@@ -1,8 +1,6 @@
 import React from "react";
 import NodeElement from "../Nodes/NodeElement";
 import { Nodes, CanvasNodes, NodeId } from "~types";
-import console = require("console");
-
 
 interface BuilderContext {
   nodes: Nodes,
