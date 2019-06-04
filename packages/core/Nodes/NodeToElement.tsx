@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { Node, NodeId } from "~types";
-import Builder, { BuilderContext } from "../Builder";
+import { BuilderContext } from "../Builder";
 import NodeElement from "./NodeElement";
 import { NodeInfo } from "~types/tree";
 import { getDOMInfo } from "~src/utils";
