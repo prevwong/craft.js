@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
 import { Node } from "~types";
 import { BuilderContext } from "../Builder";
 import NodeElement from "./NodeElement";
