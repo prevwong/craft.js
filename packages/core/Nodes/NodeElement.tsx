@@ -1,7 +1,8 @@
 import { Node, NodeId, Nodes } from "~types";
-import { BuilderContext } from "../Builder";
 import React from "react";
 import NodeContext from "./NodeContext";
+import { BuilderContext } from "../Builder/context";
+import Canvas from "../Canvas";
 
 interface NodeElementProps {
   node: Node
@@ -31,6 +32,7 @@ export default class NodeElement extends React.Component<NodeElementProps> {
               node,
               unvisitedChildCanvas,
               pushChildCanvas: (id: NodeId, nodes: Nodes) => {
+
                 builder.setCanvasNodes(id, nodes, node.id);
                 this.state.unvisitedChildCanvas.push(id);
                 this.setState({

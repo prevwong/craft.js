@@ -8,6 +8,7 @@ export interface Node {
   id?: NodeId;
   name?: string;
   info?: NodeInfo;
+  canvas?: NodeId[];
   component?: React.ElementType;
   props?: HTMLProps<any>;
   indexes?: string[];
@@ -25,8 +26,13 @@ export interface Nodes {
   [key: string]: Node
 }
 
+export interface CanvasNode {
+  info?: NodeInfo;
+  nodes?: NodeId[];
+}
+
 export interface CanvasNodes {
-  [key: string]: NodeId[]
+  [key: string]: CanvasNode
 }
 
 export interface Index {

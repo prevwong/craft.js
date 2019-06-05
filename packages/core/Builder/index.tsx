@@ -1,43 +1,20 @@
 import React from "react";
 import NodeElement from "../Nodes/NodeElement";
-import { Nodes, CanvasNodes, NodeId } from "~types";
-
-interface BuilderContext {
-  nodes: Nodes,
-  canvases: CanvasNodes,
-  active: Node,
-  dragging: Node,
-  setCanvasNodes: Function
-  setActive: Function
-  setDragging: Function
-}
-
-export const BuilderContext = React.createContext<BuilderContext>({
-  canvases: null,
-  nodes: null,
-  active: null,
-  dragging: null,
-  setCanvasNodes: () => { },
-  setActive: () => { },
-  setDragging: () => { }
-});
+import { Nodes, CanvasNode, NodeId } from "~types";
+import DragDropManager from "./DragDropManager";
+import { BuilderContextState, BuilderContext } from "./context";
 
 export default class Builder extends React.Component {
-  state: BuilderContext = {
+  state: BuilderContextState = {
     nodes: {},
     canvases: {},
     active: null,
     dragging: null,
     setCanvasNodes: (canvasId: string, nodes: Node[], parentNodeId: string) => {
       if (!this.state.canvases[canvasId]) {
-        this.state.canvases[canvasId] = [];
+        this.state.canvases[canvasId] = {}
       }
-      const canvases = {
-        ...this.state.canvases,
-        [canvasId]: Object.keys(nodes)
-      }
-
-      this.state.canvases = canvases;
+      this.state.canvases[canvasId].nodes = Object.keys(nodes);
       this.state.nodes = {
         ...this.state.nodes,
         ...nodes
@@ -61,7 +38,9 @@ export default class Builder extends React.Component {
     return (
       <BuilderContext.Provider value={this.state}>
         <NodeElement node={{ id: 'root' }}>
-          {this.props.children}
+          <DragDropManager>
+            {this.props.children}
+          </DragDropManager>
         </NodeElement>
       </BuilderContext.Provider>
     )

@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Node } from "~types";
-import { BuilderContext } from "../Builder";
 import NodeElement from "./NodeElement";
 import { NodeInfo } from "~types/tree";
 import { getDOMInfo } from "~src/utils";
+import { BuilderContext } from "../Builder/context";
 
 export default class NodeToElement extends React.PureComponent<any, any> {
   dom: HTMLElement = null;
@@ -69,6 +69,7 @@ export default class NodeToElement extends React.PureComponent<any, any> {
                     this.info = {
                       dom: getDOMInfo(this.dom)
                     };
+                    node.info = this.info;
                   }
 
                 }}

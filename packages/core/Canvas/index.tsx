@@ -3,6 +3,9 @@ import { mapChildrenToNodes } from "./helpers";
 import { NodeId } from "~types";
 import NodeToElement from "../Nodes/NodeToElement";
 import NodeContext from "../Nodes/NodeContext";
+import { getDOMInfo } from "~src/utils";
+import VagueComponent from "~src/components/VagueComponent";
+import console = require("console");
 
 const shortid = require("shortid");
 
@@ -16,33 +19,45 @@ export default class Canvas extends React.PureComponent {
     if (unvisitedChildCanvas && !unvisitedChildCanvas.length) {
       let canvasId = `canvas-${shortid.generate()}`;
       const { children } = this.props;
-      const nodes = mapChildrenToNodes(children, id);
+      const nodes = mapChildrenToNodes(children, canvasId);
       pushChildCanvas(canvasId, nodes);
     }
   }
   render() {
+    const { incoming, outgoing, ...props } = this.props;
     return (
       <NodeContext.Consumer>
-        {({ unvisitedChildCanvas, incrementIndex, builder }) => {
+        {({ node, unvisitedChildCanvas, incrementIndex, builder }) => {
+
           const canvasId = unvisitedChildCanvas.shift() || this.id;
-
           this.id = canvasId;
-
           const { canvases } = builder;
-          const nodes = canvases[canvasId];
+          const canvas = canvases[canvasId];
+          if (node.component === Canvas) {
+            // Parent node is a child of another canvas; and is actually the current canvas;
+            node.canvas = canvas;
+          }
+
           incrementIndex();
 
           return (
-            <React.Fragment>
+            <VagueComponent
+              {...props}
+              onReady={(dom: HTMLElement) => {
+                canvas.info = {
+                  dom: getDOMInfo(dom)
+                };
+              }}
+            >
               <p>{canvasId}</p>
               {
-                nodes && nodes.map((nodeId: NodeId) => {
+                canvas.nodes && canvas.nodes.map((nodeId: NodeId) => {
                   return (
                     <NodeToElement nodeId={nodeId} key={nodeId} />
                   )
                 })
               }
-            </React.Fragment>
+            </VagueComponent>
           )
         }}
       </NodeContext.Consumer>

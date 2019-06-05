@@ -44,9 +44,11 @@ class App extends Component {
     // console.log("render", arr)
     return (
       <Builder>
-        <Canvas>
+        <MessageBox />
+        <Canvas id="main">
+          <div>Hi</div>
           <Canvas>
-            <h2>Hi</h2>
+            <MessageBox />
           </Canvas>
         </Canvas>
 
