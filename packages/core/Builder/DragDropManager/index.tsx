@@ -17,7 +17,7 @@ class DragDropManager extends Component {
     // console.log("DRAGTREE", JSON.stringify(Object.keys(tree.indexes)));
     if (dragging) {
       // console.log(nodes)
-      const placeholder = placeBestPosition(nodes, dragging, e);
+      // const placeholder = placeBestPosition(nodes, dragging, e);
 
       //   if (placeholder) {
       //     setPlaceholder(placeholder);

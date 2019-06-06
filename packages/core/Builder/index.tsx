@@ -3,18 +3,15 @@ import NodeElement from "../Nodes/NodeElement";
 import { Nodes, CanvasNode, NodeId } from "~types";
 import DragDropManager from "./DragDropManager";
 import { BuilderContextState, BuilderContext } from "./context";
+import { createNode, mapChildrenToNodes } from "../Canvas/helpers";
+import NodeToElement from "../Nodes/NodeToElement";
 
 export default class Builder extends React.Component {
   state: BuilderContextState = {
     nodes: {},
-    canvases: {},
     active: null,
     dragging: null,
-    setCanvasNodes: (canvasId: string, nodes: Node[], parentNodeId: string) => {
-      if (!this.state.canvases[canvasId]) {
-        this.state.canvases[canvasId] = {}
-      }
-      this.state.canvases[canvasId].nodes = Object.keys(nodes);
+    setCanvasNodes: (canvasId: string, nodes: Node[]) => {
       this.state.nodes = {
         ...this.state.nodes,
         ...nodes
@@ -31,17 +28,19 @@ export default class Builder extends React.Component {
       });
     }
   }
-  componentDidMount() {
+  componentWillMount() {
     (window as any).tree = this.state;
+    const rootNode = mapChildrenToNodes(<div id="root-node">{this.props.children}</div>, null, "rootNode");
+    this.state.setCanvasNodes(false, rootNode);
   }
+
   render() {
+    const { nodes } = this.state;
     return (
       <BuilderContext.Provider value={this.state}>
-        <NodeElement node={{ id: 'root' }}>
-          <DragDropManager>
-            {this.props.children}
-          </DragDropManager>
-        </NodeElement>
+        <DragDropManager>
+          <NodeToElement nodeId="rootNode" />
+        </DragDropManager>
       </BuilderContext.Provider>
     )
   }

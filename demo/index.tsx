@@ -41,17 +41,11 @@ class App extends Component {
   }
   render() {
     const { tree, test, arr } = this.state;
-    // console.log("render", arr)
     return (
       <Builder>
-        <MessageBox />
-        <Canvas id="main">
-          <div>Hi</div>
-          <Canvas>
-            <MessageBox />
-          </Canvas>
+        <Canvas id="top">
+          <MessageBox />
         </Canvas>
-
       </Builder >
     );
   }

@@ -43,25 +43,21 @@ export default class MessageBox extends Component<{ text: string }> {
 
   componentDidMount() {
     setTimeout(() => {
-      console.log("CAHNGED")
       this.setState({
         test: 'Wow'
       })
     }, 2000)
     setTimeout(() => {
-      console.log("CAHNGED")
       this.setState({
         test2: 'Wow'
       })
     }, 4000)
     setTimeout(() => {
-      console.log("CAHNGED")
       this.setState({
         test3: 'Wow'
       })
     }, 6000)
     setTimeout(() => {
-      console.log("CAHNGED")
       this.setState({
         test4: 'Wow'
       })

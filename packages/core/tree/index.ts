@@ -121,7 +121,6 @@ export default class Tree {
   setInfo(id: id, info: NodeInfo) {
     let node = this.get(id);
 
-    console.log("setting info", id);
     node.info = {
       id,
       ...node.info,

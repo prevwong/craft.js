@@ -1,15 +1,13 @@
 import React from "react";
-import { mapChildrenToNodes } from "./helpers";
-import { NodeId } from "~types";
+import { mapChildrenToNodes, createNode } from "./helpers";
+import { NodeId, CanvasNode } from "~types";
 import NodeToElement from "../Nodes/NodeToElement";
 import NodeContext from "../Nodes/NodeContext";
-import { getDOMInfo } from "~src/utils";
 import VagueComponent from "~src/components/VagueComponent";
-import console = require("console");
 
 const shortid = require("shortid");
 
-export default class Canvas extends React.PureComponent {
+export default class Canvas extends React.PureComponent<CanvasNode> {
   id: NodeId = null;
   componentWillMount() {
     const { node, pushChildCanvas, unvisitedChildCanvas } = this.context;
@@ -18,9 +16,19 @@ export default class Canvas extends React.PureComponent {
     // If no unvisited canvas left, meaning this Canvas is a new child; so insert it first
     if (unvisitedChildCanvas && !unvisitedChildCanvas.length) {
       let canvasId = `canvas-${shortid.generate()}`;
+      if (node.component === Canvas) {
+        canvasId = node.id;
+      }
+
       const { children } = this.props;
       const nodes = mapChildrenToNodes(children, canvasId);
-      pushChildCanvas(canvasId, nodes);
+      const rootNode = createNode(this.constructor as React.ElementType, this.props, canvasId) as CanvasNode;
+      if (node.component === Canvas) {
+        rootNode.parent = node.parent;
+      }
+      rootNode.nodes = Object.keys(nodes);
+
+      pushChildCanvas(rootNode, nodes);
     }
   }
   render() {
@@ -31,23 +39,15 @@ export default class Canvas extends React.PureComponent {
 
           const canvasId = unvisitedChildCanvas.shift() || this.id;
           this.id = canvasId;
-          const { canvases } = builder;
-          const canvas = canvases[canvasId];
-          if (node.component === Canvas) {
-            // Parent node is a child of another canvas; and is actually the current canvas;
-            node.canvas = canvas;
-          }
+          const { canvases, nodes } = builder;
+          const canvas = nodes[canvasId];
 
           incrementIndex();
 
           return (
             <VagueComponent
               {...props}
-              onReady={(dom: HTMLElement) => {
-                canvas.info = {
-                  dom: getDOMInfo(dom)
-                };
-              }}
+              node={canvas}
             >
               <p>{canvasId}</p>
               {

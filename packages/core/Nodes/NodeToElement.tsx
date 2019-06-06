@@ -1,12 +1,11 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { Node } from "~types";
 import NodeElement from "./NodeElement";
 import { NodeInfo } from "~types/tree";
-import { getDOMInfo } from "~src/utils";
 import { BuilderContext } from "../Builder/context";
+import VagueComponent from "~src/components/VagueComponent";
 
-export default class NodeToElement extends React.PureComponent<any, any> {
+export default class DraggableNodeToElement extends React.Component<any> {
   dom: HTMLElement = null;
   node: Node = null;
   info: NodeInfo = {};
@@ -52,26 +51,23 @@ export default class NodeToElement extends React.PureComponent<any, any> {
   componentDidMount() {
     this.dom.addEventListener("mousedown", this.dragStartWrapper);
   }
+
   render() {
     const { nodeId } = this.props;
     return (
       <BuilderContext.Consumer>
         {({ nodes }) => {
           const node = nodes[nodeId];
-          const { id, props, component: Comp } = this.node = node as Node;
+          const { id, props, component } = this.node = node as Node;
           return (
             <NodeElement node={node}>
-              <Comp
+              <VagueComponent
                 {...props}
-                ref={(ref) => {
-                  if (ref) {
-                    this.dom = ReactDOM.findDOMNode(ref) as HTMLElement;
-                    this.info = {
-                      dom: getDOMInfo(this.dom)
-                    };
-                    node.info = this.info;
-                  }
-
+                is={component}
+                node={node}
+                onReady={(dom: HTMLElement, info: NodeInfo) => {
+                  this.dom = dom;
+                  this.info = info;
                 }}
               />
             </NodeElement>
@@ -83,4 +79,4 @@ export default class NodeToElement extends React.PureComponent<any, any> {
 }
 
 
-NodeToElement.contextType = BuilderContext;
+DraggableNodeToElement.contextType = BuilderContext;
