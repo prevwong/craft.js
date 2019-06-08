@@ -1,11 +1,11 @@
-import { Node, NodeId, Nodes } from "~types";
+import { Node, NodeId, Nodes, RegisteredNode } from "~types";
 import React from "react";
 import NodeContext from "./NodeContext";
 import { BuilderContext } from "../Builder/context";
 import Canvas from "../Canvas";
 
 interface NodeElementProps {
-  node: Node
+  node: RegisteredNode
 }
 interface NodeElementState {
   unvisitedChildCanvas: NodeId[]
@@ -31,8 +31,8 @@ export default class NodeElement extends React.Component<NodeElementProps> {
             <NodeContext.Provider value={{
               node,
               unvisitedChildCanvas,
-              pushChildCanvas: (canvasNode: Node, nodes: Nodes) => {
-                if (node.component !== Canvas) {
+              pushChildCanvas: (canvasNode: RegisteredNode, nodes: Nodes) => {
+                if (node.type !== Canvas) {
                   if (!node.childCanvas) node.childCanvas = [];
                   node.childCanvas.splice(this.loopInfo.index, 0, canvasNode.id);
                 }

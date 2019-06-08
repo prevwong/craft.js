@@ -4,7 +4,7 @@ import { Nodes, CanvasNode, NodeId } from "~types";
 import DragDropManager from "./DragDropManager";
 import { BuilderContextState, BuilderContext } from "./context";
 import { createNode, mapChildrenToNodes } from "../Canvas/helpers";
-import NodeToElement from "../Nodes/NodeToElement";
+import RenderDraggableNode from "../Nodes/RenderDraggableNode";
 
 export default class Builder extends React.Component {
   state: BuilderContextState = {
@@ -39,7 +39,7 @@ export default class Builder extends React.Component {
     return (
       <BuilderContext.Provider value={this.state}>
         <DragDropManager>
-          <NodeToElement nodeId="rootNode" />
+          <RenderDraggableNode nodeId="rootNode" />
         </DragDropManager>
       </BuilderContext.Provider>
     )

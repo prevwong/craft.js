@@ -1,13 +1,12 @@
 import React from "react";
-import { Node } from "~types";
 import NodeElement from "./NodeElement";
-import { NodeInfo } from "~types/tree";
+import { NodeInfo, RegisteredNode } from "~types/tree";
 import { BuilderContext } from "../Builder/context";
-import VagueComponent from "~src/components/VagueComponent";
+import RenderRegisteredNode from "./RenderRegisteredNode";
 
-export default class DraggableNodeToElement extends React.Component<any> {
+export default class RenderDraggableNode extends React.Component<any> {
   dom: HTMLElement = null;
-  node: Node = null;
+  node: RegisteredNode = null;
   info: NodeInfo = {};
   dragStartWrapper: EventListenerOrEventListenerObject = this.dragStart.bind(this);
   dragWatchWrapper: EventListenerOrEventListenerObject = this.dragWatch.bind(this);
@@ -58,12 +57,12 @@ export default class DraggableNodeToElement extends React.Component<any> {
       <BuilderContext.Consumer>
         {({ nodes }) => {
           const node = nodes[nodeId];
-          const { id, props, component } = this.node = node as Node;
+          const { id, props, type } = this.node = node as RegisteredNode;
           return (
             <NodeElement node={node}>
-              <VagueComponent
+              <RenderRegisteredNode
                 {...props}
-                is={component}
+                is={type}
                 node={node}
                 onReady={(dom: HTMLElement, info: NodeInfo) => {
                   this.dom = dom;
@@ -79,4 +78,4 @@ export default class DraggableNodeToElement extends React.Component<any> {
 }
 
 
-DraggableNodeToElement.contextType = BuilderContext;
+RenderDraggableNode.contextType = BuilderContext;

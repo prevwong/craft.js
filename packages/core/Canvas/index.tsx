@@ -1,9 +1,9 @@
 import React from "react";
 import { mapChildrenToNodes, createNode } from "./helpers";
 import { NodeId, CanvasNode } from "~types";
-import NodeToElement from "../Nodes/NodeToElement";
 import NodeContext from "../Nodes/NodeContext";
-import VagueComponent from "~src/components/VagueComponent";
+import RenderDraggableNode from "../Nodes/RenderDraggableNode";
+import RenderRegisteredNode from "../Nodes/RenderRegisteredNode";
 
 const shortid = require("shortid");
 
@@ -45,7 +45,7 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
           incrementIndex();
 
           return (
-            <VagueComponent
+            <RenderRegisteredNode
               {...props}
               node={canvas}
             >
@@ -53,11 +53,11 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
               {
                 canvas.nodes && canvas.nodes.map((nodeId: NodeId) => {
                   return (
-                    <NodeToElement nodeId={nodeId} key={nodeId} />
+                    <RenderDraggableNode nodeId={nodeId} key={nodeId} />
                   )
                 })
               }
-            </VagueComponent>
+            </RenderRegisteredNode>
           )
         }}
       </NodeContext.Consumer>

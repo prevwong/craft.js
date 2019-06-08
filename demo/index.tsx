@@ -43,9 +43,11 @@ class App extends Component {
     const { tree, test, arr } = this.state;
     return (
       <Builder>
-        <Canvas id="top">
-          <MessageBox />
-        </Canvas>
+        <div id="top">
+          <div>
+            <MessageBox />
+          </div>
+        </div>
       </Builder >
     );
   }

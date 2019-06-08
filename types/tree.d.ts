@@ -5,18 +5,20 @@ import React from "react"
 export type NodeId = string;
 
 export interface Node {
-  id?: NodeId;
-  name?: string;
-  info?: NodeInfo;
-  component?: React.ElementType;
+  type?: React.ElementType;
   props?: HTMLProps<any>;
+  children?: Node[];
+  name?: string;
+}
+export interface RegisteredNode extends Node {
+  id?: NodeId;
+  info?: NodeInfo;
   childCanvas?: string[];
   unvisitedChildCanvas?: string[];
-  children?: Node[];
   parent?: string;
 }
 
-export interface CanvasNode extends Node {
+export interface CanvasNode extends RegisteredNode {
   nodes?: NodeId[]
   incoming?: Function;
   outgoing?: Function
