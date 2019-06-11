@@ -5,11 +5,12 @@ import { DOMInfo, CSSMarginPaddingObj } from "./dom";
 
 export type NodeId = string;
 
-export interface TempNode {
+export interface ReactElement {
   type?: string | React.ElementType;
   props?: HTMLProps<any>;
 }
-export interface Node {
+
+export interface Node extends ReactElement {
   type?: string | React.ElementType;
   props?: HTMLProps<any>;
   id?: NodeId;
