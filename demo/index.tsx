@@ -45,6 +45,8 @@ class App extends Component {
       <Builder components={[
         MessageBox
       ]}>
+        <h2>whut</h2>
+        <h2>whut</h2>
         <Canvas id="top">
           <MessageBox />
         </Canvas>

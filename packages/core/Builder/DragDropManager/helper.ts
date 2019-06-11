@@ -1,13 +1,9 @@
 import {
-  Tree,
-  DraggingInfo,
-  RenderInfo,
   id,
   DOMInfo,
   DropAction
 } from "~types";
 import { NodeInfo, Node, Nodes, NodeId } from "~types/tree";
-import console = require("console");
 
 const findPosition = (
   parent: Index,

@@ -1,13 +1,12 @@
 import React from "react";
 import NodeElement from "../Nodes/NodeElement";
-import { Nodes, CanvasNode, NodeId } from "~types";
+import { Nodes, CanvasNode, NodeId, BuilderContextState, RegisteredNode } from "~types";
 import DragDropManager from "./DragDropManager";
-import { BuilderContextState, BuilderContext } from "./context";
 import { createNode, mapChildrenToNodes } from "../Canvas/helpers";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
-import console = require("console");
 import { loadState } from "./helpers";
-import test from "./test.js";
+import test from "./test";
+import BuilderContext from "./BuilderContext";
 
 export default class Builder extends React.Component<any> {
   state: BuilderContextState = {
@@ -48,12 +47,12 @@ export default class Builder extends React.Component<any> {
   }
 
   saveState() {
-    return Object.keys(this.state.nodes).reduce((result, nodeId) => {
-      const node = { ...this.state.nodes[nodeId] };
+    return Object.keys(this.state.nodes).reduce((result: any, nodeId) => {
+      const node: RegisteredNode = { ...this.state.nodes[nodeId] };
       node.type = typeof node.type === "function" ? node.type.name : node.type;
 
       const JSXToNode = ((children: React.ReactNode) => {
-        return React.Children.toArray(children).map((child, i) => {
+        return React.Children.toArray(children).map((child: React.ReactElement, i) => {
           if (typeof child === "string") return child;
           const { type, props } = child;
           const { children, ...otherProps } = props;

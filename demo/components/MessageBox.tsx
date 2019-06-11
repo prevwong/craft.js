@@ -48,6 +48,11 @@ export default class MessageBox extends Component<{ text: string }> {
         test: 'Wow'
       })
     }, 2000)
+    setTimeout(() => {
+      this.setState({
+        test2: 'Wow'
+      })
+    }, 6000)
   }
   render() {
     const { text } = this.props;
@@ -55,15 +60,23 @@ export default class MessageBox extends Component<{ text: string }> {
 
     return (
       <hgroup>
-        <Canvas id="second">
-          <button>Hi</button>
-          {
-            test ? (
-              <button>What</button>
-            ) : null
-          }
-          <button>Bye</button>
+        {
+          test2 && (
+            <Canvas id="test0">
+              <h2>hey there!</h2>
+            </Canvas>
+          )
+        }
+        <Canvas id="test1">
+          <h2>ahaha</h2>
         </Canvas>
+        {
+          test && (
+            <Canvas id="test2">
+              <h2>asdlasldk</h2>
+            </Canvas>
+          )
+        }
       </hgroup>
     )
   }

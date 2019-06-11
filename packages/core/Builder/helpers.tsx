@@ -1,6 +1,5 @@
 import { Nodes, Node } from "~types";
 import React from "react";
-import console = require("console");
 import Canvas from "../Canvas";
 
 const childrenToJsx = (childrenNodes: Node[], components) => {

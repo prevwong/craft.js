@@ -1,8 +1,7 @@
-import { Node, NodeId, Nodes, RegisteredNode, CanvasMapping } from "~types";
+import { Nodes, RegisteredNode, CanvasMapping } from "~types";
 import React from "react";
 import NodeContext from "./NodeContext";
-import { BuilderContext } from "../Builder/context";
-import Canvas from "../Canvas";
+import BuilderContext from "../Builder/BuilderContext";
 
 interface NodeElementProps {
   node: RegisteredNode

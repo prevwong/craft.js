@@ -1,5 +1,5 @@
 import React, { ReactNode, HTMLProps } from "react";
-import { NodeId, Nodes, RegisteredNode } from "~types";
+import { Node, NodeId, Nodes, RegisteredNode } from "~types";
 import Canvas from ".";
 const shortid = require("shortid");
 
@@ -29,7 +29,6 @@ export const createNode = (component: React.ElementType, props: React.Props<any>
   // const { draggable } = props;
 
   let node: RegisteredNode = {
-    name: typeof component === "string" ? component : (component as Function).name,
     type: component as React.ElementType,
     props,
     // draggable: draggable === undefined || draggable === null ? true : !!draggable
@@ -50,8 +49,8 @@ export const mapInnerChildren = (children: ReactNode) => {
       }
       let { type, props } = child;
       let { children, ...otherProps } = (props ? props : {}) as HTMLProps<any>;
-      let node: any = {
-        type,
+      let node: Node = {
+        type: type as React.ElementType,
         props: otherProps
       };
       if (children) {
