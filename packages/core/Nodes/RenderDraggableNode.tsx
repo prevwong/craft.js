@@ -1,7 +1,7 @@
 import React from "react";
 import NodeElement from "./NodeElement";
 import { NodeInfo, RegisteredNode } from "~types";
-import RenderRegisteredNode from "./RenderRegisteredNode";
+import RenderNode from "./RenderNode";
 import BuilderContext from "../Builder/BuilderContext";
 
 export default class RenderDraggableNode extends React.Component<any> {
@@ -60,7 +60,7 @@ export default class RenderDraggableNode extends React.Component<any> {
           const { id, props, type } = this.node = node as RegisteredNode;
           return (
             <NodeElement node={node}>
-              <RenderRegisteredNode
+              <RenderNode
                 {...props}
                 is={type}
                 node={node}

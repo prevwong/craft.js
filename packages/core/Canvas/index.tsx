@@ -3,7 +3,7 @@ import { mapChildrenToNodes, createNode, nodesToArray } from "./helpers";
 import { NodeId, CanvasNode, Nodes } from "~types";
 import NodeContext from "../Nodes/NodeContext";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
-import RenderRegisteredNode from "../Nodes/RenderRegisteredNode";
+import RenderNode from "../Nodes/RenderNode";
 const shortid = require("shortid");
 
 export default class Canvas extends React.PureComponent<CanvasNode> {
@@ -52,7 +52,7 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
 
 
           return (
-            <RenderRegisteredNode
+            <RenderNode
               {...props}
               node={canvas}
             >
@@ -64,7 +64,7 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
                   )
                 })
               }
-            </RenderRegisteredNode>
+            </RenderNode>
           )
         }}
       </NodeContext.Consumer>
