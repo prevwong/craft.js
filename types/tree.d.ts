@@ -13,8 +13,7 @@ export interface Node {
 export interface RegisteredNode extends Node {
   id?: NodeId;
   info?: NodeInfo;
-  childCanvas?: string[];
-  unvisitedChildCanvas?: CanvasMapping;
+  childCanvas?: CanvasMapping;
   parent?: string;
 }
 

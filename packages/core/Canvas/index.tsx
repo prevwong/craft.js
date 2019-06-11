@@ -1,27 +1,25 @@
 import React from "react";
 import { mapChildrenToNodes, createNode, nodesToArray } from "./helpers";
-import { NodeId, CanvasNode } from "~types";
+import { NodeId, CanvasNode, Nodes } from "~types";
 import NodeContext from "../Nodes/NodeContext";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
 import RenderRegisteredNode from "../Nodes/RenderRegisteredNode";
-import console = require("console");
-
 const shortid = require("shortid");
 
 export default class Canvas extends React.PureComponent<CanvasNode> {
   id: NodeId = null;
   nodes: Nodes = null;
-  constructor(props) {
+  constructor(props: CanvasNode) {
     super(props);
     if (!props.id) {
       throw new Error("Canvas must have an id")
     }
   }
   componentDidMount() {
-    const { node, pushChildCanvas, unvisitedChildCanvas } = this.context;
+    const { node, pushChildCanvas, childCanvas } = this.context;
     const { id } = this.props;
     // If no unvisited canvas left, meaning this Canvas is a new child; so insert it first
-    if (!unvisitedChildCanvas[id]) {
+    if (!childCanvas[id]) {
       let canvasId = `canvas-${shortid.generate()}`;
       if (node.component === Canvas) {
         canvasId = node.id;
@@ -38,23 +36,20 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
       pushChildCanvas(id, rootNode, nodes);
     }
   }
-  componentDidUpdate(props) {
-  }
   render() {
     const { incoming, outgoing, ...props } = this.props;
     
     return (
       <NodeContext.Consumer>
-        {({ node, unvisitedChildCanvas, incrementIndex, builder }) => {
+        {({ node, childCanvas, builder }) => {
 
-          const canvasId = unvisitedChildCanvas[this.props.id];
+          const canvasId = childCanvas[this.props.id];
           if (!canvasId) return false;
 
           this.id = canvasId;
           const { nodes } = builder;
           const canvas = nodes[canvasId];
 
-          incrementIndex();
 
           return (
             <RenderRegisteredNode

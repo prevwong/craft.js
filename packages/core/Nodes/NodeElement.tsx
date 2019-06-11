@@ -3,13 +3,12 @@ import React from "react";
 import NodeContext from "./NodeContext";
 import { BuilderContext } from "../Builder/context";
 import Canvas from "../Canvas";
-import console = require("console");
 
 interface NodeElementProps {
   node: RegisteredNode
 }
 interface NodeElementState {
-  unvisitedChildCanvas: CanvasMapping
+  childCanvas: CanvasMapping
 }
 
 export default class NodeElement extends React.Component<NodeElementProps> {
@@ -17,7 +16,7 @@ export default class NodeElement extends React.Component<NodeElementProps> {
     index: 0
   }
   state: NodeElementState = {
-    unvisitedChildCanvas: [],
+    childCanvas: {},
   }
   componentDidUpdate() {
     this.loopInfo.index = 0;
@@ -26,38 +25,29 @@ export default class NodeElement extends React.Component<NodeElementProps> {
     // this.setState({
     //   unvisitedChildCanvas: this.props.node.childCanvas
     // })
-    if ( this.props.node && this.props.node.childCanvas) this.state.unvisitedChildCanvas = this.props.node.childCanvas;
+    if (this.props.node && this.props.node.childCanvas) this.state.childCanvas = this.props.node.childCanvas;
   }
   render() {
     const { node } = this.props;
-    const { unvisitedChildCanvas } = this.state;
+    const { childCanvas } = this.state;
     return (
       <BuilderContext.Consumer>
         {(builder) => {
           return (
             <NodeContext.Provider value={{
               node,
-              unvisitedChildCanvas,
+              childCanvas,
               pushChildCanvas: (canvasId: string, canvasNode: RegisteredNode, nodes: Nodes) => {
-                if (node.type !== Canvas) {
-                  if (!node.childCanvas) node.childCanvas = [];
-                  node.childCanvas.splice(this.loopInfo.index, 0, canvasNode.id);
-                }
+                if (!node.childCanvas) node.childCanvas = {};
                 builder.setCanvasNodes(canvasNode.id, {
                   [canvasNode.id]: canvasNode,
                   ...nodes
                 });
-
-                this.state.unvisitedChildCanvas[canvasId] = canvasNode.id
-
-                // this.state.unvisitedChildCanvas.push(canvasNode.id);
+                this.state.childCanvas[canvasId] = node.childCanvas[canvasId] = canvasNode.id;
                 this.setState({
                   ...this.state,
                 });
 
-              },
-              incrementIndex: () => {
-                this.loopInfo.index = this.loopInfo.index + 1;
               },
               builder
             }}>
