@@ -3,6 +3,7 @@ import NodeElement from "./NodeElement";
 import { NodeInfo, RegisteredNode } from "~types/tree";
 import { BuilderContext } from "../Builder/context";
 import RenderRegisteredNode from "./RenderRegisteredNode";
+import console = require("console");
 
 export default class RenderDraggableNode extends React.Component<any> {
   dom: HTMLElement = null;

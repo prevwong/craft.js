@@ -1,14 +1,15 @@
-import { Node, NodeId, Nodes, RegisteredNode } from "~types";
+import { Node, NodeId, Nodes, RegisteredNode, CanvasMapping } from "~types";
 import React from "react";
 import NodeContext from "./NodeContext";
 import { BuilderContext } from "../Builder/context";
 import Canvas from "../Canvas";
+import console = require("console");
 
 interface NodeElementProps {
   node: RegisteredNode
 }
 interface NodeElementState {
-  unvisitedChildCanvas: NodeId[]
+  unvisitedChildCanvas: CanvasMapping
 }
 
 export default class NodeElement extends React.Component<NodeElementProps> {
@@ -21,6 +22,12 @@ export default class NodeElement extends React.Component<NodeElementProps> {
   componentDidUpdate() {
     this.loopInfo.index = 0;
   }
+  componentWillMount() {
+    // this.setState({
+    //   unvisitedChildCanvas: this.props.node.childCanvas
+    // })
+    if ( this.props.node && this.props.node.childCanvas) this.state.unvisitedChildCanvas = this.props.node.childCanvas;
+  }
   render() {
     const { node } = this.props;
     const { unvisitedChildCanvas } = this.state;
@@ -31,7 +38,7 @@ export default class NodeElement extends React.Component<NodeElementProps> {
             <NodeContext.Provider value={{
               node,
               unvisitedChildCanvas,
-              pushChildCanvas: (canvasNode: RegisteredNode, nodes: Nodes) => {
+              pushChildCanvas: (canvasId: string, canvasNode: RegisteredNode, nodes: Nodes) => {
                 if (node.type !== Canvas) {
                   if (!node.childCanvas) node.childCanvas = [];
                   node.childCanvas.splice(this.loopInfo.index, 0, canvasNode.id);
@@ -40,7 +47,10 @@ export default class NodeElement extends React.Component<NodeElementProps> {
                   [canvasNode.id]: canvasNode,
                   ...nodes
                 });
-                this.state.unvisitedChildCanvas.push(canvasNode.id);
+
+                this.state.unvisitedChildCanvas[canvasId] = canvasNode.id
+
+                // this.state.unvisitedChildCanvas.push(canvasNode.id);
                 this.setState({
                   ...this.state,
                 });

@@ -1,20 +1,27 @@
 import React from "react";
-import { mapChildrenToNodes, createNode } from "./helpers";
+import { mapChildrenToNodes, createNode, nodesToArray } from "./helpers";
 import { NodeId, CanvasNode } from "~types";
 import NodeContext from "../Nodes/NodeContext";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
 import RenderRegisteredNode from "../Nodes/RenderRegisteredNode";
+import console = require("console");
 
 const shortid = require("shortid");
 
 export default class Canvas extends React.PureComponent<CanvasNode> {
   id: NodeId = null;
-  componentWillMount() {
+  nodes: Nodes = null;
+  constructor(props) {
+    super(props);
+    if (!props.id) {
+      throw new Error("Canvas must have an id")
+    }
+  }
+  componentDidMount() {
     const { node, pushChildCanvas, unvisitedChildCanvas } = this.context;
-    const { id } = node;
-
+    const { id } = this.props;
     // If no unvisited canvas left, meaning this Canvas is a new child; so insert it first
-    if (unvisitedChildCanvas && !unvisitedChildCanvas.length) {
+    if (!unvisitedChildCanvas[id]) {
       let canvasId = `canvas-${shortid.generate()}`;
       if (node.component === Canvas) {
         canvasId = node.id;
@@ -28,18 +35,23 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
       }
       rootNode.nodes = Object.keys(nodes);
 
-      pushChildCanvas(rootNode, nodes);
+      pushChildCanvas(id, rootNode, nodes);
     }
+  }
+  componentDidUpdate(props) {
   }
   render() {
     const { incoming, outgoing, ...props } = this.props;
+    
     return (
       <NodeContext.Consumer>
         {({ node, unvisitedChildCanvas, incrementIndex, builder }) => {
 
-          const canvasId = unvisitedChildCanvas.shift() || this.id;
+          const canvasId = unvisitedChildCanvas[this.props.id];
+          if (!canvasId) return false;
+
           this.id = canvasId;
-          const { canvases, nodes } = builder;
+          const { nodes } = builder;
           const canvas = nodes[canvasId];
 
           incrementIndex();

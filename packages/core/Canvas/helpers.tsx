@@ -11,6 +11,20 @@ const TextNode = (props: { text: string }): React.ReactElement => {
   )
 }
 
+export const nodesToArray = (nodes: Nodes, bare: boolean = true) => {
+  return Object.keys(nodes).map((nodeId) => {
+    let node;
+    const { type, props } = node = nodes[nodeId];
+    if (bare) {
+      return {
+        type, props
+      }
+    } else {
+      return node;
+    }
+  })
+}
+
 export const createNode = (component: React.ElementType, props: React.Props<any>, id: NodeId, parent?: NodeId): RegisteredNode => {
   // const { draggable } = props;
 

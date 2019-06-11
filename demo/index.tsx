@@ -42,12 +42,14 @@ class App extends Component {
   render() {
     const { tree, test, arr } = this.state;
     return (
-      <Builder>
-        <div id="top">
-          <div>
-            <MessageBox />
-          </div>
-        </div>
+      <Builder components={[
+        MessageBox
+      ]}>
+        <Canvas id="top">
+          <MessageBox />
+        </Canvas>
+
+        <h2>whut</h2>
       </Builder >
     );
   }

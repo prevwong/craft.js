@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Button from "./Button";
 import Canvas from "~packages/core/Canvas";
+import ReactDOM from "react-dom";
 
 const Msg = styled.div`
   display: inline-block;
@@ -47,21 +48,6 @@ export default class MessageBox extends Component<{ text: string }> {
         test: 'Wow'
       })
     }, 2000)
-    setTimeout(() => {
-      this.setState({
-        test2: 'Wow'
-      })
-    }, 4000)
-    setTimeout(() => {
-      this.setState({
-        test3: 'Wow'
-      })
-    }, 6000)
-    setTimeout(() => {
-      this.setState({
-        test4: 'Wow'
-      })
-    }, 8000)
   }
   render() {
     const { text } = this.props;
@@ -69,25 +55,15 @@ export default class MessageBox extends Component<{ text: string }> {
 
     return (
       <hgroup>
-        {test4 && <Canvas>
-          <button>Im really kind the first</button>
-        </Canvas>}
-        <Canvas>
+        <Canvas id="second">
+          <button>Hi</button>
+          {
+            test ? (
+              <button>What</button>
+            ) : null
+          }
           <button>Bye</button>
         </Canvas>
-        {test3 && <Canvas>
-          <button>Im really kind the second</button>
-        </Canvas>}
-        <p> Another one</p>
-        {test && <Canvas>
-          <button>Im center</button>
-        </Canvas>}
-        <Canvas>
-          <button>Im back</button>
-        </Canvas>
-        {test2 && <Canvas>
-          <button>Im really kind the last</button>
-        </Canvas>}
       </hgroup>
     )
   }

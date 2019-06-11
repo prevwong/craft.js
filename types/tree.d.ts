@@ -14,25 +14,23 @@ export interface RegisteredNode extends Node {
   id?: NodeId;
   info?: NodeInfo;
   childCanvas?: string[];
-  unvisitedChildCanvas?: string[];
+  unvisitedChildCanvas?: CanvasMapping;
   parent?: string;
+}
+
+export interface CanvasMapping {
+  [key: string]: NodeId;
 }
 
 export interface CanvasNode extends RegisteredNode {
   nodes?: NodeId[]
   incoming?: Function;
-  outgoing?: Function
+  outgoing?: Function;
 }
 
 export interface Nodes {
   [key: string]: Node
 }
-
-export interface CanvasNode {
-  info?: NodeInfo;
-  nodes?: NodeId[];
-}
-
 export interface CanvasNodes {
   [key: string]: CanvasNode
 }
