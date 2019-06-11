@@ -1,6 +1,6 @@
 import React from "react";
 import NodeElement from "../Nodes/NodeElement";
-import { Nodes, CanvasNode, NodeId, BuilderContextState, RegisteredNode } from "~types";
+import { Node, Nodes, CanvasNode, NodeId, BuilderContextState } from "~types";
 import DragDropManager from "./DragDropManager";
 import { createNode, mapChildrenToNodes } from "../Canvas/helpers";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
@@ -48,7 +48,7 @@ export default class Builder extends React.Component<any> {
 
   saveState() {
     return Object.keys(this.state.nodes).reduce((result: any, nodeId) => {
-      const node: RegisteredNode = { ...this.state.nodes[nodeId] };
+      const node: Node = { ...this.state.nodes[nodeId] };
       node.type = typeof node.type === "function" ? node.type.name : node.type;
 
       const JSXToNode = ((children: React.ReactNode) => {

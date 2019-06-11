@@ -5,11 +5,13 @@ import { DOMInfo, CSSMarginPaddingObj } from "./dom";
 
 export type NodeId = string;
 
-export interface Node {
+export interface TempNode {
   type?: string | React.ElementType;
   props?: HTMLProps<any>;
 }
-export interface RegisteredNode extends Node {
+export interface Node {
+  type?: string | React.ElementType;
+  props?: HTMLProps<any>;
   id?: NodeId;
   info?: NodeInfo;
   childCanvas?: CanvasMapping;
@@ -20,7 +22,7 @@ export interface CanvasMapping {
   [key: string]: NodeId;
 }
 
-export interface CanvasNode extends RegisteredNode {
+export interface CanvasNode extends Node {
   nodes?: NodeId[]
   incoming?: Function;
   outgoing?: Function;

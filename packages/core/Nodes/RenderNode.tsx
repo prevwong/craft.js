@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { getDOMInfo } from "~src/utils";
 
-export default class RenderRegisteredNode extends React.Component<any> {
+export default class RenderNode extends React.Component<any> {
   render() {
     const { is, node, onReady, ...props } = this.props;
     const Comp = is ? is : 'div';

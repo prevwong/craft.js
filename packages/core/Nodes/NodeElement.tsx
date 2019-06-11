@@ -1,10 +1,10 @@
-import { Nodes, RegisteredNode, CanvasMapping } from "~types";
+import { Nodes, Node, CanvasMapping, CanvasNode } from "~types";
 import React from "react";
 import NodeContext from "./NodeContext";
 import BuilderContext from "../Builder/BuilderContext";
 
 interface NodeElementProps {
-  node: RegisteredNode
+  node: Node
 }
 interface NodeElementState {
   childCanvas: CanvasMapping
@@ -36,7 +36,7 @@ export default class NodeElement extends React.Component<NodeElementProps> {
             <NodeContext.Provider value={{
               node,
               childCanvas,
-              pushChildCanvas: (canvasId: string, canvasNode: RegisteredNode, nodes: Nodes) => {
+              pushChildCanvas: (canvasId: string, canvasNode: CanvasNode, nodes: Nodes) => {
                 if (!node.childCanvas) node.childCanvas = {};
                 builder.setCanvasNodes(canvasNode.id, {
                   [canvasNode.id]: canvasNode,

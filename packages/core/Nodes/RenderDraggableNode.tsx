@@ -1,12 +1,12 @@
 import React from "react";
 import NodeElement from "./NodeElement";
-import { NodeInfo, RegisteredNode } from "~types";
+import { NodeInfo, Node } from "~types";
 import RenderNode from "./RenderNode";
 import BuilderContext from "../Builder/BuilderContext";
 
 export default class RenderDraggableNode extends React.Component<any> {
   dom: HTMLElement = null;
-  node: RegisteredNode = null;
+  node: Node = null;
   info: NodeInfo = {};
   dragStartWrapper: EventListenerOrEventListenerObject = this.dragStart.bind(this);
   dragWatchWrapper: EventListenerOrEventListenerObject = this.dragWatch.bind(this);
@@ -57,7 +57,7 @@ export default class RenderDraggableNode extends React.Component<any> {
       <BuilderContext.Consumer>
         {({ nodes }) => {
           const node = nodes[nodeId];
-          const { id, props, type } = this.node = node as RegisteredNode;
+          const { id, props, type } = this.node = node as Node;
           return (
             <NodeElement node={node}>
               <RenderNode
