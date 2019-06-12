@@ -47,14 +47,14 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
           this.id = canvasId;
           const { nodes } = builder;
           const canvas = nodes[canvasId] as CanvasNode;
-
+          // console.log("canvas", canvas)
           return (
-            <RenderNode
+            canvas && <RenderNode
               {...props}
               node={canvas}
             >
               {
-                canvas.nodes && canvas.nodes.map((nodeId: NodeId) => {
+                canvas && canvas.nodes && canvas.nodes.map((nodeId: NodeId) => {
                   return (
                     <RenderDraggableNode nodeId={nodeId} key={nodeId} />
                   )

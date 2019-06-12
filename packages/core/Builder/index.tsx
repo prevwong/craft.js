@@ -1,6 +1,6 @@
 import React from "react";
 import NodeElement from "../Nodes/NodeElement";
-import { Node, Nodes, CanvasNode, NodeId, BuilderContextState, PlaceholderInfo } from "~types";
+import { Node, Nodes, CanvasNode, NodeId, BuilderContextState, PlaceholderInfo, BuilderState } from "~types";
 import DragDropManager from "./DragDropManager";
 import { createNode, mapChildrenToNodes } from "../Canvas/helpers";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
@@ -9,47 +9,56 @@ import test from "./test";
 import BuilderContext from "./BuilderContext";
 
 export default class Builder extends React.Component<any> {
-  state: BuilderContextState = {
+  nodesInfo = {};
+  state: BuilderState = {
     nodes: {},
     active: null,
     dragging: null,
     placeholder: null,
-    setCanvasNodes: (canvasId: string, nodes: Node[]) => {
-      this.state.nodes = {
-        ...this.state.nodes,
-        ...nodes
-      } as Nodes
-    },
-    setActive: (id: NodeId) => {
-      this.setState({
-        active: this.state.nodes[id]
-      });
-    },
-    setDragging: (id: NodeId) => {
-      this.setState({
-        dragging: id ? this.state.nodes[id] : null
-      });
-    },
-    setPlaceholder: (placeholder: PlaceholderInfo) => {
-      this.setState({
-        placeholder
-      });
-    }
   }
-  componentWillMount() {
+  constructor(props: any) {
+    super(props);
     (window as any).tree = this.state;
     (window as any).save = this.saveState.bind(this);
     let rootNode = mapChildrenToNodes(<div id="root-node">{this.props.children}</div>, null, "rootNode");
-    const loadedStateJSON: any = test
-    // console.log(66, loadedStateJSON)
-    if (loadedStateJSON) {
-      const loadedState = loadState(JSON.stringify(loadedStateJSON), this.props.components)
-      // rootNode = loadedState;
+    // const loadedStateJSON: any = test
+    // // console.log(66, loadedStateJSON)
+    // if (loadedStateJSON) {
+    //   const loadedState = loadState(JSON.stringify(loadedStateJSON), this.props.components)
+    //   // rootNode = loadedState;
+    // }
+    this.state.nodes = {
+      ...rootNode
     }
+  }
 
+  setNodes = (nodes: Nodes) => {
+    this.setState((state: BuilderState) => {
+      state.nodes = {
+        ...state.nodes,
+        ...nodes
+      }
+      return state;
+    })
 
+  }
 
-    this.state.setCanvasNodes(false, rootNode);
+  setActive = (id: NodeId) => {
+    this.setState({
+      active: this.state.nodes[id]
+    });
+  }
+
+  setDragging = (id: NodeId) => {
+    this.setState({
+      dragging: id ? this.state.nodes[id] : null
+    });
+  }
+
+  setPlaceholder = (placeholder: PlaceholderInfo) => {
+    this.setState({
+      placeholder
+    });
   }
 
   saveState() {
@@ -86,9 +95,16 @@ export default class Builder extends React.Component<any> {
     }, {});
   }
   render() {
-    const { nodes } = this.state;
+    const { setNodes, setActive, setDragging, setPlaceholder } = this;
     return (
-      <BuilderContext.Provider value={this.state}>
+      <BuilderContext.Provider value={{
+        ...this.state,
+        nodesInfo: this.nodesInfo,
+        setNodes,
+        setActive,
+        setDragging,
+        setPlaceholder
+      }}>
         <DragDropManager>
           <RenderDraggableNode nodeId="rootNode" />
         </DragDropManager>

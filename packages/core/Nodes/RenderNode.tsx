@@ -1,14 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { getDOMInfo } from "~src/utils";
+import BuilderContext from "../Builder/BuilderContext";
 
 export default class RenderNode extends React.Component<any> {
-  componentDidMount() {
+  doneRender() {
+    const { nodesInfo } = this.context;
     const { node, onReady } = this.props;
     const dom = ReactDOM.findDOMNode(this) as HTMLElement;
-    const info = node.info = {
+    const info = {
       dom: getDOMInfo(dom)
     };
+
+    if (nodesInfo) nodesInfo[node.id] = info;
 
     if (onReady) {
       onReady(dom, info);
@@ -20,7 +24,12 @@ export default class RenderNode extends React.Component<any> {
     return (
       <Comp
         {...props}
+        ref={() => {
+          this.doneRender();
+        }}
       />
     )
   }
 }
+
+RenderNode.contextType = BuilderContext;

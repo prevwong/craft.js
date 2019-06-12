@@ -6,7 +6,8 @@ const BuilderContext = React.createContext<BuilderContextState>({
   active: null,
   dragging: null,
   placeholder: null,
-  setCanvasNodes: () => { },
+  nodesInfo: {},
+  setNodes: () => { },
   setActive: () => { },
   setDragging: () => { },
   setPlaceholder: () => { }

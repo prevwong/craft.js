@@ -1,14 +1,17 @@
 import React from "react";
 import { id } from "~types";
-import { Node, NodeId, Nodes } from "./node";
+import { Node, NodeId, Nodes, NodeInfo } from "./node";
 import { CSSMarginPaddingObj } from "./dom";
 
-export interface BuilderContextState {
+export interface BuilderState {
   nodes: Nodes,
   active: Node,
   dragging: Node,
-  placeholder: PlaceholderInfo,
-  setCanvasNodes: Function
+  placeholder: PlaceholderInfo
+}
+export interface BuilderContextState extends BuilderState {
+  nodesInfo: any;
+  setNodes: Function
   setActive: Function
   setDragging: Function
   setPlaceholder: Function
