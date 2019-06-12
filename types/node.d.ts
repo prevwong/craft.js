@@ -2,8 +2,16 @@ import { HTMLProps } from "react";
 import { id } from "~types";
 import React from "react"
 import { DOMInfo, CSSMarginPaddingObj } from "./dom";
+import { BuilderContextState } from "./core";
 
 export type NodeId = string;
+
+export interface NodeContextState {
+  node: Node;
+  childCanvas: CanvasMapping;
+  pushChildCanvas: Function;
+  builder: BuilderContextState
+}
 
 export interface ReactElement {
   type?: string | React.ElementType;

@@ -1,6 +1,6 @@
 import React from "react";
 import { mapChildrenToNodes, createNode, nodesToArray } from "./helpers";
-import { NodeId, CanvasNode, Nodes } from "~types";
+import { NodeId, CanvasNode, Nodes, NodeContextState } from "~types";
 import NodeContext from "../Nodes/NodeContext";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
 import RenderNode from "../Nodes/RenderNode";
@@ -9,7 +9,7 @@ const shortid = require("shortid");
 export default class Canvas extends React.PureComponent<CanvasNode> {
   id: NodeId = null;
   nodes: Nodes = null;
-  constructor(props: CanvasNode, context) {
+  constructor(props: CanvasNode, context: NodeContextState) {
     super(props);
     if (!props.id) {
       throw new Error("Canvas must have an id")
@@ -19,14 +19,14 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
     // If no unvisited canvas left, meaning this Canvas is a new child; so insert it first
     if (!childCanvas[id]) {
       let canvasId = `canvas-${shortid.generate()}`;
-      if (node.component === Canvas) {
+      if (node.type === Canvas) {
         canvasId = node.id;
       }
 
       const { children } = this.props;
       const nodes = mapChildrenToNodes(children, canvasId);
       const rootNode = createNode(this.constructor as React.ElementType, this.props, canvasId) as CanvasNode;
-      if (node.component === Canvas) {
+      if (node.type === Canvas) {
         rootNode.parent = node.parent;
       }
       rootNode.nodes = Object.keys(nodes);
@@ -39,15 +39,14 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
 
     return (
       <NodeContext.Consumer>
-        {({ node, childCanvas, builder }) => {
+        {({ childCanvas, builder }) => {
 
           const canvasId = childCanvas[this.props.id];
           if (!canvasId) return false;
 
           this.id = canvasId;
           const { nodes } = builder;
-          const canvas = nodes[canvasId];
-
+          const canvas = nodes[canvasId] as CanvasNode;
 
           return (
             <RenderNode

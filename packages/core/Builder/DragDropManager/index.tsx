@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { DropAction, CoreState, BuilderContextState } from "~types";
+import { DropAction, BuilderContextState } from "~types";
 import { placeBestPosition } from "./helper";
 import BuilderContext from "../BuilderContext";
 
