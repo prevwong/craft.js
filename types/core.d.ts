@@ -30,7 +30,7 @@ export declare interface CoreProps {
 }
 
 export declare interface DropAction {
-  parent: NodeId;
+  parent: Node;
   index: number;
   where: string;
 }

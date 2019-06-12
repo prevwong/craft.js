@@ -15,6 +15,8 @@ export interface DOMInfo {
   right: number;
   width: number;
   height: number;
+  outerWidth: number;
+  outerHeight: number;
   padding?: CSSMarginPaddingObj;
   margin?: CSSMarginPaddingObj;
   inFlow?: boolean;

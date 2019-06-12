@@ -74,8 +74,8 @@ const findPosition = (
 
 const movePlaceholder = (
   pos: DropAction,
-  droppableDomInfo: DOMInfo, // which droppable is cursor at
-  bestTargetDomInfo: DOMInfo // closest element in droppable (null if droppable is empty)
+  canvasDOMInfo: DOMInfo, // which canvas is cursor at
+  bestTargetDomInfo: DOMInfo // closest element in canvas (null if canvas is empty)
 ) => {
   let marg = 0,
     t = 0,
@@ -118,10 +118,10 @@ const movePlaceholder = (
       l = elDim.left;
     }
   } else {
-    if (droppableDomInfo) {
-      t = droppableDomInfo.top + margI;
-      l = droppableDomInfo.left + margI;
-      w = droppableDomInfo.width - margI * 2;
+    if (canvasDOMInfo) {
+      t = canvasDOMInfo.top + margI;
+      l = canvasDOMInfo.left + margI;
+      w = canvasDOMInfo.width - margI * 2;
       h = null;
     }
   }
@@ -140,16 +140,14 @@ const getNearestTarget = (
   nodes: Nodes,
   dragNode: Node
 ) => {
-  console.log('D', dragNode)
   const pos = { x: e.clientX, y: e.clientY };
   const { canvas } = dragNode;
   const nodesWithinBounds = canvas ? (Object.keys(nodes).filter(id => {
     // don't include children of current node; do not want to drop our current element into it's children
-
     return (
       !canvas.includes(id) && id !== "rootNode"
     );
-  })) : Object.keys(nodes);
+  })) : Object.keys(nodes).filter(id => id !== "rootNode");
 
   return nodesWithinBounds.filter((nodeId: NodeId) => {
     const { info } = nodes[nodeId];
@@ -171,9 +169,14 @@ export const placeBestPosition = (
     nearestTargetId = nearestTargets.pop();
 
   if (nearestTargetId) {
-    const targetNode = nodes[nearestTargetId];
+    const targetNode = nodes[nearestTargetId],
+      targetParent = targetNode.parent ? nodes[targetNode.parent] : null;
 
-    // console.log("target", targetNode)
+    if (targetParent) {  // target is part of a canvas
+      console.log(targetParent)
+    } else { // target is a lone canvas
+
+    }
 
     // const targetIndex = tree.getIndex(nearestTarget.id),
     //   targetParent = targetIndex.children

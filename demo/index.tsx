@@ -51,6 +51,7 @@ class App extends Component {
             <h2>whut</h2>
           </Canvas>
           <Canvas id="second" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
+            <h2>fas</h2>
           </Canvas>
           <Canvas id="third" style={{ background: "#eee", padding: "20px 30px" }}>
             <h2>hahaha</h2>
