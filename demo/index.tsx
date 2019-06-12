@@ -51,11 +51,12 @@ class App extends Component {
             <h2>whut</h2>
           </Canvas>
           <Canvas id="second" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
-            <h2>fas</h2>
+            {/* <h2>fas</h2> */}
+            <div style={{ float: "left", width: "50%", background: "#ccc" }}><h2>lol</h2></div>
           </Canvas>
           <Canvas id="third" style={{ background: "#eee", padding: "20px 30px" }}>
-            <h2>hahaha</h2>
-            <h2>whut</h2>
+            <span>hahaha</span>
+            <div style={{ width: "50%", background: "#ccc" }}><h2>lol</h2></div>
             <Canvas id="forth" style={{ background: "#ccc", padding: "20px 30px" }}>
               <h2>me</h2>
               <h2>inside</h2>

@@ -3,6 +3,7 @@ import { DropAction, BuilderContextState, Nodes, NodeId, CanvasNode, NodeInfo, D
 import BuilderContext from "../BuilderContext";
 import { isCanvas } from "~src/utils";
 import Canvas from "~packages/core/Canvas";
+import Placeholder from "./Placeholder";
 
 class DragDropManager extends Component {
   lastPos: DropAction;
@@ -25,7 +26,7 @@ class DragDropManager extends Component {
 
 
   placeBestPosition(e: MouseEvent) {
-    const { nodes }: BuilderContextState = this.context;
+    const { nodes, setPlaceholder }: BuilderContextState = this.context;
     const nearestTargets = this.getNearestTarget(e),
       nearestTargetId = nearestTargets.pop();
 
@@ -56,7 +57,7 @@ class DragDropManager extends Component {
         placement: bestTarget
       };
 
-      console.log("out", output);
+      setPlaceholder(output);
     }
   }
 
@@ -212,12 +213,14 @@ class DragDropManager extends Component {
   render() {
     return (
       <BuilderContext.Consumer>
-        {({ dragging, active }: BuilderContextState) => {
+        {({ dragging, placeholder, active }: BuilderContextState) => {
           if (dragging) window.addEventListener("mousemove", this.onDrag);
           else window.removeEventListener("mousemove", this.onDrag);
           return (
             <React.Fragment>
-
+              {placeholder && (
+                <Placeholder isActive={!!dragging} placeholder={placeholder} />
+              )}
               {this.props.children}
             </React.Fragment>
           );

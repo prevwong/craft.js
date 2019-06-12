@@ -7,9 +7,11 @@ export interface BuilderContextState {
   nodes: Nodes,
   active: Node,
   dragging: Node,
+  placeholder: PlaceholderInfo,
   setCanvasNodes: Function
   setActive: Function
   setDragging: Function
+  setPlaceholder: Function
 }
 
 export interface PlaceholderInfo {

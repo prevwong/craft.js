@@ -1,6 +1,6 @@
 import React from "react";
 import NodeElement from "../Nodes/NodeElement";
-import { Node, Nodes, CanvasNode, NodeId, BuilderContextState } from "~types";
+import { Node, Nodes, CanvasNode, NodeId, BuilderContextState, PlaceholderInfo } from "~types";
 import DragDropManager from "./DragDropManager";
 import { createNode, mapChildrenToNodes } from "../Canvas/helpers";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
@@ -13,6 +13,7 @@ export default class Builder extends React.Component<any> {
     nodes: {},
     active: null,
     dragging: null,
+    placeholder: null,
     setCanvasNodes: (canvasId: string, nodes: Node[]) => {
       this.state.nodes = {
         ...this.state.nodes,
@@ -27,6 +28,11 @@ export default class Builder extends React.Component<any> {
     setDragging: (id: NodeId) => {
       this.setState({
         dragging: id ? this.state.nodes[id] : null
+      });
+    },
+    setPlaceholder: (placeholder: PlaceholderInfo) => {
+      this.setState({
+        placeholder
       });
     }
   }
