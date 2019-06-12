@@ -45,13 +45,22 @@ class App extends Component {
       <Builder components={[
         MessageBox
       ]}>
-        <h2>whut</h2>
-        <h2>whut</h2>
-        <Canvas id="top">
-          <MessageBox />
-        </Canvas>
-
-        <h2>whut</h2>
+        <div style={{ padding: "20px 30px" }}>
+          <Canvas id="first" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
+            <h2>hahaha</h2>
+            <h2>whut</h2>
+          </Canvas>
+          <Canvas id="second" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
+          </Canvas>
+          <Canvas id="third" style={{ background: "#eee", padding: "20px 30px" }}>
+            <h2>hahaha</h2>
+            <h2>whut</h2>
+            <Canvas id="forth" style={{ background: "#ccc", padding: "20px 30px" }}>
+              <h2>me</h2>
+              <h2>inside</h2>
+            </Canvas>
+          </Canvas>
+        </div>
       </Builder >
     );
   }

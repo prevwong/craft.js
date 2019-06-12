@@ -9,15 +9,13 @@ const shortid = require("shortid");
 export default class Canvas extends React.PureComponent<CanvasNode> {
   id: NodeId = null;
   nodes: Nodes = null;
-  constructor(props: CanvasNode) {
+  constructor(props: CanvasNode, context) {
     super(props);
     if (!props.id) {
       throw new Error("Canvas must have an id")
     }
-  }
-  componentDidMount() {
-    const { node, pushChildCanvas, childCanvas } = this.context;
-    const { id } = this.props;
+    const { node, pushChildCanvas, childCanvas } = context;
+    const { id } = props;
     // If no unvisited canvas left, meaning this Canvas is a new child; so insert it first
     if (!childCanvas[id]) {
       let canvasId = `canvas-${shortid.generate()}`;
@@ -38,7 +36,7 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
   }
   render() {
     const { incoming, outgoing, ...props } = this.props;
-    
+
     return (
       <NodeContext.Consumer>
         {({ node, childCanvas, builder }) => {
@@ -56,7 +54,6 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
               {...props}
               node={canvas}
             >
-              <p>{canvasId}</p>
               {
                 canvas.nodes && canvas.nodes.map((nodeId: NodeId) => {
                   return (

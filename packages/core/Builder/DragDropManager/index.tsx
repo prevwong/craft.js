@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { DropAction, CoreState } from "~types";
+import { DropAction, CoreState, BuilderContextState } from "~types";
 import { placeBestPosition } from "./helper";
-import { BuilderContext, BuilderContextState } from "../context";
+import BuilderContext from "../BuilderContext";
 
 class DragDropManager extends Component {
   lastPos: DropAction;
@@ -17,7 +17,7 @@ class DragDropManager extends Component {
     // console.log("DRAGTREE", JSON.stringify(Object.keys(tree.indexes)));
     if (dragging) {
       // console.log(nodes)
-      // const placeholder = placeBestPosition(nodes, dragging, e);
+      const placeholder = placeBestPosition(nodes, dragging, e);
 
       //   if (placeholder) {
       //     setPlaceholder(placeholder);

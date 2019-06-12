@@ -4,6 +4,7 @@ import {
   DropAction
 } from "~types";
 import { NodeInfo, Node, Nodes, NodeId } from "~types/tree";
+import console = require("console");
 
 const findPosition = (
   parent: Index,
@@ -139,12 +140,14 @@ const getNearestTarget = (
   nodes: Nodes,
   dragNode: Node
 ) => {
+  console.log('D', dragNode)
   const pos = { x: e.clientX, y: e.clientY };
   const { canvas } = dragNode;
   const nodesWithinBounds = canvas ? (Object.keys(nodes).filter(id => {
     // don't include children of current node; do not want to drop our current element into it's children
+
     return (
-      !canvas.includes(id)
+      !canvas.includes(id) && id !== "rootNode"
     );
   })) : Object.keys(nodes);
 
@@ -166,10 +169,11 @@ export const placeBestPosition = (
 ) => {
   const nearestTargets = getNearestTarget(e, nodes, dragTarget),
     nearestTargetId = nearestTargets.pop();
+
   if (nearestTargetId) {
-    const targetNode = nodes[nearestTargetId],
-      targetParent = targetNode.parent,
-      targetParentInfo = targetParent.info;
+    const targetNode = nodes[nearestTargetId];
+
+    // console.log("target", targetNode)
 
     // const targetIndex = tree.getIndex(nearestTarget.id),
     //   targetParent = targetIndex.children

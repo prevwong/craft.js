@@ -1,9 +1,9 @@
 
 import React from "react";
 
-const context = React.createContext<any>({
+const NodeContext = React.createContext<any>({
   id: null,
   insert: () => { }
 });
 
-export default context;
+export default NodeContext;

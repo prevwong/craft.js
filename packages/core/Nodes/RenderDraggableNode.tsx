@@ -48,7 +48,7 @@ export default class RenderDraggableNode extends React.Component<any> {
   }
 
   componentDidMount() {
-    this.dom.addEventListener("mousedown", this.dragStartWrapper);
+    // this.dom.addEventListener("mousedown", this.dragStartWrapper);
   }
 
   render() {
