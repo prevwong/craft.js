@@ -7,6 +7,7 @@ import RenderDraggableNode from "../Nodes/RenderDraggableNode";
 import { loadState } from "./helpers";
 import test from "./test";
 import BuilderContext from "./BuilderContext";
+import RenderNodeWithContext from "../Nodes/RenderNodeWithContext";
 
 export default class Builder extends React.Component<any> {
   nodesInfo = {};
@@ -106,7 +107,7 @@ export default class Builder extends React.Component<any> {
         setPlaceholder
       }}>
         <DragDropManager>
-          <RenderDraggableNode nodeId="rootNode" />
+          <RenderNodeWithContext nodeId="rootNode" />
         </DragDropManager>
       </BuilderContext.Provider>
     )

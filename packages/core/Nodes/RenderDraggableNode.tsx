@@ -3,8 +3,9 @@ import NodeElement from "./NodeElement";
 import { NodeInfo, Node, BuilderContextState } from "~types";
 import RenderNode from "./RenderNode";
 import BuilderContext from "../Builder/BuilderContext";
+import RenderNodeWithContext from "./RenderNodeWithContext";
 
-export default class RenderDraggableNode extends React.Component<any> {
+export default class RenderDraggableNode extends RenderNodeWithContext {
   dom: HTMLElement = null;
   node: Node = null;
   info: NodeInfo = {};
@@ -49,37 +50,10 @@ export default class RenderDraggableNode extends React.Component<any> {
 
     const { placement } = placeholder;
     setDragging(null);
-
-
   }
 
   componentDidMount() {
     this.dom.addEventListener("mousedown", this.dragStartWrapper);
-  }
-
-  render() {
-    const { nodeId } = this.props;
-    return (
-      <BuilderContext.Consumer>
-        {({ nodes }: BuilderContextState) => {
-          const node = nodes[nodeId];
-          const { id, props, type } = this.node = node as Node;
-          return (
-            <NodeElement node={node}>
-              <RenderNode
-                {...props}
-                is={type}
-                node={node}
-                onReady={(dom: HTMLElement, info: NodeInfo) => {
-                  this.dom = dom;
-                  this.info = info;
-                }}
-              />
-            </NodeElement>
-          )
-        }}
-      </BuilderContext.Consumer>
-    )
   }
 }
 
