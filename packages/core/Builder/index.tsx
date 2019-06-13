@@ -106,7 +106,9 @@ export default class Builder extends React.Component<any> {
         setPlaceholder
       }}>
         <DragDropManager>
-          <RenderNodeWithContext nodeId="rootNode" />
+          <NodeElement node={this.state.nodes["rootNode"]}>
+            <RenderNodeWithContext />
+          </NodeElement>
         </DragDropManager>
       </BuilderContext.Provider>
     )
