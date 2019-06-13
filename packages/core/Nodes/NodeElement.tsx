@@ -1,14 +1,7 @@
-import { Nodes, Node, CanvasMapping, CanvasNode, BuilderContextState } from "~types";
+import { Nodes, Node, CanvasMapping, CanvasNode, BuilderContextState, NodeElementState, NodeElementProps } from "~types";
 import React from "react";
 import NodeContext from "./NodeContext";
 import BuilderContext from "../Builder/BuilderContext";
-
-interface NodeElementProps {
-  node: Node
-}
-interface NodeElementState {
-  childCanvas: CanvasMapping
-}
 
 export default class NodeElement extends React.Component<NodeElementProps> {
   loopInfo = {
@@ -21,9 +14,6 @@ export default class NodeElement extends React.Component<NodeElementProps> {
     this.loopInfo.index = 0;
   }
   componentWillMount() {
-    // this.setState({
-    //   unvisitedChildCanvas: this.props.node.childCanvas
-    // })
     if (this.props.node && this.props.node.childCanvas) this.state.childCanvas = this.props.node.childCanvas;
   }
   render() {

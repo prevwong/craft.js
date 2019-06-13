@@ -6,9 +6,17 @@ import { BuilderContextState } from "./core";
 
 export type NodeId = string;
 
-export interface NodeContextState {
+
+export interface NodeElementProps {
+  node: Node
+}
+
+interface NodeElementState {
+  childCanvas: CanvasMapping
+}
+
+export interface NodeContextState extends NodeElementState {
   node: Node;
-  childCanvas: CanvasMapping;
   pushChildCanvas: Function;
   builder: BuilderContextState
 }
