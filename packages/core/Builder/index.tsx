@@ -8,6 +8,8 @@ import { loadState } from "./helpers";
 import test from "./test";
 import BuilderContext from "./BuilderContext";
 import RenderNodeWithContext from "../Nodes/RenderNodeWithContext";
+import console = require("console");
+import produce from "immer";
 
 export default class Builder extends React.Component<any> {
   nodesInfo = {};
@@ -33,15 +35,12 @@ export default class Builder extends React.Component<any> {
     }
   }
 
-  setNodes = (nodes: Nodes) => {
-    this.setState((state: BuilderState) => {
-      state.nodes = {
-        ...state.nodes,
-        ...nodes
-      }
-      return state;
-    })
-
+  setNodes = (nodes: Function) => {
+    this.setState((draft: BuilderContextState) => {
+      const fn = nodes(draft.nodes);
+      draft.nodes = fn;
+      return draft;
+    });
   }
 
   setActive = (id: NodeId) => {
@@ -97,6 +96,7 @@ export default class Builder extends React.Component<any> {
   }
   render() {
     const { setNodes, setActive, setDragging, setPlaceholder } = this;
+    (window as any).tree = this.state;
     return (
       <BuilderContext.Provider value={{
         ...this.state,

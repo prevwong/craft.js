@@ -1,6 +1,6 @@
 import React from "react";
 import { id } from "~types";
-import { Node, NodeId, Nodes, NodeInfo } from "./node";
+import { Node, NodeId, Nodes, NodeInfo, CanvasNode } from "./node";
 import { CSSMarginPaddingObj } from "./dom";
 
 export interface BuilderState {
@@ -18,11 +18,15 @@ export interface BuilderContextState extends BuilderState {
 }
 
 export interface PlaceholderInfo {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  margin: CSSMarginPaddingObj;
+  node: Node
+  placement: DropAction;
+  position: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+    margin: CSSMarginPaddingObj;
+  }
 }
 
 export interface ActiveElement {
@@ -35,7 +39,7 @@ export declare interface CoreProps {
 }
 
 export declare interface DropAction {
-  parent: Node;
+  parent: CanvasNode;
   index: number;
   where: string;
 }

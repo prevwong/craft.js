@@ -1,7 +1,8 @@
-import { Nodes, Node, CanvasMapping, CanvasNode, BuilderContextState, NodeElementState, NodeElementProps } from "~types";
+import { Nodes, Node, CanvasMapping, CanvasNode, BuilderContextState, NodeElementState, NodeElementProps, NodeId } from "~types";
 import React from "react";
 import NodeContext from "./NodeContext";
 import BuilderContext from "../Builder/BuilderContext";
+import console = require("console");
 
 export default class NodeElement extends React.Component<NodeElementProps> {
   loopInfo = {
@@ -26,13 +27,10 @@ export default class NodeElement extends React.Component<NodeElementProps> {
             <NodeContext.Provider value={{
               node,
               childCanvas,
-              pushChildCanvas: (canvasId: string, canvasNode: CanvasNode, nodes: Nodes) => {
+              pushChildCanvas: (canvasId: string, canvasNodeId: NodeId) => {
                 if (!node.childCanvas) node.childCanvas = {};
-                builder.setNodes({
-                  [canvasNode.id]: canvasNode,
-                  ...nodes
-                });
-                this.state.childCanvas[canvasId] = node.childCanvas[canvasId] = canvasNode.id;
+
+                this.state.childCanvas[canvasId] = node.childCanvas[canvasId] = canvasNodeId;
                 this.setState({
                   ...this.state,
                 });
