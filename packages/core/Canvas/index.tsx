@@ -6,46 +6,44 @@ import RenderDraggableNode from "../Nodes/RenderDraggableNode";
 import RenderNode from "../Nodes/RenderNode";
 const shortid = require("shortid");
 
-export default class Canvas extends React.PureComponent<CanvasNode> {
+export default class Canvas extends React.PureComponent<any> {
   id: NodeId = null;
   nodes: Nodes = null;
   constructor(props: CanvasNode, context: NodeContextState) {
     super(props);
-    if (!props.id) {
-      throw new Error("Canvas must have an id")
-    }
     const { node, pushChildCanvas, childCanvas, builder } = context;
     const { id } = props;
-    // If no unvisited canvas left, meaning this Canvas is a new child; so insert it first
-    if (!childCanvas[id]) {
-      let canvasId = `canvas-${shortid.generate()}`;
-      if (node.type === Canvas) {
-        canvasId = node.id;
-      } 
-      this.id = canvasId;
 
-      if (!builder.nodes[canvasId] || (builder.nodes[canvasId] && !(builder.nodes[canvasId] as CanvasNode).nodes)) {
-        const { children } = this.props;
-        const childNodes = mapChildrenToNodes(children, canvasId);
-        const rootNode = createNode(this.constructor as React.ElementType, this.props, canvasId) as CanvasNode;
-        if (node.type === Canvas) {
-          rootNode.parent = node.parent;
-        }
-        rootNode.nodes = Object.keys(childNodes);
-
-        builder.setNodes((prevNodes: Nodes) => {
-          return {
-            ...prevNodes,
-            [rootNode.id]: rootNode,
-            ...childNodes
-          }
-        });
-      }
-
-      if ( node.type !== Canvas ) {
-        pushChildCanvas(id, canvasId);
-      }
+    let canvasId = this.id = `canvas-${shortid.generate()}`;
+    if ( node.type === Canvas ) {
+      canvasId = this.id = node.id;
+    } else {
+      if ( !id ) throw new Error("Root Canvas cannot ommit `id` prop");
+      if ( childCanvas[id] ) canvasId = childCanvas[id];
     }
+    
+    if (!builder.nodes[canvasId] || (builder.nodes[canvasId] && !(builder.nodes[canvasId] as CanvasNode).nodes)) {
+      const { children } = this.props;
+      const childNodes = mapChildrenToNodes(children, canvasId);
+      const rootNode = createNode(this.constructor as React.ElementType, this.props, canvasId) as CanvasNode;
+      if (node.type === Canvas) {
+        rootNode.parent = node.parent;
+      }
+      rootNode.nodes = Object.keys(childNodes);
+
+      builder.setNodes((prevNodes: Nodes) => {
+        return {
+          ...prevNodes,
+          [rootNode.id]: rootNode,
+          ...childNodes
+        }
+      });
+    }
+
+    if ( node.type !== Canvas ) {
+      pushChildCanvas(id, canvasId);
+    }
+
   }
   render() {
     const { incoming, outgoing, ...props } = this.props;
