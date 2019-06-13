@@ -1,15 +1,22 @@
 import React from "react";
-import { NodeInfo, Node, BuilderContextState, Nodes, CanvasNode } from "~types";
+import { NodeInfo, Node, BuilderContextState, Nodes, CanvasNode, DOMInfo } from "~types";
 import BuilderContext from "../Builder/BuilderContext";
 import RenderNodeWithContext from "./RenderNodeWithContext";
 
-export default class RenderDraggableNode extends RenderNodeWithContext {
+export default class RenderDraggableNode extends React.Component<any> {
   dom: HTMLElement = null;
   node: Node = null;
   info: NodeInfo = {};
   dragStartWrapper: EventListenerOrEventListenerObject = this.dragStart.bind(this);
   dragWatchWrapper: EventListenerOrEventListenerObject = this.dragWatch.bind(this);
   dragEndWrapper: EventListenerOrEventListenerObject = this.dragEnd.bind(this);
+  blockSelectionWrapper: EventListenerOrEventListenerObject = this.blockSelection.bind(this);
+  blockSelection(e: MouseEvent) {
+    const selection = window.getSelection ? window.getSelection() : (document as any).selection ? (document as any).selection : null;
+    if(!!selection) selection.empty ? selection.empty() : selection.removeAllRanges();
+    e.preventDefault();
+  }
+
   dragStart(e: MouseEvent) {
     e.stopPropagation();
     if (e.which !== 1) return;
@@ -19,6 +26,7 @@ export default class RenderDraggableNode extends RenderNodeWithContext {
     setActive(id);
     window.addEventListener("mousemove", this.dragWatchWrapper);
     window.addEventListener("mouseup", this.dragEndWrapper);
+    window.addEventListener("selectstart", this.blockSelectionWrapper);
   }
 
   dragWatch(e: MouseEvent) {
@@ -41,6 +49,7 @@ export default class RenderDraggableNode extends RenderNodeWithContext {
   dragEnd(e: MouseEvent) {
     window.removeEventListener("mouseup", this.dragEndWrapper);
     window.removeEventListener("mousemove", this.dragWatchWrapper);
+    window.removeEventListener("selectstart", this.blockSelectionWrapper);
 
     const { active, dragging, placeholder, setDragging, setNodes }: BuilderContextState = this.context;
     if (!dragging) return;
@@ -64,7 +73,25 @@ export default class RenderDraggableNode extends RenderNodeWithContext {
   }
 
   componentDidMount() {
-    if(this.dom) this.dom.addEventListener("mousedown", this.dragStartWrapper);
+    if(this.dom) {
+      this.dom.addEventListener("mousedown", this.dragStartWrapper);
+    }
+  }
+
+  render() {
+    return (
+      <RenderNodeWithContext 
+        {...this.props} 
+        style={{
+          cursor: 'move'
+        }}
+        onReady={(dom: HTMLElement, info: NodeInfo, node: Node) => {
+          this.dom = dom;
+          this.info = info;
+          this.node = node;
+        }}
+      />
+    )
   }
 }
 
