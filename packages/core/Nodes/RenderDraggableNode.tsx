@@ -1,10 +1,7 @@
 import React from "react";
-import NodeElement from "./NodeElement";
 import { NodeInfo, Node, BuilderContextState, Nodes, CanvasNode } from "~types";
-import RenderNode from "./RenderNode";
 import BuilderContext from "../Builder/BuilderContext";
 import RenderNodeWithContext from "./RenderNodeWithContext";
-import console = require("console");
 
 export default class RenderDraggableNode extends RenderNodeWithContext {
   dom: HTMLElement = null;

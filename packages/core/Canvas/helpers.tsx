@@ -71,7 +71,7 @@ export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?
       }
 
       let { type, props } = child;
-      const prefix = type === Canvas ? "canvas" : "node";
+      const prefix = (type as Function) === Canvas ? "canvas" : "node";
       const id = hardId ? hardId : `${prefix}-${shortid.generate()}`;
 
       let node = createNode(type as React.ElementType, props, id, parent);
