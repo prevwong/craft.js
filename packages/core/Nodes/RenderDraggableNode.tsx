@@ -1,9 +1,10 @@
 import React from "react";
 import NodeElement from "./NodeElement";
-import { NodeInfo, Node, BuilderContextState } from "~types";
+import { NodeInfo, Node, BuilderContextState, Nodes, CanvasNode } from "~types";
 import RenderNode from "./RenderNode";
 import BuilderContext from "../Builder/BuilderContext";
 import RenderNodeWithContext from "./RenderNodeWithContext";
+import console = require("console");
 
 export default class RenderDraggableNode extends RenderNodeWithContext {
   dom: HTMLElement = null;
@@ -44,11 +45,24 @@ export default class RenderDraggableNode extends RenderNodeWithContext {
     window.removeEventListener("mouseup", this.dragEndWrapper);
     window.removeEventListener("mousemove", this.dragWatchWrapper);
 
-    const { active, dragging, placeholder, setDragging } = this.context;
+    const { active, dragging, placeholder, setDragging, setNodes }: BuilderContextState = this.context;
     if (!dragging) return;
 
-
+    const { id: dragId, parent: dragParentId } = dragging;
     const { placement } = placeholder;
+    const { parent, index, where } = placement;
+    const { id: parentId, nodes } = parent;
+
+    setNodes((stateNodes: Nodes) => {
+      const currentParentNodes = (stateNodes[dragParentId] as CanvasNode).nodes,
+        newParentNodes = (stateNodes[parentId] as CanvasNode).nodes;
+
+      currentParentNodes.splice(currentParentNodes.indexOf(dragId), 1);
+      newParentNodes.splice(index + (where === "after" ? 1 : 0), 0, dragId);
+      stateNodes[dragId].parent = parentId;
+      return stateNodes;
+    });
+
     setDragging(null);
   }
 
