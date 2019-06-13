@@ -4,6 +4,7 @@ import { NodeId, CanvasNode, Nodes, NodeContextState } from "~types";
 import NodeContext from "../Nodes/NodeContext";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
 import RenderNode from "../Nodes/RenderNode";
+import NodeElement from "../Nodes/NodeElement";
 const shortid = require("shortid");
 
 export default class Canvas extends React.PureComponent<any> {
@@ -69,7 +70,9 @@ export default class Canvas extends React.PureComponent<any> {
                 {
                   canvas && canvas.nodes && canvas.nodes.map((nodeId: NodeId) => {
                     return (
-                      <RenderDraggableNode nodeId={nodeId} key={nodeId} />
+                      <NodeElement key={nodeId} node={nodes[nodeId]}>
+                         <RenderDraggableNode />
+                      </NodeElement>
                     )
                   })
                 }

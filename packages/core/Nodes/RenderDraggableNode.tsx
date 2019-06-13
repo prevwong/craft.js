@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import { NodeInfo, Node, BuilderContextState, Nodes, CanvasNode, DOMInfo } from "~types";
 import BuilderContext from "../Builder/BuilderContext";
 import RenderNodeWithContext from "./RenderNodeWithContext";
+import NodeContext from "./NodeContext";
 export default class RenderDraggableNode extends React.PureComponent<any> {
   dom: HTMLElement = null;
   node: Node = null;
@@ -20,25 +21,28 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
   }
 
   click(e: MouseEvent) {
+    console.log("clicked.")
     e.stopPropagation();
     if (e.which !== 1) return;
-    const { id } = this.node;
-    const { setActive } = this.context;
+    const { node, builder} = this.context;
+    const { setActive } = builder;
     // Active element, now we'll be able to edit its' props
-    setActive(id);
+    setActive(node.id);
   }
 
   dragStart(e: MouseEvent) {
     e.stopPropagation();
     if (e.which !== 1) return;
+    console.log('drag start.')
     window.addEventListener("mousemove", this.dragWatchWrapper);
     window.addEventListener("mouseup", this.dragEndWrapper);
     window.addEventListener("selectstart", this.blockSelectionWrapper);
   }
 
   dragWatch(e: MouseEvent) {
-    const { active, dragging, setDragging } = this.context;
-    const { dom } = this.info;
+    const {node, builder} = this.context;
+    const { active, dragging, setDragging } = builder;
+    const { dom } = builder.nodesInfo[node.id]
     if ( !active ) return;
     if (
       !(
@@ -59,7 +63,8 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
     window.removeEventListener("mousemove", this.dragWatchWrapper);
     window.removeEventListener("selectstart", this.blockSelectionWrapper);
 
-    const { active, dragging, placeholder, setDragging, setNodes }: BuilderContextState = this.context;
+    const {node, builder} = this.context;
+    const { active, dragging, placeholder, setDragging, setNodes }: BuilderContextState = builder;
     if (!dragging) return;
 
     const { id: dragId, parent: dragParentId } = dragging;
@@ -85,46 +90,64 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
       this.dom.addEventListener("click", this.clickWrapper)
     }
   }
-  attachClickHandler(e: Event) {
-    e.target.addEventListener("click", this.clickWrapper);
+  attachClickHandler(target: HTMLElement) {
+    target.addEventListener("mousedown", this.clickWrapper);
   }
-  attachDragHandler(e: Event) {
-    e.target.addEventListener("click", this.dragStartWrapper);
+  attachDragHandler(target: HTMLElement) {
+    target.addEventListener("mousedown", this.dragStartWrapper);
   }
   
-  demo = (Comp) => {
+  
+  demo = (Comp: React.ComponentType<any>, state: any, actions: any) => {
+    const preview =  <Comp ref={(ref: any) => {
+      if ( ref ) {
+        actions.clickHandler(ReactDOM.findDOMNode(ref));
+      }
+    }} />;
     return (
       <React.Fragment>
-        {Comp}
+        {
+          state.active ? 
+          <span>
+            <div className={'toolbar'}>
+              <a ref={(ref: any) => {
+                if (ref) {
+                  actions.dragHandler(ReactDOM.findDOMNode(ref));
+                }
+              }}>Move</a>
+              
+            </div>
+            {preview}
+          </span> : preview
+        }
+       
       </React.Fragment>
     )
   }
 
   render() {
-    console.log(this.props)
-    const preview = (
-      <RenderNodeWithContext 
-        {...this.props} 
-        style={{
-          cursor: 'move'
-        }}
-        onReady={(dom: HTMLElement, info: NodeInfo, node: Node)=> {
-          this.dom = dom;
-          this.node = node;
-          this.info = info;
-        }}
-      />
-    );
-    
+   
     return (
-      <React.Fragment>
-       {
-         this.demo(preview)
-       }
-      </React.Fragment>
+      <NodeContext.Consumer>
+        {({node, builder}) => {
+          const {active, dragging} = builder;
+          return this.demo(
+                RenderNodeWithContext,
+                {
+                  active: active && active.id === node.id,
+                  dragging: dragging && dragging.id === node.id
+                },
+                {
+                  clickHandler: (target: HTMLElement) => this.attachClickHandler(target),
+                  dragHandler: (target: HTMLElement) => this.attachDragHandler(target)
+                }
+              )
+        }}
+      </NodeContext.Consumer>
     )
   }
 }
 
 
-RenderDraggableNode.contextType = BuilderContext;
+
+RenderDraggableNode.contextType = NodeContext;
