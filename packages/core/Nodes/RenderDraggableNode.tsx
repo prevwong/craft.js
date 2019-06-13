@@ -1,12 +1,14 @@
 import React from "react";
+import ReactDOM from "react-dom";
+
 import { NodeInfo, Node, BuilderContextState, Nodes, CanvasNode, DOMInfo } from "~types";
 import BuilderContext from "../Builder/BuilderContext";
 import RenderNodeWithContext from "./RenderNodeWithContext";
-
-export default class RenderDraggableNode extends React.Component<any> {
+export default class RenderDraggableNode extends React.PureComponent<any> {
   dom: HTMLElement = null;
   node: Node = null;
   info: NodeInfo = {};
+  clickWrapper: EventListenerOrEventListenerObject = this.click.bind(this);
   dragStartWrapper: EventListenerOrEventListenerObject = this.dragStart.bind(this);
   dragWatchWrapper: EventListenerOrEventListenerObject = this.dragWatch.bind(this);
   dragEndWrapper: EventListenerOrEventListenerObject = this.dragEnd.bind(this);
@@ -17,13 +19,18 @@ export default class RenderDraggableNode extends React.Component<any> {
     e.preventDefault();
   }
 
-  dragStart(e: MouseEvent) {
+  click(e: MouseEvent) {
     e.stopPropagation();
     if (e.which !== 1) return;
     const { id } = this.node;
     const { setActive } = this.context;
     // Active element, now we'll be able to edit its' props
     setActive(id);
+  }
+
+  dragStart(e: MouseEvent) {
+    e.stopPropagation();
+    if (e.which !== 1) return;
     window.addEventListener("mousemove", this.dragWatchWrapper);
     window.addEventListener("mouseup", this.dragEndWrapper);
     window.addEventListener("selectstart", this.blockSelectionWrapper);
@@ -32,6 +39,7 @@ export default class RenderDraggableNode extends React.Component<any> {
   dragWatch(e: MouseEvent) {
     const { active, dragging, setDragging } = this.context;
     const { dom } = this.info;
+    if ( !active ) return;
     if (
       !(
         e.clientX >= dom.left &&
@@ -73,24 +81,47 @@ export default class RenderDraggableNode extends React.Component<any> {
   }
 
   componentDidMount() {
-    if(this.dom) {
-      this.dom.addEventListener("mousedown", this.dragStartWrapper);
+    if ( this.dom ) {
+      this.dom.addEventListener("click", this.clickWrapper)
     }
+  }
+  attachClickHandler(e: Event) {
+    e.target.addEventListener("click", this.clickWrapper);
+  }
+  attachDragHandler(e: Event) {
+    e.target.addEventListener("click", this.dragStartWrapper);
+  }
+  
+  demo = (Comp) => {
+    return (
+      <React.Fragment>
+        {Comp}
+      </React.Fragment>
+    )
   }
 
   render() {
-    return (
+    console.log(this.props)
+    const preview = (
       <RenderNodeWithContext 
         {...this.props} 
         style={{
           cursor: 'move'
         }}
-        onReady={(dom: HTMLElement, info: NodeInfo, node: Node) => {
+        onReady={(dom: HTMLElement, info: NodeInfo, node: Node)=> {
           this.dom = dom;
-          this.info = info;
           this.node = node;
+          this.info = info;
         }}
       />
+    );
+    
+    return (
+      <React.Fragment>
+       {
+         this.demo(preview)
+       }
+      </React.Fragment>
     )
   }
 }

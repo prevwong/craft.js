@@ -42,6 +42,7 @@ export default class Builder extends React.Component<any> {
   }
 
   setActive = (id: NodeId) => {
+   
     this.setState({
       active: this.state.nodes[id]
     });
