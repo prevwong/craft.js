@@ -5,6 +5,7 @@ import { NodeInfo, Node, BuilderContextState, Nodes, CanvasNode, DOMInfo } from 
 import BuilderContext from "../Builder/BuilderContext";
 import RenderNodeWithContext from "./RenderNodeWithContext";
 import NodeContext from "./NodeContext";
+import TestRender from "./TestRender";
 export default class RenderDraggableNode extends React.PureComponent<any> {
   dom: HTMLElement = null;
   node: Node = null;
@@ -96,34 +97,6 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
   attachDragHandler(target: HTMLElement) {
     target.addEventListener("mousedown", this.dragStartWrapper);
   }
-  
-  
-  demo = (Comp: React.ComponentType<any>, state: any, actions: any) => {
-    const preview =  <Comp ref={(ref: any) => {
-      if ( ref ) {
-        actions.clickHandler(ReactDOM.findDOMNode(ref));
-      }
-    }} />;
-    return (
-      <React.Fragment>
-        {
-          state.active ? 
-          <span>
-            <div className={'toolbar'}>
-              <a ref={(ref: any) => {
-                if (ref) {
-                  actions.dragHandler(ReactDOM.findDOMNode(ref));
-                }
-              }}>Move</a>
-              
-            </div>
-            {preview}
-          </span> : preview
-        }
-       
-      </React.Fragment>
-    )
-  }
 
   render() {
    
@@ -131,17 +104,19 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
       <NodeContext.Consumer>
         {({node, builder}) => {
           const {active, dragging} = builder;
-          return this.demo(
-                RenderNodeWithContext,
-                {
-                  active: active && active.id === node.id,
-                  dragging: dragging && dragging.id === node.id
-                },
-                {
-                  clickHandler: (target: HTMLElement) => this.attachClickHandler(target),
-                  dragHandler: (target: HTMLElement) => this.attachDragHandler(target)
-                }
-              )
+          return (
+            <TestRender 
+              Component={RenderNodeWithContext} 
+              nodeState={{
+                active: active && active.id === node.id,
+                dragging: dragging && dragging.id === node.id
+              }}
+              handlers={{
+                clickHandler: (target: HTMLElement) => this.attachClickHandler(target),
+                dragHandler: (target: HTMLElement) => this.attachDragHandler(target)
+              }}
+            />
+          )
         }}
       </NodeContext.Consumer>
     )
