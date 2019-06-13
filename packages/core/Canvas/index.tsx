@@ -4,7 +4,6 @@ import { NodeId, CanvasNode, Nodes, NodeContextState } from "~types";
 import NodeContext from "../Nodes/NodeContext";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
 import RenderNode from "../Nodes/RenderNode";
-import console = require("console");
 const shortid = require("shortid");
 
 export default class Canvas extends React.PureComponent<CanvasNode> {
@@ -22,7 +21,8 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
       let canvasId = `canvas-${shortid.generate()}`;
       if (node.type === Canvas) {
         canvasId = node.id;
-      }
+      } 
+      this.id = canvasId;
 
       if (!builder.nodes[canvasId] || (builder.nodes[canvasId] && !(builder.nodes[canvasId] as CanvasNode).nodes)) {
         const { children } = this.props;
@@ -41,7 +41,10 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
           }
         });
       }
-      pushChildCanvas(id, canvasId);
+
+      if ( node.type !== Canvas ) {
+        pushChildCanvas(id, canvasId);
+      }
     }
   }
   render() {
@@ -51,13 +54,13 @@ export default class Canvas extends React.PureComponent<CanvasNode> {
       <NodeContext.Consumer>
         {({ childCanvas, builder }) => {
 
-          const canvasId = childCanvas[this.props.id];
+          const canvasId = this.id ? this.id : childCanvas[this.props.id];
           if (!canvasId) return false;
 
           this.id = canvasId;
           const { nodes } = builder;
           const canvas = nodes[canvasId] as CanvasNode;
-          // console.log("canvas", canvas)
+          console.log("canvas", canvas)
           return (
             canvas && <RenderNode
               {...props}

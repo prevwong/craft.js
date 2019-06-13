@@ -8,8 +8,6 @@ import { loadState } from "./helpers";
 import test from "./test";
 import BuilderContext from "./BuilderContext";
 import RenderNodeWithContext from "../Nodes/RenderNodeWithContext";
-import console = require("console");
-import produce from "immer";
 
 export default class Builder extends React.Component<any> {
   nodesInfo = {};

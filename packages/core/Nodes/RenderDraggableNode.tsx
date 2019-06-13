@@ -67,7 +67,7 @@ export default class RenderDraggableNode extends RenderNodeWithContext {
   }
 
   componentDidMount() {
-    this.dom.addEventListener("mousedown", this.dragStartWrapper);
+    if(this.dom) this.dom.addEventListener("mousedown", this.dragStartWrapper);
   }
 }
 
