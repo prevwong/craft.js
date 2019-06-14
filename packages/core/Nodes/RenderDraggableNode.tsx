@@ -23,8 +23,7 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
   }
 
   click(e: MouseEvent) {
-    console.log("clicked.")
-    e.stopPropagation();
+    e.stopImmediatePropagation();
     if (e.which !== 1) return;
     const { node, builder} = this.context;
     const { setActive } = builder;

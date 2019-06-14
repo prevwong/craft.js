@@ -56,7 +56,6 @@ export default class Builder extends React.Component<any> {
   }
 
   setHover = (id: NodeId) => {
-    console.log("hover", this.state.nodes[id]);
     this.setState({
       hover: id ? this.state.nodes[id] : null
     });
@@ -106,6 +105,9 @@ export default class Builder extends React.Component<any> {
   componentDidMount() {
     window.addEventListener("mouseover", e => {
       this.setHover(null);
+    });
+    window.addEventListener("mousedown", e => {
+      this.setActive(null);
     })
   }
   render() {
