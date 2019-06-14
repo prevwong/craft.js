@@ -38,11 +38,12 @@ export interface NodeState {
 }
 
 export type CraftComponent = React.ElementType & {
-  editor: React.StatelessComponent
+  editor: React.ComponentType<any>
 };
 
 export interface Node {
   type?: React.ElementType | CraftComponent
+  name?: string;
   editor?: Function;
   props?: HTMLProps<any>;
   id?: NodeId;
