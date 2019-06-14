@@ -6,7 +6,7 @@ import BuilderContext from "../Builder/BuilderContext";
 import NodeContext from "./NodeContext";
 import cx from "classnames";
 
-export default class RenderNodeWithContext extends React.Component<any> {
+export default class RenderNodeWithContext extends React.PureComponent<any> {
 
   render() {
     const { proxy } = this.props;

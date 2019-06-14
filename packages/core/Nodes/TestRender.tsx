@@ -2,27 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import cx from "classnames";
 
-
-//Detect if otherNode is contained by refNode
-function isParent(refNode, otherNode) {
-	var parent = otherNode.parentNode;
-	do {
-		if (refNode == parent) {
-			return true;
-		} else {
-			parent = parent.parentNode;
-		}
-	} while (parent);
-	return false;
-}
-
-
 class Toolbar extends React.PureComponent<any> {
  render() {
-    const {handlers, node, domInfo, Component} = this.props;
+    const {handlers, node, domInfo, editor, Component} = this.props;
+   
     const { type } = node;
     return ReactDOM.createPortal(
-      <div onMouseDown={(e: MouseEvent) => {
+      <div onMouseDown={(e: React.MouseEvent) => {
         e.stopPropagation();
         return false;
 
@@ -57,27 +43,34 @@ export default class TestRender extends React.Component<any> {
   }
 
   render() {
-      const {nodeState, node, domInfo, handlers, Component} = this.props;
-      const preview =  
-        <Component 
-          className={
-            cx(['node-el'], {
-              hover: nodeState.hover,
-              active: nodeState.active
-            })
-          }
-         
-          ref={(ref: any) => {
-            if ( ref ) {
-                const dom = this.dom = ReactDOM.findDOMNode(ref) as HTMLElement;
-                handlers.clickHandler(dom);
-            }
-          }} 
-        />;
+      const {nodeState, handlers, Editor, Component} = this.props;
+      const { hover, active } = nodeState;
+
         return (
           <React.Fragment>
             {nodeState.active && <Toolbar {...this.props} />}
-            {preview}
+            <Component 
+              className={
+                cx(['node-el'], {
+                  hover,
+                  active
+                })
+              }
+              ref={(ref: any) => {
+                if ( ref ) {
+                    const dom = this.dom = ReactDOM.findDOMNode(ref) as HTMLElement;
+                    handlers.clickHandler(dom);
+                }
+              }} 
+            />
+            {active && Editor && (
+              <div onMouseDown={(e: React.MouseEvent) => {
+                e.stopPropagation();
+                return false;
+              }} >
+                <Editor />
+              </div>
+            )}
           </React.Fragment>
         )
   }

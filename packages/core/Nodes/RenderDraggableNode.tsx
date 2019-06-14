@@ -1,12 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { NodeInfo, Node, BuilderContextState, Nodes, CanvasNode, DOMInfo } from "~types";
+import { NodeInfo, Node, BuilderContextState, Nodes, CanvasNode, DOMInfo, CraftComponent } from "~types";
 import BuilderContext from "../Builder/BuilderContext";
 import RenderNodeWithContext from "./RenderNodeWithContext";
 import NodeContext from "./NodeContext";
 import TestRender from "./TestRender";
 import ProxyRenderNode from "./ProxyRenderNode";
+import { isCraftComponent, createEditor } from "~src/utils";
+
 export default class RenderDraggableNode extends React.PureComponent<any> {
   dom: HTMLElement = null;
   node: Node = null;
@@ -84,7 +86,7 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
 
     setDragging(null);
   }
-  
+
   attachClickHandler(target: HTMLElement) {
     target.addEventListener("mousedown", this.clickWrapper);
   }
@@ -112,13 +114,16 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
                 clickHandler: (target: HTMLElement) => this.attachClickHandler(target),
                 dragHandler: (target: HTMLElement) => this.attachDragHandler(target)
               }}
+              Editor={
+                isCraftComponent(node.type) ? createEditor((node.type as CraftComponent).editor, node.props) : null
+              }
               ref={(ref) => {
                 if ( ref ) {
                   const dom = ReactDOM.findDOMNode(ref);
                   if ( dom ) {
                     dom.addEventListener("mouseover", (e: MouseEvent) => {
                       e.stopImmediatePropagation();
-                      setHover(node.id)
+                      if ( !hover ||( hover && hover.id !== node.id) ) setHover(node.id)
                     });
                   }
                 }

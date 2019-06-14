@@ -4,7 +4,7 @@ import { getDOMInfo } from "~src/utils";
 import BuilderContext from "../Builder/BuilderContext";
 import cx from "classnames";
 
-export default class RenderNode extends React.Component<any> {
+export default class RenderNode extends React.PureComponent<any> {
   doneRender() {
     const { nodesInfo } = this.context;
     const { node, onReady } = this.props;
@@ -18,6 +18,7 @@ export default class RenderNode extends React.Component<any> {
       onReady(dom, info);
     }
   }
+  
   render() {
     const { is, node, onReady, proxy, ...props } = this.props;
     const Comp = is ? is : 'div';
