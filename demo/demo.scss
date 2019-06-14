@@ -13,6 +13,12 @@ body {
   font-size: 100%;
   font-family: Graphik;
 }
+b {
+  font-weight: 500;
+}
+i {
+  font-style: italic;
+}
 .node-el {
   outline: 1px dashed rgba(170,170,170,0.7);
   outline-offset: -2px;

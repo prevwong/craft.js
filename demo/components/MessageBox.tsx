@@ -55,7 +55,7 @@ export default class MessageBox extends Component<MessageBoxProps> {
                   />
                 )
                 :
-                <h2>{text}</h2>
+                <h2 dangerouslySetInnerHTML={{__html: text}}></h2>
               )
             }}
         </NodeContext.Consumer>
