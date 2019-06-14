@@ -51,25 +51,7 @@ class App extends Component {
       ]}>
         <div style={{ padding: "20px 30px" }}>
           <Canvas id="first" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
-            <div>hahaha</div>
-            <div>whut</div>
-          </Canvas>
-          <Canvas id="second" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
-            {/* <h2>fas</h2> */}
-            {/* <div style={{ float: "left", width: "50%", background: "#ccc" }}><h2>lol</h2></div> */}
-            <Canvas  style={{ background: "#ccc", padding: "20px 30px" }}>
-              <div>hahah</div>
-              <div>throw</div>
-            </Canvas>
-          </Canvas>
-          <Canvas id="third" style={{ background: "#eee", padding: "20px 30px" }}>
-          <span>hahaha</span>
-          <span>lmao</span>
-            <div style={{ width: "50%", background: "#ccc" }}><h2>lol</h2></div>
-            <Canvas  style={{ background: "#ccc", padding: "20px 30px" }}>
-              <div>me</div>
-              <div>inside</div>
-            </Canvas>
+            <MessageBox />
           </Canvas>
         </div>
       </Builder >
