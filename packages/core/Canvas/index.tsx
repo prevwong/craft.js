@@ -26,7 +26,8 @@ export default class Canvas extends React.PureComponent<any> {
     if (!builder.nodes[canvasId] || (builder.nodes[canvasId] && !(builder.nodes[canvasId] as CanvasNode).nodes)) {
       const { children } = this.props;
       const childNodes = mapChildrenToNodes(children, canvasId);
-      const rootNode = createNode(this.constructor as React.ElementType, this.props, canvasId) as CanvasNode;
+      const rootNode: CanvasNode =  node.type === Canvas ? {...node} : createNode(this.constructor as React.ElementType, this.props, canvasId) ;
+
       if (node.type === Canvas) {
         rootNode.parent = node.parent;
       }
