@@ -6,12 +6,14 @@ import { CSSMarginPaddingObj } from "./dom";
 export interface BuilderState {
   nodes: Nodes,
   active: Node,
+  hover: Node,
   dragging: Node,
   placeholder: PlaceholderInfo
 }
 export interface BuilderContextState extends BuilderState {
   nodesInfo: any;
   setNodes: Function
+  setHover: Function
   setActive: Function
   setDragging: Function
   setPlaceholder: Function

@@ -1,5 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import cx from "classnames";
+
+
+//Detect if otherNode is contained by refNode
+function isParent(refNode, otherNode) {
+	var parent = otherNode.parentNode;
+	do {
+		if (refNode == parent) {
+			return true;
+		} else {
+			parent = parent.parentNode;
+		}
+	} while (parent);
+	return false;
+}
 
 
 class Toolbar extends React.PureComponent<any> {
@@ -25,27 +40,44 @@ class Toolbar extends React.PureComponent<any> {
   }
 }
 export default class TestRender extends React.Component<any> {
-    render() {
-        const {nodeState, node, domInfo, handlers, Component} = this.props;
-        const preview =  
-          <Component ref={(ref: any) => {
-              if ( ref ) {
-                  const dom = ReactDOM.findDOMNode(ref) as HTMLElement;
-                  handlers.clickHandler(dom);
-              }
-            }} 
-          />;
-          return (
-            <React.Fragment>
-              {
-                nodeState.active ? 
-                <React.Fragment>
-                  <Toolbar {...this.props} />
-                  {preview}
-                </React.Fragment> : preview
-              }
-             
-            </React.Fragment>
-          )
-    }
+  dom:HTMLElement = null
+  state = {
+    hover: false
+  }
+  componentDidMount() {
+    document.addEventListener("mouseenter", (e) => {
+      // console.log("h", e.target)
+    });
+  }
+
+  render() {
+      const {nodeState, node, domInfo, handlers, Component} = this.props;
+      const preview =  
+        <Component 
+          className={
+            cx(['node-el'], {
+              hover: nodeState.hover
+            })
+          }
+         
+          ref={(ref: any) => {
+            if ( ref ) {
+                const dom = this.dom = ReactDOM.findDOMNode(ref) as HTMLElement;
+                handlers.clickHandler(dom);
+            }
+          }} 
+        />;
+        return (
+          <React.Fragment>
+            {
+              nodeState.active ? 
+              <React.Fragment>
+                <Toolbar {...this.props} />
+                {preview}
+              </React.Fragment> : preview
+            }
+            
+          </React.Fragment>
+        )
+  }
 }

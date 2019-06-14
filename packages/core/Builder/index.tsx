@@ -13,6 +13,7 @@ export default class Builder extends React.Component<any> {
   nodesInfo = {};
   state: BuilderState = {
     nodes: {},
+    hover:null,
     active: null,
     dragging: null,
     placeholder: null,
@@ -51,6 +52,13 @@ export default class Builder extends React.Component<any> {
   setDragging = (id: NodeId) => {
     this.setState({
       dragging: id ? this.state.nodes[id] : null
+    });
+  }
+
+  setHover = (id: NodeId) => {
+    console.log("hover", this.state.nodes[id]);
+    this.setState({
+      hover: id ? this.state.nodes[id] : null
     });
   }
 
@@ -93,8 +101,15 @@ export default class Builder extends React.Component<any> {
       return result;
     }, {});
   }
+
+
+  componentDidMount() {
+    window.addEventListener("mouseover", e => {
+      this.setHover(null);
+    })
+  }
   render() {
-    const { setNodes, setActive, setDragging, setPlaceholder } = this;
+    const { setNodes, setActive, setHover, setDragging, setPlaceholder } = this;
     (window as any).tree = this.state;
     return (
       <BuilderContext.Provider value={{
@@ -103,6 +118,7 @@ export default class Builder extends React.Component<any> {
         setNodes,
         setActive,
         setDragging,
+        setHover,
         setPlaceholder
       }}>
         <DragDropManager>

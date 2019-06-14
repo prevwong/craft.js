@@ -4,27 +4,24 @@ import { NodeInfo, Node, BuilderContextState, NodeElementState, NodeContextState
 import RenderNode from "./RenderNode";
 import BuilderContext from "../Builder/BuilderContext";
 import NodeContext from "./NodeContext";
+import cx from "classnames";
 
 export default class RenderNodeWithContext extends React.Component<any> {
 
   render() {
-    const { nodeId, style, onReady } = this.props;
-    
+    const { proxy } = this.props;
     return (
       <NodeContext.Consumer>
         {({ node }: NodeContextState ) => {
           const { id, props, type } = node as Node;
           return (
-            <RenderNode
+            <RenderNode 
               {...props}
-              style={
-                {...props.style,
-                ...style}
-              }
+              {...proxy}
               is={type}
               node={node}
               onReady={(dom: HTMLElement, info: NodeInfo) => {
-                if ( onReady ) onReady(dom, info, node);
+                // if ( onReady ) onReady(dom, info, node);
               }}
             />
           )

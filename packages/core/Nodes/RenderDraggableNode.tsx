@@ -6,6 +6,7 @@ import BuilderContext from "../Builder/BuilderContext";
 import RenderNodeWithContext from "./RenderNodeWithContext";
 import NodeContext from "./NodeContext";
 import TestRender from "./TestRender";
+import ProxyRenderNode from "./ProxyRenderNode";
 export default class RenderDraggableNode extends React.PureComponent<any> {
   dom: HTMLElement = null;
   node: Node = null;
@@ -86,8 +87,18 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
   }
 
   componentDidMount() {
-    if ( this.dom ) {
-      this.dom.addEventListener("click", this.clickWrapper)
+    const {node, builder} = this.context;
+    const { hover, setHover } = builder;
+
+    const dom = ReactDOM.findDOMNode(this);
+
+    if ( dom ) {
+      dom.addEventListener("mouseover", (e: MouseEvent) => {
+        e.stopImmediatePropagation();
+        setHover(node.id)
+       
+      })
+     
     }
   }
   attachClickHandler(target: HTMLElement) {
@@ -102,14 +113,15 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
     return (
       <NodeContext.Consumer>
         {({node, builder}) => {
-          const {active, dragging} = builder;
+          const {active, hover,  setHover, dragging} = builder;
           return (
             <TestRender 
               node={node}
               domInfo={builder.nodesInfo[node.id]}
-              Component={RenderNodeWithContext} 
+              Component={ProxyRenderNode} 
               nodeState={{
                 active: active && active.id === node.id,
+                hover: hover && hover.id === node.id,
                 dragging: dragging && dragging.id === node.id
               }}
               handlers={{
