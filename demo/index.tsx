@@ -53,6 +53,9 @@ class App extends Component {
           <Canvas id="first" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
             <MessageBox />
           </Canvas>
+          <Canvas id="second" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
+            <MessageBox />
+          </Canvas>
         </div>
       </Builder >
     );

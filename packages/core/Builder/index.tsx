@@ -71,7 +71,7 @@ export default class Builder extends React.Component<any> {
   saveState() {
     return Object.keys(this.state.nodes).reduce((result: any, nodeId) => {
       const node: Node = { ...this.state.nodes[nodeId] };
-      node.type = typeof node.type === "function" ? node.type.name : node.type;
+      node.name = typeof node.type === "function" ? node.type.name : (node.type as string);
 
       const JSXToNode = ((children: React.ReactNode) => {
         return React.Children.toArray(children).map((child: React.ReactElement, i) => {
