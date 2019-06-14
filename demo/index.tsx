@@ -10,6 +10,10 @@ import MessageBox from "./components/MessageBox";
 import Builder from "~packages/core/Builder";
 import Canvas from "~packages/core/Canvas";
 
+const canvasTools = document.createElement("div");
+canvasTools.id = `canvasTools`;
+document.body.appendChild(canvasTools);
+
 class App extends Component {
   state = {
     tree: tree,

@@ -106,6 +106,8 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
           const {active, dragging} = builder;
           return (
             <TestRender 
+              node={node}
+              domInfo={builder.nodesInfo[node.id]}
               Component={RenderNodeWithContext} 
               nodeState={{
                 active: active && active.id === node.id,
