@@ -1,5 +1,5 @@
 import "reset-css";
-import "./demo.css";
+import "./demo.scss";
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import tree from "./tree";
