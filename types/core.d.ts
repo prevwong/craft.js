@@ -14,9 +14,7 @@ export interface BuilderState {
 export interface BuilderContextState extends BuilderState {
   nodesInfo: any;
   setNodes: Function
-  setHover: Function
-  setActive: Function
-  setDragging: Function
+  setNodeState: Function
   setPlaceholder: Function
 }
 

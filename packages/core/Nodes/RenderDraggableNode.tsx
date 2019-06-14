@@ -28,9 +28,9 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
     e.stopImmediatePropagation();
     if (e.which !== 1) return;
     const { node, builder} = this.context;
-    const { setActive } = builder;
+    const { setNodeState } = builder;
     // Active element, now we'll be able to edit its' props
-    setActive(node.id);
+    setNodeState("active", node.id);
   }
 
   dragStart(e: MouseEvent) {
@@ -44,7 +44,7 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
 
   dragWatch(e: MouseEvent) {
     const {node, builder} = this.context;
-    const { active, dragging, setDragging } = builder;
+    const { active, dragging, setNodeState } = builder;
     const { left, right, top, bottom } = builder.nodesInfo[node.id]
     if ( !active ) return;
     if (
@@ -56,7 +56,7 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
       !dragging
     ) {
       // Element being dragged
-      setDragging(active.id);
+      setNodeState("dragging", active.id);
     }
   }
 
@@ -66,7 +66,7 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
     window.removeEventListener("selectstart", this.blockSelectionWrapper);
 
     const {node, builder} = this.context;
-    const { active, dragging, placeholder, setDragging, setNodes }: BuilderContextState = builder;
+    const { active, dragging, placeholder, setNodeState, setNodes }: BuilderContextState = builder;
     if (!dragging) return;
 
     const { id: dragId, parent: dragParentId } = dragging;
@@ -84,7 +84,7 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
       return stateNodes;
     });
 
-    setDragging(null);
+    setNodeState("dragging", null);
   }
 
   attachClickHandler(target: HTMLElement) {
@@ -98,18 +98,14 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
    
     return (
       <NodeContext.Consumer>
-        {({node, builder}) => {
-          const {active, hover,  setHover, dragging} = builder;
+        {({node, state, builder}) => {
+          const {active, hover,  setNodeState, dragging} = builder;
           return (
             <TestRender 
               node={node}
               domInfo={builder.nodesInfo[node.id]}
               Component={ProxyRenderNode} 
-              nodeState={{
-                active: active && active.id === node.id,
-                hover: hover && hover.id === node.id,
-                dragging: dragging && dragging.id === node.id
-              }}
+              state={state}
               handlers={{
                 clickHandler: (target: HTMLElement) => this.attachClickHandler(target),
                 dragHandler: (target: HTMLElement) => this.attachDragHandler(target)
@@ -121,7 +117,7 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
                   if ( dom ) {
                     dom.addEventListener("mouseover", (e: MouseEvent) => {
                       e.stopImmediatePropagation();
-                      if ( !hover ||( hover && hover.id !== node.id) ) setHover(node.id)
+                      if ( !hover ||( hover && hover.id !== node.id) ) setNodeState("hover", node.id)
                     });
                   }
                 }

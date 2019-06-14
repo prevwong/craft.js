@@ -26,6 +26,10 @@ export default class NodeElement extends React.Component<NodeElementProps> {
             <NodeContext.Provider value={{
               node,
               childCanvas,
+              state: {
+                active: builder.active && builder.active.id === node.id,
+                dragging: builder.dragging && builder.dragging.id === node.id
+              },
               pushChildCanvas: (canvasId: string, canvasNodeId: NodeId) => {
                 // if ( node.type !== Canvas ) {
                   if (!node.childCanvas) node.childCanvas = {};

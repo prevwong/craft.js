@@ -10,9 +10,7 @@ const BuilderContext = React.createContext<BuilderContextState>({
   placeholder: null,
   nodesInfo: {},
   setNodes: () => { },
-  setActive: () => { },
-  setHover: () => { },
-  setDragging: () => { },
+  setNodeState: () => { },
   setPlaceholder: () => { }
 });
 

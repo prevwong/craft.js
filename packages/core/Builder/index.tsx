@@ -43,23 +43,12 @@ export default class Builder extends React.Component<any> {
     });
   }
 
-  setActive = (id: NodeId) => {
-   
+  setNodeState = (state: string, id: NodeId) => {
+    if ( !["active", "hover", "dragging"].includes(state) ) throw new Error(`Undefined state "${state}, expected either "active", "hover" or "dragging".`);
+    if ( id && !this.state.nodes[id] ) throw new Error(`Node ${id} not found.`);
     this.setState({
-      active: this.state.nodes[id]
-    });
-  }
-
-  setDragging = (id: NodeId) => {
-    this.setState({
-      dragging: id ? this.state.nodes[id] : null
-    });
-  }
-
-  setHover = (id: NodeId) => {
-    this.setState({
-      hover: id ? this.state.nodes[id] : null
-    });
+      [state]: this.state.nodes[id]
+    })
   }
 
   setPlaceholder = (placeholder: PlaceholderInfo) => {
@@ -105,23 +94,21 @@ export default class Builder extends React.Component<any> {
 
   componentDidMount() {
     window.addEventListener("mouseover", e => {
-      if ( this.state.hover ) this.setHover(null);
+      if ( this.state.hover ) this.setNodeState("hover", null);
     });
     window.addEventListener("mousedown", e => {
-      if ( this.state.active) this.setActive(null);
+      if ( this.state.active) this.setNodeState("active", null);
     })
   }
   render() {
-    const { setNodes, setActive, setHover, setDragging, setPlaceholder } = this;
+    const { setNodes, setNodeState, setPlaceholder } = this;
     (window as any).tree = this.state;
     return (
       <BuilderContext.Provider value={{
         ...this.state,
         nodesInfo: this.nodesInfo,
         setNodes,
-        setActive,
-        setDragging,
-        setHover,
+        setNodeState,
         setPlaceholder
       }}>
         <DragDropManager>

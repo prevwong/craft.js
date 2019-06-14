@@ -18,7 +18,8 @@ interface NodeElementState {
 export interface NodeContextState extends NodeElementState {
   node: Node;
   pushChildCanvas: Function;
-  builder: BuilderContextState
+  builder: BuilderContextState;
+  state: any
 }
 
 export interface ReactElement {

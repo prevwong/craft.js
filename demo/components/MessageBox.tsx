@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import PropTypes, { string } from 'prop-types';
+import NodeContext from "~packages/core/Nodes/NodeContext";
+import ContentEditable from 'react-contenteditable'
 
 interface MessageBoxProps {
   text: string
@@ -39,7 +41,24 @@ export default class MessageBox extends Component<MessageBoxProps> {
 
     return (
       <div className={'message-box'} style={{backgroundColor: bg}}>
-        <h2>{text}</h2>
+        <NodeContext.Consumer>
+            {({node, state}) => {
+              const {active} = state;
+              return (
+                active ? (
+                  <ContentEditable 
+                    tagName='h2' 
+                    html={text} 
+                    onChange={(e) => {
+                      node.props.text = e.target.value;
+                    }}
+                  />
+                )
+                :
+                <h2>{text}</h2>
+              )
+            }}
+        </NodeContext.Consumer>
       </div>
     )
   }
