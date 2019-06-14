@@ -1,6 +1,7 @@
 import React, { ReactNode, HTMLProps } from "react";
 import { Node, NodeId, Nodes } from "~types";
 import Canvas from ".";
+import { defineReactiveProperty } from "~src/utils";
 const shortid = require("shortid");
 
 const TextNode = (props: { text: string }): React.ReactElement => {
@@ -27,6 +28,17 @@ export const nodesToArray = (nodes: Nodes, bare: boolean = true) => {
 
 export const createNode = (component: React.ElementType, props: React.Props<any>, id: NodeId, parent?: NodeId): Node => {
   // const { draggable } = props;
+  
+  // const copyProps: any = {...props};
+  // const reactiveProps = Object.keys(copyProps).reduce((result: any, key) => {
+  //   if ( key !== "children" ) {
+  //     defineReactiveProperty(result, key, copyProps[key]);
+  //   } else {
+  //     result[key] = copyProps[key];
+  //   }
+  //   return result;
+  // }, {});
+
 
   let node: Node = {
     type: component as React.ElementType,
@@ -81,3 +93,23 @@ export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?
     {}
   ) as Nodes;
 };
+
+
+export const makePropsReactive = (nodes: Nodes, setNodes: Function) => {
+  Object.keys(nodes).forEach(id => {
+    const node = nodes[id];
+    let {props} = node;
+    const reactiveProps = Object.keys(props).reduce((result, key) => {
+      if ( key !== "children" ) {
+        const value = (props as any)[key];
+        defineReactiveProperty(result, key, value, () => {
+          setNodes((prevNodes: Nodes) => {
+            return prevNodes;
+          });
+        });
+      }
+      return result;
+    }, {});
+    node.props = reactiveProps;
+  })
+}

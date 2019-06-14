@@ -7,7 +7,7 @@ import RenderNodeWithContext from "./RenderNodeWithContext";
 import NodeContext from "./NodeContext";
 import TestRender from "./TestRender";
 import ProxyRenderNode from "./ProxyRenderNode";
-import { isCraftComponent, createEditor } from "~src/utils";
+import Editor from "../Editor";
 
 export default class RenderDraggableNode extends React.PureComponent<any> {
   dom: HTMLElement = null;
@@ -114,9 +114,7 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
                 clickHandler: (target: HTMLElement) => this.attachClickHandler(target),
                 dragHandler: (target: HTMLElement) => this.attachDragHandler(target)
               }}
-              Editor={
-                isCraftComponent(node.type) ? createEditor((node.type as CraftComponent).editor, node.props) : null
-              }
+              Editor={Editor}
               ref={(ref) => {
                 if ( ref ) {
                   const dom = ReactDOM.findDOMNode(ref);

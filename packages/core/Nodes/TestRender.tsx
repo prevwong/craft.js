@@ -31,7 +31,7 @@ class Toolbar extends React.PureComponent<any> {
     )
   }
 }
-export default class TestRender extends React.Component<any> {
+export default class TestRender extends React.PureComponent<any> {
   dom:HTMLElement = null
   state = {
     hover: false
