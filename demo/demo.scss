@@ -18,4 +18,35 @@ body {
   &.hover {
     outline-color:blue;
   }
+  &.active {
+    outline-color:#3e3e3e;
+    outline-width: 2px;
+    outline-offset: -3px;
+    outline-style: solid;
+  }
+}
+
+.toolbar {
+  font-size:11px;
+  padding:10px 22px;
+  display: flex;
+  color:#fff;
+  position: relative;
+  backdrop-filter: blur(10px);
+  background: rgba(0,0,0,0.7);
+  align-items: center;
+  .tag {
+    background:#0fabab;
+    color:#fff;
+    border-radius:100px;
+    float:left;
+    padding: 5px 10px;
+  }
+  .actions {
+    flex:1;
+    padding-left:20px;
+    a {
+      float:right;
+    }
+  }
 }

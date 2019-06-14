@@ -84,22 +84,7 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
 
     setDragging(null);
   }
-
-  componentDidMount() {
-    const {node, builder} = this.context;
-    const { hover, setHover } = builder;
-
-    const dom = ReactDOM.findDOMNode(this);
-
-    if ( dom ) {
-      dom.addEventListener("mouseover", (e: MouseEvent) => {
-        e.stopImmediatePropagation();
-        setHover(node.id)
-       
-      })
-     
-    }
-  }
+  
   attachClickHandler(target: HTMLElement) {
     target.addEventListener("mousedown", this.clickWrapper);
   }
@@ -126,6 +111,17 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
               handlers={{
                 clickHandler: (target: HTMLElement) => this.attachClickHandler(target),
                 dragHandler: (target: HTMLElement) => this.attachDragHandler(target)
+              }}
+              ref={(ref) => {
+                if ( ref ) {
+                  const dom = ReactDOM.findDOMNode(ref);
+                  if ( dom ) {
+                    dom.addEventListener("mouseover", (e: MouseEvent) => {
+                      e.stopImmediatePropagation();
+                      setHover(node.id)
+                    });
+                  }
+                }
               }}
             />
           )

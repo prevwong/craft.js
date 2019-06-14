@@ -22,18 +22,24 @@ class Toolbar extends React.PureComponent<any> {
     const {handlers, node, domInfo, Component} = this.props;
     const { type } = node;
     return ReactDOM.createPortal(
-      <div className={`toolbar`} style={{
+      <div onMouseDown={(e: MouseEvent) => {
+        e.stopPropagation();
+        return false;
+
+      }} className={`toolbar`} style={{
         position:'absolute',
-        width: `${domInfo.width}px`,
-        top: `${domInfo.top - 20}px`,
+        minWidth: `${domInfo.width}px`,
+        top: `${domInfo.top - 41}px`,
         left: `${domInfo.left}px`
       }}>
-        <span>{typeof type === "string" ? type : type.name }</span>
+        <span className={'tag'}>{typeof type === "string" ? type : type.name }</span>
+        <div className={'actions'}>
         <a ref={(ref: any) => {
           if (ref) {
             handlers.dragHandler(ReactDOM.findDOMNode(ref));
           }
         }}>Move</a>
+        </div>
       </div>,
       document.getElementById("canvasTools")
     )
@@ -56,7 +62,8 @@ export default class TestRender extends React.Component<any> {
         <Component 
           className={
             cx(['node-el'], {
-              hover: nodeState.hover
+              hover: nodeState.hover,
+              active: nodeState.active
             })
           }
          
@@ -69,14 +76,8 @@ export default class TestRender extends React.Component<any> {
         />;
         return (
           <React.Fragment>
-            {
-              nodeState.active ? 
-              <React.Fragment>
-                <Toolbar {...this.props} />
-                {preview}
-              </React.Fragment> : preview
-            }
-            
+            {nodeState.active && <Toolbar {...this.props} />}
+            {preview}
           </React.Fragment>
         )
   }
