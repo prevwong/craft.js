@@ -48,9 +48,9 @@ class DragDropManager extends Component {
       const output = {
         position: movePlaceholder(
           bestTarget,
-          nodesInfo[targetParent.id].dom,
+          nodesInfo[targetParent.id],
           targetParent.nodes.length
-            ? nodesInfo[bestTargetNode.id].dom
+            ? nodesInfo[bestTargetNode.id]
             : null
         ),
         node: bestTargetNode,
@@ -69,8 +69,7 @@ class DragDropManager extends Component {
     }) : Object.keys(nodes).filter(id => id !== "rootNode");
 
     return nodesWithinBounds.filter((nodeId: NodeId) => {
-      const { dom, id } = nodesInfo[nodeId];
-      const { top, left, width, height } = dom;
+      const {top, left, width, height } = nodesInfo[nodeId];
       return (
         (pos.x >= left && pos.x <= left + width) &&
         (pos.y >= top && pos.y <= top + height)

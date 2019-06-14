@@ -9,9 +9,7 @@ export default class RenderNode extends React.Component<any> {
     const { node, onReady } = this.props;
     const dom = ReactDOM.findDOMNode(this) as HTMLElement;
     if(!dom) return;
-    const info = {
-      dom: getDOMInfo(dom)
-    };
+    const info = getDOMInfo(dom)
 
     if (nodesInfo) nodesInfo[node.id] = info;
 

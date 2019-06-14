@@ -9,9 +9,9 @@ class Toolbar extends React.PureComponent<any> {
     return ReactDOM.createPortal(
       <div className={`toolbar`} style={{
         position:'absolute',
-        width: `${domInfo.dom.width}px`,
-        top: `${domInfo.dom.top - 20}px`,
-        left: `${domInfo.dom.left}px`
+        width: `${domInfo.width}px`,
+        top: `${domInfo.top - 20}px`,
+        left: `${domInfo.left}px`
       }}>
         <span>{typeof type === "string" ? type : type.name }</span>
         <a ref={(ref: any) => {

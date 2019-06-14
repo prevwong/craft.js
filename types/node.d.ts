@@ -30,7 +30,7 @@ export interface Node extends ReactElement {
   type?: string | React.ElementType;
   props?: HTMLProps<any>;
   id?: NodeId;
-  info?: NodeInfo;
+  info?: DOMInfo;
   childCanvas?: CanvasMapping;
   parent?: string;
 }
@@ -52,8 +52,6 @@ export interface CanvasNodes {
   [key: string]: CanvasNode
 }
 
-export interface NodeInfo {
+export interface NodeInfo extends DOMInfo {
   id?: id;
-  dom?: DOMInfo;
-  accept?: boolean;
 }

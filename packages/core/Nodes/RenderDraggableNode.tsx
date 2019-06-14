@@ -9,7 +9,7 @@ import TestRender from "./TestRender";
 export default class RenderDraggableNode extends React.PureComponent<any> {
   dom: HTMLElement = null;
   node: Node = null;
-  info: NodeInfo = {};
+  info: DOMInfo = null;
   clickWrapper: EventListenerOrEventListenerObject = this.click.bind(this);
   dragStartWrapper: EventListenerOrEventListenerObject = this.dragStart.bind(this);
   dragWatchWrapper: EventListenerOrEventListenerObject = this.dragWatch.bind(this);
@@ -43,14 +43,13 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
   dragWatch(e: MouseEvent) {
     const {node, builder} = this.context;
     const { active, dragging, setDragging } = builder;
-    const { dom } = builder.nodesInfo[node.id]
+    const { left, right, top, bottom } = builder.nodesInfo[node.id]
     if ( !active ) return;
     if (
       !(
-        e.clientX >= dom.left &&
-        e.clientX <= dom.right &&
-        e.clientY >= dom.top &&
-        e.clientY <= dom.bottom
+        e.clientX >= right &&
+        e.clientY >= top &&
+        e.clientY <= bottom
       ) &&
       !dragging
     ) {

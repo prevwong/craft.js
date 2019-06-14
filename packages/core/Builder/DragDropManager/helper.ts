@@ -86,7 +86,7 @@ export const findPosition = (
     id = null;
   // Each dim is: Top, Left, Height, Width
   for (var i = 0, len = dims.length; i < len; i++) {
-    dim = dims[i].dom;
+    dim = dims[i];
     id = dims[i].id as NodeId;
 
     // Right position of the element. Left + Width
