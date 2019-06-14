@@ -1,10 +1,11 @@
 import React from "react";
 import { id } from "~types";
-import { Node, NodeId, Nodes, NodeInfo, CanvasNode } from "./node";
+import { Node, NodeId, Nodes, NodeInfo, CanvasNode, NodeStates } from "./node";
 import { CSSMarginPaddingObj } from "./dom";
 
 export interface BuilderState {
   nodes: Nodes,
+  nodeStates: NodeStates,
   active: Node,
   hover: Node,
   dragging: Node,

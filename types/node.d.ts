@@ -26,8 +26,24 @@ export interface ReactElement {
   props?: HTMLProps<any>;
 }
 
-export interface Node extends ReactElement {
-  type?: string | React.ElementType;
+export interface ComponentType  {
+  editor?: Function
+}
+
+export interface NodeState {
+  editor?: Function
+  dragging?: MouseEvent
+  hover?: MouseEvent
+  active?: boolean
+}
+
+export type CraftComponent = React.ElementType & {
+  editor: React.StatelessComponent
+};
+
+export interface Node {
+  type?: React.ElementType | CraftComponent
+  editor?: Function;
   props?: HTMLProps<any>;
   id?: NodeId;
   info?: DOMInfo;
@@ -48,6 +64,11 @@ export interface CanvasNode extends Node {
 export interface Nodes {
   [key: string]: Node
 }
+
+export interface NodeStates {
+  [key: string]: NodeState
+}
+
 export interface CanvasNodes {
   [key: string]: CanvasNode
 }

@@ -13,6 +13,7 @@ export default class Builder extends React.Component<any> {
   nodesInfo = {};
   state: BuilderState = {
     nodes: {},
+    nodeStates: {},
     hover:null,
     active: null,
     dragging: null,
@@ -104,10 +105,10 @@ export default class Builder extends React.Component<any> {
 
   componentDidMount() {
     window.addEventListener("mouseover", e => {
-      this.setHover(null);
+      if ( this.state.hover ) this.setHover(null);
     });
     window.addEventListener("mousedown", e => {
-      this.setActive(null);
+      if ( this.state.active) this.setActive(null);
     })
   }
   render() {
