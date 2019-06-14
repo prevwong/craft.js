@@ -1,5 +1,5 @@
 import React from "react";
-import { mapChildrenToNodes, createNode, nodesToArray, makePropsReactive } from "./helpers";
+import { mapChildrenToNodes, createNode, makePropsReactive } from "./helpers";
 import { NodeId, CanvasNode, Nodes, NodeContextState } from "~types";
 import NodeContext from "../Nodes/NodeContext";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
@@ -12,8 +12,8 @@ export default class Canvas extends React.PureComponent<any> {
   nodes: Nodes = null;
   constructor(props: CanvasNode, context: NodeContextState) {
     super(props);
-    const { node, pushChildCanvas, childCanvas, builder } = context;
-    const { id } = props;
+    const { node, pushChildCanvas, childCanvas, builder } = context,
+          { id } = props;
 
     let canvasId = this.id = `canvas-${shortid.generate()}`;
     if ( node.type === Canvas ) {
@@ -24,28 +24,27 @@ export default class Canvas extends React.PureComponent<any> {
     }
     
     if (!builder.nodes[canvasId] || (builder.nodes[canvasId] && !(builder.nodes[canvasId] as CanvasNode).nodes)) {
-      const { children } = this.props;
-      const childNodes = mapChildrenToNodes(children, canvasId);
-      const rootNode: CanvasNode =  node.type === Canvas ? {...node} : createNode(this.constructor as React.ElementType, this.props, canvasId) ;
-      makePropsReactive(childNodes, builder.setNodes);
+      const { children } = this.props,
+            childNodes = mapChildrenToNodes(children, canvasId),
+            rootNode: CanvasNode =  
+              node.type === Canvas ? {...node} : 
+              createNode(this.constructor as React.ElementType, this.props, canvasId, null);
       
-      if (node.type === Canvas) {
-        rootNode.parent = node.parent;
-      }
+      makePropsReactive(childNodes, () => builder.setNodes());
+      
+      if (node.type === Canvas) rootNode.parent = node.parent;
       rootNode.nodes = Object.keys(childNodes);
+
       builder.setNodes((prevNodes: Nodes) => {
         return {
           ...prevNodes,
           [rootNode.id]: rootNode,
           ...childNodes
         }
-      });
+      })
     }
 
-    if ( node.type !== Canvas ) {
-      pushChildCanvas(id, canvasId);
-    }
-
+    if ( node.type !== Canvas )  pushChildCanvas(id, canvasId);
   }
   render() {
     const { incoming, outgoing, ...props } = this.props;
@@ -58,8 +57,8 @@ export default class Canvas extends React.PureComponent<any> {
           if (!canvasId) return false;
 
           this.id = canvasId;
-          const { nodes } = builder;
-          const canvas = nodes[canvasId] as CanvasNode;
+          const { nodes } = builder,
+                canvas = nodes[canvasId] as CanvasNode;
 
           return (
             canvas && <RenderNode

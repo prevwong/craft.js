@@ -1,49 +1,13 @@
 import React, { ReactNode, HTMLProps } from "react";
 import { Node, NodeId, Nodes } from "~types";
 import Canvas from ".";
-import { defineReactiveProperty } from "~src/utils";
+import { defineReactiveProperty, TextNode } from "~src/utils";
 const shortid = require("shortid");
 
-const TextNode = (props: { text: string }): React.ReactElement => {
-  return (
-    <React.Fragment>
-      {props.text}
-    </React.Fragment>
-  )
-}
-
-export const nodesToArray = (nodes: Nodes, bare: boolean = true) => {
-  return Object.keys(nodes).map((nodeId) => {
-    let node;
-    const { type, props } = node = nodes[nodeId];
-    if (bare) {
-      return {
-        type, props
-      }
-    } else {
-      return node;
-    }
-  })
-}
-
 export const createNode = (component: React.ElementType, props: React.Props<any>, id: NodeId, parent?: NodeId): Node => {
-  // const { draggable } = props;
-  
-  // const copyProps: any = {...props};
-  // const reactiveProps = Object.keys(copyProps).reduce((result: any, key) => {
-  //   if ( key !== "children" ) {
-  //     defineReactiveProperty(result, key, copyProps[key]);
-  //   } else {
-  //     result[key] = copyProps[key];
-  //   }
-  //   return result;
-  // }, {});
-
-
   let node: Node = {
     type: component as React.ElementType,
-    props,
-    // draggable: draggable === undefined || draggable === null ? true : !!draggable
+    props
   };
 
   node["id"] = id;
@@ -51,31 +15,7 @@ export const createNode = (component: React.ElementType, props: React.Props<any>
   return node;
 };
 
-export const mapInnerChildren = (children: ReactNode) => {
-  return React.Children.toArray(children).reduce(
-    (result: any, child: React.ReactElement) => {
-      // console.log("child", child);
-
-      if (typeof (child) === "string") {
-        child = <TextNode text={child} />
-      }
-      let { type, props } = child;
-      let { children, ...otherProps } = (props ? props : {}) as HTMLProps<any>;
-      let node: Node = {
-        type: type as React.ElementType,
-        props: otherProps
-      };
-      if (children) {
-        node.props.children = mapInnerChildren(children);
-      }
-      result.push(node);
-      return result;
-    },
-    []
-  );
-}
-
-export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?: string): Nodes => {
+export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?: string, cb?: Function): Nodes => {
   return React.Children.toArray(children).reduce(
     (result: Nodes, child: React.ReactElement | string) => {
       if (typeof (child) === "string") {
@@ -88,6 +28,7 @@ export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?
 
       let node = createNode(type as React.ElementType, props, id, parent);
       result[node.id] = node;
+      if ( cb ) cb(node);
       return result;
     },
     {}
@@ -95,7 +36,7 @@ export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?
 };
 
 
-export const makePropsReactive = (nodes: Nodes, setNodes: Function) => {
+export const makePropsReactive = (nodes: Nodes, cb: Function) => {
   Object.keys(nodes).forEach(id => {
     const node = nodes[id];
     let {props} = node;
@@ -103,9 +44,7 @@ export const makePropsReactive = (nodes: Nodes, setNodes: Function) => {
       if ( key !== "children" ) {
         const value = (props as any)[key];
         defineReactiveProperty(result, key, value, () => {
-          setNodes((prevNodes: Nodes) => {
-            return prevNodes;
-          });
+          cb()
         });
       }
       return result;

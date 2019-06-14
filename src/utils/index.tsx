@@ -1,6 +1,6 @@
 import { Node, CraftComponent } from "~types";
 import { node } from "prop-types";
-import React from "react";
+import React, { ReactNode, HTMLProps } from "react";
 
 export * from "./dom";
 
@@ -22,3 +22,38 @@ export const defineReactiveProperty = (obj: any, key: string, val?: string, cb?:
         }
     });
 }
+
+
+
+export const TextNode = (props: { text: string }): React.ReactElement => {
+    return (
+      <React.Fragment>
+        {props.text}
+      </React.Fragment>
+    )
+  }
+  
+
+export const mapInnerChildren = (children: ReactNode) => {
+    return React.Children.toArray(children).reduce(
+      (result: any, child: React.ReactElement) => {
+        // console.log("child", child);
+  
+        if (typeof (child) === "string") {
+          child = <TextNode text={child} />
+        }
+        let { type, props } = child;
+        let { children, ...otherProps } = (props ? props : {}) as HTMLProps<any>;
+        let node: Node = {
+          type: type as React.ElementType,
+          props: otherProps
+        };
+        if (children) {
+          node.props.children = mapInnerChildren(children);
+        }
+        result.push(node);
+        return result;
+      },
+      []
+    );
+  }

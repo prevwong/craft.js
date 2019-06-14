@@ -36,10 +36,27 @@ export default class Builder extends React.Component<any> {
 
   setNodes = (nodes: Function) => {
     this.setState((draft: BuilderContextState) => {
-      const fn = nodes(draft.nodes);
-      draft.nodes = fn;
+      const fn = nodes && nodes(draft.nodes);
+      draft.nodes = fn ? fn : draft.nodes;
       return draft;
     });
+  }
+  addNode = (node: Node) => {
+    this.setNodes((nodes: Nodes) => {
+      nodes[node.id] = node;
+      return nodes;
+    });
+  }
+  deleteNode = (node: Node) => {
+    this.setNodes((nodes: Nodes) => {
+      const parentId = node.parent,
+            parentNodes = (nodes[parentId] as CanvasNode).nodes,
+            nodeIndex = parentNodes.indexOf(node.id);
+
+      (nodes[parentId] as CanvasNode).nodes.splice(nodeIndex, 1);
+      delete nodes[node.id];
+      return nodes;
+    })
   }
 
   setNodeState = (state: string, id: NodeId) => {
@@ -100,13 +117,15 @@ export default class Builder extends React.Component<any> {
     })
   }
   render() {
-    const { setNodes, setNodeState, setPlaceholder } = this;
+    const { setNodes, addNode, deleteNode, setNodeState, setPlaceholder } = this;
     (window as any).tree = this.state;
     return (
       <BuilderContext.Provider value={{
         ...this.state,
         nodesInfo: this.nodesInfo,
         setNodes,
+        addNode,
+        deleteNode,
         setNodeState,
         setPlaceholder
       }}>
