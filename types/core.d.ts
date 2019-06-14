@@ -5,7 +5,6 @@ import { CSSMarginPaddingObj } from "./dom";
 
 export interface BuilderState {
   nodes: Nodes,
-  nodeStates: NodeStates,
   active: Node,
   hover: Node,
   dragging: Node,

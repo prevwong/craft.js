@@ -13,7 +13,6 @@ export default class Builder extends React.Component<any> {
   nodesInfo = {};
   state: BuilderState = {
     nodes: {},
-    nodeStates: {},
     hover:null,
     active: null,
     dragging: null,
