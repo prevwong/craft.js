@@ -64,7 +64,7 @@ export default class TestRender extends React.PureComponent<any> {
               }} 
             />
             {active && Editor && (
-              <div onMouseDown={(e: React.MouseEvent) => {
+              <div style={{float:"left", width:"100%", padding: "20px 30px"}} onMouseDown={(e: React.MouseEvent) => {
                 e.stopPropagation();
                 return false;
               }} >

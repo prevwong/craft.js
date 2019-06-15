@@ -1,13 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { NodeInfo, Node, BuilderContextState, Nodes, CanvasNode, DOMInfo, CraftComponent } from "~types";
-import BuilderContext from "../Builder/BuilderContext";
+import {  Node, BuilderContextState, Nodes, CanvasNode, DOMInfo, CraftComponent } from "~types";
 import RenderNodeWithContext from "./RenderNodeWithContext";
-import NodeContext from "./NodeContext";
+import NodeContext from "../nodes/NodeContext";
 import TestRender from "./TestRender";
-import ProxyRenderNode from "./ProxyRenderNode";
-import Editor from "../Editor";
+import Editor from "./RenderEditor";
 
 export default class RenderDraggableNode extends React.PureComponent<any> {
   dom: HTMLElement = null;
@@ -104,7 +102,7 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
             <TestRender 
               node={node}
               domInfo={builder.nodesInfo[node.id]}
-              Component={ProxyRenderNode} 
+              Component={RenderNodeWithContext} 
               state={state}
               handlers={{
                 clickHandler: (target: HTMLElement) => this.attachClickHandler(target),

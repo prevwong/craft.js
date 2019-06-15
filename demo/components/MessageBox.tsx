@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes, { string } from 'prop-types';
-import NodeContext from "~packages/core/Nodes/NodeContext";
+import {NodeContext} from "~packages/core/";
 import ContentEditable from 'react-contenteditable'
 
 interface MessageBoxProps {
@@ -41,7 +41,7 @@ export default class MessageBox extends Component<MessageBoxProps> {
 
     return (
       <div className={'message-box'} style={{backgroundColor: bg}}>
-        <NodeContext.Consumer>
+       <NodeContext.Consumer>
             {({node, state}) => {
               const {active} = state;
               return (

@@ -1,21 +1,21 @@
 import React from "react";
-import { mapChildrenToNodes, createNode, nodesToArray, makePropsReactive } from "./helpers";
-import { NodeId, CanvasNode, Nodes, NodeContextState } from "~types";
-import NodeContext from "../Nodes/NodeContext";
-import RenderDraggableNode from "../Nodes/RenderDraggableNode";
-import RenderNode from "../Nodes/RenderNode";
-import NodeElement from "../Nodes/NodeElement";
+import { NodeId, CanvasNode, Nodes, NodeContextState, NodeCanvasContextState } from "~types";
+import RenderDraggableNode from "../render/RenderDraggableNode";
+import RenderNode from "../render/RenderNode";
+import NodeElement from "../nodes/NodeElement";
+import NodeCanvasContext from "../nodes/NodeCanvasContext";
+import { createNode, mapChildrenToNodes } from "../utils";
 const shortid = require("shortid");
 
 export default class Canvas extends React.PureComponent<any> {
   id: NodeId = null;
   nodes: Nodes = null;
-  constructor(props: CanvasNode, context: NodeContextState) {
+  constructor(props: CanvasNode, context: NodeCanvasContextState) {
     super(props);
-    const { node, pushChildCanvas, childCanvas, builder } = context;
-    const { id } = props;
+    const { node, pushChildCanvas, childCanvas, builder } = context,
+          { id } = props;
 
-    let canvasId = this.id = `canvas-${shortid.generate()}`;
+    let canvasId = `canvas-${shortid.generate()}`;
     if ( node.type === Canvas ) {
       canvasId = this.id = node.id;
     } else {
@@ -24,43 +24,42 @@ export default class Canvas extends React.PureComponent<any> {
     }
     
     if (!builder.nodes[canvasId] || (builder.nodes[canvasId] && !(builder.nodes[canvasId] as CanvasNode).nodes)) {
-      const { children } = this.props;
-      const childNodes = mapChildrenToNodes(children, canvasId);
-      const rootNode: CanvasNode =  node.type === Canvas ? {...node} : createNode(this.constructor as React.ElementType, this.props, canvasId) ;
-      makePropsReactive(childNodes, builder.setNodes);
+      const { children } = this.props,
+            childNodes = mapChildrenToNodes(children, canvasId),
+            rootNode: CanvasNode =  
+              node.type === Canvas ? {...node} : 
+              createNode(this.constructor as React.ElementType, this.props, canvasId, null);
       
-      if (node.type === Canvas) {
-        rootNode.parent = node.parent;
-      }
+      // console.log("root node", rootNode)
+      // makePropsReactive(childNodes, () => builder.setNodes());
+      
+      if (node.type === Canvas) rootNode.parent = node.parent;
       rootNode.nodes = Object.keys(childNodes);
+
       builder.setNodes((prevNodes: Nodes) => {
         return {
           ...prevNodes,
           [rootNode.id]: rootNode,
           ...childNodes
         }
-      });
+      })
     }
 
-    if ( node.type !== Canvas ) {
-      pushChildCanvas(id, canvasId);
-    }
-
+    if ( node.type !== Canvas )  pushChildCanvas(id, canvasId);
   }
   render() {
     const { incoming, outgoing, ...props } = this.props;
 
     return (
-      <NodeContext.Consumer>
-        {({ childCanvas, builder }) => {
-
+      <NodeCanvasContext.Consumer>
+        {({ childCanvas, builder }: NodeCanvasContextState) => {
           const canvasId = this.id ? this.id : childCanvas[this.props.id];
           if (!canvasId) return false;
 
           this.id = canvasId;
-          const { nodes } = builder;
-          const canvas = nodes[canvasId] as CanvasNode;
-
+          const { nodes } = builder,
+                canvas = nodes[canvasId] as CanvasNode;
+          
           return (
             canvas && <RenderNode
               {...props}
@@ -81,9 +80,9 @@ export default class Canvas extends React.PureComponent<any> {
             </RenderNode>
           )
         }}
-      </NodeContext.Consumer>
+      </NodeCanvasContext.Consumer>
     )
   }
 }
 
-Canvas.contextType = NodeContext;
+Canvas.contextType = NodeCanvasContext;

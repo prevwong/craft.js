@@ -1,13 +1,10 @@
 import React from "react";
-import NodeElement from "../Nodes/NodeElement";
-import { Node, Nodes, CanvasNode, NodeId, BuilderContextState, PlaceholderInfo, BuilderState } from "~types";
-import DragDropManager from "./DragDropManager";
-import { createNode, mapChildrenToNodes } from "../Canvas/helpers";
-import RenderDraggableNode from "../Nodes/RenderDraggableNode";
-import { loadState } from "./helpers";
-import test from "./test";
+import NodeElement from "./nodes/NodeElement";
+import { Node,  NodeId, BuilderContextState, PlaceholderInfo, BuilderState } from "~types";
+import DragDropManager from "./dnd";
 import BuilderContext from "./BuilderContext";
-import RenderNodeWithContext from "../Nodes/RenderNodeWithContext";
+import RenderNodeWithContext from "./render/RenderNodeWithContext";
+import { makePropsReactive, mapChildrenToNodes } from "./utils";
 
 export default class Builder extends React.Component<any> {
   nodesInfo = {};
@@ -34,10 +31,11 @@ export default class Builder extends React.Component<any> {
     }
   }
 
-  setNodes = (nodes: Function) => {
+  setNodes = (nodes?: Function) => {
     this.setState((draft: BuilderContextState) => {
-      const fn = nodes(draft.nodes);
-      draft.nodes = fn;
+      const fn = nodes && nodes(draft.nodes);
+      draft.nodes = fn ? fn : draft.nodes;
+      makePropsReactive(draft.nodes, () => this.setNodes());
       return draft;
     });
   }

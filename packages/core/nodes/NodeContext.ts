@@ -5,10 +5,8 @@ import { NodeContextState } from "~types";
 
 const NodeContext = React.createContext<NodeContextState>({
   node: null,
-  pushChildCanvas: () => { },
   builder: null,
-  state: {},
-  childCanvas: null
+  state: {}
 });
 
 export default NodeContext;
