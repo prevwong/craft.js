@@ -57,6 +57,7 @@ class App extends Component {
                 <MessageBox />
             </Canvas>
           </Canvas>
+          <Layers />
         </div>
       </Builder >
     );

@@ -45,8 +45,8 @@ export default class MessageBox extends Component<MessageBoxProps> {
         <h2>Whut</h2>
       </Canvas>
        <NodeContext.Consumer>
-            {({node, state}) => {
-              const {active} = state;
+            {({node, nodeState}) => {
+              const {active} = nodeState;
               return (
                 active ? (
                   <ContentEditable 

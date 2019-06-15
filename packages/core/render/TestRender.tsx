@@ -48,7 +48,7 @@ export default class TestRender extends React.PureComponent<any> {
 
         return (
           <React.Fragment>
-            {nodeState.hover && <Toolbar {...this.props} />}
+            {(hover || active) && <Toolbar {...this.props} />}
             <Component 
               className={
                 cx(['node-el'], {
