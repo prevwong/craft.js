@@ -41,23 +41,6 @@ export default class Builder extends React.Component<any> {
       return draft;
     });
   }
-  addNode = (node: Node) => {
-    this.setNodes((nodes: Nodes) => {
-      nodes[node.id] = node;
-      return nodes;
-    });
-  }
-  deleteNode = (node: Node) => {
-    this.setNodes((nodes: Nodes) => {
-      const parentId = node.parent,
-            parentNodes = (nodes[parentId] as CanvasNode).nodes,
-            nodeIndex = parentNodes.indexOf(node.id);
-
-      (nodes[parentId] as CanvasNode).nodes.splice(nodeIndex, 1);
-      delete nodes[node.id];
-      return nodes;
-    })
-  }
 
   setNodeState = (state: string, id: NodeId) => {
     if ( !["active", "hover", "dragging"].includes(state) ) throw new Error(`Undefined state "${state}, expected either "active", "hover" or "dragging".`);
@@ -117,15 +100,13 @@ export default class Builder extends React.Component<any> {
     })
   }
   render() {
-    const { setNodes, addNode, deleteNode, setNodeState, setPlaceholder } = this;
+    const { setNodes, setNodeState, setPlaceholder } = this;
     (window as any).tree = this.state;
     return (
       <BuilderContext.Provider value={{
         ...this.state,
         nodesInfo: this.nodesInfo,
         setNodes,
-        addNode,
-        deleteNode,
         setNodeState,
         setPlaceholder
       }}>

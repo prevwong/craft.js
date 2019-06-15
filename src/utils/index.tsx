@@ -1,4 +1,4 @@
-import { Node, CraftComponent } from "~types";
+import { Node, CraftComponent, CanvasNode, Nodes } from "~types";
 import { node } from "prop-types";
 import React, { ReactNode, HTMLProps } from "react";
 
@@ -57,3 +57,18 @@ export const mapInnerChildren = (children: ReactNode) => {
       []
     );
   }
+
+export const deleteNode = (nodes: Nodes, node: Node) => {
+    const parentId = node.parent,
+            parentNodes = (nodes[parentId] as CanvasNode).nodes,
+            nodeIndex = parentNodes.indexOf(node.id);
+
+      (nodes[parentId] as CanvasNode).nodes.splice(nodeIndex, 1);
+      delete nodes[node.id];
+      return nodes;
+}
+
+export const addNode = (nodes: Nodes, node: Node) => {
+    nodes[node.id] = node;
+    return nodes;
+}

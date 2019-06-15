@@ -9,8 +9,6 @@ const BuilderContext = React.createContext<BuilderContextState>({
   placeholder: null,
   nodesInfo: {},
   setNodes: () => { },
-  addNode: () => { },
-  deleteNode: () => { },
   setNodeState: () => { },
   setPlaceholder: () => { }
 });
