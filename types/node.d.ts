@@ -11,15 +11,21 @@ export interface NodeElementProps {
   node: Node
 }
 
+
 interface NodeElementState {
   childCanvas: CanvasMapping
 }
 
-export interface NodeContextState extends NodeElementState {
+
+export interface NodeContextState {
   node: Node;
-  pushChildCanvas: Function;
   builder: BuilderContextState;
   state: any
+}
+
+export interface NodeCanvasContextState extends NodeContextState {
+  pushChildCanvas: Function;
+  childCanvas: CanvasMapping;
 }
 
 export interface ReactElement {
