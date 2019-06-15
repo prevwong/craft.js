@@ -3,6 +3,7 @@ import { NodeInfo, Node, NodeContextState } from "~types";
 import RenderNode from "./RenderNode";
 import NodeContext from "../nodes/NodeContext";
 import cx from "classnames";
+import { Canvas } from "../nodes";
 
 export default class RenderNodeWithContext extends React.PureComponent<any> {
 

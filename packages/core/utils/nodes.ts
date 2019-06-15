@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { NodeId, Node, Nodes } from "~types";
+import { NodeId, Node, Nodes, CanvasNode } from "~types";
 import { defineReactiveProperty } from ".";
 import Canvas from "../nodes/Canvas";
 const shortid = require("shortid");
@@ -64,3 +64,30 @@ export class TextNode extends React.Component<{text: string}> {
   }
 }
   
+export const nodesToTree = (nodes: Nodes, cur="rootNode", canvasName?: string) => {
+  let tree: any = {};
+  const node = nodes[cur];
+  const {id, parent, props, type} = node;
+  tree[id] = {
+    id,
+    parent,
+    props,
+    type
+  }
+  if ( canvasName ) tree[id].canvasName = canvasName;
+
+  if ( node.childCanvas || (node as CanvasNode).nodes ) tree[id].children = {};
+  if ( node.childCanvas ) {
+    Object.keys(node.childCanvas).forEach(canvasName => {
+      const virtualId = node.childCanvas[canvasName]
+      tree[id].children[virtualId] = nodesToTree(nodes, virtualId, canvasName);
+    });
+  } else if ( (node as CanvasNode).nodes ) {
+    const childNodes = (node as CanvasNode).nodes;
+    childNodes.forEach(nodeId => {
+      tree[id].children[nodeId] = nodesToTree(nodes, nodeId);
+    });
+  }
+
+  return tree[id];
+}

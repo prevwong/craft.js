@@ -49,7 +49,7 @@ export default class Canvas extends React.PureComponent<any> {
   }
   render() {
     const { incoming, outgoing, ...props } = this.props;
-
+    // console.log("canvas", props)
     return (
       <NodeCanvasContext.Consumer>
         {({ childCanvas, builder }: NodeCanvasContextState) => {
@@ -60,9 +60,11 @@ export default class Canvas extends React.PureComponent<any> {
           const { nodes } = builder,
                 canvas = nodes[canvasId] as CanvasNode;
           
+          console.log(canvas.props)
           return (
             canvas && <RenderNode
               {...props}
+              is={canvas.props.is ? canvas.props.is : "div"}
               node={canvas}
             >
 
