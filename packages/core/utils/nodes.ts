@@ -22,14 +22,19 @@ export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?
       if (typeof (child) === "string") {
         child = React.createElement(TextNode, {text: child}, null);
       }
-
       let { type, props } = child;
-      const prefix = (type as Function) === Canvas ? "canvas" : "node";
-      const id = hardId ? hardId : `${prefix}-${shortid.generate()}`;
 
-      let node = createNode(type as React.ElementType, props, id, parent);
-      result[node.id] = node;
-      return result;
+      if ( ["string", "function"].includes(typeof(type))) { 
+        const prefix = (type as Function) === Canvas ? "canvas" : "node";
+        const id = hardId ? hardId : `${prefix}-${shortid.generate()}`;
+
+        let node = createNode(type as React.ElementType, props, id, parent);
+        result[node.id] = node;
+        return result;
+      } else {
+        console.log(type, typeof(type))
+        throw new Error("Invalid <Canvas> child provided. Expected simple JSX element or React Component.");
+      }
     },
     {}
   ) as Nodes;
