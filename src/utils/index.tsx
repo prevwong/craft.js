@@ -1,6 +1,7 @@
 import { Node, CraftComponent, CanvasNode, Nodes } from "~types";
 import { node } from "prop-types";
 import React, { ReactNode, HTMLProps } from "react";
+import { TextNode } from "./nodes";
 
 export * from "./dom";
 export * from "./nodes";
@@ -24,16 +25,6 @@ export const defineReactiveProperty = (obj: any, key: string, val?: string, cb?:
     });
 }
 
-
-
-export const TextNode = (props: { text: string }): React.ReactElement => {
-    return (
-      <React.Fragment>
-        {props.text}
-      </React.Fragment>
-    )
-  }
-  
 
 export const mapInnerChildren = (children: ReactNode) => {
     return React.Children.toArray(children).reduce(

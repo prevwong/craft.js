@@ -1,12 +1,11 @@
 import React from "react";
-import { mapChildrenToNodes, makePropsReactive } from "./helpers";
 import { NodeId, CanvasNode, Nodes, NodeContextState, NodeCanvasContextState } from "~types";
 import NodeContext from "../Nodes/NodeContext";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
 import RenderNode from "../Nodes/RenderNode";
 import NodeElement from "../Nodes/NodeElement";
 import NodeCanvasContext from "../Nodes/NodeCanvasContext";
-import { createNode } from "~src/utils";
+import { createNode, mapChildrenToNodes } from "~src/utils";
 const shortid = require("shortid");
 
 export default class Canvas extends React.PureComponent<any> {
@@ -33,7 +32,7 @@ export default class Canvas extends React.PureComponent<any> {
               createNode(this.constructor as React.ElementType, this.props, canvasId, null);
       
       // console.log("root node", rootNode)
-      makePropsReactive(childNodes, () => builder.setNodes());
+      // makePropsReactive(childNodes, () => builder.setNodes());
       
       if (node.type === Canvas) rootNode.parent = node.parent;
       rootNode.nodes = Object.keys(childNodes);
