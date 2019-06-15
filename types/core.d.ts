@@ -13,8 +13,6 @@ export interface BuilderState {
 export interface BuilderContextState extends BuilderState {
   nodesInfo: any;
   setNodes: Function
-  addNode: Function
-  deleteNode: Function
   setNodeState: Function
   setPlaceholder: Function
 }
