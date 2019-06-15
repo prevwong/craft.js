@@ -11,7 +11,7 @@ const shortid = require("shortid");
 export default class Canvas extends React.PureComponent<any> {
   id: NodeId = null;
   nodes: Nodes = null;
-  constructor(props: CanvasNode, context: NodeContextState) {
+  constructor(props: CanvasNode, context: NodeCanvasContextState) {
     super(props);
     const { node, pushChildCanvas, childCanvas, builder } = context,
           { id } = props;

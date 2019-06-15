@@ -14,7 +14,7 @@ export default class NodeElement extends React.Component<NodeElementProps> {
   componentDidUpdate() {
     this.loopInfo.index = 0;
   }
-  constructor(props, context) {
+  constructor(props: NodeElementProps) {
     super(props);
     if (this.props.node && this.props.node.childCanvas) this.state.childCanvas = this.props.node.childCanvas;
   }
