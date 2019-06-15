@@ -1,7 +1,7 @@
 import React from "react";
 import NodeElement from "./Nodes/NodeElement";
 import { Node,  NodeId, BuilderContextState, PlaceholderInfo, BuilderState } from "~types";
-import DragDropManager from "./DragDropManager";
+import DragDropManager from "./dnd";
 import BuilderContext from "./BuilderContext";
 import RenderNodeWithContext from "./Render/RenderNodeWithContext";
 import { makePropsReactive, mapChildrenToNodes } from "./utils";
