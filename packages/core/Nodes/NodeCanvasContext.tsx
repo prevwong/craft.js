@@ -1,5 +1,11 @@
 
 import React from "react";
-import { NodeContextState } from "~types";
+import { NodeContextState, NodeCanvasContextState } from "~types";
 
-export default React.createContext();
+export default React.createContext<NodeCanvasContextState>({
+  pushChildCanvas: () => {},
+  childCanvas: null,
+  builder: null,
+  node: null,
+  state: null
+});

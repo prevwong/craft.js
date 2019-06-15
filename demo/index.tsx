@@ -9,6 +9,7 @@ import Button from "./components/Button";
 import MessageBox from "./components/MessageBox";
 import Builder from "~packages/core/Builder";
 import Canvas from "~packages/core/Canvas";
+import Row from "./components/Row";
 
 const canvasTools = document.createElement("div");
 canvasTools.id = `canvasTools`;
@@ -49,12 +50,12 @@ class App extends Component {
       <Builder components={[
         MessageBox
       ]}>
-        <div style={{ padding: "20px 30px" }}>
-          <Canvas id="first" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
-            <MessageBox />
-          </Canvas>
-          <Canvas id="second" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
-            <MessageBox />
+        <div style={{ padding: "50px 30px" }}>
+          
+          <Canvas is={Row} id="second" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
+            <Canvas id="third" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
+              <MessageBox />
+            </Canvas>
           </Canvas>
         </div>
       </Builder >

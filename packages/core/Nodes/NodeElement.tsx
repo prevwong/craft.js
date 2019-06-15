@@ -24,19 +24,18 @@ export default class NodeElement extends React.Component<NodeElementProps> {
     return (
       <BuilderContext.Consumer>
         {(builder: BuilderContextState) => {
-          const state =  {
-            active: builder.active && builder.active.id === node.id,
-            dragging: builder.dragging && builder.dragging.id === node.id
-          };
+          const nodeProvider = {
+            node,
+            state: {
+              active: builder.active && builder.active.id === node.id,
+              dragging: builder.dragging && builder.dragging.id === node.id
+            },
+            builder
+          }
           return (
-            <NodeContext.Provider value={{
-              node,
-              state,
-              builder
-            }}>
+            <NodeContext.Provider value={nodeProvider}>
               <NodeCanvasContext.Provider value={{
-                 node,
-                 builder,
+                 ...nodeProvider,
                  childCanvas,
                  pushChildCanvas: (canvasId: string, canvasNodeId: NodeId) => {
                   if (!node.childCanvas) node.childCanvas = {};
