@@ -1,19 +1,8 @@
 import React, { ReactNode, HTMLProps } from "react";
 import { Node, NodeId, Nodes } from "~types";
 import Canvas from ".";
-import { defineReactiveProperty, TextNode } from "~src/utils";
+import { defineReactiveProperty, TextNode, createNode } from "~src/utils";
 const shortid = require("shortid");
-
-export const createNode = (component: React.ElementType, props: React.Props<any>, id: NodeId, parent?: NodeId): Node => {
-  let node: Node = {
-    type: component as React.ElementType,
-    props
-  };
-
-  node["id"] = id;
-  node["parent"] = parent;
-  return node;
-};
 
 export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?: string, cb?: Function): Nodes => {
   return React.Children.toArray(children).reduce(

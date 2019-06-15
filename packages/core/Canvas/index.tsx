@@ -1,11 +1,12 @@
 import React from "react";
-import { mapChildrenToNodes, createNode, makePropsReactive } from "./helpers";
+import { mapChildrenToNodes, makePropsReactive } from "./helpers";
 import { NodeId, CanvasNode, Nodes, NodeContextState, NodeCanvasContextState } from "~types";
 import NodeContext from "../Nodes/NodeContext";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
 import RenderNode from "../Nodes/RenderNode";
 import NodeElement from "../Nodes/NodeElement";
 import NodeCanvasContext from "../Nodes/NodeCanvasContext";
+import { createNode } from "~src/utils";
 const shortid = require("shortid");
 
 export default class Canvas extends React.PureComponent<any> {

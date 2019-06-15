@@ -2,7 +2,7 @@ import React from "react";
 import NodeElement from "../Nodes/NodeElement";
 import { Node, Nodes, CanvasNode, NodeId, BuilderContextState, PlaceholderInfo, BuilderState } from "~types";
 import DragDropManager from "./DragDropManager";
-import { createNode, mapChildrenToNodes } from "../Canvas/helpers";
+import { mapChildrenToNodes } from "../Canvas/helpers";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
 import { loadState } from "./helpers";
 import test from "./test";
