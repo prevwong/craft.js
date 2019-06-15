@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { getDOMInfo } from "~src/utils";
+import { getDOMInfo } from "../utils";
 import BuilderContext from "../BuilderContext";
 
 export default class RenderNode extends React.PureComponent<any> {

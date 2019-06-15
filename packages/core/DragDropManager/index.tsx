@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { DropAction, BuilderContextState, Nodes, NodeId, CanvasNode } from "~types";
 import BuilderContext from "../BuilderContext";
-import { isCanvas } from "~src/utils";
+import { isCanvas } from "../utils";
 import Canvas from "../Nodes/Canvas";
 import Placeholder from "./Placeholder";
 import { movePlaceholder, findPosition } from "./helper";

@@ -4,7 +4,7 @@ import { Node,  NodeId, BuilderContextState, PlaceholderInfo, BuilderState } fro
 import DragDropManager from "./DragDropManager";
 import BuilderContext from "./BuilderContext";
 import RenderNodeWithContext from "./Render/RenderNodeWithContext";
-import { makePropsReactive, mapChildrenToNodes } from "~src/utils";
+import { makePropsReactive, mapChildrenToNodes } from "./utils";
 
 export default class Builder extends React.Component<any> {
   nodesInfo = {};

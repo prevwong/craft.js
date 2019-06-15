@@ -4,7 +4,7 @@ import RenderDraggableNode from "../Render/RenderDraggableNode";
 import RenderNode from "../Render/RenderNode";
 import NodeElement from "../Nodes/NodeElement";
 import NodeCanvasContext from "../Nodes/NodeCanvasContext";
-import { createNode, mapChildrenToNodes } from "~src/utils";
+import { createNode, mapChildrenToNodes } from "../utils";
 const shortid = require("shortid");
 
 export default class Canvas extends React.PureComponent<any> {

@@ -1,7 +1,7 @@
 import React from "react";
 import NodeContext from "../Nodes/NodeContext";
 import { NodeContextState, Node, CraftComponent } from "~types";
-import { isCraftComponent } from "~src/utils";
+import { isCraftComponent } from "../utils";
 
 export default class Editor extends React.PureComponent {
   render() {
