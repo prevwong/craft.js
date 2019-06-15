@@ -36,8 +36,10 @@ export const getDOMInfo = (dom: HTMLElement) => {
     left: Math.round(left),
     bottom: Math.round(bottom),
     right: Math.round(right),
-    width: Math.round(width + margin.left + margin.right),
-    height: Math.round(height + margin.top + margin.bottom),
+    width: Math.round(width),
+    height: Math.round(height),
+    outerWidth: Math.round(width + margin.left + margin.right),
+    outerHeight: Math.round(height + margin.top + margin.bottom),
     margin,
     padding,
     inFlow: !!styleInFlow(dom, dom.parentElement)
