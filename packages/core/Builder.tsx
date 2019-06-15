@@ -1,5 +1,5 @@
 import React from "react";
-import NodeElement from "./Nodes/NodeElement";
+import NodeElement from "./nodes/NodeElement";
 import { Node,  NodeId, BuilderContextState, PlaceholderInfo, BuilderState } from "~types";
 import DragDropManager from "./dnd";
 import BuilderContext from "./BuilderContext";

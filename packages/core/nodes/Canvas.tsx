@@ -2,8 +2,8 @@ import React from "react";
 import { NodeId, CanvasNode, Nodes, NodeContextState, NodeCanvasContextState } from "~types";
 import RenderDraggableNode from "../Render/RenderDraggableNode";
 import RenderNode from "../Render/RenderNode";
-import NodeElement from "../Nodes/NodeElement";
-import NodeCanvasContext from "../Nodes/NodeCanvasContext";
+import NodeElement from "../nodes/NodeElement";
+import NodeCanvasContext from "../nodes/NodeCanvasContext";
 import { createNode, mapChildrenToNodes } from "../utils";
 const shortid = require("shortid");
 

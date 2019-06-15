@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 import {  Node, BuilderContextState, Nodes, CanvasNode, DOMInfo, CraftComponent } from "~types";
 import RenderNodeWithContext from "./RenderNodeWithContext";
-import NodeContext from "../Nodes/NodeContext";
+import NodeContext from "../nodes/NodeContext";
 import TestRender from "./TestRender";
 import Editor from "./RenderEditor";
 

@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { NodeId, Node, Nodes } from "~types";
 import { defineReactiveProperty } from ".";
-import Canvas from "~packages/core/Nodes/Canvas";
+import Canvas from "../nodes/Canvas";
 const shortid = require("shortid");
 
 export const createNode = (component: React.ElementType, props: React.Props<any>, id: NodeId, parent?: NodeId): Node => {

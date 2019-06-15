@@ -1,2 +1,2 @@
 export {default as Builder} from "./Builder";
-export * from "./Nodes";
+export * from "./nodes";

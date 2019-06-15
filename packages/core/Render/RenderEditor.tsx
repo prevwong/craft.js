@@ -1,5 +1,5 @@
 import React from "react";
-import NodeContext from "../Nodes/NodeContext";
+import NodeContext from "../nodes/NodeContext";
 import { NodeContextState, Node, CraftComponent } from "~types";
 import { isCraftComponent } from "../utils";
 
