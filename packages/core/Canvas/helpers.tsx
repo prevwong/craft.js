@@ -40,13 +40,16 @@ export const makePropsReactive = (nodes: Nodes, cb: Function) => {
   Object.keys(nodes).forEach(id => {
     const node = nodes[id];
     let {props} = node;
-    const reactiveProps = Object.keys(props).reduce((result, key) => {
+    const reactiveProps = Object.keys(props).reduce((result: any, key) => {
+      const value = (props as any)[key];
       if ( key !== "children" ) {
-        const value = (props as any)[key];
         defineReactiveProperty(result, key, value, () => {
           cb()
         });
+      } else {
+        result[key] = value
       }
+
       return result;
     }, {});
     node.props = reactiveProps;

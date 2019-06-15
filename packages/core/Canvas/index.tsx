@@ -1,10 +1,11 @@
 import React from "react";
 import { mapChildrenToNodes, createNode, makePropsReactive } from "./helpers";
-import { NodeId, CanvasNode, Nodes, NodeContextState } from "~types";
+import { NodeId, CanvasNode, Nodes, NodeContextState, NodeCanvasContextState } from "~types";
 import NodeContext from "../Nodes/NodeContext";
 import RenderDraggableNode from "../Nodes/RenderDraggableNode";
 import RenderNode from "../Nodes/RenderNode";
 import NodeElement from "../Nodes/NodeElement";
+import NodeCanvasContext from "../Nodes/NodeCanvasContext";
 const shortid = require("shortid");
 
 export default class Canvas extends React.PureComponent<any> {
@@ -15,7 +16,7 @@ export default class Canvas extends React.PureComponent<any> {
     const { node, pushChildCanvas, childCanvas, builder } = context,
           { id } = props;
 
-    let canvasId = this.id = `canvas-${shortid.generate()}`;
+    let canvasId = `canvas-${shortid.generate()}`;
     if ( node.type === Canvas ) {
       canvasId = this.id = node.id;
     } else {
@@ -30,6 +31,7 @@ export default class Canvas extends React.PureComponent<any> {
               node.type === Canvas ? {...node} : 
               createNode(this.constructor as React.ElementType, this.props, canvasId, null);
       
+      // console.log("root node", rootNode)
       makePropsReactive(childNodes, () => builder.setNodes());
       
       if (node.type === Canvas) rootNode.parent = node.parent;
@@ -50,16 +52,15 @@ export default class Canvas extends React.PureComponent<any> {
     const { incoming, outgoing, ...props } = this.props;
 
     return (
-      <NodeContext.Consumer>
-        {({ childCanvas, builder }) => {
-
+      <NodeCanvasContext.Consumer>
+        {({ childCanvas, builder }: NodeCanvasContextState) => {
           const canvasId = this.id ? this.id : childCanvas[this.props.id];
           if (!canvasId) return false;
 
           this.id = canvasId;
           const { nodes } = builder,
                 canvas = nodes[canvasId] as CanvasNode;
-
+          
           return (
             canvas && <RenderNode
               {...props}
@@ -80,9 +81,9 @@ export default class Canvas extends React.PureComponent<any> {
             </RenderNode>
           )
         }}
-      </NodeContext.Consumer>
+      </NodeCanvasContext.Consumer>
     )
   }
 }
 
-Canvas.contextType = NodeContext;
+Canvas.contextType = NodeCanvasContext;
