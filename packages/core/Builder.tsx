@@ -18,6 +18,7 @@ export default class Builder extends React.Component<any> {
   constructor(props: any) {
     super(props);
     (window as any).tree = this.state;
+    (window as any).info = this.nodesInfo;
     (window as any).save = this.saveState.bind(this);
     (window as any).test = nodesToTree;
     let rootNode = mapChildrenToNodes(<div id="root-node">{this.props.children}</div>, null, "rootNode");
@@ -44,6 +45,7 @@ export default class Builder extends React.Component<any> {
   setNodeState = (state: string, id: NodeId) => {
     if ( !["active", "hover", "dragging"].includes(state) ) throw new Error(`Undefined state "${state}, expected either "active", "hover" or "dragging".`);
     if ( id && !this.state.nodes[id] ) throw new Error(`Node ${id} not found.`);
+    console.log("state", id)
     this.setState({
       [state]: this.state.nodes[id]
     })
