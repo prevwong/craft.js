@@ -1,7 +1,7 @@
 import { BuilderContextState, NodeElementState, NodeElementProps, NodeId } from "~types";
 import React from "react";
 import NodeContext from "./NodeContext";
-import BuilderContext from "../Builder/BuilderContext";
+import BuilderContext from "../BuilderContext";
 import NodeCanvasContext from "./NodeCanvasContext";
 
 export default class NodeElement extends React.Component<NodeElementProps> {

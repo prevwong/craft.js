@@ -1,8 +1,7 @@
 import React from "react";
 import { NodeId, CanvasNode, Nodes, NodeContextState, NodeCanvasContextState } from "~types";
-import NodeContext from "../Nodes/NodeContext";
-import RenderDraggableNode from "../Nodes/RenderDraggableNode";
-import RenderNode from "../Nodes/RenderNode";
+import RenderDraggableNode from "../Render/RenderDraggableNode";
+import RenderNode from "../Render/RenderNode";
 import NodeElement from "../Nodes/NodeElement";
 import NodeCanvasContext from "../Nodes/NodeCanvasContext";
 import { createNode, mapChildrenToNodes } from "~src/utils";

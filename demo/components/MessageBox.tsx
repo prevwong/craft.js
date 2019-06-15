@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import PropTypes, { string } from 'prop-types';
-import NodeContext from "~packages/core/Nodes/NodeContext";
+import {NodeContext} from "~packages/core/";
 import ContentEditable from 'react-contenteditable'
-import Canvas from "~packages/core/Canvas";
 
 interface MessageBoxProps {
   text: string
@@ -42,10 +41,24 @@ export default class MessageBox extends Component<MessageBoxProps> {
 
     return (
       <div className={'message-box'} style={{backgroundColor: bg}}>
-       <Canvas id="here">
-        <h2>Lolol</h2>
-        <h2>Lolol</h2>
-       </Canvas>
+       <NodeContext.Consumer>
+            {({node, state}) => {
+              const {active} = state;
+              return (
+                active ? (
+                  <ContentEditable 
+                    tagName='h2' 
+                    html={text} 
+                    onChange={(e) => {
+                      node.props.text = e.target.value;
+                    }}
+                  />
+                )
+                :
+                <h2 dangerouslySetInnerHTML={{__html: text}}></h2>
+              )
+            }}
+        </NodeContext.Consumer>
       </div>
     )
   }

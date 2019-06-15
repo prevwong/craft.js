@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { getDOMInfo } from "~src/utils";
-import BuilderContext from "../Builder/BuilderContext";
+import BuilderContext from "../BuilderContext";
 
 export default class RenderNode extends React.PureComponent<any> {
   doneRender() {

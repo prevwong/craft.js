@@ -1,12 +1,9 @@
 import React from "react";
-import NodeElement from "../Nodes/NodeElement";
-import { Node, Nodes, CanvasNode, NodeId, BuilderContextState, PlaceholderInfo, BuilderState } from "~types";
+import NodeElement from "./Nodes/NodeElement";
+import { Node,  NodeId, BuilderContextState, PlaceholderInfo, BuilderState } from "~types";
 import DragDropManager from "./DragDropManager";
-import RenderDraggableNode from "../Nodes/RenderDraggableNode";
-import { loadState } from "./helpers";
-import test from "./test";
 import BuilderContext from "./BuilderContext";
-import RenderNodeWithContext from "../Nodes/RenderNodeWithContext";
+import RenderNodeWithContext from "./Render/RenderNodeWithContext";
 import { makePropsReactive, mapChildrenToNodes } from "~src/utils";
 
 export default class Builder extends React.Component<any> {

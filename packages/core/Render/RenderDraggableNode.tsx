@@ -3,9 +3,9 @@ import ReactDOM from "react-dom";
 
 import {  Node, BuilderContextState, Nodes, CanvasNode, DOMInfo, CraftComponent } from "~types";
 import RenderNodeWithContext from "./RenderNodeWithContext";
-import NodeContext from "./NodeContext";
+import NodeContext from "../Nodes/NodeContext";
 import TestRender from "./TestRender";
-import Editor from "../Editor";
+import Editor from "./RenderEditor";
 
 export default class RenderDraggableNode extends React.PureComponent<any> {
   dom: HTMLElement = null;

@@ -1,9 +1,7 @@
 import React from "react";
-import NodeElement from "./NodeElement";
 import { NodeInfo, Node, NodeContextState } from "~types";
 import RenderNode from "./RenderNode";
-import BuilderContext from "../Builder/BuilderContext";
-import NodeContext from "./NodeContext";
+import NodeContext from "../Nodes/NodeContext";
 import cx from "classnames";
 
 export default class RenderNodeWithContext extends React.PureComponent<any> {

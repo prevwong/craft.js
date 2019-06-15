@@ -7,9 +7,9 @@ import tree from "./tree";
 // import Compose from "~/packages/compose";
 import Button from "./components/Button";
 import MessageBox from "./components/MessageBox";
-import Builder from "~packages/core/Builder";
-import Canvas from "~packages/core/Canvas";
+
 import Row from "./components/Row";
+import {Builder, Canvas} from "~packages/core/index";
 
 const canvasTools = document.createElement("div");
 canvasTools.id = `canvasTools`;
