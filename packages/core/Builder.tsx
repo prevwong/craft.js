@@ -4,7 +4,7 @@ import { Node,  NodeId, BuilderContextState, PlaceholderInfo, BuilderState } fro
 import DragDropManager from "./dnd";
 import BuilderContext from "./BuilderContext";
 import RenderNodeWithContext from "./render/RenderNodeWithContext";
-import { makePropsReactive, mapChildrenToNodes } from "./utils";
+import { makePropsReactive, mapChildrenToNodes, nodesToTree } from "./utils";
 
 export default class Builder extends React.Component<any> {
   nodesInfo = {};
@@ -19,6 +19,7 @@ export default class Builder extends React.Component<any> {
     super(props);
     (window as any).tree = this.state;
     (window as any).save = this.saveState.bind(this);
+    (window as any).test = nodesToTree;
     let rootNode = mapChildrenToNodes(<div id="root-node">{this.props.children}</div>, null, "rootNode");
     // const loadedStateJSON: any = test
     // // console.log(66, loadedStateJSON)
