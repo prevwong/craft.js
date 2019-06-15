@@ -43,12 +43,12 @@ export default class TestRender extends React.PureComponent<any> {
   }
 
   render() {
-      const {state, handlers, Editor, Component} = this.props;
-      const { hover, active } = state;
+      const {nodeState, handlers, Editor, Component} = this.props;
+      const { hover, active } = nodeState;
 
         return (
           <React.Fragment>
-            {state.active && <Toolbar {...this.props} />}
+            {nodeState.hover && <Toolbar {...this.props} />}
             <Component 
               className={
                 cx(['node-el'], {

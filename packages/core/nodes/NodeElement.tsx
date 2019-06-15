@@ -26,8 +26,9 @@ export default class NodeElement extends React.Component<NodeElementProps> {
         {(builder: BuilderContextState) => {
           const nodeProvider = {
             node,
-            state: {
+            nodeState: {
               active: builder.active && builder.active.id === node.id,
+              hover: builder.hover && builder.hover.id === node.id,
               dragging: builder.dragging && builder.dragging.id === node.id
             },
             builder

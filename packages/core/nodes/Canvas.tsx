@@ -59,8 +59,7 @@ export default class Canvas extends React.PureComponent<any> {
           this.id = canvasId;
           const { nodes } = builder,
                 canvas = nodes[canvasId] as CanvasNode;
-          
-          console.log(canvas.props)
+                
           return (
             canvas && <RenderNode
               {...props}

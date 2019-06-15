@@ -96,14 +96,14 @@ export default class RenderDraggableNode extends React.PureComponent<any> {
    
     return (
       <NodeContext.Consumer>
-        {({node, state, builder}) => {
+        {({node, nodeState, builder}) => {
           const {active, hover,  setNodeState, dragging} = builder;
           return (
             <TestRender 
               node={node}
               domInfo={builder.nodesInfo[node.id]}
               Component={RenderNodeWithContext} 
-              state={state}
+              nodeState={nodeState}
               handlers={{
                 clickHandler: (target: HTMLElement) => this.attachClickHandler(target),
                 dragHandler: (target: HTMLElement) => this.attachDragHandler(target)

@@ -20,7 +20,7 @@ interface NodeElementState {
 export interface NodeContextState {
   node: Node;
   builder: BuilderContextState;
-  state: any
+  nodeState: any
 }
 
 export interface NodeCanvasContextState extends NodeContextState {
