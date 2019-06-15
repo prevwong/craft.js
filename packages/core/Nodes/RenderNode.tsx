@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { getDOMInfo } from "~src/utils";
 import BuilderContext from "../Builder/BuilderContext";
-import cx from "classnames";
 
 export default class RenderNode extends React.PureComponent<any> {
   doneRender() {
@@ -20,16 +19,11 @@ export default class RenderNode extends React.PureComponent<any> {
   }
   
   render() {
-    const { is, node, onReady, proxy, ...props } = this.props;
+    const { is, node, onReady, ...props } = this.props;
     const Comp = is ? is : 'div';
     return (
       <Comp
         {...props}
-        style={{
-          ...props.style,
-          ...proxy && proxy.style
-        }}
-        className={cx([props.className, proxy && proxy.className])}
         ref={() => {
           this.doneRender();
         }}
