@@ -3,7 +3,7 @@ import NodeElement from "./nodes/NodeElement";
 import { Node,  NodeId, BuilderContextState, PlaceholderInfo, BuilderState } from "~types";
 import DragDropManager from "./dnd";
 import BuilderContext from "./BuilderContext";
-import RenderNodeWithContext from "./Render/RenderNodeWithContext";
+import RenderNodeWithContext from "./render/RenderNodeWithContext";
 import { makePropsReactive, mapChildrenToNodes } from "./utils";
 
 export default class Builder extends React.Component<any> {
