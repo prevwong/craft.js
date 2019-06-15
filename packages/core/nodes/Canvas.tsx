@@ -5,6 +5,7 @@ import RenderNode from "../render/RenderNode";
 import NodeElement from "../nodes/NodeElement";
 import NodeCanvasContext from "../nodes/NodeCanvasContext";
 import { createNode, mapChildrenToNodes } from "../utils";
+import RenderNodeWithContext from "../render/RenderNodeWithContext";
 const shortid = require("shortid");
 
 export default class Canvas extends React.PureComponent<any> {
@@ -61,24 +62,26 @@ export default class Canvas extends React.PureComponent<any> {
                 canvas = nodes[canvasId] as CanvasNode;
                 
           return (
-            canvas && <RenderNode
-              {...props}
-              is={canvas.props.is ? canvas.props.is : "div"}
-              node={canvas}
-            >
+            canvas && <NodeElement node={canvas}>
+                <RenderNode
+                {...props}
+                is={canvas.props.is ? canvas.props.is : "div"}
+                node={canvas}
+              >
 
-              <React.Fragment>
-                {
-                  canvas && canvas.nodes && canvas.nodes.map((nodeId: NodeId) => {
-                    return (
-                      <NodeElement key={nodeId} node={nodes[nodeId]}>
-                         <RenderDraggableNode />
-                      </NodeElement>
-                    )
-                  })
-                }
-              </React.Fragment>
-            </RenderNode>
+                <React.Fragment>
+                  {
+                    canvas && canvas.nodes && canvas.nodes.map((nodeId: NodeId) => {
+                      return (
+                        <NodeElement key={nodeId} node={nodes[nodeId]}>
+                          <RenderNodeWithContext />
+                        </NodeElement>
+                      )
+                    })
+                  }
+                </React.Fragment>
+              </RenderNode>
+            </NodeElement>
           )
         }}
       </NodeCanvasContext.Consumer>
