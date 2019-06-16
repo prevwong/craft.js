@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import ReactDOM from "react-dom";
 import { getDOMInfo } from "../utils";
 import BuilderContext from "../BuilderContext";
@@ -12,6 +12,29 @@ import DragHandler from "./handlers/DragHandler";
 
 
 export default class RenderNode extends React.PureComponent<any> {
+  hoverWrapper: EventListenerOrEventListenerObject = this.hover.bind(this);
+  dom: HTMLElement
+  hover(e: MouseEvent) {
+    e.stopPropagation();
+    const {node, nodeState, builder} = this.context;
+    if ( !nodeState.hover ||( nodeState.hover && nodeState.hover.id !== node.id) ) {
+      console.log("over here", node.id)
+      builder.setNodeState("hover", node.id)
+    }
+  }
+  componentDidMount() {
+    this.dom = ReactDOM.findDOMNode(this) as HTMLElement;
+    if ( this.dom ) {
+      this.dom.addEventListener("mouseover", this.hoverWrapper);
+    }
+  }
+  
+  componentWillUnmount() {
+    if ( this.dom ) {
+      this.dom.removeEventListener("mouseover", this.hoverWrapper);
+    }
+  }
+
   render() {
     const { is, onReady, ...props } = this.props;
     const Comp = is ? is : 'div';
@@ -33,17 +56,6 @@ export default class RenderNode extends React.PureComponent<any> {
                 Editor={Editor}
                 DragHandler={DragHandler}
                 ActiveHandler={ActiveHandler}
-                ref={(ref) => {
-                  if ( ref ) {
-                    const dom = ReactDOM.findDOMNode(ref);
-                    // if ( dom ) {
-                    //   dom.addEventListener("mouseover", (e: MouseEvent) => {
-                    //     e.stopImmediatePropagation();
-                    //     if ( !nodeState.hover ||( nodeState.hover && nodeState.hover.id !== node.id) ) builder.setNodeState("hover", node.id)
-                    //   });
-                    // }
-                  }
-                }}
               />
             )
           }}
