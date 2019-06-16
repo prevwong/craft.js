@@ -55,8 +55,8 @@ export const movePlaceholder = (
   }
 
   return {
-    top: t,
-    left: l,
+    top: t + window.scrollY,
+    left: l + window.scrollX,
     width: w,
     height: h,
     margin
@@ -94,9 +94,9 @@ export const findPosition = (
     // Bottom position of the element. Top + Height
     dimDown = dim.top + dim.outerHeight;
     // X center position of the element. Left + (Width / 2)
-    xCenter = dim.left + dim.outerWidth / 2;
+    xCenter = dim.left +   dim.outerWidth / 2;
     // Y center position of the element. Top + (Height / 2)
-    yCenter = dim.top + dim.outerHeight / 2;
+    yCenter = dim.top +  dim.outerHeight / 2;
     // Skip if over the limits
     if (
       (xLimit && dim.left > xLimit) ||
