@@ -72,6 +72,7 @@ export class TextNode extends React.Component<{text: string}> {
 export const nodesToTree = (nodes: Nodes, cur="rootNode", canvasName?: string) => {
   let tree: any = {};
   const node = nodes[cur];
+  if ( !node ) return null;
   const {id, parent, props, type} = node;
   tree[id] = {
     id,
