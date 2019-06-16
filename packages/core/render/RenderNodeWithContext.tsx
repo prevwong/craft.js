@@ -8,7 +8,6 @@ import { Canvas } from "../nodes";
 export default class RenderNodeWithContext extends React.PureComponent<any> {
 
   render() {
-    const {style, className} = this.props;
     return (
       <NodeContext.Consumer>
         {({ node }: NodeContextState ) => {
@@ -16,16 +15,7 @@ export default class RenderNodeWithContext extends React.PureComponent<any> {
           return (
             <RenderNode 
               {...props}
-              style={{
-                ...props.style,
-                ...style
-              }}
-              className={cx([props.className, className && className])}
               is={type}
-              node={node}
-              onReady={(dom: HTMLElement, info: NodeInfo) => {
-                // if ( onReady ) onReady(dom, info, node);
-              }}
             />
           )
         }}

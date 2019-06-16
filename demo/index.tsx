@@ -51,13 +51,13 @@ class App extends Component {
       <Builder components={[
         MessageBox
       ]}>
-        <div style={{ padding: "50px 30px" }}>
-          <Canvas id = "main">
-            <Canvas is={Row} id="inner" style={{ background: "#eee", padding: "20px 30px", marginBottom: "20px" }}>
+        <div style={{ float:"left", width:"100%", padding: "100px 30px" }}>
+          <Canvas id = "main" style={{ background:"#999", float:"left", width:"100%", padding:"10px 20px"}}> 
+            <Canvas id="inner" style={{ background: "#eee",float:"left", width:"100%", padding: "20px 30px", marginBottom: "20px" }}>
                 <MessageBox />
             </Canvas>
           </Canvas>
-          <Layers />
+          {/* <Layers /> */}
         </div>
       </Builder >
     );

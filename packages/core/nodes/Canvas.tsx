@@ -64,9 +64,8 @@ export default class Canvas extends React.PureComponent<any> {
           return (
             canvas && <NodeElement node={canvas}>
                 <RenderNode
-                {...props}
                 is={canvas.props.is ? canvas.props.is : "div"}
-                node={canvas}
+                {...props}
               >
 
                 <React.Fragment>

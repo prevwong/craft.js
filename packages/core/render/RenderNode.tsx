@@ -6,11 +6,14 @@ import RenderComp, { ComponentContext } from "./RenderComp";
 import { NodeContext } from "../nodes";
 import TestRender from "./TestRender";
 import Editor from "./RenderEditor";
+import { BuilderContextState, CanvasNode, Nodes } from "~types";
+import ActiveHandler from "./handlers/ActiveHandler";
+import DragHandler from "./handlers/DragHandler";
+
 
 export default class RenderNode extends React.PureComponent<any> {
-  
   render() {
-    const { is, node, onReady, ...props } = this.props;
+    const { is, onReady, ...props } = this.props;
     const Comp = is ? is : 'div';
     return (
       <ComponentContext.Provider value={{
@@ -26,15 +29,17 @@ export default class RenderNode extends React.PureComponent<any> {
                 Component={RenderComp} 
                 nodeState={nodeState}
                 Editor={Editor}
+                DragHandler={DragHandler}
+                ActiveHandler={ActiveHandler}
                 ref={(ref) => {
                   if ( ref ) {
                     const dom = ReactDOM.findDOMNode(ref);
-                    if ( dom ) {
-                      dom.addEventListener("mouseover", (e: MouseEvent) => {
-                        e.stopImmediatePropagation();
-                        if ( !nodeState.hover ||( nodeState.hover && nodeState.hover.id !== node.id) ) builder.setNodeState("hover", node.id)
-                      });
-                    }
+                    // if ( dom ) {
+                    //   dom.addEventListener("mouseover", (e: MouseEvent) => {
+                    //     e.stopImmediatePropagation();
+                    //     if ( !nodeState.hover ||( nodeState.hover && nodeState.hover.id !== node.id) ) builder.setNodeState("hover", node.id)
+                    //   });
+                    // }
                   }
                 }}
               />
@@ -46,4 +51,4 @@ export default class RenderNode extends React.PureComponent<any> {
   }
 }
 
-RenderNode.contextType = BuilderContext;
+RenderNode.contextType = NodeContext;

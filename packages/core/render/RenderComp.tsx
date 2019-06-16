@@ -8,7 +8,9 @@ import BuilderContext from "../BuilderContext";
 import { getDOMInfo } from "../utils";
 
 
-export const ComponentContext = React.createContext();
+export const ComponentContext = React.createContext<any>({
+
+});
 
 export default class RenderComp extends React.PureComponent<any> {
   render() {
@@ -22,8 +24,7 @@ export default class RenderComp extends React.PureComponent<any> {
                 return (
                   <Component 
                     {...props} 
-                    {...this.props}
-                    ref={(ref) => {
+                    ref={(ref: any) => {
                     if (ref) {
                       const { nodesInfo } = builder;
                       const dom = ReactDOM.findDOMNode(ref) as HTMLElement;
