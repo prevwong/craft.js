@@ -7,7 +7,7 @@ class Toolbar extends React.PureComponent<any> {
     const {DragHandler, node, domInfo, editor, Component} = this.props;
    
     const { type } = node;
-
+    console.log(3)
     return ReactDOM.createPortal(
       <div onMouseDown={(e: React.MouseEvent) => {
         e.stopPropagation();
@@ -33,14 +33,6 @@ class Toolbar extends React.PureComponent<any> {
 }
 export default class TestRender extends React.PureComponent<any> {
   dom:HTMLElement = null
-  state = {
-    hover: false
-  }
-  componentDidMount() {
-    document.addEventListener("mouseenter", (e) => {
-      // console.log("h", e.target)
-    });
-  }
 
   render() {
       const {nodeState, ActiveHandler, DragHandler, domInfo, handlers, Editor, Component} = this.props;
@@ -56,12 +48,6 @@ export default class TestRender extends React.PureComponent<any> {
                     active
                   })
                 }
-                ref={(ref: any) => {
-                  if ( ref ) {
-                      const dom = this.dom = ReactDOM.findDOMNode(ref) as HTMLElement;
-                      // handlers.clickHandler(dom);
-                  }
-                }} 
               />
             </ActiveHandler>
             {/* {active && Editor && (

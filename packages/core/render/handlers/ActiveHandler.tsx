@@ -6,6 +6,7 @@ export default class ActiveHandler extends React.Component {
     clickWrapper: EventListenerOrEventListenerObject = this.click.bind(this);
     dom: HTMLElement
     click(e: MouseEvent) {
+        e.stopImmediatePropagation();
         e.stopPropagation();
         if (e.which !== 1) return;
         console.log("clicked", this.context);
