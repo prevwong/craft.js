@@ -13,7 +13,7 @@ class Toolbar extends React.PureComponent<any> {
         return false;
 
       }} className={`toolbar`} style={{
-        position:'absolute',
+        position:'fixed',
         minWidth: `${domInfo.width}px`,
         top: `${domInfo.top - 41}px`,
         left: `${domInfo.left}px`
@@ -34,21 +34,20 @@ export default class TestRender extends React.PureComponent<any> {
   dom:HTMLElement = null
 
   render() {
-      const {nodeState, ActiveHandler, DragHandler, domInfo, handlers, Editor, Component} = this.props;
+      const {nodeState, ActiveHandler, onMouseOver, DragHandler, domInfo, handlers, Editor, Component} = this.props;
       const { hover, active } = nodeState;
         return (
           <React.Fragment>
-            {active && <Toolbar {...this.props} /> }
-            <ActiveHandler>
-              <Component 
+            {(hover || active) && <Toolbar {...this.props} /> }
+              <ActiveHandler is={Component}
                 className={
                   cx(['node-el'], {
                     hover,
                     active
                   })
                 }
+                onMouseOver={onMouseOver}
               />
-            </ActiveHandler>
             {/* {active && Editor && (
               <div style={{float:"left", width:"100%", padding: "20px 30px"}} onMouseDown={(e: React.MouseEvent) => {
                 e.stopPropagation();

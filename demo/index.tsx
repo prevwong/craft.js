@@ -11,6 +11,7 @@ import MessageBox from "./components/MessageBox";
 import Row from "./components/Row";
 import {Builder, Canvas} from "~packages/core/index";
 import Layers from "~packages/layers";
+import Renderer from "~packages/core/render/Renderer";
 
 const canvasTools = document.createElement("div");
 canvasTools.id = `canvasTools`;
@@ -48,17 +49,20 @@ class App extends Component {
   render() {
     const { tree, test, arr } = this.state;
     return (
-      <Builder components={[
-        MessageBox
-      ]}>
-        <div style={{  padding: "100px 30px" }}>
-          <Canvas id = "main" style={{ background:"#999",  padding:"10px 20px"}}> 
-            <Canvas id="inner" style={{ background: "#000", padding: "20px 30px", marginBottom: "20px" }}>
-                <MessageBox />
+      <Builder>
+        <Renderer components={[
+          MessageBox
+        ]}>
+          <div style={{  padding: "100px 30px" }}>
+            <Canvas id = "main" style={{ background:"#999",  padding:"10px 20px"}}> 
+              <Canvas id="inner" style={{ background: "#000", padding: "20px 30px", marginBottom: "20px" }}>
+                  <MessageBox />
+              </Canvas>
             </Canvas>
-          </Canvas>
-          {/* <Layers /> */}
-        </div>
+          
+          </div>
+        </Renderer>
+        <Layers />
       </Builder >
     );
   }
