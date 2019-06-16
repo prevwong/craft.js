@@ -4,9 +4,10 @@ import cx from "classnames";
 
 class Toolbar extends React.PureComponent<any> {
  render() {
-    const {handlers, node, domInfo, editor, Component} = this.props;
+    const {DragHandler, node, domInfo, editor, Component} = this.props;
    
     const { type } = node;
+
     return ReactDOM.createPortal(
       <div onMouseDown={(e: React.MouseEvent) => {
         e.stopPropagation();
@@ -20,11 +21,10 @@ class Toolbar extends React.PureComponent<any> {
       }}>
         <span className={'tag'}>{typeof type === "string" ? type : type.name }</span>
         <div className={'actions'}>
-        <a ref={(ref: any) => {
-          if (ref) {
-            handlers.dragHandler(ReactDOM.findDOMNode(ref));
-          }
-        }}>Move</a>
+          <DragHandler is="a">
+           Move
+          </DragHandler>
+        {/* {connectDragStart(<a>Move</a>)} */}
         </div>
       </div>,
       document.getElementById("canvasTools")
@@ -43,34 +43,35 @@ export default class TestRender extends React.PureComponent<any> {
   }
 
   render() {
-      const {nodeState, handlers, Editor, Component} = this.props;
+      const {nodeState, ActiveHandler, DragHandler, domInfo, handlers, Editor, Component} = this.props;
       const { hover, active } = nodeState;
-
         return (
           <React.Fragment>
-            {(hover || active) && <Toolbar {...this.props} />}
-            <Component 
-              className={
-                cx(['node-el'], {
-                  hover,
-                  active
-                })
-              }
-              ref={(ref: any) => {
-                if ( ref ) {
-                    const dom = this.dom = ReactDOM.findDOMNode(ref) as HTMLElement;
-                    handlers.clickHandler(dom);
+            {active && <Toolbar {...this.props} /> }
+            <ActiveHandler>
+              <Component 
+                className={
+                  cx(['node-el'], {
+                    hover,
+                    active
+                  })
                 }
-              }} 
-            />
-            {active && Editor && (
+                ref={(ref: any) => {
+                  if ( ref ) {
+                      const dom = this.dom = ReactDOM.findDOMNode(ref) as HTMLElement;
+                      // handlers.clickHandler(dom);
+                  }
+                }} 
+              />
+            </ActiveHandler>
+            {/* {active && Editor && (
               <div style={{float:"left", width:"100%", padding: "20px 30px"}} onMouseDown={(e: React.MouseEvent) => {
                 e.stopPropagation();
                 return false;
               }} >
                 <Editor />
               </div>
-            )}
+            )} */}
           </React.Fragment>
         )
   }
