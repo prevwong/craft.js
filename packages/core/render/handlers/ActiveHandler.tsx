@@ -2,7 +2,7 @@ import React from "react";
 import { NodeContext } from "~packages/core/nodes";
 import ReactDOM from "react-dom";
 
-export default class ActiveHandler extends React.Component {
+export default class ActiveHandler extends React.Component<any> {
     clickWrapper: EventListenerOrEventListenerObject = this.click.bind(this);
     dom: HTMLElement
     click(e: MouseEvent) {
@@ -11,6 +11,7 @@ export default class ActiveHandler extends React.Component {
         if (e.which !== 1) return;
         const {node, builder} = this.context;
         const {setNodeState } = builder;
+
         setNodeState("active", node.id);
     }
 
@@ -24,7 +25,10 @@ export default class ActiveHandler extends React.Component {
     }
 
     render() {
-        return React.Children.only(this.props.children);
+        const {is: Comp, ...props} = this.props;
+        return (
+            <Comp {...props} />
+        )
     }
 }
 
