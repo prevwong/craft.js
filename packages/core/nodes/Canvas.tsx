@@ -31,7 +31,6 @@ export default class Canvas extends React.PureComponent<any> {
               node.type === Canvas ? {...node} : 
               createNode(this.constructor as React.ElementType, this.props, canvasId, null);
       
-      // console.log("root node", rootNode)
       // makePropsReactive(childNodes, () => builder.setNodes());
       
       if (node.type === Canvas) rootNode.parent = node.parent;
@@ -53,34 +52,33 @@ export default class Canvas extends React.PureComponent<any> {
     // console.log("canvas", props)
     return (
       <NodeCanvasContext.Consumer>
-        {({ childCanvas, builder }: NodeCanvasContextState) => {
+        {({ node, childCanvas, builder }: NodeCanvasContextState) => {
           const canvasId = this.id ? this.id : childCanvas[this.props.id];
           if (!canvasId) return false;
 
           this.id = canvasId;
           const { nodes } = builder,
                 canvas = nodes[canvasId] as CanvasNode;
-                
           return (
             canvas && <NodeElement node={canvas}>
-                <RenderNode
-                is={canvas.props.is ? canvas.props.is : "div"}
-                {...props}
-              >
-
-                <React.Fragment>
-                  {
-                    canvas && canvas.nodes && canvas.nodes.map((nodeId: NodeId) => {
-                      return (
-                        <NodeElement key={nodeId} node={nodes[nodeId]}>
-                          <RenderNodeWithContext />
-                        </NodeElement>
-                      )
-                    })
-                  }
-                </React.Fragment>
-              </RenderNode>
-            </NodeElement>
+              <RenderNode
+              is={canvas.props.is ? canvas.props.is : "div"}
+              {...props}
+            >
+              <React.Fragment>
+                {
+                  canvas && canvas.nodes && canvas.nodes.map((nodeId: NodeId) => {
+                    return (
+                      <NodeElement key={nodeId} node={nodes[nodeId]}>
+                        <RenderNodeWithContext />
+                      </NodeElement>
+                    )
+                  })
+                }
+              </React.Fragment>
+            </RenderNode>
+          </NodeElement>
+           
           )
         }}
       </NodeCanvasContext.Consumer>

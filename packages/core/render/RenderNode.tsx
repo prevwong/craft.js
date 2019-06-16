@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { getDOMInfo } from "../utils";
 import BuilderContext from "../BuilderContext";
 import RenderComp, { ComponentContext } from "./RenderComp";
-import { NodeContext } from "../nodes";
+import { NodeContext, Canvas } from "../nodes";
 import TestRender from "./TestRender";
 import Editor from "./RenderEditor";
 import { BuilderContextState, CanvasNode, Nodes } from "~types";
@@ -23,6 +23,8 @@ export default class RenderNode extends React.PureComponent<any> {
         <NodeContext.Consumer>
           {({node, nodeState, builder}) => {
             return (
+              // If it's a Canvas component, it means we have not initialized the Canvas yet, so render it by itself first
+              Comp === Canvas ? <Canvas {...props} /> : 
               <TestRender 
                 node={node}
                 domInfo={builder.nodesInfo[node.id]}
