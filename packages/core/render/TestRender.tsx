@@ -7,7 +7,6 @@ class Toolbar extends React.PureComponent<any> {
     const {DragHandler, node, domInfo, editor, Component} = this.props;
    
     const { type } = node;
-    console.log(3)
     return ReactDOM.createPortal(
       <div onMouseDown={(e: React.MouseEvent) => {
         e.stopPropagation();
