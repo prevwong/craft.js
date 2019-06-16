@@ -9,7 +9,6 @@ export default class ActiveHandler extends React.Component {
         e.stopImmediatePropagation();
         e.stopPropagation();
         if (e.which !== 1) return;
-        console.log("clicked", this.context);
         const {node, builder} = this.context;
         const {setNodeState } = builder;
         setNodeState("active", node.id);
