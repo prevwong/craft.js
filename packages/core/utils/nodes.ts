@@ -96,3 +96,21 @@ export const nodesToTree = (nodes: Nodes, cur="rootNode", canvasName?: string) =
 
   return tree[id];
 }
+
+export const getDeepChildrenNodes = (nodes: Nodes, id: NodeId, result: NodeId[] = []) => {
+  result.push(id);
+  const node = nodes[id];
+  if ( node.childCanvas ) {
+    Object.keys(node.childCanvas).map(canvasName => {
+      const virtualId = node.childCanvas[canvasName];
+      getDeepChildrenNodes(nodes, virtualId, result);
+    })
+  } else if ( (node as CanvasNode).nodes ) {
+    const childNodes = (node as CanvasNode).nodes;
+    childNodes.forEach(nodeId => {
+      getDeepChildrenNodes(nodes, nodeId, result);
+    });
+  }
+
+  return result;
+}
