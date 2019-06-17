@@ -1,6 +1,5 @@
 import React from "react";
 import { NodeId, CanvasNode, Nodes, NodeContextState, NodeCanvasContextState } from "~types";
-import RenderDraggableNode from "../render/RenderDraggableNode";
 import RenderNode from "../render/RenderNode";
 import NodeElement from "../nodes/NodeElement";
 import NodeCanvasContext from "../nodes/NodeCanvasContext";
@@ -34,6 +33,7 @@ export default class Canvas extends React.PureComponent<any> {
       // makePropsReactive(childNodes, () => builder.setNodes());
       
       if (node.type === Canvas) rootNode.parent = node.parent;
+
       rootNode.nodes = Object.keys(childNodes);
 
       builder.setNodes((prevNodes: Nodes) => {
@@ -54,8 +54,7 @@ export default class Canvas extends React.PureComponent<any> {
       <NodeCanvasContext.Consumer>
         {({ node, childCanvas, builder }: NodeCanvasContextState) => {
           const canvasId = this.id ? this.id : childCanvas[this.props.id];
-          if (!canvasId) return false;
-
+          if (!canvasId ) return false;
           this.id = canvasId;
           const { nodes } = builder,
                 canvas = nodes[canvasId] as CanvasNode;

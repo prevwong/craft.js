@@ -32,7 +32,6 @@ export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?
         result[node.id] = node;
         return result;
       } else {
-        console.log(type, typeof(type))
         throw new Error("Invalid <Canvas> child provided. Expected simple JSX element or React Component.");
       }
     },
@@ -78,7 +77,7 @@ export const nodesToTree = (nodes: Nodes, cur="rootNode", canvasName?: string) =
     id,
     parent,
     props,
-    type
+    type,
   }
   if ( canvasName ) tree[id].canvasName = canvasName;
 
@@ -90,6 +89,7 @@ export const nodesToTree = (nodes: Nodes, cur="rootNode", canvasName?: string) =
     });
   } else if ( (node as CanvasNode).nodes ) {
     const childNodes = (node as CanvasNode).nodes;
+    tree[id].nodes = childNodes;
     childNodes.forEach(nodeId => {
       tree[id].children[nodeId] = nodesToTree(nodes, nodeId);
     });

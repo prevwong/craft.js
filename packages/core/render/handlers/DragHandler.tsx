@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { NodeContext } from "~packages/core/nodes";
 import { CanvasNode, Nodes, BuilderContextState } from "~types";
 
@@ -12,7 +12,7 @@ export default class DragHandler extends React.Component {
       if(!!selection) selection.empty ? selection.empty() : selection.removeAllRanges();
       e.preventDefault();
     }
-    dragStart(e: MouseEvent) {
+    dragStart(e: React.MouseEvent) {
       e.stopPropagation();
       if (e.nativeEvent.which !== 1) return;
       console.log('drag start2')
@@ -50,12 +50,12 @@ export default class DragHandler extends React.Component {
       const { placement } = placeholder;
       const { parent, index, where } = placement;
       const { id: parentId, nodes } = parent;
-  
+      
       setNodes((stateNodes: Nodes) => {
-        const currentParentNodes = (stateNodes[dragParentId] as CanvasNode).nodes,
-          newParentNodes = (stateNodes[parentId] as CanvasNode).nodes;
+        const currentParentNodes = (stateNodes[dragParentId] as CanvasNode).nodes;
+          currentParentNodes.splice(currentParentNodes.indexOf(dragId), 1);
+        const newParentNodes = (stateNodes[parentId] as CanvasNode).nodes;
   
-        currentParentNodes.splice(currentParentNodes.indexOf(dragId), 1);
         newParentNodes.splice(index + (where === "after" ? 1 : 0), 0, dragId);
         stateNodes[dragId].parent = parentId;
         return stateNodes;
