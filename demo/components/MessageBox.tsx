@@ -41,7 +41,7 @@ export default class MessageBox extends Component<MessageBoxProps> {
 
     return (
       <div className={'message-box'} style={{backgroundColor: bg}}>
-      <Canvas id="MessageCanvas">
+      <Canvas id="MessageCanvas" style={{"padding" : "20px 0"}}>
         <h2>Whut</h2>
       </Canvas>
        <NodeContext.Consumer>

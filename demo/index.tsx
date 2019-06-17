@@ -49,21 +49,18 @@ class App extends Component {
   render() {
     const { tree, test, arr } = this.state;
     return (
+      <div style={{paddingTop:"30px"}}> 
       <Builder>
         <Renderer components={[
           MessageBox
         ]}>
-          <div style={{  padding: "100px 30px" }}>
-            <Canvas id = "main" style={{ background:"#999",  padding:"10px 20px"}}> 
-              <Canvas id="inner" style={{ background: "#000", padding: "20px 30px", marginBottom: "20px" }}>
-                  <MessageBox />
-              </Canvas>
-            </Canvas>
-          
-          </div>
+            <MessageBox />
         </Renderer>
-        <Layers />
+        <div style={{width: "300px", float:"left"}}>
+          <Layers />
+        </div>
       </Builder >
+      </div>
     );
   }
 }
