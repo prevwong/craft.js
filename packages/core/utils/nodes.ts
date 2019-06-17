@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { NodeId, Node, Nodes } from "~types";
+import { NodeId, Node, Nodes, CanvasNode } from "~types";
 import { defineReactiveProperty } from ".";
 import Canvas from "../nodes/Canvas";
 const shortid = require("shortid");
@@ -22,14 +22,18 @@ export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?
       if (typeof (child) === "string") {
         child = React.createElement(TextNode, {text: child}, null);
       }
-
       let { type, props } = child;
-      const prefix = (type as Function) === Canvas ? "canvas" : "node";
-      const id = hardId ? hardId : `${prefix}-${shortid.generate()}`;
 
-      let node = createNode(type as React.ElementType, props, id, parent);
-      result[node.id] = node;
-      return result;
+      if ( ["string", "function"].includes(typeof(type))) { 
+        const prefix = (type as Function) === Canvas ? "canvas" : "node";
+        const id = hardId ? hardId : `${prefix}-${shortid.generate()}`;
+
+        let node = createNode(type as React.ElementType, props, id, parent);
+        result[node.id] = node;
+        return result;
+      } else {
+        throw new Error("Invalid <Canvas> child provided. Expected simple JSX element or React Component.");
+      }
     },
     {}
   ) as Nodes;
@@ -64,3 +68,50 @@ export class TextNode extends React.Component<{text: string}> {
   }
 }
   
+export const nodesToTree = (nodes: Nodes, cur="rootNode", canvasName?: string) => {
+  let tree: any = {};
+  const node = nodes[cur];
+  if ( !node ) return null;
+  const {id, parent, props, type} = node;
+  tree[id] = {
+    id,
+    parent,
+    props,
+    type,
+  }
+  if ( canvasName ) tree[id].canvasName = canvasName;
+
+  if ( node.childCanvas || (node as CanvasNode).nodes ) tree[id].children = {};
+  if ( node.childCanvas ) {
+    Object.keys(node.childCanvas).forEach(canvasName => {
+      const virtualId = node.childCanvas[canvasName]
+      tree[id].children[virtualId] = nodesToTree(nodes, virtualId, canvasName);
+    });
+  } else if ( (node as CanvasNode).nodes ) {
+    const childNodes = (node as CanvasNode).nodes;
+    tree[id].nodes = childNodes;
+    childNodes.forEach(nodeId => {
+      tree[id].children[nodeId] = nodesToTree(nodes, nodeId);
+    });
+  }
+
+  return tree[id];
+}
+
+export const getDeepChildrenNodes = (nodes: Nodes, id: NodeId, result: NodeId[] = []) => {
+  result.push(id);
+  const node = nodes[id];
+  if ( node.childCanvas ) {
+    Object.keys(node.childCanvas).map(canvasName => {
+      const virtualId = node.childCanvas[canvasName];
+      getDeepChildrenNodes(nodes, virtualId, result);
+    })
+  } else if ( (node as CanvasNode).nodes ) {
+    const childNodes = (node as CanvasNode).nodes;
+    childNodes.forEach(nodeId => {
+      getDeepChildrenNodes(nodes, nodeId, result);
+    });
+  }
+
+  return result;
+}

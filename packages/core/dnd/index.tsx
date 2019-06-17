@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { DropAction, BuilderContextState, Nodes, NodeId, CanvasNode } from "~types";
 import BuilderContext from "../BuilderContext";
-import { isCanvas } from "../utils";
+import { isCanvas, getDeepChildrenNodes } from "../utils";
 import Canvas from "../nodes/Canvas";
 import Placeholder from "./Placeholder";
 import { movePlaceholder, findPosition } from "./helper";
@@ -64,10 +64,12 @@ class DragDropManager extends Component {
   getNearestTarget(e: MouseEvent) {
     const { nodesInfo, dragging, nodes }: BuilderContextState = this.context;
     const pos = { x: e.clientX, y: e.clientY };
-    const nodesWithinBounds = isCanvas(dragging) ? Object.keys(nodes).filter(id => {
-      return !(dragging as CanvasNode).nodes.includes(id) && id !== "rootNode";
-    }) : Object.keys(nodes).filter(id => id !== "rootNode");
-
+    
+    const deepChildren =  getDeepChildrenNodes(nodes, dragging.id);
+    const nodesWithinBounds = Object.keys(nodes).filter(nodeId => {
+      return nodeId !== "rootNode" && !deepChildren.includes(nodeId)
+    });
+    
     return nodesWithinBounds.filter((nodeId: NodeId) => {
       const {top, left, width, height } = nodesInfo[nodeId];
       return (

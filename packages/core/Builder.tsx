@@ -4,7 +4,7 @@ import { Node,  NodeId, BuilderContextState, PlaceholderInfo, BuilderState } fro
 import DragDropManager from "./dnd";
 import BuilderContext from "./BuilderContext";
 import RenderNodeWithContext from "./render/RenderNodeWithContext";
-import { makePropsReactive, mapChildrenToNodes } from "./utils";
+import { makePropsReactive, mapChildrenToNodes, nodesToTree, getDeepChildrenNodes } from "./utils";
 
 export default class Builder extends React.Component<any> {
   nodesInfo = {};
@@ -18,17 +18,10 @@ export default class Builder extends React.Component<any> {
   constructor(props: any) {
     super(props);
     (window as any).tree = this.state;
+    (window as any).info = this.nodesInfo;
+    (window as any).deep = (nodeId: NodeId) => getDeepChildrenNodes(this.state.nodes, nodeId);
     (window as any).save = this.saveState.bind(this);
-    let rootNode = mapChildrenToNodes(<div id="root-node">{this.props.children}</div>, null, "rootNode");
-    // const loadedStateJSON: any = test
-    // // console.log(66, loadedStateJSON)
-    // if (loadedStateJSON) {
-    //   const loadedState = loadState(JSON.stringify(loadedStateJSON), this.props.components)
-    //   // rootNode = loadedState;
-    // }
-    this.state.nodes = {
-      ...rootNode
-    }
+    (window as any).test = nodesToTree;
   }
 
   setNodes = (nodes?: Function) => {
@@ -43,6 +36,7 @@ export default class Builder extends React.Component<any> {
   setNodeState = (state: string, id: NodeId) => {
     if ( !["active", "hover", "dragging"].includes(state) ) throw new Error(`Undefined state "${state}, expected either "active", "hover" or "dragging".`);
     if ( id && !this.state.nodes[id] ) throw new Error(`Node ${id} not found.`);
+    console.log("state", state, id)
     this.setState({
       [state]: this.state.nodes[id]
     })
@@ -90,12 +84,12 @@ export default class Builder extends React.Component<any> {
 
 
   componentDidMount() {
-    window.addEventListener("mouseover", e => {
-      if ( this.state.hover ) this.setNodeState("hover", null);
-    });
-    window.addEventListener("mousedown", e => {
-      if ( this.state.active) this.setNodeState("active", null);
-    })
+    // window.addEventListener("mouseover", e => {
+    //   if ( this.state.hover ) this.setNodeState("hover", null);
+    // });
+    // window.addEventListener("mousedown", e => {
+    //   if ( this.state.active) this.setNodeState("active", null);
+    // })
   }
   render() {
     const { setNodes, setNodeState, setPlaceholder } = this;
@@ -109,9 +103,7 @@ export default class Builder extends React.Component<any> {
         setPlaceholder
       }}>
         <DragDropManager>
-          <NodeElement node={this.state.nodes["rootNode"]}>
-            <RenderNodeWithContext />
-          </NodeElement>
+          {this.props.children}
         </DragDropManager>
       </BuilderContext.Provider>
     )
