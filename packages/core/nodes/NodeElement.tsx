@@ -1,4 +1,4 @@
-import { BuilderContextState, NodeElementState, NodeElementProps, NodeId } from "~types";
+import { BuilderContextState, NodeElementProps, NodeId } from "~types";
 import React from "react";
 import NodeContext from "./NodeContext";
 import BuilderContext from "../BuilderContext";
@@ -8,19 +8,14 @@ export default class NodeElement extends React.Component<NodeElementProps> {
   loopInfo = {
     index: 0
   }
-  state: NodeElementState = {
-    childCanvas: {},
-  }
   componentDidUpdate() {
     this.loopInfo.index = 0;
   }
   constructor(props: NodeElementProps) {
     super(props);
-    if (this.props.node && this.props.node.childCanvas) this.state.childCanvas = this.props.node.childCanvas;
   }
   render() {
     const { node } = this.props;
-    const { childCanvas } = this.state;
     return (
       <BuilderContext.Consumer>
         {(builder: BuilderContextState) => {
@@ -37,12 +32,13 @@ export default class NodeElement extends React.Component<NodeElementProps> {
             <NodeContext.Provider value={nodeProvider}>
               <NodeCanvasContext.Provider value={{
                  ...nodeProvider,
-                 childCanvas,
+                 childCanvas: builder.nodes[node.id].childCanvas ? builder.nodes[node.id].childCanvas : {}, 
                  pushChildCanvas: (canvasId: string, canvasNodeId: NodeId) => {
                   if (!node.childCanvas) node.childCanvas = {};
-                  this.setState((state: NodeElementState) => {
-                    state.childCanvas[canvasId] = node.childCanvas[canvasId] = canvasNodeId;
-                    return state;
+                  builder.setNodes((nodes) => {
+                    if (!nodes[node.id].childCanvas ) nodes[node.id].childCanvas = {};
+                    nodes[node.id].childCanvas[canvasId] = canvasNodeId;
+                    return nodes;
                   });
                 }
               }}> 
