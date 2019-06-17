@@ -1,5 +1,5 @@
 import "reset-css";
-import "./demo.css";
+import "./demo.scss";
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import tree from "./tree";
@@ -7,8 +7,15 @@ import tree from "./tree";
 // import Compose from "~/packages/compose";
 import Button from "./components/Button";
 import MessageBox from "./components/MessageBox";
-import Builder from "~packages/core/Builder";
-import Canvas from "~packages/core/Canvas";
+
+import Row from "./components/Row";
+import {Builder, Canvas} from "~packages/core/index";
+import Layers from "~packages/layers";
+import Renderer from "~packages/core/render/Renderer";
+
+const canvasTools = document.createElement("div");
+canvasTools.id = `canvasTools`;
+document.body.appendChild(canvasTools);
 
 class App extends Component {
   state = {
@@ -41,15 +48,21 @@ class App extends Component {
   }
   render() {
     const { tree, test, arr } = this.state;
-    // console.log("render", arr)
     return (
       <Builder>
-        <Canvas>
-          <Canvas>
-            <h2>Hi</h2>
-          </Canvas>
-        </Canvas>
-
+        <Renderer components={[
+          MessageBox
+        ]}>
+          <div style={{  padding: "100px 30px" }}>
+            <Canvas id = "main" style={{ background:"#999",  padding:"10px 20px"}}> 
+              <Canvas id="inner" style={{ background: "#000", padding: "20px 30px", marginBottom: "20px" }}>
+                  <MessageBox />
+              </Canvas>
+            </Canvas>
+          
+          </div>
+        </Renderer>
+        <Layers />
       </Builder >
     );
   }

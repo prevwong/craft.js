@@ -1,58 +1,37 @@
-import { Tree } from "../src/utils";
-import { Index } from "./tree";
 import React from "react";
 import { id } from "~types";
+import { Node, NodeId, Nodes, NodeInfo, CanvasNode, NodeStates } from "./node";
+import { CSSMarginPaddingObj } from "./dom";
 
-export declare interface CoreState {
-  dragging: ActiveElement;
-  active: ActiveElement;
-  tree: Tree;
-  setDragging: Function;
-  setTree: Function;
-  setPlaceholder: Function;
-  setActive: Function;
-  placeholder: PlaceholderInfo;
+export interface BuilderState {
+  nodes: Nodes,
+  active: Node,
+  hover: Node,
+  dragging: Node,
+  placeholder: PlaceholderInfo
+}
+export interface BuilderContextState extends BuilderState {
+  nodesInfo: any;
+  setNodes: Function
+  setNodeState: Function
+  setPlaceholder: Function
+}
+
+export interface PlaceholderInfo {
+  node: Node
+  placement: DropAction;
+  position: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+    margin: CSSMarginPaddingObj;
+  }
 }
 
 export interface ActiveElement {
   type: string;
-  index: Index;
-}
-
-export interface CSSMarginPaddingObj {
-  left?: number;
-  right?: number;
-  bottom?: number;
-  top?: number;
-}
-export interface DOMInfo {
-  x?: number;
-  y?: number;
-  top?: number;
-  left?: number;
-  bottom?: number;
-  right?: number;
-  width?: number;
-  height?: number;
-  padding?: CSSMarginPaddingObj;
-  margin?: CSSMarginPaddingObj;
-  inFlow?: boolean;
-}
-
-export interface PlaceholderInfo {
-  position: DOMInfo;
   node: Node;
-  placement: DropAction;
-}
-
-export interface NodeInfo {
-  id?: number;
-  dom?: DOMInfo;
-  accept?: boolean;
-}
-
-export interface RenderInfo {
-  [key: string]: NodeInfo;
 }
 
 export declare interface CoreProps {
@@ -60,7 +39,7 @@ export declare interface CoreProps {
 }
 
 export declare interface DropAction {
-  parent: Index;
+  parent: CanvasNode;
   index: number;
   where: string;
 }

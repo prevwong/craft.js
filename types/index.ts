@@ -1,6 +1,5 @@
 export * from "./core.d";
-export * from "./space.d";
-export * from "./tree.d";
-export * from "./compose.d";
+export * from "./node.d";
+export * from "./dom.d";
 
 export type id = string | number;
