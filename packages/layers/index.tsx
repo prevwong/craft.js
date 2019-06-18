@@ -8,20 +8,6 @@ import LayerContext from "./context";
 import { findPosition } from "./helper";
 import { DropTreeNode, LayerState } from "./types";
 
-export const List = styled.ul`
- float:left;
- width:100%;
- background-color: #fefefe;
- padding: 0;
- margin:0;
- li {
-   > div {
-     padding-left: 10px;
-   }
- }
-`
-
-
 export default class Layers extends React.Component {
   layerInfo: any =  {}
   state: LayerState = {
@@ -141,5 +127,19 @@ export default class Layers extends React.Component {
       )
   }
 }
+
+
+export const List = styled.ul`
+ float:left;
+ width:100%;
+ background-color: #fefefe;
+ padding: 0;
+ margin:0;
+ li {
+   > div {
+     padding-left: 10px;
+   }
+ }
+`
 
 Layers.contextType = BuilderContext;

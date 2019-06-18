@@ -5,53 +5,6 @@ import LayerContext from "./context";
 import { getDOMInfo } from "./utils/dom";
 import { LayerContextState } from "./types";
 
-const LayerNode = styled.li`
-position:relative;
-height:100%;
-font-weight: lighter;
-text-align: left;
-position: relative;
-font-size: .75rem;
-`
-
-const LayerNodeTitle = styled.div<{
-  placeholderBefore: Boolean,
-  placeholderAfter: Boolean,
-  placeholderInside: Boolean
-}>`
-  font-weight: lighter;
-  letter-spacing: 1px;
-  text-align: left;
-  position: relative;
-  cursor: pointer;
-  padding: 3px 10px 5px 5px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid rgba(0,0,0,0.25);
-  outline: ${props => props.placeholderInside ? "1px solid #000" : "none" };
-
-  &:after, &:before {
-    content: " ";
-    float:left;
-    width:100%;
-    height:2px;
-    width:100%;
-    background:#000;
-    position:absolute;
-    left:0;
-  }
-
-  &:after {
-    bottom:0;
-    display: ${props => props.placeholderAfter ? "block" : "none" } 
-  }
-
-  &:before {
-    top:0;
-    display: ${props => props.placeholderBefore ? "block" : "none" } 
-  }
-`
-
 export default class RenderTreeNode extends React.Component<any> {
     ref= React.createRef();
    
@@ -104,5 +57,54 @@ export default class RenderTreeNode extends React.Component<any> {
         )
     }
 }
+
+
+
+const LayerNode = styled.li`
+position:relative;
+height:100%;
+font-weight: lighter;
+text-align: left;
+position: relative;
+font-size: .75rem;
+`
+
+const LayerNodeTitle = styled.div<{
+  placeholderBefore: Boolean,
+  placeholderAfter: Boolean,
+  placeholderInside: Boolean
+}>`
+  font-weight: lighter;
+  letter-spacing: 1px;
+  text-align: left;
+  position: relative;
+  cursor: pointer;
+  padding: 3px 10px 5px 5px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+  outline: ${props => props.placeholderInside ? "1px solid #000" : "none" };
+
+  &:after, &:before {
+    content: " ";
+    float:left;
+    width:100%;
+    height:2px;
+    width:100%;
+    background:#000;
+    position:absolute;
+    left:0;
+  }
+
+  &:after {
+    bottom:0;
+    display: ${props => props.placeholderAfter ? "block" : "none" } 
+  }
+
+  &:before {
+    top:0;
+    display: ${props => props.placeholderBefore ? "block" : "none" } 
+  }
+`
 
 RenderTreeNode.contextType = LayerContext;
