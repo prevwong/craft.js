@@ -48,7 +48,7 @@ export const getNearestDraggableParent = (nodes: Nodes, id: NodeId) => {
   if ( node.parent ) {
     return node;
   } else {
-    return getNearestDraggableParent(nodes, node.parentNode)
+    return getNearestDraggableParent(nodes, node.closestParent)
   }
 }
 
