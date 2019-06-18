@@ -18,7 +18,10 @@ export default class RenderTreeNode extends React.Component<any> {
         {({ layerInfo, setDragging, placeholder, builder }: LayerContextState) => {
           const { setNodeState } = builder;
           return (
-            <LayerNode>
+            <LayerNode
+            placeholderBefore={placeholder && placeholder.nodeId === node.id && placeholder.where === "before"}
+            placeholderAfter={placeholder && placeholder.nodeId === node.id && placeholder.where === "after"}
+            >
               <LayerNodeTitle
                 ref={(dom) => {
                   if (dom) {
@@ -27,7 +30,6 @@ export default class RenderTreeNode extends React.Component<any> {
                 }}
                 style={{ paddingLeft: `${(layer + 1) * 10}px` }}
                 placeholderBefore={placeholder && placeholder.nodeId === node.id && placeholder.where === "before"}
-                placeholderAfter={placeholder && placeholder.nodeId === node.id && placeholder.where === "after"}
                 placeholderInside={placeholder && placeholder.nodeId === node.id && placeholder.where === "inside"}
                 onMouseDown={(e) => {
                   if ( !node.parent ) return;
@@ -61,18 +63,43 @@ export default class RenderTreeNode extends React.Component<any> {
 
 
 
-const LayerNode = styled.li`
+const LayerNode = styled.li<{
+  placeholderBefore: Boolean,
+  placeholderAfter: Boolean,
+}>`
 position:relative;
 height:100%;
 font-weight: lighter;
 text-align: left;
 position: relative;
 font-size: .75rem;
+float:left;
+width:100%;
+&:after, &:before {
+  content: " ";
+  float:left;
+  width:100%;
+  height:2px;
+  width:100%;
+  background:#000;
+  position:absolute;
+  left:0;
+}
+
+&:after {
+  bottom:0;
+  display: ${props => props.placeholderAfter ? "block" : "none"} 
+}
+
+&:before {
+  top:0;
+  display: ${props => props.placeholderBefore ? "block" : "none"} 
+}
+
 `
 
 const LayerNodeTitle = styled.div<{
   placeholderBefore: Boolean,
-  placeholderAfter: Boolean,
   placeholderInside: Boolean
 }>`
   font-weight: lighter;
@@ -86,7 +113,7 @@ const LayerNodeTitle = styled.div<{
   border-bottom: 1px solid rgba(0,0,0,0.25);
   outline: ${props => props.placeholderInside ? "1px solid #000" : "none"};
 
-  &:after, &:before {
+  &:before {
     content: " ";
     float:left;
     width:100%;
@@ -95,11 +122,6 @@ const LayerNodeTitle = styled.div<{
     background:#000;
     position:absolute;
     left:0;
-  }
-
-  &:after {
-    bottom:0;
-    display: ${props => props.placeholderAfter ? "block" : "none"} 
   }
 
   &:before {

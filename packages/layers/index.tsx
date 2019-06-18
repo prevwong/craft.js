@@ -63,6 +63,7 @@ export default class Layers extends React.Component {
         index = nodes[parentId].nodes.indexOf(nodeId) + (where === "after" ? 1 : 0);
       }
       
+      // console.log(placeholder, parentId, index)
       setNodes((prevNodes: Nodes) => {
         return moveNode(prevNodes, dragging, parentId, index + (where === "after" ? 1 : 0));
       })
@@ -111,7 +112,7 @@ export default class Layers extends React.Component {
                           targetParent: CanvasNode = (targetNode as CanvasNode).nodes ? targetNode : nodes[targetNode.parent],
                           targetParentInfo = layerInfo[targetParent.id];
 
-                        if ((targetNode as CanvasNode).nodes && e.clientY > (targetParentInfo.y) && e.clientY < (targetParentInfo.bottom - targetParentInfo.height * 1 / 4)) {
+                        if ((targetNode as CanvasNode).nodes && e.clientY >= (targetParentInfo.y) && e.clientY <= targetParentInfo.top + targetParentInfo.outerHeight) {
                           placeholder = {
                             nodeId: targetNode.id,
                             where: "inside"
@@ -125,6 +126,7 @@ export default class Layers extends React.Component {
                           });
 
                           placeholder = findPosition(targetParent, dimensionsInContainer, e.clientY);
+                          // console.log("placeholder", placeholder)
 
                         }
 
