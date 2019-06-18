@@ -117,11 +117,13 @@ export const moveNode = (nodes: Nodes, targetNodeId: NodeId, parentContainerNode
   const targetNode = nodes[targetNodeId];
 
   const currentParentNodes = (nodes[targetNode.parent] as CanvasNode).nodes;
-        currentParentNodes.splice(currentParentNodes.indexOf(targetNodeId), 1);
-
+  currentParentNodes[currentParentNodes.indexOf(targetNodeId)] = "marked";
   const newParentNodes = (nodes[parentContainerNodeId] as CanvasNode).nodes;
-
   newParentNodes.splice(index, 0, targetNodeId);
   nodes[targetNodeId].parent = parentContainerNodeId;
+
+  currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
+
+
   return nodes;
 }
