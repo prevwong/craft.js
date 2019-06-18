@@ -59,6 +59,14 @@ export interface Node {
   parent?: string;
 }
 
+export interface TreeNode extends Node {
+  children: TreeNodes
+}
+
+export interface TreeNodes {
+  [key: string]: TreeNode
+}
+
 export interface CanvasMapping {
   [key: string]: NodeId;
 }
