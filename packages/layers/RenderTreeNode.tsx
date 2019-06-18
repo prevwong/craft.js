@@ -19,17 +19,20 @@ export default class RenderTreeNode extends React.Component<any> {
           const { setNodeState } = builder;
           return (
             <LayerNode
-            placeholderBefore={placeholder && placeholder.nodeId === node.id && placeholder.where === "before"}
-            placeholderAfter={placeholder && placeholder.nodeId === node.id && placeholder.where === "after"}
+              ref={(dom) => {
+                if (dom) {
+                  layerInfo[node.id].full = getDOMInfo(dom);
+                }
+              }}
+              
             >
-              <LayerNodeTitle
-                ref={(dom) => {
-                  if (dom) {
-                    layerInfo[node.id] = getDOMInfo(dom);
-                  }
-                }}
-                style={{ paddingLeft: `${(layer + 1) * 10}px` }}
+              <LayerNodeMovementIndicator
+                style={{paddingLeft: `${(layer) * 10}px`}}
                 placeholderBefore={placeholder && placeholder.nodeId === node.id && placeholder.where === "before"}
+                placeholderAfter={placeholder && placeholder.nodeId === node.id && placeholder.where === "after"}
+                />
+              <LayerNodeTitle
+                style={{ paddingLeft: `${(layer) * 10}px` }}
                 placeholderInside={placeholder && placeholder.nodeId === node.id && placeholder.where === "inside"}
                 onMouseDown={(e) => {
                   if ( !node.parent ) return;
@@ -39,8 +42,15 @@ export default class RenderTreeNode extends React.Component<any> {
                   setDragging(node.id);
                   return false;
                 }}
+                ref={(dom) => {
+                  if (dom) {
+                    layerInfo[node.id] = getDOMInfo(dom);
+                  }
+                }}
               >
-                {node.id}
+                <div>
+                  {node.id}
+                </div>
               </LayerNodeTitle>
               {
                 (children) ? (
@@ -63,70 +73,48 @@ export default class RenderTreeNode extends React.Component<any> {
 
 
 
-const LayerNode = styled.li<{
-  placeholderBefore: Boolean,
-  placeholderAfter: Boolean,
-}>`
-position:relative;
-height:100%;
-font-weight: lighter;
-text-align: left;
-position: relative;
-font-size: .75rem;
-float:left;
-width:100%;
-&:after, &:before {
-  content: " ";
+const LayerNode = styled.li`
+  position:relative;
+  height:100%;
+  font-weight: lighter;
+  text-align: left;
+  position: relative;
+  font-size: .75rem;
   float:left;
   width:100%;
-  height:2px;
-  width:100%;
-  background:#000;
-  position:absolute;
-  left:0;
-}
-
-&:after {
-  bottom:0;
-  display: ${props => props.placeholderAfter ? "block" : "none"} 
-}
-
-&:before {
-  top:0;
-  display: ${props => props.placeholderBefore ? "block" : "none"} 
-}
-
+  padding-bottom:1px;
 `
 
-const LayerNodeTitle = styled.div<{
-  placeholderBefore: Boolean,
-  placeholderInside: Boolean
-}>`
+const LayerNodeTitle = styled.div`
   font-weight: lighter;
   letter-spacing: 1px;
   text-align: left;
   position: relative;
   cursor: pointer;
-  padding: 3px 10px 5px 5px;
+  padding:0;
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(0,0,0,0.25);
   outline: ${props => props.placeholderInside ? "1px solid #000" : "none"};
+`
 
-  &:before {
+const LayerNodeMovementIndicator = styled.div`
+  position:absolute;
+  height:100%;
+  width:100%;
+
+  &:after {
     content: " ";
-    float:left;
+    display:block; 
+    left:0;
     width:100%;
     height:2px;
-    width:100%;
+    display:block;
     background:#000;
-    position:absolute;
-    left:0;
-  }
-
-  &:before {
-    top:0;
-    display: ${props => props.placeholderBefore ? "block" : "none"} 
+    position:relative;
+    display: ${props => (props.placeholderBefore || props.placeholderAfter) ? "block" : "none" };
+    top: ${props => (props.placeholderBefore) ? 0 : "auto" };
+    bottom: ${props => (props.placeholderAfter) ? "-100%" : "auto" };
   }
 `
 

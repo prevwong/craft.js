@@ -5,7 +5,7 @@ import RenderTreeNode from "./RenderTreeNode";
 import styled from "styled-components";
 import { NodeId, CanvasNode, BuilderContextState, Node, Nodes } from "~types";
 import LayerContext from "./context";
-import { findPosition } from "./helper";
+import { findPosition, getNearestDraggableParent, moveNextToParent } from "./helper";
 import { DropTreeNode, LayerState } from "./types";
 
 export default class Layers extends React.Component {
@@ -50,25 +50,25 @@ export default class Layers extends React.Component {
 
   mouseup(e: React.MouseEvent) {
     const { dragging, placeholder } = this.state;
-    
-    if (dragging){
+
+    if (dragging && placeholder) {
       const { nodes, setNodes } = this.context;
       const { nodeId, where } = placeholder;
       let parentId: NodeId, index: number;
-      if ( where === "inside" ) {
+      if (where === "inside") {
         parentId = nodeId,
-        index = (nodes[parentId] as CanvasNode).nodes.length;
+          index = (nodes[parentId] as CanvasNode).nodes.length;
       } else {
         parentId = nodes[nodeId].parent;
         index = nodes[parentId].nodes.indexOf(nodeId) + (where === "after" ? 1 : 0);
       }
-      
-      // console.log(placeholder, parentId, index)
+
       setNodes((prevNodes: Nodes) => {
-        return moveNode(prevNodes, dragging, parentId, index + (where === "after" ? 1 : 0));
+        return moveNode(prevNodes, dragging, parentId, index);
       })
-      this.setState({ dragging: null, placeholder: null })
     }
+
+    this.setState({ dragging: null, placeholder: null })
   }
   componentDidMount() {
     window.addEventListener("mouseup", this.onMouseUp);
@@ -105,36 +105,53 @@ export default class Layers extends React.Component {
                     if (active) {
                       const nearestTargets = this.getNearestTarget(e),
                         nearestTargetId = nearestTargets.pop();
-                      let placeholder: DropTreeNode;
 
-                      if (nearestTargetId) {
-                        const targetNode = nodes[nearestTargetId],
-                          targetParent: CanvasNode = (targetNode as CanvasNode).nodes ? targetNode : nodes[targetNode.parent],
-                          targetParentInfo = layerInfo[targetParent.id];
+                      let placeholder: DropTreeNode,
+                        nextToParent = moveNextToParent(nodes, layerInfo, e.clientY, dragging);
 
-                        if ((targetNode as CanvasNode).nodes && e.clientY >= (targetParentInfo.y) && e.clientY <= targetParentInfo.top + targetParentInfo.outerHeight) {
-                          placeholder = {
-                            nodeId: targetNode.id,
-                            where: "inside"
-                          }
-                        } else {
-                          const dimensionsInContainer = targetParent.nodes.map((id: NodeId) => {
-                            return {
-                              id,
-                              ...layerInfo[id]
+                      if (nextToParent && !nearestTargetId) {
+                        placeholder = nextToParent;
+                      } else {
+                        if (nearestTargetId) {
+                          const targetNode = nodes[nearestTargetId],
+                            targetParent: CanvasNode = (targetNode as CanvasNode).nodes ? targetNode : nodes[targetNode.parent],
+                            targetParentInfo = layerInfo[targetParent.id];
+
+                          if ((targetNode as CanvasNode).nodes && e.clientY >= (targetParentInfo.y) && e.clientY <= targetParentInfo.top + targetParentInfo.outerHeight) {
+                            placeholder = {
+                              nodeId: targetNode.id,
+                              where: "inside"
                             }
-                          });
+                          } else {
+                            const dimensionsInContainer = targetParent.nodes.map((id: NodeId) => {
+                              return {
+                                id,
+                                ...layerInfo[id]
+                              }
+                            });
 
-                          placeholder = findPosition(targetParent, dimensionsInContainer, e.clientY);
-                          // console.log("placeholder", placeholder)
+                            placeholder = findPosition(targetParent, dimensionsInContainer, e.clientY);
+                            
+                            if (placeholder.where === "after" ) {
+                              if ( e.clientY < (layerInfo[placeholder.nodeId].full.bottom - 5) ) return;
+                              nextToParent = moveNextToParent(nodes, layerInfo, e.clientY, placeholder.nodeId);
+                              if (nextToParent) placeholder = nextToParent;
+                            } else {
+                              if ( e.clientY < (layerInfo[placeholder.nodeId].full.top - 5) ) return;
+                            }
 
+                          }
                         }
+                      }
 
+                      if (placeholder) {
+                        // console.log(placeholder)
                         this.setState({
                           placeholder
                         })
 
                       }
+
                     }
                   }
                 }}
@@ -157,7 +174,7 @@ export const List = styled.ul`
  margin:0;
  li {
    > div {
-     padding-left: 10px;
+    //  padding-left: 10px;
    }
  }
 `

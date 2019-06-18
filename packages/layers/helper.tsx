@@ -1,4 +1,4 @@
-import { NodeId, DropAction, CanvasNode, NodeInfo } from "~types";
+import { NodeId, DropAction, CanvasNode, NodeInfo, Nodes } from "~types";
 import { DropTreeNode } from "./types";
 
 export const findPosition = (
@@ -42,3 +42,25 @@ export const findPosition = (
 
   return result;
 }
+
+export const getNearestDraggableParent = (nodes: Nodes, id: NodeId) => {
+  const node = nodes[id];
+  if ( node.parent ) {
+    return node;
+  } else {
+    return getNearestDraggableParent(nodes, node.parentNode)
+  }
+}
+
+export const moveNextToParent = (nodes: Nodes, layerInfo: any, posY: number, targetId: NodeId) => {
+  if ( nodes[targetId].parent !== "rootNode" ) {
+    const nearestDraggableParent = getNearestDraggableParent(nodes, nodes[targetId].parent),
+    nearestDraggableParentInfo = layerInfo[nearestDraggableParent.id];
+    if ( posY > nearestDraggableParentInfo.full.bottom - 5 ) {
+      return {
+        nodeId: nearestDraggableParent.id,
+        where: "after"
+      }
+    }
+  }
+} 
