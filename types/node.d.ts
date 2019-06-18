@@ -56,7 +56,8 @@ export interface Node {
   id?: NodeId;
   info?: DOMInfo;
   childCanvas?: CanvasMapping;
-  parent?: string;
+  parent?: NodeId;
+  parentNode?: NodeId;
 }
 
 export interface TreeNode extends Node {
