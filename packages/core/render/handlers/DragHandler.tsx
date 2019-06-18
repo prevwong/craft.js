@@ -1,6 +1,7 @@
 import React, { SyntheticEvent } from "react";
 import { NodeContext } from "~packages/core/nodes";
 import { CanvasNode, Nodes, BuilderContextState } from "~types";
+import { moveNode } from "~packages/core/utils";
 
 export default class DragHandler extends React.Component {
     dragStartWrapper: EventListenerOrEventListenerObject = this.dragStart.bind(this);
@@ -52,13 +53,14 @@ export default class DragHandler extends React.Component {
       const { id: parentId, nodes } = parent;
       
       setNodes((stateNodes: Nodes) => {
-        const currentParentNodes = (stateNodes[dragParentId] as CanvasNode).nodes;
-          currentParentNodes.splice(currentParentNodes.indexOf(dragId), 1);
-        const newParentNodes = (stateNodes[parentId] as CanvasNode).nodes;
+        // const currentParentNodes = (stateNodes[dragParentId] as CanvasNode).nodes;
+        //   currentParentNodes.splice(currentParentNodes.indexOf(dragId), 1);
+        // const newParentNodes = (stateNodes[parentId] as CanvasNode).nodes;
   
-        newParentNodes.splice(index + (where === "after" ? 1 : 0), 0, dragId);
-        stateNodes[dragId].parent = parentId;
-        return stateNodes;
+        // newParentNodes.splice(index + (where === "after" ? 1 : 0), 0, dragId);
+        // stateNodes[dragId].parent = parentId;
+        // return stateNodes;
+        return moveNode(stateNodes, dragId, parentId, index + (where === "after" ? 1 : 0));
       });
   
       setNodeState("dragging", null);

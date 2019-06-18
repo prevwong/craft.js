@@ -112,3 +112,16 @@ export const getDeepChildrenNodes = (nodes: Nodes, id: NodeId, result: NodeId[] 
 
   return result;
 }
+
+export const moveNode = (nodes: Nodes, targetNodeId: NodeId, parentContainerNodeId: NodeId, index: number) => {
+  const targetNode = nodes[targetNodeId];
+
+  const currentParentNodes = (nodes[targetNode.parent] as CanvasNode).nodes;
+        currentParentNodes.splice(currentParentNodes.indexOf(targetNodeId), 1);
+
+  const newParentNodes = (nodes[parentContainerNodeId] as CanvasNode).nodes;
+
+  newParentNodes.splice(index, 0, targetNodeId);
+  nodes[targetNodeId].parent = parentContainerNodeId;
+  return nodes;
+}
