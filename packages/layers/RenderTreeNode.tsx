@@ -85,7 +85,9 @@ const LayerNode = styled.li`
   padding-bottom:1px;
 `
 
-const LayerNodeTitle = styled.div`
+const LayerNodeTitle = styled.div<{
+  placeholderInside: Boolean
+}>`
   font-weight: lighter;
   letter-spacing: 1px;
   text-align: left;
@@ -98,11 +100,13 @@ const LayerNodeTitle = styled.div`
   outline: ${props => props.placeholderInside ? "1px solid #000" : "none"};
 `
 
-const LayerNodeMovementIndicator = styled.div`
+const LayerNodeMovementIndicator = styled.div<{
+  placeholderBefore: Boolean
+  placeholderAfter: Boolean
+}>`
   position:absolute;
   height:100%;
   width:100%;
-
   &:after {
     content: " ";
     display:block; 

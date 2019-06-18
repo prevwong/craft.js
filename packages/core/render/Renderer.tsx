@@ -1,5 +1,5 @@
 import React from "react";
-import { Node,  NodeId, BuilderContextState, PlaceholderInfo, BuilderState } from "~types";
+import { Node,  NodeId, BuilderContextState, PlaceholderInfo, BuilderState, Nodes } from "~types";
 import BuilderContext from "../BuilderContext";
 import { mapChildrenToNodes } from "../utils";
 import NodeElement from "../nodes/NodeElement";
@@ -13,7 +13,7 @@ export default class Renderer extends React.Component<any> {
   
     let node = mapChildrenToNodes(<Canvas>{this.props.children}</Canvas>, null, "rootNode");
 
-    context.setNodes((nodes) => {
+    context.setNodes((nodes: Nodes) => {
         nodes["rootNode"] = node["rootNode"];
         return nodes;
     });

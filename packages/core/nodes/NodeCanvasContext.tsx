@@ -7,5 +7,5 @@ export default React.createContext<NodeCanvasContextState>({
   childCanvas: null,
   builder: null,
   node: null,
-  state: null
+  nodeState: null
 });
