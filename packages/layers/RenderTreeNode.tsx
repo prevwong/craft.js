@@ -6,56 +6,56 @@ import { getDOMInfo } from "./utils/dom";
 import { LayerContextState } from "./types";
 
 export default class RenderTreeNode extends React.Component<any> {
-    ref= React.createRef();
-   
-    render() {
-        const { node } = this.props;
-        const { children} = node;
-        const layer = this.props.layer ? this.props.layer : 0;
+  ref = React.createRef();
 
-        return (
-            <LayerContext.Consumer>
-                {({layerInfo, setDragging, placeholder, builder}: LayerContextState) => {
-                    const {setNodeState} = builder;
-                    return (
-                        <LayerNode>
-                          <LayerNodeTitle
-                            ref={(dom) => {
-                              if ( dom ) {
-                                  layerInfo[node.id] = getDOMInfo(dom);
-                              }
-                            }}
-                            style={{paddingLeft: `${(layer+1)*10}px`}}
-                            placeholderBefore={placeholder &&  placeholder.nodeId === node.id && placeholder.where === "before"}
-                            placeholderAfter={placeholder &&  placeholder.nodeId === node.id && placeholder.where === "after"}
-                            placeholderInside={placeholder &&  placeholder.nodeId === node.id && placeholder.where === "inside"}
-                            onMouseDown={(e) => {
-                                e.stopPropagation();
-                                e.nativeEvent.stopImmediatePropagation();
-                                setNodeState("active", node.id);
-                                setDragging("dragging", node.id); 
-                                return false; 
-                            }}
-                            >
-                              {node.id}
-                            </LayerNodeTitle>
-                            {
-                                (children) ? (
-                                  <List>
-                                        {
-                                            Object.keys(children).map((childId) => {
-                                                return <RenderTreeNode key={childId} node={children[childId]} layer={layer+1} />
-                                            })
-                                        }
-                                    </List>
-                                ) : null
-                            }
-                        </LayerNode>
-                    )
+  render() {
+    const { node } = this.props;
+    const { children } = node;
+    const layer = this.props.layer ? this.props.layer : 0;
+
+    return (
+      <LayerContext.Consumer>
+        {({ layerInfo, setDragging, placeholder, builder }: LayerContextState) => {
+          const { setNodeState } = builder;
+          return (
+            <LayerNode>
+              <LayerNodeTitle
+                ref={(dom) => {
+                  if (dom) {
+                    layerInfo[node.id] = getDOMInfo(dom);
+                  }
                 }}
-            </LayerContext.Consumer>
-        )
-    }
+                style={{ paddingLeft: `${(layer + 1) * 10}px` }}
+                placeholderBefore={placeholder && placeholder.nodeId === node.id && placeholder.where === "before"}
+                placeholderAfter={placeholder && placeholder.nodeId === node.id && placeholder.where === "after"}
+                placeholderInside={placeholder && placeholder.nodeId === node.id && placeholder.where === "inside"}
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                  e.nativeEvent.stopImmediatePropagation();
+                  setNodeState("active", node.id);
+                  setDragging("dragging", node.id);
+                  return false;
+                }}
+              >
+                {node.id}
+              </LayerNodeTitle>
+              {
+                (children) ? (
+                  <List>
+                    {
+                      Object.keys(children).map((childId) => {
+                        return <RenderTreeNode key={childId} node={children[childId]} layer={layer + 1} />
+                      })
+                    }
+                  </List>
+                ) : null
+              }
+            </LayerNode>
+          )
+        }}
+      </LayerContext.Consumer>
+    )
+  }
 }
 
 
@@ -83,7 +83,7 @@ const LayerNodeTitle = styled.div<{
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(0,0,0,0.25);
-  outline: ${props => props.placeholderInside ? "1px solid #000" : "none" };
+  outline: ${props => props.placeholderInside ? "1px solid #000" : "none"};
 
   &:after, &:before {
     content: " ";
@@ -98,12 +98,12 @@ const LayerNodeTitle = styled.div<{
 
   &:after {
     bottom:0;
-    display: ${props => props.placeholderAfter ? "block" : "none" } 
+    display: ${props => props.placeholderAfter ? "block" : "none"} 
   }
 
   &:before {
     top:0;
-    display: ${props => props.placeholderBefore ? "block" : "none" } 
+    display: ${props => props.placeholderBefore ? "block" : "none"} 
   }
 `
 
