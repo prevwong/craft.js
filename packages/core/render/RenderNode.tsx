@@ -18,6 +18,7 @@ export default class RenderNode extends React.PureComponent<any> {
     e.stopPropagation();
     const {node, nodeState, builder} = this.context;
     if ( !nodeState.hover ||( nodeState.hover && nodeState.hover.id !== node.id) ) {
+      console.log("over here", node.id)
       builder.setNodeState("hover", node.id)
     }
   }
