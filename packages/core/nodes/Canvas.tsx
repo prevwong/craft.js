@@ -32,9 +32,9 @@ export default class Canvas extends React.PureComponent<any> {
       
       // makePropsReactive(childNodes, () => builder.setNodes());
       
-      if (node.type === Canvas) rootNode.parent = node.parent;
-      else rootNode.parentNode = node.id;
-      
+      if (node.type === Canvas) rootNode.parent = rootNode.closestParent = node.parent;
+      else rootNode.closestParent = node.id;
+
       rootNode.nodes = Object.keys(childNodes);
 
       builder.setNodes((prevNodes: Nodes) => {
