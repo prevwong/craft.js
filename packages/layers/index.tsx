@@ -1,9 +1,9 @@
 import React from "react";
 import BuilderContext from "~packages/core/BuilderContext";
-import { nodesToTree, getDeepChildrenNodes } from "~packages/core/utils";
+import { nodesToTree, getDeepChildrenNodes, moveNode } from "~packages/core/utils";
 import RenderTreeNode from "./RenderTreeNode";
 import styled from "styled-components";
-import { NodeId, CanvasNode, BuilderContextState, Node } from "~types";
+import { NodeId, CanvasNode, BuilderContextState, Node, Nodes } from "~types";
 import LayerContext from "./context";
 import { findPosition } from "./helper";
 import { DropTreeNode, LayerState } from "./types";
@@ -49,7 +49,25 @@ export default class Layers extends React.Component {
   };
 
   mouseup(e: React.MouseEvent) {
-    if (this.state.dragging) this.setState({ dragging: null, placeholder: null })
+    const { dragging, placeholder } = this.state;
+    
+    if (dragging){
+      const { nodes, setNodes } = this.context;
+      const { nodeId, where } = placeholder;
+      let parentId: NodeId, index: number;
+      if ( where === "inside" ) {
+        parentId = nodeId,
+        index = (nodes[parentId] as CanvasNode).nodes.length;
+      } else {
+        parentId = nodes[nodeId].parent;
+        index = nodes[parentId].nodes.indexOf(nodeId) + (where === "after" ? 1 : 0);
+      }
+      
+      setNodes((prevNodes: Nodes) => {
+        return moveNode(prevNodes, dragging, parentId, index + (where === "after" ? 1 : 0));
+      })
+      this.setState({ dragging: null, placeholder: null })
+    }
   }
   componentDidMount() {
     window.addEventListener("mouseup", this.onMouseUp);

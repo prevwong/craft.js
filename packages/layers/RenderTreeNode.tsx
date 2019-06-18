@@ -30,10 +30,11 @@ export default class RenderTreeNode extends React.Component<any> {
                 placeholderAfter={placeholder && placeholder.nodeId === node.id && placeholder.where === "after"}
                 placeholderInside={placeholder && placeholder.nodeId === node.id && placeholder.where === "inside"}
                 onMouseDown={(e) => {
+                  if ( !node.parent ) return;
                   e.stopPropagation();
                   e.nativeEvent.stopImmediatePropagation();
                   setNodeState("active", node.id);
-                  setDragging("dragging", node.id);
+                  setDragging(node.id);
                   return false;
                 }}
               >
