@@ -55,6 +55,7 @@ class App extends Component {
           MessageBox
         ]}>
             <MessageBox />
+            <h2>Hi</h2>
         </Renderer>
         <div style={{width: "300px", float:"left"}}>
           <Layers />
