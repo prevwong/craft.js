@@ -1,4 +1,4 @@
-import { NodeId, DropAction, CanvasNode, NodeInfo, Nodes } from "~types";
+import { NodeId, DropAction, CanvasNode, NodeInfo, Nodes, Node } from "~types";
 import { DropTreeNode } from "./types";
 
 export const findPosition = (
@@ -43,7 +43,7 @@ export const findPosition = (
   return result;
 }
 
-export const getNearestDraggableParent = (nodes: Nodes, id: NodeId) => {
+export const getNearestDraggableParent = (nodes: Nodes, id: NodeId) : Node => {
   const node = nodes[id];
   if ( node.parent ) {
     return node;

@@ -1,4 +1,4 @@
-import { BuilderContextState, NodeElementProps, NodeId } from "~types";
+import { BuilderContextState, NodeElementProps, NodeId, Nodes } from "~types";
 import React from "react";
 import NodeContext from "./NodeContext";
 import BuilderContext from "../BuilderContext";
@@ -35,7 +35,7 @@ export default class NodeElement extends React.Component<NodeElementProps> {
                  childCanvas: builder.nodes[node.id].childCanvas ? builder.nodes[node.id].childCanvas : {}, 
                  pushChildCanvas: (canvasId: string, canvasNodeId: NodeId) => {
                   if (!node.childCanvas) node.childCanvas = {};
-                  builder.setNodes((nodes) => {
+                  builder.setNodes((nodes: Nodes) => {
                     if (!nodes[node.id].childCanvas ) nodes[node.id].childCanvas = {};
                     nodes[node.id].childCanvas[canvasId] = canvasNodeId;
                     return nodes;
