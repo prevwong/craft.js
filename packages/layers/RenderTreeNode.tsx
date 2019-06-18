@@ -1,14 +1,9 @@
 import React, { SyntheticEvent } from "react";
 import styled from "styled-components";
 import { List } from ".";
-import BuilderContext from "~packages/core/BuilderContext";
-import { NodeContext, Canvas } from "~packages/core";
-import cx from "classnames";
-import { addNode, getDOMInfo, getDeepChildrenNodes } from "~packages/core/utils";
-import { findPosition } from "~packages/core/dnd/helper";
-import { CanvasNode, NodeId, BuilderContextState } from "~types";
 import LayerContext from "./context";
-import Placeholder from "~packages/core/dnd/Placeholder";
+import { getDOMInfo } from "./utils/dom";
+import { LayerContextState } from "./types";
 
 const LayerNode = styled.li`
 position:relative;
@@ -19,7 +14,11 @@ position: relative;
 font-size: .75rem;
 `
 
-const LayerNodeTitle = styled.div`
+const LayerNodeTitle = styled.div<{
+  placeholderBefore: Boolean,
+  placeholderAfter: Boolean,
+  placeholderInside: Boolean
+}>`
   font-weight: lighter;
   letter-spacing: 1px;
   text-align: left;
@@ -29,6 +28,8 @@ const LayerNodeTitle = styled.div`
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(0,0,0,0.25);
+  outline: ${props => props.placeholderInside ? "1px solid #000" : "none" };
+
   &:after, &:before {
     content: " ";
     float:left;
@@ -42,75 +43,59 @@ const LayerNodeTitle = styled.div`
 
   &:after {
     bottom:0;
-    display: ${props => props.placeholder.after ? "block" : "none" } 
+    display: ${props => props.placeholderAfter ? "block" : "none" } 
   }
 
   &:before {
     top:0;
-    display: ${props => props.placeholder.before ? "block" : "none" } 
+    display: ${props => props.placeholderBefore ? "block" : "none" } 
   }
 `
 
 export default class RenderTreeNode extends React.Component<any> {
     ref= React.createRef();
-    mousedown = false
-    componentDidMount() {
-        
-    }
-  
-
+   
     render() {
         const { node } = this.props;
-        const {id, canvasName, type, props, children} = node;
+        const { children} = node;
         const layer = this.props.layer ? this.props.layer : 0;
 
         return (
             <LayerContext.Consumer>
-                {({layerInfo, setLayerState, placeholder, builder}) => {
+                {({layerInfo, setDragging, placeholder, builder}: LayerContextState) => {
                     const {setNodeState} = builder;
                     return (
-                        <LayerNode ref={(dom) => {
-                            if ( dom ) {
-                                layerInfo[node.id] = getDOMInfo(dom);
-                            }
-                        }} child>
-                            <LayerNodeTitle
+                        <LayerNode>
+                          <LayerNodeTitle
+                            ref={(dom) => {
+                              if ( dom ) {
+                                  layerInfo[node.id] = getDOMInfo(dom);
+                              }
+                            }}
                             style={{paddingLeft: `${(layer+1)*10}px`}}
-                            placeholder={{
-                              before: placeholder &&  placeholder.node.id === node.id && placeholder.where === "before",
-                              after:  placeholder && placeholder.node.id === node.id && placeholder.where === "after"
-
-                            }}
-                            onMouseOver={(e: React.MouseEvent) => {
-                                e.stopPropagation();
-                                e.nativeEvent.stopImmediatePropagation();
-                               
-                                return false; 
-                            }}
+                            placeholderBefore={placeholder &&  placeholder.nodeId === node.id && placeholder.where === "before"}
+                            placeholderAfter={placeholder &&  placeholder.nodeId === node.id && placeholder.where === "after"}
+                            placeholderInside={placeholder &&  placeholder.nodeId === node.id && placeholder.where === "inside"}
                             onMouseDown={(e) => {
                                 e.stopPropagation();
                                 e.nativeEvent.stopImmediatePropagation();
                                 setNodeState("active", node.id);
-                                setLayerState("dragging", node.id); 
-                                this.mousedown = true;
+                                setDragging("dragging", node.id); 
                                 return false; 
                             }}
-                            onMouseUp={(e) => {
-                                this.mousedown = false;
-                            }}
                             >
-                               {node.id}
+                              {node.id}
                             </LayerNodeTitle>
                             {
-                                children && Object.keys(children).length && (
-                                    <List child>
+                                (children) ? (
+                                  <List>
                                         {
                                             Object.keys(children).map((childId) => {
                                                 return <RenderTreeNode key={childId} node={children[childId]} layer={layer+1} />
                                             })
                                         }
                                     </List>
-                                )
+                                ) : null
                             }
                         </LayerNode>
                     )

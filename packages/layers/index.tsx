@@ -3,9 +3,10 @@ import BuilderContext from "~packages/core/BuilderContext";
 import { nodesToTree, getDeepChildrenNodes } from "~packages/core/utils";
 import RenderTreeNode from "./RenderTreeNode";
 import styled from "styled-components";
-import { NodeId, CanvasNode, BuilderContextState } from "~types";
+import { NodeId, CanvasNode, BuilderContextState, Node } from "~types";
 import LayerContext from "./context";
 import { findPosition } from "./helper";
+import { DropTreeNode, LayerState } from "./types";
 
 export const List = styled.ul`
  float:left;
@@ -23,15 +24,24 @@ export const List = styled.ul`
 
 export default class Layers extends React.Component {
   layerInfo: any =  {}
-  state = {
-    dragging: false,
+  state: LayerState = {
+    dragging: null,
     placeholder: null
   }
-  setLayerState(state, id: NodeId) {
-      console.log("set dragging")
-      this.setState({
-          [state]: id
-      })
+  onMouseUp: EventListenerOrEventListenerObject = this.mouseup.bind(this);
+  blockSelectionWrapper: EventListenerOrEventListenerObject = this.blockSelection.bind(this);
+
+  blockSelection(e: MouseEvent) {
+    const selection = window.getSelection ? window.getSelection() : (document as any).selection ? (document as any).selection : null;
+    if(!!selection) selection.empty ? selection.empty() : selection.removeAllRanges();
+    e.preventDefault();
+  }
+
+  setDragging(id: NodeId) {
+    this.setState((state: LayerState) => {
+      state.dragging = id;
+      return state;
+    })
   }
 
   getNearestTarget(e: React.MouseEvent) {
@@ -45,17 +55,27 @@ export default class Layers extends React.Component {
       });
       
       return nodesWithinBounds.filter((nodeId: NodeId) => {
-        const {top, left, width, height } = layerInfo[nodeId];
+        const {top, height } = layerInfo[nodeId];
         return (
-          (pos.x >= left && pos.x <= left + width) &&
           (pos.y >= top && pos.y <= top + height)
         );
       });
     };
 
+  mouseup(e: React.MouseEvent) {
+    if ( this.state.dragging ) this.setState({ dragging: null, placeholder: null })
+  }
+  componentDidMount() {
+    window.addEventListener("mouseup", this.onMouseUp);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("mouseup", this.onMouseUp);
+    window.removeEventListener("selectstart", this.blockSelectionWrapper);
+  }
+
   render() {
       const { dragging, placeholder } = this.state;
-      const { setLayerState, layerInfo } = this;
+      const { setDragging, layerInfo } = this;
       // if (dragging) window.addEventListener("mousemove", this.onDrag);
       // else window.removeEventListener("mousemove", this.onDrag);
 
@@ -68,42 +88,49 @@ export default class Layers extends React.Component {
                       
                       <LayerContext.Provider value={{
                           layerInfo,
-                          setLayerState: setLayerState.bind(this),
+                          setDragging: setDragging.bind(this),
+                          dragging,
                           builder,
                           placeholder
                       }}>
                           <List 
                               onMouseMove={(e) => {
+                                  window.addEventListener("selectstart", this.blockSelectionWrapper);
                                   if ( dragging ) {
                                         if ( active ) {
                                           const nearestTargets = this.getNearestTarget(e),
                                           nearestTargetId = nearestTargets.pop();
-                                  
+                                          let placeholder: DropTreeNode;
+
                                           if (nearestTargetId) {
                                               const targetNode = nodes[nearestTargetId],
-                                              targetParent: CanvasNode = (targetNode as CanvasNode).nodes ? targetNode : nodes[targetNode.parent];
-                                      
-                                              const dimensionsInContainer = targetParent.nodes.map((id: NodeId) => {
-                                                  return {
-                                                      id,
-                                                      ...layerInfo[id]
-                                                  }
-                                              });
+                                              targetParent: CanvasNode = (targetNode as CanvasNode).nodes ? targetNode : nodes[targetNode.parent],
+                                              targetParentInfo = layerInfo[targetParent.id];
 
-                                              const placeholder = findPosition(targetParent, dimensionsInContainer, e.clientX, e.clientY);
+                                              if ( (targetNode as CanvasNode).nodes && e.clientY > (targetParentInfo.y) && e.clientY < (targetParentInfo.bottom - targetParentInfo.height * 1/4) ) {
+                                               placeholder = {
+                                                 nodeId: targetNode.id,
+                                                 where: "inside"
+                                               }
+                                              } else {
+                                                const dimensionsInContainer = targetParent.nodes.map((id: NodeId) => {
+                                                    return {
+                                                        id,
+                                                        ...layerInfo[id]
+                                                    }
+                                                });
+
+                                                placeholder = findPosition(targetParent, dimensionsInContainer, e.clientY);
+                                               
+                                              }
+
                                               this.setState({
-                                                placeholder: {
-                                                  node: nodes[placeholder.parent.nodes[placeholder.index]],
-                                                  where: placeholder.where
-                                                }
+                                                placeholder
                                               })
+                                             
                                           }
                                       }
                                   }
-                              }}
-                              onMouseUp={(e) => {
-                                  console.log("mouseup")
-                                  if ( dragging ) this.setState({ dragging: null, placeholder: null })
                               }}
                           >
                               <RenderTreeNode node={tree} />
