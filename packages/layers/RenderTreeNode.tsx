@@ -93,7 +93,7 @@ const LayerNodeTitle = styled.div<{
   text-align: left;
   position: relative;
   cursor: pointer;
-  padding:0;
+  padding: 5px 0;
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(0,0,0,0.25);
@@ -112,10 +112,11 @@ const LayerNodeMovementIndicator = styled.div<{
     display:block; 
     left:0;
     width:100%;
-    height:2px;
+    height:1px;
     display:block;
     background:#000;
     position:relative;
+    margin-top: -1px;
     display: ${props => (props.placeholderBefore || props.placeholderAfter) ? "block" : "none" };
     top: ${props => (props.placeholderBefore) ? 0 : "auto" };
     bottom: ${props => (props.placeholderAfter) ? "-100%" : "auto" };

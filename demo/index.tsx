@@ -54,6 +54,7 @@ class App extends Component {
         <Renderer components={[
           MessageBox
         ]}>
+            <Canvas></Canvas>
             <MessageBox />
             <h2>Hi</h2>
         </Renderer>
