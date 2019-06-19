@@ -117,10 +117,16 @@ export default class Layers extends React.Component {
                             targetParent: CanvasNode = (targetNode as CanvasNode).nodes ? targetNode : nodes[targetNode.parent],
                             targetParentInfo = layerInfo[targetParent.id];
 
-                          if ((targetNode as CanvasNode).nodes && e.clientY >= (targetParentInfo.y) && e.clientY <= targetParentInfo.top + targetParentInfo.outerHeight) {
+                          if ((targetNode as CanvasNode).nodes) {
+                            let where= "inside";
+                            if ( targetNode.id !== "rootNode" && e.clientY < (targetParentInfo.y + 5) ) {
+                              where = "before";
+                            } else if ( targetNode.id !== "rootNode" && e.clientY > targetParentInfo.full.bottom - 5 ) {
+                              where =  "after";
+                            }
                             placeholder = {
                               nodeId: targetNode.id,
-                              where: "inside"
+                              where
                             }
                           } else {
                             const dimensionsInContainer = targetParent.nodes.map((id: NodeId) => {
@@ -137,6 +143,7 @@ export default class Layers extends React.Component {
                               nextToParent = moveNextToParent(nodes, layerInfo, e.clientY, placeholder.nodeId);
                               if (nextToParent) placeholder = nextToParent;
                             } else {
+                              // console.log("placeholder", placeholder);
                               if ( e.clientY < (layerInfo[placeholder.nodeId].full.top - 5) ) return;
                             }
 
