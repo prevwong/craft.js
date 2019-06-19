@@ -4,9 +4,9 @@ import { nodesToTree, getDeepChildrenNodes, moveNode, getAllParents } from "~pac
 import RenderTreeNode from "./RenderTreeNode";
 import styled from "styled-components";
 import { NodeId, CanvasNode, BuilderContextState, Node, Nodes } from "~types";
-import LayerContext from "./context";
 import { findPosition, getNearestDraggableParent, moveNextToParent } from "./helper";
 import { DropTreeNode, LayerState } from "./types";
+import LayerContext from "./LayerContext";
 
 export default class Layers extends React.Component {
   layerInfo: any = {}

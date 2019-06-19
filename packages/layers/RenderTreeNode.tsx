@@ -2,12 +2,12 @@ import React, { SyntheticEvent } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import { List } from ".";
-import LayerContext from "./context";
 import { getDOMInfo } from "./utils/dom";
 import { LayerContextState } from "./types";
 import LayerNodeContext from "./LayerNodeContext";
 import Comp from "./Comp";
 import { getDeepChildrenNodes } from "~packages/core/utils";
+import LayerContext from "./LayerContext";
 
 export default class RenderTreeNode extends React.Component<any> {
   state = {
