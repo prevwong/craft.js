@@ -1,14 +1,9 @@
-import React, { SyntheticEvent } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
-import { getDOMInfo } from "../utils";
-import BuilderContext from "../BuilderContext";
 import RenderComp, { ComponentContext } from "./RenderComp";
 import { NodeContext, Canvas } from "../nodes";
 import TestRender from "./TestRender";
 import Editor from "./RenderEditor";
-import { BuilderContextState, CanvasNode, Nodes } from "~types";
-import ActiveHandler from "./handlers/ActiveHandler";
-import DragHandler from "./handlers/DragHandler";
 
 
 export default class RenderNode extends React.PureComponent<any> {
@@ -53,8 +48,6 @@ export default class RenderNode extends React.PureComponent<any> {
                 Component={RenderComp} 
                 nodeState={nodeState}
                 Editor={Editor}
-                DragHandler={DragHandler}
-                ActiveHandler={ActiveHandler}
               />
             )
           }}

@@ -1,10 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import cx from "classnames";
+import ActiveHandler from "./handlers/ActiveHandler";
+import DragHandler from "./handlers/DragHandler";
 
 class Toolbar extends React.PureComponent<any> {
  render() {
-    const {DragHandler, node, domInfo, editor, Component} = this.props;
+    const {node, domInfo, editor, Component} = this.props;
    
     const { type } = node;
     return ReactDOM.createPortal(
@@ -34,7 +36,7 @@ export default class TestRender extends React.PureComponent<any> {
   dom:HTMLElement = null
 
   render() {
-      const {nodeState, ActiveHandler, onMouseOver, DragHandler, domInfo, handlers, Editor, Component} = this.props;
+      const {nodeState, onMouseOver, domInfo, handlers, Editor, Component} = this.props;
       const { hover, active } = nodeState;
         return (
           <React.Fragment>
