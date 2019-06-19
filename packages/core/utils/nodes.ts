@@ -11,7 +11,7 @@ export const createNode = (component: React.ElementType, props: React.Props<any>
   };
 
   node["id"] = id;
-  node["parent"] = parent;
+  node["parent"] = node["closestParent"] = parent;
   return node;
 };
 
@@ -121,9 +121,19 @@ export const moveNode = (nodes: Nodes, targetNodeId: NodeId, parentContainerNode
   const newParentNodes = (nodes[parentContainerNodeId] as CanvasNode).nodes;
   newParentNodes.splice(index, 0, targetNodeId);
   nodes[targetNodeId].parent = parentContainerNodeId;
+  nodes[targetNodeId].closestParent = parentContainerNodeId;
 
   currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
-
-
   return nodes;
+}
+
+export const getAllParents = (nodes: Nodes, nodeId: NodeId, result:NodeId[] = []) => {
+  const node = nodes[nodeId];
+  const parent = node.closestParent;
+  if ( parent ) {
+    result.push(parent);
+    getAllParents(nodes, parent, result);
+  }
+
+  return result;
 }
