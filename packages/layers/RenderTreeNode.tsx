@@ -6,9 +6,13 @@ import { getDOMInfo } from "./utils/dom";
 import { LayerContextState } from "./types";
 
 export default class RenderTreeNode extends React.Component<any> {
+  state = {
+    showChildren: false
+  }
   ref = React.createRef();
 
   render() {
+    const {showChildren} = this.state;
     const { node } = this.props;
     const { children } = node;
     const layer = this.props.layer ? this.props.layer : 0;
@@ -21,6 +25,7 @@ export default class RenderTreeNode extends React.Component<any> {
             <LayerNode
               ref={(dom) => {
                 if (dom) {
+                  // console.log("node", node.id);
                   layerInfo[node.id].full = getDOMInfo(dom);
                 }
               }}
@@ -35,10 +40,11 @@ export default class RenderTreeNode extends React.Component<any> {
                 style={{ paddingLeft: `${(layer) * 10}px` }}
                 placeholderInside={placeholder && placeholder.nodeId === node.id && placeholder.where === "inside"}
                 onMouseDown={(e) => {
-                  if ( !node.parent ) return;
+                  
                   e.stopPropagation();
                   e.nativeEvent.stopImmediatePropagation();
                   setNodeState("active", node.id);
+                  if ( !node.parent ) return;
                   setDragging(node.id);
                   return false;
                 }}
@@ -48,12 +54,17 @@ export default class RenderTreeNode extends React.Component<any> {
                   }
                 }}
               >
-                <div>
-                  {node.id}
-                </div>
+                <div className="nodename">{node.id}</div>
+                {
+                  (children && Object.keys(children).length) ? <a onMouseDown={(e) => {
+                    console.log("clicked")
+                    e.stopPropagation();
+                    this.setState({ showChildren: !showChildren })
+                  }}>Toggle</a> : null
+                }
               </LayerNodeTitle>
               {
-                (children) ? (
+                (children && showChildren) ? (
                   <List>
                     {
                       Object.keys(children).map((childId) => {
@@ -98,6 +109,9 @@ const LayerNodeTitle = styled.div<{
   align-items: center;
   border-bottom: 1px solid rgba(0,0,0,0.25);
   outline: ${props => props.placeholderInside ? "1px solid #000" : "none"};
+  > .nodename {
+    flex:1; 
+  }
 `
 
 const LayerNodeMovementIndicator = styled.div<{
