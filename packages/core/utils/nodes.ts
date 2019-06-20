@@ -2,41 +2,44 @@ import React, { ReactNode } from "react";
 import { NodeId, Node, Nodes, CanvasNode, TreeNode } from "~types";
 import { defineReactiveProperty } from ".";
 import Canvas from "../nodes/Canvas";
+import produce from "immer";
+
 const shortid = require("shortid");
 
 export const createNode = (component: React.ElementType, props: React.Props<any>, id: NodeId, parent?: NodeId): Node => {
-  let node: Node = {
-    type: component as React.ElementType,
-    props
-  };
-
-  node["id"] = id;
-  node["parent"] = node["closestParent"] = parent;
-  return node;
+  return produce({}, node => {
+    node.type = component;
+    node.props = {
+      ...props
+    }
+    node.id = id;
+    node.parent = parent;
+    node.closestParent = parent;
+  })
 };
 
 
 export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?: string): Nodes => {
   return React.Children.toArray(children).reduce(
-    (result: Nodes, child: React.ReactElement | string) => {
-      if (typeof (child) === "string") {
-        child = React.createElement(TextNode, {text: child}, null);
-      }
-      let { type, props } = child;
+      (result: Nodes, child: React.ReactElement | string) => {
+        if (typeof (child) === "string") {
+          child = React.createElement(TextNode, {text: child}, null);
+        }
+        let { type, props } = child;
 
-      if ( ["string", "function"].includes(typeof(type))) { 
-        const prefix = (type as Function) === Canvas ? "canvas" : "node";
-        const id = hardId ? hardId : `${prefix}-${shortid.generate()}`;
+        if ( ["string", "function"].includes(typeof(type))) { 
+          const prefix = (type as Function) === Canvas ? "canvas" : "node";
+          const id = hardId ? hardId : `${prefix}-${shortid.generate()}`;
 
-        let node = createNode(type as React.ElementType, props, id, parent);
-        result[node.id] = node;
-        return result;
-      } else {
-        throw new Error("Invalid <Canvas> child provided. Expected simple JSX element or React Component.");
-      }
-    },
-    {}
-  ) as Nodes;
+          let node = createNode(type as React.ElementType, props, id, parent);
+          result[node.id] = node;
+          return result;
+        } else {
+          throw new Error("Invalid <Canvas> child provided. Expected simple JSX element or React Component.");
+        }
+      },
+      {}
+    ) as Nodes;
 };
 
 

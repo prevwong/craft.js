@@ -13,9 +13,10 @@ export default class Renderer extends React.Component<any> {
   
     let node = mapChildrenToNodes(<Canvas>{this.props.children}</Canvas>, null, "rootNode");
 
-    context.setNodes((nodes: Nodes) => {
-        nodes["rootNode"] = node["rootNode"];
-        return nodes;
+    window.n = node;
+    // console.log("n", node);
+    context.setImmer((nodes: Nodes) => {
+      nodes["rootNode"] = node["rootNode"];
     });
   }
 

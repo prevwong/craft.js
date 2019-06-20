@@ -32,15 +32,7 @@ export default class NodeElement extends React.Component<NodeElementProps> {
             <NodeContext.Provider value={nodeProvider}>
               <NodeCanvasContext.Provider value={{
                  ...nodeProvider,
-                 childCanvas: builder.nodes[node.id].childCanvas ? builder.nodes[node.id].childCanvas : {}, 
-                 pushChildCanvas: (canvasId: string, canvasNodeId: NodeId) => {
-                  if (!node.childCanvas) node.childCanvas = {};
-                  builder.setNodes((nodes: Nodes) => {
-                    if (!nodes[node.id].childCanvas ) nodes[node.id].childCanvas = {};
-                    nodes[node.id].childCanvas[canvasId] = canvasNodeId;
-                    return nodes;
-                  });
-                }
+                 childCanvas: builder.nodes[node.id].childCanvas ? builder.nodes[node.id].childCanvas : {}
               }}> 
                 {
                   this.props.children

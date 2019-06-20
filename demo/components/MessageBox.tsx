@@ -38,7 +38,7 @@ export default class MessageBox extends Component<MessageBoxProps> {
 
   render() {
     const { text, bg } = this.props;
-
+    console.log("t", text)
     return (
       <div className={'message-box'} style={{backgroundColor: bg}}>
       <Canvas id="MessageCanvas" style={{"padding" : "20px 0"}}>
@@ -49,17 +49,11 @@ export default class MessageBox extends Component<MessageBoxProps> {
             {({node, nodeState}) => {
               const {active} = nodeState;
               return (
-                active ? (
-                  <ContentEditable 
-                    tagName='h2' 
-                    html={text} 
-                    onChange={(e) => {
-                      node.props.text = e.target.value;
-                    }}
-                  />
-                )
-                :
-                <h2 dangerouslySetInnerHTML={{__html: text}}></h2>
+                <div>
+                  <h2>{text}</h2>
+                  <button onClick={() => node.props.text = "Hi"}>Click me</button>
+                </div>
+
               )
             }}
         </NodeContext.Consumer>
