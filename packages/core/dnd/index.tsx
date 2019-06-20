@@ -8,6 +8,7 @@ import { movePlaceholder, findPosition } from "./helper";
 
 export const DNDContext = React.createContext<any>({});
 class DragDropManager extends Component {
+  nodesInfo: any = {};
   dragging: NodeId = null;
   lastPos: DropAction;
   onDrag: EventListenerOrEventListenerObject;
@@ -37,8 +38,8 @@ class DragDropManager extends Component {
 
   drag(e: MouseEvent) {
     e.stopPropagation();
-    const { nodesInfo, dragging, setNodeState} = this.context;
-    const { left, right, top, bottom } = nodesInfo[this.dragging]
+    const { dragging, setNodeState} = this.context;
+    const { left, right, top, bottom } = this.nodesInfo[this.dragging]
     if (
       !(
         e.clientX >= right &&
@@ -58,7 +59,8 @@ class DragDropManager extends Component {
 
 
   placeBestPosition(e: MouseEvent) {
-    const { nodes, nodesInfo, dragging }: BuilderContextState = this.context;
+    const { nodesInfo } = this;
+    const { nodes, dragging }: BuilderContextState = this.context;
     const nearestTargets = this.getNearestTarget(e),
       nearestTargetId = nearestTargets.pop();
 
@@ -93,7 +95,7 @@ class DragDropManager extends Component {
   }
 
   getNearestTarget(e: MouseEvent) {
-    const { nodesInfo, nodes }: BuilderContextState = this.context;
+    const { nodes }: BuilderContextState = this.context;
     const pos = { x: e.clientX, y: e.clientY };
     
     const deepChildren =  getDeepChildrenNodes(nodes, this.dragging);
@@ -102,7 +104,7 @@ class DragDropManager extends Component {
     });
     
     return nodesWithinBounds.filter((nodeId: NodeId) => {
-      const {top, left, width, height } = nodesInfo[nodeId];
+      const {top, left, width, height } = this.nodesInfo[nodeId];
       return (
         (pos.x >= left && pos.x <= left + width) &&
         (pos.y >= top && pos.y <= top + height)
@@ -138,12 +140,13 @@ class DragDropManager extends Component {
   }
 
   render() {
-    const { setDragging } = this;
+    const { setDragging, nodesInfo } = this;
     const { placeholder } = this.state;
 
     return (
       <DNDContext.Provider value={{
-        setDragging
+        setDragging,
+        nodesInfo
       }}>
         <React.Fragment>
           {placeholder && (
