@@ -27,12 +27,6 @@ export default class Builder extends React.Component<any> {
     })
   }
 
-  setPlaceholder = (placeholder: PlaceholderInfo) => {
-    this.setState({
-      placeholder
-    });
-  }
-
   setImmer(cb: Function) {
     const newNodes = produce(this.state.nodes, cb);
 
@@ -44,16 +38,8 @@ export default class Builder extends React.Component<any> {
     // console.log(this.state.nodes, newNodes);
   } 
 
-  componentDidMount() {
-    // window.addEventListener("mouseover", e => {
-    //   if ( this.state.hover ) this.setNodeState("hover", null);
-    // });
-    // window.addEventListener("mousedown", e => {
-    //   if ( this.state.active) this.setNodeState("active", null);
-    // })
-  }
   render() {
-    const { setNodeState, setImmer, setPlaceholder } = this;
+    const { setNodeState, setImmer } = this;
     (window as any).tree = this.state.nodes;
 
     return (
@@ -62,7 +48,6 @@ export default class Builder extends React.Component<any> {
         nodesInfo: this.nodesInfo,
         // setNodes,
         setNodeState,
-        setPlaceholder,
         setImmer: setImmer.bind(this)
       }}>
         <DragDropManager>
