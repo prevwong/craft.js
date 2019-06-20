@@ -38,7 +38,7 @@ export default class MessageBox extends Component<MessageBoxProps> {
 
   render() {
     const { text, bg } = this.props;
-    console.log("t", text)
+    // console.log("t", text)
     return (
       <div className={'message-box'} style={{backgroundColor: bg}}>
       <Canvas id="MessageCanvas" style={{"padding" : "20px 0"}}>

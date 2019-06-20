@@ -7,8 +7,8 @@ import DragHandler from "./handlers/DragHandler";
 class Toolbar extends React.PureComponent<any> {
  render() {
     const {node, domInfo, editor, Component} = this.props;
-   
     const { type } = node;
+
     return ReactDOM.createPortal(
       <div onMouseDown={(e: React.MouseEvent) => {
         e.stopPropagation();
@@ -34,21 +34,20 @@ class Toolbar extends React.PureComponent<any> {
 }
 export default class TestRender extends React.PureComponent<any> {
   dom:HTMLElement = null
-
+ 
   render() {
-      const {nodeState, onMouseOver, domInfo, handlers, Editor, Component} = this.props;
-      const { hover, active } = nodeState;
-        return (
+      const {nodeState, handlers, Editor, Component} = this.props;
+      const { hover } = nodeState;
+
+      return (
           <React.Fragment>
-            {(hover || active) && <Toolbar {...this.props} /> }
-              <ActiveHandler is={Component}
+            {(hover) && <Toolbar domInfo={hover} {...this.props} /> }
+              <Component 
                 className={
                   cx(['node-el'], {
                     hover,
-                    active
                   })
                 }
-                onMouseOver={onMouseOver}
               />
             {/* {active && Editor && (
               <div style={{float:"left", width:"100%", padding: "20px 30px"}} onMouseDown={(e: React.MouseEvent) => {
