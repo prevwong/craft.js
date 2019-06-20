@@ -6,9 +6,18 @@ import Canvas from "../nodes/Canvas";
 import Placeholder from "./Placeholder";
 import { movePlaceholder, findPosition } from "./helper";
 
+export const DNDContext = React.createContext<any>({});
 class DragDropManager extends Component {
+  dragging: NodeId = null;
   lastPos: DropAction;
   onDrag: EventListenerOrEventListenerObject;
+  onMouseup: EventListenerOrEventListenerObject;
+  blockSelectionWrapper: EventListenerOrEventListenerObject = this.blockSelection.bind(this);
+  blockSelection(e: MouseEvent) {
+    const selection = window.getSelection ? window.getSelection() : (document as any).selection ? (document as any).selection : null;
+    if(!!selection) selection.empty ? selection.empty() : selection.removeAllRanges();
+    e.preventDefault();
+  }
   nodes: Nodes;
   state = {
     placeholder: null
@@ -17,6 +26,7 @@ class DragDropManager extends Component {
     super(props);
     this.nodes = context.nodes;
     this.onDrag = this.drag.bind(this);
+    this.onMouseup = this.mouseup.bind(this);
   }
 
   setPlaceholder = (placeholder: PlaceholderInfo) => {
@@ -27,16 +37,28 @@ class DragDropManager extends Component {
 
   drag(e: MouseEvent) {
     e.stopPropagation();
-    const { dragging, nodes }: BuilderContextState = this.context;
-
-    if (dragging) {
-      this.placeBestPosition(e);
+    const { nodesInfo, dragging, setNodeState} = this.context;
+    const { left, right, top, bottom } = nodesInfo[this.dragging]
+    if (
+      !(
+        e.clientX >= right &&
+        e.clientY >= top &&
+        e.clientY <= bottom
+      ) &&
+      !dragging
+    ) {
+      // Element being dragged
+      setNodeState("dragging", this.dragging);
+    } else {
+      if ( dragging ) {
+        this.placeBestPosition(e);
+      }
     }
   }
 
 
   placeBestPosition(e: MouseEvent) {
-    const { nodes, nodesInfo }: BuilderContextState = this.context;
+    const { nodes, nodesInfo, dragging }: BuilderContextState = this.context;
     const nearestTargets = this.getNearestTarget(e),
       nearestTargetId = nearestTargets.pop();
 
@@ -65,16 +87,16 @@ class DragDropManager extends Component {
         node: bestTargetNode,
         placement: bestTarget
       };
-
+      
       this.setPlaceholder(output);
     }
   }
 
   getNearestTarget(e: MouseEvent) {
-    const { nodesInfo, dragging, nodes }: BuilderContextState = this.context;
+    const { nodesInfo, nodes }: BuilderContextState = this.context;
     const pos = { x: e.clientX, y: e.clientY };
     
-    const deepChildren =  getDeepChildrenNodes(nodes, dragging.id);
+    const deepChildren =  getDeepChildrenNodes(nodes, this.dragging);
     const nodesWithinBounds = Object.keys(nodes).filter(nodeId => {
       return nodeId !== "rootNode" && !deepChildren.includes(nodeId)
     });
@@ -86,25 +108,50 @@ class DragDropManager extends Component {
         (pos.y >= top && pos.y <= top + height)
       );
     });
-  };
+  }; 
+
+  mouseup() {
+    window.removeEventListener("mousemove", this.onDrag);
+    window.removeEventListener("mouseup", this.onMouseup);
+    window.removeEventListener("selectstart", this.blockSelectionWrapper);
+    
+    const {  dragging, move, setNodeState }: BuilderContextState = this.context;
+    const { placeholder } = this.state;
+    if ( !dragging ) return;
+
+    const { placement } = placeholder;
+    const { parent, index, where } = placement;
+    const { id: parentId, nodes } = parent;
+    
+    move(dragging.id, parentId, index + (where === "after" ? 1 : 0));
+    this.dragging = null;
+    this.setPlaceholder(null);
+    setNodeState("dragging", null);
+  }
+
+  setDragging = (nodeId: NodeId) => {
+    // this.setState
+    this.dragging = nodeId;
+    window.addEventListener("selectstart", this.blockSelectionWrapper);
+    window.addEventListener("mousemove", this.onDrag);
+    window.addEventListener("mouseup", this.onMouseup);
+  }
 
   render() {
+    const { setDragging } = this;
     const { placeholder } = this.state;
+
     return (
-      <BuilderContext.Consumer>
-        {({ dragging }: BuilderContextState) => {
-          if (dragging) window.addEventListener("mousemove", this.onDrag);
-          else window.removeEventListener("mousemove", this.onDrag);
-          return (
-            <React.Fragment>
-              {placeholder && (
-                <Placeholder isActive={!!dragging} placeholder={placeholder} />
-              )}
-              {this.props.children}
-            </React.Fragment>
-          );
-        }}
-      </BuilderContext.Consumer>
+      <DNDContext.Provider value={{
+        setDragging
+      }}>
+        <React.Fragment>
+          {placeholder && (
+            <Placeholder placeholder={placeholder} />
+          )}
+          {this.props.children}
+        </React.Fragment>
+      </DNDContext.Provider>
     );
   }
 }

@@ -35,23 +35,11 @@ const PlaceholderInner = styled.div`
 
 export default class Placeholder extends Component<any> {
   render() {
-    const { isActive, placeholder } = this.props;
+    const {  placeholder } = this.props;
     const { position } = placeholder as PlaceholderInfo;
     let { width, height, top, left, margin } = position;
     let opacity = 1;
-    if (!isActive) {
-      width = 0;
-      height = 0;
-      top = 0;
-      left = 0;
-      opacity = 0;
-      margin = {
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0
-      };
-    }
+    
     return (
       <StyledPlaceholder
         opacity={opacity}
