@@ -2,7 +2,7 @@ import { HTMLProps } from "react";
 import { id } from "~types";
 import React from "react"
 import { DOMInfo, CSSMarginPaddingObj } from "./dom";
-import { BuilderContextState } from "./core";
+import { BuilderContextState, CraftAPIContext } from "./core";
 
 export type NodeId = string;
 
@@ -19,7 +19,7 @@ interface NodeElementState {
 
 export interface NodeContextState {
   node: Node;
-  builder: BuilderContextState;
+  builder: CraftAPIContext;
   nodeState: any
 }
 

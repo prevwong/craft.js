@@ -6,9 +6,9 @@ import DragHandler from "./handlers/DragHandler";
 
 class Toolbar extends React.PureComponent<any> {
  render() {
-    const {node, domInfo, editor, Component} = this.props;
+    const {node, nodeState, editor, Component} = this.props;
     const { type } = node;
-
+    const {hover} = nodeState;
     return ReactDOM.createPortal(
       <div onMouseDown={(e: React.MouseEvent) => {
         e.stopPropagation();
@@ -16,14 +16,14 @@ class Toolbar extends React.PureComponent<any> {
 
       }} className={`toolbar`} style={{
         position:'fixed',
-        minWidth: `${domInfo.width}px`,
-        top: `${domInfo.top - 41}px`,
-        left: `${domInfo.left}px`
+        minWidth: `${hover.info.width}px`,
+        top: `${hover.info.top - 41}px`,
+        left: `${hover.info.left}px`
       }}>
         <span className={'tag'}>{typeof type === "string" ? type : type.name }</span>
         <div className={'actions'}>
           <DragHandler is="a">
-           Move
+            Move
           </DragHandler>
         {/* {connectDragStart(<a>Move</a>)} */}
         </div>
@@ -41,7 +41,7 @@ export default class TestRender extends React.PureComponent<any> {
 
       return (
           <React.Fragment>
-            {(hover) && <Toolbar domInfo={hover} {...this.props} /> }
+            {(hover) && <Toolbar  {...this.props} /> }
               <Component 
                 className={
                   cx(['node-el'], {
