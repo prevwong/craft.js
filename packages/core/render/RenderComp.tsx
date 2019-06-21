@@ -7,7 +7,7 @@ import { Canvas } from "../nodes";
 import BuilderContext from "../BuilderContext";
 import { getDOMInfo } from "../utils";
 import { css } from "styled-components";
-import { DNDContext } from "../dnd";
+import DNDContext from "../dnd/DNDContext";
 
 
 export const ComponentContext = React.createContext<any>({

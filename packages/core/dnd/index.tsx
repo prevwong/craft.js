@@ -5,8 +5,8 @@ import { isCanvas, getDeepChildrenNodes } from "../utils";
 import Canvas from "../nodes/Canvas";
 import Placeholder from "./Placeholder";
 import { movePlaceholder, findPosition } from "./helper";
+import DNDContext from "./DNDContext";
 
-export const DNDContext = React.createContext<any>({});
 class DragDropManager extends Component {
   nodesInfo: any = {};
   dragging: NodeId = null;
@@ -21,6 +21,9 @@ class DragDropManager extends Component {
   }
   nodes: Nodes;
   state = {
+    active: null,
+    dragging: null,
+    hover: null,
     placeholder: null
   }
   constructor(props: any, context: BuilderContextState) {
@@ -139,14 +142,29 @@ class DragDropManager extends Component {
     window.addEventListener("mouseup", this.onMouseup);
   }
 
+  setNodeEvent = (eventType: string, node: Node) => {
+    const {nodes} = this.context
+    if ( !["active", "hover", "dragging"].includes(eventType) ) throw new Error(`Undefined event "${eventType}, expected either "active", "hover" or "dragging".`);
+    this.setState({
+      [eventType]: {
+        node,
+        info: this.nodesInfo[node.id]
+      }
+    })
+  }
+
   render() {
-    const { setDragging, nodesInfo } = this;
-    const { placeholder } = this.state;
+    const { setDragging, setNodeEvent, nodesInfo } = this;
+    const { placeholder, active, dragging, hover } = this.state;
 
     return (
       <DNDContext.Provider value={{
         setDragging,
-        nodesInfo
+        setNodeEvent,
+        nodesInfo,
+        active,
+        dragging,
+        hover
       }}>
         <React.Fragment>
           {placeholder && (
