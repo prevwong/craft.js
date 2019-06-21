@@ -1,11 +1,8 @@
-import React, { SyntheticEvent } from "react";
+import React from "react";
 import { NodeContext } from "~packages/core/nodes";
-import { CanvasNode, Nodes, BuilderContextState } from "~types";
-import { moveNode } from "~packages/core/utils";
-import { DNDContext } from "~packages/core/dnd";
+import DNDContext from "~packages/core/dnd/DNDContext";
 
 export default class DragHandler extends React.Component {
-  
     render() {
       const {is: Comp} = this.props;
       return (
