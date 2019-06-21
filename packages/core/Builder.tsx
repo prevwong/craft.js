@@ -1,32 +1,24 @@
 import React from "react";
 import NodeElement from "./nodes/NodeElement";
-import { Node,  NodeId, BuilderContextState, PlaceholderInfo, BuilderState, Nodes, CanvasNode } from "~types";
+import { Node,  NodeId, BuilderContextState, BuilderState, Nodes, CanvasNode } from "~types";
 import DragDropManager from "./dnd";
 import BuilderContext from "./BuilderContext";
 import RenderNodeWithContext from "./render/RenderNodeWithContext";
 import { makePropsReactive, mapChildrenToNodes, nodesToTree, getDeepChildrenNodes } from "./utils";
 import produce from "immer";
+import DNDContext from "./dnd/DNDContext";
+
+export const NodeMouseEventContext = React.createContext<any>({});
+export const CraftAPI = React.createContext<any>();
 
 export default class Builder extends React.Component<any> {
   nodesInfo = {};
   state: BuilderState = {
     nodes: produce({}, (draft) => {}),
-    hover:null,
-    active: null,
-    dragging: null,
-    placeholder: null,
   }
   constructor(props: any) {
       super(props);
   }
-  setNodeState = (state: string, id: NodeId) => {
-    if ( !["active", "hover", "dragging"].includes(state) ) throw new Error(`Undefined state "${state}, expected either "active", "hover" or "dragging".`);
-    // if ( id && !this.state.nodes[id] ) throw new Error(`Node ${id} not found.`);
-    this.setState({
-      [state]: typeof id === "object" ? id : this.state.nodes[id]
-    })
-  }
-
 
   add = (newNodes: Node | Node[]) => {
     this.setImmer((nodes: Nodes) => {
@@ -54,30 +46,36 @@ export default class Builder extends React.Component<any> {
     });
   }
 
-  setImmer(cb: Function) {
+  setImmer = (cb: Function)  => {
     const newNodes = produce(this.state.nodes, cb);
-    
-    this.setState({
-      nodes: newNodes
+    this.setState((state) => {
+      state.nodes =  produce(this.state.nodes, cb);
+      return state;
     });
   } 
 
   render() {
-    const { setNodeState, setImmer, add, move } = this;
+    const { setImmer, add, move } = this;
     (window as any).tree = this.state.nodes;
+    const { nodes} = this.state;
 
     return (
       <BuilderContext.Provider value={{
-        ...this.state,
+        nodes,
         add,
         move,
-        nodesInfo: this.nodesInfo,
-        // setNodes,
-        setNodeState,
-        setImmer: setImmer.bind(this)
+        setImmer
       }}>
         <DragDropManager>
-          {this.props.children}
+          <DNDContext.Consumer>
+            {({active, dragging, hover, setActive}) => {
+              return (
+                <CraftAPI.Provider value={{nodes, add, move, active, dragging, hover, setActive}}>
+                  {this.props.children}
+                </CraftAPI.Provider>
+              )
+            }}
+          </DNDContext.Consumer>
         </DragDropManager>
       </BuilderContext.Provider>
     )

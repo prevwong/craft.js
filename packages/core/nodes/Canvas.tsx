@@ -38,25 +38,29 @@ export default class Canvas extends React.PureComponent<any> {
         if (node.type === Canvas) draft.parent = draft.closestParent = node.parent;
         else draft.closestParent = node.id;
   
-        draft.nodes = Object.keys(childNodes);
+        draft.nodes = childNodes.map(node => node.id);
       });
+      
+      builder.add([rootNode, ...childNodes]);
+      if ( node.type !== Canvas )  {
+        pushChildCanvas(id, canvasId);
+      }
+      // builder.setImmer((prevNodes: Nodes) => {
+      //   prevNodes[rootNode.id] = rootNode;
+      //   Object.keys(childNodes).forEach(id => {
+      //     prevNodes[id] = childNodes[id];
+      //   });
 
-      builder.setImmer((prevNodes: Nodes) => {
-        prevNodes[rootNode.id] = rootNode;
-        Object.keys(childNodes).forEach(id => {
-          prevNodes[id] = childNodes[id];
-        });
-
-        if ( node.type !== Canvas )  {
-          if (!prevNodes[node.id].childCanvas ) prevNodes[node.id].childCanvas = {};
-          prevNodes[node.id].childCanvas[id] = rootNode.id;
-        }
-      })
+      //   if ( node.type !== Canvas )  {
+      //     if (!prevNodes[node.id].childCanvas ) prevNodes[node.id].childCanvas = {};
+      //     prevNodes[node.id].childCanvas[id] = rootNode.id;
+      //   }
+      // })
     }
   }
   render() {
     const { incoming, outgoing, ...props } = this.props;
-    // console.log("canvas", props)
+
     return (
       <NodeCanvasContext.Consumer>
         {({ node, childCanvas, builder }: NodeCanvasContextState) => {
@@ -65,8 +69,9 @@ export default class Canvas extends React.PureComponent<any> {
           this.id = canvasId;
           const { nodes } = builder,
                 canvas = nodes[canvasId] as CanvasNode;
-
-                return (
+          
+          console.log("canvas", canvas, canvasId)
+          return (
             canvas && <NodeElement node={canvas}>
               <RenderNode
               is={canvas.props.is ? canvas.props.is : "div"}
