@@ -7,7 +7,7 @@ import produce from "immer";
 const shortid = require("shortid");
 
 export const createNode = (component: React.ElementType, props: React.Props<any>, id: NodeId, parent?: NodeId): Node => {
-  return produce({}, node => {
+  return produce({}, (node: Node) => {
     node.type = component;
     node.props = {
       ...props
@@ -19,9 +19,9 @@ export const createNode = (component: React.ElementType, props: React.Props<any>
 };
 
 
-export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?: string): Nodes => {
+export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?: string): Node[] => {
   return React.Children.toArray(children).reduce(
-      (result: Nodes, child: React.ReactElement | string) => {
+      (result: Node[], child: React.ReactElement | string) => {
         if (typeof (child) === "string") {
           child = React.createElement(TextNode, {text: child}, null);
         }
@@ -32,14 +32,14 @@ export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?
           const id = hardId ? hardId : `${prefix}-${shortid.generate()}`;
 
           let node = createNode(type as React.ElementType, props, id, parent);
-          result[node.id] = node;
+          result.push(node);
           return result;
         } else {
           throw new Error("Invalid <Canvas> child provided. Expected simple JSX element or React Component.");
         }
       },
-      {}
-    ) as Nodes;
+      []
+    ) as Node[];
 };
 
 
