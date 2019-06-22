@@ -1,9 +1,9 @@
 import React from "react";
 import { mapChildrenToNodes } from "../utils";
 import NodeElement from "../nodes/NodeElement";
-import RenderNodeWithContext from "./RenderNodeWithContext";
 import { CraftAPIContext } from "../CraftAPIContext";
 import Canvas from "../nodes/Canvas";
+import RenderNode from "./RenderNode";
 
 export default class Renderer extends React.PureComponent<any> {
  
@@ -22,7 +22,7 @@ export default class Renderer extends React.PureComponent<any> {
               return (
                 nodes["rootNode"]  && 
                     <NodeElement node={nodes["rootNode"]}>
-                        <RenderNodeWithContext />
+                        <RenderNode />
                     </NodeElement>
               )
           }}

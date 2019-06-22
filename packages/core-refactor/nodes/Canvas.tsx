@@ -2,7 +2,6 @@ import React from "react";
 import RenderNode from "../render/RenderNode";
 import NodeElement from "../nodes/NodeElement";
 import { createNode, mapChildrenToNodes } from "../utils";
-import RenderNodeWithContext from "../render/RenderNodeWithContext";
 import produce from "immer";
 import { NodeId, Nodes, CanvasNode } from "~types";
 import { NodeCanvasContext } from "./NodeCanvasContext";
@@ -81,7 +80,7 @@ export default class Canvas extends React.PureComponent<any> {
                   canvas && canvas.nodes && canvas.nodes.map((nodeId: NodeId) => {
                     return (
                       <NodeElement key={nodeId} node={nodes[nodeId]}>
-                        <RenderNodeWithContext />
+                        <RenderNode />
                       </NodeElement>
                     )
                   })

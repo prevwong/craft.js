@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import RenderComp, { ComponentContext } from "./RenderComp";
 import TestRender from "./TestRender";
 import Editor from "./RenderEditor";
@@ -8,19 +8,23 @@ import Canvas from "../nodes/Canvas";
 
 export default class RenderNode extends React.PureComponent<any> {
   render() {
-    const { is, onReady, ...props } = this.props;
-    const Comp = is ? is : 'div';
+    const { is, onReady, ...passProps } = this.props;
+   
     return (
         <NodeContext.Consumer>
           {({node, events, api}: NodeContext) => {
+            const { type, props} = node;
+            const Comp = is ? is : type
             return (
               <EventContext.Consumer>
                 {({hover, setNodeEvent}) => {
+                  
                   return (
                     <ComponentContext.Provider value={{
                       Component: Comp,
                       props: {
                         ...props,
+                        ...passProps,
                         onMouseOver: (e: React.MouseEvent) => {
                           e.stopPropagation();
                           if ( !hover ||( hover && hover.node.id !== node.id) ) {
