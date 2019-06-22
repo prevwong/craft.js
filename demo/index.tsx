@@ -3,14 +3,8 @@ import "./demo.scss";
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import tree from "./tree";
-// import Space from "~/packages/space";
-// import Compose from "~/packages/compose";
-import Button from "./components/Button";
 import MessageBox from "./components/MessageBox";
-
-import Row from "./components/Row";
-import {Builder, Canvas} from "~packages/core/index";
-import Layers from "~packages/layers";
+import Builder from "~packages/core/Builder";
 import Renderer from "~packages/core/render/Renderer";
 
 const canvasTools = document.createElement("div");
