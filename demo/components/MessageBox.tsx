@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import PropTypes, { string } from 'prop-types';
-import {NodeContext, Canvas} from "~packages/core/";
 import ContentEditable from 'react-contenteditable'
+import { NodeContext } from "~packages/core/nodes/NodeContext";
+import Canvas from "~packages/core/nodes/Canvas";
 
 interface MessageBoxProps {
   text: string
@@ -46,8 +47,8 @@ export default class MessageBox extends Component<MessageBoxProps> {
       <h2>Whut</h2>
       </Canvas>
        <NodeContext.Consumer>
-            {({node, nodeState}) => {
-              const {active} = nodeState;
+            {({node}) => {
+              console.log("type", node)
               return (
                 <div>
                   <h2>{text}</h2>
