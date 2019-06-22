@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { NodeContext } from "~packages/core-refactor/nodes/NodeContext";
-import EventContext from "~packages/core-refactor/events/EventContext";
+import { NodeContext } from "~packages/core/nodes/NodeContext";
+import EventContext from "~packages/core/events/EventContext";
 
 export default class ActiveHandler extends React.Component<any> {
     // clickWrapper: EventListenerOrEventListenerObject = this.click.bind(this);

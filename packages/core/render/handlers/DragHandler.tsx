@@ -1,6 +1,6 @@
 import React from "react";
-import EventContext from "~packages/core-refactor/events/EventContext";
-import { NodeContext } from "~packages/core-refactor/nodes/NodeContext";
+import EventContext from "~packages/core/events/EventContext";
+import { NodeContext } from "~packages/core/nodes/NodeContext";
 
 export default class DragHandler extends React.Component<any> {
     render() {
