@@ -5,20 +5,24 @@ import { CraftAPIContext } from "../CraftAPIContext";
 import Canvas from "../nodes/Canvas";
 import RenderNode from "./RenderNode";
 
-export default class Renderer extends React.PureComponent<any> {
+export default class Renderer extends React.Component<any> {
  
   constructor(props: any, context: CraftAPIContext) {
     super(props);
   
     let node = mapChildrenToNodes(<Canvas>{this.props.children}</Canvas>, null, "rootNode");
-    context.methods.add(node);
+    context.manager.methods.add(node);
   }
 
+  shouldComponentUpdate(){
+    return false;
+  }
 
   render() {
+    console.log("gg")
     return (
       <CraftAPIContext.Consumer>
-          {({nodes}) => {
+          {({manager: {nodes}}) => {
               return (
                 nodes["rootNode"]  && 
                     <NodeElement node={nodes["rootNode"]}>

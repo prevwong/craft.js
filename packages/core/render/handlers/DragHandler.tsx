@@ -1,6 +1,6 @@
 import React from "react";
-import EventContext from "~packages/core/events/EventContext";
 import { NodeContext } from "~packages/core/nodes/NodeContext";
+import { EventContext } from "~packages/core/events/EventContext";
 
 export default class DragHandler extends React.Component<any> {
     render() {
@@ -11,7 +11,7 @@ export default class DragHandler extends React.Component<any> {
             return (
               node.parent && 
                 <EventContext.Consumer>
-                  {({setNodeEvent}) => {
+                  {({methods: {setNodeEvent}}) => {
                     return (
                       <Comp onMouseDown={() => setNodeEvent("dragging", node.id)}>
                         {this.props.children}

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { NodeContext } from "~packages/core/nodes/NodeContext";
-import EventContext from "~packages/core/events/EventContext";
+import { EventContext } from "~packages/core/events/EventContext";
 
 export default class ActiveHandler extends React.Component<any> {
     // clickWrapper: EventListenerOrEventListenerObject = this.click.bind(this);
@@ -32,10 +32,11 @@ export default class ActiveHandler extends React.Component<any> {
              {({node}) => {
                return (
                 <EventContext.Consumer>
-                    {({setNodeEvent}) => {
+                    {({methods:{setNodeEvent}}) => {
                       return (
                       <Comp {...props} onClick={(e: React.MouseEvent) => {
                         e.stopPropagation();
+                        console.log("clkicked.")
                         setNodeEvent("active", node.id)
                       }} />
                       )

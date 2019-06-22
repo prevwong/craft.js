@@ -3,10 +3,11 @@ import RenderComp, { ComponentContext } from "./RenderComp";
 import TestRender from "./TestRender";
 import Editor from "./RenderEditor";
 import { NodeContext } from "../nodes/NodeContext";
-import EventContext from "../events/EventContext";
 import Canvas from "../nodes/Canvas";
+import { EventContext } from "../events/EventContext";
 
-export default class RenderNode extends React.PureComponent<any> {
+export default class RenderNode extends React.Component<any> {
+ 
   render() {
     const { is, onReady, ...passProps } = this.props;
    
@@ -15,10 +16,10 @@ export default class RenderNode extends React.PureComponent<any> {
           {({node, events, api}: NodeContext) => {
             const { type, props} = node;
             const Comp = is ? is : type
+            console.log("node", node)
             return (
               <EventContext.Consumer>
-                {({hover, setNodeEvent}) => {
-                  
+                {({hover, methods:{setNodeEvent}}) => {
                   return (
                     <ComponentContext.Provider value={{
                       Component: Comp,
