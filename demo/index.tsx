@@ -6,6 +6,7 @@ import tree from "./tree";
 import MessageBox from "./components/MessageBox";
 import Builder from "~packages/core/Builder";
 import Renderer from "~packages/core/render/Renderer";
+import Canvas from "~packages/core/nodes/Canvas";
 
 const canvasTools = document.createElement("div");
 canvasTools.id = `canvasTools`;
@@ -48,7 +49,7 @@ class App extends Component {
         <Renderer components={[
           MessageBox
         ]}>
-            <MessageBox />
+           
             <h2>Hi</h2>
         </Renderer>
         <div style={{width: "300px", float:"left"}}>

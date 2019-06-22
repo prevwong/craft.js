@@ -38,17 +38,14 @@ export default class TestRender extends React.PureComponent<any> {
   dom:HTMLElement = null
  
   render() {
-      const {events, handlers, Editor, Component} = this.props;
-      const { hover, active } = events;
+      const { handlers, Editor, Component} = this.props;
 
       return (
           <React.Fragment>
-            {(hover || active) && <Toolbar  {...this.props} /> }
-              <Component
+            {/* {(hover || active) && <Toolbar  {...this.props} /> } */}
+              <ActiveHandler is={Component}
                 className={
-                  cx(['node-el'], {
-                    hover,
-                  })
+                  cx(['node-el'])
                 }
               />
             {/* {active && Editor && (

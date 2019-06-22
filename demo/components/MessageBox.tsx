@@ -38,26 +38,15 @@ export default class MessageBox extends Component<MessageBoxProps> {
   static editor = Editor
 
   render() {
-    const { text, bg } = this.props;
+    const { text, bg, ...props} = this.props;
     // console.log("t", text)
     return (
-      <div className={'message-box'} style={{backgroundColor: bg}}>
+      <div className={'message-box'} style={{backgroundColor: bg}} >
       <Canvas id="MessageCanvas" style={{"padding" : "20px 0"}}>
-      <h2>66</h2>
-      <h2>Whut</h2>
+        <h2>66</h2>
+        <h2>Whut</h2>
       </Canvas>
-       <NodeContext.Consumer>
-            {({node}) => {
-              console.log("type", node)
-              return (
-                <div>
-                  <h2>{text}</h2>
-                  <button onClick={() => node.props.text = "Hi"}>Click me</button>
-                </div>
-
-              )
-            }}
-        </NodeContext.Consumer>
+       
       </div>
     )
   }
