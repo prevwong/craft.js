@@ -46,6 +46,7 @@ export default class Builder extends React.Component {
   }
 
   setNodes = (cb: Function) => {
+    console.log("set NODES")
     this.setState((state) => {
       state.nodes =  produce(this.state.nodes, cb);
       return state;

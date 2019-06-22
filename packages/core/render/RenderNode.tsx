@@ -5,51 +5,55 @@ import Editor from "./RenderEditor";
 import { NodeContext } from "../nodes/NodeContext";
 import Canvas from "../nodes/Canvas";
 import { EventContext } from "../events/EventContext";
+import { NodeManagerContext } from "../nodes/NodeManagerContext";
 
 export default class RenderNode extends React.Component<any> {
- 
+
   render() {
     const { is, onReady, ...passProps } = this.props;
    
     return (
-        <NodeContext.Consumer>
-          {({node, events, api}: NodeContext) => {
-            const { type, props} = node;
-            const Comp = is ? is : type
-            console.log("node", node)
-            return (
-              <EventContext.Consumer>
-                {({hover, methods:{setNodeEvent}}) => {
-                  return (
-                    <ComponentContext.Provider value={{
-                      Component: Comp,
-                      props: {
-                        ...props,
-                        ...passProps,
-                        onMouseOver: (e: React.MouseEvent) => {
-                          e.stopPropagation();
-                          if ( !hover ||( hover && hover.node.id !== node.id) ) {
-                            setNodeEvent("hover", node.id);
+      <NodeManagerContext.Consumer>
+        {({ nodes }) => {
+          return (
+            <NodeContext.Consumer>
+              {({ nodeId }: NodeContext) => {
+                
+                const node = nodes[nodeId];
+                const { type, props } = node;
+                const Comp = is ? is : type
+                console.log("re-render node comp", is, Comp, Comp === Canvas, nodeId)
+                return (
+                  <EventContext.Consumer>
+                    {({ hover, methods: { setNodeEvent } }) => {
+                      return (
+                        <ComponentContext.Provider value={{
+                          Component: Comp,
+                          props: {
+                            ...props,
+                            ...passProps,
+                           
                           }
-                        }
-                      }
-                    }}>
-                      {
-                        Comp === Canvas ? <Canvas {...props} /> : 
-                        <TestRender  
-                          node={node}
-                          Component={RenderComp} 
-                          events={events}
-                          Editor={Editor} 
-                        />
-                      }
-                    </ComponentContext.Provider>
-                  )
-                }}
-              </EventContext.Consumer>
-            )
-          }}
-        </NodeContext.Consumer>
+                        }}>
+                          {
+                            (Comp === Canvas) ? 
+                              <Canvas {...props} /> :
+                              <TestRender
+                                node={node}
+                                Component={RenderComp}
+                                Editor={Editor}
+                              />
+                          }
+                        </ComponentContext.Provider>
+                      )
+                    }}
+                  </EventContext.Consumer>
+                )
+              }}
+            </NodeContext.Consumer>
+          )
+        }}
+      </NodeManagerContext.Consumer>
     )
   }
 }

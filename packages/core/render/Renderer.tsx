@@ -10,7 +10,7 @@ export default class Renderer extends React.Component<any> {
   constructor(props: any, context: CraftAPIContext) {
     super(props);
   
-    let node = mapChildrenToNodes(<Canvas>{this.props.children}</Canvas>, null, "rootNode");
+    let node = mapChildrenToNodes(<Canvas id="root">{this.props.children}</Canvas>, null, "rootNode");
     context.manager.methods.add(node);
   }
 
@@ -25,9 +25,7 @@ export default class Renderer extends React.Component<any> {
           {({manager: {nodes}}) => {
               return (
                 nodes["rootNode"]  && 
-                    <NodeElement node={nodes["rootNode"]}>
-                        <RenderNode />
-                    </NodeElement>
+                    <NodeElement nodeId="rootNode" />
               )
           }}
       </CraftAPIContext.Consumer>
