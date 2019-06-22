@@ -5,6 +5,7 @@ import { NodeManagerContext } from "./nodes/NodeManagerContext";
 import EventManager from "./events/EventManager";
 import EventContext from "./events/EventContext";
 import { createAPIContext, CraftAPIContext } from "./CraftAPIContext";
+import Root from "./Root";
 
 interface BuilderState {
   nodes: Nodes
@@ -32,13 +33,16 @@ export default class Builder extends React.Component {
             currentParentNodes = (nodes[targetNode.parent] as CanvasNode).nodes,
             newParentNodes = (nodes[newParentId] as CanvasNode).nodes;
 
+      currentParentNodes[currentParentNodes.indexOf(targetId)] = "marked";
       newParentNodes.splice(index, 0, targetId);
       nodes[targetId].parent = newParentId;
       nodes[targetId].closestParent = newParentId;
       currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
-
-      currentParentNodes[currentParentNodes.indexOf(targetId)] = "marked";
     });
+  }
+
+  remove = () => {
+
   }
 
   setNodes = (cb: Function) => {
@@ -48,30 +52,23 @@ export default class Builder extends React.Component {
     });
   }
 
+
   render(){
-    const { state, setNodes, add, move } = this,
+    const { state, setNodes, add, remove, move } = this,
           { nodes } = state;
+   
     return (
-      <NodeManagerContext.Provider value={{nodes, setNodes, add, move}}>
+      <NodeManagerContext.Provider value={{
+        nodes,
+        methods: {
+          remove, 
+          setNodes, 
+          add, 
+          move
+        }
+      }}>
         <EventManager>
-          <EventContext.Consumer>
-            {({active, dragging, hover, setNodeEvent}) => {
-              return (
-                <CraftAPIContext.Provider value={createAPIContext(
-                  {active, dragging, hover},
-                  nodes,
-                  {
-                    add,
-                    move,
-                    setActiveNode: (nodeId: NodeId) => setNodeEvent("active", nodeId),
-                    delete: () => {}
-                  }
-                )}>
-                  {this.props.children}
-                </CraftAPIContext.Provider>
-              )
-            }}
-          </EventContext.Consumer>
+          <Root>{this.props.children}</Root>
         </EventManager>
       </NodeManagerContext.Provider>
     )

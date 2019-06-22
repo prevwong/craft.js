@@ -1,41 +1,32 @@
 import React from "react";
-import { DOMInfo, Nodes, Node } from "~types";
+import { NodeManagerContext, RootManagerContext, PublicManagerContext } from "./nodes/NodeManagerContext";
+import { EventContext, RootEventContext, PublicEventContext } from "./events/EventContext";
 
-
-export interface NodeEvent {
-  node: Node,
-  info: DOMInfo
-}
-
-export interface MouseEvents {
-  active: NodeEvent | null
-  dragging: NodeEvent | null
-  hover: NodeEvent | null
-}
-
-export interface CraftAPIMethods {
-  add: Function;
-  delete: Function;
-  move: Function;
-  setActiveNode: Function
-}
 
 export interface CraftAPIContext {
-  events: MouseEvents | undefined,
-  nodes: Nodes | undefined,
-  methods: CraftAPIMethods | undefined
+  events: EventContext<PublicEventContext>,
+  manager: NodeManagerContext<PublicManagerContext>,
+
 }
 
 export const CraftAPIContext = React.createContext<CraftAPIContext>({
-  events: undefined,
-  nodes: undefined,
-  methods: undefined
+  manager: undefined,
+  events: undefined
 });
 
-export function createAPIContext(events: MouseEvents, nodes: Nodes, methods: CraftAPIMethods): CraftAPIContext {
+export function createAPIContext(manager: NodeManagerContext<RootManagerContext>, events: EventContext<RootEventContext>): CraftAPIContext {
+  const {nodes, methods: {setNodes, ...managerMethods}} = manager;
+  const {methods: {setNodeEvent, ...eventMethods}, active, dragging, hover} = events;
   return {
-    events,
-    nodes,
-    methods
+    manager: {
+      nodes,
+      methods: managerMethods
+    },
+    events: {
+      active,
+      dragging, 
+      hover,
+      methods: eventMethods
+    }
   }
 }
