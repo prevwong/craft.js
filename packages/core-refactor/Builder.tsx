@@ -51,7 +51,6 @@ export default class Builder extends React.Component {
   render(){
     const { state, setNodes, add, move } = this,
           { nodes } = state;
-    
     return (
       <NodeManagerContext.Provider value={{nodes, setNodes, add, move}}>
         <EventManager>

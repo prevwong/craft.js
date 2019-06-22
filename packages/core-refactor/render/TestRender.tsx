@@ -44,7 +44,7 @@ export default class TestRender extends React.PureComponent<any> {
       return (
           <React.Fragment>
             {(hover || active) && <Toolbar  {...this.props} /> }
-              <ActiveHandler is={Component} 
+              <Component
                 className={
                   cx(['node-el'], {
                     hover,
