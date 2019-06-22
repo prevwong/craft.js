@@ -15,16 +15,18 @@ export default class NodeElement extends React.Component<NodeElementProps> {
   constructor(props: NodeElementProps) {
     super(props);
   }
+  
   render() {
     const { node } = this.props;
+    console.log("node-re")
     return (
       <NodeManagerContext.Consumer>
-        {({setNodes}) => {
+        {({methods: {setNodes}}) => {
           return (
             <CraftAPIContext.Consumer>
             {(api: CraftAPIContext) => {
-              const {events, nodes} = api;
-              // console.log(events)
+              const {events, manager:{nodes}} = api;
+              // console.log(events, node)
               const nodeProvider = {
                 node,
                 events: {

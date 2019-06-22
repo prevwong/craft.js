@@ -1,15 +1,14 @@
 import React from "react";
-import EventContext from "./EventContext";
+import  { EventContext, EventProperties, RootEventContext } from "./EventContext";
 import { NodeId, CanvasNode } from "~types";
 import { findPosition, movePlaceholder } from "./DragDropHelper";
 import { getDeepChildrenNodes } from "../utils";
 import { PlaceholderInfo } from "~types/events";
-import { MouseEvents } from "../CraftAPIContext";
 import Placeholder from "./Placeholder";
-import { NodeManagerContext } from "../nodes/NodeManagerContext";
+import { NodeManagerContext, RootManagerContext } from "../nodes/NodeManagerContext";
 import Canvas from "../nodes/Canvas";
 
-interface EventManagerState extends MouseEvents {
+interface EventManagerState extends EventProperties {
   placeholder: PlaceholderInfo
 }
 
@@ -24,14 +23,6 @@ export default class EventManager extends React.PureComponent {
     if (!!selection) selection.empty ? selection.empty() : selection.removeAllRanges();
     e.preventDefault();
   }
-
-  state: EventManagerState = {
-    active: null,
-    dragging: null,
-    hover: null,
-    placeholder: null
-  }
-
 
   drag(e: MouseEvent) {
     e.stopImmediatePropagation();
@@ -52,7 +43,7 @@ export default class EventManager extends React.PureComponent {
 
   placeBestPosition(e: MouseEvent) {
     const { nodesInfo } = this;
-    const { nodes }: NodeManagerContext = this.context;
+    const { nodes }: NodeManagerContext<RootManagerContext> = this.context;
     const nearestTargets = this.getNearestTarget(e),
       nearestTargetId = nearestTargets.pop();
 
@@ -87,7 +78,7 @@ export default class EventManager extends React.PureComponent {
   }
 
   getNearestTarget(e: MouseEvent) {
-    const { nodes }: NodeManagerContext = this.context;
+    const { nodes }: NodeManagerContext<RootManagerContext> = this.context;
     const pos = { x: e.clientX, y: e.clientY };
 
     const deepChildren = getDeepChildrenNodes(nodes, this.dragging);
@@ -109,7 +100,7 @@ export default class EventManager extends React.PureComponent {
     window.removeEventListener("mouseup", this.onMouseup);
     window.removeEventListener("selectstart", this.blockSelectionWrapper);
 
-    const { move }: NodeManagerContext = this.context;
+    const { methods: {move}, nodes }: NodeManagerContext<RootManagerContext> = this.context;
     const { placeholder } = this.state;
     if (!this.dragging) return;
 
@@ -120,7 +111,7 @@ export default class EventManager extends React.PureComponent {
     move(this.dragging, parentId, index + (where === "after" ? 1 : 0));
     this.dragging = null;
     this.setPlaceholder(null);
-    this.setNodeEvent("dragging", null);
+    this.state.methods.setNodeEvent("dragging", null);
   }
 
   initDragging = (nodeId: NodeId) => {
@@ -132,44 +123,47 @@ export default class EventManager extends React.PureComponent {
     }
   }
 
-  setNodeEvent = (eventType: string, nodeId: NodeId) => {
-    if (!["active", "hover", "dragging"].includes(eventType)) throw new Error(`Undefined event "${eventType}, expected either "active", "hover" or "dragging".`);
-    if (nodeId) { 
-      const { nodes } = this.context;
-      if (eventType === "dragging" ) this.initDragging(nodeId);
-
-      this.setState({
-        [eventType]: {
-          node: nodes[nodeId],
-          info: this.nodesInfo[nodeId]
-        }
-      })
-    } else {
-      this.setState({
-        [eventType]: null
-      })
-    }
-
-  }
-
   setPlaceholder = (placeholder: PlaceholderInfo) => {
     this.setState({
       placeholder
     });
   }
 
-  render() {
-    const { setNodeEvent, nodesInfo } = this;
-    const { active, dragging, hover, placeholder } = this.state;
+  state: EventContext<RootEventContext> = {
+    nodesInfo: this.nodesInfo,
+    active: null,
+    dragging: null,
+    hover: null,
+    placeholder: null,
+    methods: {
+      setNodeEvent: (eventType: string, nodeId: NodeId) => {
+        if (!["active", "hover", "dragging"].includes(eventType)) throw new Error(`Undefined event "${eventType}, expected either "active", "hover" or "dragging".`);
+        if (nodeId) { 
+          const { nodes } = this.context;
+          if (eventType === "dragging" ) this.initDragging(nodeId);
+    
+          this.setState({
+            [eventType]: {
+              node: nodes[nodeId],
+              info: this.nodesInfo[nodeId]
+            }
+          })
+        } else {
+          this.setState({
+            [eventType]: null
+          })
+        }
+    
+      },
+      setActive: (nodeId: NodeId) => this.state.methods.setNodeEvent("active", nodeId)
+    }
+  }
 
+  render() {
+    const { active, dragging, hover, placeholder } = this.state;
+    console.log("re-render")
     return (
-      <EventContext.Provider value={{
-        setNodeEvent,
-        nodesInfo,
-        active,
-        dragging,
-        hover
-      }}>
+      <EventContext.Provider value={this.state}>
         <React.Fragment>
           {placeholder && (
             <Placeholder placeholder={placeholder} />

@@ -13,6 +13,7 @@ export default class Canvas extends React.PureComponent<any> {
   nodes: Nodes = null;
   constructor(props: CanvasNode, context: NodeCanvasContext) {
     super(props);
+    console.log("Canvas")
     const { node, pushChildCanvas, childCanvas, api } = context,
           { id } = props;
 
@@ -24,7 +25,7 @@ export default class Canvas extends React.PureComponent<any> {
       if ( childCanvas[id] ) canvasId = childCanvas[id];
     }
     
-    if (!api.nodes[canvasId] || (api.nodes[canvasId] && !(api.nodes[canvasId] as CanvasNode).nodes)) {
+    if (!api.manager.nodes[canvasId] || (api.manager.nodes[canvasId] && !(api.manager.nodes[canvasId] as CanvasNode).nodes)) {
       const { children } = this.props,
             childNodes = mapChildrenToNodes(children, canvasId);
       let rootNode: CanvasNode =  
@@ -40,7 +41,7 @@ export default class Canvas extends React.PureComponent<any> {
         draft.nodes = childNodes.map(node => node.id);
       });
       
-      api.methods.add([rootNode, ...childNodes]);
+      api.manager.methods.add([rootNode, ...childNodes]);
       if ( node.type !== Canvas )  {
         pushChildCanvas(id, canvasId);
       }
@@ -66,9 +67,9 @@ export default class Canvas extends React.PureComponent<any> {
           const canvasId = this.id ? this.id : childCanvas[this.props.id];
           if (!canvasId ) return false;
           this.id = canvasId;
-          const { nodes } = api,
+          const { nodes } = api.manager,
                 canvas = nodes[canvasId] as CanvasNode;
-          
+          console.log("ca", canvas);
           return (
             canvas && <NodeElement node={canvas}>
               <RenderNode
