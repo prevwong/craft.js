@@ -7,6 +7,7 @@ import MessageBox from "./components/MessageBox";
 import Builder from "~packages/core/Builder";
 import Renderer from "~packages/core/render/Renderer";
 import Canvas from "~packages/core/nodes/Canvas";
+import Test from "~packages/hooks/ref.js";
 
 const canvasTools = document.createElement("div");
 canvasTools.id = `canvasTools`;
@@ -45,19 +46,7 @@ class App extends Component {
     const { tree, test, arr } = this.state;
     return (
       <div style={{paddingTop:"30px"}}> 
-      <Builder>
-        <Renderer components={[
-          MessageBox
-        ]}>
-           
-           <h2>Hi</h2>
-           {/* <MessageBox /> */}
-           <h2>bye</h2>
-        </Renderer>
-        <div style={{width: "300px", float:"left"}}>
-          {/* <Layers /> */}
-        </div>
-      </Builder >
+        <Test />
       </div>
     );
   }
