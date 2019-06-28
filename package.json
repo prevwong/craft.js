@@ -18,7 +18,8 @@
     "react-serialize": "^0.2.0",
     "reset-css": "^4.0.1",
     "shortid": "^2.2.14",
-    "styled-components": "^4.2.1"
+    "styled-components": "^4.2.1",
+    "use-methods": "^0.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
