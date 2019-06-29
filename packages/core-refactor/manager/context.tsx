@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import useMethods, { StateAndCallbacksFor } from "use-methods";
 import methods from "./methods";
 
@@ -13,5 +13,3 @@ export const ManagerContextProvider = ({ children, nodes: defaultNodes }: any) =
     </ManagerContext.Provider>
   )
 }
-
-

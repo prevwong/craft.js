@@ -1,6 +1,6 @@
 import { Nodes, Node } from "../nodes";
 
-export * from "./connectManager";
+export * from "./connector";
 export * from "./context";
 
 export type Events = {
