@@ -1,21 +1,23 @@
 import React, { useEffect } from "react";
-import { connectInternalNode } from "./NodeContext";
-import { mapChildrenToNodes, createNode } from "~packages/core/utils";
+import { connectInternalNode, ConnectedNode } from "./NodeContext";
+import { mapChildrenToNodes, createNode } from "~packages/core-refactor/utils/index.tsx";
 import { CanvasNode, NodeId, Node } from "~types";
 import { NodeElement } from "./NodeElement";
-import {  RenderNodeToElement } from "../render/RenderNode";
+import { RenderNodeToElement } from "../render/RenderNode";
+import { ManagerMethods } from "../manager/methods";
 const shortid = require("shortid");
 
-export interface Canvas {
-  id: NodeId,
-  node: Node,
-  manager: any
+export interface Canvas extends ConnectedNode<ManagerMethods> {
+  id?: NodeId,
+  children?: React.ReactNode
 }
 
-const Canvas : React.FC<Canvas> = connectInternalNode(({ id, children, node, manager }) => {
-  const internal = React.useRef({ id: null })
+export const Canvas = connectInternalNode(({ node, manager, children, id }: Canvas) => {
+  const internal = React.useRef({ id: null });
   useEffect(() => {
+    console.log("canvas effe")
     let canvasId = `canvas-${shortid.generate()}`;
+
     if (node.type === Canvas) {
       canvasId = internal.current.id = node.id;
       const childNodes = mapChildrenToNodes(children, canvasId);
@@ -23,7 +25,7 @@ const Canvas : React.FC<Canvas> = connectInternalNode(({ id, children, node, man
     } else {
       if (!id) throw new Error("Root Canvas cannot ommit `id` prop");
       // const rootNode = createNode(this.constructor as React.ElementType, this.props, canvasId, null);
-      if (!node.childCanvas || (node.childCanvas && !node.childCanvas[id])) {
+      if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
         const rootNode = createNode(Canvas, { children }, canvasId, null);
         internal.current.id = canvasId;
         manager.pushChildCanvas(node.id, id, rootNode);
@@ -31,16 +33,17 @@ const Canvas : React.FC<Canvas> = connectInternalNode(({ id, children, node, man
     }
   }, []);
 
+  console.log(node, node.type === Canvas, internal.current.id)
   return (
     node.type === Canvas ? (
       <RenderNodeToElement is="div" className="hi-canvas">
-        <React.Fragment>
-          {
+        {
+          <React.Fragment>
             (node as CanvasNode).nodes && (node as CanvasNode).nodes.map((id => (
-              <NodeElement id={id} key={id} />
+                <NodeElement id={id} key={id} />
             )))
-          }
-        </React.Fragment>
+              </React.Fragment>
+        }
       </RenderNodeToElement>
     ) : (
         internal.current.id ? (
@@ -48,5 +51,6 @@ const Canvas : React.FC<Canvas> = connectInternalNode(({ id, children, node, man
         ) : null
       )
   )
-})
+});
+
 

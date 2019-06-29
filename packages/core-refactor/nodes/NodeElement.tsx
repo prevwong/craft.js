@@ -8,6 +8,7 @@ export type NodeElement = {
 }
 
 export const NodeElement: React.FC<NodeElement> = React.memo(({id}) => {
+  console.log("node element", id);
   return (
     <NodeProvider id={id}>
       <RenderNodeToElement />

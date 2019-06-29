@@ -13,8 +13,8 @@ class App extends React.Component {
       <div className='app'>
         <Craft>
           <Renderer>
-          <MsgBox />
-          <h2>bye</h2>
+            <MsgBox text="hi" />
+            <h2>bye</h2>
           </Renderer>
         </Craft>
       </div>

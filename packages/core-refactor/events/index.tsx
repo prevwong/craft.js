@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { connectRoot } from "../manager";
 
-export const EventsManager = connectRoot(({children, manager: {state, methods}}) => {
+export const EventsManager = connectRoot(({children, manager: [state, methods]}) => {
   const [placeholder, setPlaceholder] = useState(null);
 
   useEffect(() => {

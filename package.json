@@ -35,6 +35,7 @@
     "lodash": "^4.17.11",
     "postcss-modules": "^1.4.1",
     "sass": "^1.19.0",
-    "typescript": "^3.5.1"
+    "typescript": "^3.5.1",
+    "utility-types": "^3.7.0"
   }
 }
