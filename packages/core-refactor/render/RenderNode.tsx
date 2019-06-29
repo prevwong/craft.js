@@ -1,26 +1,28 @@
 import React, { useEffect, useRef } from "react";
 import { Canvas } from "../nodes/Canvas";
-import { connectInternalNode, ConnectedNode } from "../nodes/NodeContext";
 import { PublicManagerMethods } from "../manager/methods";
+import { isDOMComponent } from "../utils";
+import { ConnectedPublicNode, connectInternalNode } from "../nodes/connectors";
 
 export type Render = {
   is: React.ComponentType<any>
-} & ConnectedNode<PublicManagerMethods>
+} & ConnectedPublicNode
 
-const Render: React.FC<any> = React.memo(({node, is}: Render) => {
+const Render: React.FC<any> = React.memo(({craft:{node, connectTarget}, is, ...injectedProps}: Render) => {
   let { type, props } = node;
-  
-  const Comp = is ? is : type;
+  const {children, ...propsWithoutChildren} = props;
+
+  let Comp = is ? is : type;
 
   if ( type === Canvas && !is ) {
-    console.log("go canvsa");
-    const {children, ...otherProps} = props;
-    return <Canvas {...otherProps} />;
-  }
+    return <Canvas {...props} />;
+  } 
 
-  return (
-    React.cloneElement(<Comp {...props}/>)
-  )
+  const availableProps = (type === Canvas) ? propsWithoutChildren : props;
+  let render = React.cloneElement(<Comp {...availableProps} {...injectedProps} />);
+  
+  if ( isDOMComponent(type) ) render = connectTarget(render);
+  return render;
 });
 
 export const RenderNodeToElement = connectInternalNode(Render);
