@@ -3,16 +3,31 @@ import { defineReactiveProperty } from ".";
 import { Canvas } from "../nodes/Canvas";
 import { NodeId, Node, Nodes, CanvasNode } from "../nodes";
 import { TreeNode } from "~types";
+import produce from "immer";
+
 const shortid = require("shortid");
 
 export const createNode = (component: React.ElementType, props: React.Props<any>, id: NodeId, parent?: NodeId): Node => {
-  let node: Node = {
-    type: component as React.ElementType,
-    props,
-    id,
-    parent,
-    closestParent: parent
-  };
+  let node = produce({}, (node: Node) => {
+    node.type = component as React.ElementType;
+    node.props = props;
+    node.id = id;
+    node.parent = parent;
+    node.closestParent = parent;
+    node.event = {
+      active: false, 
+      dragging: false, 
+      hover: false
+    }
+  }) as Node;
+
+  // node = {
+  //   type: component as React.ElementType,
+  //   props,
+  //   id,
+  //   parent,
+  //   closestParent: parent
+  // }
   return node;
 };
 
