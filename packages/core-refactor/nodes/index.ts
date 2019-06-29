@@ -8,7 +8,14 @@ export type Node = {
   type: React.ElementType;
   parent: NodeId;
   closestParent: NodeId;
+  event: NodeEvent;
   _childCanvas?: CanvasMapping
+}
+
+export interface NodeEvent {
+  active?: boolean;
+  dragging?: boolean;
+  hover?: boolean;
 }
 
 export type Nodes = {

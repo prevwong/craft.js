@@ -33,14 +33,19 @@ const PublicManagerMethods = (state: ManagerState) => {
 };
 
 const ManagerMethods = (state: ManagerState) => ({
+  setDOM: (id: NodeId, dom: HTMLElement) => {
+    state.dom[id] = dom;
+  },
   pushChildCanvas(id: NodeId, canvasName: string, newNode: Node) {
     if (!state.nodes[id]._childCanvas) state.nodes[id]._childCanvas = {};
     state.nodes[id]._childCanvas[canvasName] = newNode.id;
     state.nodes[newNode.id] = newNode;
   },
   setNodeEvent(eventType: "active" | "hover" | "dragging", node: Node) {
+    console.log(eventType, node)
     if (!["active", "hover", "dragging"].includes(eventType)) throw new Error(`Undefined event "${eventType}, expected either "active", "hover" or "dragging".`);
     if (node) {
+      state.nodes[node.id].event[eventType] = true
       state.events[eventType] = node;
     } else {
       state.events[eventType] = null;
