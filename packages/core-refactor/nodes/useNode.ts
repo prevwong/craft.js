@@ -1,4 +1,4 @@
-import { cloneElement, useContext, useCallback, useMemo } from "react";
+import { cloneElement, useContext, useCallback, useMemo, useRef, useEffect, useLayoutEffect } from "react";
 import { NodeContext } from "./NodeContext";
 import { ManagerContext } from "../manager";
 import { ManagerMethods, PublicManagerMethods } from "../manager/methods";
@@ -21,25 +21,35 @@ const useNode = () : CraftNodeAPI<ManagerMethods> => {
   } else {
     const {id} = nodeContext;
     const [state, manager] = useContext(ManagerContext);
+    const domRef = useRef(null);
 
-    const node = useMemo(() => (
-      state.nodes[id]
-    ), [state.nodes[id]]);
+    const node = useMemo(() => {
+      // console.log("run")
+      return (
+        state.nodes[id]
+      )
+    }, [state.nodes[id]]);
       
     const connectTarget = useCallback((render) => {
       return cloneElement(render, {
         onMouseDown: (e) => {
           e.stopPropagation();~
           manager.setNodeEvent("active", node)
+        },
+        ref: (ref: any) => {
+          if ( ref ) {
+            manager.setDOM(id, ref);
+          }
+          if ( render.ref ) render.ref(ref);
         }
       });
     }, []);
 
-    return {
+    return useMemo(() => ({
       node,
       manager,
       connectTarget
-    }
+    }), [state.nodes[id]])
   }
 }
 
