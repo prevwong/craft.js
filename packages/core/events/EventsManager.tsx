@@ -1,43 +1,44 @@
-import { connectManager } from "../manager";
+import { connectManager, ConnectedManager } from "../manager";
 import React, { useState, useRef, useCallback } from "react";
-import { CanvasNode } from "../interfaces";
-import { NodeId } from "~types";
+import { CanvasNode, PlaceholderInfo } from "../interfaces";
+import { NodeId, DropAction } from "~types";
 import { getDOMInfo, getDeepChildrenNodes } from "../utils";
 import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
 import { useEventListener } from "../utils/hooks";
 import RenderPlaceholder from "../render/RenderPlaceholder";
 
+export type EventsManager = { 
+  children: React.ReactChildren
+} & ConnectedManager
 
-export const EventsManager = connectManager(({ children, manager: [state, methods] }) => {
+export const EventsManager = connectManager(({ children, manager: [state, methods] }: EventsManager) => {
   const [placeholder, setPlaceholder] = useState(null);
-  const placeholderRef = useRef(null);
-
+  const placeholderRef = useRef<PlaceholderInfo>(null);
   const placeBestPosition = (e: MouseEvent) => {
-    const { nodes, dom } = state;
+    const { nodes } = state;
     const nearestTargets = getNearestTarget(e),
       nearestTargetId = nearestTargets.pop();
-
     if (nearestTargetId) {
       const targetNode = nodes[nearestTargetId],
-        targetParent: CanvasNode = (targetNode as CanvasNode).nodes ? targetNode : nodes[targetNode.parent];
+        targetParent = (targetNode as CanvasNode).data.nodes ? targetNode as CanvasNode : nodes[targetNode.data.parent] as CanvasNode;
 
-      const dimensionsInContainer = targetParent.nodes.map((id: NodeId) => {
+      const dimensionsInContainer = targetParent.data.nodes.map((id: NodeId) => {
         return {
           id,
-          ...getDOMInfo(dom[id])
+          ...getDOMInfo(nodes[id].ref.dom)
         }
       })
 
       const bestTarget = findPosition(targetParent, dimensionsInContainer, e.clientX, e.clientY);
-      const bestTargetNode = targetParent.nodes.length ? nodes[targetParent.nodes[bestTarget.index]] : targetParent;
+      const bestTargetNode = targetParent.data.nodes.length ? nodes[targetParent.data.nodes[bestTarget.index]] : targetParent;
 
-      const output = {
+      const output: PlaceholderInfo = {
         position: movePlaceholder(
           bestTarget,
-          getDOMInfo(dom[targetParent.id]),
-          targetParent.nodes.length
-            ? getDOMInfo(dom[bestTargetNode.id])
+          getDOMInfo(targetParent.ref.dom),
+          targetParent.data.nodes.length
+            ? getDOMInfo(bestTargetNode.ref.dom)
             : null
         ),
         node: bestTargetNode,
@@ -49,16 +50,18 @@ export const EventsManager = connectManager(({ children, manager: [state, method
   }
 
   const getNearestTarget = (e: MouseEvent) => {
-    const { nodes, dom, events } = state;
+    const { nodes, events } = state;
     const pos = { x: e.clientX, y: e.clientY };
 
-    const deepChildren = getDeepChildrenNodes(nodes, events.active.id);
-    const nodesWithinBounds = Object.keys(dom).filter(nodeId => {
-      return nodeId !== "rootNode" && !deepChildren.includes(nodeId)
+    const deepChildren = getDeepChildrenNodes(nodes, events.active.data.id);
+    const nodesWithinBounds = Object.keys(nodes).filter(nodeId => {
+      return nodeId !== "rootNode" && nodes[nodeId].ref.dom && !deepChildren.includes(nodeId)
     });
 
+
     return nodesWithinBounds.filter((nodeId: NodeId) => {
-      const { top, left, width, height } = getDOMInfo(dom[nodeId]);
+      const { top, left, width, height } = getDOMInfo(nodes[nodeId].ref.dom);
+
       return (
         (pos.x >= left && pos.x <= left + width) &&
         (pos.y >= top && pos.y <= top + height)
@@ -68,7 +71,7 @@ export const EventsManager = connectManager(({ children, manager: [state, method
 
   const onDrag = useCallback((e: MouseEvent) => {
     if (state.events.active) {
-      const { left, right, top, bottom } = getDOMInfo(state.dom[state.events.active.id]);
+      const { left, right, top, bottom } = getDOMInfo(state.events.active.ref.dom);
       if (
         !(
           e.clientX >= left &&
@@ -83,7 +86,7 @@ export const EventsManager = connectManager(({ children, manager: [state, method
           selection.empty ? selection.empty() : selection.removeAllRanges();
         }
         if (!state.events.dragging) {
-          methods.setNodeEvent("dragging", state.events.active);
+          methods.setNodeEvent("dragging", state.events.active.data.id);
         } else {
           
           placeBestPosition(e);
@@ -95,10 +98,10 @@ export const EventsManager = connectManager(({ children, manager: [state, method
 
   const onMouseUp = useCallback((e: MouseEvent) => {
     if (state.events.dragging) {
-      const { id: dragId, parent: dragParentId } = state.events.dragging;
+      const { id: dragId, parent: dragParentId } = state.events.dragging.data;
       const { placement } = placeholderRef.current;
       const { parent, index, where } = placement;
-      const { id: parentId, nodes } = parent;
+      const { id: parentId, nodes } = parent.data;
 
       methods.move(dragId, parentId, index + (where === "after" ? 1 : 0));
       methods.setNodeEvent("active", null);

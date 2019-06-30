@@ -7,8 +7,7 @@ export const ManagerContext = React.createContext<StateAndCallbacksFor<typeof me
 export const ManagerContextProvider = ({ children, nodes: defaultNodes }: any) => {
   const [state, actions] = useMethods(methods, { 
     nodes: defaultNodes ? defaultNodes : {}, 
-    events: {active: null, dragging: null, hover: null},
-    dom: {}
+    events: {active: null, dragging: null, hover: null}
   });
   (window as any).nodes = state;
 

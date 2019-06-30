@@ -9,8 +9,4 @@ export type Events = {
 export type ManagerState = {
   nodes: Nodes,
   events: Events
-  dom: DOMMapping
-}
-export type DOMMapping = {
-  [key: string]: HTMLElement
 }
