@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { mapChildrenToNodes, createNode } from "~packages/core-refactor/utils/index.tsx";
+import { mapChildrenToNodes, createNode } from "~packages/core/utils/index.tsx";
 import { CanvasNode, NodeId, Node } from "~types";
 import { NodeElement } from "./NodeElement";
 import { RenderNodeToElement } from "../render/RenderNode";

@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { mapChildrenToNodes } from "~packages/core-refactor/utils";
+import { mapChildrenToNodes } from "~packages/core/utils";
 import { NodeElement } from "../nodes/NodeElement";
 import { ManagerContext } from "../manager";
 import { Canvas } from "../nodes/Canvas";
