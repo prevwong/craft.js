@@ -42,7 +42,6 @@ const ManagerMethods = (state: ManagerState) => ({
     state.nodes[newNode.id] = newNode;
   },
   setNodeEvent(eventType: "active" | "hover" | "dragging", node: Node) {
-    console.log(eventType, node)
     if (!["active", "hover", "dragging"].includes(eventType)) throw new Error(`Undefined event "${eventType}, expected either "active", "hover" or "dragging".`);
     if (node) {
       state.nodes[node.id].event[eventType] = true

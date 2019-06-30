@@ -20,7 +20,6 @@ const Render: React.FC<any> = React.memo(({craft:{node, connectTarget}, is, ...i
 
   const availableProps = (type === Canvas) ? propsWithoutChildren : props;
 
-  
   let render = React.cloneElement(<Comp {...availableProps} {...injectedProps} />);
 
   if ( isDOMComponent(Comp)) render = connectTarget(render);
