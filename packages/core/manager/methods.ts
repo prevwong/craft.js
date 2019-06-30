@@ -9,13 +9,13 @@ export const PublicManagerMethods = (state: ManagerState) => {
   
       if (Array.isArray(nodes)) {
         (nodes as Node[]).forEach(node => {
-          state.nodes[node.data.id] = node;
-          if (parentId) (state.nodes[parentId] as CanvasNode).data.nodes.push(node.data.id);
+          state.nodes[node.id] = node;
+          if (parentId) (state.nodes[parentId] as CanvasNode).data.nodes.push(node.id);
         });
       } else {
         const node = nodes as Node;
-        state.nodes[node.data.id] = node;
-        if (parentId) (state.nodes[parentId] as CanvasNode).data.nodes.push(node.data.id);
+        state.nodes[node.id] = node;
+        if (parentId) (state.nodes[parentId] as CanvasNode).data.nodes.push(node.id);
       }
     },
     move(targetId: NodeId, newParentId: NodeId, index: number) {
@@ -38,8 +38,8 @@ const ManagerMethods = (state: ManagerState) => ({
   },
   pushChildCanvas(id: NodeId, canvasName: string, newNode: Node) {
     if (!state.nodes[id].data._childCanvas) state.nodes[id].data._childCanvas = {};
-    state.nodes[id].data._childCanvas[canvasName] = newNode.data.id;
-    state.nodes[newNode.data.id] = newNode;
+    state.nodes[id].data._childCanvas[canvasName] = newNode.id;
+    state.nodes[newNode.id] = newNode;
   },
   setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
     if (!["active", "hover", "dragging"].includes(eventType)) throw new Error(`Undefined event "${eventType}, expected either "active", "hover" or "dragging".`);

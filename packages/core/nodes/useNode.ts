@@ -27,7 +27,7 @@ const useNode = () : CraftNodeAPI<ManagerMethods> => {
       return cloneElement(render, {
         onMouseDown: (e) => {
           e.stopPropagation();
-          if ( node.data.id !== "rootNode" ) manager.setNodeEvent("active", node.data.id)
+          if ( node.id !== "rootNode" ) manager.setNodeEvent("active", node.id)
         },
         ref: (ref: any) => {
           if ( ref ) {

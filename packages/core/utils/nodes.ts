@@ -9,10 +9,10 @@ const shortid = require("shortid");
 
 export const createNode = (component: React.ElementType, props: React.Props<any>, id: NodeId, parent?: NodeId): Node => {
   let node = produce({}, (node: Node) => {
+    node.id = id;
     node.data = {
       type: component as React.ElementType,
       props: props,
-      id: id,
       parent :parent,
       closestParent: parent,
       event: {
@@ -93,7 +93,7 @@ export const nodesToTree = (nodes: Nodes, cur="rootNode", canvasName?: string): 
   let tree: any = {};
   const node = nodes[cur];
   if ( !node ) return null;
-  const {id } = node.data;
+  const {id } = node;
   tree[id] = {
     ...node
   }

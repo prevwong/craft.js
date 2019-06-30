@@ -19,15 +19,15 @@ export const Canvas = connectInternalNode(({ craft: { node, manager }, children,
     let canvasId = `canvas-${shortid.generate()}`;
 
     if (node.data.type === Canvas) {
-      canvasId = internal.current.id = node.data.id;
+      canvasId = internal.current.id = node.id;
       const childNodes = mapChildrenToNodes(children, canvasId);
-      manager.add(node.data.id, childNodes);
+      manager.add(node.id, childNodes);
     } else {
       if (!id) throw new Error("Root Canvas cannot ommit `id` prop");
       if (!node.data._childCanvas || (node.data._childCanvas && !node.data._childCanvas[id])) {
         const rootNode = createNode(Canvas, { is, children } as any, canvasId, null);
         internal.current.id = canvasId;
-        manager.pushChildCanvas(node.data.id, id, rootNode);
+        manager.pushChildCanvas(node.id, id, rootNode);
       }
     }
   }, []);

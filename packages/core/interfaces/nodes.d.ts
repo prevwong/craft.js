@@ -4,12 +4,12 @@ import { ManagerMethods, PublicManagerMethods } from "../manager/methods";
 export type NodeId = string;
 
 export interface Node  {
+  id: NodeId;
   data: NodeData;
   ref: NodeRef;
 }
 
 export interface NodeData {
-  id: NodeId;
   props: React.Props<any>;
   type: React.ElementType;
   parent: NodeId;

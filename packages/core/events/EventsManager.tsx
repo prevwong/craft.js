@@ -53,7 +53,7 @@ export const EventsManager = connectManager(({ children, manager: [state, method
     const { nodes, events } = state;
     const pos = { x: e.clientX, y: e.clientY };
 
-    const deepChildren = getDeepChildrenNodes(nodes, events.active.data.id);
+    const deepChildren = getDeepChildrenNodes(nodes, events.active.id);
     const nodesWithinBounds = Object.keys(nodes).filter(nodeId => {
       return nodeId !== "rootNode" && nodes[nodeId].ref.dom && !deepChildren.includes(nodeId)
     });
@@ -86,7 +86,7 @@ export const EventsManager = connectManager(({ children, manager: [state, method
           selection.empty ? selection.empty() : selection.removeAllRanges();
         }
         if (!state.events.dragging) {
-          methods.setNodeEvent("dragging", state.events.active.data.id);
+          methods.setNodeEvent("dragging", state.events.active.id);
         } else {
           
           placeBestPosition(e);
@@ -98,10 +98,10 @@ export const EventsManager = connectManager(({ children, manager: [state, method
 
   const onMouseUp = useCallback((e: MouseEvent) => {
     if (state.events.dragging) {
-      const { id: dragId, parent: dragParentId } = state.events.dragging.data;
+      const { id: dragId } = state.events.dragging;
       const { placement } = placeholderRef.current;
       const { parent, index, where } = placement;
-      const { id: parentId, nodes } = parent.data;
+      const { id: parentId, data:{nodes} } = parent;
 
       methods.move(dragId, parentId, index + (where === "after" ? 1 : 0));
       methods.setNodeEvent("active", null);
