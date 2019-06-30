@@ -1,13 +1,7 @@
 import React, { useMemo, useContext, useCallback, cloneElement } from "react";
-import useNode, { CraftNodeAPI } from "./useNode";
+import useNode from "./useNode";
 import { PublicManagerMethods, ManagerMethods } from "../manager/methods";
-
-export interface ConnectedNode<M extends ManagerMethods | PublicManagerMethods> {
-  craft: CraftNodeAPI<M>
-}
-
-export type ConnectedInternalNode = ConnectedNode<ManagerMethods>;
-export type ConnectedPublicNode = ConnectedNode<PublicManagerMethods>;
+import { ConnectedInternalNode, ConnectedPublicNode } from "../interfaces";
 
 export function connectInternalNode<P extends ConnectedInternalNode, C>(
   WrappedComponent: React.JSXElementConstructor<P>

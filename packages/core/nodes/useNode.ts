@@ -2,13 +2,7 @@ import { cloneElement, useContext, useCallback, useMemo, useRef, useEffect, useL
 import { NodeContext } from "./NodeContext";
 import { ManagerContext } from "../manager";
 import { ManagerMethods, PublicManagerMethods } from "../manager/methods";
-import { Node } from ".";
-
-export type CraftNodeAPI<M extends ManagerMethods | PublicManagerMethods> = {
-  node: Node;
-  manager: M
-  connectTarget: Function
-} 
+import { CraftNodeAPI } from "../interfaces";
 
 const useNode = () : CraftNodeAPI<ManagerMethods> => {
   const nodeContext = useContext(NodeContext);

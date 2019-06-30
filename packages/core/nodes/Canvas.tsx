@@ -4,7 +4,8 @@ import { CanvasNode, NodeId, Node } from "~types";
 import { NodeElement } from "./NodeElement";
 import { RenderNodeToElement } from "../render/RenderNode";
 import { ManagerMethods } from "../manager/methods";
-import { connectInternalNode, ConnectedInternalNode } from "./connectors";
+import { connectInternalNode } from "./connectors";
+import { ConnectedInternalNode } from "../interfaces";
 const shortid = require("shortid");
 
 export interface Canvas extends ConnectedInternalNode {
