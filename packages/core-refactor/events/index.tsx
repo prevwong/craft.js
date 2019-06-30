@@ -4,6 +4,7 @@ import { getDOMInfo, getDeepChildrenNodes } from "../utils";
 import { CanvasNode, NodeId } from "../nodes";
 import { findPosition, movePlaceholder, CSSMarginPaddingObj } from "./helper";
 import RenderPlaceholder from "../render/RenderPlaceholder";
+import { useEventListener } from "../utils/hooks";
 
 export interface DropAction {
   parent: CanvasNode;
@@ -23,14 +24,7 @@ export interface PlaceholderInfo {
   }
 }
 
-const blockSelection = (e: MouseEvent) => {
-  console.log("block")
-  const selection = window.getSelection ? window.getSelection() : (document as any).selection ? (document as any).selection : null;
-    if(!!selection) selection.empty ? selection.empty() : selection.removeAllRanges();
-    e.preventDefault();
-};
-
-export const EventsManager = connectManager(({children, manager: [state, methods]}) => {
+export const EventsManager = connectManager(({ children, manager: [state, methods] }) => {
   const [placeholder, setPlaceholder] = useState(null);
   const placeholderRef = useRef(null);
 
@@ -72,14 +66,14 @@ export const EventsManager = connectManager(({children, manager: [state, methods
   const getNearestTarget = (e: MouseEvent) => {
     const { nodes, dom, events } = state;
     const pos = { x: e.clientX, y: e.clientY };
-    
-    const deepChildren =  getDeepChildrenNodes(nodes, events.active.id);
+
+    const deepChildren = getDeepChildrenNodes(nodes, events.active.id);
     const nodesWithinBounds = Object.keys(dom).filter(nodeId => {
       return nodeId !== "rootNode" && !deepChildren.includes(nodeId)
     });
-    
+
     return nodesWithinBounds.filter((nodeId: NodeId) => {
-      const {top, left, width, height } = getDOMInfo(dom[nodeId]);
+      const { top, left, width, height } = getDOMInfo(dom[nodeId]);
       return (
         (pos.x >= left && pos.x <= left + width) &&
         (pos.y >= top && pos.y <= top + height)
@@ -88,61 +82,61 @@ export const EventsManager = connectManager(({children, manager: [state, methods
   };
 
   const onDrag = useCallback((e: MouseEvent) => {
-    const { left, right, top, bottom } = getDOMInfo(state.dom[state.events.active.id]);
-    if (
-      !(
-        e.clientX >= right &&
-        e.clientY >= top &&
-        e.clientY <= bottom && 
-        !state.events.dragging
-      )
-    ) {
-      // Element being dragged
-     methods.setNodeEvent("dragging", state.events.active);
-     placeBestPosition(e);
+    if (state.events.active) {
+      const { left, right, top, bottom } = getDOMInfo(state.dom[state.events.active.id]);
+      if (
+        !(
+          e.clientX >= left &&
+          e.clientX <= right &&
+          e.clientY >= top &&
+          e.clientY <= bottom
+        )
+      ) {
+        // Element being dragged
+        const selection = window.getSelection ? window.getSelection() : (document as any).selection ? (document as any).selection : null;
+        if (!!selection) {
+          selection.empty ? selection.empty() : selection.removeAllRanges();
+        }
+        if (!state.events.dragging) {
+          methods.setNodeEvent("dragging", state.events.active);
+        } else {
+          
+          placeBestPosition(e);
+        }
+
+      }
     }
-  }, [state.events.active]);
-  
+  }, [state.events.active, state.events.dragging]);
+
   const onMouseUp = useCallback((e: MouseEvent) => {
-    if ( placeholderRef.current ) { 
-      window.removeEventListener("mousemove", onDrag);
-      window.removeEventListener("mouseup", onMouseUp);
-      window.removeEventListener("selectstart", blockSelection);
-      methods.setNodeEvent("active", null);
-      methods.setNodeEvent("dragging", null);
-
-
-      const { id: dragId, parent: dragParentId } = state.events.active;
+    if (state.events.dragging) {
+      const { id: dragId, parent: dragParentId } = state.events.dragging;
       const { placement } = placeholderRef.current;
       const { parent, index, where } = placement;
       const { id: parentId, nodes } = parent;
 
       methods.move(dragId, parentId, index + (where === "after" ? 1 : 0));
-      
-    }
-  }, [state.events.active, placeholderRef.current]);
-
-
-  useEffect(() => {
-    if (state.events.active) {
-      window.addEventListener("selectstart", blockSelection);
-      window.addEventListener("mousemove", onDrag);
-      window.addEventListener("mouseup", onMouseUp);
-    }
-  }, [state.events.active]);
-
-  useEffect(() => {
-    window.addEventListener("mousedown", () => {
       methods.setNodeEvent("active", null);
-    })
+      methods.setNodeEvent("dragging", null);
+
+    }
+  }, [state.events.dragging]);
+
+
+  const onMouseDown = useCallback(() => {
+    methods.setNodeEvent("active", null)
   }, []);
 
-  return (
-    <React.Fragment>
-      {
-        placeholder ? <RenderPlaceholder isActive={!!state.events.dragging} placeholder={placeholder} /> : null
-      }
-      {children}
-    </React.Fragment>
-  )
+  useEventListener("mousemove", onDrag);
+  useEventListener("mouseup", onMouseUp);
+  useEventListener("mousedown", onMouseDown);
+
+return (
+  <React.Fragment>
+    {
+      placeholder ? <RenderPlaceholder isActive={!!state.events.dragging} placeholder={placeholder} /> : null
+    }
+    {children}
+  </React.Fragment>
+)
 })
