@@ -24,17 +24,16 @@ const useNode = () : CraftNodeAPI<ManagerMethods> => {
     const domRef = useRef(null);
 
     const node = useMemo(() => {
-      // console.log("run")
       return (
         state.nodes[id]
       )
     }, [state.nodes[id]]);
-      
+
     const connectTarget = useCallback((render) => {
       return cloneElement(render, {
         onMouseDown: (e) => {
-          e.stopPropagation();~
-          manager.setNodeEvent("active", node)
+          e.stopPropagation();
+          if ( node.id !== "rootNode" ) manager.setNodeEvent("active", node)
         },
         ref: (ref: any) => {
           if ( ref ) {
