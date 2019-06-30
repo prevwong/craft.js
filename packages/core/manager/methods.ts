@@ -1,6 +1,6 @@
-import { NodeId, Node, CanvasNode } from "../nodes";
-import { ManagerState } from ".";
+import { NodeId, Node, CanvasNode } from "../interfaces";
 import { CallbacksFor } from "use-methods";
+import { ManagerState } from "../interfaces";
 
 const PublicManagerMethods = (state: ManagerState) => {
   return {
@@ -55,5 +55,4 @@ const ManagerMethods = (state: ManagerState) => ({
 
 export type PublicManagerMethods = CallbacksFor<typeof PublicManagerMethods>
 export type ManagerMethods = CallbacksFor<typeof ManagerMethods>
-
 export default ManagerMethods;
