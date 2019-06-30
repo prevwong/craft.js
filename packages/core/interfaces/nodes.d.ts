@@ -2,7 +2,13 @@ import React from "react";
 import { ManagerMethods, PublicManagerMethods } from "../manager/methods";
 
 export type NodeId = string;
-export type Node = {
+
+export interface Node  {
+  data: NodeData;
+  ref: NodeRef;
+}
+
+export interface NodeData {
   id: NodeId;
   props: React.Props<any>;
   type: React.ElementType;
@@ -10,6 +16,18 @@ export type Node = {
   closestParent: NodeId;
   event: NodeEvent;
   _childCanvas?: CanvasMapping
+}
+
+export interface CanvasNode extends Node {
+  data: CanvasNodeData;
+}
+
+export interface CanvasNodeData extends NodeData {
+  nodes: NodeId[]
+}
+
+export type NodeRef = {
+  dom: HTMLElement;
 }
 
 export interface NodeEvent {
@@ -22,9 +40,6 @@ export type Nodes = {
   [key: string]: Node
 }
 
-export interface CanvasNode extends Node {
-  nodes: NodeId[]
-}
 
 export interface CanvasMapping {
   [key: string]: NodeId;
