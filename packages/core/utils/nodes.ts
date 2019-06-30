@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { defineReactiveProperty } from ".";
 import { Canvas } from "../nodes/Canvas";
-import { NodeId, Node, Nodes, CanvasNode } from "../nodes";
+import { NodeId, Node, Nodes, CanvasNode } from "../interfaces";
 import { TreeNode } from "~types";
 import produce from "immer";
 
@@ -9,15 +9,20 @@ const shortid = require("shortid");
 
 export const createNode = (component: React.ElementType, props: React.Props<any>, id: NodeId, parent?: NodeId): Node => {
   let node = produce({}, (node: Node) => {
-    node.type = component as React.ElementType;
-    node.props = props;
-    node.id = id;
-    node.parent = parent;
-    node.closestParent = parent;
-    node.event = {
-      active: false, 
-      dragging: false, 
-      hover: false
+    node.data = {
+      type: component as React.ElementType,
+      props: props,
+      id: id,
+      parent :parent,
+      closestParent: parent,
+      event: {
+        active: false,
+        dragging: false,
+        hover: false
+      }
+    };
+    node.ref = {
+      dom: null
     }
   }) as Node;
 
@@ -60,7 +65,7 @@ export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?
 export const makePropsReactive = (nodes: Nodes, cb: Function) => {
   Object.keys(nodes).forEach(id => {
     const node = nodes[id];
-    let {props} = node;
+    let {props} = node.data;
     const reactiveProps = Object.keys(props).reduce((result: any, key) => {
       const value = (props as any)[key];
       if ( key !== "children" ) {
@@ -73,7 +78,7 @@ export const makePropsReactive = (nodes: Nodes, cb: Function) => {
 
       return result;
     }, {});
-    node.props = reactiveProps;
+    node.data.props = reactiveProps;
   })
 }
 
@@ -88,20 +93,20 @@ export const nodesToTree = (nodes: Nodes, cur="rootNode", canvasName?: string): 
   let tree: any = {};
   const node = nodes[cur];
   if ( !node ) return null;
-  const {id } = node;
+  const {id } = node.data;
   tree[id] = {
     ...node
   }
   if ( canvasName ) tree[id].canvasName = canvasName;
 
-  if ( node._childCanvas || (node as CanvasNode).nodes ) tree[id].children = {};
-  if ( node._childCanvas ) {
-    Object.keys(node._childCanvas).forEach(canvasName => {
-      const virtualId = node._childCanvas[canvasName]
+  if ( node.data._childCanvas || (node as CanvasNode).data.nodes ) tree[id].children = {};
+  if ( node.data._childCanvas ) {
+    Object.keys(node.data._childCanvas).forEach(canvasName => {
+      const virtualId = node.data._childCanvas[canvasName]
       tree[id].children[virtualId] = nodesToTree(nodes, virtualId, canvasName);
     });
-  } else if ( (node as CanvasNode).nodes ) {
-    const childNodes = (node as CanvasNode).nodes;
+  } else if ( (node as CanvasNode).data.nodes ) {
+    const childNodes = (node as CanvasNode).data.nodes;
     tree[id].nodes = childNodes;
     childNodes.forEach(nodeId => {
       tree[id].children[nodeId] = nodesToTree(nodes, nodeId);
@@ -114,13 +119,13 @@ export const nodesToTree = (nodes: Nodes, cur="rootNode", canvasName?: string): 
 export const getDeepChildrenNodes = (nodes: Nodes, id: NodeId, result: NodeId[] = []) => {
   result.push(id);
   const node = nodes[id];
-  if ( node._childCanvas ) {
-    Object.keys(node._childCanvas).map(canvasName => {
-      const virtualId = node._childCanvas[canvasName];
+  if ( node.data._childCanvas ) {
+    Object.keys(node.data._childCanvas).map(canvasName => {
+      const virtualId = node.data._childCanvas[canvasName];
       getDeepChildrenNodes(nodes, virtualId, result);
     })
-  } else if ( (node as CanvasNode).nodes ) {
-    const childNodes = (node as CanvasNode).nodes;
+  } else if ( (node as CanvasNode).data.nodes ) {
+    const childNodes = (node as CanvasNode).data.nodes;
     childNodes.forEach(nodeId => {
       getDeepChildrenNodes(nodes, nodeId, result);
     });
@@ -131,7 +136,7 @@ export const getDeepChildrenNodes = (nodes: Nodes, id: NodeId, result: NodeId[] 
 
 export const getAllParents = (nodes: Nodes, nodeId: NodeId, result:NodeId[] = []) => {
   const node = nodes[nodeId];
-  const parent = node.closestParent;
+  const parent = node.data.closestParent;
   if ( parent ) {
     result.push(parent);
     getAllParents(nodes, parent, result);
