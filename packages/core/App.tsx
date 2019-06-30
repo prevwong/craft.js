@@ -13,9 +13,9 @@ class App extends React.Component {
       <div className='app'>
         <Craft>
           <Renderer>
-            <MsgBox text="hi" />
-            <MsgBox text="bye" />
-            <MsgBox text="what" />
+          <MsgBox text="hi" />
+          <MsgBox text="bye" />
+          <MsgBox text="lol" />
           </Renderer>
         </Craft>
       </div>
