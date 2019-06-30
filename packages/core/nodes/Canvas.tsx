@@ -13,7 +13,7 @@ export interface Canvas extends ConnectedInternalNode, React.Props<any> {
   children?: React.ReactNode
 }
 
-export const Canvas = connectInternalNode(({ craft: { node, manager }, children, is, id, ...props}: Canvas) => {
+export const Canvas = connectInternalNode(({ craft: { node, manager }, children, is="div", id, ...props}: Canvas) => {
   const internal = React.useRef({ id: null });
   useEffect(() => {
     let canvasId = `canvas-${shortid.generate()}`;
