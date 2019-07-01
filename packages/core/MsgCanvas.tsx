@@ -1,7 +1,20 @@
 import React from "react";
+import { connectNode } from "./nodes";
+import { ConnectedNode, ConnectedPublicNode, Node } from "./interfaces";
 
-export default function MsgCanvas({children}) {
-  return (
-    <hgroup className="msg-canvas">{children}</hgroup>
+type MsgCanvas = {
+  children: React.ReactChildren
+} & ConnectedPublicNode
+
+const MsgCanvas: React.FC<MsgCanvas> = ({children, craft: {node, connectTarget}}: MsgCanvas) => {
+  return connectTarget(
+    <hgroup className="msg-canvas">{children}</hgroup>,
+    {
+      incoming: (incomingNode: Node) => {
+        return true;
+      }
+    }
   )
 }
+
+export default connectNode(MsgCanvas);

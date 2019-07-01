@@ -2,8 +2,9 @@ import React from "react";
 import { Canvas } from "./nodes/Canvas";
 import { Heading } from "./Heading";
 import { PublicManagerMethods } from "./manager/methods";
-import { connectNode, ConnectedPublicNode } from "./nodes/connectors";
+import { connectNode } from "./nodes/connectors";
 import MsgCanvas from "./MsgCanvas";
+import { ConnectedPublicNode } from "./interfaces";
 
 export type MsgBox = {
   text: string
@@ -14,10 +15,10 @@ const Msg = ({craft:{node, manager, connectTarget}, text}: MsgBox) => {
   return connectTarget(
     <div className="message-box" >
       <h2>MESSAGE{text}</h2>
-      {/* <Canvas id="Msgcanvas" is={MsgCanvas}>
+      <Canvas id="Msgcanvas" is={MsgCanvas}>
         <p>Order1</p>
         <p>Order2</p>
-      </Canvas> */}
+      </Canvas>
     </div>
   )
 }
