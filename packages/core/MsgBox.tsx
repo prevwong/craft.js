@@ -18,6 +18,9 @@ const Msg = ({craft:{node, manager, connectTarget}, text}: MsgBox) => {
       <Canvas id="Msgcanvas" is={MsgCanvas}>
         <p>Order1</p>
         <p>Order2</p>
+        <Canvas style={{background:"#000", padding:"5px", color:"#fff"}}>
+          <p>Order3</p>
+        </Canvas>
       </Canvas>
     </div>
   )
