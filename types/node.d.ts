@@ -2,7 +2,7 @@ import { HTMLProps } from "react";
 import { id } from "~types";
 import React from "react"
 import { DOMInfo, CSSMarginPaddingObj } from "./dom";
-import { BuilderContextState } from "./core";
+import { BuilderContextState, CraftAPIContext } from "./core";
 
 export type NodeId = string;
 
@@ -19,7 +19,7 @@ interface NodeElementState {
 
 export interface NodeContextState {
   node: Node;
-  builder: BuilderContextState;
+  builder: CraftAPIContext;
   nodeState: any
 }
 
@@ -56,7 +56,16 @@ export interface Node {
   id?: NodeId;
   info?: DOMInfo;
   childCanvas?: CanvasMapping;
-  parent?: string;
+  parent?: NodeId;
+  closestParent?: NodeId;
+}
+
+export interface TreeNode extends Node {
+  children: TreeNodes
+}
+
+export interface TreeNodes {
+  [key: string]: TreeNode
 }
 
 export interface CanvasMapping {

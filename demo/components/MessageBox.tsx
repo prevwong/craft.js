@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import PropTypes, { string } from 'prop-types';
-import {NodeContext, Canvas} from "~packages/core/";
 import ContentEditable from 'react-contenteditable'
+import { NodeContext } from "~packages/core/nodes/NodeContext";
+import Canvas from "~packages/core/nodes/Canvas";
 
 interface MessageBoxProps {
   text: string
@@ -37,31 +38,15 @@ export default class MessageBox extends Component<MessageBoxProps> {
   static editor = Editor
 
   render() {
-    const { text, bg } = this.props;
-
+    const { text, bg, ...props} = this.props;
+    // console.log("t", text)
     return (
-      <div className={'message-box'} style={{backgroundColor: bg}}>
-      <Canvas id="MessageCanvas">
+      <div className={'message-box'} style={{backgroundColor: bg}} >
+      <Canvas id="MessageCanvas" style={{"padding" : "20px 0"}}>
+        <h2>66</h2>
         <h2>Whut</h2>
       </Canvas>
-       <NodeContext.Consumer>
-            {({node, nodeState}) => {
-              const {active} = nodeState;
-              return (
-                active ? (
-                  <ContentEditable 
-                    tagName='h2' 
-                    html={text} 
-                    onChange={(e) => {
-                      node.props.text = e.target.value;
-                    }}
-                  />
-                )
-                :
-                <h2 dangerouslySetInnerHTML={{__html: text}}></h2>
-              )
-            }}
-        </NodeContext.Consumer>
+       
       </div>
     )
   }

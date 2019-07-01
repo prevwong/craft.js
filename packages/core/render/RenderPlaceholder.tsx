@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { PlaceholderInfo } from "~types";
+import { PlaceholderInfo } from "../events";
 
 const StyledPlaceholder = styled.div`
   position: absolute;
@@ -33,7 +33,7 @@ const PlaceholderInner = styled.div`
   outline: none;
 `;
 
-export default class Placeholder extends Component<any> {
+export default class RenderPlaceholder extends Component<any> {
   render() {
     const { isActive, placeholder } = this.props;
     const { position } = placeholder as PlaceholderInfo;

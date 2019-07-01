@@ -1,2 +1,2 @@
-export {default as Canvas} from "./Canvas";
-export {default as NodeContext} from "./NodeContext"
+export * from "./Canvas"
+export * from "./connectors"
