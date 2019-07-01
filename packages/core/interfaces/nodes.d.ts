@@ -20,14 +20,21 @@ export interface NodeData {
 
 export interface CanvasNode extends Node {
   data: CanvasNodeData;
+  ref: CanvasNodeRef
 }
 
 export interface CanvasNodeData extends NodeData {
   nodes: NodeId[]
 }
 
-export type NodeRef = {
+export interface NodeRef {
   dom: HTMLElement;
+  canDrag(node: Node): void;
+}
+
+export interface CanvasNodeRef extends NodeRef {
+  incoming(incoming: Node): boolean;
+  outgoing(outgoing: Node): boolean;
 }
 
 export interface NodeEvent {
