@@ -12,6 +12,9 @@ const MsgCanvas: React.FC<MsgCanvas> = ({children, craft: {node, connectTarget}}
     {
       incoming: (incomingNode: Node) => {
         return true;
+      },
+      outgoing: (outgoingNode: Node) => {
+        return false;
       }
     }
   )
