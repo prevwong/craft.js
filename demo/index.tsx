@@ -3,15 +3,11 @@ import "./demo.scss";
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import tree from "./tree";
-// import Space from "~/packages/space";
-// import Compose from "~/packages/compose";
-import Button from "./components/Button";
 import MessageBox from "./components/MessageBox";
-
-import Row from "./components/Row";
-import {Builder, Canvas} from "~packages/core/index";
-import Layers from "~packages/layers";
+import Builder from "~packages/core/Builder";
 import Renderer from "~packages/core/render/Renderer";
+import Canvas from "~packages/core/nodes/Canvas";
+import Test from "~packages/hooks/ref.js";
 
 const canvasTools = document.createElement("div");
 canvasTools.id = `canvasTools`;
@@ -49,21 +45,9 @@ class App extends Component {
   render() {
     const { tree, test, arr } = this.state;
     return (
-      <Builder>
-        <Renderer components={[
-          MessageBox
-        ]}>
-          <div style={{  padding: "100px 30px" }}>
-            <Canvas id = "main" style={{ background:"#999",  padding:"10px 20px"}}> 
-              <Canvas id="inner" style={{ background: "#000", padding: "20px 30px", marginBottom: "20px" }}>
-                  <MessageBox />
-              </Canvas>
-            </Canvas>
-          
-          </div>
-        </Renderer>
-        <Layers />
-      </Builder >
+      <div style={{paddingTop:"30px"}}> 
+        <Test />
+      </div>
     );
   }
 }

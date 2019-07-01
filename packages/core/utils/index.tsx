@@ -3,8 +3,8 @@ import { node } from "prop-types";
 import React, { ReactNode, HTMLProps } from "react";
 import { TextNode } from "./nodes";
 
-export * from "./dom";
 export * from "./nodes";
+export * from "./element";
 
 export const isCanvas = (node: any) => !!node.nodes
 export const isCraftComponent = (type: any): boolean => !!type.editor;

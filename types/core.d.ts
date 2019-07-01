@@ -2,13 +2,10 @@ import React from "react";
 import { id } from "~types";
 import { Node, NodeId, Nodes, NodeInfo, CanvasNode, NodeStates } from "./node";
 import { CSSMarginPaddingObj } from "./dom";
+import { NodeEvent } from "./events";
 
 export interface BuilderState {
-  nodes: Nodes,
-  active: Node,
-  hover: Node,
-  dragging: Node,
-  placeholder: PlaceholderInfo
+  nodes: Nodes
 }
 export interface BuilderContextState extends BuilderState {
   nodesInfo: any;
@@ -17,16 +14,14 @@ export interface BuilderContextState extends BuilderState {
   setPlaceholder: Function
 }
 
-export interface PlaceholderInfo {
-  node: Node
-  placement: DropAction;
-  position: {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-    margin: CSSMarginPaddingObj;
-  }
+export interface CraftAPIContext {
+  nodes: Nodes, 
+  add: Function, 
+  move: Function, 
+  active: NodeEvent, 
+  dragging: NodeEvent,
+  hover: NodeEvent, 
+  setActive: Function
 }
 
 export interface ActiveElement {

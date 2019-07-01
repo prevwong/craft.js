@@ -1,39 +1,20 @@
-import React from "react";
-import { Node,  NodeId, BuilderContextState, PlaceholderInfo, BuilderState } from "~types";
-import BuilderContext from "../BuilderContext";
-import { mapChildrenToNodes } from "../utils";
-import NodeElement from "../nodes/NodeElement";
-import RenderNodeWithContext from "./RenderNodeWithContext";
-import { Canvas } from "../nodes";
+import React, { useEffect, useContext } from "react";
+import { mapChildrenToNodes } from "~packages/core/utils";
+import { NodeElement } from "../nodes/NodeElement";
+import { ManagerContext } from "../manager";
+import { Canvas } from "../nodes/Canvas";
 
-export default class Renderer extends React.Component<any> {
- 
-  constructor(props: any, context: BuilderContextState) {
-    super(props);
-  
-    let node = mapChildrenToNodes(<Canvas>{this.props.children}</Canvas>, null, "rootNode");
-
-    context.setNodes((nodes) => {
-        nodes["rootNode"] = node["rootNode"];
-        return nodes;
-    });
-  }
-
-
-  render() {
-    return (
-      <BuilderContext.Consumer>
-          {({nodes}) => {
-              return (
-                nodes["rootNode"]  && 
-                    <NodeElement node={nodes["rootNode"]}>
-                        <RenderNodeWithContext />
-                    </NodeElement>
-              )
-          }}
-      </BuilderContext.Consumer>
-    )
-  }
+export const Renderer = ({ children }: any) => {
+  const [state, methods] = useContext(ManagerContext);
+  useEffect(() => {
+    let node = mapChildrenToNodes(<Canvas id="rootCanvas">{children}</Canvas>, null, "rootNode");
+    methods.add(null, node);
+    console.log("added root node");
+  }, []);
+  return (
+    state.nodes["rootNode"] ? (
+      <NodeElement id="rootNode" />
+    ) : null
+  )
 }
 
-Renderer.contextType = BuilderContext;
