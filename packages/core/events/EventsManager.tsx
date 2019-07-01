@@ -7,6 +7,7 @@ import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
 import { useEventListener } from "../utils/hooks";
 import RenderPlaceholder from "../render/RenderPlaceholder";
+import { Canvas } from "../nodes";
 
 export type EventsManager = { 
   children: React.ReactChildren
@@ -50,14 +51,21 @@ export const EventsManager = connectManager(({ children, manager: [state, method
     }
   }
 
-  const getNodesInAcceptedCanvas = (nodes: Nodes, incomingNode: Node): NodeId[] => {
+  const getNodesInAcceptedCanvas = (nodes: Nodes, draggedNode: Node): NodeId[] => {
+    
+    // first check if the parent canvas allows the dragged node from going out
+    const { parent } = draggedNode.data;
+    if ( !(nodes[parent] as CanvasNode).ref.outgoing(draggedNode) ) {
+      // if the parent node does not allow the dragged node from going out then, limit potential nodes to those within the parent;
+      return getDeepChildrenNodes(nodes, parent);
+    }
+
     const canvases = getAllCanvas(nodes);
     const nodesToConsider = canvases.reduce((res: NodeId[], id) => {
       const canvas = nodes[id] as CanvasNode;
-      if ( canvas.ref.incoming(incomingNode) ) {
+      if ( canvas.ref.incoming(draggedNode) ) {
         if ( !res.includes(canvas.id) ) res = [...res, canvas.id];
         res = [...res, ...canvas.data.nodes];
-       
       }
       return res;
     }, []);
