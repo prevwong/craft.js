@@ -1,6 +1,7 @@
 import { NodeId, Node, CanvasNode } from "../interfaces";
 import { CallbacksFor } from "use-methods";
 import { ManagerState } from "../interfaces";
+import { isCanvas } from "../utils";
 
 export const PublicManagerMethods = (state: ManagerState) => {
   return {
@@ -33,11 +34,15 @@ export const PublicManagerMethods = (state: ManagerState) => {
 };
 
 const ManagerMethods = (state: ManagerState) => ({
-  setDOM: (id: NodeId, dom: HTMLElement) => {
-    state.nodes[id].ref.dom = dom;
+  setRef: (id: NodeId, ref: "dom" | "outgoing" | "incoming" | "canDrag", value: any) => {
+    if ( !["dom", "outgoing", "incoming", "canDrag"].includes(ref)) {  throw new Error(); }
+    let node = state.nodes[id];
+    if ( isCanvas(node) ) (node as CanvasNode).ref[ref] = value;
+    else node.ref[ref as "dom" | "canDrag"] = value;
   },
   pushChildCanvas(id: NodeId, canvasName: string, newNode: Node) {
     if (!state.nodes[id].data._childCanvas) state.nodes[id].data._childCanvas = {};
+    newNode.data.closestParent = id;
     state.nodes[id].data._childCanvas[canvasName] = newNode.id;
     state.nodes[newNode.id] = newNode;
   },

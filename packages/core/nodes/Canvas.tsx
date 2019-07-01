@@ -9,8 +9,9 @@ const shortid = require("shortid");
 
 export interface Canvas extends ConnectedInternalNode, React.Props<any> {
   id?: NodeId,
+  style?: any,
+  className?: any,
   is?: React.ElementType
-  children?: React.ReactNode
 }
 
 export const Canvas = connectInternalNode(({ craft: { node, manager }, children, is="div", id, ...props}: Canvas) => {
@@ -19,15 +20,19 @@ export const Canvas = connectInternalNode(({ craft: { node, manager }, children,
     let canvasId = `canvas-${shortid.generate()}`;
 
     if (node.data.type === Canvas) {
-      canvasId = internal.current.id = node.id;
-      const childNodes = mapChildrenToNodes(children, canvasId);
-      manager.add(node.id, childNodes);
+      if ( !(node as CanvasNode).data.nodes ) {  // don't recreate nodes from children after initial hydration
+        canvasId = internal.current.id = node.id;
+        const childNodes = mapChildrenToNodes(children, canvasId);
+        manager.add(node.id, childNodes);
+      }
     } else {
       if (!id) throw new Error("Root Canvas cannot ommit `id` prop");
       if (!node.data._childCanvas || (node.data._childCanvas && !node.data._childCanvas[id])) {
         const rootNode = createNode(Canvas, { is, children } as any, canvasId, null);
         internal.current.id = canvasId;
         manager.pushChildCanvas(node.id, id, rootNode);
+      } else {
+       internal.current.id = node.data._childCanvas[id];
       }
     }
   }, []);
