@@ -1,5 +1,6 @@
 import React from "react";
 import { ManagerMethods, PublicManagerMethods } from "../manager/methods";
+import { RenderContext } from "../render/RenderContext";
 
 export type NodeId = string;
 
@@ -60,9 +61,12 @@ export type CraftNodeAPI<M extends ManagerMethods | PublicManagerMethods> = {
 } 
 
 
-export interface ConnectedNode<M extends ManagerMethods | PublicManagerMethods> {
+export type ConnectedNode<M extends ManagerMethods | PublicManagerMethods> = {
   craft: CraftNodeAPI<M>
 }
 
-export type ConnectedInternalNode = ConnectedNode<ManagerMethods>;
+export type ConnectedInternalNode = {
+  renderer: RenderContext;
+} & ConnectedNode<ManagerMethods>
+
 export type ConnectedPublicNode = ConnectedNode<PublicManagerMethods>;
