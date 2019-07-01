@@ -13,11 +13,17 @@ class App extends React.Component {
     return (
       <div className='app'>
         <Craft>
-          <Renderer>
-            <Canvas is={AnotherCanvas}>
-              <p>Alright</p>
-            </Canvas>
+          <Renderer onRender={(({render, node}) => {
+            return (
+              <React.Fragment>
+                {node.data.event.active ? <p>is active</p>: null}
+                {render}
+              </React.Fragment>
+            )
+          })}>
+            <h1>Lol</h1>
             <MsgBox text="hi" />
+            <h2>Hi world</h2>
           </Renderer>
         </Craft>
       </div>
