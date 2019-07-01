@@ -1,15 +1,21 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import { Canvas } from "../nodes/Canvas";
 import { PublicManagerMethods } from "../manager/methods";
 import { isDOMComponent } from "../utils";
-import {  connectNode } from "../nodes/connectors";
-import { ConnectedPublicNode } from "../interfaces";
+import {  connectNode, connectInternalNode } from "../nodes/connectors";
+import { ConnectedPublicNode, ConnectedInternalNode } from "../interfaces";
 
 export type Render = {
   is: React.ComponentType<any>
-} & ConnectedPublicNode
+} & ConnectedInternalNode
 
-const Render: React.FC<any> = React.memo(({craft:{node, connectTarget}, is, ...injectedProps}: Render) => {
+const RenderComp = ({node, render}: any) => {
+  return (
+    {render}
+  )
+}
+
+const Render: React.FC<any> = React.memo(({craft:{node, connectTarget, manager}, renderer, is, ...injectedProps}: Render) => {
   let { type, props } = node.data;
   let {children, ...propsWithoutChildren} = props;
 
@@ -27,9 +33,9 @@ const Render: React.FC<any> = React.memo(({craft:{node, connectTarget}, is, ...i
   }
 
   let render = React.cloneElement(<Comp {...availableProps} {...injectedProps} />);
-
   if ( isDOMComponent(Comp)) render = connectTarget(render);
-  return render;
+
+  return React.createElement(renderer.onRender, {render, node}, null);
 });
 
-export const RenderNodeToElement = connectNode(Render);
+export const RenderNodeToElement = connectInternalNode(Render);
