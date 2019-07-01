@@ -7,6 +7,9 @@ import produce from "immer";
 
 const shortid = require("shortid");
 
+export const isCanvas = (node: Node) => node.data.type === Canvas
+
+
 export const createNode = (component: React.ElementType, props: React.Props<any>, id: NodeId, parent?: NodeId): Node => {
   let node = produce({}, (node: Node) => {
     node.id = id;
@@ -22,7 +25,12 @@ export const createNode = (component: React.ElementType, props: React.Props<any>
       }
     };
     node.ref = {
-      dom: null
+      dom: null,
+      canDrag: () => true
+    };
+    if ( isCanvas(node) ) {
+      (node as CanvasNode).ref.incoming = () => true;
+      (node as CanvasNode).ref.outgoing = () => true;
     }
   }) as Node;
 
@@ -143,4 +151,11 @@ export const getAllParents = (nodes: Nodes, nodeId: NodeId, result:NodeId[] = []
   }
 
   return result;
+}
+
+export const getAllCanvas = (nodes: Nodes) => {
+  return Object.keys(nodes).filter(id => {
+    if (isCanvas(nodes[id]) ) return true;
+    return false;
+  })
 }

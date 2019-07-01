@@ -1,8 +1,8 @@
 import { connectManager, ConnectedManager } from "../manager";
 import React, { useState, useRef, useCallback } from "react";
-import { CanvasNode, PlaceholderInfo } from "../interfaces";
+import { CanvasNode, PlaceholderInfo, Nodes, Node } from "../interfaces";
 import { NodeId, DropAction } from "~types";
-import { getDOMInfo, getDeepChildrenNodes } from "../utils";
+import { getDOMInfo, getDeepChildrenNodes, getAllCanvas } from "../utils";
 import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
 import { useEventListener } from "../utils/hooks";
@@ -17,8 +17,7 @@ export const EventsManager = connectManager(({ children, manager: [state, method
   const placeholderRef = useRef<PlaceholderInfo>(null);
   const placeBestPosition = (e: MouseEvent) => {
     const { nodes } = state;
-    const nearestTargets = getNearestTarget(e),
-      nearestTargetId = nearestTargets.pop();
+    const [nearestTargetId, possibleNodes] = getNearestTarget(e);
     if (nearestTargetId) {
       const targetNode = nodes[nearestTargetId],
         targetParent = (targetNode as CanvasNode).data.nodes ? targetNode as CanvasNode : nodes[targetNode.data.parent] as CanvasNode;
@@ -32,6 +31,8 @@ export const EventsManager = connectManager(({ children, manager: [state, method
 
       const bestTarget = findPosition(targetParent, dimensionsInContainer, e.clientX, e.clientY);
       const bestTargetNode = targetParent.data.nodes.length ? nodes[targetParent.data.nodes[bestTarget.index]] : targetParent;
+      
+      if ( !possibleNodes.includes(bestTargetNode.id) ) return;
 
       const output: PlaceholderInfo = {
         position: movePlaceholder(
@@ -49,17 +50,33 @@ export const EventsManager = connectManager(({ children, manager: [state, method
     }
   }
 
-  const getNearestTarget = (e: MouseEvent) => {
+  const getNodesInAcceptedCanvas = (nodes: Nodes, incomingNode: Node): NodeId[] => {
+    const canvases = getAllCanvas(nodes);
+    const nodesToConsider = canvases.reduce((res: NodeId[], id) => {
+      const canvas = nodes[id] as CanvasNode;
+      if ( canvas.ref.incoming(incomingNode) ) {
+        if ( !res.includes(canvas.id) ) res = [...res, canvas.id];
+        res = [...res, ...canvas.data.nodes];
+       
+      }
+      return res;
+    }, []);
+
+    return nodesToConsider;
+  }
+
+  const getNearestTarget = (e: MouseEvent): [NodeId, NodeId[]]=> {
     const { nodes, events } = state;
     const pos = { x: e.clientX, y: e.clientY };
 
     const deepChildren = getDeepChildrenNodes(nodes, events.active.id);
-    const nodesWithinBounds = Object.keys(nodes).filter(nodeId => {
-      return nodeId !== "rootNode" && nodes[nodeId].ref.dom && !deepChildren.includes(nodeId)
+    const possibleNodeIds = getNodesInAcceptedCanvas(nodes, state.events.active);
+    const nodesWithinBounds = possibleNodeIds.filter(nodeId => {
+      return nodes[nodeId].ref.dom && 
+      !deepChildren.includes(nodeId) 
     });
 
-
-    return nodesWithinBounds.filter((nodeId: NodeId) => {
+    const nearestTargets = nodesWithinBounds.filter((nodeId: NodeId) => {
       const { top, left, width, height } = getDOMInfo(nodes[nodeId].ref.dom);
 
       return (
@@ -67,6 +84,8 @@ export const EventsManager = connectManager(({ children, manager: [state, method
         (pos.y >= top && pos.y <= top + height)
       );
     });
+
+    return [nearestTargets.length ? nearestTargets.pop() : null, possibleNodeIds]
   };
 
   const onDrag = useCallback((e: MouseEvent) => {

@@ -6,6 +6,7 @@ import { MsgBox } from "./MsgBox";
 import { Heading } from "./Heading";
 import { Renderer } from "./render/Renderer";
 import { Craft } from "./Craft";
+import AnotherCanvas from "./AnotherCanvas";
 
 class App extends React.Component {
   render() {
@@ -13,9 +14,10 @@ class App extends React.Component {
       <div className='app'>
         <Craft>
           <Renderer>
+            <Canvas is={AnotherCanvas}>
+              <p>Alright</p>
+            </Canvas>
             <MsgBox text="hi" />
-            <MsgBox text="bye" />
-            <MsgBox text="lol" />
           </Renderer>
         </Craft>
       </div>
