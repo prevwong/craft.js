@@ -3,6 +3,7 @@ import { NodeContext } from "./NodeContext";
 import { ManagerContext } from "../manager";
 import { ManagerMethods, PublicManagerMethods } from "../manager/methods";
 import { CraftNodeAPI } from "../interfaces";
+import { isCanvas } from "../utils";
 
 const useNode = () : CraftNodeAPI<ManagerMethods> => {
   const nodeContext = useContext(NodeContext);
@@ -23,7 +24,7 @@ const useNode = () : CraftNodeAPI<ManagerMethods> => {
       )
     }, [state.nodes[id]]);
 
-    const connectTarget = useCallback((render) => {
+    const connectTarget = useCallback((render, nodeMethods) => {
       return cloneElement(render, {
         onMouseDown: (e) => {
           e.stopPropagation();
@@ -31,7 +32,14 @@ const useNode = () : CraftNodeAPI<ManagerMethods> => {
         },
         ref: (ref: any) => {
           if ( ref ) {
-            manager.setDOM(id, ref);
+            manager.setRef(id, "dom", ref);
+            if ( nodeMethods ) { 
+              if ( nodeMethods.canDrag ) manager.setRef(id, "canDrag", nodeMethods.canDrag);
+              if ( isCanvas(node) ) {
+                if ( nodeMethods.incoming ) manager.setRef(id, "incoming", nodeMethods.incoming) 
+                if ( nodeMethods.outgoing ) manager.setRef(id, "outgoing", nodeMethods.outgoing);
+              }
+            }
           }
           if ( render.ref ) render.ref(ref);
         }
