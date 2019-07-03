@@ -3,7 +3,7 @@ import { CanvasNode, NodeId, Node } from "../interfaces";
 import { NodeElement } from "./NodeElement";
 import { RenderNodeToElement } from "../render/RenderNode";
 import {useNode, mapChildrenToNodes} from "../nodes";
-import useManager from "../manager/useManager";
+import {useManager} from "../manager";
 import { createNode } from "../shared/createNode";
 
 const shortid = require("shortid");

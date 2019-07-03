@@ -3,13 +3,16 @@ import { ManagerContext } from "./context";
 import { ManagerState } from "../interfaces";
 import { ManagerMethods } from "./methods";
 import { QueryMethods } from "./query";
-import { CallbacksFor, ActionUnion } from "use-methods";
 
-type connectedManager<S> = {
+type connectedManager = {
   query: QueryMethods
-} & S & ManagerMethods
+} & ManagerMethods
 
-export default function useManager<S>(mapManagerState?: (state: ManagerState) => S): connectedManager<S>  {
+
+
+export function useManager(): connectedManager;
+export function useManager<S>(mapManagerState: (state: ManagerState) => S): connectedManager & S;
+export function useManager(mapManagerState?: Function) {
   const [managerState, dispatchers] = useContext(ManagerContext);
   const state = mapManagerState ? useMemo(() => {
     return mapManagerState(managerState);
@@ -24,3 +27,4 @@ export default function useManager<S>(mapManagerState?: (state: ManagerState) =>
     return {...state, ...dispatchers, query}
   }, [state]);
 }
+ 

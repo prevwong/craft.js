@@ -1,7 +1,7 @@
 import { cloneElement, useContext, useCallback, useMemo } from "react";
 import { NodeContext } from "./NodeContext";
 import { ConnectedNode } from "../interfaces";
-import useManager from "../manager/useManager";
+import {useManager} from "../manager";
 import { isCanvas } from "../nodes";
 
 export function useNode() : ConnectedNode {

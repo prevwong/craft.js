@@ -4,12 +4,12 @@ import { NodeId  } from "~types";
 import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
 import RenderPlaceholder from "../render/RenderPlaceholder";
-import useManager from "../manager/useManager";
+import {useManager} from "../manager";
 import { getDOMInfo } from "../shared/dom";
 import { useEventListener } from "../shared/useEventListener";
 
 export const EventsManager: React.FC = ({ children }) => {
-  const { nodes, events, setNodeEvent, move, query } = useManager((state) => state);
+  const { nodes, events, setNodeEvent, move, query } = useManager((state) => state)
   const [placeholder, setPlaceholder] = useState(null);
   const placeholderRef = useRef<PlaceholderInfo>(null);
   const isMousePressed = useRef<boolean>(null);

@@ -1,7 +1,7 @@
 import React from "react";
 import { StateAndCallbacksFor } from "use-methods";
 import ManagerMethods from "./methods";
-import useManager from "./useManager";
+import {useManager} from "./useManager";
 
 export interface ConnectedManager {
   manager: StateAndCallbacksFor<typeof ManagerMethods>
