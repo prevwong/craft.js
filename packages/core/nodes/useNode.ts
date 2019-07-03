@@ -1,43 +1,35 @@
 import { cloneElement, useContext, useCallback, useMemo, useRef, useEffect, useLayoutEffect } from "react";
 import { NodeContext } from "./NodeContext";
 import { ManagerContext } from "../manager";
-import { ManagerMethods, PublicManagerMethods } from "../manager/methods";
-import { CraftNodeAPI } from "../interfaces";
 import { isCanvas } from "../utils";
+import { ConnectedNode } from "../interfaces";
+import useManager from "../manager/useManager";
 
-const useNode = () : CraftNodeAPI<ManagerMethods> => {
+const useNode = () : ConnectedNode => {
   const nodeContext = useContext(NodeContext);
   if ( !nodeContext ) {
     return {
       node: null,
-      manager: null,
-      connectTarget: useCallback((render) => render, [])
+      connectTarget: useCallback((render) => render, []),
+      setProp: () => {}
     }
   } else {
     const {id} = nodeContext;
-    const [state, manager] = useContext(ManagerContext);
-    const domRef = useRef(null);
-
-    const node = useMemo(() => {
-      return (
-        state.nodes[id]
-      )
-    }, [state.nodes[id]]);
-
+    const { node, setRef, setNodeEvent, setProp: setManagerProp} = useManager((state) => ({node: state.nodes[id]}));
     const connectTarget = useCallback((render, nodeMethods) => {
       return cloneElement(render, {
         onMouseDown: (e) => {
           e.stopPropagation();
-          if ( node.id !== "rootNode" ) manager.setNodeEvent("active", node.id)
+          if ( node.id !== "rootNode" ) setNodeEvent("active", node.id)
         },
         ref: (ref: any) => {
           if ( ref ) {
-            manager.setRef(id, "dom", ref);
+            setRef(id, "dom", ref);
             if ( nodeMethods ) { 
-              if ( nodeMethods.canDrag ) manager.setRef(id, "canDrag", nodeMethods.canDrag);
+              if ( nodeMethods.canDrag ) setRef(id, "canDrag", nodeMethods.canDrag);
               if ( isCanvas(node) ) {
-                if ( nodeMethods.incoming ) manager.setRef(id, "incoming", nodeMethods.incoming) 
-                if ( nodeMethods.outgoing ) manager.setRef(id, "outgoing", nodeMethods.outgoing);
+                if ( nodeMethods.incoming ) setRef(id, "incoming", nodeMethods.incoming) 
+                if ( nodeMethods.outgoing ) setRef(id, "outgoing", nodeMethods.outgoing);
               }
             }
           }
@@ -46,11 +38,15 @@ const useNode = () : CraftNodeAPI<ManagerMethods> => {
       });
     }, []);
 
+    const setProp = useCallback((prop, value) => {
+      setManagerProp(node.id, prop, value);
+    }, []);
+
     return useMemo(() => ({
       node,
-      manager,
-      connectTarget
-    }), [state.nodes[id].data])
+      connectTarget,
+      setProp
+    }), [node.data])
   }
 }
 
