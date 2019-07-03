@@ -2,6 +2,7 @@ import { NodeId, Node, CanvasNode } from "../interfaces";
 import { CallbacksFor, MethodRecordBase, ActionUnion } from "use-methods";
 import { ManagerState } from "../interfaces";
 import { isCanvas } from "../utils";
+import produce from "immer";
 
 const ManagerMethods = (state: ManagerState) => ({
   setRef: (id: NodeId, ref: "dom" | "outgoing" | "incoming" | "canDrag" | "props", value: any) => {
@@ -49,8 +50,8 @@ const ManagerMethods = (state: ManagerState) => ({
     state.nodes[targetId].data.closestParent = newParentId;
     currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
   },
-  setProp(id: NodeId, key: string, value: any) {
-    (state.nodes[id].data.props as any)[key] = value;
+  setProp(id: NodeId, cb: <T>(props: T) => void) {
+    state.nodes[id].data.props = produce(state.nodes[id].data.props, draft => cb(draft));
   },
 });
 
