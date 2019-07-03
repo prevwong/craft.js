@@ -1,32 +1,18 @@
-import React, { useMemo, useContext, useCallback, cloneElement } from "react";
+import React, { useMemo } from "react";
 import useNode from "./useNode";
-import { PublicManagerMethods, ManagerMethods } from "../manager/methods";
-import { ConnectedInternalNode, ConnectedPublicNode } from "../interfaces";
-import { RenderContext } from "../render/RenderContext";
-
-export function connectInternalNode<P extends ConnectedInternalNode, C>(
-  WrappedComponent: React.JSXElementConstructor<P>
-) {
-  type Props = JSX.LibraryManagedAttributes<C, Omit<P, keyof ConnectedInternalNode>>;
-  return (props: Props) => {
-    const { node, manager, connectTarget } = useNode();
-    const { onRender } = useContext(RenderContext);
-
-    return useMemo(() => <WrappedComponent craft={{node, manager, connectTarget}} renderer={{onRender}} {...props as any} />, [node]);
-  }
-}
+import { ConnectedNode } from "../interfaces";
 
 /**
- * Nearly identical to conenctInternalNode but hides internal manager methods 
+ * Nearly identical to conenctInternalNode but hides internal manager methods and renderer
  * @param WrappedComponent 
  */
-export function connectNode<P extends ConnectedPublicNode, C>(
+export function connectNode<P extends ConnectedNode, C>(
   WrappedComponent: React.JSXElementConstructor<P>
 ) {  
-  type Props = JSX.LibraryManagedAttributes<C, Omit<P, keyof ConnectedPublicNode>>;
+  type Props = JSX.LibraryManagedAttributes<C, Omit<P, keyof ConnectedNode>>;
   return (props: Props) => {
-    const {node, manager: {setNodeEvent, setRef, pushChildCanvas, ...manager}, connectTarget} = useNode();
-    return useMemo(() => <WrappedComponent craft={{node, manager, connectTarget}} {...props as any} />, [node]);
+    const target = useNode();
+    return useMemo(() => <WrappedComponent {...target} {...props as any} />, [target.node]);
   }
 }
 
