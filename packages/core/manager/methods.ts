@@ -1,4 +1,4 @@
-import { NodeId, Node, CanvasNode } from "../interfaces";
+import { NodeId, Node, CanvasNode, Nodes } from "../interfaces";
 import { CallbacksFor } from "use-methods";
 import { ManagerState } from "../interfaces";
 import produce from "immer";
@@ -30,6 +30,9 @@ const ManagerMethods = (state: ManagerState) => ({
     } else {
       state.events[eventType] = null;
     }
+  },
+  replaceNodes(nodes: Nodes) {
+    state.nodes = nodes;
   },
   add(parentId: NodeId, nodes: Node[] | Node) {
     if (parentId && !(state.nodes[parentId] as CanvasNode).data.nodes) (state.nodes[parentId] as CanvasNode).data.nodes = []
