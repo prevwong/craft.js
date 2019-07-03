@@ -16,7 +16,7 @@ class App extends React.Component {
           <Renderer onRender={(({render, node}) => {
             return (
               <React.Fragment>
-                {node.data.event.active ? <p>is active</p>: null}
+                {/* {node.data.event.active ? <p>is active</p>: null} */}
                 {render}
               </React.Fragment>
             )
