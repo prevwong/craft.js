@@ -1,14 +1,14 @@
-import { NodeId, Node, CanvasNode, Nodes } from "../interfaces";
+import { NodeId, Node, Nodes } from "../interfaces";
 import { CallbacksFor } from "use-methods";
 import { ManagerState } from "../interfaces";
 import produce from "immer";
 import { isCanvas } from "../nodes";
 
 const ManagerMethods = (state: ManagerState) => ({
-  setRef: (id: NodeId, ref: "dom" | "outgoing" | "incoming" | "canDrag" | "props", value: any) => {
-    if (!["dom", "outgoing", "incoming", "canDrag", "props"].includes(ref)) { throw new Error(); }
+  setRef: (id: NodeId, ref: "dom" | "outgoing" | "incoming" | "canDrag", value: any) => {
+    if (!["dom", "outgoing", "incoming", "canDrag"].includes(ref)) { throw new Error(); }
     let node = state.nodes[id];
-    if (isCanvas(node)) (node as CanvasNode).ref[ref] = value;
+    if (isCanvas(node)) node.ref[ref] = value;
     else node.ref[ref as "dom" | "canDrag"] = value;
   },
   pushChildCanvas(id: NodeId, canvasName: string, newNode: Node) {
@@ -35,17 +35,17 @@ const ManagerMethods = (state: ManagerState) => ({
     state.nodes = nodes;
   },
   add(parentId: NodeId, nodes: Node[] | Node) {
-    if (parentId && !(state.nodes[parentId] as CanvasNode).data.nodes) (state.nodes[parentId] as CanvasNode).data.nodes = []
+    if (parentId && !state.nodes[parentId].data.nodes) state.nodes[parentId].data.nodes = []
     if ( !Array.isArray(nodes) ) nodes = [nodes];
     (nodes as Node[]).forEach(node => {
       state.nodes[node.id] = node;
-      if (parentId) (state.nodes[parentId] as CanvasNode).data.nodes.push(node.id);
+      if (parentId) state.nodes[parentId].data.nodes.push(node.id);
     });
   },
   move(targetId: NodeId, newParentId: NodeId, index: number) {
     const targetNode = state.nodes[targetId],
-      currentParentNodes = (state.nodes[targetNode.data.parent] as CanvasNode).data.nodes,
-      newParentNodes = (state.nodes[newParentId] as CanvasNode).data.nodes;
+      currentParentNodes = state.nodes[targetNode.data.parent].data.nodes,
+      newParentNodes = state.nodes[newParentId].data.nodes;
 
     currentParentNodes[currentParentNodes.indexOf(targetId)] = "marked";
     newParentNodes.splice(index, 0, targetId);
@@ -54,7 +54,7 @@ const ManagerMethods = (state: ManagerState) => ({
     currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
   },
   setProp(id: NodeId, cb: <T>(props: T) => void) {
-    state.nodes[id].data.props = produce(state.nodes[id].data.props, draft => cb(draft));
+    cb(state.nodes[id].data.props);
   },
 });
 
