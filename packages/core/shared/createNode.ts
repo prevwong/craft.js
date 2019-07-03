@@ -8,7 +8,8 @@ export function createNode(component: React.ElementType, props: React.Props<any>
     node.id = id;
     node.data = {
       type: component as React.ElementType,
-      props: props,
+      name: (typeof component === "string") ? component : (component.displayName ? component.displayName :  component.name),
+      props: {...props},
       parent: parent,
       closestParent: parent,
       event: {
