@@ -20,6 +20,17 @@ export interface NodeData {
   _childCanvas?: CanvasMapping
 }
 
+export type ReduceCompType ={
+  resolvedName: string | {name: string}
+}
+
+export type ReducedComp = {
+  type: ReduceCompType
+  props: any
+}
+
+export type SerializedNodeData = Omit<NodeData, 'type' | 'event'> & ReducedComp 
+
 export interface CanvasNode extends Node {
   data: CanvasNodeData;
   ref: CanvasNodeRef
