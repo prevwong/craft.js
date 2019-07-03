@@ -2,7 +2,6 @@ import React from "react";
 import { ManagerContextProvider } from "./manager";
 import EventsManager from "./events";
 export * from "./events"
-export * from "./interfaces"
 export * from "./manager"
 export * from "./nodes"
 export * from "./render"
