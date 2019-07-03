@@ -38,9 +38,7 @@ const useNode = () : ConnectedNode => {
       });
     }, []);
 
-    const setProp = useCallback((prop, value) => {
-      setManagerProp(node.id, prop, value);
-    }, []);
+    const setProp = useCallback((cb) => setManagerProp(node.id, cb), []);
 
     return useMemo(() => ({
       node,
