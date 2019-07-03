@@ -1,8 +1,8 @@
 import { NodeId, Node, CanvasNode } from "../interfaces";
-import { CallbacksFor, MethodRecordBase, ActionUnion } from "use-methods";
+import { CallbacksFor } from "use-methods";
 import { ManagerState } from "../interfaces";
-import { isCanvas } from "../utils";
 import produce from "immer";
+import { isCanvas } from "../nodes";
 
 const ManagerMethods = (state: ManagerState) => ({
   setRef: (id: NodeId, ref: "dom" | "outgoing" | "incoming" | "canDrag" | "props", value: any) => {
