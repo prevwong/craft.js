@@ -1,27 +1,50 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useMemo } from "react";
 import { NodeElement, Canvas, mapChildrenToNodes } from "../nodes";
-import { ManagerContext } from "../manager";
+import { ManagerContext, useManager } from "../manager";
 import { RenderContext, RenderContextProvider } from "./RenderContext";
+import { ReactElement, NodeId } from "~types";
+import { NodeData, Nodes, SerializedNodeData, CanvasNode, CanvasNodeData } from "../interfaces";
+import { deserializeNode } from "../shared/deserializeNode";
+import { createNode } from "../shared/createNode";
+const invariant = require("invariant");
 
+export type Renderer = {
+  nodes?: Record<NodeId, SerializedNodeData>
+  resolvers?: Function
+} & RenderContext
 
-export const Renderer: React.FC<RenderContext> = ({ 
+export const Renderer: React.FC<Renderer> = ({ 
   children, 
-  onRender = ({render}) => render
+  onRender = ({render}) => render,
+  resolvers = () => {},
+  nodes = null 
 }) => {
-  const [state, methods] = useContext(ManagerContext);
+  const {rootNode, add, replaceNodes} = useManager((state) => ({rootNode: state.nodes["rootNode"]}));
   useEffect(() => {
-    let node = mapChildrenToNodes(<Canvas id="rootCanvas" style={{background:"#ccc", padding:"20px 0"}}>{children}</Canvas>, null, "rootNode");
-    methods.add(null, node);
+    if ( !nodes ) { 
+      const rootCanvas = React.Children.only(children) as ReactElement;
+      invariant(rootCanvas.type  && rootCanvas.type == Canvas, "The immediate child of <Renderer /> has to be a Canvas");
+      let node = mapChildrenToNodes(rootCanvas, null, "rootNode");
+      add(null, node);
+    } else {
+      const rehydratedNodes = Object.keys(nodes).reduce((accum, id) => {
+        const deserialized = deserializeNode(nodes[id], resolvers);
+        // TODO: Refactor createNode()
+        accum[id] = createNode(deserialized.type, deserialized.props, id, deserialized.parent, deserialized.closestParent,  (deserialized as CanvasNodeData).nodes);
+        return accum;
+      }, {} as Nodes);
+      replaceNodes(rehydratedNodes);
+    }
   }, []);
 
-  return (
+  return useMemo(() => (
     <RenderContextProvider onRender={onRender}>
      {
-        state.nodes["rootNode"] ? (
+        rootNode ? (
           <NodeElement id="rootNode" />
         ) : null
      }
     </RenderContextProvider>
-  )
+  ), [rootNode])
 }
 
