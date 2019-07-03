@@ -1,6 +1,4 @@
-import React, { useContext, useMemo } from "react";
-import { ManagerContext } from "./context";
-import { ManagerState } from "../interfaces";
+import React from "react";
 import { StateAndCallbacksFor } from "use-methods";
 import ManagerMethods from "./methods";
 import useManager from "./useManager";

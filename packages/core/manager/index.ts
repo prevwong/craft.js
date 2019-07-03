@@ -1,2 +1,2 @@
 export * from "./context";
-export * from "./connector";
+export * from "./connectors";
