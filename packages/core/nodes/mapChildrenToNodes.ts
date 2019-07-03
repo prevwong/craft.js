@@ -2,6 +2,7 @@ import { NodeId, Node } from "../interfaces";
 import React, { ReactNode, Fragment } from "react";
 import { Canvas } from "./Canvas";
 import { createNode } from "../shared/createNode";
+import { create } from "domain";
 const shortid = require("shortid");
 
 
@@ -13,11 +14,16 @@ export function mapChildrenToNodes(children: ReactNode, parent?: NodeId, hardId?
       }
       let { type, props } = child;
 
-      if ( ["string", "function"].includes(typeof(type))) { 
+      if (["string", "function"].includes(typeof (type))) {
         const prefix = (type as Function) === Canvas ? "canvas" : "node";
         const id = hardId ? hardId : `${prefix}-${shortid.generate()}`;
 
-        let node = createNode(type as React.ElementType, props, id, parent);
+        let node = createNode({
+          type: type as React.ElementType,
+          props,
+          parent
+        }, id);
+        
         result.push(node);
         return result;
       } else {

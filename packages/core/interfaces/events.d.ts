@@ -1,4 +1,4 @@
-import { NodeId, CanvasNode, Node } from "./nodes";
+import { NodeId, Node } from "./nodes";
 
 export interface NodeInfo extends DOMInfo {
   id?: NodeId;
@@ -29,7 +29,7 @@ export interface DOMInfo {
 
 
 export interface DropAction {
-  parent: CanvasNode;
+  parent: Node;
   index: number;
   where: string;
 }

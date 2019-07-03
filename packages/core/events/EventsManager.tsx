@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { CanvasNode, PlaceholderInfo, Nodes, Node } from "../interfaces";
+import { PlaceholderInfo, Nodes, Node } from "../interfaces";
 import { NodeId  } from "~types";
 import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
@@ -18,7 +18,7 @@ export const EventsManager: React.FC = ({ children }) => {
     const [nearestTargetId, possibleNodes] = getNearestTarget(e);
     if (nearestTargetId) {
       const targetNode = nodes[nearestTargetId],
-        targetParent = (targetNode as CanvasNode).data.nodes ? targetNode as CanvasNode : nodes[targetNode.data.parent] as CanvasNode;
+        targetParent = targetNode.data.nodes ? targetNode : nodes[targetNode.data.parent];
 
       const dimensionsInContainer = targetParent.data.nodes.map((id: NodeId) => {
         return {
@@ -52,14 +52,14 @@ export const EventsManager: React.FC = ({ children }) => {
     
     // first check if the parent canvas allows the dragged node from going out
     const { parent } = draggedNode.data;
-    if ( !(nodes[parent] as CanvasNode).ref.outgoing(draggedNode) ) {
+    if ( !nodes[parent].ref.outgoing(draggedNode) ) {
       // if the parent node does not allow the dragged node from going out then, limit potential nodes to those within the parent;
       return query.getDeepNodes(parent);
     }
 
     const canvases = query.getAllCanvas();
     const nodesToConsider = canvases.reduce((res: NodeId[], id) => {
-      const canvas = nodes[id] as CanvasNode;
+      const canvas = nodes[id];
       if ( canvas.ref.incoming(draggedNode) ) {
         if ( !res.includes(canvas.id) ) res = [...res, canvas.id];
         res = [...res, ...canvas.data.nodes];

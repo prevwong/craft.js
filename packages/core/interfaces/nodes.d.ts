@@ -12,12 +12,40 @@ export interface Node  {
 }
 
 export interface NodeData {
-  props: React.Props<any>;
+  props: any,
   type: React.ElementType;
-  parent: NodeId;
-  closestParent: NodeId;
+  parent?: NodeId;
+  closestParent?: NodeId;
   event: NodeEvent;
   _childCanvas?: CanvasMapping
+  nodes?: NodeId[]
+}
+
+// export interface CanvasNode extends Node {
+//   data: CanvasNodeData;
+//   ref: CanvasNodeRef
+// }
+
+// export interface CanvasNodeData extends NodeData {
+//   nodes: NodeId[]
+// }
+
+export interface NodeRef {
+  dom: HTMLElement;
+  canDrag(node: Node): void;
+  incoming?(incoming: Node): boolean;
+  outgoing?(outgoing: Node): boolean;
+}
+
+// export interface CanvasNodeRef extends NodeRef {
+//   incoming(incoming: Node): boolean;
+//   outgoing(outgoing: Node): boolean;
+// }
+
+export interface NodeEvent {
+  active?: boolean;
+  dragging?: boolean;
+  hover?: boolean;
 }
 
 export type ReduceCompType ={
@@ -30,32 +58,6 @@ export type ReducedComp = {
 }
 
 export type SerializedNodeData = Omit<NodeData, 'type' | 'event'> & ReducedComp 
-
-export interface CanvasNode extends Node {
-  data: CanvasNodeData;
-  ref: CanvasNodeRef
-}
-
-export interface CanvasNodeData extends NodeData {
-  nodes: NodeId[]
-}
-
-export interface NodeRef {
-  dom: HTMLElement;
-  props: any
-  canDrag(node: Node): void;
-}
-
-export interface CanvasNodeRef extends NodeRef {
-  incoming(incoming: Node): boolean;
-  outgoing(outgoing: Node): boolean;
-}
-
-export interface NodeEvent {
-  active?: boolean;
-  dragging?: boolean;
-  hover?: boolean;
-}
 
 export type Nodes = {
   [key: string]: Node

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { CanvasNode, NodeId, Node } from "../interfaces";
+import { NodeId, Node } from "../interfaces";
 import { NodeElement } from "./NodeElement";
 import { RenderNodeToElement } from "../render/RenderNode";
 import {useNode, mapChildrenToNodes} from "../nodes";
@@ -27,7 +27,7 @@ export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
     let canvasId = `canvas-${shortid.generate()}`;
 
     if (node.data.type === Canvas) {
-      if ( !(node as CanvasNode).data.nodes ) {  // don't recreate nodes from children after initial hydration
+      if ( !node.data.nodes ) {  // don't recreate nodes from children after initial hydration
         canvasId = internal.current.id = node.id;
         const childNodes = mapChildrenToNodes(children, canvasId);
         add(node.id, childNodes);
@@ -35,7 +35,10 @@ export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
     } else {
       if (!id) throw new Error("Root Canvas cannot ommit `id` prop");
       if (!node.data._childCanvas || (node.data._childCanvas && !node.data._childCanvas[id])) {
-        const rootNode = createNode(Canvas, { is, children } as any, canvasId, null);
+        const rootNode = createNode({
+          type: Canvas,
+          props: {is, children},
+        }, canvasId);
         internal.current.id = canvasId;
         pushChildCanvas(node.id, id, rootNode);
       } else {
@@ -52,7 +55,7 @@ export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
             {
               <React.Fragment>
                 {
-                  (node as CanvasNode).data.nodes && (node as CanvasNode).data.nodes.map((id => (
+                  node.data.nodes && node.data.nodes.map((id => (
                     <NodeElement id={id} key={id} />
                   )))
                 }

@@ -3,7 +3,7 @@ import { NodeElement, Canvas, mapChildrenToNodes } from "../nodes";
 import { ManagerContext, useManager } from "../manager";
 import { RenderContext, RenderContextProvider } from "./RenderContext";
 import { ReactElement, NodeId } from "~types";
-import { NodeData, Nodes, SerializedNodeData, CanvasNode, CanvasNodeData } from "../interfaces";
+import { NodeData, Nodes, SerializedNodeData } from "../interfaces";
 import { deserializeNode } from "../shared/deserializeNode";
 import { createNode } from "../shared/createNode";
 const invariant = require("invariant");
@@ -28,9 +28,16 @@ export const Renderer: React.FC<Renderer> = ({
       add(null, node);
     } else {
       const rehydratedNodes = Object.keys(nodes).reduce((accum, id) => {
-        const deserialized = deserializeNode(nodes[id], resolvers);
+        const {type, props, parent, closestParent, nodes: childNodes} = deserializeNode(nodes[id], resolvers);
         // TODO: Refactor createNode()
-        accum[id] = createNode(deserialized.type, deserialized.props, id, deserialized.parent, deserialized.closestParent,  (deserialized as CanvasNodeData).nodes);
+        accum[id] = createNode({
+          type,
+          props,
+          parent, 
+          closestParent,
+          nodes: childNodes
+        }, id);
+
         return accum;
       }, {} as Nodes);
       replaceNodes(rehydratedNodes);
