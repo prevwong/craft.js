@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import useNode from "./useNode";
+import {useNode} from "../nodes";
 import { ConnectedNode } from "../interfaces";
 
 /**

@@ -1,9 +1,6 @@
 import React, { useEffect, useContext } from "react";
-import { mapChildrenToNodes } from "~packages/core/utils";
-import { NodeElement } from "../nodes/NodeElement";
+import { NodeElement, Canvas, mapChildrenToNodes } from "../nodes";
 import { ManagerContext } from "../manager";
-import { Canvas } from "../nodes/Canvas";
-import { Node } from "../interfaces";
 import { RenderContext, RenderContextProvider } from "./RenderContext";
 
 

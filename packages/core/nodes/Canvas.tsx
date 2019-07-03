@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo } from "react";
-import { mapChildrenToNodes, createNode } from "~packages/core/utils/index.tsx";
 import { CanvasNode, NodeId, Node } from "../interfaces";
 import { NodeElement } from "./NodeElement";
 import { RenderNodeToElement } from "../render/RenderNode";
-import useNode from "./useNode";
+import {useNode, mapChildrenToNodes} from "../nodes";
 import useManager from "../manager/useManager";
+import { createNode } from "../shared/createNode";
 
 const shortid = require("shortid");
 
@@ -14,6 +14,9 @@ export interface Canvas extends React.Props<any> {
   className?: any,
   is?: React.ElementType
 }
+
+
+export const isCanvas = (node: Node) => node.data.type === Canvas
 
 export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
   const {add, pushChildCanvas} = useManager();
