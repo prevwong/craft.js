@@ -22,7 +22,7 @@ class App extends React.Component {
             )
           })}>
             <h1>Lol</h1>
-            <MsgBox text="hi" />
+            <MsgBox text="hi">hII</MsgBox>
             <h2>Hi world</h2>
           </Renderer>
         </Craft>

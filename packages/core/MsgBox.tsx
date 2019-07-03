@@ -9,14 +9,15 @@ export type MsgBox = {
   text: string
 } & ConnectedNode
 
-const Msg = ({node, setProp, connectTarget, text}: MsgBox) => {
+const Msg: React.FC<MsgBox> = ({node, setProp, connectTarget, children, text}) => {
   console.log("Re0render")
   return connectTarget(
     <div className="message-box" >
-      <h2>MESSAGE{text}</h2>
+      <h2>MESSAGE{children}</h2>
       <a onClick={() => {
-        setProp('text', 'WHAAAT')
-        // console.log(node.ref.props)
+        setProp((props) => {
+          props.children = <a>Whaat</a>
+        });
       }}>Click me</a>
     </div>
   )
