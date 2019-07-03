@@ -2,7 +2,7 @@ import { Nodes, CanvasNode, NodeId, Node, NodeData } from "../interfaces";
 import { Methods, ActionUnion, ActionByType } from "use-methods";
 import { isCanvas, Canvas } from "../nodes";
 import { Children } from "react";
-import { serializeReducedNode } from "../shared/serializeReducedNode";
+import { serializeNode } from "../shared/serializeNode";
 
 /**
  * Manager methods used to query nodes 
@@ -70,10 +70,10 @@ export const QueryMethods = (nodes: Nodes) => ({
   serialize() {
     const simplifiedNodes = Object.keys(nodes).reduce((result: any, id: NodeId ) => {
       const {data: {event, ...data}} = nodes[id];
-      result[id] = serializeReducedNode({...data})
+      result[id] = serializeNode({...data})
       return result;
     }, {});
-    
+
     console.log(JSON.stringify(simplifiedNodes))
   }
 });
