@@ -1,6 +1,5 @@
-import { cloneElement, useContext, useCallback, useMemo, useRef, useEffect, useLayoutEffect } from "react";
+import { cloneElement, useContext, useCallback, useMemo } from "react";
 import { NodeContext } from "./NodeContext";
-import { ManagerContext } from "../manager";
 import { isCanvas } from "../utils";
 import { ConnectedNode } from "../interfaces";
 import useManager from "../manager/useManager";

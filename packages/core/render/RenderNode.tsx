@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React from "react";
 import { Canvas } from "../nodes/Canvas";
 import { isDOMComponent } from "../utils";
-import {  ConnectedInternalNode } from "../interfaces";
 import useNode from "../nodes/useNode";
 import { useRenderer } from "./RenderContext";
 
