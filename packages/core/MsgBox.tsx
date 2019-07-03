@@ -1,21 +1,23 @@
 import React from "react";
 import { Canvas } from "./nodes/Canvas";
 import { Heading } from "./Heading";
-import { PublicManagerMethods } from "./manager/methods";
 import { connectNode } from "./nodes/connectors";
 import MsgCanvas from "./MsgCanvas";
-import { ConnectedPublicNode } from "./interfaces";
+import { ConnectedNode } from "./interfaces";
 
 export type MsgBox = {
   text: string
-} & ConnectedPublicNode
+} & ConnectedNode
 
-const Msg = ({craft:{node, manager, connectTarget}, text}: MsgBox) => {
-  console.log("render33")
+const Msg = ({node, setProp, connectTarget, text}: MsgBox) => {
+  console.log("Re0render")
   return connectTarget(
     <div className="message-box" >
       <h2>MESSAGE{text}</h2>
-      
+      <a onClick={() => {
+        setProp('text', 'WHAAAT')
+        // console.log(node.ref.props)
+      }}>Click me</a>
     </div>
   )
 }

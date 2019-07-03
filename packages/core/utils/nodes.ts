@@ -16,7 +16,7 @@ export const createNode = (component: React.ElementType, props: React.Props<any>
     node.data = {
       type: component as React.ElementType,
       props: props,
-      parent :parent,
+      parent: parent,
       closestParent: parent,
       event: {
         active: false,
@@ -24,10 +24,13 @@ export const createNode = (component: React.ElementType, props: React.Props<any>
         hover: false
       }
     };
+
     node.ref = {
       dom: null,
-      canDrag: () => true
+      canDrag: () => true,
+      props: null
     };
+
     if ( isCanvas(node) ) {
       (node as CanvasNode).ref.incoming = () => true;
       (node as CanvasNode).ref.outgoing = () => true;
@@ -69,26 +72,25 @@ export const mapChildrenToNodes = (children: ReactNode, parent?: NodeId, hardId?
 };
 
 
+// export const makePropsReactive = (nodes: Nodes, cb: Function) => {
+//   Object.keys(nodes).forEach(id => {
+//     const node = nodes[id];
+//     let {props} = node.data;
+//     const reactiveProps = Object.keys(props).reduce((result: any, key) => {
+//       const value = (props as any)[key];
+//       if ( key !== "children" ) {
+//         defineReactiveProperty(result, key, value, () => {
+//           cb()
+//         });
+//       } else {
+//         result[key] = value
+//       }
 
-export const makePropsReactive = (nodes: Nodes, cb: Function) => {
-  Object.keys(nodes).forEach(id => {
-    const node = nodes[id];
-    let {props} = node.data;
-    const reactiveProps = Object.keys(props).reduce((result: any, key) => {
-      const value = (props as any)[key];
-      if ( key !== "children" ) {
-        defineReactiveProperty(result, key, value, () => {
-          cb()
-        });
-      } else {
-        result[key] = value
-      }
-
-      return result;
-    }, {});
-    node.data.props = reactiveProps;
-  })
-}
+//       return result;
+//     }, {});
+//     node.data.props = reactiveProps;
+//   })
+// }
 
 export class TextNode extends React.Component<{text: string}> {
   render() {

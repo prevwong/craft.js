@@ -1,27 +1,19 @@
 import React, { useEffect, useRef, useMemo } from "react";
 import { Canvas } from "../nodes/Canvas";
-import { PublicManagerMethods } from "../manager/methods";
 import { isDOMComponent } from "../utils";
-import {  connectNode, connectInternalNode } from "../nodes/connectors";
-import { ConnectedPublicNode, ConnectedInternalNode } from "../interfaces";
+import {  ConnectedInternalNode } from "../interfaces";
+import useNode from "../nodes/useNode";
+import { useRenderer } from "./RenderContext";
 
-export type Render = {
-  is: React.ComponentType<any>
-} & ConnectedInternalNode
+export const RenderNodeToElement: React.FC<any> = React.memo(({ is, ...injectedProps}) => {
+  const {node, connectTarget} = useNode();
+  const {onRender} = useRenderer();
 
-const RenderComp = ({node, render}: any) => {
-  return (
-    {render}
-  )
-}
-
-const Render: React.FC<any> = React.memo(({craft:{node, connectTarget, manager}, renderer, is, ...injectedProps}: Render) => {
   let { type, props } = node.data;
   let {children, ...propsWithoutChildren} = props;
 
   let Comp = is ? is : type;
 
-  
   if ( type === Canvas && !is ) {
     return <Canvas  {...props} {...injectedProps} />;
   } 
@@ -35,7 +27,6 @@ const Render: React.FC<any> = React.memo(({craft:{node, connectTarget, manager},
   let render = React.cloneElement(<Comp {...availableProps} {...injectedProps} />);
   if ( isDOMComponent(Comp)) render = connectTarget(render);
 
-  return React.createElement(renderer.onRender, {render, node}, null);
+  return React.createElement(onRender, {render, node}, null);
 });
 
-export const RenderNodeToElement = connectInternalNode(Render);

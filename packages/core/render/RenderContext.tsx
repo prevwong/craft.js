@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useMemo } from "react";
 import { Node } from "../interfaces";
 
 export type RenderContext = {
@@ -13,4 +13,10 @@ export const RenderContextProvider: React.FC<RenderContext> = ({ children, onRen
       {children}
     </RenderContext.Provider>
   )
+}
+
+export const useRenderer = () => {
+  const render = useContext(RenderContext);
+
+  return useMemo(() => (render), [render]);
 }

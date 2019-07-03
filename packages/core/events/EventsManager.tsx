@@ -1,25 +1,20 @@
-import { connectManager, ConnectedManager } from "../manager";
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { CanvasNode, PlaceholderInfo, Nodes, Node } from "../interfaces";
-import { NodeId, DropAction } from "~types";
+import { NodeId  } from "~types";
 import { getDOMInfo, getDeepChildrenNodes, getAllCanvas } from "../utils";
 import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
 import { useEventListener } from "../utils/hooks";
 import RenderPlaceholder from "../render/RenderPlaceholder";
-import { Canvas } from "../nodes";
+import useManager from "../manager/useManager";
 
-export type EventsManager = { 
-  children: React.ReactNode
-} & ConnectedManager
-
-export const EventsManager = connectManager(({ children, manager: [state, methods] }: EventsManager) => {
+export const EventsManager: React.FC = ({ children }) => {
+  const { nodes, events, setNodeEvent, move } = useManager((state) => state);
   const [placeholder, setPlaceholder] = useState(null);
   const placeholderRef = useRef<PlaceholderInfo>(null);
   const isMousePressed = useRef<boolean>(null);
 
   const placeBestPosition = (e: MouseEvent) => {
-    const { nodes } = state;
     const [nearestTargetId, possibleNodes] = getNearestTarget(e);
     if (nearestTargetId) {
       const targetNode = nodes[nearestTargetId],
@@ -76,11 +71,10 @@ export const EventsManager = connectManager(({ children, manager: [state, method
   }
 
   const getNearestTarget = (e: MouseEvent): [NodeId, NodeId[]]=> {
-    const { nodes, events } = state;
     const pos = { x: e.clientX, y: e.clientY };
 
     const deepChildren = getDeepChildrenNodes(nodes, events.active.id);
-    const possibleNodeIds = getNodesInAcceptedCanvas(nodes, state.events.active);
+    const possibleNodeIds = getNodesInAcceptedCanvas(nodes, events.active);
     const nodesWithinBounds = possibleNodeIds.filter(nodeId => {
       return nodes[nodeId].ref.dom && 
       !deepChildren.includes(nodeId) 
@@ -100,7 +94,7 @@ export const EventsManager = connectManager(({ children, manager: [state, method
 
   const onDrag = useCallback((e: MouseEvent) => {
     if (isMousePressed.current === true) {
-      const { left, right, top, bottom } = getDOMInfo(state.events.active.ref.dom);
+      const { left, right, top, bottom } = getDOMInfo(events.active.ref.dom);
       if (
         !(
           e.clientX >= left &&
@@ -114,36 +108,36 @@ export const EventsManager = connectManager(({ children, manager: [state, method
         if (!!selection) {
           selection.empty ? selection.empty() : selection.removeAllRanges();
         }
-        if (!state.events.dragging) {
-          methods.setNodeEvent("dragging", state.events.active.id);
+        if (!events.dragging) {
+          setNodeEvent("dragging", events.active.id);
         } else {
           placeBestPosition(e);
         }
       }
     }
-  }, [state.events.active, state.events.dragging]);
+  }, [events.active, events.dragging]);
 
   const onMouseUp = useCallback((e: MouseEvent) => {
-    methods.setNodeEvent("dragging", null);
+    setNodeEvent("dragging", null);
     isMousePressed.current = false;
-    if (state.events.dragging) {
-      const { id: dragId } = state.events.dragging;
+    if (events.dragging) {
+      const { id: dragId } = events.dragging;
       const { placement } = placeholderRef.current;
       const { parent, index, where } = placement;
       const { id: parentId, data:{nodes} } = parent;
 
-      methods.move(dragId, parentId, index + (where === "after" ? 1 : 0));
+      move(dragId, parentId, index + (where === "after" ? 1 : 0));
     }
-  }, [state.events.dragging]);
+  }, [events.dragging]);
 
 
   const onMouseDown = useCallback(() => {
-    methods.setNodeEvent("active", null)
+    setNodeEvent("active", null)
   }, []);
 
   useEffect(() => {
-    if ( state.events.active ) isMousePressed.current = true;
-  }, [state.events.active]);
+    if ( events.active ) isMousePressed.current = true;
+  }, [events.active]);
 
   useEventListener("mousemove", onDrag);
   useEventListener("mouseup", onMouseUp);
@@ -152,9 +146,9 @@ export const EventsManager = connectManager(({ children, manager: [state, method
 return (
   <React.Fragment>
     {
-      placeholder ? <RenderPlaceholder isActive={!!state.events.dragging} placeholder={placeholder} /> : null
+      placeholder ? <RenderPlaceholder isActive={!!events.dragging} placeholder={placeholder} /> : null
     }
     {children}
   </React.Fragment>
 )
-})
+}

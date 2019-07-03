@@ -1,5 +1,5 @@
 import React from "react";
-import { ManagerMethods, PublicManagerMethods } from "../manager/methods";
+import { ManagerMethods } from "../manager/methods";
 import { RenderContext } from "../render/RenderContext";
 
 export type NodeId = string;
@@ -8,6 +8,7 @@ export interface Node  {
   id: NodeId;
   data: NodeData;
   ref: NodeRef;
+  props: any;
 }
 
 export interface NodeData {
@@ -30,6 +31,7 @@ export interface CanvasNodeData extends NodeData {
 
 export interface NodeRef {
   dom: HTMLElement;
+  props: any
   canDrag(node: Node): void;
 }
 
@@ -54,19 +56,9 @@ export interface CanvasMapping {
 }
 
 
-export type CraftNodeAPI<M extends ManagerMethods | PublicManagerMethods> = {
+export type ConnectedNode = {
   node: Node;
-  manager: M
-  connectTarget: Function
+  connectTarget: Function,
+  setProp: Function
 } 
 
-
-export type ConnectedNode<M extends ManagerMethods | PublicManagerMethods> = {
-  craft: CraftNodeAPI<M>
-}
-
-export type ConnectedInternalNode = {
-  renderer: RenderContext;
-} & ConnectedNode<ManagerMethods>
-
-export type ConnectedPublicNode = ConnectedNode<PublicManagerMethods>;
