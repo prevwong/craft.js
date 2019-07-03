@@ -1,15 +1,15 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { CanvasNode, PlaceholderInfo, Nodes, Node } from "../interfaces";
 import { NodeId  } from "~types";
-import { getDOMInfo, getDeepChildrenNodes, getAllCanvas } from "../utils";
 import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
-import { useEventListener } from "../utils/hooks";
 import RenderPlaceholder from "../render/RenderPlaceholder";
 import useManager from "../manager/useManager";
+import { getDOMInfo } from "../shared/dom";
+import { useEventListener } from "../shared/useEventListener";
 
 export const EventsManager: React.FC = ({ children }) => {
-  const { nodes, events, setNodeEvent, move } = useManager((state) => state);
+  const { nodes, events, setNodeEvent, move, query } = useManager((state) => state);
   const [placeholder, setPlaceholder] = useState(null);
   const placeholderRef = useRef<PlaceholderInfo>(null);
   const isMousePressed = useRef<boolean>(null);
@@ -54,10 +54,10 @@ export const EventsManager: React.FC = ({ children }) => {
     const { parent } = draggedNode.data;
     if ( !(nodes[parent] as CanvasNode).ref.outgoing(draggedNode) ) {
       // if the parent node does not allow the dragged node from going out then, limit potential nodes to those within the parent;
-      return getDeepChildrenNodes(nodes, parent);
+      return query.getDeepNodes(parent);
     }
 
-    const canvases = getAllCanvas(nodes);
+    const canvases = query.getAllCanvas();
     const nodesToConsider = canvases.reduce((res: NodeId[], id) => {
       const canvas = nodes[id] as CanvasNode;
       if ( canvas.ref.incoming(draggedNode) ) {
@@ -73,7 +73,7 @@ export const EventsManager: React.FC = ({ children }) => {
   const getNearestTarget = (e: MouseEvent): [NodeId, NodeId[]]=> {
     const pos = { x: e.clientX, y: e.clientY };
 
-    const deepChildren = getDeepChildrenNodes(nodes, events.active.id);
+    const deepChildren = query.getDeepNodes(events.active.id);
     const possibleNodeIds = getNodesInAcceptedCanvas(nodes, events.active);
     const nodesWithinBounds = possibleNodeIds.filter(nodeId => {
       return nodes[nodeId].ref.dom && 

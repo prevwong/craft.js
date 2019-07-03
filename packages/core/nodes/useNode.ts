@@ -1,10 +1,10 @@
 import { cloneElement, useContext, useCallback, useMemo } from "react";
 import { NodeContext } from "./NodeContext";
-import { isCanvas } from "../utils";
 import { ConnectedNode } from "../interfaces";
 import useManager from "../manager/useManager";
+import { isCanvas } from "../nodes";
 
-const useNode = () : ConnectedNode => {
+export function useNode() : ConnectedNode {
   const nodeContext = useContext(NodeContext);
   if ( !nodeContext ) {
     return {
@@ -47,4 +47,3 @@ const useNode = () : ConnectedNode => {
   }
 }
 
-export default useNode;
