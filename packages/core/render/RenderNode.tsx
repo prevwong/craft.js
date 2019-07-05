@@ -7,7 +7,6 @@ export const RenderNodeToElement: React.FC<any> = React.memo(({ is, ...injectedP
   const {onRender} = useRenderer();
 
   let { type, props } = node.data;
-  let {children, ...propsWithoutChildren} = props;
 
   let Comp = is ? is : type;
 
