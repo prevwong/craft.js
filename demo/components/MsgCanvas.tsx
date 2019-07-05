@@ -8,7 +8,7 @@ type MsgCanvas = {
 
 const MsgCanvas: React.FC<MsgCanvas> = ({children, node, connectTarget}: MsgCanvas) => {
   return connectTarget(
-    <hgroup className="msg-canvas">{children}</hgroup>,
+    <hgroup className="msg-canvas" style={{ background: '#999', padding: '20px 0'}}>{children}</hgroup>,
     {
       incoming: (incomingNode: Node) => {
         return true;

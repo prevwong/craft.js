@@ -1,6 +1,7 @@
 import React from "react";
 import { ConnectedNode } from "~packages/core/interfaces";
-import { connectNode } from "~packages/core/nodes";
+import { connectNode, Canvas } from "~packages/core/nodes";
+import MsgCanvas from "./MsgCanvas";
 
 export type MsgBox = {
   text: string
@@ -15,6 +16,9 @@ const Msg: React.FC<MsgBox> = ({node, setProp, connectTarget, children, text}) =
           props.text = "whut"
         });
       }}>Click me</a>
+      <Canvas id="Msgca" is={MsgCanvas}>
+        <h2>Hi</h2>
+      </Canvas>
     </div>
   )
 }
