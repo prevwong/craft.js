@@ -35,8 +35,8 @@ export interface NodeEvent {
   hover?: boolean;
 }
 
-export type ReduceCompType ={
-  resolvedName: string | {name: string}
+export type ReduceCompType = string | {
+  resolvedName: string
 }
 
 export type ReducedComp = {
@@ -56,3 +56,7 @@ export type ConnectedNode = {
   connectTarget: Function,
   setProp: Function
 } 
+
+export type ResolverFunction = (name: string) => React.ElementType;
+export type ResolverMap = Record<string, React.ElementType>;
+export type Resolver = ResolverFunction | ResolverMap;
