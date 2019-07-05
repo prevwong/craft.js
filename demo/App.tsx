@@ -20,8 +20,8 @@ export default class App extends React.Component {
                 </React.Fragment>
               )
             })}
-            resolvers={(componentName: string) => {
-              const map: Record<string, Function> = {
+            resolver={(componentName: string) => {
+              const map: Record<string, React.ElementType> = {
                 Canvas,
                 Msg: MsgBox
               }
