@@ -1,6 +1,7 @@
 import React from "react";
 import { ManagerMethods } from "../manager/methods";
 import { RenderContext } from "../render/RenderContext";
+import { NodeProvider } from "../nodes/NodeContext";
 
 export type NodeId = string;
 
@@ -45,14 +46,10 @@ export type ReducedComp = {
 
 export type SerializedNodeData = Omit<NodeData, 'type' | 'event'> & ReducedComp 
 
-export type Nodes = {
-  [key: string]: Node
-}
+export type Nodes = Record<NodeId, Node>
 
 
-export interface CanvasMapping {
-  [key: string]: NodeId;
-}
+export type CanvasMapping = Record<string, NodeId>
 
 export type ConnectedNode = {
   node: Node;
