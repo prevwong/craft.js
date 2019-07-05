@@ -1,8 +1,8 @@
-import React, { useState, useRef, useCallback, useEffect, useMemo } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { PlaceholderInfo, Nodes, Node, NodeId } from "../interfaces";
 import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
-import RenderPlaceholder from "../render/RenderPlaceholder";
+import {RenderPlaceholder} from "../render/RenderPlaceholder";
 import {useManager} from "../manager";
 import { getDOMInfo } from "../shared/dom";
 
@@ -148,7 +148,7 @@ export const EventsManager: React.FC = ({ children }) => {
 return (
   <React.Fragment>
     {
-      placeholder ? <RenderPlaceholder isActive={!!events.dragging} placeholder={placeholder} /> : null
+      placeholder? <RenderPlaceholder placeholder = { placeholder } /> : null
     }
     {children}
   </React.Fragment>
