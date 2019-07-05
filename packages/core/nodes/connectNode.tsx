@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
-import {useNode} from "../nodes";
+import {useNode} from ".";
 import { ConnectedNode } from "../interfaces";
+
 
 export function connectNode<P extends ConnectedNode, C>(
   WrappedComponent: React.JSXElementConstructor<P>
