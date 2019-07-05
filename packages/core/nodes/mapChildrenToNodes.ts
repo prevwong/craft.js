@@ -2,9 +2,8 @@ import { NodeId, Node } from "../interfaces";
 import React, { ReactNode, Fragment } from "react";
 import { Canvas } from "./Canvas";
 import { createNode } from "../shared/createNode";
-import { create } from "domain";
 const shortid = require("shortid");
-
+const invariant = require('invariant');
 
 export function mapChildrenToNodes(children: ReactNode, parent?: NodeId, hardId?: string): Node[] {
   return React.Children.toArray(children).reduce(
@@ -26,9 +25,9 @@ export function mapChildrenToNodes(children: ReactNode, parent?: NodeId, hardId?
         
         result.push(node);
         return result;
-      } else {
-        throw new Error("Invalid <Canvas> child provided. Expected simple JSX element or React Component.");
       }
+      invariant(["string", "function"].includes(typeof (type)), "Invalid <Canvas> child provided. Expected simple JSX element or React Component.");
+
     },
     []
   ) as Node[]

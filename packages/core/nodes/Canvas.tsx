@@ -5,8 +5,8 @@ import { RenderNodeToElement } from "../render/RenderNode";
 import {useNode, mapChildrenToNodes} from "../nodes";
 import {useManager} from "../manager";
 import { createNode } from "../shared/createNode";
-
 const shortid = require("shortid");
+const invariant = require("invariant");
 
 export interface Canvas extends React.Props<any> {
   id?: NodeId,
@@ -33,7 +33,7 @@ export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
         add(node.id, childNodes);
       }
     } else {
-      if (!id) throw new Error("Root Canvas cannot ommit `id` prop");
+      invariant(id, 'Root canvas cannot ommit `id` prop')
       if (!node.data._childCanvas || (node.data._childCanvas && !node.data._childCanvas[id])) {
         const rootNode = createNode({
           type: Canvas,
