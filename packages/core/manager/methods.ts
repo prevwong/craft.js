@@ -1,12 +1,11 @@
 import { NodeId, Node, Nodes } from "../interfaces";
 import { CallbacksFor } from "use-methods";
 import { ManagerState } from "../interfaces";
-import produce from "immer";
 import { isCanvas } from "../nodes";
+const invariant = require('invariant');
 
 const ManagerMethods = (state: ManagerState) => ({
   setRef: (id: NodeId, ref: "dom" | "outgoing" | "incoming" | "canDrag", value: any) => {
-    if (!["dom", "outgoing", "incoming", "canDrag"].includes(ref)) { throw new Error(); }
     let node = state.nodes[id];
     if (isCanvas(node)) node.ref[ref] = value;
     else node.ref[ref as "dom" | "canDrag"] = value;
@@ -18,7 +17,6 @@ const ManagerMethods = (state: ManagerState) => ({
     state.nodes[newNode.id] = newNode;
   },
   setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
-    if (!["active", "hover", "dragging"].includes(eventType)) throw new Error(`Undefined event "${eventType}, expected either "active", "hover" or "dragging".`);
     const current = state.events[eventType];
     if (current && current.id !== id) {
       state.nodes[current.id].data.event[eventType] = false;
