@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { PlaceholderInfo, Nodes, Node, NodeId } from "../interfaces";
+import { Nodes, Node, NodeId } from "../interfaces";
+import { PlaceholderInfo } from "./interfaces";
 import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
 import {RenderPlaceholder} from "../render/RenderPlaceholder";

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { useRenderer } from "./useRenderer";
-import { PlaceholderInfo } from "../interfaces";
+import { PlaceholderInfo } from "../events/interfaces";
 
 export type Placeholder = {
   placeholder: PlaceholderInfo

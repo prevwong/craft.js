@@ -1,4 +1,4 @@
-import { DropAction, DOMInfo } from "../interfaces";
+import { DropAction, DOMInfo } from "./interfaces";
 
 export default function movePlaceholder(
   pos: DropAction,
