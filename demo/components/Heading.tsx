@@ -9,7 +9,7 @@ export const Heading = ({text}: any) => {
    <Fragment>
       <h2>Heading</h2>
       <a onClick={() => {
-        query.serialize();
+       console.log(JSON.stringify(query.serialize()));
         c.current = true;
       }}>Click me</a>
    </Fragment>

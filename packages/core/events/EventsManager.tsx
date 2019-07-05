@@ -143,7 +143,7 @@ export const EventsManager: React.FC = ({ children }) => {
 
 
   useEffect(() => {
-    if ( events.active ) setMousePressed(true);
+    if ( events.active && events.active.data.parent ) setMousePressed(true);
   }, [events.active]);
 
 return (

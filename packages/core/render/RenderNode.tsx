@@ -1,6 +1,5 @@
 import React from "react";
 import { Canvas, useNode } from "../nodes";
-import { isDOMComponent } from "../shared/dom";
 import { useRenderer } from "./useRenderer";
 
 export const RenderNodeToElement: React.FC<any> = React.memo(({ is, ...injectedProps}) => {
@@ -8,7 +7,6 @@ export const RenderNodeToElement: React.FC<any> = React.memo(({ is, ...injectedP
   const {onRender} = useRenderer();
 
   let { type, props } = node.data;
-  let {children, ...propsWithoutChildren} = props;
 
   let Comp = is ? is : type;
 
@@ -23,7 +21,7 @@ export const RenderNodeToElement: React.FC<any> = React.memo(({ is, ...injectedP
   }
 
   let render = React.cloneElement(<Comp {...availableProps} {...injectedProps} />);
-  if ( isDOMComponent(Comp)) render = connectTarget(render);
+  if ( typeof Comp === 'string') render = connectTarget(render);
 
   return React.createElement(onRender, {render, node}, null);
 });

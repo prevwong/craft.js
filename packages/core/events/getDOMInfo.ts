@@ -1,5 +1,3 @@
-export const isDOMComponent = (type: React.ElementType) => typeof type === "string";
-
 export const getDOMPadding = (dom: HTMLElement) => {
     return {
         left: parseInt(window.getComputedStyle(dom).paddingLeft),
