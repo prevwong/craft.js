@@ -5,7 +5,7 @@ import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
 import {RenderPlaceholder} from "../render/RenderPlaceholder";
 import {useManager} from "../manager";
-import { getDOMInfo } from "../shared/dom";
+import { getDOMInfo } from "./getDOMInfo";
 
 export const EventsManager: React.FC = ({ children }) => {
   const { nodes, events, setNodeEvent, move, query } = useManager((state) => state)
