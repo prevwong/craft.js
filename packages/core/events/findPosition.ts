@@ -1,8 +1,8 @@
-import { CanvasNode, NodeId } from "../interfaces";
+import { NodeId, Node } from "../interfaces";
 import { NodeInfo, DropAction } from "../interfaces";
 
 export default function findPosition(
-  parent: CanvasNode,
+  parent: Node,
   dims: NodeInfo[],
   posX: number,
   posY: number

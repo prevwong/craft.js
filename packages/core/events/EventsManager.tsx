@@ -1,24 +1,22 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
-import { CanvasNode, PlaceholderInfo, Nodes, Node } from "../interfaces";
-import { NodeId  } from "~types";
+import React, { useState, useRef, useCallback, useEffect, useMemo } from "react";
+import { PlaceholderInfo, Nodes, Node, NodeId } from "../interfaces";
 import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
 import RenderPlaceholder from "../render/RenderPlaceholder";
-import useManager from "../manager/useManager";
+import {useManager} from "../manager";
 import { getDOMInfo } from "../shared/dom";
-import { useEventListener } from "../shared/useEventListener";
 
 export const EventsManager: React.FC = ({ children }) => {
-  const { nodes, events, setNodeEvent, move, query } = useManager((state) => state);
+  const { nodes, events, setNodeEvent, move, query } = useManager((state) => state)
   const [placeholder, setPlaceholder] = useState(null);
   const placeholderRef = useRef<PlaceholderInfo>(null);
-  const isMousePressed = useRef<boolean>(null);
+  const [isMousePressed, setMousePressed] = useState(false);
 
   const placeBestPosition = (e: MouseEvent) => {
     const [nearestTargetId, possibleNodes] = getNearestTarget(e);
     if (nearestTargetId) {
       const targetNode = nodes[nearestTargetId],
-        targetParent = (targetNode as CanvasNode).data.nodes ? targetNode as CanvasNode : nodes[targetNode.data.parent] as CanvasNode;
+        targetParent = targetNode.data.nodes ? targetNode : nodes[targetNode.data.parent];
 
       const dimensionsInContainer = targetParent.data.nodes.map((id: NodeId) => {
         return {
@@ -52,14 +50,14 @@ export const EventsManager: React.FC = ({ children }) => {
     
     // first check if the parent canvas allows the dragged node from going out
     const { parent } = draggedNode.data;
-    if ( !(nodes[parent] as CanvasNode).ref.outgoing(draggedNode) ) {
+    if ( !nodes[parent].ref.outgoing(draggedNode) ) {
       // if the parent node does not allow the dragged node from going out then, limit potential nodes to those within the parent;
       return query.getDeepNodes(parent);
     }
 
     const canvases = query.getAllCanvas();
     const nodesToConsider = canvases.reduce((res: NodeId[], id) => {
-      const canvas = nodes[id] as CanvasNode;
+      const canvas = nodes[id];
       if ( canvas.ref.incoming(draggedNode) ) {
         if ( !res.includes(canvas.id) ) res = [...res, canvas.id];
         res = [...res, ...canvas.data.nodes];
@@ -93,7 +91,6 @@ export const EventsManager: React.FC = ({ children }) => {
   };
 
   const onDrag = useCallback((e: MouseEvent) => {
-    if (isMousePressed.current === true) {
       const { left, right, top, bottom } = getDOMInfo(events.active.ref.dom);
       if (
         !(
@@ -108,18 +105,15 @@ export const EventsManager: React.FC = ({ children }) => {
         if (!!selection) {
           selection.empty ? selection.empty() : selection.removeAllRanges();
         }
-        if (!events.dragging) {
-          setNodeEvent("dragging", events.active.id);
-        } else {
-          placeBestPosition(e);
-        }
+
+        setNodeEvent("dragging", events.active.id);
+        placeBestPosition(e);
       }
-    }
-  }, [events.active, events.dragging]);
+  }, [events.active]);
 
   const onMouseUp = useCallback((e: MouseEvent) => {
+    setMousePressed(false);
     setNodeEvent("dragging", null);
-    isMousePressed.current = false;
     if (events.dragging) {
       const { id: dragId } = events.dragging;
       const { placement } = placeholderRef.current;
@@ -130,18 +124,25 @@ export const EventsManager: React.FC = ({ children }) => {
     }
   }, [events.dragging]);
 
+  useEffect(() => { 
+    if ( isMousePressed ) {
+      window.addEventListener('mousemove', onDrag);
+      window.addEventListener('mouseup', onMouseUp);
+    } else {
+      window.removeEventListener('mousemove', onDrag);
+      window.removeEventListener('mouseup', onMouseUp);
+    }
 
-  const onMouseDown = useCallback(() => {
-    setNodeEvent("active", null)
-  }, []);
+    return(() => {
+      window.removeEventListener("mousedown", onDrag);
+      window.removeEventListener('mouseup', onMouseUp);
+    })
+  }, [isMousePressed, onDrag, onMouseUp]);
+
 
   useEffect(() => {
-    if ( events.active ) isMousePressed.current = true;
+    if ( events.active ) setMousePressed(true);
   }, [events.active]);
-
-  useEventListener("mousemove", onDrag);
-  useEventListener("mouseup", onMouseUp);
-  useEventListener("mousedown", onMouseDown);
 
 return (
   <React.Fragment>

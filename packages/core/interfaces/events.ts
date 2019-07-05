@@ -1,3 +1,8 @@
+import { NodeId, Node } from "./nodes";
+
+export interface NodeInfo extends DOMInfo {
+  id?: NodeId;
+}
 
 export interface CSSMarginPaddingObj {
   left?: number;
@@ -20,4 +25,23 @@ export interface DOMInfo {
   padding?: CSSMarginPaddingObj;
   margin?: CSSMarginPaddingObj;
   inFlow?: boolean;
+}
+
+
+export interface DropAction {
+  parent: Node;
+  index: number;
+  where: string;
+}
+
+export interface PlaceholderInfo {
+  node: Node
+  placement: DropAction;
+  position: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+    margin: CSSMarginPaddingObj;
+  }
 }

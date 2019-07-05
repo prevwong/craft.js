@@ -32,6 +32,7 @@
     "@types/styled-components": "^4.1.15",
     "autoprefixer": "^9.6.0",
     "classnames": "^2.2.6",
+    "invariant": "^2.2.4",
     "lodash": "^4.17.11",
     "postcss-modules": "^1.4.1",
     "sass": "^1.19.0",

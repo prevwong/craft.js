@@ -1,2 +1,3 @@
 export * from "./context";
-export * from "./connectors";
+export * from "./useManager";
+export * from "./connectManager";
