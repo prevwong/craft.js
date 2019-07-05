@@ -1,7 +1,4 @@
 import React from "react";
-import { ManagerMethods } from "../manager/methods";
-import { RenderContext } from "../render/RenderContext";
-import { NodeProvider } from "../nodes/NodeContext";
 
 export type NodeId = string;
 
