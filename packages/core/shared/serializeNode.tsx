@@ -1,12 +1,13 @@
 import { Children } from "react";
-import { NodeData, ReducedComp, ReduceCompType } from "../interfaces";
+import { NodeData, ReducedComp, ReduceCompType, SerializedNodeData } from "../interfaces";
+import { Canvas } from "../nodes";
 
 
 export const serializeComp = (data: {type: React.ElementType, props: any}): ReducedComp => {
   let { type, props: {children, ...props} } = data;
-  const reducedType = ((typeof type === "string" ) ? type : {resolvedName: (type.displayName ? type.displayName : type.name)}) as ReduceCompType;
+  const reducedType: ReduceCompType = typeof type === "string" ? type : {resolvedName: type.name || type.displayName};
 
-  if ( children && (reducedType.resolvedName !== "Canvas") ) {
+  if (children && (type !== Canvas) ) {
     props.children = Children.count(children) === 1 && typeof children === "string" ? children : Children.map(children, (child) => {
       if ( typeof child === "string" ) return child;
       return serializeComp(child);
@@ -18,7 +19,7 @@ export const serializeComp = (data: {type: React.ElementType, props: any}): Redu
   };
 }
 
-export const serializeNode = (data: Omit<NodeData, 'event'>) => {
+export const serializeNode = (data: Omit<NodeData, 'event'>): SerializedNodeData => {
   let { type, props, ...nodeData } = data;
 
   const reducedComp = serializeComp({type, props});

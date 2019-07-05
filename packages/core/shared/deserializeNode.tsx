@@ -1,31 +1,41 @@
 import React, { Children } from "react";
-import { NodeData, SerializedNodeData, ReducedComp } from "../interfaces";
+import { NodeData, SerializedNodeData, ReducedComp, Resolver, ResolverFunction } from "../interfaces";
+import { Canvas } from "../nodes";
 
+const resolve = (resolver: Resolver, comp: string) => {
+  let Comp;
+  if (typeof resolver == "function") Comp = resolver(comp);
+  else { Comp = resolver[comp]; }
 
-export const deserializeComp = (data: ReducedComp, resolvers: Function, index?: number): any => {
-    let { type, props: {children, ...props} } = data;
-    const reducedType = typeof type === "object" && type.resolvedName ? resolvers(type.resolvedName) : type;
-    
-    let newChildren;
-    if ( children && (reducedType.name !== "Canvas") ) {
-        newChildren = typeof(children) === "string" ? children : Object.keys(children).map((key, i) => {
-        const child = children[key];
-        if ( typeof child === "string" ) return child;
-        return deserializeComp(child, resolvers, i);
-      })
-    }
+  return Comp;
+}
 
-    if ( index ) props.key = index;
-    return React.createElement(reducedType, props, newChildren ? newChildren : null); 
+export const deserializeComp = (data: ReducedComp, resolver: Resolver, index?: number): JSX.Element => {
+  let { type, props: { children, ...props } } = data;
+  const reducedType = typeof type === "object" && type.resolvedName ? resolve(resolver, type.resolvedName) : typeof type === "string" ? type : null;
+
+  if (!reducedType) return;
+  let newChildren;
+  if (children && (reducedType !== Canvas)) {
+    newChildren = typeof (children) === "string" ? children : Object.keys(children).map((key, i) => {
+      const child = children[key];
+      if (typeof child === "string") return child;
+      return deserializeComp(child, resolver, i);
+    })
   }
+
+  if (index) props.key = index;
   
-  export const deserializeNode = (data: SerializedNodeData, resolvers: any): Omit<NodeData, 'event'> => {
-    let { type, props, ...nodeData } = data;
-  
-    const reducedComp = deserializeComp({type, props}, resolvers);
-  
-    return {
-      ...reducedComp,
-      ...nodeData
-    };
-  }
+  return React.createElement(reducedType, props, newChildren ? newChildren : null);
+}
+
+export const deserializeNode = (data: SerializedNodeData, resolver: Resolver): Omit<NodeData, 'event'> => {
+  let { type, props, ...nodeData } = data;
+
+  const reducedComp = deserializeComp({ type, props }, resolver);
+
+  return {
+    ...reducedComp,
+    ...nodeData
+  };
+}
