@@ -69,6 +69,6 @@ export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
           )
       }
     </React.Fragment>
-  ), [node]);
+  ), [node, internal.current.id]);
 }
 

@@ -24,7 +24,7 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
     };
 
     if ( isCanvas(node) ) {
-      node.data.subtype = node.data.props.is ? node.data.props.is : 'div';
+      node.data.subtype = data.subtype ? data.subtype : node.data.props.is ? node.data.props.is : 'div';
       delete node.data.props['is'];
       node.ref.incoming = () => true;
       node.ref.outgoing = () => true;
