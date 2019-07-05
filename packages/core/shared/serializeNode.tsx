@@ -1,28 +1,37 @@
-import { Children } from "react";
+import {  Children, isValidElement } from "react";
 import { NodeData, ReducedComp, ReduceCompType, SerializedNodeData } from "../interfaces";
 import { Canvas } from "../nodes";
 
-
-export const serializeComp = (data: {type: React.ElementType, props: any}): ReducedComp => {
-  let { type, props: {children, ...props} } = data;
-  const reducedType: ReduceCompType = typeof type === "string" ? type : {resolvedName: type.name || type.displayName};
-
-  if (children && (type !== Canvas) ) {
-    props.children = Children.count(children) === 1 && typeof children === "string" ? children : Children.map(children, (child) => {
-      if ( typeof child === "string" ) return child;
-      return serializeComp(child);
-    })
-  }
+const reduceType = (type: React.ElementType | string) => typeof type === "string" ? type : { resolvedName: type.displayName || type.name };
+export const serializeComp = (data: Pick<NodeData, 'type' | 'subtype' | 'props'>): ReducedComp => {
+  let { type, subtype, props} = data;
+  props = Object.keys(props).reduce((result: Record<string, any>, key) => {
+    const prop = props[key];
+    if (type === Canvas && key == 'children') return result;
+    else if (key === 'children' && typeof prop !== 'string') {
+      result[key] = Children.map(prop, (child) => {
+        if (typeof child === 'string') return child;
+        return serializeComp(child);
+      })
+    }
+    else if (prop.type) {
+      result[key] = serializeComp(prop)
+    } else {
+      result[key] = prop;
+    }
+    return result;
+  }, {});
   return {
-    type: reducedType,
+    type: reduceType(type),
+    ...(subtype && { subtype: reduceType(subtype)}),
     props
   };
 }
 
 export const serializeNode = (data: Omit<NodeData, 'event'>): SerializedNodeData => {
-  let { type, props, ...nodeData } = data;
+  let { type, props, subtype, ...nodeData } = data;
 
-  const reducedComp = serializeComp({type, props});
+  const reducedComp = serializeComp({type, subtype, props});
 
   return {
     ...reducedComp,
