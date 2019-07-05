@@ -1,5 +1,5 @@
-import React, { useContext, useMemo } from "react";
-import { Node, PlaceholderInfo } from "../interfaces";
+import React from "react";
+import { Node } from "../interfaces";
 import { Placeholder } from "./RenderPlaceholder";
 
 export type RenderContext = {
