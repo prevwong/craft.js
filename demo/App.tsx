@@ -4,6 +4,7 @@ import { MsgBox } from "./components/MsgBox";
 import { Craft, Renderer, Canvas } from "~packages/core";
 import { Heading } from "./components/Heading";
 import ReactDOMServer from "react-dom/server";
+import MsgCanvas from "./components/MsgCanvas";
 
 export default class App extends React.Component {
   render() {
@@ -21,18 +22,19 @@ export default class App extends React.Component {
               )
             })}
             resolver={(componentName: string) => {
+              // console.log("Resolve", componentName)
               const map: Record<string, React.ElementType> = {
                 Canvas,
-                Msg: MsgBox
+                Msg: MsgBox,
+                MsgCanvas: MsgCanvas
               }
               return map[componentName];
             }}
-            // nodes={JSON.parse('{"rootNode":{"type":{"resolvedName":"Canvas"},"props":{},"parent":null,"nodes":["node-6_I0YS-W_G","node-zzbZgw-AMd","node-NmR1eCW1vP"]},"node-zzbZgw-AMd":{"type":"h1","props":{"children":["Lol",{"type":"span","props":{"children":"Hi"}}]},"parent":"rootNode","closestParent":"rootNode"},"node-6_I0YS-W_G":{"type":{"resolvedName":"Msg"},"props":{"text":"whut"},"parent":"rootNode","closestParent":"rootNode"},"node-NmR1eCW1vP":{"type":"h2","props":{"children":"Hi world"},"parent":"rootNode","closestParent":"rootNode"}}')}
+            nodes='{"rootNode":{"type":{"resolvedName":"Canvas"},"subtype":"div","props":{},"parent":null,"nodes":["node-xnx8qrlc8g","node-wdsGN6jigL"]},"node-8YQ6HpyFo_":{"type":"h2","props":{"children":"THISTHISTHIS"},"parent":"canvas-19l292CSUj","closestParent":"canvas-19l292CSUj"},"node-xnx8qrlc8g":{"type":{"resolvedName":"Msg"},"props":{"text":"hi"},"parent":"rootNode","closestParent":"rootNode","_childCanvas":{"Msgca":"canvas-19l292CSUj"}},"canvas-19l292CSUj":{"type":{"resolvedName":"Canvas"},"subtype":{"resolvedName":"MsgCanvas"},"props":{"style":{"background":"#999","padding":"20px 0"}},"closestParent":"node-xnx8qrlc8g","nodes":["node-8YQ6HpyFo_"]},"node-wdsGN6jigL":{"type":"h2","props":{"children":"Hi world"},"parent":"rootNode","closestParent":"rootNode"}}'
           >
-            <Canvas style={{padding:'30px 0', background:'#ccc'}}>
-              <h1>Lol<span>Hi</span></h1>
+            <Canvas is="div">
+              <h2>THISTHISTHIS</h2>
               <MsgBox text="hi" />
-              <h2>Hi world</h2>
             </Canvas>
           </Renderer>
         </Craft>

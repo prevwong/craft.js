@@ -16,10 +16,13 @@ const Msg: React.FC<MsgBox> = ({node, setProp, connectTarget, children, text}) =
           props.text = "whut"
         });
       }}>Click me</a>
-      <Canvas id="Msgca" is={MsgCanvas}>
-        <h2>Hi</h2>
+      <Canvas id="Msgca" is={MsgCanvas} style={{ background: '#999', padding: '20px 0' }}>
+        <h2>Hi world</h2>
       </Canvas>
-    </div>
+    </div>,
+    {
+      incoming: () => true
+    }
   )
 }
 
