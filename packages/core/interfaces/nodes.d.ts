@@ -21,26 +21,12 @@ export interface NodeData {
   nodes?: NodeId[]
 }
 
-// export interface CanvasNode extends Node {
-//   data: CanvasNodeData;
-//   ref: CanvasNodeRef
-// }
-
-// export interface CanvasNodeData extends NodeData {
-//   nodes: NodeId[]
-// }
-
 export interface NodeRef {
   dom: HTMLElement;
   canDrag(node: Node): void;
   incoming?(incoming: Node): boolean;
   outgoing?(outgoing: Node): boolean;
 }
-
-// export interface CanvasNodeRef extends NodeRef {
-//   incoming(incoming: Node): boolean;
-//   outgoing(outgoing: Node): boolean;
-// }
 
 export interface NodeEvent {
   active?: boolean;
@@ -68,10 +54,8 @@ export interface CanvasMapping {
   [key: string]: NodeId;
 }
 
-
 export type ConnectedNode = {
   node: Node;
   connectTarget: Function,
   setProp: Function
 } 
-
