@@ -1,7 +1,7 @@
 import React from "react";
 import { NodeProvider } from "./NodeContext";
-import { NodeId } from "~types";
 import {  RenderNodeToElement } from "../render/RenderNode";
+import { NodeId } from "../interfaces";
 
 export type NodeElement = {
   id: NodeId

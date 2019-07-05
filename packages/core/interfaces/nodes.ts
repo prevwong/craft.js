@@ -15,7 +15,7 @@ export interface NodeData {
   parent?: NodeId;
   closestParent?: NodeId;
   event: NodeEvent;
-  _childCanvas?: CanvasMapping
+  _childCanvas?: Record<string, NodeId>
   nodes?: NodeId[]
 }
 
@@ -44,9 +44,6 @@ export type ReducedComp = {
 export type SerializedNodeData = Omit<NodeData, 'type' | 'event'> & ReducedComp 
 
 export type Nodes = Record<NodeId, Node>
-
-
-export type CanvasMapping = Record<string, NodeId>
 
 export type ConnectedNode = {
   node: Node;

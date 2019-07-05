@@ -46,7 +46,7 @@ export function QueryMethods(nodes: Nodes) {
       if (node.data._childCanvas) {
         Object.keys(node.data._childCanvas).map(canvasName => {
           const virtualId = node.data._childCanvas[canvasName];
-          this(nodes, virtualId, result);
+          _self('getDeepNodes')(virtualId, result);
         })
       } else if (node.data.nodes) {
         const childNodes = node.data.nodes;
