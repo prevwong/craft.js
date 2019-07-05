@@ -72,22 +72,23 @@ export function QueryMethods(nodes: Nodes) {
       })
     },
     serialize(): string {
-      return JSON.stringify(Object.keys(nodes).reduce((result: any, id: NodeId) => {
+      return (Object.keys(nodes).reduce((result: any, id: NodeId) => {
         const { data: { event, ...data } } = nodes[id];
         result[id] = serializeNode({ ...data })
         return result;
       }, {}));
     },
     deserialize(json: string, resolver: Resolver): Nodes {
-      const nodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
-      return Object.keys(nodes).reduce((accum: Nodes, id) => {
-        const { type, props, parent, closestParent, nodes: childNodes } = deserializeNode(nodes[id], resolver);
+      const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
+      return Object.keys(reducedNodes).reduce((accum: Nodes, id) => {
+        const { type, subtype, props, parent, closestParent, nodes, _childCanvas } = deserializeNode(reducedNodes[id], resolver);
         accum[id] = createNode({
           type,
           props,
           parent,
           closestParent,
-          nodes: childNodes
+          ...(type === Canvas && {subtype, nodes}),
+          ...(_childCanvas && {_childCanvas})
         }, id);
         return accum;
       }, {});
