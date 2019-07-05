@@ -1,6 +1,5 @@
 import produce from "immer";
 import { NodeId, Node, NodeData } from "../interfaces";
-import React from "react";
 import { isCanvas } from "../nodes";
 
 // TODO: Refactor createNode()

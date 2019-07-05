@@ -1,7 +1,7 @@
 import React from "react";
 import { Canvas, useNode } from "../nodes";
-import { useRenderer } from "./RenderContext";
 import { isDOMComponent } from "../shared/dom";
+import { useRenderer } from "./useRenderer";
 
 export const RenderNodeToElement: React.FC<any> = React.memo(({ is, ...injectedProps}) => {
   const {node, connectTarget} = useNode();
