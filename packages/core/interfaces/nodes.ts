@@ -11,7 +11,8 @@ export interface Node  {
 
 export interface NodeData {
   props: any,
-  type: React.ElementType;
+  type: React.ElementType | string;
+  subtype?: React.ElementType,
   parent?: NodeId;
   closestParent?: NodeId;
   event: NodeEvent;

@@ -37,7 +37,7 @@ export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
       if (!node.data._childCanvas || (node.data._childCanvas && !node.data._childCanvas[id])) {
         const rootNode = createNode({
           type: Canvas,
-          props: {is, children},
+          props: {is, children, ...props},
         }, canvasId);
         internal.current.id = canvasId;
         pushChildCanvas(node.id, id, rootNode);
@@ -51,7 +51,7 @@ export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
     <React.Fragment>
        {
         node.data.type === Canvas ? (
-          <RenderNodeToElement is={is} {...props}>
+          <RenderNodeToElement is={node.data.subtype} {...props}>
             {
               <React.Fragment>
                 {
