@@ -1,11 +1,11 @@
 import React, { useContext, useMemo } from "react";
 import { ManagerContext } from "./context";
-import { ManagerState } from "../interfaces";
+import { ManagerState, ConnectedManager } from "../interfaces";
 import { ManagerMethods } from "./methods";
 import { QueryMethods } from "./query";
 
-export function useManager(): ManagerMethods;
-export function useManager<S>(mapManagerState: (state: ManagerState) => S): ManagerMethods & {query: QueryMethods} & S;
+export function useManager(): ConnectedManager;
+export function useManager<S>(mapManagerState: (state: ManagerState) => S): ConnectedManager<S>
 export function useManager(mapManagerState?: Function) {
   const [managerState, dispatchers] = useContext(ManagerContext);
   const state = mapManagerState ? useMemo(() => {
