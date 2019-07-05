@@ -42,6 +42,5 @@ export interface PlaceholderInfo {
     top: number;
     width: number;
     height: number;
-    margin: CSSMarginPaddingObj;
   }
 }
