@@ -11,8 +11,8 @@ export interface Node  {
 
 export interface NodeData {
   props: any,
-  type: React.ElementType | string;
-  subtype?: React.ElementType,
+  type: string | React.ElementType;
+  subtype?: string | React.ElementType,
   parent?: NodeId;
   closestParent?: NodeId;
   event: NodeEvent;
@@ -39,10 +39,11 @@ export type ReduceCompType = string | {
 
 export type ReducedComp = {
   type: ReduceCompType
+  subtype?: ReduceCompType
   props: any
 }
 
-export type SerializedNodeData = Omit<NodeData, 'type' | 'event'> & ReducedComp 
+export type SerializedNodeData = Omit<NodeData, 'type' | 'subtype' | 'event'> & ReducedComp 
 
 export type Nodes = Record<NodeId, Node>
 
@@ -52,6 +53,6 @@ export type ConnectedNode = {
   setProp: Function
 } 
 
-export type ResolverFunction = (name: string) => React.ElementType;
-export type ResolverMap = Record<string, React.ElementType>;
+export type ResolverFunction = (name: string) => string | React.ElementType;
+export type ResolverMap = Record<string, string | React.ElementType>;
 export type Resolver = ResolverFunction | ResolverMap;
