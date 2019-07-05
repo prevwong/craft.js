@@ -1,5 +1,5 @@
 import { NodeId, Node } from "../interfaces";
-import { NodeInfo, DropAction } from "../interfaces";
+import { NodeInfo, DropAction } from "./interfaces";
 
 export default function findPosition(
   parent: Node,

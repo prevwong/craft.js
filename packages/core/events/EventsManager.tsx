@@ -1,15 +1,15 @@
-import React, { useState, useRef, useCallback, useEffect, useMemo } from "react";
-import { PlaceholderInfo, Nodes, Node, NodeId } from "../interfaces";
+import React, { useState, useCallback, useEffect } from "react";
+import { Nodes, Node, NodeId } from "../interfaces";
+import { PlaceholderInfo } from "./interfaces";
 import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
-import RenderPlaceholder from "../render/RenderPlaceholder";
+import {RenderPlaceholder} from "../render/RenderPlaceholder";
 import {useManager} from "../manager";
-import { getDOMInfo } from "../shared/dom";
+import { getDOMInfo } from "./getDOMInfo";
 
 export const EventsManager: React.FC = ({ children }) => {
   const { nodes, events, setNodeEvent, move, query } = useManager((state) => state)
-  const [placeholder, setPlaceholder] = useState(null);
-  const placeholderRef = useRef<PlaceholderInfo>(null);
+  const [placeholder, setPlaceholder] = useState<PlaceholderInfo>(null);
   const [isMousePressed, setMousePressed] = useState(false);
 
   const placeBestPosition = (e: MouseEvent) => {
@@ -41,7 +41,7 @@ export const EventsManager: React.FC = ({ children }) => {
         node: bestTargetNode,
         placement: bestTarget
       };
-      placeholderRef.current = output;
+
       setPlaceholder(output);
     }
   }
@@ -114,15 +114,17 @@ export const EventsManager: React.FC = ({ children }) => {
   const onMouseUp = useCallback((e: MouseEvent) => {
     setMousePressed(false);
     setNodeEvent("dragging", null);
+    
     if (events.dragging) {
       const { id: dragId } = events.dragging;
-      const { placement } = placeholderRef.current;
+      const { placement } = placeholder;
       const { parent, index, where } = placement;
       const { id: parentId, data:{nodes} } = parent;
 
       move(dragId, parentId, index + (where === "after" ? 1 : 0));
     }
-  }, [events.dragging]);
+    setPlaceholder(null);
+  }, [events.dragging, placeholder]);
 
   useEffect(() => { 
     if ( isMousePressed ) {
@@ -137,7 +139,7 @@ export const EventsManager: React.FC = ({ children }) => {
       window.removeEventListener("mousedown", onDrag);
       window.removeEventListener('mouseup', onMouseUp);
     })
-  }, [isMousePressed, onDrag, onMouseUp]);
+  }, [isMousePressed, onDrag, onMouseUp, placeholder]);
 
 
   useEffect(() => {
@@ -147,7 +149,7 @@ export const EventsManager: React.FC = ({ children }) => {
 return (
   <React.Fragment>
     {
-      placeholder ? <RenderPlaceholder isActive={!!events.dragging} placeholder={placeholder} /> : null
+      placeholder? <RenderPlaceholder placeholder = { placeholder } /> : null
     }
     {children}
   </React.Fragment>
