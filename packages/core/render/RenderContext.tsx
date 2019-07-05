@@ -1,22 +1,18 @@
 import React, { useContext, useMemo } from "react";
-import { Node } from "../interfaces";
+import { Node, PlaceholderInfo } from "../interfaces";
+import { Placeholder } from "./RenderPlaceholder";
 
 export type RenderContext = {
   onRender: React.FC<{render: React.ReactElement, node: Node}>
+  renderPlaceholder: React.FC<Placeholder>
 }
 
 export const RenderContext = React.createContext<RenderContext>(null);
 
-export const RenderContextProvider: React.FC<RenderContext> = ({ children, onRender }) => {
+export const RenderContextProvider: React.FC<RenderContext> = ({ children, onRender, renderPlaceholder }) => {
   return (
-    <RenderContext.Provider value={{onRender}}>
+    <RenderContext.Provider value={{ onRender, renderPlaceholder}}>
       {children}
     </RenderContext.Provider>
   )
-}
-
-export const useRenderer = () => {
-  const render = useContext(RenderContext);
-
-  return useMemo(() => (render), [render]);
 }
