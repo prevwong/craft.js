@@ -7,8 +7,7 @@ const invariant = require('invariant');
 const ManagerMethods = (state: ManagerState) => ({
   setRef: (id: NodeId, ref: "dom" | "outgoing" | "incoming" | "canDrag", value: any) => {
     let node = state.nodes[id];
-    if (isCanvas(node)) node.ref[ref] = value;
-    else node.ref[ref as "dom" | "canDrag"] = value;
+    node.ref[ref] = value;
   },
   pushChildCanvas(id: NodeId, canvasName: string, newNode: Node) {
     if (!state.nodes[id].data._childCanvas) state.nodes[id].data._childCanvas = {};
@@ -18,11 +17,12 @@ const ManagerMethods = (state: ManagerState) => ({
   },
   setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
     const current = state.events[eventType];
-    if (current && current.id !== id) {
-      state.nodes[current.id].data.event[eventType] = false;
-    }
 
     if (id) {
+      if ( current ) {
+        if ( current.id === id ) return;
+        else state.nodes[current.id].data.event[eventType] = false;
+      }
       state.nodes[id].data.event[eventType] = true
       state.events[eventType] = state.nodes[id];
     } else {
