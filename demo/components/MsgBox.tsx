@@ -1,13 +1,14 @@
 import React from "react";
 import { ConnectedNode } from "~packages/core/interfaces";
-import { connectNode, Canvas } from "~packages/core/nodes";
+import { connectNode, Canvas, useNode } from "~packages/core/nodes";
 import MsgCanvas from "./MsgCanvas";
 
 export type MsgBox = {
   text: string
-} & ConnectedNode
+}
 
-const Msg: React.FC<MsgBox> = ({node, setProp, connectTarget, children, text}) => {
+export const Msg: React.FC<MsgBox> = ({children, text}) => {
+  const { node, setProp, connectTarget }  = useNode();
   return connectTarget(
     <div className="message-box" >
       <h2>MESSAGE{text}</h2>
@@ -26,4 +27,3 @@ const Msg: React.FC<MsgBox> = ({node, setProp, connectTarget, children, text}) =
   )
 }
 
-export const MsgBox = connectNode(Msg);
