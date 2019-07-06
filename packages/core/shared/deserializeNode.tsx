@@ -10,7 +10,14 @@ const resolve = (resolver: Resolver, comp: string) => {
   return Comp;
 }
 
-const restoreType = (type: ReduceCompType, resolver: Resolver) => typeof type === "object" && type.resolvedName ? resolve(resolver, type.resolvedName) : typeof type === "string" ? type : null;
+const restoreType = (type: ReduceCompType, resolver: Resolver) => 
+  typeof type === "object" && type.resolvedName ? 
+    (
+      type.resolvedName === 'Canvas' ? Canvas :
+      resolve(resolver, type.resolvedName)
+    ) : 
+    typeof type === "string" ? 
+      type : null;
 
 export const deserializeComp = (data: ReducedComp, resolver: Resolver, index?: number): JSX.Element & {subtype?: React.ElementType | string} => {
   let { type, subtype, props } = data;

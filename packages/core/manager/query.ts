@@ -82,6 +82,7 @@ export function QueryMethods(nodes: Nodes) {
       const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
       return Object.keys(reducedNodes).reduce((accum: Nodes, id) => {
         const { type, subtype, props, parent, closestParent, nodes, _childCanvas } = deserializeNode(reducedNodes[id], resolver);
+        if ( !type ) return accum;
         accum[id] = createNode({
           type,
           props,
