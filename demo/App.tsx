@@ -24,7 +24,6 @@ export default class App extends React.Component {
             resolver={(componentName: string) => {
               // console.log("Resolve", componentName)
               const map: Record<string, React.ElementType> = {
-                Canvas,
                 Msg: MsgBox,
                 MsgCanvas: MsgCanvas
               }
