@@ -1,28 +1,24 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Canvas, useNode } from "../nodes";
 import { useRenderer } from "./useRenderer";
+import { useInternalNode } from "../nodes/useInternalNode";
 
-export const RenderNodeToElement: React.FC<any> = React.memo(({ is, ...injectedProps}) => {
-  const {node, connectTarget} = useNode();
+export const SimpleElement = ({render}: any) => {
+  const {connectTarget} = useNode();
+  return connectTarget(render);
+}
+
+export const RenderNodeToElement: React.FC<any> = React.memo(({ ...injectedProps}) => {
+  const {node} = useInternalNode();
   const {onRender} = useRenderer();
 
   let { type, props } = node.data;
 
-  let Comp = is ? is : type;
+  let Comp = type;
 
-  if ( type === Canvas && !is ) {
-    return <Canvas  {...props} {...injectedProps} />;
-  } 
+  let render = React.cloneElement(<Comp {...props} {...injectedProps} />);
+  if ( typeof Comp === 'string') render = <SimpleElement render={render} />
 
-  let availableProps = props;
-  if ( type === Canvas ) {
-    const {is, ...withoutIs} = availableProps as any;
-    availableProps = withoutIs
-  }
-
-  let render = React.cloneElement(<Comp {...availableProps} {...injectedProps} />);
-  if ( typeof Comp === 'string') render = connectTarget(render);
-
-  return React.createElement(onRender, {render, node}, null);
+  return useMemo(() => React.createElement(onRender, { render, node }, null), [node.data]);
 });
 

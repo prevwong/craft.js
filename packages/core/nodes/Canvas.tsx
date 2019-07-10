@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo } from "react";
 import { NodeId, Node } from "../interfaces";
 import { NodeElement } from "./NodeElement";
-import { RenderNodeToElement } from "../render/RenderNode";
+import { RenderNodeToElement, SimpleElement } from "../render/RenderNode";
 import {useNode, mapChildrenToNodes} from "../nodes";
 import {useManager} from "../manager";
 import { createNode } from "../shared/createNode";
+import { useInternalNode } from "./useInternalNode";
 const shortid = require("shortid");
 const invariant = require("invariant");
 
@@ -20,7 +21,7 @@ export const isCanvas = (node: Node) => node.data.type === Canvas
 
 export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
   const {add, pushChildCanvas} = useManager();
-  const {node} = useNode();
+  const {node}  = useInternalNode();
 
   const internal = React.useRef({ id: null });
   useEffect(() => {
@@ -51,17 +52,16 @@ export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
     <React.Fragment>
        {
         node.data.type === Canvas ? (
-          <RenderNodeToElement is={node.data.subtype} {...props}>
-            {
-              <React.Fragment>
-                {
-                  node.data.nodes && node.data.nodes.map((id => (
-                    <NodeElement id={id} key={id} />
-                  )))
-                }
-              </React.Fragment>
-            }
-          </RenderNodeToElement>
+          <SimpleElement render={React.createElement(is, props, (
+            <React.Fragment>
+              {
+                node.data.nodes && node.data.nodes.map((id => (
+                  <NodeElement id={id} key={id} />
+                )))
+              }
+            </React.Fragment>
+          ))
+            } />
         ) : (
             internal.current.id ? (
               <NodeElement id={internal.current.id} />
