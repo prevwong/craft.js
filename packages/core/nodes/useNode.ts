@@ -1,53 +1,40 @@
-import { cloneElement, useContext, useCallback, useMemo } from "react";
+import { cloneElement, useContext, useCallback, useMemo, useEffect } from "react";
 import { NodeContext } from "./NodeContext";
 import { ConnectedNode } from "../interfaces";
-import {useManager} from "../manager";
+import { useManager } from "../manager";
 import { isCanvas } from "../nodes";
+import { useInternalNode } from "./useInternalNode";
+import { MonitorContext } from "../monitor/context";
 
-export function useNode() : ConnectedNode {
-  const nodeContext = useContext(NodeContext);
-  if ( !nodeContext ) {
-    return {
-      node: null,
-      connectTarget: useCallback((render) => render, []),
-      setProp: () => {}
-    }
-  } else {
-    const {id} = nodeContext;
-    const { node, setRef, setNodeEvent, setProp: setManagerProp} = useManager((state) => ({node: state.nodes[id]}));
+export function useNode(): any {
+  const { node, setProp } = useInternalNode();
+  const [ subscribe, getState, { setRef, setNodeEvent}] = useContext(MonitorContext);
 
-    const connectTarget = useCallback((render, nodeMethods) => {
-      useMemo(() => {
-        if (nodeMethods) {
-          if (nodeMethods.canDrag) setRef(id, "canDrag", nodeMethods.canDrag);
-          if (isCanvas(node)) {
-            if (nodeMethods.incoming) setRef(id, "incoming", nodeMethods.incoming)
-            if (nodeMethods.outgoing) setRef(id, "outgoing", nodeMethods.outgoing);
-          }
+  useEffect(() => {
+    subscribe(() => {
+      const { prev, current } = getState();
+      if ( prev.nodes[node.id] !== current.nodes[node.id]) console.log("state changed",  node.id, current);
+    })
+  }, []);
+  const connectTarget = useCallback((render, nodeMethods) => {
+    return useMemo(() => cloneElement(render, {
+      onMouseDown: (e) => {
+        e.stopPropagation();
+        setNodeEvent("active", node)
+      },
+      ref: (ref: any) => {
+        if (ref) {
+          setRef(node.id, "dom", ref);
         }
-      }, []);
+        // if ( render.ref ) render.ref(ref);
+      }
+    }), [node.data]);
+  }, [node.data]);
+  
+  return useMemo(() => ({
+    node,
+    connectTarget
+  }), [node.data])
 
-      return useMemo(() => cloneElement(render, {
-        onMouseDown: (e) => {
-          e.stopPropagation();
-          setNodeEvent("active", node.id)
-        },
-        ref: (ref: any) => {
-          if ( ref ) {
-            setRef(id, "dom", ref);
-          }
-          // if ( render.ref ) render.ref(ref);
-        }
-      }), [node.data]);
-    }, [node.data]);
-
-    const setProp = useCallback((cb) => setManagerProp(node.id, cb), []);
-
-    return useMemo(() => ({
-      node,
-      connectTarget,
-      setProp
-    }), [node.data])
-  }
 }
 
