@@ -1,22 +1,13 @@
-import React, { createContext } from "react";
-import { ManagerContextProvider } from "./manager";
-import { MonitorProvider } from "./monitor/context";
-export * from "./events"
+import React from "react";
+import { RootContextProvider } from "./RootContext";
+export * from "./dnd"
 export * from "./manager"
 export * from "./nodes"
 export * from "./render"
-export * from "./interfaces"
-
-
-const CraftContext = createContext(null);
-
+export * from "./interfaces";
 
 export const Craft = ({ children }: any) => {
   return (
-    <MonitorProvider>
-      <ManagerContextProvider>
-        {children}
-      </ManagerContextProvider>
-    </MonitorProvider>
+    <RootContextProvider>{children}</RootContextProvider>
   )
 }
