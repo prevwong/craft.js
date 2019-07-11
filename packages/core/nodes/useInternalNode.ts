@@ -1,8 +1,7 @@
-import { cloneElement, useContext, useCallback, useMemo } from "react";
+import { useContext, useCallback, useMemo } from "react";
 import { NodeContext } from "./NodeContext";
-import { ConnectedNode, Node } from "../interfaces";
-import {useManager} from "../manager";
-import { isCanvas } from "../nodes";
+import { Node } from "../interfaces";
+import { useCollector } from "../shared/useCollector";
 
 export function useInternalNode(): { node: Node, setProp: (cb: any) => void} {
   const nodeContext = useContext(NodeContext);
@@ -10,10 +9,10 @@ export function useInternalNode(): { node: Node, setProp: (cb: any) => void} {
     return null
   } else {
     const {id} = nodeContext;
-    const { node, setProp: setManagerProp, setRef, setNodeEvent} = useManager((state) => ({node: state.nodes[id]}));
+    const {node, setProp: setManagerProp} = useCollector('manager', (state) => ({node: state.nodes[id]}));
     
     const setProp = useCallback((cb) => setManagerProp(node.id, cb), []);
-    return useMemo(() => ({ node, setProp, setRef, setNodeEvent }), [node.data])
+    return useMemo(() => ({ node, setProp}), [node.data])
   }
 }
 
