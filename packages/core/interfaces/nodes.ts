@@ -2,35 +2,19 @@ import React from "react";
 
 export type NodeId = string;
 
-export interface Node  {
+export type Node =  {
   id: NodeId;
-  data: NodeData;
-  ref: NodeRef;
-  props: any;
+  data: NodeData
 }
 
-export interface NodeData {
+export type NodeData = {
   props: any,
   type: string | React.ElementType;
   subtype?: string | React.ElementType,
   parent?: NodeId;
   closestParent?: NodeId;
-  event: NodeEvent;
   _childCanvas?: Record<string, NodeId>
   nodes?: NodeId[]
-}
-
-export interface NodeRef {
-  dom: HTMLElement;
-  canDrag(node: Node): void;
-  incoming?(incoming: Node): boolean;
-  outgoing?(outgoing: Node): boolean;
-}
-
-export interface NodeEvent {
-  active?: boolean;
-  dragging?: boolean;
-  hover?: boolean;
 }
 
 export type ReduceCompType = string | {
