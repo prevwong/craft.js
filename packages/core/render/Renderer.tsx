@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo } from "react";
 import { NodeElement, Canvas, mapChildrenToNodes } from "../nodes";
-import { useManager } from "../manager";
 import { RenderContext, RenderContextProvider } from "./RenderContext";
 import { Resolver } from "../interfaces";
 import { defaultPlaceholder } from "./RenderPlaceholder";
-import EventsManager from "../events";
+import DNDManager from "../dnd";
+import { useCollector } from "../shared/useCollector";
 const invariant = require("invariant");
 
 export type Renderer = {
@@ -19,7 +19,9 @@ export const Renderer: React.FC<Renderer> = ({
   renderPlaceholder = defaultPlaceholder,
   nodes = null
 }) => {
-  const { rootNode, add, replaceNodes, query } = useManager((state) => ({ rootNode: state.nodes["rootNode"] }));
+
+  const { rootNode, add, replaceNodes, query } = useCollector('manager', (state) => ({ rootNode: state.nodes["rootNode"] }));
+
   useEffect(() => {
     if (!nodes) {
       const rootCanvas = React.Children.only(children) as React.ReactElement;
@@ -27,20 +29,20 @@ export const Renderer: React.FC<Renderer> = ({
       let node = mapChildrenToNodes(rootCanvas, null, "rootNode");
       add(null, node);
     } else {
-      const rehydratedNodes = query.deserialize(nodes, resolver);
-      replaceNodes(rehydratedNodes);
+      // const rehydratedNodes = query.deserialize(nodes, resolver);
+      // replaceNodes(rehydratedNodes);
     }
   }, []);
 
   return useMemo(() => (
     <RenderContextProvider onRender={onRender} renderPlaceholder={renderPlaceholder}>
-      <EventsManager>
+      {/* <DNDManager> */}
         {
           rootNode ? (
             <NodeElement id="rootNode" />
           ) : null
         }
-      </EventsManager>
+      {/* </DNDManager> */}
     </RenderContextProvider>
   ), [rootNode])
 }
