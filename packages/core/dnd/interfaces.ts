@@ -1,4 +1,4 @@
-import { NodeId, Node } from "./nodes";
+import { NodeId, Node } from "../interfaces/nodes";
 
 export interface NodeInfo extends DOMInfo {
   id?: NodeId;

@@ -6,7 +6,7 @@ import movePlaceholder from "./movePlaceholder";
 import {RenderPlaceholder} from "../render/RenderPlaceholder";
 import {useManager} from "../manager";
 import { getDOMInfo } from "./getDOMInfo";
-import { MonitorContext } from "../monitor/context";
+import { MonitorContext } from "../monitor";
 
 export const EventsManager: React.FC = ({ children }) => {
   const { nodes, events, move, query } = useManager((state) => state)
@@ -18,6 +18,7 @@ export const EventsManager: React.FC = ({ children }) => {
   const [active, setActive] = useState(null);
   const [dragging, setDragging] = useState(null);
 
+  console.log("AC", active);
   const placeBestPosition = (e: MouseEvent) => {
     const [nearestTargetId, possibleNodes] = getNearestTarget(e);
     if (nearestTargetId) {
@@ -101,6 +102,8 @@ export const EventsManager: React.FC = ({ children }) => {
   };
 
   const onDrag = useCallback((e: MouseEvent) => {
+    console.log("active", active);
+    if ( active ) { 
       const { left, right, top, bottom } = getDOMInfo(active.ref.dom);
       if (
         !(
@@ -119,10 +122,11 @@ export const EventsManager: React.FC = ({ children }) => {
         setNodeEvent("dragging", active);
         placeBestPosition(e);
       }
+    }
   }, [active]);
 
   const onMouseUp = useCallback((e: MouseEvent) => {
-  
+    console.log("dragging", dragging);
     if (dragging) {
       const { id: dragId } = dragging;
       const { placement } = placeholder;
@@ -131,15 +135,19 @@ export const EventsManager: React.FC = ({ children }) => {
 
       move(dragId, parentId, index + (where === "after" ? 1 : 0));
     }
+    setActive(null);
     setPlaceholder(null);
     setNodeEvent("dragging", null);
+    
   }, [dragging, placeholder]);
 
   useEffect(() => { 
+    console.log("new active", active);
     if ( active ) {
       window.addEventListener('mousemove', onDrag);
       window.addEventListener('mouseup', onMouseUp);
     } else {
+      console.log("remove")
       window.removeEventListener('mousemove', onDrag);
       window.removeEventListener('mouseup', onMouseUp);
     }
@@ -158,10 +166,13 @@ export const EventsManager: React.FC = ({ children }) => {
   useEffect(() => {
     subscribeMonitor(() => {
       const { prev, current } = getMonitor();
-      if ( prev.events.active !== current.events.active ) {
-        nodesRef.current = current.nodes;
+      if (prev.events.active !== current.events.active) {
+        console.log("set active", current.events.active)
         setActive(current.events.active);
+      } else if (prev.events.dragging !== current.events.dragging) {
+        setDragging(current.events.dragging);
       }
+      nodesRef.current = current.nodes;
     })
   }, [])
 return (
