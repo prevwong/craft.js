@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo } from "react";
 import { NodeId, Node } from "../interfaces";
 import { NodeElement } from "./NodeElement";
-import { RenderNodeToElement, SimpleElement } from "../render/RenderNode";
-import {useNode, mapChildrenToNodes} from "../nodes";
-import {useManager} from "../manager";
+import { SimpleElement } from "../render/RenderNode";
+import { mapChildrenToNodes} from "../nodes";
 import { createNode } from "../shared/createNode";
 import { useInternalNode } from "./useInternalNode";
+import { useCollector } from "../shared/useCollector";
 const shortid = require("shortid");
 const invariant = require("invariant");
 
@@ -20,7 +20,7 @@ export interface Canvas extends React.Props<any> {
 export const isCanvas = (node: Node) => node.data.type === Canvas
 
 export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
-  const {add, pushChildCanvas} = useManager();
+  const {add, pushChildCanvas} = useCollector('manager');
   const {node}  = useInternalNode();
 
   const internal = React.useRef({ id: null });
