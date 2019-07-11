@@ -5,36 +5,18 @@ import { isCanvas } from "../nodes";
 const invariant = require('invariant');
 
 const ManagerMethods = (state: ManagerState) => ({
-  setRef: (id: NodeId, ref: "dom" | "outgoing" | "incoming" | "canDrag", value: any) => {
-    let node = state.nodes[id];
-    node.ref[ref] = value;
-  },
   pushChildCanvas(id: NodeId, canvasName: string, newNode: Node) {
     if (!state.nodes[id].data._childCanvas) state.nodes[id].data._childCanvas = {};
     newNode.data.closestParent = id;
     state.nodes[id].data._childCanvas[canvasName] = newNode.id;
     state.nodes[newNode.id] = newNode;
   },
-  setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
-    const current = state.events[eventType];
-
-    if (id) {
-      if ( current ) {
-        if ( current.id === id ) return;
-        else state.nodes[current.id].data.event[eventType] = false;
-      }
-      state.nodes[id].data.event[eventType] = true
-      state.events[eventType] = state.nodes[id];
-    } else {
-      state.events[eventType] = null;
-    }
-  },
   replaceNodes(nodes: Nodes) {
     state.nodes = nodes;
   },
   add(parentId: NodeId, nodes: Node[] | Node) {
     if (parentId && !state.nodes[parentId].data.nodes) state.nodes[parentId].data.nodes = []
-    if ( !Array.isArray(nodes) ) nodes = [nodes];
+    if (!Array.isArray(nodes)) nodes = [nodes];
     (nodes as Node[]).forEach(node => {
       state.nodes[node.id] = node;
       if (parentId) state.nodes[parentId].data.nodes.push(node.id);
