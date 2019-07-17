@@ -1,10 +1,10 @@
 import React, { useContext, useState, useCallback, useLayoutEffect, useRef } from "react";
 import { RootContext } from "../RootContext";
 import { Unsubscribe } from "redux";
-import { CallbacksFor, QueryCallbacksFor } from "./redux-methods";
 import { ManagerState } from "../interfaces";
 import { ManagerMethods } from "../manager/methods";
 import { QueryMethods } from "../manager/query";
+import { QueryCallbacksFor, CallbacksFor } from "./createReduxMethods";
 const shallowequal = require('shallowequal');
 
 type Methods = { actions: ManagerMethods, query: QueryCallbacksFor<typeof QueryMethods>};
