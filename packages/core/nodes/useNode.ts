@@ -4,7 +4,7 @@ import { Node } from "../interfaces";
 
 
 export function useNode<S>(collect? : (node: Node) => S) {
-  const { actions: {setRef, setProp, setActive}, ...collected } = useInternalNode((node) => collect && collect(node));
+  const { actions: {setRef, setProp, setNodeEvent}, ...collected } = useInternalNode((node) => collect && collect(node));
 
   return useMemo(() => {
     return {
@@ -17,9 +17,13 @@ export function useNode<S>(collect? : (node: Node) => S) {
               setRef("dom", ref);
             }
           },
+          onMouseOver: (e: React.MouseEvent) => {
+            e.stopPropagation();
+            setNodeEvent('hover')
+          },
           onMouseDown: (e: React.MouseEvent) => {
             e.stopPropagation();
-            setActive();
+            setNodeEvent('active');
           }
         })
       }
