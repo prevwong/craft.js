@@ -14,7 +14,7 @@ const ManagerMethods = (state: ManagerState) => ({
   },
   setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
     const current = state.events[eventType];
-    if (current && current.id !== id) {
+    if (current ) {
       state.nodes[current.id].ref.event[eventType] = false;
     }
 
