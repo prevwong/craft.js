@@ -1,9 +1,9 @@
-import { Nodes, NodeId, Node, NodeData, SerializedNodeData, Resolver, ManagerState } from "../interfaces";
+import { Nodes, NodeId, SerializedNodeData, ManagerState, Resolver } from "../interfaces";
 import { isCanvas, Canvas } from "../nodes";
 import { serializeNode } from "../shared/serializeNode";
 import { createNode } from "../shared/createNode";
 import { deserializeNode } from "../shared/deserializeNode";
-import { CallbacksFor, QueryCallbacksFor } from "../shared/redux-methods";
+import { QueryCallbacksFor } from "../shared/createReduxMethods";
 
 /**
  * Manager methods used to query nodes 
