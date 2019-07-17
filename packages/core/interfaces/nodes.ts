@@ -1,4 +1,5 @@
 import React from "react";
+import { CallbacksFor } from "use-methods";
 
 export type NodeId = string;
 
@@ -44,8 +45,10 @@ export type SerializedNodeData = Omit<NodeData, 'type' | 'subtype' | 'event'> & 
 
 export type Nodes = Record<NodeId, Node>
 
-export type ConnectedNode = {
-  node: Node;
+export type ConnectedNode<S = null> = S extends null ? {
   connectTarget: Function,
-  setProp: Function
+  actions: any
+}  : S & {
+  connectTarget: Function,
+  actions: any
 } 
