@@ -1,20 +1,17 @@
 import { Nodes, NodeId, Node, NodeData, SerializedNodeData, Resolver, ManagerState } from "../interfaces";
-import { Methods, ActionUnion, ActionByType } from "use-methods";
 import { isCanvas, Canvas } from "../nodes";
 import { serializeNode } from "../shared/serializeNode";
 import { createNode } from "../shared/createNode";
 import { deserializeNode } from "../shared/deserializeNode";
-import { QueryParameters, QueryCallback } from "../shared/redux-methods";
-import { MonitorState } from "../interfaces/monitor";
+import { CallbacksFor, QueryCallbacksFor } from "../shared/redux-methods";
 
 /**
  * Manager methods used to query nodes 
  * @param nodes 
  */
 
-export function QueryMethods(manager: ManagerState, monitor: MonitorState) {
-  const _self = <T extends keyof QueryCallback<typeof QueryMethods>>(name: T) => (QueryMethods(manager, monitor)[name]);
-
+export function QueryMethods(manager: ManagerState, options: any) {
+  const _self = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) => (QueryMethods(manager, options)[name]);
   return {
     getTree(cur = "rootNode", canvasName?: string) {
       let tree: any = {};
@@ -43,6 +40,7 @@ export function QueryMethods(manager: ManagerState, monitor: MonitorState) {
       return tree[id];
     },
     getDeepNodes(id: NodeId, result: NodeId[] = []) {
+      // console.log(id, manager)
       result.push(id);
       const node = manager.nodes[id];
       if (node.data._childCanvas) {
@@ -76,7 +74,7 @@ export function QueryMethods(manager: ManagerState, monitor: MonitorState) {
     serialize(): string {
       return (Object.keys(manager.nodes).reduce((result: any, id: NodeId) => {
         const { data: { ...data } } = manager.nodes[id];
-        result[id] = serializeNode({ ...data })
+        result[id] = serializeNode({ ...data }, options.resolver)
         return result;
       }, {}));
     },

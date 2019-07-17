@@ -1,7 +1,8 @@
-import { NodeId, Node, Nodes } from "../interfaces";
+import { NodeId, Node, Nodes, NodeRef } from "../interfaces";
 import { CallbacksFor } from "use-methods";
 import { ManagerState } from "../interfaces";
 import { isCanvas } from "../nodes";
+import produce from "immer";
 const invariant = require('invariant');
 
 const ManagerMethods = (state: ManagerState) => ({
@@ -10,6 +11,20 @@ const ManagerMethods = (state: ManagerState) => ({
     newNode.data.closestParent = id;
     state.nodes[id].data._childCanvas[canvasName] = newNode.id;
     state.nodes[newNode.id] = newNode;
+  },
+  setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
+    const current = state.events[eventType];
+    if (current && current.id !== id) {
+      state.nodes[current.id].ref.event[eventType] = false;
+    }
+
+    if (id) {
+      state.nodes[id].ref.event[eventType] = true
+      state.events[eventType] = state.nodes[id];
+    } else {
+      // if ( eventType === 'dragging') return;
+      state.events[eventType] = null;
+    }
   },
   replaceNodes(nodes: Nodes) {
     state.nodes = nodes;
@@ -30,12 +45,16 @@ const ManagerMethods = (state: ManagerState) => ({
     currentParentNodes[currentParentNodes.indexOf(targetId)] = "marked";
     newParentNodes.splice(index, 0, targetId);
     state.nodes[targetId].data.parent = newParentId;
-    state.nodes[targetId].data.closestParent = newParentId;
+    // state.nodes[targetId].data.closestParent = newParentId;
     currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
+
   },
   setProp(id: NodeId, cb: <T>(props: T) => void) {
     cb(state.nodes[id].data.props);
   },
+  setRef(id: NodeId, ref: keyof NodeRef, value: any) {
+    state.nodes[id].ref[ref] = value;
+  }
 });
 
 
