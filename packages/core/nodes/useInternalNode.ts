@@ -1,6 +1,6 @@
 import { useContext, useCallback, useMemo } from "react";
 import { NodeContext } from "./NodeContext";
-import { Node, NodeRef } from "../interfaces";
+import { Node, NodeRef, NodeRefEvent } from "../interfaces";
 import { useManager } from "../manager/useManager";
 
 export function useInternalNode<S>(collect?: (node: Node) => S) {
@@ -14,10 +14,10 @@ export function useInternalNode<S>(collect?: (node: Node) => S) {
 
   const setProp = useCallback((cb) => actions.setProp(id, cb), []);
   const setRef = useCallback((ref: keyof NodeRef, value: any) => actions.setRef(id, ref, value), []);
-  const setActive = useCallback(() => actions.setNodeEvent("active", id), []);
+  const setNodeEvent = useCallback((action: keyof NodeRefEvent) => actions.setNodeEvent(action, id), []);
 
   return useMemo(() => {
-    return { ...collected, actions: { setProp, setRef, setActive}}
+    return { ...collected, actions: { setProp, setRef, setNodeEvent}}
   }, [collected])
 }
 
