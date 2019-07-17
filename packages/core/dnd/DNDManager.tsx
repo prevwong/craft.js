@@ -6,7 +6,7 @@ import movePlaceholder from "./movePlaceholder";
 import { RenderPlaceholder } from "../render/RenderPlaceholder";
 import { getDOMInfo } from "./getDOMInfo";
 import { useCollector } from "../shared/useCollector";
-import { useManager } from "../manager/useManager";
+import { useManager } from "../connectors/useManager";
 
 export const DNDManager: React.FC = ({ children }) => {
   const { nodes, events, query, actions: {setNodeEvent, move} } = useManager((state) => state);
