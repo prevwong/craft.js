@@ -6,6 +6,5 @@ export function useManager<S>(collect?: (state: ManagerState) => S) {
     finalize(collected);
   });
 
-
   return collected;
 }

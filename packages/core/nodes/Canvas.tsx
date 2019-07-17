@@ -5,8 +5,7 @@ import { SimpleElement } from "../render/RenderNode";
 import { mapChildrenToNodes} from "../nodes";
 import { createNode } from "../shared/createNode";
 import { useInternalNode } from "./useInternalNode";
-import { useCollector } from "../shared/useCollector";
-import { useManager } from "../manager/useManager";
+import { useManager } from "../connectors/useManager";
 const shortid = require("shortid");
 const invariant = require("invariant");
 
