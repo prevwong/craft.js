@@ -1,15 +1,14 @@
 import React, { cloneElement, useMemo } from "react";
-import { useInternalNode } from "./useInternalNode";
-import { Node } from "../interfaces";
+import { Node, ConnectedNode } from "../interfaces";
 import invariant from "invariant";
+import { useInternalNode } from "../nodes/useInternalNode";
 
 
-export function useNode<S>(collect? : (node: Node) => S) {
+export function useNode<S = null>(collect? : (node: Node) => S): ConnectedNode<S> {
   const { actions: {setRef, setProp, setNodeEvent}, ...collected } = useInternalNode((node) => collect && collect(node));
 
-  return useMemo(() => {
     return {
-      ...collected,
+      ...collected as any,
       actions: { setProp},
       connectTarget: (render: any): React.ReactElement => {
         const previousRef = render.ref;
@@ -34,6 +33,5 @@ export function useNode<S>(collect? : (node: Node) => S) {
         })
       }
     }
-  }, [collected])
 }
 
