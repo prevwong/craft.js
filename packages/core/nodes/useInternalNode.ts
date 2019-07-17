@@ -1,18 +1,23 @@
 import { useContext, useCallback, useMemo } from "react";
 import { NodeContext } from "./NodeContext";
-import { Node } from "../interfaces";
-import { useCollector } from "../shared/useCollector";
+import { Node, NodeRef } from "../interfaces";
+import { useManager } from "../manager/useManager";
 
-export function useInternalNode(): { node: Node, setProp: (cb: any) => void} {
-  const nodeContext = useContext(NodeContext);
+export function useInternalNode<S>(collect?: (node: Node) => S) {
+  const nodeContext = useContext(NodeContext); 
   if ( !nodeContext ) {
     return null
-  } else {
-    const {id} = nodeContext;
-    const {node, setProp: setManagerProp} = useCollector('manager', (state) => ({node: state.nodes[id]}));
-    
-    const setProp = useCallback((cb) => setManagerProp(node.id, cb), []);
-    return useMemo(() => ({ node, setProp}), [node.data])
   }
+  const {id} = nodeContext;
+
+  const {actions, query, ...collected} = useManager((state) => collect(state.nodes[id])) ;
+
+  const setProp = useCallback((cb) => actions.setProp(id, cb), []);
+  const setRef = useCallback((ref: keyof NodeRef, value: any) => actions.setRef(id, ref, value), []);
+  const setActive = useCallback(() => actions.setNodeEvent("active", id), []);
+
+  return useMemo(() => {
+    return { ...collected, actions: { setProp, setRef, setActive}}
+  }, [collected])
 }
 

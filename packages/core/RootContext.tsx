@@ -1,19 +1,26 @@
 import React, { createContext, useMemo } from "react";
-import { createMonitorStore, MonitorStore } from "./monitor";
 import { createManagerStore, ManagerStore } from "./manager";
+import { defaultPlaceholder } from "./render/RenderPlaceholder";
+import { Options } from "./interfaces/root";
 
 export type RootContext  = {
-  monitor: MonitorStore,
-  manager: ManagerStore
+  manager: ManagerStore,
+  options: Options
 }
 
-
 export const RootContext = createContext<RootContext>(null);
-export const RootContextProvider: React.FC = ({ children }) => {
+export const RootContextProvider: React.FC<Options> = ({
+  children, 
+  onRender = ({render}) => render, 
+  resolver = {},
+  renderPlaceholder = defaultPlaceholder,
+  nodes = null
+}) => {
+
   const store = useMemo(() => {
     return {
-      monitor: createMonitorStore(),
-      manager: createManagerStore()
+      manager: createManagerStore(),
+      options: { onRender, resolver, nodes, renderPlaceholder}
     }
   }, []);
 

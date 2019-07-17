@@ -1,24 +1,22 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useContext } from "react";
 import { Canvas, useNode } from "../nodes";
-import { useRenderer } from "./useRenderer";
 import { useInternalNode } from "../nodes/useInternalNode";
+import { RootContext } from "../RootContext";
 
 export const SimpleElement = ({render}: any) => {
   const {connectTarget} = useNode();
   return connectTarget(render);
 }
 
-export const RenderNodeToElement: React.FC<any> = React.memo(({ ...injectedProps}) => {
-  const {node} = useInternalNode();
-  const {onRender} = useRenderer();
+export const RenderNodeToElement: React.FC<any> =React.memo(({ ...injectedProps}) => {
+  const { type, props } = useInternalNode((node) => ({type: node.data.type, props: node.data.props}));
+  const { options: { onRender}} = useContext(RootContext);
+  return useMemo(() => {
+    let Comp = type;
+    let render = React.cloneElement(<Comp {...props} {...injectedProps} />);
+    if (typeof Comp === 'string') render = <SimpleElement render={render} />
 
-  let { type, props } = node.data;
-
-  let Comp = type;
-
-  let render = React.cloneElement(<Comp {...props} {...injectedProps} />);
-  if ( typeof Comp === 'string') render = <SimpleElement render={render} />
-
-  return useMemo(() => React.createElement(onRender, { render, node }, null), [node.data]);
+    return React.createElement(onRender, {render}, null);
+  }, [type, props]);
 });
 
