@@ -1,27 +1,15 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useContext } from "react";
 import { NodeElement, Canvas, mapChildrenToNodes } from "../nodes";
-import { RenderContext, RenderContextProvider } from "./RenderContext";
-import { Resolver } from "../interfaces";
-import { defaultPlaceholder } from "./RenderPlaceholder";
 import DNDManager from "../dnd";
-import { useCollector } from "../shared/useCollector";
+import { useManager } from "../manager/useManager";
+import { RootContext } from "../RootContext";
 const invariant = require("invariant");
 
-export type Renderer = {
-  nodes?: string
-  resolver?: Resolver
-} & Partial<RenderContext>
-
-export const Renderer: React.FC<Renderer> = ({
-  children,
-  onRender = ({ render }) => render,
-  resolver = {},
-  renderPlaceholder = defaultPlaceholder,
-  nodes = null
+export const Renderer: React.FC = ({
+  children
 }) => {
-
-  const { rootNode, add, replaceNodes, query } = useCollector('manager', (state) => ({ rootNode: state.nodes["rootNode"] }));
-
+  const { options:{nodes, resolver, onRender, renderPlaceholder }} = useContext(RootContext);
+  const { rootNode, actions: { add, replaceNodes }, query: {deserialize} } = useManager((state) => ({rootNode: state.nodes["rootNode"]}));
   useEffect(() => {
     if (!nodes) {
       const rootCanvas = React.Children.only(children) as React.ReactElement;
@@ -29,21 +17,19 @@ export const Renderer: React.FC<Renderer> = ({
       let node = mapChildrenToNodes(rootCanvas, null, "rootNode");
       add(null, node);
     } else {
-      // const rehydratedNodes = query.deserialize(nodes, resolver);
-      // replaceNodes(rehydratedNodes);
+      const rehydratedNodes = deserialize(nodes, resolver);
+      replaceNodes(rehydratedNodes);
     }
   }, []);
 
   return useMemo(() => (
-    <RenderContextProvider onRender={onRender} renderPlaceholder={renderPlaceholder}>
-      {/* <DNDManager> */}
+      <DNDManager>
         {
           rootNode ? (
             <NodeElement id="rootNode" />
           ) : null
         }
-      {/* </DNDManager> */}
-    </RenderContextProvider>
+      </DNDManager>
   ), [rootNode])
 }
 
