@@ -4,7 +4,7 @@ import { createStore, Unsubscribe } from 'redux';
 type Subscriber = (listener: () => void) => Unsubscribe
 export type QueryParameters<Q extends Methods> = Partial<Parameters<Q>> & Array<any>
 
-export type SubscriberAndCallbacksFor<M extends MethodsOrOptions, Q extends Methods> = [
+export type SubscriberAndCallbacksFor<M extends MethodsOrOptions, Q extends QueryMethods> = [
   Subscriber,
   () => { prev: StateFor<M>, current: StateFor<M> },
   (...payload: QueryParameters<Q>) => QueryCallbacksFor<Q>,
@@ -53,12 +53,7 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<a
   }
   : never;
 
-export default function reduxMethods<S, R extends MethodRecordBase<S>, Q extends Methods>(
-  methodsOrOptions: MethodsOrOptions<S, R>,
-  queryHelper: any,
-  initialState: S,
-): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q>;
-export default function reduxMethods<S, R extends MethodRecordBase<S>, Q extends Methods>(
+export default function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends QueryMethods>(
   methodsOrOptions: MethodsOrOptions<S, R>,
   queryHelper: Q,
   initialState: any
