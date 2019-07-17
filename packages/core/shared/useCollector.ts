@@ -11,7 +11,7 @@ type Methods = { actions: ManagerMethods, query: QueryCallbacksFor<typeof QueryM
 
 type Collected<S = null> =  S extends null | void ? Methods : Methods & S
 
-type useCollector<S = null> = Collected<S>;
+export type useCollector<S = null> = Collected<S>;
 
 export function useCollector(): useCollector
 export function useCollector<S>(collect: (state: ManagerState) => S, onChange: (collected: Collected<S>, finalize: React.Dispatch<React.SetStateAction<Collected<S>>>) => void): useCollector<S>;
