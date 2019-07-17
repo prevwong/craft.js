@@ -71,7 +71,7 @@ export const Canvas = React.memo(({id, is="div", children, ...props}: Canvas) =>
           )
       }
     </React.Fragment>
-  ), [node])
+  ), [node, internal.current.id])
 })
 
 // Canvas.name = 'Canvas'
