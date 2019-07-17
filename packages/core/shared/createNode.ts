@@ -10,18 +10,18 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
       ...data,
       props: {
         ...data.props
-      },
-      event: {
-        active: false,
-        dragging: false,
-        hover: false
-      },
+      }
     };
 
     node.ref = {
+      event: {
+        active:false,
+        dragging: false,
+        hover: false
+      },
       dom: null,
-      canDrag: () => true
-    };
+      canDrag: () => {}
+    }
 
     if ( isCanvas(node) ) {
       node.data.subtype = data.subtype ? data.subtype : node.data.props.is ? node.data.props.is : 'div';

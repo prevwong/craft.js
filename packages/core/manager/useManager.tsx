@@ -1,24 +1,11 @@
-import React, { useContext, useMemo } from "react";
-import { ManagerContext } from "./context";
-import { ManagerState, ConnectedManager } from "../interfaces";
-import { ManagerMethods } from "./methods";
-import { QueryMethods } from "./query";
+import { useCollector } from "../shared/useCollector";
+import { ManagerState } from "../interfaces";
 
-export function useManager(): ConnectedManager;
-export function useManager<S>(mapManagerState: (state: ManagerState) => S): ConnectedManager<S>
-export function useManager(mapManagerState?: Function) {
-  const [managerState, dispatchers] = useContext(ManagerContext);
-  const state = mapManagerState ? useMemo(() => {
-    return mapManagerState(managerState);
-  }, [managerState]) : null;
-  
-  const query = useMemo(() => {
-    return state ? QueryMethods(managerState.nodes) : null;    
-  }, [state]);
+export function useManager<S>(collect?: (state: ManagerState) => S) {
+  const collected = useCollector((state) => collect && collect(state), (collected, finalize) => {
+    finalize(collected);
+  });
 
 
-  return useMemo(() => {
-    return {...state, ...dispatchers, query}
-  }, [state]);
+  return collected;
 }
- 

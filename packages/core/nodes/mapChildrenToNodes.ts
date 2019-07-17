@@ -13,7 +13,7 @@ export function mapChildrenToNodes(children: ReactNode, parent?: NodeId, hardId?
       }
       let { type, props } = child;
 
-      if (["string", "function"].includes(typeof (type))) {
+      // if (["string", "function"].includes(typeof (type))) {
         const prefix = type === Canvas ? "canvas" : "node";
         const id = hardId ? hardId : `${prefix}-${shortid.generate()}`;
 
@@ -25,8 +25,8 @@ export function mapChildrenToNodes(children: ReactNode, parent?: NodeId, hardId?
         
         result.push(node);
         return result;
-      }
-      invariant(["string", "function"].includes(typeof (type)), "Invalid <Canvas> child provided. Expected simple JSX element or React Component.");
+      // }
+      // invariant(["string", "function"].includes(typeof (type)), "Invalid <Canvas> child provided. Expected simple JSX element or React Component.");
 
     },
     []

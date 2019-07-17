@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo } from "react";
 import { NodeId, Node } from "../interfaces";
 import { NodeElement } from "./NodeElement";
-import { RenderNodeToElement } from "../render/RenderNode";
-import {useNode, mapChildrenToNodes} from "../nodes";
-import {useManager} from "../manager";
+import { SimpleElement } from "../render/RenderNode";
+import { mapChildrenToNodes} from "../nodes";
 import { createNode } from "../shared/createNode";
+import { useInternalNode } from "./useInternalNode";
+import { useCollector } from "../shared/useCollector";
+import { useManager } from "../manager/useManager";
 const shortid = require("shortid");
 const invariant = require("invariant");
 
@@ -18,31 +20,32 @@ export interface Canvas extends React.Props<any> {
 
 export const isCanvas = (node: Node) => node.data.type === Canvas
 
-export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
-  const {add, pushChildCanvas} = useManager();
-  const {node} = useNode();
-
+export const Canvas = React.memo(({id, is="div", children, ...props}: Canvas) => {
+  const { actions: { add, pushChildCanvas}, nodes } = useManager((state)=>({nodes: state.nodes}));
+  const {node, nodeId}  = useInternalNode((node) => ({node: node.data, nodeId: node.id}));
+  // console.log(33, node);
   const internal = React.useRef({ id: null });
   useEffect(() => {
     let canvasId = `canvas-${shortid.generate()}`;
 
-    if (node.data.type === Canvas) {
-      if ( !node.data.nodes ) {  // don't recreate nodes from children after initial hydration
-        canvasId = internal.current.id = node.id;
+    if (node.type === Canvas) {
+      if ( !node.nodes ) {  // don't recreate nodes from children after initial hydration
+        canvasId = internal.current.id = nodeId;
         const childNodes = mapChildrenToNodes(children, canvasId);
-        add(node.id, childNodes);
+        // console.log("addding...", nodeId)
+        add(nodeId, childNodes);
       }
     } else {
       invariant(id, 'Root canvas cannot ommit `id` prop')
-      if (!node.data._childCanvas || (node.data._childCanvas && !node.data._childCanvas[id])) {
+      if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
         const rootNode = createNode({
           type: Canvas,
           props: {is, children, ...props},
         }, canvasId);
         internal.current.id = canvasId;
-        pushChildCanvas(node.id, id, rootNode);
+        pushChildCanvas(nodeId, id, rootNode);
       } else {
-       internal.current.id = node.data._childCanvas[id];
+       internal.current.id = node._childCanvas[id];
       }
     }
   }, []);
@@ -50,18 +53,17 @@ export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
   return useMemo(() => (
     <React.Fragment>
        {
-        node.data.type === Canvas ? (
-          <RenderNodeToElement is={node.data.subtype} {...props}>
-            {
-              <React.Fragment>
-                {
-                  node.data.nodes && node.data.nodes.map((id => (
-                    <NodeElement id={id} key={id} />
-                  )))
-                }
-              </React.Fragment>
-            }
-          </RenderNodeToElement>
+        node.type === Canvas ? (
+          <SimpleElement render={React.createElement(is, props, (
+            <React.Fragment>
+              {
+                node.nodes && node.nodes.map((id => (
+                  <NodeElement id={id} key={id} />
+                )))
+              }
+            </React.Fragment>
+          ))
+            } />
         ) : (
             internal.current.id ? (
               <NodeElement id={internal.current.id} />
@@ -69,6 +71,7 @@ export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
           )
       }
     </React.Fragment>
-  ), [node, internal.current.id]);
-}
+  ), [node, internal.current.id])
+})
 
+// Canvas.name = 'Canvas'

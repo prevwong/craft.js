@@ -2,35 +2,32 @@ import React from "react";
 
 export type NodeId = string;
 
-export interface Node  {
+export type Node =  {
   id: NodeId;
-  data: NodeData;
-  ref: NodeRef;
-  props: any;
+  data: NodeData
+  ref: NodeRef
 }
 
-export interface NodeData {
+export type InternalNode = Pick<Node, 'id'> & NodeData
+export type NodeRefEvent = Record<'active' | 'dragging' | 'hover', boolean>
+
+export type NodeRef = {
+  dom: HTMLElement;
+  canDrag(node: Node): void;
+  incoming?(incoming: Node): boolean;
+  outgoing?(outgoing: Node): boolean;
+  event: NodeRefEvent
+}
+
+
+export type NodeData = {
   props: any,
   type: string | React.ElementType;
   subtype?: string | React.ElementType,
   parent?: NodeId;
   closestParent?: NodeId;
-  event: NodeEvent;
   _childCanvas?: Record<string, NodeId>
   nodes?: NodeId[]
-}
-
-export interface NodeRef {
-  dom: HTMLElement;
-  canDrag(node: Node): void;
-  incoming?(incoming: Node): boolean;
-  outgoing?(outgoing: Node): boolean;
-}
-
-export interface NodeEvent {
-  active?: boolean;
-  dragging?: boolean;
-  hover?: boolean;
 }
 
 export type ReduceCompType = string | {
@@ -52,7 +49,3 @@ export type ConnectedNode = {
   connectTarget: Function,
   setProp: Function
 } 
-
-export type ResolverFunction = (name: string) => string | React.ElementType;
-export type ResolverMap = Record<string, string | React.ElementType>;
-export type Resolver = ResolverFunction | ResolverMap;

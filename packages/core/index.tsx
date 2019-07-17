@@ -1,15 +1,17 @@
 import React from "react";
-import { ManagerContextProvider } from "./manager";
-export * from "./events"
+import { RootContextProvider } from "./RootContext";
+import DNDManager from "./dnd";
+import { Options } from "./interfaces/root";
+export * from "./dnd"
 export * from "./manager"
 export * from "./nodes"
 export * from "./render"
-export * from "./interfaces"
+export * from "./interfaces";
 
-export const Craft = ({ children }: any) => {
+export const Craft: React.FC<Partial<Options>> = ({ children, ...props }: any) => {
   return (
-    <ManagerContextProvider>
-      {children}
-    </ManagerContextProvider>
+    <RootContextProvider {...props}>
+        {children}
+    </RootContextProvider>
   )
 }

@@ -1,22 +1,21 @@
-import { Nodes, NodeId, Node, NodeData, SerializedNodeData, Resolver } from "../interfaces";
-import { Methods, ActionUnion, ActionByType } from "use-methods";
+import { Nodes, NodeId, Node, NodeData, SerializedNodeData, Resolver, ManagerState } from "../interfaces";
 import { isCanvas, Canvas } from "../nodes";
 import { serializeNode } from "../shared/serializeNode";
 import { createNode } from "../shared/createNode";
 import { deserializeNode } from "../shared/deserializeNode";
+import { CallbacksFor, QueryCallbacksFor } from "../shared/redux-methods";
 
 /**
  * Manager methods used to query nodes 
  * @param nodes 
  */
 
-export function QueryMethods(nodes: Nodes) {
-  const _self = <T extends keyof QueryMethods>(name: T) => (QueryMethods(nodes)[name]);
-
+export function QueryMethods(manager: ManagerState, options: any) {
+  const _self = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) => (QueryMethods(manager, options)[name]);
   return {
     getTree(cur = "rootNode", canvasName?: string) {
       let tree: any = {};
-      const node = nodes[cur];
+      const node = manager.nodes[cur];
       if (!node) return null;
       const { id } = node;
       tree[id] = {
@@ -28,21 +27,22 @@ export function QueryMethods(nodes: Nodes) {
       if (node.data._childCanvas) {
         Object.keys(node.data._childCanvas).forEach(canvasName => {
           const virtualId = node.data._childCanvas[canvasName]
-          tree[id].children[virtualId] = this(nodes, virtualId, canvasName);
+          tree[id].children[virtualId] = this(manager.nodes, virtualId, canvasName);
         });
       } else if (node.data.nodes) {
         const childNodes = node.data.nodes;
         tree[id].nodes = childNodes;
         childNodes.forEach((nodeId: NodeId) => {
-          tree[id].children[nodeId] = this(nodes, nodeId);
+          tree[id].children[nodeId] = this(manager.nodes, nodeId);
         });
       }
 
       return tree[id];
     },
     getDeepNodes(id: NodeId, result: NodeId[] = []) {
+      // console.log(id, manager)
       result.push(id);
-      const node = nodes[id];
+      const node = manager.nodes[id];
       if (node.data._childCanvas) {
         Object.keys(node.data._childCanvas).map(canvasName => {
           const virtualId = node.data._childCanvas[canvasName];
@@ -57,7 +57,7 @@ export function QueryMethods(nodes: Nodes) {
       return result;
     },
     getAllParents(nodeId: NodeId, result: NodeId[] = []) {
-      const node = nodes[nodeId];
+      const node = manager.nodes[nodeId];
       const parent = node.data.closestParent;
       if (parent) {
         result.push(parent);
@@ -66,15 +66,15 @@ export function QueryMethods(nodes: Nodes) {
       return result;
     },
     getAllCanvas() {
-      return Object.keys(nodes).filter(id => {
-        if (isCanvas(nodes[id])) return true;
+      return Object.keys(manager.nodes).filter(id => {
+        if (isCanvas(manager.nodes[id])) return true;
         return false;
       })
     },
     serialize(): string {
-      return (Object.keys(nodes).reduce((result: any, id: NodeId) => {
-        const { data: { event, ...data } } = nodes[id];
-        result[id] = serializeNode({ ...data })
+      return (Object.keys(manager.nodes).reduce((result: any, id: NodeId) => {
+        const { data: { ...data } } = manager.nodes[id];
+        result[id] = serializeNode({ ...data }, options.resolver)
         return result;
       }, {}));
     },
@@ -96,11 +96,3 @@ export function QueryMethods(nodes: Nodes) {
     }
   }
 };
-
-export type CallbacksFor<M extends Methods> = M extends Methods<any, infer R>
-  ? {
-    [T in ActionUnion<R>['type']]: (...payload: ActionByType<ActionUnion<R>, T>['payload']) => ReturnType<R[T]>
-  }
-  : never;
-
-export type QueryMethods = CallbacksFor<typeof QueryMethods>;

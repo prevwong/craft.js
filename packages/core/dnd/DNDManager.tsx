@@ -3,12 +3,13 @@ import { Nodes, Node, NodeId } from "../interfaces";
 import { PlaceholderInfo } from "./interfaces";
 import findPosition from "./findPosition";
 import movePlaceholder from "./movePlaceholder";
-import {RenderPlaceholder} from "../render/RenderPlaceholder";
-import {useManager} from "../manager";
+import { RenderPlaceholder } from "../render/RenderPlaceholder";
 import { getDOMInfo } from "./getDOMInfo";
+import { useCollector } from "../shared/useCollector";
+import { useManager } from "../manager/useManager";
 
-export const EventsManager: React.FC = ({ children }) => {
-  const { nodes, events, setNodeEvent, move, query } = useManager((state) => state)
+export const DNDManager: React.FC = ({ children }) => {
+  const { nodes, events, query, actions: {setNodeEvent, move} } = useManager((state) => state);
   const [placeholder, setPlaceholder] = useState<PlaceholderInfo>(null);
   const [isMousePressed, setMousePressed] = useState(false);
 
@@ -27,8 +28,8 @@ export const EventsManager: React.FC = ({ children }) => {
 
       const bestTarget = findPosition(targetParent, dimensionsInContainer, e.clientX, e.clientY);
       const bestTargetNode = targetParent.data.nodes.length ? nodes[targetParent.data.nodes[bestTarget.index]] : targetParent;
-      
-      if ( !possibleNodes.includes(bestTargetNode.id) ) return;
+
+      if (!possibleNodes.includes(bestTargetNode.id)) return;
 
       const output: PlaceholderInfo = {
         position: movePlaceholder(
@@ -47,10 +48,10 @@ export const EventsManager: React.FC = ({ children }) => {
   }
 
   const getNodesInAcceptedCanvas = (nodes: Nodes, draggedNode: Node): NodeId[] => {
-    
+
     // first check if the parent canvas allows the dragged node from going out
     const { parent } = draggedNode.data;
-    if ( !nodes[parent].ref.outgoing(draggedNode) ) {
+    if (!nodes[parent].ref.outgoing(draggedNode)) {
       // if the parent node does not allow the dragged node from going out then, limit potential nodes to those within the parent;
       return query.getDeepNodes(parent);
     }
@@ -58,8 +59,8 @@ export const EventsManager: React.FC = ({ children }) => {
     const canvases = query.getAllCanvas();
     const nodesToConsider = canvases.reduce((res: NodeId[], id) => {
       const canvas = nodes[id];
-      if ( canvas.ref.incoming(draggedNode) ) {
-        if ( !res.includes(canvas.id) ) res = [...res, canvas.id];
+      if (canvas.ref.incoming(draggedNode)) {
+        if (!res.includes(canvas.id)) res = [...res, canvas.id];
         res = [...res, ...canvas.data.nodes];
       }
       return res;
@@ -68,14 +69,14 @@ export const EventsManager: React.FC = ({ children }) => {
     return nodesToConsider;
   }
 
-  const getNearestTarget = (e: MouseEvent): [NodeId, NodeId[]]=> {
+  const getNearestTarget = (e: MouseEvent): [NodeId, NodeId[]] => {
     const pos = { x: e.clientX, y: e.clientY };
 
     const deepChildren = query.getDeepNodes(events.active.id);
     const possibleNodeIds = getNodesInAcceptedCanvas(nodes, events.active);
     const nodesWithinBounds = possibleNodeIds.filter(nodeId => {
-      return nodes[nodeId].ref.dom && 
-      !deepChildren.includes(nodeId) 
+      return nodes[nodeId].ref.dom &&
+        !deepChildren.includes(nodeId)
     });
 
     const nearestTargets = nodesWithinBounds.filter((nodeId: NodeId) => {
@@ -91,43 +92,43 @@ export const EventsManager: React.FC = ({ children }) => {
   };
 
   const onDrag = useCallback((e: MouseEvent) => {
-      const { left, right, top, bottom } = getDOMInfo(events.active.ref.dom);
-      if (
-        !(
-          e.clientX >= left &&
-          e.clientX <= right &&
-          e.clientY >= top &&
-          e.clientY <= bottom
-        )
-      ) {
-        // Element being dragged
-        const selection = window.getSelection ? window.getSelection() : (document as any).selection ? (document as any).selection : null;
-        if (!!selection) {
-          selection.empty ? selection.empty() : selection.removeAllRanges();
-        }
-
-        setNodeEvent("dragging", events.active.id);
-        placeBestPosition(e);
+    const { left, right, top, bottom } = getDOMInfo(events.active.ref.dom);
+    if (
+      !(
+        e.clientX >= left &&
+        e.clientX <= right &&
+        e.clientY >= top &&
+        e.clientY <= bottom
+      )
+    ) {
+      // Element being dragged
+      const selection = window.getSelection ? window.getSelection() : (document as any).selection ? (document as any).selection : null;
+      if (!!selection) {
+        selection.empty ? selection.empty() : selection.removeAllRanges();
       }
+
+      setNodeEvent("dragging", events.active.id);
+      placeBestPosition(e);
+    }
   }, [events.active]);
 
   const onMouseUp = useCallback((e: MouseEvent) => {
     setMousePressed(false);
     setNodeEvent("dragging", null);
-    
+
     if (events.dragging) {
       const { id: dragId } = events.dragging;
       const { placement } = placeholder;
       const { parent, index, where } = placement;
-      const { id: parentId, data:{nodes} } = parent;
+      const { id: parentId, data: { nodes } } = parent;
 
       move(dragId, parentId, index + (where === "after" ? 1 : 0));
     }
     setPlaceholder(null);
   }, [events.dragging, placeholder]);
 
-  useEffect(() => { 
-    if ( isMousePressed ) {
+  useEffect(() => {
+    if (isMousePressed) {
       window.addEventListener('mousemove', onDrag);
       window.addEventListener('mouseup', onMouseUp);
     } else {
@@ -135,7 +136,7 @@ export const EventsManager: React.FC = ({ children }) => {
       window.removeEventListener('mouseup', onMouseUp);
     }
 
-    return(() => {
+    return (() => {
       window.removeEventListener("mousedown", onDrag);
       window.removeEventListener('mouseup', onMouseUp);
     })
@@ -143,15 +144,15 @@ export const EventsManager: React.FC = ({ children }) => {
 
 
   useEffect(() => {
-    if ( events.active && events.active.data.parent ) setMousePressed(true);
+    if (events.active && events.active.data.parent) setMousePressed(true);
   }, [events.active]);
 
-return (
-  <React.Fragment>
-    {
-      placeholder? <RenderPlaceholder placeholder = { placeholder } /> : null
-    }
-    {children}
-  </React.Fragment>
-)
+  return (
+    <React.Fragment>
+      {
+        placeholder ? <RenderPlaceholder placeholder={placeholder} /> : null
+      }
+      {children}
+    </React.Fragment>
+  )
 }

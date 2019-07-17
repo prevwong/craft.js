@@ -12,4 +12,4 @@ export type ManagerState = {
   }
 }
 
-export type ConnectedManager<S = null> = S extends null ?  ManagerMethods: ManagerMethods & {query: QueryMethods} & S ;
+// export type ConnectedManager<S = null> = S extends null ?  ManagerMethods: ManagerMethods & {query: QueryMethods} & S ;

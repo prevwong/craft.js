@@ -1,15 +1,11 @@
-import { NodeId, Node, Nodes } from "../interfaces";
+import { NodeId, Node, Nodes, NodeRef } from "../interfaces";
 import { CallbacksFor } from "use-methods";
 import { ManagerState } from "../interfaces";
 import { isCanvas } from "../nodes";
+import produce from "immer";
 const invariant = require('invariant');
 
 const ManagerMethods = (state: ManagerState) => ({
-  setRef: (id: NodeId, ref: "dom" | "outgoing" | "incoming" | "canDrag", value: any) => {
-    let node = state.nodes[id];
-    if (isCanvas(node)) node.ref[ref] = value;
-    else node.ref[ref as "dom" | "canDrag"] = value;
-  },
   pushChildCanvas(id: NodeId, canvasName: string, newNode: Node) {
     if (!state.nodes[id].data._childCanvas) state.nodes[id].data._childCanvas = {};
     newNode.data.closestParent = id;
@@ -19,13 +15,14 @@ const ManagerMethods = (state: ManagerState) => ({
   setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
     const current = state.events[eventType];
     if (current && current.id !== id) {
-      state.nodes[current.id].data.event[eventType] = false;
+      state.nodes[current.id].ref.event[eventType] = false;
     }
 
     if (id) {
-      state.nodes[id].data.event[eventType] = true
+      state.nodes[id].ref.event[eventType] = true
       state.events[eventType] = state.nodes[id];
     } else {
+      // if ( eventType === 'dragging') return;
       state.events[eventType] = null;
     }
   },
@@ -34,7 +31,7 @@ const ManagerMethods = (state: ManagerState) => ({
   },
   add(parentId: NodeId, nodes: Node[] | Node) {
     if (parentId && !state.nodes[parentId].data.nodes) state.nodes[parentId].data.nodes = []
-    if ( !Array.isArray(nodes) ) nodes = [nodes];
+    if (!Array.isArray(nodes)) nodes = [nodes];
     (nodes as Node[]).forEach(node => {
       state.nodes[node.id] = node;
       if (parentId) state.nodes[parentId].data.nodes.push(node.id);
@@ -48,12 +45,16 @@ const ManagerMethods = (state: ManagerState) => ({
     currentParentNodes[currentParentNodes.indexOf(targetId)] = "marked";
     newParentNodes.splice(index, 0, targetId);
     state.nodes[targetId].data.parent = newParentId;
-    state.nodes[targetId].data.closestParent = newParentId;
+    // state.nodes[targetId].data.closestParent = newParentId;
     currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
+
   },
   setProp(id: NodeId, cb: <T>(props: T) => void) {
     cb(state.nodes[id].data.props);
   },
+  setRef(id: NodeId, ref: keyof NodeRef, value: any) {
+    state.nodes[id].ref[ref] = value;
+  }
 });
 
 

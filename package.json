@@ -16,7 +16,9 @@
     "react-contenteditable": "^3.2.6",
     "react-dom": "^16.8.6",
     "react-serialize": "^0.2.0",
+    "redux": "^4.0.4",
     "reset-css": "^4.0.1",
+    "shallowequal": "^1.1.0",
     "shortid": "^2.2.14",
     "styled-components": "^4.2.1",
     "use-methods": "^0.5.1"
@@ -29,6 +31,7 @@
     "@types/node": "^11.13.5",
     "@types/react": "^16.8.13",
     "@types/react-dom": "^16.8.4",
+    "@types/redux": "^3.6.0",
     "@types/styled-components": "^4.1.15",
     "autoprefixer": "^9.6.0",
     "classnames": "^2.2.6",
