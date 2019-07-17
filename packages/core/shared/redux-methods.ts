@@ -2,12 +2,12 @@ import produce, { PatchListener } from 'immer';
 import { createStore, Unsubscribe } from 'redux';
 
 type Subscriber = (listener: () => void) => Unsubscribe
-export type QueryParameters<Q extends QueryMethods> = Partial<Parameters<Q>> & Array<any>
+export type QueryParameters<Q extends Methods> = Partial<Parameters<Q>> & Array<any>
 
-export type SubscriberAndCallbacksFor<M extends MethodsOrOptions, Q extends QueryMethods> = [
+export type SubscriberAndCallbacksFor<M extends MethodsOrOptions, Q extends Methods> = [
   Subscriber,
   () => { prev: StateFor<M>, current: StateFor<M> },
-  (...payload: QueryParameters<Q>) => QueryCallback<Q>,
+  (...payload: QueryParameters<Q>) => QueryCallbacksFor<Q>,
   CallbacksFor<M>
 ];
 
@@ -23,7 +23,7 @@ export type CallbacksFor<M extends MethodsOrOptions> = M extends MethodsOrOption
   }
   : never;
 
-export type Methods<S = any, R extends MethodRecordBase<S> = any> = (state: S) => R;
+export type Methods<S = any, R extends MethodRecordBase<S> = any> = (state?: S) => R;
 
 export type Options<S = any, R extends MethodRecordBase<S> = any> = {
   methods: Methods<S, R>;
@@ -46,20 +46,19 @@ export type ActionUnion<R extends MethodRecordBase> = {
 export type ActionByType<A, T> = A extends { type: infer T2 } ? (T extends T2 ? A : never) : never;
 
 
-export type QueryMethods<S = any, S2 = any, R extends MethodRecordBase<S> = any> = (state?: S, state2?: S2) => R;
-
-export type QueryCallback<M extends QueryMethods> = M extends QueryMethods<any, any, infer R>
+export type QueryMethods<S = any, O=any, R extends MethodRecordBase<S> = any> = (state?: S, options?: O) => R;
+export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<any, any, infer R>
   ? {
     [T in ActionUnion<R>['type']]: (...payload: ActionByType<ActionUnion<R>, T>['payload']) => ReturnType<R[T]>
   }
   : never;
 
-export default function reduxMethods<S, R extends MethodRecordBase<S>, Q extends QueryMethods>(
+export default function reduxMethods<S, R extends MethodRecordBase<S>, Q extends Methods>(
   methodsOrOptions: MethodsOrOptions<S, R>,
   queryHelper: any,
   initialState: S,
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q>;
-export default function reduxMethods<S, R extends MethodRecordBase<S>, Q extends QueryMethods>(
+export default function reduxMethods<S, R extends MethodRecordBase<S>, Q extends Methods>(
   methodsOrOptions: MethodsOrOptions<S, R>,
   queryHelper: Q,
   initialState: any

@@ -1,20 +1,13 @@
 import React, { Children } from "react";
-import { NodeData, SerializedNodeData, ReducedComp, Resolver, ResolverFunction, ReduceCompType } from "../interfaces";
+import { NodeData, SerializedNodeData, ReducedComp, ReduceCompType } from "../interfaces";
 import { Canvas } from "../nodes";
-
-const resolve = (resolver: Resolver, comp: string) => {
-  let Comp;
-  if (typeof resolver == "function") Comp = resolver(comp);
-  else { Comp = resolver[comp]; }
-
-  return Comp;
-}
+import { Resolver } from "../interfaces/root";
 
 const restoreType = (type: ReduceCompType, resolver: Resolver) => 
   typeof type === "object" && type.resolvedName ? 
     (
       type.resolvedName === 'Canvas' ? Canvas :
-      resolve(resolver, type.resolvedName)
+      resolver[type.resolvedName]
     ) : 
     typeof type === "string" ? 
       type : null;
@@ -25,7 +18,7 @@ export const deserializeComp = (data: ReducedComp, resolver: Resolver, index?: n
   if (!main) {
     return;
   }
-  // console.log(subtype)
+  
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
     if (typeof prop === "object" && prop.resolvedName) {
@@ -49,7 +42,6 @@ export const deserializeNode = (data: SerializedNodeData, resolver: Resolver): O
 
   const reducedComp = deserializeComp({ type, subtype, props }, resolver);
 
-  // console.log(reducedComp)
   return {
     ...reducedComp,
     ...nodeData
