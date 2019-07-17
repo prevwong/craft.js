@@ -1,5 +1,5 @@
 import React, { Fragment, useRef } from "react";
-import {useManager} from "~packages/core/manager/useManager";
+import { useManager } from "~packages/core/connectors";
 
 export const Heading = ({text}: any) => {
   const {query} = useManager((state) => state);

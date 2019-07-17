@@ -1,7 +1,8 @@
 import React, { useMemo, useContext } from "react";
-import { Canvas, useNode } from "../nodes";
+import { Canvas } from "../nodes";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { RootContext } from "../RootContext";
+import { useNode } from "../connectors";
 
 export const SimpleElement = ({render}: any) => {
   const {connectTarget} = useNode();

@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useContext } from "react";
 import { NodeElement, Canvas, mapChildrenToNodes } from "../nodes";
 import DNDManager from "../dnd";
-import { useManager } from "../manager/useManager";
 import { RootContext } from "../RootContext";
+import { useManager } from "../connectors";
 const invariant = require("invariant");
 
 export const Renderer: React.FC = ({
