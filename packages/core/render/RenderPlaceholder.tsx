@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { useRenderer } from "./useRenderer";
-import { PlaceholderInfo } from "../events/interfaces";
+import React, { Component, useContext } from "react";
+import { PlaceholderInfo } from "../dnd/interfaces";
+import { RootContext } from "../RootContext";
 
 export type Placeholder = {
   placeholder: PlaceholderInfo
@@ -39,6 +39,6 @@ export const defaultPlaceholder: React.FC<Placeholder> = ({placeholder:{position
 
 
 export const RenderPlaceholder: React.FC<Placeholder> = ({ placeholder }) => {
-  const { renderPlaceholder } = useRenderer();
+  const { options: { renderPlaceholder} } = useContext(RootContext);
   return React.createElement(renderPlaceholder, { placeholder });
 }
