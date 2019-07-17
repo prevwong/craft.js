@@ -1,7 +1,8 @@
 import React from "react";
 import { ConnectedNode } from "~packages/core/interfaces";
-import { connectNode, Canvas, useNode } from "~packages/core/nodes";
+import { connectNode, Canvas } from "~packages/core/nodes";
 import MsgCanvas from "./MsgCanvas";
+import { useNode } from "~packages/core/connectors/useNode";
 
 export type MsgBox = {
   text: string
