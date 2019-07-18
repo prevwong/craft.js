@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import { TreeNode } from "~packages/core";
 import styled from "styled-components";
+import { LayerContext } from "./context";
 
 
 export const LayerNode: React.FC<{node: TreeNode, depth?:number}> = ({node, depth=0}) => {
   const {children, data} = node;
-  console.log(node)
+  const dispatch = useContext(LayerContext);
+
   return (
-    <LayerNodeDiv depth={depth} className="craft-layer-node">
+    <LayerNodeDiv 
+      depth={depth}
+      className="craft-layer-node"
+      ref={(ref) => {
+        if ( ref ) {
+          dispatch({
+            type: 'REGISTER_LAYER',
+            layer: node
+          });
+        }
+      }}
+    >
       <span className='craft-layer-node-heading'>{data.name}</span>
       {
         children && Object.keys(children).length ? Object.keys(children).map(id =>
