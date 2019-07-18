@@ -13,7 +13,7 @@ export default class App extends React.Component {
     return (
       <div className='app'>
         <Craft
-          // nodes='{"rootNode":{"type":{"resolvedName":"Canvas"},"subtype":"div","props":{},"parent":null,"nodes":["node-yzMEZ9FxfN","node-iT_7_zLt2K"]},"node-sVkn2U5ljm":{"type":"h2","props":{"children":"THISTHISTHIS"},"parent":"canvas-DBey6hVO6a"},"node-yzMEZ9FxfN":{"type":{"resolvedName":"Msg"},"props":{"text":"hi"},"parent":"rootNode","_childCanvas":{"Msgca":"canvas-DBey6hVO6a"}},"canvas-DBey6hVO6a":{"type":{"resolvedName":"Canvas"},"subtype":{"resolvedName":"MsgCanvas"},"props":{"style":{"background":"#999","padding":"20px 0"}},"closestParent":"node-yzMEZ9FxfN","nodes":["node-sVkn2U5ljm"]},"node-iT_7_zLt2K":{"type":"h2","props":{"children":"Hi world"},"parent":"rootNode"}}'
+          nodes='{"rootNode":{"type":{"resolvedName":"Canvas"},"subtype":"div","props":{},"nodes":["node-KsjZhXnscS","node-cFm3GIgDhc","node-kqcZAcbGD9"]},"node-kqcZAcbGD9":{"type":"h2","props":{"children":"THISTHISTHIS"},"parent":"rootNode"},"node-KsjZhXnscS":{"type":{"resolvedName":"Msg"},"props":{"text":"hi"},"parent":"rootNode","_childCanvas":{"Msgca":"canvas-vyPaBV6ILS"}},"node-F53wjMN_jN":{"type":{"resolvedName":"TestCComponent"},"props":{},"parent":"canvas-vyPaBV6ILS"},"canvas-vyPaBV6ILS":{"type":{"resolvedName":"Canvas"},"subtype":{"resolvedName":"MsgCanvas"},"props":{"style":{"background":"#999","padding":"20px 0"}},"closestParent":"node-KsjZhXnscS","nodes":["node-F53wjMN_jN"]},"node-cFm3GIgDhc":{"type":"h2","props":{"children":"Hi world"},"parent":"rootNode"}}'
           onRender={(({ render }) => {
             return (
               <React.Fragment>

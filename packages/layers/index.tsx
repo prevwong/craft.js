@@ -5,7 +5,6 @@ import { LayerNode } from "./LayerNode";
 export const Layers: React.FC = () => {
   const {query} = useManager((state) => state);
   const tree = query.getTree();
-
   return (
     tree ? (
       <LayerNode node={tree} />
