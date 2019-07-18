@@ -6,6 +6,7 @@ import { Heading } from "./components/Heading";
 import ReactDOMServer from "react-dom/server";
 import MsgCanvas from "./components/MsgCanvas";
 import TestCComponent from "./components/TestCComponent";
+import {Layers} from "~packages/layers";
 
 export default class App extends React.Component {
   render() {
@@ -30,6 +31,7 @@ export default class App extends React.Component {
               <TestCComponent />
             </Canvas>
           </Renderer>
+          <Layers />
         </Craft>
       </div>
     )

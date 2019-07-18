@@ -9,7 +9,7 @@ export type MsgBox = {
 
 export const Msg: React.FC<MsgBox> = ({children, text}) => {
   const { actions:{setProp}, connectTarget, event }  = useNode(node => ({event: node.ref.event}));
-  console.log(event);
+  // console.log(event);
   return connectTarget(
     <div className="message-box" >
       <h2>MESSAGE{text}</h2>
