@@ -7,10 +7,9 @@ import { QueryMethods } from "../manager/query";
 import { QueryCallbacksFor, CallbacksFor } from "./createReduxMethods";
 const shallowequal = require('shallowequal');
 
-type Methods = { actions: ManagerMethods, query: QueryCallbacksFor<typeof QueryMethods>};
+export type Methods = { actions: ManagerMethods, query: QueryCallbacksFor<typeof QueryMethods>};
 
-type Collected<S = null> =  S extends null | void ? Methods : Methods & S
-
+type Collected<S = null> = S extends null ? Methods : Methods & S
 export type useCollector<S = null> = Collected<S>;
 
 export function useCollector(): useCollector
