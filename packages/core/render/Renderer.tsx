@@ -9,12 +9,14 @@ export const Renderer: React.FC = ({
   children
 }) => {
   const { options:{nodes, resolver, onRender, renderPlaceholder }} = useContext(RootContext);
-  const { rootNode, actions: { add, replaceNodes }, query: {deserialize} } = useManager((state) => ({rootNode: state.nodes["rootNode"]}));
+  const { rootNode, actions: { add, replaceNodes }, query: {deserialize, createNode} } = useManager((state) => ({rootNode: state.nodes["rootNode"]}));
   useEffect(() => {
     if (!nodes) {
       const rootCanvas = React.Children.only(children) as React.ReactElement;
       invariant(rootCanvas.type && rootCanvas.type == Canvas, "The immediate child of <Renderer /> has to be a Canvas");
-      let node = mapChildrenToNodes(rootCanvas, null, "rootNode");
+      let node = mapChildrenToNodes(rootCanvas, (data, id) => {
+        return createNode(data, id);
+      }, {hardId:"rootNode"});
       add(null, node);
     } else {
       const rehydratedNodes = deserialize(nodes, resolver);

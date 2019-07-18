@@ -20,7 +20,7 @@ export interface Canvas extends React.Props<any> {
 export const isCanvas = (node: Node) => node.data.type === Canvas
 
 export const Canvas = React.memo(({id, is="div", children, ...props}: Canvas) => {
-  const { actions: { add, pushChildCanvas}, nodes } = useManager((state)=>({nodes: state.nodes}));
+  const { actions: { add, pushChildCanvas}, nodes, query } = useManager((state)=>({nodes: state.nodes}));
   const {node, nodeId}  = useInternalNode((node) => ({node: node.data, nodeId: node.id}));
   // console.log(33, node);
   const internal = React.useRef({ id: null });
@@ -30,14 +30,16 @@ export const Canvas = React.memo(({id, is="div", children, ...props}: Canvas) =>
     if (node.type === Canvas) {
       if ( !node.nodes ) {  // don't recreate nodes from children after initial hydration
         canvasId = internal.current.id = nodeId;
-        const childNodes = mapChildrenToNodes(children, canvasId);
+        const childNodes = mapChildrenToNodes(children, (data, id) => {
+          return query.createNode(data, id);
+        }, {parent: canvasId});
         // console.log("addding...", nodeId)
         add(nodeId, childNodes);
       }
     } else {
       invariant(id, 'Root canvas cannot ommit `id` prop')
       if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
-        const rootNode = createNode({
+        const rootNode = query.createNode({
           type: Canvas,
           props: {is, children, ...props},
         }, canvasId);
