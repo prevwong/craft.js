@@ -24,6 +24,7 @@ export type NodeRef = {
 export type NodeData = {
   props: any,
   type: string | React.ElementType;
+  name: string,
   subtype?: string | React.ElementType,
   parent?: NodeId;
   closestParent?: NodeId;
@@ -41,10 +42,10 @@ export type ReducedComp = {
   props: any
 }
 
-export type SerializedNodeData = Omit<NodeData, 'type' | 'subtype' | 'event'> & ReducedComp 
+export type SerializedNodeData = Omit<NodeData, 'type' | 'subtype' | 'name' | 'event'> & ReducedComp 
 
 export type Nodes = Record<NodeId, Node>
-export type TreeNode = Record<NodeId, Node & {children?: any}>
+export type TreeNode = Node & {children?: any}
 
 export type ConnectedNode<S = null> = S extends null ? {
   connectTarget: Function,
