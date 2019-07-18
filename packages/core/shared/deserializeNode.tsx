@@ -44,7 +44,7 @@ export const deserializeComp = (data: ReducedComp, resolver: Resolver, index?: n
 }
 
 export const deserializeNode = (data: SerializedNodeData, resolver: Resolver): Omit<NodeData, 'event'> => {
-  let { type, subtype, props, name, ...nodeData } = data;
+  let { type, subtype, props, ...nodeData } = data;
 
   const reducedComp = deserializeComp({ type, subtype, props }, resolver);
 
