@@ -47,36 +47,20 @@ export const DNDManager: React.FC = ({ children }) => {
     }
   }
 
-  const getNodesInAcceptedCanvas = (nodes: Nodes, draggedNode: Node): NodeId[] => {
-
-    // first check if the parent canvas allows the dragged node from going out
-    const { parent } = draggedNode.data;
-    if (!nodes[parent].ref.outgoing(draggedNode)) {
-      // if the parent node does not allow the dragged node from going out then, limit potential nodes to those within the parent;
-      return query.getDeepNodes(parent);
-    }
-
-    const canvases = query.getAllCanvas();
-    const nodesToConsider = canvases.reduce((res: NodeId[], id) => {
-      const canvas = nodes[id];
-      if (canvas.ref.incoming(draggedNode)) {
-        if (!res.includes(canvas.id)) res = [...res, canvas.id];
-        res = [...res, ...canvas.data.nodes];
-      }
+  const getNodesInAcceptedCanvas = (draggedNode: Node): NodeId[] => {
+    const acceptingCanvases = query.getAcceptingCanvases(draggedNode.id);
+    return acceptingCanvases.reduce((res, id) => {
+      res.push(...[id,...nodes[id].data.nodes]);
       return res;
     }, []);
-
-    return nodesToConsider;
   }
 
   const getNearestTarget = (e: MouseEvent): [NodeId, NodeId[]] => {
     const pos = { x: e.clientX, y: e.clientY };
 
-    const deepChildren = query.getDeepNodes(events.active.id);
-    const possibleNodeIds = getNodesInAcceptedCanvas(nodes, events.active);
+    const possibleNodeIds = getNodesInAcceptedCanvas(events.active);
     const nodesWithinBounds = possibleNodeIds.filter(nodeId => {
-      return nodes[nodeId].ref.dom &&
-        !deepChildren.includes(nodeId)
+      return nodes[nodeId].ref.dom 
     });
 
     const nearestTargets = nodesWithinBounds.filter((nodeId: NodeId) => {
