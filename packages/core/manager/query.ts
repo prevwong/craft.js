@@ -1,4 +1,4 @@
-import { Nodes, NodeId, SerializedNodeData, ManagerState, Resolver } from "../interfaces";
+import { Nodes, NodeId, SerializedNodeData, ManagerState, Resolver, TreeNode } from "../interfaces";
 import { isCanvas, Canvas } from "../nodes";
 import { serializeNode } from "../shared/serializeNode";
 import { createNode } from "../shared/createNode";
@@ -14,26 +14,26 @@ export function QueryMethods(manager: ManagerState, options: any) {
   const _self = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) => (QueryMethods(manager, options)[name]);
   return {
     getTree(cur = "rootNode", canvasName?: string) {
-      let tree: any = {};
+      let tree: TreeNode = {};
       const node = manager.nodes[cur];
       if (!node) return null;
       const { id } = node;
       tree[id] = {
         ...node
       }
-      if (canvasName) tree[id].canvasName = canvasName;
+      // if (canvasName) tree[id].canvasName = canvasName;
 
       if (node.data._childCanvas || node.data.nodes) tree[id].children = {};
       if (node.data._childCanvas) {
         Object.keys(node.data._childCanvas).forEach(canvasName => {
           const virtualId = node.data._childCanvas[canvasName]
-          tree[id].children[virtualId] = this(manager.nodes, virtualId, canvasName);
+          tree[id].children[virtualId] = _self('getTree')(virtualId, canvasName);
         });
       } else if (node.data.nodes) {
         const childNodes = node.data.nodes;
-        tree[id].nodes = childNodes;
+        // tree[id].data.nodes = childNodes;
         childNodes.forEach((nodeId: NodeId) => {
-          tree[id].children[nodeId] = this(manager.nodes, nodeId);
+          tree[id].children[nodeId] = _self('getTree')(nodeId);
         });
       }
 

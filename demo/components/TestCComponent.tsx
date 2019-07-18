@@ -1,7 +1,6 @@
 import React from "react";
-import { connectManager } from "~packages/core/connectors/legacy/connectManager";
+import { connectManager, connectNode } from "~packages/core/connectors";
 import { ManagerState, Node, ConnectedNode, ConnectedManager } from "~packages/core";
-import { connectNode } from "~packages/core/connectors/legacy/connectNode";
 
 class Test extends React.Component<ConnectedManager & ConnectedNode<ReturnType<typeof collect>>> {
   render() {

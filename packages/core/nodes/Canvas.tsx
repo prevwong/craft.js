@@ -5,7 +5,7 @@ import { SimpleElement } from "../render/RenderNode";
 import { mapChildrenToNodes} from "../nodes";
 import { createNode } from "../shared/createNode";
 import { useInternalNode } from "./useInternalNode";
-import { useManager } from "../connectors/useManager";
+import { useManager } from "../connectors";
 const shortid = require("shortid");
 const invariant = require("invariant");
 
@@ -56,7 +56,7 @@ export const Canvas = React.memo(({id, is="div", children, ...props}: Canvas) =>
           <SimpleElement render={React.createElement(is, props, (
             <React.Fragment>
               {
-                node.nodes && node.nodes.map((id => (
+                node.nodes && node.nodes.map(((id: NodeId) => (
                   <NodeElement id={id} key={id} />
                 )))
               }
