@@ -21,6 +21,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
         node.id = id;
         node.data = {
           ...data,
+          name: null,
           props: {
             ...data.props
           }
