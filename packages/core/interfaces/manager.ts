@@ -1,7 +1,6 @@
 import { Nodes, Node } from "./nodes";
-import { useCollector } from "../shared/useCollector";
 import { PlaceholderInfo } from "../dnd/interfaces";
-
+import { useManagerCollector } from "../manager/useManagerCollector";
 
 export type ManagerState = {
   nodes: Nodes,
@@ -14,4 +13,4 @@ export type ManagerState = {
   }
 }
 
-export type ConnectedManager<S = null> = useCollector<S>;
+export type ConnectedManager<S = null> = useManagerCollector<S>;
