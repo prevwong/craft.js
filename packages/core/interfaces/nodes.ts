@@ -10,11 +10,11 @@ export type Node =  {
 }
 
 export type InternalNode = Pick<Node, 'id'> & NodeData
-export type NodeRefEvent = Record<'active' | 'dragging' | 'hover', boolean>
+export type NodeRefEvent = Record<'active' | 'selected' | 'dragging' | 'hover', boolean>
 
 export type NodeRef = {
   dom: HTMLElement;
-  canDrag(node: Node): void;
+  canDrag(): boolean;
   incoming?(incoming: Node): boolean;
   outgoing?(outgoing: Node): boolean;
   event: NodeRefEvent
