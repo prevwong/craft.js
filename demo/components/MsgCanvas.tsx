@@ -1,15 +1,16 @@
 import React from "react";
-import { ConnectedNode } from "~packages/core/interfaces";
-import { connectNode, useNode } from "~packages/core/nodes";
+import { ConnectedNode, Node } from "~packages/core/interfaces";
+import { useNode } from "~packages/core/connectors";
 
 type MsgCanvas = {
   children: React.ReactChildren
 } & ConnectedNode
 
 const MsgCanvas: React.FC<MsgCanvas> = ({children, ...props}: MsgCanvas) => {
-  const { node, connectTarget, setProp } = useNode();
+  const { connectTarget } = useNode();
+  console.log("aaar")
   return connectTarget(
-    <hgroup className="msg-canvas" {...props}>{children}</hgroup>,
+    <hgroup style={{padding: "20px 0"}} className="msg-canvas" {...props}>{children}</hgroup>,
     {
       incoming: (incomingNode: Node) => {
         return true;

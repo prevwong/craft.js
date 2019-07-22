@@ -3,7 +3,6 @@ import { NodeId, Node } from "../interfaces";
 import { NodeElement } from "./NodeElement";
 import { SimpleElement } from "../render/RenderNode";
 import { mapChildrenToNodes} from "../nodes";
-import { createNode } from "../shared/createNode";
 import { useInternalNode } from "./useInternalNode";
 import { useManager } from "../connectors";
 const shortid = require("shortid");
@@ -19,8 +18,8 @@ export interface Canvas extends React.Props<any> {
 
 export const isCanvas = (node: Node) => node.data.type === Canvas
 
-export const Canvas = React.memo(({id, is="div", children, ...props}: Canvas) => {
-  const { actions: { add, pushChildCanvas}, nodes, query } = useManager((state)=>({nodes: state.nodes}));
+export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
+  const { actions: { add, pushChildCanvas}, query } = useManager();
   const {node, nodeId}  = useInternalNode((node) => ({node: node.data, nodeId: node.id}));
   // console.log(33, node);
   const internal = React.useRef({ id: null });
@@ -51,11 +50,11 @@ export const Canvas = React.memo(({id, is="div", children, ...props}: Canvas) =>
     }
   }, []);
 
-  return useMemo(() => (
+  return (
     <React.Fragment>
        {
         node.type === Canvas ? (
-          <SimpleElement render={React.createElement(is, props, (
+          <SimpleElement render={React.createElement(node.subtype, props, (
             <React.Fragment>
               {
                 node.nodes && node.nodes.map(((id: NodeId) => (
@@ -72,7 +71,7 @@ export const Canvas = React.memo(({id, is="div", children, ...props}: Canvas) =>
           )
       }
     </React.Fragment>
-  ), [node, internal.current.id])
-})
+  )
+}
 
 // Canvas.name = 'Canvas'

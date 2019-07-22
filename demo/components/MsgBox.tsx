@@ -1,5 +1,5 @@
 import React from "react";
-import { connectNode, Canvas } from "~packages/core/nodes";
+import {  Canvas } from "~packages/core/nodes";
 import MsgCanvas from "./MsgCanvas";
 import { useNode } from "~packages/core/connectors";
 
@@ -8,8 +8,7 @@ export type MsgBox = {
 }
 
 export const Msg: React.FC<MsgBox> = ({children, text}) => {
-  const { actions:{setProp}, connectTarget, event }  = useNode(node => ({event: node.ref.event}));
-  // console.log(event);
+  const { actions: { setProp }, connectTarget, active}  = useNode((state) => ({active: state.ref.event.active}));
   return connectTarget(
     <div className="message-box" >
       <h2>MESSAGE{text}</h2>
@@ -18,8 +17,8 @@ export const Msg: React.FC<MsgBox> = ({children, text}) => {
           props.text = "whut"
         });
       }}>Click me</a>
-      <Canvas id="Msgca" is={MsgCanvas} style={{ background: '#999', padding: '20px 0' }}>
-        <h2>Hi world</h2>
+      <Canvas id="Msgca" style={{ background: '#999', padding: '50px 0' }}>
+        <h2>Hi ad</h2>
       </Canvas>
     </div>
   )
