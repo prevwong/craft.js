@@ -6,12 +6,13 @@ import { useNode } from "../connectors";
 
 export const SimpleElement = ({render}: any) => {
   const {connectTarget} = useNode();
-  return connectTarget(render);
+  return typeof render.type === "string" ? connectTarget(render) : render;
 }
 
 export const RenderNodeToElement: React.FC<any> =React.memo(({ ...injectedProps}) => {
   const { type, props } = useInternalNode((node) => ({type: node.data.type, props: node.data.props}));
   const { options: { onRender}} = useContext(RootContext);
+
   return useMemo(() => {
     let Comp = type;
     let render = React.cloneElement(<Comp {...props} {...injectedProps} />);
