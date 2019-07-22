@@ -1,35 +1,65 @@
-import React, { useContext } from "react";
-import { TreeNode } from "~packages/core";
+import React, { useContext, useEffect, useRef, useMemo, useLayoutEffect, useState } from "react";
+import { TreeNode, NodeId } from "~packages/core";
 import styled from "styled-components";
-import { LayerContext } from "./context";
+import { useManager } from "~packages/core/connectors";
+import { LayerContext } from "./LayerContext";
+import { useLayer } from "./useLayer";
 
 
-export const LayerNode: React.FC<{node: TreeNode, depth?:number}> = ({node, depth=0}) => {
-  const {children, data} = node;
-  const dispatch = useContext(LayerContext);
+export const LayerNode: React.FC<{id: NodeId, depth?:number}> = React.memo(({id, depth=0}) => {
+  const { data, query } = useManager(state => {
+    return {
+      data: state.nodes[id] ? state.nodes[id].data : null
+    }
+  });
+  const children = data ? query.getDeepNodes(id, false) : false;
+  const {actions} = useLayer();
+
+  const [visible, setVisible] = useState(false);
 
   return (
-    <LayerNodeDiv 
-      depth={depth}
-      className="craft-layer-node"
-      ref={(ref) => {
-        if ( ref ) {
-          dispatch({
-            type: 'REGISTER_LAYER',
-            layer: node
-          });
+    data ? ( 
+      <LayerNodeDiv 
+        depth={depth}
+        className={`craft-layer-node ${id}`}
+        ref={(ref) => {
+          if ( ref ) {
+            actions.setRef(id, 'dom', ref)
+            actions.setRef(id, 'headingDom', ref.querySelector('.craft-layer-node-heading'));
+          }
+        }}
+        onMouseDown={(e: React.MouseEvent) => {
+          e.stopPropagation();
+          actions.setLayerEvent('active', id)
+          // dispatch({
+          //   type: 'SET_LAYER_EVENT',
+          //   layer: id,
+          //   event: 'active'
+          // })
+        }}
+        onMouseOver={(e: React.MouseEvent) => {
+          e.stopPropagation();
+          actions.setLayerEvent('hover', id)
+          // dispatch({
+          //   type: 'SET_LAYER_EVENT',
+          //   layer: id,
+          //   event: 'hover'
+          // })
+        }}
+      >
+        <span className='craft-layer-node-heading'>
+          {data.name}
+          {(children && children.length) ? <a onClick={() => setVisible(!visible)}>Toggle</a> : null}
+        </span>
+        {
+          (children && visible) ? children.map(id =>
+            <LayerNode key={id} id={id} depth={depth+1} />
+          ) : null
         }
-      }}
-    >
-      <span className='craft-layer-node-heading'>{data.name}</span>
-      {
-        children && Object.keys(children).length ? Object.keys(children).map(id =>
-          <LayerNode key={id} node={children[id]} depth={depth+1} />
-        ) : null
-      }
-    </LayerNodeDiv>
-  )
-}
+      </LayerNodeDiv>
+    ): null
+  );
+})
 
 const LayerNodeDiv = styled.div<{depth: number}>`
   border-top: 1px solid #ddd;
