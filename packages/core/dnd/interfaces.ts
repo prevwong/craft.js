@@ -37,10 +37,11 @@ export interface DropAction {
 export interface PlaceholderInfo {
   node: Node
   placement: DropAction;
-  position: {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-  }
+  // position: {
+  //   left: number;
+  //   top: number;
+  //   width: number;
+  //   height: number;
+  // },
+  error: string | false
 }

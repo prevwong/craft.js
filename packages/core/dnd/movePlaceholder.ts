@@ -24,23 +24,23 @@ export default function movePlaceholder(
         where == "before" ? elDim.left : elDim.left + elDim.outerWidth;
     } else {
       w = elDim.outerWidth;
-      h = null;
+      h = 2;
       t =
-        where == "before" ? elDim.top : elDim.top + elDim.outerHeight;
+        where == "before" ? elDim.top : elDim.bottom
       l = elDim.left;
     }
   } else {
     if (canvasDOMInfo) {
-      t = canvasDOMInfo.top;
+      t = canvasDOMInfo.top + canvasDOMInfo.padding.top;
       l = canvasDOMInfo.left;
       w = canvasDOMInfo.outerWidth * 2;
-      h = null;
+      h = 2;
     }
   }
 
   return {
-    top: t + window.scrollY,
-    left: l + window.scrollX,
+    top: t,
+    left: l,
     width: w,
     height: h
   };
