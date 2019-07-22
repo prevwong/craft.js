@@ -8,9 +8,10 @@ export const LayerMethods = (state: LayerState) => ({
     }
     state.events[event] = state.layers[id]
   },
-  setRef: (layerId: string, ref: string, value: any) => {
-    if (!state.layers[layerId]) state.layers[layerId] = {id: layerId};
-    state.layers[layerId][ref] = value;
+  setRef: (id: string, ref: Exclude<keyof Layer, 'expanded'>, value: any) => {
+    if (!state.layers[id]) state.layers[id] = {id};
+    const layer = state.layers[id];
+    layer[ref] = value;
   },
   toggleLayer: (id: string) => {
     state.layers[id].expanded = true

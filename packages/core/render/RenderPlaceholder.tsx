@@ -1,17 +1,11 @@
-import React, { Component, useContext } from "react";
+import React, { useContext } from "react";
 import { PlaceholderInfo } from "../dnd/interfaces";
 import { RootContext } from "../RootContext";
-import movePlaceholder from "../dnd/movePlaceholder";
-import { getDOMInfo } from "../dnd/getDOMInfo";
+import { CSSObject } from "styled-components";
 
 export type Placeholder = {
   placeholder: PlaceholderInfo,
-  suggestedStyles: {
-    top: number,
-    left: number,
-    width: number,
-    height: number
-  }
+  suggestedStyles: CSSObject
 }
 
 export const defaultPlaceholder: React.FC<Placeholder> = ({ placeholder: { error }, suggestedStyles}) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useLayoutEffect, useState } from "react";
 import { NodeId, Node } from "../interfaces";
 import { NodeElement } from "./NodeElement";
 import { SimpleElement } from "../render/RenderNode";
@@ -21,36 +21,37 @@ export const isCanvas = (node: Node) => node.data.type === Canvas
 export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
   const { actions: { add, pushChildCanvas}, query } = useManager();
   const {node, nodeId}  = useInternalNode((node) => ({node: node.data, nodeId: node.id}));
-  // console.log(33, node);
-  const internal = React.useRef({ id: null });
-  useEffect(() => {
+  const [internalId, setInternalId] = useState(null);
+
+  useLayoutEffect(() => {
     let canvasId = `canvas-${shortid.generate()}`;
 
     if (node.type === Canvas) {
       if ( !node.nodes ) {  // don't recreate nodes from children after initial hydration
-        canvasId = internal.current.id = nodeId;
+        canvasId = nodeId;
         const childNodes = mapChildrenToNodes(children, (data, id) => {
           return query.createNode(data, id);
         }, {parent: canvasId});
-        // console.log("addding...", nodeId)
         add(nodeId, childNodes);
       }
     } else {
-      invariant(id, 'Root canvas cannot ommit `id` prop')
+      invariant(id, 'Root canvas cannot ommit `id` prop');
+      let internalId;
       if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
         const rootNode = query.createNode({
           type: Canvas,
           props: {is, children, ...props},
         }, canvasId);
-        internal.current.id = canvasId;
+        internalId = canvasId;
         pushChildCanvas(nodeId, id, rootNode);
       } else {
-       internal.current.id = node._childCanvas[id];
+       internalId = node._childCanvas[id];
       }
+      setInternalId(internalId);
     }
   }, []);
 
-  return (
+  return useMemo(() => (
     <React.Fragment>
        {
         node.type === Canvas ? (
@@ -65,13 +66,13 @@ export const Canvas = ({id, is="div", children, ...props}: Canvas) => {
           ))
             } />
         ) : (
-            internal.current.id ? (
-              <NodeElement id={internal.current.id} />
+            internalId ? (
+              <NodeElement id={internalId} />
             ) : null
           )
       }
     </React.Fragment>
-  )
+  ), [node, internalId]);
 }
 
 // Canvas.name = 'Canvas'

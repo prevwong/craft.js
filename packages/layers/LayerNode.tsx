@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useRef, useMemo, useLayoutEffect, useState } from "react";
-import { TreeNode, NodeId } from "~packages/core";
+import React, { useState } from "react";
+import { NodeId } from "~packages/core";
 import styled from "styled-components";
 import { useManager } from "~packages/core/connectors";
-import { LayerContext } from "./LayerContext";
 import { useLayer } from "./useLayer";
 
 
@@ -30,21 +29,11 @@ export const LayerNode: React.FC<{id: NodeId, depth?:number}> = React.memo(({id,
         }}
         onMouseDown={(e: React.MouseEvent) => {
           e.stopPropagation();
-          actions.setLayerEvent('active', id)
-          // dispatch({
-          //   type: 'SET_LAYER_EVENT',
-          //   layer: id,
-          //   event: 'active'
-          // })
+          actions.setLayerEvent('active', id);
         }}
         onMouseOver={(e: React.MouseEvent) => {
           e.stopPropagation();
-          actions.setLayerEvent('hover', id)
-          // dispatch({
-          //   type: 'SET_LAYER_EVENT',
-          //   layer: id,
-          //   event: 'hover'
-          // })
+          actions.setLayerEvent('hover', id);
         }}
       >
         <span className='craft-layer-node-heading'>

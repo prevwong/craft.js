@@ -1,15 +1,15 @@
 import { Nodes, NodeId, SerializedNodeData, ManagerState, Resolver, TreeNode, NodeData, Node, Options } from "../interfaces";
 import { isCanvas, Canvas } from "../nodes";
-import { serializeNode } from "../shared/serializeNode";
-import { deserializeNode } from "../shared/deserializeNode";
-import { QueryCallbacksFor } from "../shared/createReduxMethods";
+import { serializeNode } from "../utils/serializeNode";
+import { deserializeNode } from "../utils/deserializeNode";
 import produce from "immer";
-import { resolveComponent } from "../shared/resolveComponent";
+import { resolveComponent } from "../utils/resolveComponent";
 import invariant from "invariant";
-import { getDOMInfo } from "../dnd/getDOMInfo";
+import { getDOMInfo } from "../../shared/getDOMInfo";
 import findPosition from "../dnd/findPosition";
 import { PlaceholderInfo } from "../dnd/interfaces";
 import movePlaceholder from "../dnd/movePlaceholder";
+import { QueryCallbacksFor } from "./useManagerCollector";
 
 /**
  * Manager methods used to query nodes 
@@ -192,16 +192,18 @@ export function QueryMethods(manager: ManagerState, options: Options) {
         return result;
       }, []);
 
-      const placement = findPosition(targetParent, dimensionsInContainer, pos.x, pos.y);
-      const bestTargetNode = targetParentNodes.length ? manager.nodes[targetParentNodes[placement.index]] : null;
+      const dropAction = findPosition(targetParent, dimensionsInContainer, pos.x, pos.y);
+      const currentNode = targetParentNodes.length ? manager.nodes[targetParentNodes[dropAction.index]] : null;
 
       // Prevent from dragging self into a descendant
       if (
         ( _('getDeepNodes')(source).includes(targetNode.id))
       ) return;
       const output: PlaceholderInfo = {
-       node: bestTargetNode,
-        placement,
+        placement: {
+          ...dropAction,
+          currentNode
+        },
         error: null
       };
 

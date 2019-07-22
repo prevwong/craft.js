@@ -1,32 +1,18 @@
 import { NodeId, Node } from "../interfaces/nodes";
+import { CSSObject } from "styled-components";
+import { CSSProperties } from "react";
 
-export interface NodeInfo extends DOMInfo {
+export type NodeInfo =  {
   id?: NodeId;
-}
+} & DOMInfo
 
-export interface CSSMarginPaddingObj {
-  left?: number;
-  right?: number;
-  bottom?: number;
-  top?: number;
-}
-
-export interface DOMInfo {
-  x: number;
-  y: number;
-  top: number;
-  left: number;
-  bottom: number;
-  right: number;
-  width: number;
-  height: number;
-  outerWidth: number;
-  outerHeight: number;
-  padding?: CSSMarginPaddingObj;
-  margin?: CSSMarginPaddingObj;
-  inFlow?: boolean;
-}
-
+export type DOMInfo = Record<
+  'x' | 'y' | 'top' | 'left' |'bottom' | 'right' | 'width' | 'height' | 'outerWidth' | 'outerHeight', 
+  number> & {
+    inFlow: boolean,
+    margin: Record<'top'|'left'|'bottom'|'right', number>,
+    padding: Record<'top'|'left'|'bottom'|'right', number>
+  }
 
 export interface DropAction {
   parent: Node;
@@ -34,14 +20,10 @@ export interface DropAction {
   where: string;
 }
 
+export type Placement = DropAction & {
+  currentNode: Node
+}
 export interface PlaceholderInfo {
-  node: Node
-  placement: DropAction;
-  // position: {
-  //   left: number;
-  //   top: number;
-  //   width: number;
-  //   height: number;
-  // },
+  placement: Placement;
   error: string | false
 }

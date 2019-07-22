@@ -1,4 +1,4 @@
-import { useManagerCollector } from "../shared/useCollector";
+import { useManagerCollector } from "../manager/useManagerCollector";
 import { ManagerState } from "../interfaces";
 
 export function useManager(): useManagerCollector;

@@ -4,7 +4,7 @@ import { PlaceholderInfo } from "./interfaces";
 import { RenderPlaceholder } from "../render/RenderPlaceholder";
 import { useManager } from "../connectors";
 import movePlaceholder from "./movePlaceholder";
-import { getDOMInfo } from "./getDOMInfo";
+import { getDOMInfo } from "../../shared/getDOMInfo";
 
 export const DNDManager: React.FC = ({ children }) => {
   const { nodes, events, query, actions: {setNodeEvent, setPlaceholder, move}, options: {renderPlaceholder}} = useManager((state) => state);
@@ -83,7 +83,7 @@ export const DNDManager: React.FC = ({ children }) => {
               ...movePlaceholder(
                 events.placeholder.placement,
                 getDOMInfo(events.placeholder.placement.parent.ref.dom),
-                events.placeholder.node ? getDOMInfo(events.placeholder.node.ref.dom) : null
+                events.placeholder.placement.currentNode ? getDOMInfo(events.placeholder.placement.currentNode.ref.dom) : null
               ),
               transition: '0.2s ease-in'
             }

@@ -1,11 +1,5 @@
 import { NodeId, Node, Nodes, NodeRef } from "../interfaces";
-import { CallbacksFor } from "use-methods";
 import { ManagerState } from "../interfaces";
-import { isCanvas } from "../nodes";
-import produce from "immer";
-import { Methods } from "../shared/useCollector";
-import { QueryMethods } from "./query";
-import { QueryCallbacksFor } from "../shared/createReduxMethods";
 import { PlaceholderInfo } from "../dnd/interfaces";
 const invariant = require('invariant');
 
@@ -18,6 +12,7 @@ const ManagerMethods = (state: ManagerState) => ({
     state.nodes[newNode.id] = newNode;
   },
   setPlaceholder(placeholder: PlaceholderInfo) {
+    if ( placeholder && (!placeholder.placement.parent.ref.dom || (placeholder.placement.currentNode  && !placeholder.placement.currentNode .ref.dom))) return;
     state.events.placeholder = placeholder;
   },
   setNodeEvent(eventType: "active" | "selected" | "hover" | "dragging", id: NodeId) {
