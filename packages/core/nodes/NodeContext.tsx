@@ -1,5 +1,5 @@
 import React from "react";
-import { NodeId, Node } from "../interfaces";
+import { NodeId } from "../interfaces";
 
 export const NodeContext = React.createContext<any>(null);
 

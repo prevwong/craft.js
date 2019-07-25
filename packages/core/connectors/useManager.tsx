@@ -1,10 +1,10 @@
-import { useCollector } from "../shared/useCollector";
+import { useManagerCollector } from "../manager/useManagerCollector";
 import { ManagerState } from "../interfaces";
 
-export function useManager<S>(collect?: (state: ManagerState) => S) {
-  const collected = collect ? useCollector((state) => collect(state), (collected, finalize) => {
-    finalize(collected);
-  }) : useCollector();
+export function useManager(): useManagerCollector;
+export function useManager<S>(collect: (state: ManagerState) => S): useManagerCollector<S>;
 
-  return collected;
+export function useManager<S>(collect?: any): useManagerCollector<S> {
+  let collected = collect ? useManagerCollector(collect) : useManagerCollector();
+  return collected as any;
 }
