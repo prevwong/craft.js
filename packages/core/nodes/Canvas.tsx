@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useLayoutEffect, useState } from "react";
+import React, { useMemo, useLayoutEffect, useState } from "react";
 import { NodeId, Node } from "../interfaces";
 import { NodeElement } from "./NodeElement";
 import { SimpleElement } from "../render/RenderNode";

@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React from "react";
 import { NodeData, SerializedNodeData, ReducedComp, ReduceCompType } from "../interfaces";
 import { Canvas } from "../nodes";
 import { Resolver } from "../interfaces/root";

@@ -1,4 +1,4 @@
-import { useContext, useCallback, useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { NodeContext } from "./NodeContext";
 import { Node, NodeRef, NodeRefEvent } from "../interfaces";
 import { useManager } from "../connectors";
@@ -32,8 +32,6 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S): useInter
       setNodeEvent: (action: keyof NodeRefEvent) => managerActions.setNodeEvent(action, id)
     }
   }, []);
-
-  // console.log(collected)
 
   return {
     ...collected as any,

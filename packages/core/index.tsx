@@ -1,6 +1,5 @@
 import React from "react";
 import { RootContextProvider } from "./RootContext";
-import DNDManager from "./dnd";
 import { Options } from "./interfaces/root";
 export * from "./dnd"
 export * from "./manager"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NodeId } from "~packages/core";
 import styled from "styled-components";
 import { useManager } from "~packages/core/connectors";
@@ -6,16 +6,18 @@ import { useLayer } from "./useLayer";
 
 
 export const LayerNode: React.FC<{id: NodeId, depth?:number}> = React.memo(({id, depth=0}) => {
-  const { data, query } = useManager(state => {
-    return {
-      data: state.nodes[id] ? state.nodes[id].data : null
-    }
-  });
+  const { currentlySelected, data, query } = useManager((state) => ({ data: state.nodes[id] && state.nodes[id].data, currentlySelected: state.events.selected }));
   const children = data ? query.getDeepNodes(id, false) : false;
   const {actions} = useLayer();
-
   const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const allChildren = query.getDeepNodes(id);
 
+    if (!visible && currentlySelected && (currentlySelected.id === id || (allChildren && allChildren.includes(currentlySelected.id)))) {
+      setVisible(true);
+    }
+  }, [currentlySelected]);
+  
   return (
     data ? ( 
       <LayerNodeDiv 

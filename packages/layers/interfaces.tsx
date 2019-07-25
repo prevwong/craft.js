@@ -1,4 +1,4 @@
-import { NodeId, NodeData } from "~packages/core";
+import { NodeId } from "~packages/core";
 
 export type Layer = {
   id: NodeId,

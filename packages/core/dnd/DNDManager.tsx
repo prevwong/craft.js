@@ -1,14 +1,11 @@
-import React, { useState, useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { ManagerState } from "../interfaces";
-import { PlaceholderInfo } from "./interfaces";
-import { RenderPlaceholder } from "../render/RenderPlaceholder";
 import { useManager } from "../connectors";
 import movePlaceholder from "./movePlaceholder";
 import { getDOMInfo } from "../../shared/getDOMInfo";
 
 export const DNDManager: React.FC = ({ children }) => {
   const { nodes, events, query, actions: {setNodeEvent, setPlaceholder, move}, options: {renderPlaceholder}} = useManager((state) => state);
-  // const [placeholder, setPlaceholder] = useState<PlaceholderInfo>(null);
   const [isMousePressed, setMousePressed] = useState(false);
   const mutable = useRef<ManagerState>({
     nodes: null,

@@ -1,4 +1,4 @@
-import React, { cloneElement, useMemo } from "react";
+import React, { cloneElement } from "react";
 import { Node, ConnectedNode, NodeRef } from "../interfaces";
 import invariant from "invariant";
 import { useInternalNode } from "../nodes/useInternalNode";

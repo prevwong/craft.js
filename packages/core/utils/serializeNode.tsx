@@ -1,5 +1,5 @@
-import React,{  Children, isValidElement, memo } from "react";
-import { NodeData, ReducedComp, ReduceCompType, SerializedNodeData } from "../interfaces";
+import React,{  Children } from "react";
+import { NodeData, ReducedComp, SerializedNodeData } from "../interfaces";
 import { Canvas } from "../nodes";
 import { Resolver } from "../interfaces/root";
 import { resolveComponent } from "./resolveComponent";

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useContext, useLayoutEffect } from "react";
+import React, { useMemo, useContext, useLayoutEffect } from "react";
 import { NodeElement, Canvas, mapChildrenToNodes } from "../nodes";
 import DNDManager from "../dnd";
 import { RootContext } from "../RootContext";

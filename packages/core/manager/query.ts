@@ -1,4 +1,4 @@
-import { Nodes, NodeId, SerializedNodeData, ManagerState, Resolver, TreeNode, NodeData, Node, Options } from "../interfaces";
+import { Nodes, NodeId, SerializedNodeData, ManagerState, Resolver, NodeData, Node, Options } from "../interfaces";
 import { isCanvas, Canvas } from "../nodes";
 import { serializeNode } from "../utils/serializeNode";
 import { deserializeNode } from "../utils/deserializeNode";
@@ -8,7 +8,6 @@ import invariant from "invariant";
 import { getDOMInfo } from "../../shared/getDOMInfo";
 import findPosition from "../dnd/findPosition";
 import { PlaceholderInfo } from "../dnd/interfaces";
-import movePlaceholder from "../dnd/movePlaceholder";
 import { QueryCallbacksFor } from "./useManagerCollector";
 
 /**

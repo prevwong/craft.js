@@ -2,7 +2,6 @@ import { NodeId, Node, NodeData } from "../interfaces";
 import React, { ReactNode, Fragment } from "react";
 import { Canvas } from "./Canvas";
 const shortid = require("shortid");
-const invariant = require('invariant');
 
 type MapChildrenData = {
   parent?: NodeId,
