@@ -2,14 +2,13 @@ import produce, { PatchListener } from 'immer';
 import { createStore, Unsubscribe } from 'redux';
 
 type Subscriber = (listener: () => void) => Unsubscribe
-export type QueryParameters<Q extends Methods> = Partial<Parameters<Q>> & Array<any>
 
-export type SubscriberAndCallbacksFor<M extends MethodsOrOptions, Q extends QueryMethods> = [
-  Subscriber,
-  () => { prev: StateFor<M>, current: StateFor<M> },
-  (...payload: QueryParameters<Q>) => QueryCallbacksFor<Q>,
-  CallbacksFor<M>
-];
+export type StateForStore<M extends Methods, S extends SubscriberAndCallbacksFor<M>> = ReturnType<S['getState']>['current']
+export type SubscriberAndCallbacksFor<M extends MethodsOrOptions> = {
+  subscribe: Subscriber,
+  getState: () => { prev: StateFor<M>, current: StateFor<M> },
+  actions: CallbacksFor<M>
+};
 
 export type StateFor<M extends MethodsOrOptions> = M extends MethodsOrOptions<infer S, any>
   ? S
@@ -45,19 +44,10 @@ export type ActionUnion<R extends MethodRecordBase> = {
 
 export type ActionByType<A, T> = A extends { type: infer T2 } ? (T extends T2 ? A : never) : never;
 
-
-export type QueryMethods<S = any, O=any, R extends MethodRecordBase<S> = any> = (state?: S, options?: O) => R;
-export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<any, any, infer R>
-  ? {
-    [T in ActionUnion<R>['type']]: (...payload: ActionByType<ActionUnion<R>, T>['payload']) => ReturnType<R[T]>
-  }
-  : never;
-
-export default function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends QueryMethods>(
+export default function createReduxMethods<S, R extends MethodRecordBase<S>>(
   methodsOrOptions: MethodsOrOptions<S, R>,
-  queryHelper: Q,
   initialState: any
-): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q> {
+): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>> {
 
   let prevState = initialState;
   let methods: Methods<S, R>;
@@ -97,10 +87,9 @@ export default function createReduxMethods<S, R extends MethodRecordBase<S>, Q e
   );
 
 
-  return [
+  return {
     subscribe,
-    () => ({ prev: prevState, current: getState() }),
-    queryHelper,
+    getState: () => ({ prev: prevState, current: getState() }),
     actions
-  ];
+  };
 }

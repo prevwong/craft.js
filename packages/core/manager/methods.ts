@@ -1,18 +1,21 @@
 import { NodeId, Node, Nodes, NodeRef } from "../interfaces";
-import { CallbacksFor } from "use-methods";
 import { ManagerState } from "../interfaces";
-import { isCanvas } from "../nodes";
-import produce from "immer";
+import { PlaceholderInfo } from "../dnd/interfaces";
 const invariant = require('invariant');
 
 const ManagerMethods = (state: ManagerState) => ({
   pushChildCanvas(id: NodeId, canvasName: string, newNode: Node) {
-    if (!state.nodes[id].data._childCanvas) state.nodes[id].data._childCanvas = {};
+    const targetNode = state.nodes[id]
+    if (!targetNode.data._childCanvas) targetNode.data._childCanvas = {};
     newNode.data.closestParent = id;
-    state.nodes[id].data._childCanvas[canvasName] = newNode.id;
+    targetNode.data._childCanvas[canvasName] = newNode.id;
     state.nodes[newNode.id] = newNode;
   },
-  setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
+  setPlaceholder(placeholder: PlaceholderInfo) {
+    if ( placeholder && (!placeholder.placement.parent.ref.dom || (placeholder.placement.currentNode  && !placeholder.placement.currentNode .ref.dom))) return;
+    state.events.placeholder = placeholder;
+  },
+  setNodeEvent(eventType: "active" | "selected" | "hover" | "dragging", id: NodeId) {
     const current = state.events[eventType];
     if (current ) {
       state.nodes[current.id].ref.event[eventType] = false;
@@ -33,37 +36,38 @@ const ManagerMethods = (state: ManagerState) => ({
     if (parentId && !state.nodes[parentId].data.nodes) state.nodes[parentId].data.nodes = []
     if (!Array.isArray(nodes)) nodes = [nodes];
     (nodes as Node[]).forEach(node => {
+      if ( parentId ) {
+        state.nodes[parentId].data.nodes.push(node.id);
+        invariant(state.nodes[parentId].ref.incoming(node), `Parent node rejects incoming node ${node}`);
+      }
       state.nodes[node.id] = node;
-      if (parentId) state.nodes[parentId].data.nodes.push(node.id);
     });
   },
   move(targetId: NodeId, newParentId: NodeId, index: number) {
     const targetNode = state.nodes[targetId],
-      currentParentNodes = state.nodes[targetNode.data.parent].data.nodes,
-      newParentNodes = state.nodes[newParentId].data.nodes;
+      currentParent = state.nodes[targetNode.data.parent],
+      currentParentNodes = currentParent.data.nodes,
+      newParent = state.nodes[newParentId],
+      newParentNodes = newParent.data.nodes;
+
+    // Define some rules
+    invariant(targetNode.data.parent, `Cannot move node that is not a direct-descendant of a Canvas ${targetNode}`)
+    invariant(currentParent.ref.outgoing(targetNode), `Node cannot be dragged out of parent ${targetNode}`)
+    invariant(newParent.ref.incoming(targetNode), `Target parent rejects incoming node ${targetNode}`);
 
     currentParentNodes[currentParentNodes.indexOf(targetId)] = "marked";
     newParentNodes.splice(index, 0, targetId);
     state.nodes[targetId].data.parent = newParentId;
-    // state.nodes[targetId].data.closestParent = newParentId;
+    state.nodes[targetId].data.closestParent = newParentId;
     currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
-
+    
   },
   setProp(id: NodeId, cb: <T>(props: T) => void) {
     cb(state.nodes[id].data.props);
   },
   setRef(id: NodeId, ref: keyof NodeRef, value: any) {
     state.nodes[id].ref[ref] = value;
-  }
+  },
 });
 
-
-// type FactoryManagerMethods<S = any, O = any, R extends MethodRecordBase<S> = any> = (state: S, options: O) => R;
-// type GetFactoryManagerMethods<M extends FactoryManagerMethods> = M extends FactoryManagerMethods<any, any, infer R>
-//   ? {
-//       [T in ActionUnion<R>['type']]: (...args: ActionUnion<R>['payload']) => void
-//     }
-//   : never;
-
-export type ManagerMethods = CallbacksFor<typeof ManagerMethods>
 export default ManagerMethods;

@@ -1,11 +1,13 @@
-import { NodeId, Node } from "../interfaces";
+import { NodeId, Node, NodeData } from "../interfaces";
 import React, { ReactNode, Fragment } from "react";
 import { Canvas } from "./Canvas";
-import { createNode } from "../shared/createNode";
 const shortid = require("shortid");
-const invariant = require('invariant');
 
-export function mapChildrenToNodes(children: ReactNode, parent?: NodeId, hardId?: string): Node[] {
+type MapChildrenData = {
+  parent?: NodeId,
+  hardId?: NodeId
+}
+export function mapChildrenToNodes(children: ReactNode, cb:(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id: NodeId) => any, {hardId, parent}: MapChildrenData = {}): Node[] {
   return React.Children.toArray(children).reduce(
     (result: Node[], child: React.ReactElement | string) => {
       if (typeof (child) === "string") {
@@ -17,7 +19,7 @@ export function mapChildrenToNodes(children: ReactNode, parent?: NodeId, hardId?
         const prefix = type === Canvas ? "canvas" : "node";
         const id = hardId ? hardId : `${prefix}-${shortid.generate()}`;
 
-        let node = createNode({
+        let node = cb({
           type: type,
           props,
           parent
