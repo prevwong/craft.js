@@ -8,7 +8,6 @@ export const createManagerStore = (
   nodes = {}, 
   events: ManagerEvents = {
     active: null, 
-    selected: null,
     dragging: null, 
     hover:null, 
     placeholder:null

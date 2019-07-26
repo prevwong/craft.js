@@ -40,7 +40,6 @@ export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S>
         },
         onMouseDown: (e: React.MouseEvent) => {
           e.stopPropagation();
-          setNodeEvent('selected');
           setNodeEvent('active');
           if (render.props.onMouseDown) render.props.onMouseDown(e);
         }
