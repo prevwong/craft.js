@@ -6,7 +6,7 @@ import { useLayer } from "./useLayer";
 
 
 export const LayerNode: React.FC<{id: NodeId, depth?:number}> = React.memo(({id, depth=0}) => {
-  const { currentlySelected, data, query } = useManager((state) => ({ data: state.nodes[id] && state.nodes[id].data, currentlySelected: state.events.selected }));
+  const { currentlySelected, data, query } = useManager((state) => ({ data: state.nodes[id] && state.nodes[id].data, currentlySelected: state.events.active }));
   const children = data ? query.getDeepNodes(id, false) : false;
   const {actions} = useLayer();
   const [visible, setVisible] = useState(false);
@@ -40,7 +40,10 @@ export const LayerNode: React.FC<{id: NodeId, depth?:number}> = React.memo(({id,
       >
         <span className='craft-layer-node-heading'>
           {data.name}
-          {(children && children.length) ? <a onClick={() => setVisible(!visible)}>Toggle</a> : null}
+          {(children && children.length) ? <a onMouseDown={(e) => {
+            e.stopPropagation();
+            setVisible(!visible);
+          }}>Toggle</a> : null}
         </span>
         {
           (children && visible) ? children.map(id =>

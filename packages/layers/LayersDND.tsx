@@ -104,7 +104,7 @@ export const LayersDND: React.FC<any> = ({ children }) => {
     }, [isMousePressed]);
 
     useEffect(() => {
-        if (events.active) setNodeEvent('selected', events.active.id)
+        // if (events.active) setNodeEvent('selected', events.active.id)
         if (events.active && query.getNode(events.active.id).data.parent) setMousePressed(true);
     }, [events.active]);
 
