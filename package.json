@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "cleanup": "rm -rf .cache dist"
+  },
+  "jest" : {
+    "moduleNameMapper": {
+      "^~(.*)$": "<rootDir>/$1"
+    }
   },
   "keywords": [],
   "author": "",
@@ -27,7 +32,12 @@
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@types/classnames": "^2.2.7",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@testing-library/jest-dom": "^4.0.0",
+    "@testing-library/react": "^8.0.6",
+    "@types/jest": "^24.0.15",
     "@types/lodash": "^4.14.123",
     "@types/node": "^11.13.5",
     "@types/react": "^16.8.13",
@@ -37,10 +47,11 @@
     "autoprefixer": "^9.6.0",
     "classnames": "^2.2.6",
     "invariant": "^2.2.4",
+    "jest": "^24.8.0",
+    "jest-dom": "^4.0.0",
     "lodash": "^4.17.11",
     "postcss-modules": "^1.4.1",
     "sass": "^1.19.0",
-    "typescript": "^3.5.1",
-    "utility-types": "^3.7.0"
+    "typescript": "^3.5.1"
   }
 }
