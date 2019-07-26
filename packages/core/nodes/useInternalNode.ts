@@ -4,9 +4,10 @@ import { Node, NodeRef, NodeRefEvent } from "../interfaces";
 import { useManager } from "../connectors";
 
 type internalActions = {
+  _inNodeContext: boolean,
   actions : {
     setProp: Function,
-    setRef: Function,
+    setRef: (cb: (ref: NodeRef) => void) => void,
     setNodeEvent: Function
   }
 }
@@ -17,7 +18,11 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S): useInter
 export function useInternalNode<S = null>(collect?: (node: Node) => S): useInternalNode<S> {
   const nodeContext = useContext(NodeContext);
   if (!nodeContext) {
-    return null
+    return {
+      ...{} as any,
+      _inNodeContext: false,
+      actions: {}
+    }
   }
   const { id } = nodeContext;
 
@@ -26,8 +31,8 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S): useInter
   const actions = useMemo(() => {
     return {
       setProp: (cb: any) => managerActions.setProp(id, cb),
-      setRef: (ref: keyof NodeRef, value: any) => {
-        return managerActions.setRef(id, ref, value);
+      setRef: (cb: (ref: NodeRef) => void) => {
+        return managerActions.setRef(id, cb);
       },
       setNodeEvent: (action: keyof NodeRefEvent) => managerActions.setNodeEvent(action, id)
     }
@@ -35,6 +40,7 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S): useInter
 
   return {
     ...collected as any,
+    _inNodeContext: true,
      actions 
   }
 }
