@@ -1,16 +1,14 @@
 import { Nodes, Node } from "./nodes";
 import { PlaceholderInfo } from "../dnd/interfaces";
-import { useManagerCollector } from "../manager/useManagerCollector";
+import { useInternalManager } from "../manager/useInternalManager";
+
+export type ManagerEvents = Record<'active' | 'selected' | 'dragging' | 'hover', Node> & {
+  placeholder: PlaceholderInfo
+}
 
 export type ManagerState = {
   nodes: Nodes,
-  events: {
-    active: Node,
-    selected: Node,
-    dragging: Node,
-    hover: Node,
-    placeholder: PlaceholderInfo
-  }
+  events: ManagerEvents
 }
 
-export type ConnectedManager<S = null> = useManagerCollector<S>;
+export type ConnectedManager<S = null> = useInternalManager<S>;

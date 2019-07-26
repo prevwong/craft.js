@@ -5,8 +5,14 @@ export type NodeId = string;
 
 export type Node =  {
   id: NodeId;
-  data: NodeData
-  ref: NodeRef
+  data: NodeData;
+  event: NodeRefEvent;
+  ref: NodeRef;
+}
+
+export type NodeToAdd = {
+  node: Node,
+  index?: number
 }
 
 export type InternalNode = Pick<Node, 'id'> & NodeData
@@ -17,7 +23,6 @@ export type NodeRef = {
   canDrag(): boolean;
   incoming?(incoming: Node): boolean;
   outgoing?(outgoing: Node): boolean;
-  event: NodeRefEvent
 }
 
 
