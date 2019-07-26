@@ -7,25 +7,31 @@ import { useInternalNode } from "../nodes/useInternalNode";
 export function useNode(): ConnectedNode
 export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S>
 export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S> {
-  const { actions: { setRef, setProp, setNodeEvent }, ...collected } = useInternalNode(collect);
+  const { actions: { setRef, setProp, setNodeEvent }, _inNodeContext, ...collected } = useInternalNode(collect);
 
   return {
     ...collected as any,
     actions: { setProp },
     connectTarget: (render: any, methods: Exclude<NodeRef, 'dom' | 'event'>): React.ReactElement => {
+      if (!_inNodeContext) return render;
       const previousRef = render.ref;
       invariant(previousRef !== "string", "Cannot connect to an element with an existing string ref. Please convert it into a callback ref instead.");
-      if ( methods ) Object.keys(methods).forEach((key: keyof Exclude<NodeRef, 'dom' | 'event'>) => {
-        setRef(key, methods[key]);
-      });
+     
+
+      if ( methods ) {
+        setRef((ref) => {
+          Object.keys(methods).forEach((key: keyof Exclude<NodeRef, 'dom'>) => {
+              ref[key] = methods[key] as any;
+          });
+        });
+      }
 
       return cloneElement(render, {
-        ref: (ref: HTMLElement) => {
-          if (ref) {
-            // console.log("MAIN", ref)
-            setRef("dom", ref);
+        ref: (dom: HTMLElement) => {
+          if (dom) {
+            setRef((ref) => ref.dom = dom);
           }
-          if (previousRef) previousRef(ref);
+          if (previousRef) previousRef(dom);
         },
         onMouseOver: (e: React.MouseEvent) => {
           e.stopPropagation();
