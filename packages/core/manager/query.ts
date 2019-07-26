@@ -10,8 +10,9 @@ import findPosition from "../dnd/findPosition";
 import { PlaceholderInfo } from "../dnd/interfaces";
 import { QueryCallbacksFor } from "./useInternalManager";
 import { createNode } from "../utils/createNode";
-import { ROOT_NODE } from "../utils/constants";
+import { ROOT_NODE } from "~packages/shared/constants";
 import { getDeepNodes } from "../utils/getDeepNodes";
+import { transformJSXToNode } from "../utils/transformJSX";
 
 /**
  * Manager methods used to query nodes 
@@ -24,12 +25,11 @@ export function QueryMethods(manager: ManagerState, options: Options) {
     getNode(id: NodeId) {
       return manager.nodes[id];
     },
-    createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id?: NodeId): Node {
-      const node = createNode(data, id);
-      // check type
+    transformJSXToNode(child: React.ReactElement | string, extras?: any) {
+      const node = transformJSXToNode(child, extras);
       const name = resolveComponent(options.resolver, node.data.subtype ? node.data.subtype : node.data.type);
       invariant(name, "The node you're trying to create does not exist in the resolver.");
-
+      node.data.name = name;
       return node;
     },
     getDeepNodes(id: NodeId, deep: boolean = true) {

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Options } from "../interfaces";
-import { RootContextProvider } from "./RootContext";
+import { RootContextProvider, createRootContext } from "./RootContext";
 
-export const Craft: React.FC<Partial<Options>> = ({ children, ...props }: any) => {
+export const Craft: React.FC<Partial<Options>> = ({ children, ...options }: any) => {
   return (
-    <RootContextProvider {...props}>
+    <RootContextProvider context={createRootContext({options})}>
       {children}
     </RootContextProvider>
   )

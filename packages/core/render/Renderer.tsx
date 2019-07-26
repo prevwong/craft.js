@@ -10,7 +10,7 @@ export const Renderer: React.FC = ({
   children
 }) => {
   const { options:{nodes, resolver, onRender, renderPlaceholder }} = useContext(RootContext);
-  const { rootNode, actions: { add, replaceNodes }, query: { transformJSXToNode, deserialize, createNode } } = useManager((state) => ({ rootNode: state.nodes[ROOT_NODE]}));
+  const { rootNode, actions: { add, replaceNodes }, query: { transformJSXToNode, deserialize } } = useManager((state) => ({ rootNode: state.nodes[ROOT_NODE]}));
 
   useLayoutEffect(() => {
     if (!nodes) {

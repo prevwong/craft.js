@@ -23,7 +23,6 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
 
     node.event = {
       active: false,
-      selected: false,
       dragging: false,
       hover: false
     }
