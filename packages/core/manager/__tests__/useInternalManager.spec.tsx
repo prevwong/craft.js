@@ -6,7 +6,7 @@ import { defaultPlaceholder } from '~packages/core/render/RenderPlaceholder';
 import { Options, ManagerState } from '~packages/core/interfaces';
 import { fireEvent, cleanup, render } from '@testing-library/react';
 import Actions from '../actions';
-import { ROOT_NODE } from '~packages/core/utils/constants';
+import { ROOT_NODE } from '~packages/shared/constants';
 import { createRootContext, RootContextProvider } from '~packages/core/root/RootContext';
 
 type TestComponent = {
@@ -15,7 +15,7 @@ type TestComponent = {
   click: (e: React.MouseEvent, manager: any) => any
 }
 
-const TestComponent: React.FC<Partial<TestComponent>> = ({collect, callback, click}) => {
+const TestComponent: React.FC<Partial<TestComponent>> = ({ collect, callback, click }) => {
   const manager = useInternalManager(collect && collect);
   callback(manager);
   return <h3 data-testid="test-click" onClick={
@@ -25,19 +25,19 @@ const TestComponent: React.FC<Partial<TestComponent>> = ({collect, callback, cli
 
 describe('useInternalManager', () => {
   const nodes = {
-          [ROOT_NODE]: transformJSXToNode(<div />, ROOT_NODE),
-          'somenode-1': transformJSXToNode(<h2>Hi</h2>, 'somenode-1')
-        },
-        options: Options = {
-          onRender: ({ render }) => render,
-          renderPlaceholder: defaultPlaceholder,
-          resolver: {},
-          nodes: null
-        },
-        context = createRootContext({
-          nodes,
-          options
-        });
+    [ROOT_NODE]: transformJSXToNode(<div />, { id: ROOT_NODE }),
+    'somenode-1': transformJSXToNode(<h2>Hi</h2>, { id: 'somenode-1' })
+  },
+    options: Options = {
+      onRender: ({ render }) => render,
+      renderPlaceholder: defaultPlaceholder,
+      resolver: {},
+      nodes: null
+    },
+    context = createRootContext({
+      nodes,
+      options
+    });
 
   let collected: any;
 
@@ -75,7 +75,7 @@ describe('useInternalManager', () => {
     const mock = (onClick: (manager: any) => any, count: number) => {
       cleanup();
       const mockCount = jest.fn();
-      const {queryByTestId} = render(
+      const { queryByTestId } = render(
         <RootContextProvider context={context}>
           <TestComponent
             collect={(state) => ({ t1: state.nodes['somenode-1'].data, t2: state.nodes[ROOT_NODE].data.type })}
@@ -98,7 +98,7 @@ describe('useInternalManager', () => {
 
     // This should re-render since t1 watches for data property changes
     mock((manager: typeof context.manager) => manager.actions.setProp('somenode-1', (props) => {
-      (props as any).testProp = 3; 
+      (props as any).testProp = 3;
     }), 2);
   })
 });

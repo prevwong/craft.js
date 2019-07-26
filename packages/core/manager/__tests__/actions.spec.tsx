@@ -1,6 +1,6 @@
 import React from 'react';
 import { transformJSXToNode } from "~packages/core/utils/transformJSX";
-import { ROOT_NODE, ERROR_MOVE_NONCANVAS_CHILD, ERROR_MOVE_TO_DESCENDANT, ERROR_MOVE_INCOMING_PARENT, ERROR_MOVE_OUTGOING_PARENT, ERROR_MOVE_TO_NONCANVAS_PARENT, ERROR_INVALID_NODEID } from '~packages/core/utils/constants';
+import { ROOT_NODE, ERROR_MOVE_NONCANVAS_CHILD, ERROR_MOVE_TO_DESCENDANT, ERROR_MOVE_INCOMING_PARENT, ERROR_MOVE_OUTGOING_PARENT, ERROR_MOVE_TO_NONCANVAS_PARENT, ERROR_INVALID_NODEID } from '~packages/shared/constants';
 import { Canvas } from '~packages/core/nodes';
 import { PlaceholderInfo } from '~packages/core/dnd/interfaces';
 import { testActions } from '~packages/core/utils/testing/testActions';
@@ -10,10 +10,14 @@ describe('ManagerActions', () => {
   describe('add', () => {
     it('insert node(s)', () => {
       const [context, actions] = testActions();
-      const node = transformJSXToNode(<h3>What</h3>, 'tn1');
+      const node = transformJSXToNode(<h3>What</h3>, {
+        id: 'tn1'
+      });
       actions.add(node, ROOT_NODE);
       
-      const nodes = [transformJSXToNode(<h3>What</h3>, 'tn2'), transformJSXToNode(<h3>Haha</h3>, 'tn3')];
+      const nodes = [transformJSXToNode(<h3>What</h3>, {
+        id: 'tn2'
+      }), transformJSXToNode(<h3>Haha</h3>, { id: 'tn3'})];
       actions.add(nodes, ROOT_NODE);
 
       expect(Object.keys(context.manager.getState().current.nodes)).toEqual(expect.arrayContaining(['tn1', 'tn2', 'tn3']));
@@ -24,7 +28,7 @@ describe('ManagerActions', () => {
       const [context, actions] = testActions();
       const node1 = transformJSXToNode(<h3>What</h3>);
       const node2 = transformJSXToNode(<h3>What</h3>);
-      const node3 = transformJSXToNode(<h3>What</h3>, 'tn3');
+      const node3 = transformJSXToNode(<h3>What</h3>, {id: 'tn3'});
       actions.add([node1, node2], ROOT_NODE);
 
       actions.add({
@@ -37,13 +41,14 @@ describe('ManagerActions', () => {
     it('reject adding node to a non-Canvas node', () => {
       const [context, actions] = testActions();
 
-      actions.add(transformJSXToNode(<div></div>, 'parent', {
-       ref : {
-          outgoing: (node) => node.id == 'child' ? false : true
-       }
+      actions.add(transformJSXToNode(<div></div>, {
+        id: 'parent',
+        ref : {
+            outgoing: (node) => node.id == 'child' ? false : true
+        }
       }), ROOT_NODE);
 
-      expect(() => actions.add(transformJSXToNode(<div></div>, 'child'), 'parent')).toThrowError();
+      expect(() => actions.add(transformJSXToNode(<div></div>, { id: 'child'}), 'parent')).toThrowError();
     });
     it('reject orphaned non-root node', () => {
       const [_, actions] = testActions();
@@ -53,13 +58,14 @@ describe('ManagerActions', () => {
     it('rejects incompatible node', () => {
       const [_, actions] = testActions();
       
-      actions.add(transformJSXToNode(<div></div>, 'rejectingContainer', {
+      actions.add(transformJSXToNode(<div></div>, {
+        id: 'rejectingContainer',
         ref: {
           incoming: () => false
         }
       }), ROOT_NODE);
 
-      const node = transformJSXToNode(<div></div>, 'tn4');
+      const node = transformJSXToNode(<div></div>, {id: 'tn4'});
       expect(() => actions.add(node, 'rejectingContainer')).toThrow()
     });
   });
@@ -67,54 +73,56 @@ describe('ManagerActions', () => {
   describe('move', () => {
     it('successfully move node', () => {
       const [context, actions] = testActions();
-      actions.add(transformJSXToNode(<Canvas />, 'parent'), ROOT_NODE);
-      actions.add(transformJSXToNode(<h2 />, 'child1'), 'parent');
-      actions.add(transformJSXToNode(<h2 />, 'child2'), 'parent');
-      actions.add(transformJSXToNode(<h3 />, 'newChild'), ROOT_NODE);
+      actions.add(transformJSXToNode(<Canvas />, {id: 'parent'}), ROOT_NODE);
+      actions.add(transformJSXToNode(<h2 />, {id: 'child1'}), 'parent');
+      actions.add(transformJSXToNode(<h2 />, {id: 'child2'}), 'parent');
+      actions.add(transformJSXToNode(<h3 />, { id:'newChild'}), ROOT_NODE);
       
       expect(() => actions.move('newChild', 'parent', 1)).not.toThrowError();
       expect(context.manager.getState().current.nodes['parent'].data.nodes).toEqual(expect.arrayContaining(['child1', 'newChild', 'child2']));
     })
     it('reject moving node that is not a direct child of a Canvas', () => {
       const [context, actions] = testActions();
-      actions.add(transformJSXToNode(<Canvas />, 'parent'), ROOT_NODE);
-      actions.add(transformJSXToNode(<div />, 'descandant'), 'parent');
-      actions.add(transformJSXToNode(<Canvas />, 'child'), 'descandant');
+      actions.add(transformJSXToNode(<Canvas />, {id: 'parent'}), ROOT_NODE);
+      actions.add(transformJSXToNode(<div />, {id: 'descendant'}), 'parent');
+      actions.add(transformJSXToNode(<Canvas />, {id: 'child'}), 'descendant');
       expect(() => actions.move('child', ROOT_NODE, 0)).toThrowError(ERROR_MOVE_NONCANVAS_CHILD);
     });
     it('reject moving node to a non-Canvas parent', () => {
       const [context, actions] = testActions();
-      actions.add(transformJSXToNode(<div />, 'parent'), ROOT_NODE);
-      actions.add(transformJSXToNode(<h3 />, 'child'), ROOT_NODE);
+      actions.add(transformJSXToNode(<div />, {id: 'parent'}), ROOT_NODE);
+      actions.add(transformJSXToNode(<h3 />, {id: 'child'}), ROOT_NODE);
       expect(() => actions.move('child', 'parent', 0)).toThrowError(ERROR_MOVE_TO_NONCANVAS_PARENT);
     });
     it('reject moving node to it`s own descendant', () => {
       const [context, actions] = testActions();
-      actions.add(transformJSXToNode(<Canvas />, 'parent'), ROOT_NODE);
-      actions.add(transformJSXToNode(<div></div>, 'child'), 'parent');
-      actions.add(transformJSXToNode(<Canvas />, 'childCanvas'), 'child');
+      actions.add(transformJSXToNode(<Canvas />, {id: 'parent'}), ROOT_NODE);
+      actions.add(transformJSXToNode(<div></div>, {id: 'child'}), 'parent');
+      actions.add(transformJSXToNode(<Canvas />, {id: 'childCanvas'}), 'child');
       expect(() => actions.move('parent', 'childCanvas', 0)).toThrowError(ERROR_MOVE_TO_DESCENDANT);
     });
     it('reject moving node into incompatible parent', () => {
       const [context, actions] = testActions();
-      actions.add(transformJSXToNode(<Canvas />, 'parent', {
+      actions.add(transformJSXToNode(<Canvas />, {
+        id: 'parent',
         ref: {
           incoming: (node) => node.id == 'child' ? false : true
         }
       }), ROOT_NODE);
 
-      actions.add(transformJSXToNode(<div></div>, 'child'), ROOT_NODE);
+      actions.add(transformJSXToNode(<div></div>, {id: 'child'}), ROOT_NODE);
       expect(() => actions.move('child', 'parent', 0)).toThrowError(ERROR_MOVE_INCOMING_PARENT)
     });
     it('reject moving node out of disallowing-parent', () => {
       const [context, actions] = testActions();
-      actions.add(transformJSXToNode(<Canvas />, 'parent', {
+      actions.add(transformJSXToNode(<Canvas />, {
+        id: 'parent',
         ref: {
           outgoing: (node) => node.id == 'child' ? false : true
         }
       }), ROOT_NODE);
       
-      actions.add(transformJSXToNode(<div></div>, 'child'), 'parent');
+      actions.add(transformJSXToNode(<div></div>, {id: 'child'}), 'parent');
       expect(() => actions.move('child', ROOT_NODE, 0)).toThrowError(ERROR_MOVE_OUTGOING_PARENT)
     })
   });
@@ -131,7 +139,7 @@ describe('ManagerActions', () => {
           <h3>{text}</h3>
         )
       }
-      actions.add(transformJSXToNode(<TestComponent text="Text1" />, 'child'), ROOT_NODE);
+      actions.add(transformJSXToNode(<TestComponent text="Text1" />, {id: 'child'}), ROOT_NODE);
       actions.setProp('child', (props: { text: string }) => {
         props.text = "hi"
       });
@@ -146,7 +154,7 @@ describe('ManagerActions', () => {
     });
     it('can update node ref', () => {
       const [context, actions] = testActions();
-      actions.add(transformJSXToNode(<h2 />, 'child'), ROOT_NODE);
+      actions.add(transformJSXToNode(<h2 />, {id: 'child'}), ROOT_NODE);
       const refValues = {
         incoming: jest.fn(),
         outgoing: jest.fn(),
@@ -167,8 +175,8 @@ describe('ManagerActions', () => {
   describe('setNodeEvent', () => {
     it('can update node event', () =>{
       const [context, actions] = testActions();
-      actions.add(transformJSXToNode(<h2 />, 'child'), ROOT_NODE);
-      actions.add(transformJSXToNode(<h2 />, 'child2'), ROOT_NODE);
+      actions.add(transformJSXToNode(<h2 />, {id: 'child'}), ROOT_NODE);
+      actions.add(transformJSXToNode(<h2 />, {id: 'child2'}), ROOT_NODE);
       actions.setNodeEvent('active', 'child');
       expect(context.manager.getState().current.nodes['child'].event.active).toBeTruthy();
 
@@ -182,8 +190,8 @@ describe('ManagerActions', () => {
     it('can set placeholder', () => {
       const [context, actions] = testActions();
       const {current} = context.manager.getState();
-      actions.add(transformJSXToNode(<h2 />, 'child'), ROOT_NODE);
-      actions.add(transformJSXToNode(<h2 />, 'child1'), ROOT_NODE);
+      actions.add(transformJSXToNode(<h2 />, {id: 'child'}), ROOT_NODE);
+      actions.add(transformJSXToNode(<h2 />, {id: 'child1'}), ROOT_NODE);
       actions.setRef(ROOT_NODE, (ref) => {
         ref.dom = document.body;
       });
