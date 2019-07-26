@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { PlaceholderInfo } from "../dnd/interfaces";
-import { RootContext } from "../RootContext";
 import { CSSObject } from "styled-components";
+import { RootContext } from "../root/RootContext";
 
 export type Placeholder = {
   placeholder: PlaceholderInfo,
