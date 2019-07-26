@@ -8,7 +8,10 @@ import invariant from "invariant";
 import { getDOMInfo } from "../../shared/getDOMInfo";
 import findPosition from "../dnd/findPosition";
 import { PlaceholderInfo } from "../dnd/interfaces";
-import { QueryCallbacksFor } from "./useManagerCollector";
+import { QueryCallbacksFor } from "./useInternalManager";
+import { createNode } from "../utils/createNode";
+import { ROOT_NODE } from "../utils/constants";
+import { getDeepNodes } from "../utils/getDeepNodes";
 
 /**
  * Manager methods used to query nodes 
@@ -22,65 +25,15 @@ export function QueryMethods(manager: ManagerState, options: Options) {
       return manager.nodes[id];
     },
     createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id?: NodeId): Node {
-      let node = produce({}, (node: Node) => {
-        node.id = id;
-        node.data = {
-          ...data,
-          name: null,
-          props: {
-            ...data.props
-          }
-        };
-        if ( !node.data.closestParent ) node.data.closestParent = node.data.parent;
-        node.ref = {
-          event: {
-            active: false,
-            selected: false,
-            dragging: false,
-            hover: false
-          },
-          dom: null,
-          canDrag: () => true,
-          incoming: () => true,
-          outgoing: () => true
-        }
-
-        if (isCanvas(node)) {
-          node.data.subtype = data.subtype ? data.subtype : node.data.props.is ? node.data.props.is : 'div';
-          delete node.data.props['is'];
-        }
-
-        // check type
-        const name = resolveComponent(options.resolver, node.data.subtype ? node.data.subtype : node.data.type);
-        invariant(name, "The node you're trying to create does not exist in the resolver.");
-
-        node.data.name = name;
-      }) as Node;
+      const node = createNode(data, id);
+      // check type
+      const name = resolveComponent(options.resolver, node.data.subtype ? node.data.subtype : node.data.type);
+      invariant(name, "The node you're trying to create does not exist in the resolver.");
 
       return node;
     },
     getDeepNodes(id: NodeId, deep: boolean = true) {
-      function recursive(id: NodeId, result: NodeId[] = [], depth: number = 0) {
-        const node = manager.nodes[id];
-        if (deep || (!deep && depth == 0)) {
-          if (node.data._childCanvas) {
-            Object.keys(node.data._childCanvas).map(canvasName => {
-              const virtualId = node.data._childCanvas[canvasName];
-              result.push(virtualId);
-              recursive(virtualId, result, depth + 1);
-            })
-          } else if (node.data.nodes) {
-            const childNodes = node.data.nodes;
-            childNodes.forEach(nodeId => {
-              result.push(nodeId);
-              recursive(nodeId, result, depth + 1);
-            });
-          }
-        }
-        return result;
-      }
-      
-      return recursive(id)
+      return getDeepNodes(manager.nodes, id, deep);
     },
     getAllParents(nodeId: NodeId, result: NodeId[] = []) {
       const node = manager.nodes[nodeId];
@@ -91,10 +44,10 @@ export function QueryMethods(manager: ManagerState, options: Options) {
       }
       return result;
     },
-    getAllCanvas(parent: NodeId = "rootNode") {
+    getAllCanvas(parent: NodeId = ROOT_NODE) {
       const bound = _('getDeepNodes')(parent);
 
-      return (parent === "rootNode" ? ["rootNode", ...bound] : bound).filter(id => {
+      return (parent === ROOT_NODE ? [ROOT_NODE, ...bound] : bound).filter(id => {
         if (isCanvas(manager.nodes[id])) return true;
         return false;
       })
@@ -103,7 +56,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
       const targetNode = manager.nodes[id];
       const { parent } = targetNode.data;
 
-      const bound = (parent && !manager.nodes[parent].ref.outgoing(targetNode)) ? parent : "rootNode";
+      const bound = (parent && !manager.nodes[parent].ref.outgoing(targetNode)) ? parent : ROOT_NODE;
       const targetDeepNodes = _('getDeepNodes')(id);
       const canvases = _('getAllCanvas')(bound);
       const acceptedCanvases = canvases.reduce((res: NodeId[], id) => {
@@ -172,7 +125,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
         pos.x > (targetNodeInfo.left + 5) && pos.x < (targetNodeInfo.right - 5) &&
         pos.y > (targetNodeInfo.top + 5) && pos.y < (targetNodeInfo.bottom - 5)
       ),
-      targetParent = (isTargetCanvas && (isWithinBorders) || targetNode.id == "rootNode") ? targetNode : manager.nodes[targetNode.data.closestParent];
+        targetParent = (isTargetCanvas && (isWithinBorders) || targetNode.id == ROOT_NODE) ? targetNode : manager.nodes[targetNode.data.closestParent];
 
       const targetParentNodes = 
           (targetParent.data._childCanvas) ? 
