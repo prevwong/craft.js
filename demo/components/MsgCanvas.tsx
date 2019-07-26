@@ -8,7 +8,6 @@ type MsgCanvas = {
 
 const MsgCanvas: React.FC<MsgCanvas> = ({children, ...props}: MsgCanvas) => {
   const { connectTarget } = useNode();
-  console.log("aaar")
   return connectTarget(
     <hgroup style={{padding: "20px 0"}} className="msg-canvas" {...props}>{children}</hgroup>,
     {

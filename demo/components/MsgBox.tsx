@@ -8,14 +8,14 @@ export type MsgBox = {
 }
 
 export const Msg: React.FC<MsgBox> = ({children, text}) => {
-  const { actions: { setProp }, connectTarget, active}  = useNode((state) => ({active: state.ref.event.active}));
+  const {connectTarget}  = useNode();
   return connectTarget(
     <div className="message-box" >
       <h2>MESSAGE{text}</h2>
       <a onClick={() => {
-        setProp((props: MsgBox) => {
-          props.text = "whut"
-        });
+        // setProp((props: MsgBox) => {
+        //   props.text = "whut"
+        // });
       }}>Click me</a>
       <Canvas id="Msgca" style={{ background: '#999', padding: '50px 0' }}>
         <h2>Hi ad</h2>

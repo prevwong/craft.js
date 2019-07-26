@@ -14,7 +14,7 @@ class Test extends React.Component<ConnectedManager & ConnectedNode<ReturnType<t
 
 
 const collect = (state: Node) => ({
-  event: state.ref.event.active
+  event: state.event.active
 });
 
 export default connectManager()(connectNode(collect)(Test));
