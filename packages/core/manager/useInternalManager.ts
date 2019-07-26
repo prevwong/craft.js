@@ -1,10 +1,10 @@
 import React, { useContext} from "react";
-import { RootContext } from "../RootContext";
 import { ManagerState, Options } from "../interfaces";
 import { QueryMethods } from "./query";
-import ManagerMethods from "./methods";
 import { useCollector } from "~packages/shared/useCollector";
 import { MethodRecordBase, ActionByType, ActionUnion } from "~packages/shared/createReduxMethods";
+import { RootContext } from "../root/RootContext";
+import Actions from "./actions";
 
 
 export type QueryMethods<S = any, O=any, R extends MethodRecordBase<S> = any> = (state?: S, options?: O) => R;
@@ -15,15 +15,14 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<a
   : never;
 
 
-type query = { query: QueryCallbacksFor<typeof QueryMethods>, options: Options }
-export type useManagerCollector<C = null> = C extends null ? query & useCollector<typeof ManagerMethods> : query & useCollector<typeof ManagerMethods, C>;
-export function useManagerCollector(): useManagerCollector
-export function useManagerCollector<C>(collector: (state: ManagerState) => C): useManagerCollector<C>
-export function useManagerCollector<C>(collector?: any): useManagerCollector<C> {
+type query = { query: QueryCallbacksFor<typeof QueryMethods>, options: Options, _inContext: boolean }
+export type useInternalManager<C = null> = C extends null ? query & useCollector<typeof Actions> : query & useCollector<typeof Actions, C>;
+export function useInternalManager(): useInternalManager
+export function useInternalManager<C>(collector: (state: ManagerState) => C): useInternalManager<C>
+export function useInternalManager<C>(collector?: any): useInternalManager<C> {
   const { manager, options } = useContext(RootContext);
+  const collected = manager ? useCollector(manager, collector, (collected, finalize) => finalize(collected)) : {actions: {}};
 
-  const collected = useCollector(manager, collector, (collected, finalize) => finalize(collected));
-  
   const queryFactory: QueryMethods = QueryMethods;
   const query = (Object.keys(queryFactory()) as Array<keyof QueryCallbacksFor<typeof queryFactory>>).reduce((accum: Partial<QueryCallbacksFor<typeof queryFactory>>, key) => {
     return {
@@ -36,6 +35,7 @@ export function useManagerCollector<C>(collector?: any): useManagerCollector<C> 
   return {
     ...collected as any,
     query,
-    options
+    options,
+    _inContext: !!manager
   }
 }
