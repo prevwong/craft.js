@@ -1,7 +1,7 @@
 import { NodeId, Node, Nodes, NodeRef } from "../interfaces";
 import { ManagerState } from "../interfaces";
 import { PlaceholderInfo } from "../dnd/interfaces";
-import { ROOT_NODE, ERROR_MOVE_INCOMING_PARENT, ERROR_MOVE_OUTGOING_PARENT, ERROR_MOVE_TO_DESCENDANT, ERROR_MOVE_NONCANVAS_CHILD, ERROR_MOVE_TO_NONCANVAS_PARENT, ERROR_INVALID_NODEID, ERROR_MISSING_PLACEHOLDER_PLACEMENT } from "../utils/constants";
+import { ROOT_NODE, ERROR_MOVE_INCOMING_PARENT, ERROR_MOVE_OUTGOING_PARENT, ERROR_MOVE_TO_DESCENDANT, ERROR_MOVE_NONCANVAS_CHILD, ERROR_MOVE_TO_NONCANVAS_PARENT, ERROR_INVALID_NODEID, ERROR_MISSING_PLACEHOLDER_PLACEMENT } from "~packages/shared/constants";
 import { isCanvas, Canvas } from "../nodes";
 import { QueryMethods } from "./query";
 import { getDeepNodes } from "../utils/getDeepNodes";
@@ -17,7 +17,7 @@ const Actions = (state: ManagerState) => {
       if (placeholder && (!placeholder.placement.parent.ref.dom || (placeholder.placement.currentNode && !placeholder.placement.currentNode.ref.dom))) return;
       state.events.placeholder = placeholder;
     },
-    setNodeEvent(eventType: "active" | "selected" | "hover" | "dragging", id: NodeId) {
+    setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
       const current = state.events[eventType];
       if (current) {
         state.nodes[current.id].event[eventType] = false;
@@ -38,7 +38,7 @@ const Actions = (state: ManagerState) => {
       
       if (!Array.isArray(nodes)) nodes = [nodes];
       (nodes as NodeToAdd[]).forEach(node => {
-        const parent = parentId ? parentId : node.data.closestParent || node.data.parent;        
+        const parent = parentId ? parentId : node.data.closestParent || node.data.parent;    
         invariant((node.id !== ROOT_NODE && parent) || (node.id === ROOT_NODE && !parent), 'parentId is required when adding a node');
         
         // adding canvas to a normal node

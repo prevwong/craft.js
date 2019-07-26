@@ -5,7 +5,6 @@ import { SimpleElement } from "../render/RenderNode";
 import { mapChildrenToNodes } from "../nodes";
 import { useInternalNode } from "./useInternalNode";
 import { useInternalManager } from "../manager/useInternalManager";
-const shortid = require("shortid");
 const invariant = require("invariant");
 
 export interface Canvas extends React.Props<any> {
@@ -25,12 +24,15 @@ export const Canvas = ({ is = "div", children, ...props }: Canvas) => {
   const [internalId, setInternalId] = useState(null);
   useLayoutEffect(() => {
     if (!_inContext || !_inNodeContext) return;
-    let canvasId = `canvas-${shortid.generate()}`;
 
     if (node.type === Canvas) {
       if (!node.nodes) {  // don't recreate nodes from children after initial hydration
-        canvasId = nodeId;
-        const childNodes = mapChildrenToNodes(children, { parent: canvasId }, (node) => {
+        const childNodes = mapChildrenToNodes(children, (jsx) => {
+          const node = query.transformJSXToNode(jsx, {
+            data: {
+              parent: nodeId
+            }
+          })
           return node;
         });
         add(childNodes, nodeId);
@@ -40,11 +42,8 @@ export const Canvas = ({ is = "div", children, ...props }: Canvas) => {
       let internalId;
       
       if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
-        const rootNode = query.createNode({
-          type: Canvas,
-          props: { is, children, ...props },
-        }, canvasId);
-        internalId = canvasId;
+        const rootNode = query.transformJSXToNode(<Canvas is={is} {...props}>{children}</Canvas>);
+        internalId = rootNode.id;
         add(rootNode, nodeId);
       } else {
         internalId = node._childCanvas[id];
