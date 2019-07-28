@@ -8,13 +8,13 @@ export const getDeepNodes = (nodes:Nodes, id: NodeId, deep: boolean = true) => {
         Object.keys(node.data._childCanvas).map(canvasName => {
           const virtualId = node.data._childCanvas[canvasName];
           result.push(virtualId);
-          recursive(virtualId, result, depth + 1);
+          result = recursive(virtualId, result, depth + 1);
         })
       } else if (node.data.nodes) {
-        const childNodes = node.data.nodes;
+        const childNodes = node.data.nodes; // ['t1c1', 't1c2']
         childNodes.forEach(nodeId => {
           result.push(nodeId);
-          recursive(nodeId, result, depth + 1);
+          result = recursive(nodeId, result, depth + 1);
         });
       }
     }
