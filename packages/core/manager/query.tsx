@@ -8,11 +8,11 @@ import invariant from "invariant";
 import { getDOMInfo } from "../../shared/getDOMInfo";
 import findPosition from "../dnd/findPosition";
 import { PlaceholderInfo } from "../dnd/interfaces";
-import { QueryCallbacksFor } from "./useInternalManager";
 import { createNode } from "../utils/createNode";
-import { ROOT_NODE } from "~packages/shared/constants";
+import { ROOT_NODE, ERRROR_NOT_IN_RESOLVER, ERROR_MOVE_TO_NONCANVAS_PARENT, ERROR_MOVE_OUTGOING_PARENT, ERROR_MOVE_INCOMING_PARENT, ERROR_MOVE_TO_DESCENDANT, ERROR_MOVE_NONCANVAS_CHILD, ERROR_DUPLICATE_NODEID, ERROR_NOPARENT } from "~packages/shared/constants";
 import { getDeepNodes } from "../utils/getDeepNodes";
 import { transformJSXToNode } from "../utils/transformJSX";
+import { QueryCallbacksFor } from "~packages/shared/createReduxMethods";
 
 /**
  * Manager methods used to query nodes 
@@ -22,13 +22,16 @@ import { transformJSXToNode } from "../utils/transformJSX";
 export function QueryMethods(manager: ManagerState, options: Options) {
   const _ = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) => (QueryMethods(manager, options)[name]);
   return {
+    getOptions() {
+      return options;
+    },
     getNode(id: NodeId) {
       return manager.nodes[id];
     },
     transformJSXToNode(child: React.ReactElement | string, extras?: any) {
       const node = transformJSXToNode(child, extras);
       const name = resolveComponent(options.resolver, node.data.subtype ? node.data.subtype : node.data.type);
-      invariant(name, "The node you're trying to create does not exist in the resolver.");
+      invariant(name, ERRROR_NOT_IN_RESOLVER);
       node.data.name = name;
       return node;
     },
@@ -52,24 +55,6 @@ export function QueryMethods(manager: ManagerState, options: Options) {
         return false;
       })
     },
-    getAcceptingCanvases(id: NodeId): NodeId[] {
-      const targetNode = manager.nodes[id];
-      const { parent } = targetNode.data;
-
-      const bound = (parent && !manager.nodes[parent].ref.outgoing(targetNode)) ? parent : ROOT_NODE;
-      const targetDeepNodes = _('getDeepNodes')(id);
-      const canvases = _('getAllCanvas')(bound);
-      const acceptedCanvases = canvases.reduce((res: NodeId[], id) => {
-        const canvas = manager.nodes[id];
-        if (canvas.ref.incoming(targetNode) && !targetDeepNodes.includes(id)) {
-          res.push(id);
-        }
-        return res;
-      }, []);
-
-      return acceptedCanvases;
-
-    },
     serialize(): string {
       return (Object.keys(manager.nodes).reduce((result: any, id: NodeId) => {
         const { data: { ...data } } = manager.nodes[id];
@@ -80,33 +65,38 @@ export function QueryMethods(manager: ManagerState, options: Options) {
     deserialize(json: string, resolver: Resolver): Nodes {
       const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
       return Object.keys(reducedNodes).reduce((accum: Nodes, id) => {
-        const { type, subtype, props, parent, closestParent, nodes, _childCanvas, name } = deserializeNode(reducedNodes[id], resolver);
-        if (!type) return accum;
+        const { type: Comp, subtype, props, parent, closestParent, nodes, _childCanvas, name } = deserializeNode(reducedNodes[id], resolver);
+        if (!Comp) return accum;
 
-        accum[id] = _('createNode')({
-          type,
-          props,
-          name,
-          parent,
-          closestParent,
-          ...(type === Canvas && { subtype, nodes }),
-          ...(_childCanvas && { _childCanvas })
-        }, id);
+        accum[id] = _('transformJSXToNode')(<Comp {...props} />, {
+          data: {
+            parent, 
+            closestParent,
+            ...(Comp === Canvas && { subtype, nodes }),
+            ...(_childCanvas && { _childCanvas })
+          }
+        });
         return accum;
       }, {});
     },
-    canDropInParent: (id: NodeId, parent: NodeId) => {
-      const targetNode = manager.nodes[id],
-            currentParentNode = manager.nodes[targetNode.data.parent],
-            parentNode = manager.nodes[parent];
+    canDropInParent: (node: Node | NodeId, newParent: NodeId) => {
+      const targetNode = typeof node === "string" ? manager.nodes[node] : node;
+      const currentParentNode = targetNode.data.closestParent && manager.nodes[targetNode.data.closestParent],
+            newParentNode = manager.nodes[newParent];
+        
+      invariant(currentParentNode || (!currentParentNode && !manager.nodes[targetNode.id]), ERROR_DUPLICATE_NODEID);
+      invariant((targetNode.id !== ROOT_NODE && newParent) || (targetNode.id === ROOT_NODE && !newParent), ERROR_NOPARENT);
+      if ( newParent ) {
+        invariant(isCanvas(newParentNode), ERROR_MOVE_TO_NONCANVAS_PARENT);
+        invariant(newParentNode.ref.incoming(targetNode), ERROR_MOVE_INCOMING_PARENT);
+      }
 
-      // Test if parent is a Canvas
-      invariant(isCanvas(parentNode), 'Parent is not a valid Canvas node');
-
-      // Test if parent can move out of its' own parent
-      invariant(currentParentNode.ref.outgoing(targetNode), 'Target node cannot be dragged out of its current parent');
-      // Test if parent accepts target
-      invariant(parentNode.ref.incoming(targetNode), 'Parent rejects target node');
+      if (currentParentNode) {  // moving
+        const targetDeepNodes = _('getDeepNodes')(targetNode.id);
+        invariant(targetNode.data.parent, ERROR_MOVE_NONCANVAS_CHILD);
+        invariant(!targetDeepNodes.includes(newParent), ERROR_MOVE_TO_DESCENDANT);
+        invariant(currentParentNode.ref.outgoing(targetNode), ERROR_MOVE_OUTGOING_PARENT);
+      }
 
       return true;
     },
