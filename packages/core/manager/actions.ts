@@ -1,18 +1,20 @@
 import { NodeId, Node, Nodes, NodeRef } from "../interfaces";
 import { ManagerState } from "../interfaces";
 import { PlaceholderInfo } from "../dnd/interfaces";
-import { ROOT_NODE, ERROR_MOVE_INCOMING_PARENT, ERROR_MOVE_OUTGOING_PARENT, ERROR_MOVE_TO_DESCENDANT, ERROR_MOVE_NONCANVAS_CHILD, ERROR_MOVE_TO_NONCANVAS_PARENT, ERROR_INVALID_NODEID, ERROR_MISSING_PLACEHOLDER_PLACEMENT } from "~packages/shared/constants";
+import { ROOT_NODE, ERROR_MOVE_INCOMING_PARENT, ERROR_MOVE_OUTGOING_PARENT, ERROR_MOVE_TO_DESCENDANT, ERROR_MOVE_NONCANVAS_CHILD, ERROR_MOVE_TO_NONCANVAS_PARENT, ERROR_INVALID_NODEID, ERROR_MISSING_PLACEHOLDER_PLACEMENT, ERROR_ROOT_CANVAS_NO_ID } from "~packages/shared/constants";
 import { isCanvas, Canvas } from "../nodes";
 import { QueryMethods } from "./query";
-import { getDeepNodes } from "../utils/getDeepNodes";
+import { QueryCallbacksFor } from "~packages/shared/createReduxMethods";
 const invariant = require('invariant');
 
 type NodeToAdd = Node & {
   index?: number
 }
 
-const Actions = (state: ManagerState) => {
+const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMethods>) => {
+  // console.log("actions", state, q)
   return {
+    
     setPlaceholder(placeholder: PlaceholderInfo) {
       if (placeholder && (!placeholder.placement.parent.ref.dom || (placeholder.placement.currentNode && !placeholder.placement.currentNode.ref.dom))) return;
       state.events.placeholder = placeholder;
@@ -35,33 +37,26 @@ const Actions = (state: ManagerState) => {
       state.nodes = nodes;
     },
     add(nodes: NodeToAdd[] | NodeToAdd, parentId?: NodeId ) {
-      
       if (!Array.isArray(nodes)) nodes = [nodes];
       (nodes as NodeToAdd[]).forEach(node => {
-        const parent = parentId ? parentId : node.data.closestParent || node.data.parent;    
-        invariant((node.id !== ROOT_NODE && parent) || (node.id === ROOT_NODE && !parent), 'parentId is required when adding a node');
+        const parent = parentId ? parentId : node.data.closestParent || node.data.parent,
+              parentNode = state.nodes[parent];   
         
-        // adding canvas to a normal node
-        if ( parent ) {
-          const parentNode = state.nodes[parent];
-          if (isCanvas(node) && !isCanvas(parentNode)) {
-            if (!parentNode.data._childCanvas) parentNode.data._childCanvas = {};
-            node.data.closestParent = parentNode.id;
-            parentNode.data._childCanvas[node.data.props.id] = node.id;
-            delete node.data.props.id;
-          } else {
-            if (!parentNode.data.nodes) parentNode.data.nodes = []
-
-            invariant(isCanvas(state.nodes[parent]), `Cannot add node to a non-Canvas node`)
-
-            if (parent) {
-              const currentNodes = state.nodes[parent].data.nodes;
-              currentNodes.splice((node.index !== undefined) ? node.index : currentNodes.length - 1, 0, node.id);
-              invariant(state.nodes[parent].ref.incoming(node), `Parent node rejects incoming node ${node}`);
-              node.data.parent = node.data.closestParent = parent;
-            }
-          }
-        }
+        if (parentNode && isCanvas(node) && !isCanvas(parentNode) ) {
+          invariant(node.data.props.id, ERROR_ROOT_CANVAS_NO_ID);
+          if (!parentNode.data._childCanvas) parentNode.data._childCanvas = {};
+          node.data.closestParent = parentNode.id;
+          parentNode.data._childCanvas[node.data.props.id] = node.id;
+          delete node.data.props.id;
+        } else {
+          query.canDropInParent(node, parentId);
+          if (parentNode ) {
+            if (!parentNode.data.nodes) parentNode.data.nodes = [];
+            const currentNodes = parentNode.data.nodes;
+            currentNodes.splice((node.index !== undefined) ? node.index : currentNodes.length, 0, node.id);
+            node.data.parent = node.data.closestParent = parent;
+          } 
+        }        
         state.nodes[node.id] = node;
       });
     },
@@ -71,16 +66,10 @@ const Actions = (state: ManagerState) => {
         newParentNodes = newParent.data.nodes;
 
       // Define some rules
-      invariant(isCanvas(newParent), ERROR_MOVE_TO_NONCANVAS_PARENT)
-      invariant(targetNode.data.parent, ERROR_MOVE_NONCANVAS_CHILD);
+      query.canDropInParent(targetNode, newParentId);
 
       const currentParent = state.nodes[targetNode.data.parent],
-            currentParentNodes = currentParent.data.nodes,
-        currentTargetDeepNodes = getDeepNodes(state.nodes, targetId)
-
-      invariant(!currentTargetDeepNodes.includes(newParent.id), ERROR_MOVE_TO_DESCENDANT);
-      invariant(currentParent.ref.outgoing(targetNode), ERROR_MOVE_OUTGOING_PARENT)
-      invariant(newParent.ref.incoming(targetNode), ERROR_MOVE_INCOMING_PARENT);
+            currentParentNodes = currentParent.data.nodes;
 
       currentParentNodes[currentParentNodes.indexOf(targetId)] = "marked";
       newParentNodes.splice(index, 0, targetId);
