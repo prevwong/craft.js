@@ -9,9 +9,9 @@ const invariant = require("invariant");
 export const Renderer: React.FC = ({
   children
 }) => {
-  const { options:{nodes, resolver, onRender, renderPlaceholder }} = useContext(RootContext);
-  const { rootNode, actions: { add, replaceNodes }, query: { transformJSXToNode, deserialize } } = useManager((state) => ({ rootNode: state.nodes[ROOT_NODE]}));
-
+  const manager = useContext(RootContext);
+  const { rootNode, actions: { add, replaceNodes }, query: { getOptions, transformJSXToNode, deserialize } } = useManager((state) => ({ rootNode: state.nodes[ROOT_NODE]}));
+  const { nodes, resolver } = getOptions();
   useLayoutEffect(() => {
     if (!nodes) {
       const rootCanvas = React.Children.only(children) as React.ReactElement;

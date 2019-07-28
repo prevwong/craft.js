@@ -5,7 +5,8 @@ import movePlaceholder from "./movePlaceholder";
 import { getDOMInfo } from "../../shared/getDOMInfo";
 
 export const DNDManager: React.FC = ({ children }) => {
-  const { nodes, events, query, actions: {setNodeEvent, setPlaceholder, move}, options: {renderPlaceholder}} = useManager((state) => state);
+  const { nodes, events, query, actions: {setNodeEvent, setPlaceholder, move}} = useManager((state) => state);
+  const {renderPlaceholder} = query.getOptions();
   const [isMousePressed, setMousePressed] = useState(false);
   const mutable = useRef<ManagerState>({
     nodes: null,

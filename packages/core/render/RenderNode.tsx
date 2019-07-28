@@ -11,7 +11,8 @@ export const SimpleElement = ({render}: any) => {
 
 export const RenderNodeToElement: React.FC<any> =React.memo(({ ...injectedProps}) => {
   const { type, props } = useInternalNode((node) => ({type: node.data.type, props: node.data.props}));
-  const { options: { onRender}} = useContext(RootContext);
+  const { query: { getOptions }} = useContext(RootContext);
+  const {onRender} = getOptions();
 
   return useMemo(() => {
     let Comp = type;
