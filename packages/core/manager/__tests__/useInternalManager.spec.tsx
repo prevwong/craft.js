@@ -48,20 +48,17 @@ describe('useInternalManager', () => {
   );
 
   it('Returns options', () => {
-    expect(collected).toHaveProperty('options');
-    expect(collected.options).toMatchObject(options);
+    expect(collected.query.getOptions()).toMatchObject(options);
   });
 
   it('Returns actions', () => {
-    const dummyActions = Actions(context.manager.getState().current);
     expect(collected).toHaveProperty('actions');
-    expect(Object.keys(collected.actions)).toMatchObject(Object.keys(dummyActions));
+    expect(Object.keys(collected.actions)).toMatchObject(Object.keys(context.actions));
   });
 
   it('Returns queries', () => {
-    const dummyQueries = QueryMethods(context.manager.getState().current, options);
     expect(collected).toHaveProperty('query');
-    expect(Object.keys(collected.query)).toMatchObject(Object.keys(dummyQueries));
+    expect(Object.keys(collected.query)).toMatchObject(Object.keys(context.query));
   });
 
   it('Returns collected states', () => {
@@ -83,7 +80,7 @@ describe('useInternalManager', () => {
               mockCount();
               collected = manager
             }}
-            click={(e: React.MouseEvent, manager: typeof context.manager) => {
+            click={(e: React.MouseEvent, manager: typeof context) => {
               onClick(manager);
             }}
           />
@@ -94,10 +91,10 @@ describe('useInternalManager', () => {
     }
 
     // Shouldn't re-render when a property changes on a node that isn't watch by a collector
-    mock((manager: typeof context.manager) => manager.actions.setRef('somenode-1', (ref => ref.dom = document.body)), 1)
+    mock((manager: typeof context) => manager.actions.setRef('somenode-1', (ref => ref.dom = document.body)), 1)
 
     // This should re-render since t1 watches for data property changes
-    mock((manager: typeof context.manager) => manager.actions.setProp('somenode-1', (props) => {
+    mock((manager: typeof context) => manager.actions.setProp('somenode-1', (props) => {
       (props as any).testProp = 3;
     }), 2);
   })
