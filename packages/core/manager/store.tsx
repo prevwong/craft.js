@@ -1,6 +1,7 @@
 import createReduxMethods, {SubscriberAndCallbacksFor} from "../../shared/createReduxMethods";
-import { NodeRefEvent, ManagerState, ManagerEvents } from "../interfaces";
+import { NodeRefEvent, ManagerState, ManagerEvents, Options } from "../interfaces";
 import Actions from "./actions";
+import { QueryMethods } from "./query";
 
 export type ManagerStore = SubscriberAndCallbacksFor<typeof Actions>;
 
@@ -11,7 +12,16 @@ export const createManagerStore = (
     dragging: null, 
     hover:null, 
     placeholder:null
-  }): ManagerStore => createReduxMethods(Actions, {
-  nodes,
-  events
-});
+  },
+  options: Partial<Options> = {}
+): ManagerStore => createReduxMethods(
+    Actions, 
+    {
+      nodes,
+      events
+    },
+    {
+      methods: QueryMethods,
+      options
+    }
+);
