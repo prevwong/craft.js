@@ -5,6 +5,7 @@ import { SimpleElement } from "../render/RenderNode";
 import { mapChildrenToNodes } from "../nodes";
 import { useInternalNode } from "./useInternalNode";
 import { useInternalManager } from "../manager/useInternalManager";
+import { ERROR_ROOT_CANVAS_NO_ID } from "~packages/shared/constants";
 const invariant = require("invariant");
 
 export interface Canvas extends React.Props<any> {
@@ -28,17 +29,13 @@ export const Canvas = ({ is = "div", children, ...props }: Canvas) => {
     if (node.type === Canvas) {
       if (!node.nodes) {  // don't recreate nodes from children after initial hydration
         const childNodes = mapChildrenToNodes(children, (jsx) => {
-          const node = query.transformJSXToNode(jsx, {
-            data: {
-              parent: nodeId
-            }
-          })
+          const node = query.transformJSXToNode(jsx)
           return node;
         });
         add(childNodes, nodeId);
       }
     } else {
-      invariant(id, 'Root canvas cannot ommit `id` prop');
+      invariant(id, ERROR_ROOT_CANVAS_NO_ID);
       let internalId;
       
       if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
