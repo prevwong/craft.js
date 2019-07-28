@@ -13,7 +13,7 @@ export default class App extends React.Component {
     return (
       <div className='app'>
         <Craft
-          // nodes='{"ROOT":{"type":{"resolvedName":"Canvas"},"subtype":"div","props":{},"nodes":["node-KsjZhXnscS","node-cFm3GIgDhc","node-kqcZAcbGD9"]},"node-kqcZAcbGD9":{"type":"h2","props":{"children":"THISTHISTHIS"},"parent":"ROOT"},"node-KsjZhXnscS":{"type":{"resolvedName":"Msg"},"props":{"text":"hi"},"parent":"ROOT","_childCanvas":{"Msgca":"canvas-vyPaBV6ILS"}},"node-F53wjMN_jN":{"type":{"resolvedName":"TestCComponent"},"props":{},"parent":"canvas-vyPaBV6ILS"},"canvas-vyPaBV6ILS":{"type":{"resolvedName":"Canvas"},"subtype":{"resolvedName":"MsgCanvas"},"props":{"style":{"background":"#999","padding":"20px 0"}},"closestParent":"node-KsjZhXnscS","nodes":["node-F53wjMN_jN"]},"node-cFm3GIgDhc":{"type":"h2","props":{"children":"Hi world"},"parent":"ROOT"}}'
+          nodes='{"ROOT":{"type":{"resolvedName":"Canvas"},"subtype":"div","props":{},"nodes":["node-KsjZhXnscS","node-cFm3GIgDhc","node-kqcZAcbGD9"]},"node-kqcZAcbGD9":{"type":"h2","props":{"children":"THISTHISTHIS"},"parent":"ROOT"},"node-KsjZhXnscS":{"type":{"resolvedName":"Msg"},"props":{"text":"hi"},"parent":"ROOT","_childCanvas":{"Msgca":"canvas-vyPaBV6ILS"}},"node-F53wjMN_jN":{"type":{"resolvedName":"TestCComponent"},"props":{},"parent":"canvas-vyPaBV6ILS"},"canvas-vyPaBV6ILS":{"type":{"resolvedName":"Canvas"},"subtype":{"resolvedName":"MsgCanvas"},"props":{"style":{"background":"#999","padding":"20px 0"}},"closestParent":"node-KsjZhXnscS","nodes":["node-F53wjMN_jN"]},"node-cFm3GIgDhc":{"type":"h2","props":{"children":"Hi world"},"parent":"ROOT"}}'
           onRender={(({ render }) => {
             return (
               <React.Fragment>
@@ -28,11 +28,13 @@ export default class App extends React.Component {
             <Canvas is={MsgCanvas}>
               <h2>THISTHISTHIS</h2>
               <TestCComponent />
-              <Msg text="hi" />
+              <Canvas>
+                <h2>asdas</h2>
+              </Canvas>
               <Msg text="lol" />
             </Canvas>
           </Renderer>
-          {/* <Layers /> */}
+          <Layers />
         </Craft>
       </div>
     )
