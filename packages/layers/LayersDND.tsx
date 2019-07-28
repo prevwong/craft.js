@@ -7,7 +7,8 @@ import { PlaceholderInfo } from "~packages/core/dnd/interfaces";
 
 export const LayersDND: React.FC<any> = ({ children }) => {
     const {layers, events} = useLayer((state) => state);
-    const { query, actions: { move, setNodeEvent, setPlaceholder }, placeholder, options: { renderPlaceholder } } = useManager((state) => ({ placeholder: state.events.placeholder }));
+    const { query, actions: { move, setNodeEvent, setPlaceholder }, placeholder } = useManager((state) => ({ placeholder: state.events.placeholder }));
+    const {renderPlaceholder} = query.getOptions();
     const [isMousePressed, setMousePressed] = useState(false);
 
     const mutable = useRef<LayerState & {placeholder: PlaceholderInfo, onCanvas: boolean}>({
