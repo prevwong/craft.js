@@ -1,0 +1,14 @@
+0 silly argv { _: [ 'bootstrap' ],
+0 silly argv   hoist: true,
+0 silly argv   lernaVersion: '3.16.4',
+0 silly argv   '$0':
+0 silly argv    '/Users/prevwong/Documents/GitHub/react-page-builder/node_modules/.bin/lerna' }
+1 notice cli v3.16.4
+2 verbose rootPath /Users/prevwong/Documents/GitHub/react-page-builder
+3 info versioning independent
+4 error Error: Invalid package name "@craftjs/examples/ResumeDesigner": name can only contain URL-friendly characters
+4 error     at invalidPackageName (/Users/prevwong/Documents/GitHub/react-page-builder/node_modules/npm-package-arg/npa.js:86:15)
+4 error     at Result.setName (/Users/prevwong/Documents/GitHub/react-page-builder/node_modules/npm-package-arg/npa.js:121:11)
+4 error     at new Result (/Users/prevwong/Documents/GitHub/react-page-builder/node_modules/npm-package-arg/npa.js:111:23)
+4 error     at Function.resolve (/Users/prevwong/Documents/GitHub/react-page-builder/node_modules/npm-package-arg/npa.js:58:15)
+4 error     at new Package (/Users/prevwong/Documents/GitHub/react-page-builder/node_modules/@lerna/package/index.js:36:26)

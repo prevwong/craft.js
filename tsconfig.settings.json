@@ -1,0 +1,14 @@
+{
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "jsx": "preserve",
+        "module": "es2015",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "outDir": "lib",
+        "sourceMap": true,
+        "target": "es2015"
+    }
+}

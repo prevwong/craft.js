@@ -1,20 +1,22 @@
 {
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+    "extends": "./tsconfig.settings.json",
     "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-        "jsx": "preserve",
-        "module": "es2015",
-        "moduleResolution": "node",
-        "noImplicitAny": true,
-        "outDir": "lib",
-        "sourceMap": true,
-        "target": "es2015",
         "baseUrl": ".",
+        "allowSyntheticDefaultImports": true,
         "paths": {
-            "~*": [
-                "./*"
+            "@craftjs/core": [
+                "packages/core/src/index"
+            ],
+            "@craftjs/shared": [
+               "packages/shared/src/index"
+            ],
+            "resume-designer": [
+                "packages/resume-designer/src/index"
             ]
         }
-    }
+    },
+    "exclude": [
+        "**/node_modules/**",
+        "**/lib/**"
+    ]
 }
