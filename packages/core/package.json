@@ -1,0 +1,35 @@
+{
+  "name": "craftjs-core",
+  "version": "0.0.0",
+  "description": "A react framework to write drag-and-drop page builders",
+  "keywords": [
+    "react",
+    "dnd",
+    "page",
+    "builder",
+    "exetnsible",
+    "powerful",
+    "framework"
+  ],
+  "author": "Prev Wong <prevwong@gmail.com>",
+  "homepage": "https://github.com/prevwong/craft.js#readme",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/prevwong/craft.js.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "build": "../../scripts/build.sh"
+  },
+  "bugs": {
+    "url": "https://github.com/prevwong/craft.js/issues"
+  },
+  "dependencies": {
+    "craftjs-utils": "*",
+    "shortid": "^2.2.15"
+  }
+}
