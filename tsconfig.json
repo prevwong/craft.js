@@ -1,22 +1,23 @@
 {
-    "extends": "./tsconfig.settings.json",
-    "compilerOptions": {
-        "baseUrl": ".",
-        "allowSyntheticDefaultImports": true,
-        "paths": {
-            "@craftjs/core": [
-                "packages/core/src/index"
-            ],
-            "@craftjs/shared": [
-               "packages/shared/src/index"
-            ],
-            "resume-designer": [
-                "packages/resume-designer/src/index"
-            ]
-        }
-    },
-    "exclude": [
-        "**/node_modules/**",
-        "**/lib/**"
-    ]
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "craftjs": [
+        "packages/core/src/index"
+      ],
+      "craftjs/*": [
+        "packages/core/src/*"
+      ],
+      "craftjs-utils": [
+        "packages/shared/index"
+      ]
+    }
+  },
+  "exclude": [
+    "**/node_modules/**",
+    "**/dist/**"
+  ]
 }

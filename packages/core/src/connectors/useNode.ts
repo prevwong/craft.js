@@ -2,7 +2,7 @@ import React, { cloneElement, useContext } from "react";
 import { Node, ConnectedNode, NodeRef } from "../interfaces";
 import invariant from "invariant";
 import { useInternalNode } from "../nodes/useInternalNode";
-import { NodeProvider, NodeContext } from "../nodes/NodeContext";
+import { NodeContext } from "../nodes/NodeContext";
 
 
 export function useNode(): ConnectedNode

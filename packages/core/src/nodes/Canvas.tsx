@@ -5,7 +5,7 @@ import { SimpleElement } from "../render/RenderNode";
 import { mapChildrenToNodes } from "../nodes";
 import { useInternalNode } from "./useInternalNode";
 import { useInternalManager } from "../manager/useInternalManager";
-import { ERROR_ROOT_CANVAS_NO_ID } from "@shared/constants";
+import { ERROR_ROOT_CANVAS_NO_ID } from "craftjs-utils";
 const invariant = require("invariant");
 
 export interface Canvas extends React.Props<any> {

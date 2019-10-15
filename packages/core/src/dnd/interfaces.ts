@@ -1,6 +1,4 @@
 import { NodeId, Node } from "../interfaces/nodes";
-import { CSSObject } from "styled-components";
-import { CSSProperties } from "react";
 
 export type NodeInfo =  {
   id?: NodeId;

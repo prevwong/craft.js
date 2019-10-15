@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { PlaceholderInfo } from "../dnd/interfaces";
-import { CSSObject } from "styled-components";
+// import { CSSObject } from "styled-components";
 import { RootContext } from "../root/RootContext";
 
 export type Placeholder = {
   placeholder: PlaceholderInfo,
-  suggestedStyles: CSSObject
+  suggestedStyles: any
 }
 
 export const defaultPlaceholder: React.FC<Placeholder> = ({ placeholder: { error }, suggestedStyles}) => {
@@ -29,6 +29,10 @@ export const defaultPlaceholder: React.FC<Placeholder> = ({ placeholder: { error
 
 
 export const RenderPlaceholder: React.FC<Placeholder> = ({ placeholder, suggestedStyles }) => {
-  const { options: { renderPlaceholder} } = useContext(RootContext);
-  return React.createElement(renderPlaceholder, { placeholder, suggestedStyles });
+  const { query } = useContext(RootContext);
+  const { renderPlaceholder } = query.getOptions();
+  return React.createElement(renderPlaceholder, {
+    placeholder,
+    suggestedStyles,
+  });
 }

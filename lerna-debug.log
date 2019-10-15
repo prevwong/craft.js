@@ -1,14 +1,19 @@
-0 silly argv { _: [ 'bootstrap' ],
-0 silly argv   hoist: true,
+0 silly argv { _: [ 'create' ],
 0 silly argv   lernaVersion: '3.16.4',
-0 silly argv   '$0':
-0 silly argv    '/Users/prevwong/Documents/GitHub/react-page-builder/node_modules/.bin/lerna' }
+0 silly argv   '$0': 'lerna',
+0 silly argv   name: 'core' }
 1 notice cli v3.16.4
 2 verbose rootPath /Users/prevwong/Documents/GitHub/react-page-builder
-3 info versioning independent
-4 error Error: Invalid package name "@craftjs/examples/ResumeDesigner": name can only contain URL-friendly characters
-4 error     at invalidPackageName (/Users/prevwong/Documents/GitHub/react-page-builder/node_modules/npm-package-arg/npa.js:86:15)
-4 error     at Result.setName (/Users/prevwong/Documents/GitHub/react-page-builder/node_modules/npm-package-arg/npa.js:121:11)
-4 error     at new Result (/Users/prevwong/Documents/GitHub/react-page-builder/node_modules/npm-package-arg/npa.js:111:23)
-4 error     at Function.resolve (/Users/prevwong/Documents/GitHub/react-page-builder/node_modules/npm-package-arg/npa.js:58:15)
-4 error     at new Package (/Users/prevwong/Documents/GitHub/react-page-builder/node_modules/@lerna/package/index.js:36:26)
+3 error Error: canceled
+3 error     at Interface.<anonymous> (/usr/local/lib/node_modules/lerna/node_modules/read/lib/read.js:66:13)
+3 error     at Interface.emit (events.js:193:13)
+3 error     at Interface._ttyWrite (readline.js:820:16)
+3 error     at ReadStream.onkeypress (readline.js:184:10)
+3 error     at ReadStream.emit (events.js:193:13)
+3 error     at emitKeys (internal/readline.js:424:14)
+3 error     at emitKeys.next (<anonymous>)
+3 error     at ReadStream.onData (readline.js:1093:36)
+3 error     at ReadStream.emit (events.js:193:13)
+3 error     at addChunk (_stream_readable.js:296:12)
+3 error     at readableAddChunk (_stream_readable.js:277:11)
+3 error     at ReadStream.Readable.push (_stream_readable.js:232:10)

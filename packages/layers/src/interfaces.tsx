@@ -1,4 +1,4 @@
-import { NodeId } from "~packages/core";
+import { NodeId } from "craftjs-core";
 
 export type Layer = {
   id: NodeId,

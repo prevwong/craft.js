@@ -1,10 +1,9 @@
 import React, { createContext, useMemo } from "react";
-import { defaultPlaceholder } from "../render/RenderPlaceholder";
 import { Options } from "../interfaces/root";
 import { createOptions } from "./createOptions";
 import { createManagerStore, ManagerStore } from "../manager/store";
 import { Nodes, ManagerEvents } from "../interfaces";
-import { ROOT_NODE } from "~packages/shared/constants";
+import { ROOT_NODE } from "craftjs-utils";
 import { Canvas } from "../nodes";
 import { transformJSXToNode } from "../utils/transformJSX";
 

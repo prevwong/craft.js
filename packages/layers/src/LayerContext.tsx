@@ -1,6 +1,6 @@
 import React, { createContext, useMemo } from "react";
 import { LayersDND } from "./LayersDND";
-import createReduxMethods, { SubscriberAndCallbacksFor } from "~packages/shared/createReduxMethods";
+import {createReduxMethods, SubscriberAndCallbacksFor } from "craftjs-utils";
 import { LayerMethods } from "./LayerMethods";
 
 export type LayerStore = SubscriberAndCallbacksFor<typeof LayerMethods>;

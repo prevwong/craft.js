@@ -1,8 +1,8 @@
 import React, { useContext} from "react";
 import { ManagerState, Options } from "../interfaces";
 import { QueryMethods } from "./query";
-import { useCollector } from "@shared/useCollector";
-import { MethodRecordBase, ActionByType, ActionUnion } from "@shared/createReduxMethods";
+import { useCollector } from "craftjs-utils";
+import { MethodRecordBase, ActionByType, ActionUnion } from "craftjs-utils";
 import { RootContext } from "../root/RootContext";
 import Actions from "./actions";
 

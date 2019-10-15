@@ -1,7 +1,8 @@
 import React from "react";
-import { Craft, Renderer, Canvas } from "~packages/core";
-import { Container } from "./components/Container";
-import {Toolbar} from '~demo/Toolbar';
+import ReactDOM from "react-dom"
+import { Craft, Renderer, Canvas } from "craftjs-core";
+import { Container } from "./selectors/Container";
+import {Toolbar} from './components/Toolbar';
 import "./demo.css";
 
 const App = () => {
@@ -47,4 +48,4 @@ const App = () => {
   );
 };
 
-export default App;
+ReactDOM.render(<App />, document.getElementById('root'))

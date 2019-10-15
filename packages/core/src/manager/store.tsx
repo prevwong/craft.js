@@ -1,4 +1,4 @@
-import createReduxMethods, {SubscriberAndCallbacksFor} from "../../shared/createReduxMethods";
+import { createReduxMethods, SubscriberAndCallbacksFor } from "craftjs-utils";
 import { NodeRefEvent, ManagerState, ManagerEvents, Options } from "../interfaces";
 import Actions from "./actions";
 import { QueryMethods } from "./query";

@@ -1,17 +1,14 @@
-import React, { useState, useMemo, useContext, useLayoutEffect } from "react";
+import React, { useState, useMemo, useLayoutEffect } from "react";
 import { NodeElement, Canvas } from "../nodes";
-import DNDManager from "../dnd";
 import { useManager } from "../connectors";
-import { RootContext } from "../root/RootContext";
-import { ROOT_NODE } from "@shared/constants";
+import { ROOT_NODE } from "craftjs-utils";
 const invariant = require("invariant");
 
 export const Renderer: React.FC = ({
   children
 }) => {
-  const manager = useContext(RootContext);
   const { actions: { add, replaceNodes }, query: {getNode, getOptions, transformJSXToNode, deserialize } } = useManager();
-  const { nodes, resolver } = getOptions();
+  const { nodes } = getOptions();
     const [rootNode, setRootNode] = useState();
   useLayoutEffect(() => {
     if (!nodes) {

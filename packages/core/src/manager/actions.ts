@@ -1,11 +1,10 @@
-import React from 'react';
 import { NodeId, Node, Nodes, NodeRef } from "../interfaces";
 import { ManagerState } from "../interfaces";
 import { PlaceholderInfo } from "../dnd/interfaces";
-import { ROOT_NODE, ERROR_MOVE_INCOMING_PARENT, ERROR_MOVE_OUTGOING_PARENT, ERROR_MOVE_TO_DESCENDANT, ERROR_MOVE_NONCANVAS_CHILD, ERROR_MOVE_TO_NONCANVAS_PARENT, ERROR_INVALID_NODEID, ERROR_MISSING_PLACEHOLDER_PLACEMENT, ERROR_ROOT_CANVAS_NO_ID } from "@shared/constants";
-import { isCanvas, Canvas } from "../nodes";
+import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID } from "craftjs-utils";
+import { isCanvas } from "../nodes";
 import { QueryMethods } from "./query";
-import { QueryCallbacksFor } from "@shared/createReduxMethods";
+import { QueryCallbacksFor } from "craftjs-utils";
 const invariant = require('invariant');
 
 type NodeToAdd = Node & {

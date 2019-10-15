@@ -2,7 +2,7 @@ import React from 'react';
 
 export type EditorItem = {
     title: string;
-    full: boolean;
+    full?: boolean;
     children: React.ReactNode
 }
 export const EditorItem = ({title, full=false, children}: EditorItem) => {

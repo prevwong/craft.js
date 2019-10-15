@@ -1,7 +1,7 @@
 import produce, { PatchListener } from 'immer';
 import { createStore, Unsubscribe } from 'redux';
 
-type Subscriber = (listener: () => void) => Unsubscribe
+type Subscriber = (listener: () => void) => Unsubscribe;
 
 export type SubscriberAndCallbacksFor<M extends MethodsOrOptions, Q extends QueryMethods = null> = {
   subscribe: Subscriber,
@@ -54,7 +54,7 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<a
 
 
 
-export default function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends QueryMethods>(
+export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends QueryMethods>(
   methodsOrOptions: Methods<S, R, QueryCallbacksFor<Q>>,
   initialState: any,
   queryFactory?: {

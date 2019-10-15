@@ -1,0 +1,69 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.19.0/libexec/bin/yarn.js add shortid
+
+PATH: 
+  /Users/prevwong/anaconda3/bin:/Users/prevwong/.npm-global/bin:/Users/prevwong/flutter/bin:/Users/prevwong/Library/Android/sdk/emulator:/Users/prevwong/Library/Android/sdk/tools:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/usr/local/go/bin:/opt/X11/bin:/Users/prevwong/anaconda3/bin:/Users/prevwong/anaconda3/condabin:/Users/prevwong/.npm-global/bin:/Users/prevwong/flutter/bin:/Users/prevwong/Library/Android/sdk/emulator:/Users/prevwong/Library/Android/sdk/tools
+
+Yarn version: 
+  1.19.0
+
+Node version: 
+  11.13.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/craftjs-utils: Not found
+      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.19.0/libexec/lib/cli.js:66918:18)
+      at Request.self.callback (/usr/local/Cellar/yarn/1.19.0/libexec/lib/cli.js:140539:22)
+      at Request.emit (events.js:193:13)
+      at Request.<anonymous> (/usr/local/Cellar/yarn/1.19.0/libexec/lib/cli.js:141511:10)
+      at Request.emit (events.js:193:13)
+      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.19.0/libexec/lib/cli.js:141433:12)
+      at Object.onceWrapper (events.js:281:20)
+      at IncomingMessage.emit (events.js:198:15)
+      at endReadableNT (_stream_readable.js:1142:12)
+      at processTicksAndRejections (internal/process/task_queues.js:81:17)
+
+npm manifest: 
+  {
+    "name": "craftjs-core",
+    "version": "0.0.0",
+    "description": "A react framework to write drag-and-drop page builders",
+    "keywords": [
+      "react",
+      "dnd",
+      "page",
+      "builder",
+      "exetnsible",
+      "powerful",
+      "framework"
+    ],
+    "author": "Prev Wong <prevwong@gmail.com>",
+    "homepage": "https://github.com/prevwong/craft.js#readme",
+    "license": "MIT",
+    "main": "./dist/esm/index.js",
+    "module": "./dist/esm/index.js",
+    "type": "module",
+    "repository": {
+      "type": "git",
+      "url": "git+ssh://git@github.com/prevwong/craft.js.git"
+    },
+    "scripts": {
+      "test": "echo \"Error: run tests from root\" && exit 1",
+      "build": "../../scripts/build.sh"
+    },
+    "bugs": {
+      "url": "https://github.com/prevwong/craft.js/issues"
+    },
+    "dependencies" :{
+      "craftjs-utils" : "*"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
