@@ -1,0 +1,19 @@
+0 silly argv { _: [ 'create' ],
+0 silly argv   lernaVersion: '3.16.4',
+0 silly argv   '$0': 'lerna',
+0 silly argv   name: 'core' }
+1 notice cli v3.16.4
+2 verbose rootPath /Users/prevwong/Documents/GitHub/react-page-builder
+3 error Error: canceled
+3 error     at Interface.<anonymous> (/usr/local/lib/node_modules/lerna/node_modules/read/lib/read.js:66:13)
+3 error     at Interface.emit (events.js:193:13)
+3 error     at Interface._ttyWrite (readline.js:820:16)
+3 error     at ReadStream.onkeypress (readline.js:184:10)
+3 error     at ReadStream.emit (events.js:193:13)
+3 error     at emitKeys (internal/readline.js:424:14)
+3 error     at emitKeys.next (<anonymous>)
+3 error     at ReadStream.onData (readline.js:1093:36)
+3 error     at ReadStream.emit (events.js:193:13)
+3 error     at addChunk (_stream_readable.js:296:12)
+3 error     at readableAddChunk (_stream_readable.js:277:11)
+3 error     at ReadStream.Readable.push (_stream_readable.js:232:10)

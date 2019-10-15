@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "outDir": "dist",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src/index.tsx"
+  ]
+}

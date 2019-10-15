@@ -1,0 +1,23 @@
+{
+  "name": "craftjs-layers",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "../../scripts/build.sh"
+  },
+  "dependencies": {
+    "craftjs-core": "*",
+    "craftjs-utils": "*",
+    "re-resizable": "^6.1.0",
+    "react": "^16.8.6",
+    "react-contenteditable": "^3.2.6",
+    "react-dom": "^16.8.6",
+    "styled-components": "^4.2.1",
+    "tailwindcss": "^1.1.2"
+  },
+  "devDependencies": {
+    "classnames": "^2.2.6",
+    "postcss-modules": "^1.4.1",
+    "sass": "^1.19.0",
+    "typescript": "^3.5.1"
+  }
+}

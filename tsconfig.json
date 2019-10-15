@@ -1,20 +1,23 @@
 {
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-        "jsx": "preserve",
-        "module": "es2015",
-        "moduleResolution": "node",
-        "noImplicitAny": true,
-        "outDir": "lib",
-        "sourceMap": true,
-        "target": "es2015",
-        "baseUrl": ".",
-        "paths": {
-            "~*": [
-                "./*"
-            ]
-        }
+    "paths": {
+      "craftjs": [
+        "packages/core/src/index"
+      ],
+      "craftjs/*": [
+        "packages/core/src/*"
+      ],
+      "craftjs-utils": [
+        "packages/shared/index"
+      ]
     }
+  },
+  "exclude": [
+    "**/node_modules/**",
+    "**/dist/**"
+  ]
 }

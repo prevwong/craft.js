@@ -1,0 +1,10 @@
+{
+  "name": "craftjs-utils",
+  "version": "0.0.0",
+  "description": "Shared utilities used across the craft.js monorepo",
+  "author": "Prev Wong <prevwong@gmail.com>",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "../../scripts/build.sh"
+  }
+}

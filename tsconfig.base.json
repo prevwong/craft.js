@@ -1,0 +1,15 @@
+{
+  "allowSyntheticDefaultImports": true,
+  "esModuleInterop": true,
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    "target": "esnext",
+    "declaration": true
+  }
+}
