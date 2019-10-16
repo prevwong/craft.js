@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { NodeId } from "~packages/core";
+import { NodeId } from "craftjs";
 import styled from "styled-components";
-import { useManager } from "~packages/core/connectors";
+import { useManager } from "craftjs";
 import { useLayer } from "./useLayer";
 
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { useManager } from "craftjs-core";
+import { useManager } from "craftjs";
 
 export const Toolbar = () => {
   const { active } = useManager(state => ({
