@@ -1,5 +1,5 @@
 {
-  "name": "craftjs-core",
+  "name": "craftjs",
   "version": "0.0.0",
   "description": "A react framework to write drag-and-drop page builders",
   "keywords": [

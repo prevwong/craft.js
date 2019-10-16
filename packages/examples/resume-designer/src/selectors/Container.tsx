@@ -1,6 +1,6 @@
 import React, { useRef, useLayoutEffect } from "react";
 import { Resizable } from "re-resizable";
-import { useNode, useManager } from "craftjs-core"
+import { useNode, useManager } from "craftjs"
 import {EditorItem} from "../components/EditorItem"
 import cx from "classnames";
 
