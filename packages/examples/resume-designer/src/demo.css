@@ -11,8 +11,3 @@ body, html {
 .cx {
     @apply px-2
 }
-
-.editorInput {
-    @apply w-full leading-none pt-2 pb-1 rounded-full bg-transparent border outline-none px-2;
-    font-size: 14px;
-}

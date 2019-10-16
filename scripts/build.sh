@@ -1,3 +1,3 @@
 #!/bin/sh
-npx tsc
+npx tsc -w
 wait

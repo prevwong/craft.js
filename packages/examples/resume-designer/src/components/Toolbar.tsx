@@ -7,9 +7,9 @@ export const Toolbar = () => {
   }));
 
   return (
-    <div className='px-6 py-5'>
+    <div className='px-2 py-5'>
         <div>
-            <h2 className='text-lg font-medium'>Edit</h2>
+          <div className='cx'><h2 className='text-white text-lg font-medium'>Edit</h2></div>
             <div className='py-5'>
                 {active && active.related && (active.related.toolbar) }
             </div>
