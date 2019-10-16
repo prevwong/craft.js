@@ -6,14 +6,15 @@ import { mapChildrenToNodes } from "../nodes";
 import { useInternalNode } from "./useInternalNode";
 import { useInternalManager } from "../manager/useInternalManager";
 import { ERROR_ROOT_CANVAS_NO_ID } from "craftjs-utils";
+import { type } from "os";
 const invariant = require("invariant");
 
-export interface Canvas extends React.Props<any> {
+export type Canvas = {
   id?: NodeId,
   style?: any,
   className?: any,
   is?: React.ElementType
-}
+} & React.Props<any> & any;
 
 
 export const isCanvas = (node: Node) => node.data.type === Canvas

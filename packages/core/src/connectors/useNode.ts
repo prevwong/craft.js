@@ -8,13 +8,13 @@ import { NodeContext } from "../nodes/NodeContext";
 export function useNode(): ConnectedNode
 export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S>
 export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S> {
-  const {id, related } = useContext(NodeContext);
+  const {related } = useContext(NodeContext);
   const { actions: { setRef, setProp, setNodeEvent }, _inNodeContext, ...collected } = useInternalNode(collect);
-
   return {
     ...collected as any,
     actions: { setProp },
     connectTarget: (render: any, methods: Exclude<NodeRef, 'dom' | 'event'>): React.ReactElement => {
+      invariant(typeof render.type == "string", "Please ensure the root of the connected render template is a HTMl element")
       if ( related  ) console.warn("connectTarget has no effect on a node's related components")
       if (!_inNodeContext || related ) return render;
       const previousRef = render.ref;
