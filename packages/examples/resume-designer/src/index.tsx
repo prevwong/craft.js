@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom"
-import { Craft, Renderer, Canvas } from "craftjs-core";
+import { Craft, Renderer, Canvas } from "craftjs";
 import { Container } from "./selectors/Container";
 import {Toolbar} from './components/Toolbar';
 import "./demo.css";

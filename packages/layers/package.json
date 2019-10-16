@@ -5,19 +5,13 @@
     "build": "../../scripts/build.sh"
   },
   "dependencies": {
-    "craftjs-core": "*",
+    "craftjs": "*",
     "craftjs-utils": "*",
-    "re-resizable": "^6.1.0",
     "react": "^16.8.6",
-    "react-contenteditable": "^3.2.6",
-    "react-dom": "^16.8.6",
-    "styled-components": "^4.2.1",
-    "tailwindcss": "^1.1.2"
+    "styled-components": "^4.2.1"
   },
   "devDependencies": {
-    "classnames": "^2.2.6",
-    "postcss-modules": "^1.4.1",
-    "sass": "^1.19.0",
-    "typescript": "^3.5.1"
+    "typescript": "^3.5.1",
+    "@types/styled-components": "*"
   }
 }

@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef, useLayoutEffect, useMemo } from "react";
-import { useManager } from "~packages/core/connectors";
-import { isCanvas } from "~packages/core";
+import { useManager, isCanvas, PlaceholderInfo } from "craftjs";
 import { useLayer } from "./useLayer";
 import { LayerState } from "./interfaces";
-import { PlaceholderInfo } from "~packages/core/dnd/interfaces";
 
 export const LayersDND: React.FC<any> = ({ children }) => {
     const {layers, events} = useLayer((state) => state);

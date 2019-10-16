@@ -7,7 +7,7 @@
     "dev-demo": "parcel ./index.html"
   },
   "dependencies": {
-    "craftjs-core": "*",
+    "craftjs": "*",
     "re-resizable": "^6.1.0",
     "react": "^16.8.6",
     "react-contenteditable": "^3.2.6",
