@@ -9,7 +9,6 @@ export type Placeholder = {
 }
 
 export const defaultPlaceholder: React.FC<Placeholder> = ({ placeholder: { error }, suggestedStyles}) => {
-
   return (
     <div
       style={{
@@ -20,6 +19,7 @@ export const defaultPlaceholder: React.FC<Placeholder> = ({ placeholder: { error
         borderColor: 'rgb(98, 196, 98)',
         borderStyle: 'solid',
         borderWidth: '0px',
+        zIndex: "99999",
         ...suggestedStyles
       }}
     >

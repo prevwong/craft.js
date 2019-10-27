@@ -2,16 +2,17 @@ import React from "react";
 import { useManager } from "craftjs";
 
 export const Toolbar = () => {
-  const { active } = useManager(state => ({
-    active: state.events.active
+  const { active, related } = useManager(state => ({
+    active: state.events.active,
+    related: state.events.active && state.events.active.related
   }));
 
   return (
-    <div className='px-6 py-5'>
+    <div className='px-2 py-5'>
         <div>
-            <h2 className='text-lg font-medium'>Edit</h2>
+          <div className='cx'><h2 className='text-white text-lg font-medium'>Edit</h2></div>
             <div className='py-5'>
-                {active && active.related && (active.related.toolbar) }
+              {active && related && React.createElement(related.toolbar) }
             </div>
         </div>
     </div>
