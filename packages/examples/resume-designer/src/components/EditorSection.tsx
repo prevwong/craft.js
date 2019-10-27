@@ -15,13 +15,15 @@ export type EditorSection = {
 }
 export const EditorSection = ({ title, children }: EditorSection) => {
     return (
-      <EditorSectionItem className="mb-4 flex items-center w-full">
-        <div className="cx items-center flex w-full">
-          <div className="w-2/6">
-            <h4 className="editor-section-title text-md">{title}</h4>
+      <EditorSectionItem className="mb-6 flex items-center w-full">
+        <div className="items-center w-full">
+          <div className="w-6/6 block md-10">
+            <h4 className="cx editor-section-title text-md mb-1">{title}</h4>
           </div>
-          <div className="w-4/6">
-            {children}
+          <div className="w-6/6">
+            <div className="block">
+              {children}
+            </div>
           </div>
         </div>
       </EditorSectionItem>
