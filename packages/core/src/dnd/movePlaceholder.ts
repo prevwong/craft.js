@@ -17,8 +17,8 @@ export default function movePlaceholder(
   if (elDim) {
     // If it's not in flow (like 'float' element)
     if (!elDim.inFlow) {
-      w = null;
-      h = elDim.outerHeight * 2;
+      w = 2;
+      h = elDim.outerHeight;
       t = elDim.top;
       l =
         where == "before" ? elDim.left : elDim.left + elDim.outerWidth;
@@ -33,7 +33,7 @@ export default function movePlaceholder(
     if (canvasDOMInfo) {
       t = canvasDOMInfo.top + canvasDOMInfo.padding.top;
       l = canvasDOMInfo.left;
-      w = canvasDOMInfo.outerWidth * 2;
+      w = canvasDOMInfo.outerWidth;
       h = 2;
     }
   }
