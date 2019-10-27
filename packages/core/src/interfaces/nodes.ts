@@ -7,16 +7,15 @@ export type Node =  {
   data: NodeData;
   event: NodeRefEvent;
   ref: NodeRef;
-    related: Record<string, React.ReactElement>
+  related: Record<string, React.ElementType>
 }
 
-export type NodeToAdd = {
-  node: Node,
+export type NodeToAdd = Node & {
   index?: number
 }
 
 export type InternalNode = Pick<Node, 'id'> & NodeData
-export type NodeRefEvent = Record<'active' | 'dragging' | 'hover', boolean>
+export type NodeRefEvent = Record<'active' | 'dragging' | 'hover' | 'pending', boolean>
 
 export type NodeRef = {
   dom: HTMLElement;
