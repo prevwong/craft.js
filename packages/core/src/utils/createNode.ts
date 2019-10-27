@@ -28,11 +28,11 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
     node.event = {
       active: false,
       dragging: false,
+      pending: false,
       hover: false
     }
 
     if (isCanvas(node)) {
-      // node.data.nodes = [];
       node.data.subtype = data.subtype ? data.subtype : node.data.props.is ? node.data.props.is : 'div';
       actualType = node.data.subtype;
     }
@@ -40,7 +40,7 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
     if ( actualType.related ) {
       node.related = {};
       Object.keys(actualType.related).forEach((comp) => {
-          node.related[comp] = React.cloneElement( React.createElement(NodeProvider, {id, related: true}, React.createElement(actualType.related[comp])) )
+          node.related[comp] = () => React.createElement(NodeProvider, {id, related: true}, React.createElement(actualType.related[comp])) 
       });
   }
 
