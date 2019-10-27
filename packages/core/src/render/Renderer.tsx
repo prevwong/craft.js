@@ -1,15 +1,25 @@
-import React, { useState, useMemo, useLayoutEffect } from "react";
+import React, { useState, useMemo, useLayoutEffect, useCallback } from "react";
 import { NodeElement, Canvas } from "../nodes";
 import { useManager } from "../connectors";
+import DNDManager from "../dnd";
+
 import { ROOT_NODE } from "craftjs-utils";
 const invariant = require("invariant");
 
-export const Renderer: React.FC = ({
-  children
+export type Renderer = {
+  is: string
+} & any;
+
+export const Renderer: React.FC<Renderer> = ({
+  is,
+  children,
+  ...props
 }) => {
-  const { actions: { add, replaceNodes }, query: {getNode, getOptions, transformJSXToNode, deserialize } } = useManager();
+  const { actions: { add, replaceNodes, setNodeEvent }, query: {getNode, getOptions, transformJSXToNode, deserialize } } = useManager();
   const { nodes } = getOptions();
-    const [rootNode, setRootNode] = useState();
+  const [rootNode, setRootNode] = useState();
+  
+ 
   useLayoutEffect(() => {
     if (!nodes) {
       const rootCanvas = React.Children.only(children) as React.ReactElement;
@@ -28,7 +38,15 @@ export const Renderer: React.FC = ({
 
   return useMemo(() => (
           rootNode ? (
-          <NodeElement id={ROOT_NODE} />
+            React.createElement(is, {
+              onMouseDown: () => {
+                setNodeEvent("active", null)
+              },
+              onMouseOver: () => {
+                setNodeEvent("hover", null)
+              },
+              ...props
+            }, <DNDManager><NodeElement id={ROOT_NODE} /></DNDManager> )
           ) : null
   ), [rootNode])
 }

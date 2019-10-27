@@ -179,9 +179,9 @@ export function QueryMethods(manager: ManagerState, options: Options) {
 
       const targetParentNodes = targetParent.data._childCanvas
         ? Object.values(targetParent.data._childCanvas)
-        : targetParent.data.nodes;
+        : targetParent.data.nodes || [];
 
-      const dimensionsInContainer = targetParentNodes.reduce(
+      const dimensionsInContainer = targetParentNodes ? targetParentNodes.reduce(
         (result, id: NodeId) => {
           const dom = nodesToDOM(manager.nodes[id]);
           if (dom) {
@@ -193,7 +193,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
           return result;
         },
         []
-      );
+      ): [];
 
       const dropAction = findPosition(
         targetParent,

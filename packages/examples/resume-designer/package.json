@@ -7,13 +7,19 @@
     "dev-demo": "parcel ./index.html"
   },
   "dependencies": {
+    "@juggle/resize-observer": "^2.4.0",
+    "@types/react-color": "^3.0.1",
+    "components": "^0.1.0",
     "craftjs": "*",
     "re-resizable": "^6.1.0",
     "react": "^16.8.6",
+    "react-color": "^2.17.3",
     "react-contenteditable": "^3.2.6",
     "react-dom": "^16.8.6",
+    "selectors": "^0.0.1",
     "styled-components": "^4.2.1",
-    "tailwindcss": "^1.1.2"
+    "tailwindcss": "^1.1.2",
+    "utils": "^0.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -24,13 +30,13 @@
     "@babel/preset-typescript": "^7.3.3",
     "@testing-library/jest-dom": "^4.0.0",
     "@testing-library/react": "^8.0.6",
+    "@types/classnames": "*",
     "@types/jest": "^24.0.15",
     "@types/lodash": "^4.14.123",
     "@types/node": "^11.13.5",
     "@types/react": "^16.8.13",
     "@types/react-dom": "^16.8.4",
     "@types/redux": "^3.6.0",
-    "@types/classnames": "*",
     "@types/styled-components": "^4.1.15",
     "autoprefixer": "^9.6.0",
     "classnames": "^2.2.6",

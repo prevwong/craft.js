@@ -4,6 +4,7 @@ import { useInternalManager } from "../manager/useInternalManager";
 
 export type ManagerEvents = Record<'active' | 'dragging' | 'hover', Node> & {
   placeholder: PlaceholderInfo
+  pending: Node
 }
 
 export type ManagerState = {

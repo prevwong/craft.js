@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { ManagerState } from "../interfaces";
+import { ManagerState, NodeToAdd } from "../interfaces";
 import { useManager } from "../connectors";
 import movePlaceholder from "./movePlaceholder";
 import { getDOMInfo } from "craftjs-utils";
 
 export const DNDManager: React.FC = ({ children }) => {
-  const { nodes, events, query, actions: {setNodeEvent, setPlaceholder, move}} = useManager((state) => state);
+  const { nodes, events, query, actions: {add, setNodeEvent, setPlaceholder, move}} = useManager((state) => state);
   const {renderPlaceholder} = query.getOptions();
   const [isMousePressed, setMousePressed] = useState(false);
   const mutable = useRef<ManagerState>({
@@ -17,7 +17,7 @@ export const DNDManager: React.FC = ({ children }) => {
     nodes,
     events
   }
-  
+
   const blockSelection = useCallback(() => {
     // Element being dragged
     const selection = window.getSelection ? window.getSelection() : (document as any).selection ? (document as any).selection : null;
@@ -26,14 +26,25 @@ export const DNDManager: React.FC = ({ children }) => {
     }
   }, []);
 
+  // let i = 0;
   const onDrag = useCallback((e: MouseEvent) => {
     const {events} = mutable.current;
     blockSelection();
-    if (events.active.ref.canDrag() === false) return false;
-    // console.log(events.hover)
-    const getPlaceholder = query.getDropPlaceholder(events.active.id, events.hover.id, { x: e.clientX, y: e.clientY });
+    if ((events.active || events.pending).ref.canDrag() === false || !events.hover) return false;
+    const getPlaceholder = query.getDropPlaceholder((events.active || events.pending).id, events.hover.id, { x: e.clientX, y: e.clientY });
     if (getPlaceholder) {
-      setNodeEvent("dragging", events.active.id);
+      if ( events.pending ) {
+        console.log("adding")
+        const newNode: NodeToAdd = {
+          ...events.pending,
+          index: getPlaceholder.placement.index + (getPlaceholder.placement.where == 'after' ? 1 : 0)
+        } 
+
+        add(newNode, getPlaceholder.placement.parent.id);
+        setNodeEvent('active', events.pending.id);
+        setNodeEvent('pending', null);
+      }
+      setNodeEvent("dragging", (events.active || events.pending).id);
       setPlaceholder(getPlaceholder)
     }
   }, []);
@@ -44,7 +55,7 @@ export const DNDManager: React.FC = ({ children }) => {
     setNodeEvent("dragging", null);
 
     if (events.placeholder && !events.placeholder.error) {
-      const { id: dragId } = events.active;
+      const { id: dragId } = events.active || events.pending;
       const { placement } = events.placeholder;
       const { parent, index, where } = placement;
       const { id: parentId, data: { nodes } } = parent;
@@ -52,6 +63,9 @@ export const DNDManager: React.FC = ({ children }) => {
       move(dragId, parentId, index + (where === "after" ? 1 : 0));
     }
     setPlaceholder(null);
+
+    window.removeEventListener("mousemove", onDrag);
+    window.removeEventListener('mouseup', onMouseUp);
   }, []);
 
   useEffect(() => {
@@ -68,9 +82,19 @@ export const DNDManager: React.FC = ({ children }) => {
 
 
   useEffect(() => {
-    if (events.active && events.active.data.parent) setMousePressed(true);
+    if (events.active && events.active.data.parent && !isMousePressed ) {
+      setMousePressed(true);
+    }
   }, [events.active]);
 
+  useEffect(() => {
+    if (events.pending && !isMousePressed) {
+      setMousePressed(true);
+    }
+  }, [events.pending]);
+
+  // console.log(events.hover)
+ 
   return (
     <React.Fragment>
       {
