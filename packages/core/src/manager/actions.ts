@@ -1,4 +1,4 @@
-import { NodeId, Node, Nodes, NodeRef } from "../interfaces";
+import { NodeId, Node, Nodes, NodeRef, NodeToAdd } from "../interfaces";
 import { ManagerState } from "../interfaces";
 import { PlaceholderInfo } from "../dnd/interfaces";
 import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID } from "craftjs-utils";
@@ -7,9 +7,6 @@ import { QueryMethods } from "./query";
 import { QueryCallbacksFor } from "craftjs-utils";
 const invariant = require('invariant');
 
-type NodeToAdd = Node & {
-  index?: number
-}
 
 const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMethods>) => {
   // console.log("actions", state, q)
@@ -19,7 +16,7 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
       if (placeholder && (!placeholder.placement.parent.ref.dom || (placeholder.placement.currentNode && !placeholder.placement.currentNode.ref.dom))) return;
       state.events.placeholder = placeholder;
     },
-    setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
+    setNodeEvent(eventType: "active" | "hover" | "dragging" | "pending", id: NodeId) {
       const current = state.events[eventType];
       if (current && id != current.id) {
         state.nodes[current.id].event[eventType] = false;
@@ -49,7 +46,7 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
           parentNode.data._childCanvas[node.data.props.id] = node.id;
           delete node.data.props.id;
         } else {
-          query.canDropInParent(node, parentId);
+          if ( parentId) query.canDropInParent(node, parentId);
           if (parentNode ) {
             if (!parentNode.data.nodes) parentNode.data.nodes = [];
             const currentNodes = parentNode.data.nodes;
@@ -59,6 +56,9 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
         }        
         state.nodes[node.id] = node;
       });
+    },
+    setPending(node: Node) {
+      state.events.pending = node;
     },
     move(targetId: NodeId, newParentId: NodeId, index: number) {
       const targetNode = state.nodes[targetId],
@@ -72,15 +72,20 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
             currentParentNodes = currentParent.data.nodes;
 
       currentParentNodes[currentParentNodes.indexOf(targetId)] = "marked";
-      newParentNodes.splice(index, 0, targetId);
+      if ( newParentNodes ) 
+        newParentNodes.splice(index, 0, targetId);
+      else 
+        newParent.data.nodes = [targetId];
+        
       state.nodes[targetId].data.parent = newParentId;
       state.nodes[targetId].data.closestParent = newParentId;
       currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
 
     },
     setProp(id: NodeId, cb: (props: any) => void) {
-      invariant(state.nodes[id], ERROR_INVALID_NODEID)
+      invariant(state.nodes[id], ERROR_INVALID_NODEID);
       cb(state.nodes[id].data.props);
+      if (state.events['active'] && state.events['active'].id == id) state.events['active'] = state.nodes[id]
     },
     setRef(id: NodeId, cb: (ref: NodeRef) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID)
