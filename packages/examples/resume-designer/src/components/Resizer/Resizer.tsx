@@ -125,17 +125,16 @@ export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, d
         }, {})}
         className={cx([`bg-white`, {
           'm-auto': isRoot,
-          'float-left': true
+          'flex': true,
+          'items-center': true
         }])}
         ref={resizable}
         defaultSize={{ width: nodeWidth, height: nodeHeight }}
         onResizeStart={(e) => {
-          if (!active) return
           e.stopPropagation();
           isResizing.current = true;
         }}
         onResize={(e, direction, ref, d) => {
-          if (!active) return
           e.stopPropagation();
           const n = updateInternalDimension(d.width, d.height);
           actions.setProp((prop: any) => {
@@ -166,15 +165,20 @@ export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, d
             height
           }
         }}
-        onMouseOver={(e: React.MouseEvent) => {
-          e.stopPropagation();
-        }}
+      onMouseDown={(e: React.MouseEvent) => {
+        e.stopPropagation();
+        return false;
+      }}
+      onMouseOver={(e: React.MouseEvent) => {
+        e.stopPropagation();
+        return false;
+      }}
         
       >
         {
           connectTarget(
             <div
-              className='w-full h-full'
+              className='w-full h-full flex items-center'
               ref={domRef}
               {...props}
             >
