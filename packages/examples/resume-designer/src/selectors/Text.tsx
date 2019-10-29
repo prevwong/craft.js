@@ -3,9 +3,9 @@ import { useNode } from 'craftjs';
 import { EditorSection } from '../components/EditorSection';
 
 export const Text = ({ children} : any) => {
-  const {connectTarget} = useNode();
+  const { connectTarget, connectDragHandler } = useNode();
   return connectTarget(
-    <h2>{children}</h2>
+    connectDragHandler(<h2>{children}</h2>)
   )
 }
 
