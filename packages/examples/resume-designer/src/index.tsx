@@ -30,7 +30,7 @@ const App = () => {
                 <Renderer is={Editor}>
                   <Canvas is={Container} background={{ r: 255, g: 255, b: 255, a: 1 }} height="100%" width="50%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}>
                     <Canvas is={Container} background={{ r: 0, g: 0, b: 0, a: 1 }} height="100%" width="50%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}></Canvas>
-                    <Text>HI world</Text>
+
                   </Canvas>
                 </Renderer>
               </div>
