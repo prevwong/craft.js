@@ -16,16 +16,7 @@ const ResizerDiv = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
-  &.active { 
-    outline: 1px dashed blue;
-  }
-  &.active {
-    .resizer-indicators {
-      display:block;
-    }
-  }
   .resizer-indicators {
-    display:none;
     position: absolute;
     top: 0;
     left: 0;
@@ -40,6 +31,7 @@ const ResizerDiv = styled.div`
       border-radius: 100%;
       display: block;
       box-shadow:0px 0px 12px -1px rgba(0, 0, 0, 0.32);
+      z-index:99999;
       &:nth-child(1) {
         left: -5px;
         top: -5px;
@@ -64,7 +56,7 @@ export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, d
   const resizable = useRef<Resizable>(null);
   const isResizing = useRef<boolean>(false);
 
-  const { id, isRoot, actions, active, connectTarget, parent, nodeWidth, nodeHeight } = useNode(node => ({
+  const { id, isRoot, actions, active, connectTarget, connectDragHandler, nodeWidth, nodeHeight } = useNode(node => ({
     id: node.id,
     isRoot: node.id == "ROOT",
     parent: node.data.parent,
@@ -131,10 +123,18 @@ export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, d
         ref={resizable}
         defaultSize={{ width: nodeWidth, height: nodeHeight }}
         onResizeStart={(e) => {
+<<<<<<< HEAD
+=======
+          e.preventDefault();
+>>>>>>> 767edd3... [develop] update demo
           e.stopPropagation();
           isResizing.current = true;
         }}
         onResize={(e, direction, ref, d) => {
+<<<<<<< HEAD
+=======
+          e.preventDefault();
+>>>>>>> 767edd3... [develop] update demo
           e.stopPropagation();
           const n = updateInternalDimension(d.width, d.height);
           actions.setProp((prop: any) => {
@@ -156,7 +156,8 @@ export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, d
 
           })
         }}
-        onResizeStop={(_, __, ___, d) => {
+        onResizeStop={(e, __, ___, d) => {
+          e.preventDefault();
           if (!active) return
           const {width, height} = updateInternalDimension(d.width, d.height);
           isResizing.current = false;
@@ -177,6 +178,7 @@ export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, d
       >
         {
           connectTarget(
+<<<<<<< HEAD
             <div
               className='w-full h-full flex items-center'
               ref={domRef}
@@ -184,6 +186,25 @@ export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, d
             >
               {children}
             </div>
+=======
+            connectDragHandler(
+              <ResizerDiv
+                className='w-full h-full flex items-center'
+                ref={domRef}
+                {...props}
+              >
+                {children}
+                {active && (
+                  <div className={cx(['resizer-indicators'])}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                )}
+              </ResizerDiv>
+            )
+>>>>>>> 767edd3... [develop] update demo
           )
         }
       </Resizable>
