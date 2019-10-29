@@ -123,18 +123,12 @@ export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, d
         ref={resizable}
         defaultSize={{ width: nodeWidth, height: nodeHeight }}
         onResizeStart={(e) => {
-<<<<<<< HEAD
-=======
           e.preventDefault();
->>>>>>> 767edd3... [develop] update demo
           e.stopPropagation();
           isResizing.current = true;
         }}
         onResize={(e, direction, ref, d) => {
-<<<<<<< HEAD
-=======
           e.preventDefault();
->>>>>>> 767edd3... [develop] update demo
           e.stopPropagation();
           const n = updateInternalDimension(d.width, d.height);
           actions.setProp((prop: any) => {
@@ -178,15 +172,6 @@ export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, d
       >
         {
           connectTarget(
-<<<<<<< HEAD
-            <div
-              className='w-full h-full flex items-center'
-              ref={domRef}
-              {...props}
-            >
-              {children}
-            </div>
-=======
             connectDragHandler(
               <ResizerDiv
                 className='w-full h-full flex items-center'
@@ -204,7 +189,6 @@ export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, d
                 )}
               </ResizerDiv>
             )
->>>>>>> 767edd3... [develop] update demo
           )
         }
       </Resizable>
