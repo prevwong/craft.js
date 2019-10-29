@@ -1,50 +1,33 @@
-import React, { cloneElement, useContext, useCallback, useEffect, useRef } from "react";
+import React, { cloneElement, useContext } from "react";
 import { Node, ConnectedNode, NodeRef } from "../interfaces";
 import invariant from "invariant";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { NodeContext } from "../nodes/NodeContext";
+import { isCanvas } from "../nodes";
+import { DNDContext } from "../dnd/DNDManager";
+import { ROOT_NODE } from "craftjs-utils";
+
 
 export function useNode(): ConnectedNode
 export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S>
 export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S> {
-  const {related } = useContext(NodeContext);
+  const {id, related } = useContext(NodeContext);
+  const handlers = useContext(DNDContext);
   const { actions: { setRef, setProp, setNodeEvent }, _inNodeContext, ...collected } = useInternalNode(collect);
-  let nodeRef = useRef<any>();
-
-  // useEffect(() => {
-  //   if ( !nodeRef.current ) return;
-    
-  //   nodeRef.current.addEventListener('mousedown', onActive)
-  //   nodeRef.current.addEventListener('mouseover', onHover);
-
-  //   return (() => {
-  //     nodeRef.current.removeEventListener('mousedown', onActive)
-  //     nodeRef.current.removeEventListener('mouseover', onHover);
-  //   })
-  // }, [nodeRef]);
-
-  const onActive = useCallback((e, cb) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setNodeEvent('active');
-    if (cb) cb(e);
-    return false;
-  }, []);
-
-  const onHover = useCallback((e, cb) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setNodeEvent('hover');
-    if (cb) cb(e);
-
-    return false;
-  }, []);
 
   return {
     ...collected as any,
     actions: { setProp },
+    connectDragHandler: (render: any) => {
+      return React.cloneElement(render, {
+        draggable: id !== ROOT_NODE,
+        onDragStart: (e: React.MouseEvent) => {
+          e.stopPropagation();
+          handlers.onDragStart(e, id);
+        }
+      })
+    },
     connectTarget: (render: any, methods: Exclude<NodeRef, 'dom' | 'event'>): React.ReactElement => {
-      // invariant(typeof render.type == "string", "Please ensure the root of the connected render template is a HTMl element")
       if ( related  ) console.warn("connectTarget has no effect on a node's related components")
       if (!_inNodeContext || related ) return render;
       const previousRef = render.ref;
@@ -59,18 +42,33 @@ export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S>
         });
       }
 
+
       return cloneElement(render, {
         ref: (dom: HTMLElement) => {
-          nodeRef.current = dom;
-
           if (dom) {
             setRef((ref) => ref.dom = dom);
           }
-          dom
+
           if (previousRef) previousRef(dom);
         },
-        onMouseDown: (e: React.MouseEvent) => onActive(e, render.onMouseDown),
-        onMouseOver: (e: React.MouseEvent) => onHover(e, render.onMouseOver)
+        onMouseDown: (e: React.MouseEvent) => {
+          e.stopPropagation();
+          setNodeEvent('active');
+        },
+        onMouseOver: (e: React.MouseEvent) => {
+          e.stopPropagation();
+          setNodeEvent('hover');
+        },
+        onDragOver: (e: React.MouseEvent) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handlers.onDragOver(e, id);
+        },
+       
+        onDragEnd: (e: React.MouseEvent)  => {
+          e.stopPropagation();
+          handlers.onDragEnd(e);
+        }
       })
     }
   }
