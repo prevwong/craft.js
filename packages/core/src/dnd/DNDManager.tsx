@@ -1,16 +1,24 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import { ManagerState, NodeToAdd } from "../interfaces";
+import React, {  useRef } from "react";
+import { Node, ManagerState, NodeToAdd, NodeId } from "../interfaces";
 import { useManager } from "../connectors";
 import movePlaceholder from "./movePlaceholder";
 import { getDOMInfo } from "craftjs-utils";
+import { useMemo } from "react";
+
+export type DNDContext = {
+  onDragStart: (e: React.MouseEvent, id: Node | NodeId) => void,
+  onDragOver: (e: React.MouseEvent, id: NodeId) => void,
+  onDragEnd: (e:React.MouseEvent) => void
+}
+
+export const DNDContext = React.createContext<DNDContext>(null);
 
 export const DNDManager: React.FC = ({ children }) => {
   const { nodes, events, query, actions: {add, setNodeEvent, setPlaceholder, move}} = useManager((state) => state);
   const {renderPlaceholder} = query.getOptions();
-  const [isMousePressed, setMousePressed] = useState(false);
   const mutable = useRef<ManagerState>({
-    nodes: null,
-    events: null
+    nodes,
+    events
   });
 
   mutable.current = {
@@ -18,85 +26,54 @@ export const DNDManager: React.FC = ({ children }) => {
     events
   }
 
-  const blockSelection = useCallback(() => {
-    // Element being dragged
-    const selection = window.getSelection ? window.getSelection() : (document as any).selection ? (document as any).selection : null;
-    if (!!selection) {
-      selection.empty ? selection.empty() : selection.removeAllRanges();
-    }
-  }, []);
+  const draggedNode = useRef<Node | NodeId>(null);
 
-  // let i = 0;
-  const onDrag = useCallback((e: MouseEvent) => {
-    const {events} = mutable.current;
-    blockSelection();
-    if ((events.active || events.pending).ref.canDrag() === false || !events.hover) return false;
-    const getPlaceholder = query.getDropPlaceholder((events.active || events.pending).id, events.hover.id, { x: e.clientX, y: e.clientY });
-    if (getPlaceholder) {
-      if ( events.pending ) {
-        console.log("adding")
-        const newNode: NodeToAdd = {
-          ...events.pending,
-          index: getPlaceholder.placement.index + (getPlaceholder.placement.where == 'after' ? 1 : 0)
-        } 
+  const handlers = useMemo(() => {
+    return {
+      onDragStart: (e: React.MouseEvent, node: Node | NodeId) => {
+        e.stopPropagation();
+        draggedNode.current = node;
+      },
+      onDragOver: (e: React.MouseEvent, id: NodeId) => {
+        e.stopPropagation();
+        const { current: start } = draggedNode;
+        
 
-        add(newNode, getPlaceholder.placement.parent.id);
-        setNodeEvent('active', events.pending.id);
-        setNodeEvent('pending', null);
+        if (!start) return;
+        const dragId = typeof start == 'object' ? start.id : start;
+
+        const getPlaceholder = query.getDropPlaceholder(dragId, id, { x: e.clientX, y: e.clientY });
+        if ( getPlaceholder ) {
+          if ( typeof start == 'object' && start.id ) {
+            const newNode: NodeToAdd = {
+              ...start,
+              index: getPlaceholder.placement.index + (getPlaceholder.placement.where == 'after' ? 1 : 0)
+            }
+            add(newNode, getPlaceholder.placement.parent.id);
+            draggedNode.current = newNode.id;
+          }
+          setPlaceholder(getPlaceholder)
+        }
+      },
+      onDragEnd: (e: React.MouseEvent) => {
+        e.stopPropagation();
+       
+        if (mutable.current.events.placeholder && !mutable.current.events.placeholder.error) {
+          const { placement } = mutable.current.events.placeholder;
+          const { parent, index, where } = placement;
+          const { id: parentId } = parent;
+
+          move(draggedNode.current as NodeId, parentId, index + (where === "after" ? 1 : 0));
+        }
+
+        draggedNode.current = null;
+        setPlaceholder(null);
       }
-      setNodeEvent("dragging", (events.active || events.pending).id);
-      setPlaceholder(getPlaceholder)
     }
   }, []);
-
-  const onMouseUp = useCallback((e: MouseEvent) => {
-    const {events} = mutable.current;
-    setMousePressed(false);
-    setNodeEvent("dragging", null);
-
-    if (events.placeholder && !events.placeholder.error) {
-      const { id: dragId } = events.active || events.pending;
-      const { placement } = events.placeholder;
-      const { parent, index, where } = placement;
-      const { id: parentId, data: { nodes } } = parent;
-
-      move(dragId, parentId, index + (where === "after" ? 1 : 0));
-    }
-    setPlaceholder(null);
-
-    window.removeEventListener("mousemove", onDrag);
-    window.removeEventListener('mouseup', onMouseUp);
-  }, []);
-
-  useEffect(() => {
-    if (isMousePressed) {
-      window.addEventListener('mousemove', onDrag);
-      window.addEventListener('mouseup', onMouseUp);
-    }
-
-    return (() => {
-      window.removeEventListener("mousemove", onDrag);
-      window.removeEventListener('mouseup', onMouseUp);
-    })
-  }, [isMousePressed]);
-
-
-  useEffect(() => {
-    if (events.active && events.active.data.parent && !isMousePressed ) {
-      setMousePressed(true);
-    }
-  }, [events.active]);
-
-  useEffect(() => {
-    if (events.pending && !isMousePressed) {
-      setMousePressed(true);
-    }
-  }, [events.pending]);
-
-  // console.log(events.hover)
  
   return (
-    <React.Fragment>
+    <DNDContext.Provider value={handlers}>
       {
         events.placeholder ? (
           React.createElement(renderPlaceholder, {
@@ -114,6 +91,6 @@ export const DNDManager: React.FC = ({ children }) => {
         ) : null
       }
       {children}
-    </React.Fragment>
+    </DNDContext.Provider>
   )
 }

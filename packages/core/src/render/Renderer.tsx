@@ -1,8 +1,6 @@
 import React, { useState, useMemo, useLayoutEffect, useCallback } from "react";
 import { NodeElement, Canvas } from "../nodes";
 import { useManager } from "../connectors";
-import DNDManager from "../dnd";
-
 import { ROOT_NODE } from "craftjs-utils";
 const invariant = require("invariant");
 
@@ -46,7 +44,7 @@ export const Renderer: React.FC<Renderer> = ({
                 setNodeEvent("hover", null)
               },
               ...props
-            }, <DNDManager><NodeElement id={ROOT_NODE} /></DNDManager> )
+            }, <NodeElement id={ROOT_NODE} /> )
           ) : null
   ), [rootNode])
 }
