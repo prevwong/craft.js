@@ -5,6 +5,7 @@ import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID } from "craftjs-utils";
 import { isCanvas } from "../nodes";
 import { QueryMethods } from "./query";
 import { QueryCallbacksFor } from "craftjs-utils";
+import { node } from "prop-types";
 const invariant = require('invariant');
 
 
@@ -16,15 +17,16 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
       if (placeholder && (!placeholder.placement.parent.ref.dom || (placeholder.placement.currentNode && !placeholder.placement.currentNode.ref.dom))) return;
       state.events.placeholder = placeholder;
     },
-    setNodeEvent(eventType: "active" | "hover" | "dragging" | "pending", id: NodeId) {
+    setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
       const current = state.events[eventType];
       if (current && id != current.id) {
         state.nodes[current.id].event[eventType] = false;
       }
 
       if (id) {
+        const node = state.nodes[id];
         state.nodes[id].event[eventType] = true
-        state.events[eventType] = state.nodes[id];
+        state.events[eventType] = node;
       } else {
         // if ( eventType === 'dragging') return;
         state.events[eventType] = null;
@@ -57,15 +59,13 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
         state.nodes[node.id] = node;
       });
     },
-    setPending(node: Node) {
-      state.events.pending = node;
-    },
     move(targetId: NodeId, newParentId: NodeId, index: number) {
       const targetNode = state.nodes[targetId],
         newParent = state.nodes[newParentId],
         newParentNodes = newParent.data.nodes;
 
       // Define some rules
+     
       query.canDropInParent(targetNode, newParentId);
 
       const currentParent = state.nodes[targetNode.data.parent],
@@ -81,11 +81,13 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
       state.nodes[targetId].data.closestParent = newParentId;
       currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
 
+      if ( state.events.active && state.events.active.id == targetId ) state.events.active = state.nodes[targetId];
+
     },
     setProp(id: NodeId, cb: (props: any) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID);
       cb(state.nodes[id].data.props);
-      if (state.events['active'] && state.events['active'].id == id) state.events['active'] = state.nodes[id]
+      if (state.events.active && state.events.active.id == id) state.events.active = state.nodes[id]
     },
     setRef(id: NodeId, cb: (ref: NodeRef) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID)
