@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { useManager } from 'craftjs';
-import ResizeObserver from '@juggle/resize-observer';
 import { useState } from 'react';
-import { useMemo } from 'react';
 
 export const Editor:React.FC = ({children, ...props}) => {
   const { activeDOM, activeProps} = useManager((state) => ({
@@ -11,9 +9,8 @@ export const Editor:React.FC = ({children, ...props}) => {
   }));
   const [observerStyle, setObserverStyle] = useState({});
 
- 
-
   useEffect(() => {
+    // console.log("changed", closestParent)
     if (activeDOM && activeProps ) {
      setTimeout(() => {
         const { width, height, top, left } = activeDOM.getBoundingClientRect();
@@ -26,7 +23,7 @@ export const Editor:React.FC = ({children, ...props}) => {
      })
     }
 
-  }, [activeDOM, activeProps]);
+  }, [activeDOM, activeProps ]);
 
   // if (active) console.log(getComputedStyle(active.ref.dom).marginLeft, active.ref.dom.getBoundingClientRect().left)
   return (

@@ -15,7 +15,7 @@ export type NodeToAdd = Node & {
 }
 
 export type InternalNode = Pick<Node, 'id'> & NodeData
-export type NodeRefEvent = Record<'active' | 'dragging' | 'hover' | 'pending', boolean>
+export type NodeRefEvent = Record<'active' | 'dragging' | 'hover', boolean>
 
 export type NodeRef = {
   dom: HTMLElement;
@@ -54,8 +54,10 @@ export type TreeNode = Node & {children?: any}
 
 export type ConnectedNode<S = null> = S extends null ? {
   connectTarget: Function,
+  connectDragHandler: Function,
   actions: any
 }  : S & {
   connectTarget: Function,
+  connectDragHandler: Function,
   actions: any
 } 
