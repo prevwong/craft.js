@@ -36,14 +36,16 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
     },
     add(nodes: Node[] | Node, parentId?: NodeId ) {
       if (!Array.isArray(nodes)) nodes = [nodes];
+      if ( parentId && !state.nodes[parentId].data.nodes ) state.nodes[parentId].data.nodes = [];
+
       (nodes as Node[]).forEach(node => {
-        const parent = parentId ? parentId : node.data.closestParent || node.data.parent,
+        const parent = parentId ? parentId :  node.data.parent,
               parentNode = state.nodes[parent];   
         
         if (parentNode && isCanvas(node) && !isCanvas(parentNode) ) {
           invariant(node.data.props.id, ERROR_ROOT_CANVAS_NO_ID);
           if (!parentNode.data._childCanvas) parentNode.data._childCanvas = {};
-          node.data.closestParent = parentNode.id;
+          node.data.parent = parentNode.id;
           parentNode.data._childCanvas[node.data.props.id] = node.id;
           delete node.data.props.id;
         } else {
@@ -52,11 +54,13 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
             if (!parentNode.data.nodes) parentNode.data.nodes = [];
             const currentNodes = parentNode.data.nodes;
             currentNodes.splice((node.data.index !== undefined) ? node.data.index : currentNodes.length, 0, node.id);
-            node.data.parent = node.data.closestParent = parent;
+            node.data.parent =  parent;
           } 
         }        
         state.nodes[node.id] = node;
       });
+
+     
     },
     move(targetId: NodeId, newParentId: NodeId, index: number) {
       const targetNode = state.nodes[targetId],
@@ -76,7 +80,6 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
         newParent.data.nodes = [targetId];
         
       state.nodes[targetId].data.parent = newParentId;
-      state.nodes[targetId].data.closestParent = newParentId;
       state.nodes[targetId].data.index = index;
       currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
 

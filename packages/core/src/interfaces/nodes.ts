@@ -28,8 +28,7 @@ export type NodeData = {
   type: string | React.ElementType;
   name: string,
   subtype?: string | React.ElementType,
-  parent?: NodeId;
-  closestParent?: NodeId;
+  parent: NodeId;
   index?: number;
   _childCanvas?: Record<string, NodeId>
   nodes?: NodeId[]
@@ -50,12 +49,11 @@ export type SerializedNodeData = Omit<NodeData, 'type' | 'subtype' | 'name' | 'e
 export type Nodes = Record<NodeId, Node>
 export type TreeNode = Node & {children?: any}
 
-export type ConnectedNode<S = null> = S extends null ? {
+
+type ConnectedNodeShared = {
   connectTarget: Function,
   connectDragHandler: Function,
   actions: any
-}  : S & {
-  connectTarget: Function,
-  connectDragHandler: Function,
-  actions: any
-} 
+}
+
+export type ConnectedNode<S = null> = S extends null ? ConnectedNodeShared : S & ConnectedNodeShared
