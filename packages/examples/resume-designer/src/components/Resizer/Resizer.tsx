@@ -52,16 +52,14 @@ const ResizerDiv = styled.div`
   }
 `;
 
-export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, domRef: (dom: HTMLElement) => void) => {
+export const Resizer = React.forwardRef(({ propKey, width: nodeWidth, height: nodeHeight, children, ...props }: any, domRef: (dom: HTMLElement) => void) => {
   const resizable = useRef<Resizable>(null);
   const isResizing = useRef<boolean>(false);
 
-  const { id, isRoot, actions, active, connectTarget, connectDragHandler, nodeWidth, nodeHeight } = useNode(node => ({
+  const { id, isRoot, actions, active, _inNodeContext, connectTarget, connectDragHandler } = useNode(node => ({
     id: node.id,
     isRoot: node.id == "ROOT",
     parent: node.data.parent,
-    nodeWidth: node.data.props[propKey.width],
-    nodeHeight: node.data.props[propKey.height],
     active: node.event.active
   }));
 
@@ -112,7 +110,7 @@ export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, d
   return (
       <Resizable
         enable={['top', 'left', 'bottom', 'right', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'].reduce((acc: any, key) => {
-          acc[key] = active;
+          acc[key] = active && _inNodeContext;
           return acc;
         }, {})}
         className={cx([`bg-white`, {

@@ -33,9 +33,10 @@ export const Container = ({
   flexDirection = "row",
   background = 'rgba(0,0,0,0)'
 }: Partial<Container>) => {
-
   return (
     <Resizer
+      width={width}
+      height={height}
       propKey={{ width: "width", height: "height" }}
       style={{ background: `rgba(${Object.values(background)})`, paddingLeft: `${paddingLeft}px`, paddingRight: `${paddingRight}px`, paddingBottom: `${paddingBottom}px`, paddingTop: `${paddingTop}px` }}
     >
