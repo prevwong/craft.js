@@ -62,7 +62,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
     },
     getAllParents(nodeId: NodeId, result: NodeId[] = []) {
       const node = manager.nodes[nodeId];
-      const parent = node.data.closestParent;
+      const parent = node.data.parent;
       if (parent) {
         result.push(parent);
         _("getAllParents")(parent, result);
@@ -96,7 +96,6 @@ export function QueryMethods(manager: ManagerState, options: Options) {
           subtype,
           props,
           parent,
-          closestParent,
           nodes,
           _childCanvas,
           name,
@@ -106,7 +105,6 @@ export function QueryMethods(manager: ManagerState, options: Options) {
         accum[id] = _("transformJSXToNode")(<Comp {...props} />, {
           data: {
             parent,
-            closestParent,
             ...(Comp === Canvas && { subtype, nodes }),
             ...(_childCanvas && { _childCanvas }),
           },
@@ -117,8 +115,8 @@ export function QueryMethods(manager: ManagerState, options: Options) {
     canDropInParent: (node: Node | NodeId, newParent: NodeId) => {
       const targetNode = typeof node === "string" ? manager.nodes[node] : node;
       const currentParentNode =
-          targetNode.data.closestParent &&
-          manager.nodes[targetNode.data.closestParent],
+          targetNode.data.parent &&
+          manager.nodes[targetNode.data.parent],
         newParentNode = manager.nodes[newParent];
 
         
@@ -174,7 +172,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
       const targetNodeInfo = getDOMInfo(nodesToDOM(targetNode));
       const targetParent =
           (isTargetCanvas) ? targetNode
-            : manager.nodes[targetNode.data.closestParent];
+            : manager.nodes[targetNode.data.parent];
 
       const targetParentNodes = targetParent.data._childCanvas
         ? Object.values(targetParent.data._childCanvas)
