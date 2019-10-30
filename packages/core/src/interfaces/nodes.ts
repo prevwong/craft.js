@@ -53,7 +53,8 @@ export type TreeNode = Node & {children?: any}
 type ConnectedNodeShared = {
   connectTarget: Function,
   connectDragHandler: Function,
-  actions: any
+  actions: any,
+  _inNodeContext: boolean
 }
 
 export type ConnectedNode<S = null> = S extends null ? ConnectedNodeShared : S & ConnectedNodeShared
