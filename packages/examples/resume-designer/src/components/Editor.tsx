@@ -3,10 +3,12 @@ import { useManager } from 'craftjs';
 import { useState } from 'react';
 
 export const Editor:React.FC = ({children, ...props}) => {
-  const { activeDOM, activeProps, closestParent } = useManager((state) => ({
+  const { activeDOM, activeProps, closestParent, index} = useManager((state) => ({
     activeDOM: state.events.active && state.events.active.ref.dom,
     activeProps: state.events.active && state.events.active.data.props,
-    closestParent: state.events.active && state.events.active.data.closestParent
+    closestParent: state.events.active && state.events.active.data.closestParent,
+    index: state.events.active && state.events.active.data.index
+
   }));
   const [observerStyle, setObserverStyle] = useState({
     width:0,
@@ -16,7 +18,6 @@ export const Editor:React.FC = ({children, ...props}) => {
   });
 
   useEffect(() => {
-    console.log("changed", closestParent)
     if (activeDOM ) {
      setTimeout(() => {
         const { width, height, top, left } = activeDOM.getBoundingClientRect();
@@ -29,7 +30,7 @@ export const Editor:React.FC = ({children, ...props}) => {
      })
     }
 
-  }, [activeDOM, activeProps, closestParent ]);
+  }, [activeDOM, activeProps, closestParent, index ]);
 
   // if (active) console.log(getComputedStyle(active.ref.dom).marginLeft, active.ref.dom.getBoundingClientRect().left)
   return (
