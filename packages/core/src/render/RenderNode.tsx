@@ -5,9 +5,10 @@ import { RootContext } from "../root/RootContext";
 import { Canvas } from "../nodes";
 
 export const SimpleElement = ({render}: any) => {
-  const {connectTarget} = useNode();
+  const {connectTarget, connectDragHandler } = useNode();
 
-  return typeof render.type === "string" ? connectTarget(render) : render;
+  console.log("Render", render)
+  return typeof render.type === "string" ? connectTarget(connectDragHandler(React.cloneElement(render, {draggable: true}))) : render;
 }
 
 export const RenderNodeToElement: React.FC<any> =React.memo(({ ...injectedProps}) => {
