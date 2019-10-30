@@ -1,11 +1,18 @@
 import React from 'react';
-import { useNode } from 'craftjs';
+import { useNode, Canvas } from 'craftjs';
 import { EditorSection } from '../components/EditorSection';
 
 export const Text = ({ children} : any) => {
   const { connectTarget, connectDragHandler } = useNode();
   return connectTarget(
-    connectDragHandler(<h2>{children}</h2>)
+    connectDragHandler(
+      <div>
+        <h2>{children}</h2>
+        <Canvas id="main">
+          <h4>wow</h4>
+        </Canvas>
+      </div>
+    )
   )
 }
 
