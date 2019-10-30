@@ -11,14 +11,15 @@ import { ROOT_NODE } from "craftjs-utils";
 export function useNode(): ConnectedNode
 export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S>
 export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S> {
-  const {id, related } = useContext(NodeContext);
   const handlers = useContext(DNDContext);
-  const { actions: { setRef, setProp, setNodeEvent }, _inNodeContext, ...collected } = useInternalNode(collect);
+  const { id, related, actions: { setRef, setProp, setNodeEvent }, _inNodeContext, ...collected } = useInternalNode(collect);
 
   return {
     ...collected as any,
     actions: { setProp },
+    _inNodeContext,
     connectDragHandler: (render: any) => {
+      // if (!_inNodeContext || related) return render;
       return React.cloneElement(render, {
         draggable: id !== ROOT_NODE,
         onDragStart: (e: React.MouseEvent) => {
