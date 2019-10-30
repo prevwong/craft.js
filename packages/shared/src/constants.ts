@@ -11,3 +11,4 @@ export const ERROR_MOVE_NONCANVAS_CHILD = 'Cannot move node that is not a direct
 export const ERROR_MOVE_TO_NONCANVAS_PARENT = 'Cannot move node into a non-Canvas parent';
 export const ERROR_MOVE_TO_DESCENDANT = 'Cannot move node into a descendant';
 export const ERRROR_NOT_IN_RESOLVER = 'The component type specified for this node does not exist in the resolver';
+export const ERROR_INFINITE_CANVAS = "The component specified in the <Canvas> `is` prop has additional Canvas specified in it's render template.";
