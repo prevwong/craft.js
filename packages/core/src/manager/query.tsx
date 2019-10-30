@@ -62,7 +62,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
     },
     getAllParents(nodeId: NodeId, result: NodeId[] = []) {
       const node = manager.nodes[nodeId];
-      const parent = node.data.closestParent;
+      const parent = node.data.parent;
       if (parent) {
         result.push(parent);
         _("getAllParents")(parent, result);
@@ -96,7 +96,6 @@ export function QueryMethods(manager: ManagerState, options: Options) {
           subtype,
           props,
           parent,
-          closestParent,
           nodes,
           _childCanvas,
           name,
@@ -106,7 +105,6 @@ export function QueryMethods(manager: ManagerState, options: Options) {
         accum[id] = _("transformJSXToNode")(<Comp {...props} />, {
           data: {
             parent,
-            closestParent,
             ...(Comp === Canvas && { subtype, nodes }),
             ...(_childCanvas && { _childCanvas }),
           },
@@ -117,20 +115,24 @@ export function QueryMethods(manager: ManagerState, options: Options) {
     canDropInParent: (node: Node | NodeId, newParent: NodeId) => {
       const targetNode = typeof node === "string" ? manager.nodes[node] : node;
       const currentParentNode =
-          targetNode.data.closestParent &&
-          manager.nodes[targetNode.data.closestParent],
+          targetNode.data.parent &&
+          manager.nodes[targetNode.data.parent],
         newParentNode = manager.nodes[newParent];
 
+        
       invariant(
         currentParentNode ||
           (!currentParentNode && !manager.nodes[targetNode.id]),
         ERROR_DUPLICATE_NODEID
       );
+
+      // console.log(targetNode);
       invariant(
         (targetNode.id !== ROOT_NODE && newParent) ||
           (targetNode.id === ROOT_NODE && !newParent),
         ERROR_NOPARENT
       );
+
       if (newParent) {
         invariant(isCanvas(newParentNode), ERROR_MOVE_TO_NONCANVAS_PARENT);
         invariant(
@@ -162,25 +164,21 @@ export function QueryMethods(manager: ManagerState, options: Options) {
       nodesToDOM: (node: Node) => HTMLElement = node =>
         manager.nodes[node.id].ref.dom
     ) => {
+      // console.log(source, target);
       if (source === target) return;
       const targetNode = manager.nodes[target],
         isTargetCanvas = isCanvas(targetNode);
 
       const targetNodeInfo = getDOMInfo(nodesToDOM(targetNode));
-      const isWithinBorders =
-          pos.x > targetNodeInfo.left + 5 &&
-          pos.x < targetNodeInfo.right - 5 &&
-          pos.y > targetNodeInfo.top + 5 &&
-          pos.y < targetNodeInfo.bottom - 5,
-        targetParent =
-          (isTargetCanvas && isWithinBorders) || targetNode.id == ROOT_NODE
-            ? targetNode
-            : manager.nodes[targetNode.data.closestParent];
+      const targetParent =
+          (isTargetCanvas) ? targetNode
+            : manager.nodes[targetNode.data.parent];
 
       const targetParentNodes = targetParent.data._childCanvas
         ? Object.values(targetParent.data._childCanvas)
         : targetParent.data.nodes || [];
 
+      // console.log("parent nodes", targetParentNodes);
       const dimensionsInContainer = targetParentNodes ? targetParentNodes.reduce(
         (result, id: NodeId) => {
           const dom = nodesToDOM(manager.nodes[id]);

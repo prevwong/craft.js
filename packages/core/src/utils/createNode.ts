@@ -4,7 +4,7 @@ import produce from "immer";
 import { isCanvas } from "../nodes";
 import { NodeProvider } from "../nodes/NodeContext";
 
-export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id?: NodeId, ref: Partial<NodeRef> = {}): Node {
+export function createNode(data: Partial<NodeData> & Pick<NodeData, 'parent' | 'type' | 'props'>, id?: NodeId, ref: Partial<NodeRef> = {}): Node {
   let node = produce({}, (node: Node) => {
     node.id = id;
     node.data = {
@@ -14,7 +14,7 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
         ...data.props
       }
     };
-    if (!node.data.closestParent) node.data.closestParent = node.data.parent;
+    // if (!node.data.closestParent) node.data.closestParent = node.data.parent;
 
     let actualType = ( data.subtype ? data.subtype : data.type ) as any;
     node.ref = {
@@ -28,7 +28,6 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
     node.event = {
       active: false,
       dragging: false,
-      pending: false,
       hover: false
     }
 

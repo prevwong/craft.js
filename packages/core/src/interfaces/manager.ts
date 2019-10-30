@@ -1,10 +1,10 @@
-import { Nodes, Node } from "./nodes";
+import { Nodes, Node, NodeEvents } from "./nodes";
 import { PlaceholderInfo } from "../dnd/interfaces";
 import { useInternalManager } from "../manager/useInternalManager";
 
-export type ManagerEvents = Record<'active' | 'dragging' | 'hover', Node> & {
+
+export type ManagerEvents = Record<NodeEvents, Node> & {
   placeholder: PlaceholderInfo
-  pending: Node
 }
 
 export type ManagerState = {
