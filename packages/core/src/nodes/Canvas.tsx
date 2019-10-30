@@ -13,12 +13,13 @@ export type Canvas = {
   style?: any,
   className?: any,
   is?: React.ElementType
+  passThrough?: boolean
 } & React.Props<any> & any;
 
 
 export const isCanvas = (node: Node) => node.data.type === Canvas
 
-export const Canvas = ({ is = "div", children, ...props }: Canvas) => {
+export const Canvas = ({ is = "div", children, passThrough, ...props }: Canvas) => {
   const id = props.id;
   const { actions: { add }, query, _inContext } = useInternalManager();
   const { node, nodeId, _inNodeContext } = useInternalNode((node) => ({ node: node.data, nodeId: node.id }));
@@ -28,14 +29,15 @@ export const Canvas = ({ is = "div", children, ...props }: Canvas) => {
    
     if (_inContext && _inNodeContext) {
       if (node.type === Canvas ) {
-        invariant(!node.nodes, ERROR_INFINITE_CANVAS)
-        
-        const childNodes = mapChildrenToNodes(children, (jsx) => {
-          const node = query.transformJSXToNode(jsx)
-          return node;
-        });
+        invariant(passThrough, ERROR_INFINITE_CANVAS)
+        if ( !node.nodes ) {
+          const childNodes = mapChildrenToNodes(children, (jsx) => {
+            const node = query.transformJSXToNode(jsx)
+            return node;
+          });
 
-        add(childNodes, nodeId);
+          add(childNodes, nodeId);
+        }
       } else {
 
           invariant(id, ERROR_ROOT_CANVAS_NO_ID);
