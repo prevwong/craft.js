@@ -1,5 +1,5 @@
 import React, {  useRef } from "react";
-import { Node, ManagerState, NodeToAdd, NodeId } from "../interfaces";
+import { Node, ManagerState, NodeId } from "../interfaces";
 import { useManager } from "../connectors";
 import movePlaceholder from "./movePlaceholder";
 import { getDOMInfo } from "craftjs-utils";
@@ -32,25 +32,21 @@ export const DNDManager: React.FC = ({ children }) => {
     return {
       onDragStart: (e: React.MouseEvent, node: Node | NodeId) => {
         e.stopPropagation();
+        setNodeEvent('dragging', typeof node == 'string' ? node : node.id);
         draggedNode.current = node;
       },
       onDragOver: (e: React.MouseEvent, id: NodeId) => {
         e.stopPropagation();
         const { current: start } = draggedNode;
-        
-
         if (!start) return;
         const dragId = typeof start == 'object' ? start.id : start;
 
         const getPlaceholder = query.getDropPlaceholder(dragId, id, { x: e.clientX, y: e.clientY });
         if ( getPlaceholder ) {
           if ( typeof start == 'object' && start.id ) {
-            const newNode: NodeToAdd = {
-              ...start,
-              index: getPlaceholder.placement.index + (getPlaceholder.placement.where == 'after' ? 1 : 0)
-            }
-            add(newNode, getPlaceholder.placement.parent.id);
-            draggedNode.current = newNode.id;
+            start.data.index = getPlaceholder.placement.index + (getPlaceholder.placement.where == 'after' ? 1 : 0);
+            add(start, getPlaceholder.placement.parent.id);
+            draggedNode.current = start.id;
           }
           setPlaceholder(getPlaceholder)
         }
@@ -68,6 +64,7 @@ export const DNDManager: React.FC = ({ children }) => {
 
         draggedNode.current = null;
         setPlaceholder(null);
+        setNodeEvent('dragging', null);
       }
     }
   }, []);
