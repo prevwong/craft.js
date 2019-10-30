@@ -1,5 +1,5 @@
 import React, { useRef, useLayoutEffect } from "react";
-import { Resizer, ResizerEditorSection, connectResize } from "../components/Resizer";
+import { Resizer, ResizerEditorSection } from "../components/Resizer";
 import { EditorItem } from "../components/EditorItem"
 import { EditorSection } from "../components/EditorSection"
 import { Input } from "../components/Input"

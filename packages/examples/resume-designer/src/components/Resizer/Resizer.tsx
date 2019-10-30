@@ -160,14 +160,6 @@ export const Resizer = React.forwardRef(({ propKey, children, ...props }: any, d
             height
           }
         }}
-      onMouseDown={(e: React.MouseEvent) => {
-        e.stopPropagation();
-        return false;
-      }}
-      onMouseOver={(e: React.MouseEvent) => {
-        e.stopPropagation();
-        return false;
-      }}
         
       >
         {

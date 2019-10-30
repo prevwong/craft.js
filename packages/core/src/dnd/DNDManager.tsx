@@ -32,7 +32,7 @@ export const DNDManager: React.FC = ({ children }) => {
     return {
       onDragStart: (e: React.MouseEvent, node: Node | NodeId) => {
         e.stopPropagation();
-        setNodeEvent('dragging', typeof node == 'string' ? node : node.id);
+        if ( typeof node === 'string' ) setNodeEvent('dragging', node);
         draggedNode.current = node;
       },
       onDragOver: (e: React.MouseEvent, id: NodeId) => {
