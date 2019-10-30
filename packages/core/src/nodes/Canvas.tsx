@@ -63,7 +63,8 @@ export const Canvas = ({ is = "div", children, passThrough, ...props }: Canvas) 
       {
         initialised ? (
           (_inContext && _inNodeContext) ?
-            node.type === Canvas && node.nodes ? (
+            (
+              node.type === Canvas && node.nodes ? (
               <SimpleElement render={React.createElement(node.subtype, props, (
                 <React.Fragment>
                   {
@@ -79,7 +80,7 @@ export const Canvas = ({ is = "div", children, passThrough, ...props }: Canvas) 
                   <NodeElement id={internalId} />
                 ) : null
               )
-            : children
+            ) : React.createElement(is, props, children)
         ) : null
       }
     </React.Fragment>

@@ -1,11 +1,11 @@
 import { useContext, useMemo } from "react";
-import { NodeContext } from "./NodeContext";
+import { NodeContext, NodeProvider } from "./NodeContext";
 import { Node, NodeRef, NodeRefEvent } from "../interfaces";
 import { useManager } from "../connectors";
 
 type setProp<P> = (props: P) => void;
 
-type internalActions = {
+type internalActions = NodeProvider & {
   _inNodeContext: boolean,
   actions : {
     setProp: (cb: any) => void,
@@ -18,15 +18,18 @@ type useInternalNode<S = null> = S extends null ? internalActions : S & internal
 export function useInternalNode() : useInternalNode
 export function useInternalNode<S = null>(collect?: (node: Node) => S): useInternalNode<S>
 export function useInternalNode<S = null>(collect?: (node: Node) => S): useInternalNode<S> {
-  const nodeContext = useContext(NodeContext);
-  if (!nodeContext) {
+  const context = useContext(NodeContext);
+  if (!context) {
     return {
       ...{} as any,
+      id: null,
+      related: false,
       _inNodeContext: false,
       actions: {}
     }
   }
-  const { id } = nodeContext;
+  
+  const { id, related } = context;
 
   const { actions: managerActions, query, ...collected } = collect ? useManager((state) => collect(state.nodes[id])) : useManager();
   const actions = useMemo(() => {
@@ -40,6 +43,8 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S): useInter
   }, []);
 
   return {
+    id,
+    related,
     ...collected as any,
     _inNodeContext: true,
      actions 
