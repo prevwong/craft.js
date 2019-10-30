@@ -10,12 +10,9 @@ export type Node =  {
   related: Record<string, React.ElementType>
 }
 
-export type NodeToAdd = Node & {
-  index?: number
-}
-
+export type NodeEvents = 'active' | 'dragging' | 'hover';
 export type InternalNode = Pick<Node, 'id'> & NodeData
-export type NodeRefEvent = Record<'active' | 'dragging' | 'hover', boolean>
+export type NodeRefEvent = Record<NodeEvents, boolean>
 
 export type NodeRef = {
   dom: HTMLElement;
@@ -33,6 +30,7 @@ export type NodeData = {
   subtype?: string | React.ElementType,
   parent?: NodeId;
   closestParent?: NodeId;
+  index?: number;
   _childCanvas?: Record<string, NodeId>
   nodes?: NodeId[]
 }
