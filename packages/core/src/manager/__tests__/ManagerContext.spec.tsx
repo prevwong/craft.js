@@ -1,19 +1,19 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { RootContext, RootContextProvider, createRootContext } from "../RootContext";
+import { ManagerContext, ManagerContextProvider, createManagerContext } from "../ManagerContext";
 
 describe('RootContext', () => {
   it('Provides manager store and options', () => {
     let expectedStore;
-    const context = createRootContext();
-    render(<RootContextProvider context={context}>
-      <RootContext.Consumer>
+    const context = createManagerContext();
+    render(<ManagerContextProvider context={context}>
+      <ManagerContext.Consumer>
         {(store) => {
           expectedStore = store;
           return null;
         }}
-      </RootContext.Consumer>
-    </RootContextProvider>)
+      </ManagerContext.Consumer>
+    </ManagerContextProvider>)
     expect(expectedStore).toBe(context);
   });
 })

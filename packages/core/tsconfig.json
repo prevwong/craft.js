@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "outDir": "dist",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/index.tsx"

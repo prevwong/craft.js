@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { PlaceholderInfo } from "../dnd/interfaces";
-// import { CSSObject } from "styled-components";
-import { RootContext } from "../root/RootContext";
+import { useManager } from "../connectors";
 
 export type Placeholder = {
   placeholder: PlaceholderInfo,
@@ -29,9 +28,8 @@ export const defaultPlaceholder: React.FC<Placeholder> = ({ placeholder: { error
 
 
 export const RenderPlaceholder: React.FC<Placeholder> = ({ placeholder, suggestedStyles }) => {
-  const { query } = useContext(RootContext);
-  const { renderPlaceholder } = query.getOptions();
-  return React.createElement(renderPlaceholder, {
+  const { query: {getOptions} } = useManager();
+  return React.createElement(getOptions().renderPlaceholder, {
     placeholder,
     suggestedStyles,
   });

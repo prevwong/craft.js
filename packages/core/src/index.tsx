@@ -1,16 +1,18 @@
-export * from "./manager"
 export * from "./nodes"
 export * from "./render"
 export * from "./interfaces";
-export * from "./root";
 export * from './connectors';
-// import { getDOMInfo } from "craftjs-utils";
-// import React from 'react';
+import React from 'react';
+import { Options } from "interfaces";
+import { DNDManager } from "./dnd/DNDManager";
+import {ManagerContextProvider, createManagerContext} from "./manager";
 
-// export const App = () => {
-//   return (
-//     <div>
-//       <h2>hi</h2>
-//     </div>
-//   )
-// }
+export const Craft: React.FC<Partial<Options>> = ({ children, ...options }: any) => {
+  return (
+    <ManagerContextProvider context={createManagerContext({ options })}>
+      <DNDManager>
+        {children}
+      </DNDManager>
+    </ManagerContextProvider>
+  )
+}

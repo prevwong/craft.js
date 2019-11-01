@@ -2,11 +2,19 @@
   "name": "root",
   "npmClient": "yarn",
   "private": true,
-  "dependencies": {},
   "scripts": {
     "build": "lerna run build --stream"
   },
   "devDependencies": {
-    "typescript": "^3.6.3"
+    "@types/react-dom": "^16.8.0",
+    "@types/react": "^16.9.11",
+    "react": "^16.9.0",
+    "typescript": "^3.5.1"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "packages/examples/*"
+    ]
   }
 }
