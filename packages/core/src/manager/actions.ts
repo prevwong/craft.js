@@ -87,6 +87,9 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
       // updateEventsNode(state, targetId);
 
     },
+    delete(id: NodeId) {
+      delete state.nodes[id];
+    },
     setProp(id: NodeId, cb: (props: any) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID);
       cb(state.nodes[id].data.props);
