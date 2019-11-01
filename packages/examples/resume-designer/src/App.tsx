@@ -41,7 +41,7 @@ function App() {
               <div className="flex-1 h-full overflow-hidden">
                 <div
                   className="bg-white h-full w-full"
-                  style={{ background: "#EEECF1", width: "100%", height: "100%" }}
+                  style={{ background: "rgb(224, 224, 224)", width: "100%", height: "100%" }}
                 >
                   <Renderer is={Editor}>
                     <Canvas is={Container} background={{ r: 255, g: 255, b: 255, a: 1 }} color={{r:0, g:0, b:0, a: 1}} height="100%" width="50%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}>
@@ -51,7 +51,7 @@ function App() {
                 </div>
               </div>
               <div
-                style={{ width:"270px" }}
+                style={{ width:"270px", background:"rgb(245, 245, 245)" }}
                   className="bg-white w-2 h-full"
                 >
                     <Toolbar />
