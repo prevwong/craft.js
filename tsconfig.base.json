@@ -2,12 +2,13 @@
   "allowSyntheticDefaultImports": true,
   "esModuleInterop": true,
   "compilerOptions": {
+    "lib" : ["esnext", "dom"],
     "allowSyntheticDefaultImports": true,
     "jsx": "react",
     "module": "esnext",
     "moduleResolution": "node",
-    "noImplicitAny": true,
-    "outDir": "lib",
+    "noImplicitAny": false,
+    "outDir": "dist",
     "sourceMap": true,
     "target": "esnext",
     "declaration": true
