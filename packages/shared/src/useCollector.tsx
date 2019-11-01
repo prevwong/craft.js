@@ -1,10 +1,10 @@
-import React, { useContext, useState, useCallback, useLayoutEffect, useRef } from "react";
+import React, { useContext, useState, useCallback, useLayoutEffect, useRef, useEffect } from "react";
 import { Unsubscribe } from "redux";
 import { CallbacksFor, Methods, StateFor, QueryCallbacksFor, QueryMethods } from "./createReduxMethods";
 import { SubscriberAndCallbacksFor } from "./createReduxMethods";
-const shallowequal = require('shallowequal');
+import {isEqualWith} from "lodash";
 
-
+// console.log(1001, shallowequal({}, {}));
 type Actions<M extends Methods, Q extends QueryMethods> = {
   actions: CallbacksFor<M>,
   query: QueryCallbacksFor<Q>
@@ -37,18 +37,19 @@ export function useCollector<M extends Methods, Q extends QueryMethods, C>
 
   const [renderCollected, setRenderCollected] = useState(onCollect(collected.current));
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     let unsubscribe: Unsubscribe;
     if (collect && typeof onChange === 'function') {
       unsubscribe = subscribe(() => {
-
         const { current } = getState();
-        // window.nodes = current;
         const recollect = collect(current);
-        (window as any).nodes = current
-        if (shallowequal(recollect, collected.current) == false) {
+        
+        // console.log(recollect, collected.current, isEqualWith(recollect, collected.current))
+        if (!isEqualWith(recollect, collected.current)) {
+          // console.log("CHANGED!", collected.current, recollect);
+
           collected.current = recollect;
-          
+          (window as any).state = current;
           onChange(onCollect(collected.current), setRenderCollected);
         }
       });
@@ -57,7 +58,7 @@ export function useCollector<M extends Methods, Q extends QueryMethods, C>
       if (unsubscribe) unsubscribe();
 
     })
-  }, [collected.current]);
+  }, []);
 
   return renderCollected;
 }
