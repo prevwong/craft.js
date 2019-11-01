@@ -58,7 +58,7 @@ export const Canvas = ({ is = "div", children, passThrough, ...props }: Canvas) 
     setInitialised(true);
   }, []);
 
-  return useMemo(() => (
+  return (
     <React.Fragment>
       {
         initialised ? (
@@ -84,7 +84,7 @@ export const Canvas = ({ is = "div", children, passThrough, ...props }: Canvas) 
         ) : null
       }
     </React.Fragment>
-  ), [initialised, node, internalId]);
+  );
 }
 
 // Canvas.name = 'Canvas'

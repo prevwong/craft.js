@@ -10,7 +10,7 @@ export const Toolbar = () => {
   return (
     <div className='px-2 py-5'>
         <div>
-          <div className='cx'><h2 className='text-white text-lg font-medium'>Edit</h2></div>
+          <div className='cx'><h2 className='text-black text-lg font-medium'>Edit</h2></div>
             <div className='py-5'>
               {active && related && React.createElement(related.toolbar) }
             </div>

@@ -24,7 +24,7 @@ export type NodeRef = {
 
 
 export type NodeData = {
-  props: any,
+  props: Record<string, any>,
   type: string | React.ElementType;
   name: string,
   subtype?: string | React.ElementType,
