@@ -16,6 +16,8 @@ const ResizerDiv = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+  display: flex;
+  align-items: center;
   .resizer-indicators {
     position: absolute;
     top: 0;
@@ -90,13 +92,13 @@ export const Resizer = React.forwardRef(({ propKey, width: nodeWidth, height: no
     if (!isPercentage(nodeWidth)) {
       newWidth = parseInt(internalDimensions.current.width) + parseInt(width) + "px";
     } else {
-      newWidth = (parseInt(internalDimensions.current.width) + pxToPercent(width, dom.parentElement.clientWidth)).toFixed(4) + "%";
+      newWidth = (parseInt(internalDimensions.current.width) + pxToPercent(width, dom.parentElement.clientWidth)).toFixed(2) + "%";
     }
 
     if (!isPercentage(nodeHeight)) {
       newHeight = parseInt(internalDimensions.current.height) + parseInt(height) + "px";
     } else {
-      newHeight = (parseInt(internalDimensions.current.height) + pxToPercent(height, dom.parentElement.clientHeight)).toFixed(4)+ "%";
+      newHeight = (parseInt(internalDimensions.current.height) + pxToPercent(height, dom.parentElement.clientHeight)).toFixed(2)+ "%";
     }
 
     // console.log(newWidth);
@@ -113,7 +115,7 @@ export const Resizer = React.forwardRef(({ propKey, width: nodeWidth, height: no
           acc[key] = active && _inNodeContext;
           return acc;
         }, {})}
-        className={cx([`bg-white`, {
+        className={cx([{
           'm-auto': isRoot,
           'flex': true,
           'items-center': true
@@ -164,7 +166,6 @@ export const Resizer = React.forwardRef(({ propKey, width: nodeWidth, height: no
           connectTarget(
             connectDragHandler(
               <ResizerDiv
-                className='w-full h-full flex items-center'
                 ref={domRef}
                 {...props}
               >

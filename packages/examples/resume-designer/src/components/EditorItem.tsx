@@ -1,117 +1,88 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import cx from 'classnames';
-import { useState } from 'react';
+import { Grid, Slider, makeStyles } from '@material-ui/core'
 import { useNode } from 'craftjs';
-import { ChromePicker } from 'react-color'
+import { EditorTextInput } from './EditorTextInput'
+import { withStyles } from '@material-ui/styles';
+const iOSBoxShadow =
+  '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
 
-const Item = styled.div`
-  position:relative;
-  display:inline-block;
-  align-items:center;
-  .editor-item-prefix {
-    position:absolute;
-    pointer-events:none;
-    font-size:12px;
-    margin-left: 10px;
-    color:rgb(75, 213, 255);
-    &.prefix-color {
-      width:10px;
-      height:10px;
-      background-color:transparent;
-      border-radius:100%;
-      box-shadow:0px 3px 14px -1px rgba(0, 0, 0, 0.34901960784313724);
-    }
-  }
-
-  input.editorInput {
-    font-size:12px;
-    padding: 3px 2px 3px 30px;
-    text-align:center;
-    width: 100%;
-    border-radius:100px;
-    background:rgba(0, 0, 0, 0.08);
-    color:#fff;
-    outline:none;
-    text-align:left;
-    &:focus {
-      background:rgba(0, 0, 0, 0.28);
-    }
-  }
-`
-
+const SliderStyled = withStyles({
+  root: {
+    color: '#3880ff',
+    height: 2,
+    padding: '5px 0',
+    width: "100%"
+  },
+  thumb: {
+    height: 14,
+    width: 14,
+    backgroundColor: '#fff',
+    boxShadow: iOSBoxShadow,
+    marginTop: -7,
+    marginLeft: -7,
+    '&:focus,&:hover,&$active': {
+      boxShadow: '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)',
+      // Reset on touch devices, it doesn't add specificity
+      '@media (hover: none)': {
+        boxShadow: iOSBoxShadow,
+      },
+    },
+  },
+  active: {},
+  valueLabel: {
+    left: 'calc(-50% + 11px)',
+    top: -22,
+    '& *': {
+      background: 'transparent',
+      color: '#000',
+    },
+  },
+  track: {
+    height: 2,
+  },
+  rail: {
+    height: 2,
+    opacity: 0.5,
+    backgroundColor: '#bfbfbf',
+  },
+  mark: {
+    backgroundColor: '#bfbfbf',
+    height: 8,
+    width: 1,
+    marginTop: -3,
+  },
+  markActive: {
+    opacity: 1,
+    backgroundColor: 'currentColor',
+  },
+})(Slider);
 
 export type EditorItem = {
-    prefix?: string;
+  prefix?: string;
+  label?: string;
     full?: boolean;
-    propKey?: string;
-    onEnter?: (value: any) => void;
-    type: string
+    propKey?: string;    type: string
 }
-export const EditorItem = ({ prefix, full = false, propKey, onEnter, type, ...props }: EditorItem) => {
-  const [internalValue, setInternalValue] = useState(propKey);
-  const [active, setActive] = useState(false);
+export const EditorItem = ({  full = false, propKey, type, ...props }: EditorItem) => {
 
   const { actions, value } = useNode((node) => ({ value: node.data.props[propKey] }));
-
-  useEffect(() => {
-    if (value !== internalValue) {
-      let val = value;
-      if ( type == 'color') val = `rgba(${Object.values(value)})`
-      setInternalValue(val);
-    }
-  }, [value]);
-
-  
-
     return (
-        <Item className={cx(['cx', 'inline-block', 'mb-1'], {
-          'w-3/6': !full,
-          'w-full': full,
-        })}>
-           <div className='flex items-center relative' onClick={() => {
-             setActive(true);
-           }}>
-            {
-              (type == 'color' && active) ? (
-              <div className="absolute" style={{ top: "calc(100% + 10px)", left:"-7px"}}>
-                  <div className="fixed top-0 left-0 w-full h-full cursor-pointer" onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setActive(false)
-                  }}></div>
-                  <ChromePicker color={value} onChange={(color: any) => {
-                    actions.setProp((prop: any) => {
-                      prop[propKey] = color.rgb;
-                    })
-                  }} />
-                </div>
-              ) : null
-            }
-            <span className={cx(['editor-item-prefix', {
-              'prefix-color' : type == 'color'
-            }])} style={{ background: type == 'color' ? `rgba(${Object.values(value)})` : 'transparent'}}>{type !== 'color' && prefix ? prefix : null}</span>
-            <input
-              onKeyDown={e => {
-                if (e.keyCode == 13) {
-                  if (onEnter) {
-                    onEnter(e.currentTarget.value);
-                  } else if (propKey) {
-                    actions.setProp((prop: any) => {
-                      prop[propKey] = e.currentTarget.value;
-                    })
-                  }
-                }
-              }}
-              onChange={e => {
-                setInternalValue(e.currentTarget.value)
-              }}
-              value={internalValue || ''}
-              className='editorInput'
-              type = {type == 'color' ? 'text' : type}
-              {...props}
-            />
-           </div>
-        </Item>
+        <Grid item xs={full ? 12 : 6} >
+           {
+             ['text', 'color', 'bg', 'number'].includes(type) ? (
+               <EditorTextInput {...props} type={type} value={value} onChange={(value) => actions.setProp((props: any) => propKey ? props[propKey] = value : false)} />
+             ) : type == 'slider' ? (
+              <SliderStyled value={value || 0} onChange={(e, value: number) => {
+               
+                actions.setProp((props: any) => {
+                  // console.log("updating", propKey, value)
+                  props[propKey] = value
+                })
+              }} />
+             ) : null
+           }
+        </Grid>
     )
 }
