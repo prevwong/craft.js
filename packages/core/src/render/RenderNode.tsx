@@ -1,8 +1,8 @@
 import React, { useMemo, useContext } from "react";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { useNode } from "../connectors";
-import { RootContext } from "../root/RootContext";
 import { Canvas } from "../nodes";
+import { useInternalManager } from "../manager/useInternalManager";
 
 export const SimpleElement = ({render}: any) => {
   const {connectTarget, connectDragHandler } = useNode();
@@ -10,9 +10,9 @@ export const SimpleElement = ({render}: any) => {
   return typeof render.type === "string" ? connectTarget(connectDragHandler(React.cloneElement(render, {draggable: true}))) : render;
 }
 
-export const RenderNodeToElement: React.FC<any> =React.memo(({ ...injectedProps}) => {
+export const RenderNodeToElement: React.FC<any> =React.memo(({ ...injectedProps}: any) => {
   const { type, props } = useInternalNode((node) => ({type: node.data.type, props: node.data.props}));
-  const { query: { getOptions }} = useContext(RootContext);
+  const { query: { getOptions }} = useInternalManager();
   const {onRender} = getOptions();
 
   return useMemo(() => {
