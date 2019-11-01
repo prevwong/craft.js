@@ -40,14 +40,14 @@ const useLabelStyles = makeStyles({
   }, // a style rule
 });
 
-export type EditorTextInput = {
+export type ToolbarTextInput = {
   prefix?: string;
   label?: string;
   type: string,
   onChange?: (value: any) => void;
   value?: any;
 }
-export const EditorTextInput = ({ onChange, value, prefix, label, type, ...props }: EditorTextInput) => {
+export const ToolbarTextInput = ({ onChange, value, prefix, label, type, ...props }: ToolbarTextInput) => {
   const [internalValue, setInternalValue] = useState(value);
   const [active, setActive] = useState(false);
   const classes = useStyles({});

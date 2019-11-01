@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import cx from 'classnames';
 import { Grid, Slider, makeStyles } from '@material-ui/core'
 import { useNode } from 'craftjs';
-import { EditorTextInput } from './EditorTextInput'
+import { ToolbarTextInput } from './ToolbarTextInput'
 import { withStyles } from '@material-ui/styles';
 const iOSBoxShadow =
   '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
@@ -59,20 +59,20 @@ const SliderStyled = withStyles({
   },
 })(Slider);
 
-export type EditorItem = {
+export type ToolbarItem = {
   prefix?: string;
   label?: string;
     full?: boolean;
     propKey?: string;    type: string
 }
-export const EditorItem = ({  full = false, propKey, type, ...props }: EditorItem) => {
+export const ToolbarItem = ({  full = false, propKey, type, ...props }: ToolbarItem) => {
 
   const { actions, value } = useNode((node) => ({ value: node.data.props[propKey] }));
     return (
         <Grid item xs={full ? 12 : 6} >
            {
              ['text', 'color', 'bg', 'number'].includes(type) ? (
-               <EditorTextInput {...props} type={type} value={value} onChange={(value) => actions.setProp((props: any) => propKey ? props[propKey] = value : false)} />
+            <ToolbarTextInput {...props} type={type} value={value} onChange={(value) => actions.setProp((props: any) => propKey ? props[propKey] = value : false)} />
              ) : type == 'slider' ? (
               <SliderStyled value={value || 0} onChange={(e, value: number) => {
                

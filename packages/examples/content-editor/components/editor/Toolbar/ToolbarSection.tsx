@@ -30,7 +30,7 @@ const useSummaryStyles = makeStyles(theme => ({
   }
 }));
 
-export const SettingsPanel = ({title, props, summary, children}: any) => {
+export const ToolbarSection = ({title, props, summary, children}: any) => {
   const panelClasses = usePanelStyles({});
   const summaryClasses = useSummaryStyles({});
   const {nodeProps} = useNode((node) => ({

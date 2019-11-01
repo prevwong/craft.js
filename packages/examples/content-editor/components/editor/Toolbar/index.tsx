@@ -1,7 +1,9 @@
 import React from "react";
 import { useManager } from "craftjs";
 import styled from 'styled-components';
-
+export * from "./ToolbarItem";
+export * from "./ToolbarSection";
+export * from "./ToolbarTextInput";
 
 export const Toolbar = () => {
   const { active, related } = useManager(state => ({

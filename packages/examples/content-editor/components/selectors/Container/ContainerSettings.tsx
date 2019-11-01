@@ -1,7 +1,6 @@
 import React from 'react';
 import {useNode} from 'craftjs';
-import { SettingsPanel } from "../../components/Editor/SettingsPanel"
-import { EditorItem } from "../../components/EditorItem"
+import { ToolbarSection, ToolbarItem } from "../../editor"
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Grid, Divider, Typography, Chip, TextField } from '@material-ui/core'
 
 export const ContainerSettings = () => {
@@ -9,16 +8,16 @@ export const ContainerSettings = () => {
 
   return (
     <React.Fragment>
-      <SettingsPanel
+      <ToolbarSection
         title="Dimensions"
         props={['width', 'height']}
         summary={({ width, height }: any) => {
           return `${width || 0} x ${height || 0}`;
         }}>
-        <EditorItem propKey="width" type="text" label="Width" />
-        <EditorItem propKey="height" type="text" label="Height" />
-      </SettingsPanel>
-      <SettingsPanel
+        <ToolbarItem propKey="width" type="text" label="Width" />
+        <ToolbarItem propKey="height" type="text" label="Height" />
+      </ToolbarSection>
+      <ToolbarSection
         title="Colors"
         props={['background', 'color']}
         summary={({ background, color }: any) => {
@@ -30,47 +29,47 @@ export const ContainerSettings = () => {
             </div>
           );
         }}>
-        <EditorItem full={true} propKey="background" type="bg" label="Background" />
-        <EditorItem full={true} propKey="color" type="color" label="Text" />
-      </SettingsPanel>
-      <SettingsPanel
+        <ToolbarItem full={true} propKey="background" type="bg" label="Background" />
+        <ToolbarItem full={true} propKey="color" type="color" label="Text" />
+      </ToolbarSection>
+      <ToolbarSection
         title="Margin"
         props={['marginTop', 'marginBottom', 'marginLeft', 'marginRight']}
         summary={({ marginTop, marginRight, marginBottom, marginLeft }: any) => {
           return `${marginTop || 0}px ${marginRight || 0}px ${marginBottom || 0}px ${marginLeft || 0}px`;
         }}>
-        <EditorItem propKey="marginTop" type="number" label="Top" />
-        <EditorItem propKey="marginBottom" type="number" label="Bottom" />
-        <EditorItem propKey="marginLeft" type="number" label="Left" />
-        <EditorItem propKey="marginRight" type="number" label="Right" />
-      </SettingsPanel>
-      <SettingsPanel
+        <ToolbarItem propKey="marginTop" type="number" label="Top" />
+        <ToolbarItem propKey="marginBottom" type="number" label="Bottom" />
+        <ToolbarItem propKey="marginLeft" type="number" label="Left" />
+        <ToolbarItem propKey="marginRight" type="number" label="Right" />
+      </ToolbarSection>
+      <ToolbarSection
         title="Padding"
         props={['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight']}
         summary={({ paddingTop, paddingRight, paddingBottom, paddingLeft }: any) => {
           return `${paddingTop || 0}px ${paddingRight || 0}px ${paddingBottom || 0}px ${paddingLeft || 0}px`;
         }}>
-        <EditorItem propKey="paddingTop" type="number" label="Top" />
-        <EditorItem propKey="paddingBottom" type="number" label="Bottom" />
-        <EditorItem propKey="paddingLeft" type="number" label="Left" />
-        <EditorItem propKey="paddingRight" type="number" label="Right" />
-      </SettingsPanel>
-       <SettingsPanel
+        <ToolbarItem propKey="paddingTop" type="number" label="Top" />
+        <ToolbarItem propKey="paddingBottom" type="number" label="Bottom" />
+        <ToolbarItem propKey="paddingLeft" type="number" label="Left" />
+        <ToolbarItem propKey="paddingRight" type="number" label="Right" />
+      </ToolbarSection>
+      <ToolbarSection
         title="Rounded"
         props={['radius']}
         summary={({ radius }: any) => {
-          return `${radius || 0}px`;
+          return `${radius || 0}`;
         }}>
-        <EditorItem full={true} propKey="radius" type="slider" label="Radius" />
-      </SettingsPanel>
-       <SettingsPanel
+        <ToolbarItem full={true} propKey="radius" type="slider" label="Radius" />
+      </ToolbarSection>
+       <ToolbarSection
         title="Shadow"
         props={['shadow']}
         summary={({ shadow }: any) => {
-          return `${shadow || 0}px`;
+          return `${shadow || 0}`;
         }}>
-        <EditorItem full={true} propKey="shadow" type="slider" label="Shadow" />
-      </SettingsPanel>
+        <ToolbarItem full={true} propKey="shadow" type="slider" label="Shadow" />
+      </ToolbarSection>
 
     </React.Fragment>
   );

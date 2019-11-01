@@ -1,5 +1,5 @@
 import React from "react";
-import { Resizer, ResizerEditorSection } from "../../components/Resizer";
+import { Resizer, ResizerEditorSection } from "../../editor/Resizer";
 import { useNode } from "craftjs";
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Grid, Divider, Typography, Chip, TextField } from '@material-ui/core'
 import { ContainerSettings } from "./ContainerSettings";

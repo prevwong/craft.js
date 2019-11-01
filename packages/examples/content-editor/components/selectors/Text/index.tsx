@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNode, Canvas } from 'craftjs';
-import { EditorSection } from '../components/EditorSection';
+import { ToolbarSection } from '../../editor';
 
 export const Text = ({ children} : any) => {
   const { connectTarget, connectDragHandler } = useNode();
@@ -20,9 +20,9 @@ Text.related = {
   toolbar: () => {
     return (
       <React.Fragment>
-        <EditorSection title="Font">
+        <ToolbarSection title="Font">
 
-        </EditorSection>
+        </ToolbarSection>
       </React.Fragment>
     )
   }

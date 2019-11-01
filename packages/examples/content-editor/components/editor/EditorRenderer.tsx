@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useManager } from 'craftjs';
 import { useState } from 'react';
-import {Actions} from "./Editor/Actions"
+import {Actions} from "./Actions"
 
-export const Editor:React.FC = ({children, ...props}) => {
+export const EditorRenderer:React.FC = ({children, ...props}) => {
   const { activeDOM, activeProps, closestParent, index} = useManager((state) => ({
     activeDOM: state.events.active && state.events.active.ref.dom,
     activeProps: state.events.active && state.events.active.data.props,
