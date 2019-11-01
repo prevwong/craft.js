@@ -84,7 +84,7 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
       state.nodes[targetId].data.index = index;
       currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
 
-      updateEventsNode(state, targetId);
+      // updateEventsNode(state, targetId);
 
     },
     setProp(id: NodeId, cb: (props: any) => void) {
@@ -95,7 +95,7 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
     setRef(id: NodeId, cb: (ref: NodeRef) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID)
       cb(state.nodes[id].ref as NodeRef);
-      updateEventsNode(state, id);
+      // updateEventsNode(state, id);
     }
 
   }

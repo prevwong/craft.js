@@ -6,7 +6,7 @@ export const Editor:React.FC = ({children, ...props}) => {
   const { activeDOM, activeProps, closestParent, index} = useManager((state) => ({
     activeDOM: state.events.active && state.events.active.ref.dom,
     activeProps: state.events.active && state.events.active.data.props,
-    closestParent: state.events.active && state.events.active.data.closestParent,
+    closestParent: state.events.active && state.events.active.data.parent,
     index: state.events.active && state.events.active.data.index
 
   }));
@@ -32,7 +32,6 @@ export const Editor:React.FC = ({children, ...props}) => {
 
   }, [activeDOM, activeProps, closestParent, index ]);
 
-  // if (active) console.log(getComputedStyle(active.ref.dom).marginLeft, active.ref.dom.getBoundingClientRect().left)
   return (
     <div style={{ borderColor: "#EEECF1" }} className="p-4 w-full h-full overflow-auto flex items-center"  {...props}>
         {

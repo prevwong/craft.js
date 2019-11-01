@@ -2,7 +2,7 @@
   "name": "craftjs-layers",
   "version": "1.0.0",
   "scripts": {
-    "build": "../../scripts/build.sh"
+    "build-b": "../../scripts/build.sh"
   },
   "dependencies": {
     "craftjs": "*",
