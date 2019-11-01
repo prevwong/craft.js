@@ -7,7 +7,6 @@ import { Canvas } from "../nodes";
 export const SimpleElement = ({render}: any) => {
   const {connectTarget, connectDragHandler } = useNode();
 
-  console.log("Render", render)
   return typeof render.type === "string" ? connectTarget(connectDragHandler(React.cloneElement(render, {draggable: true}))) : render;
 }
 

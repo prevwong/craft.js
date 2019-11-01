@@ -35,7 +35,7 @@ export const createRootContext = (data: RootContextIntializer = {
 export const RootContext = createContext<RootContext>(null);
 export const RootContextProvider: React.FC<{context?: RootContext}> = ({ children, context }) => {
 
-  const newContext = useMemo(() => context ? context : createRootContext(), []);
+  const newContext = context ? context : createRootContext();
 
   return (
     <RootContext.Provider value={newContext}>

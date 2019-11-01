@@ -7,5 +7,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "../../scripts/build.sh"
+  },
+  "dependencies": {
+    "redux": "^4.0.4"
   }
 }
