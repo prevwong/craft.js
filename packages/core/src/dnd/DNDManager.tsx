@@ -1,9 +1,8 @@
-import React, {  useRef } from "react";
+import React, {  useRef, useMemo } from "react";
 import { Node, ManagerState, NodeId } from "../interfaces";
 import { useManager } from "../connectors";
 import movePlaceholder from "./movePlaceholder";
 import { getDOMInfo } from "craftjs-utils";
-import { useMemo } from "react";
 
 export type DNDContext = {
   onDragStart: (e: React.MouseEvent, id: Node | NodeId) => void,
