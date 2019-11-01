@@ -5,13 +5,9 @@
     "build-b": "../../scripts/build.sh"
   },
   "dependencies": {
-    "craftjs": "*",
-    "craftjs-utils": "*",
+    "craftjs": "file:../core",
+    "craftjs-utils": "file:../shared",
     "react": "^16.8.6",
     "styled-components": "^4.2.1"
-  },
-  "devDependencies": {
-    "typescript": "^3.5.1",
-    "@types/styled-components": "*"
   }
 }

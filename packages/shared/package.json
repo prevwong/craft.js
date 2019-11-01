@@ -9,6 +9,10 @@
     "build": "../../scripts/build.sh"
   },
   "dependencies": {
+    "@types/react": "^16.9.11",
     "redux": "^4.0.4"
+  },
+  "devDependencies": {
+    "react": "^16.11.0"
   }
 }
