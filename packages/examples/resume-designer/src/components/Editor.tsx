@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useManager } from 'craftjs';
 import { useState } from 'react';
+import {Actions} from "./Editor/Actions"
 
 export const Editor:React.FC = ({children, ...props}) => {
   const { activeDOM, activeProps, closestParent, index} = useManager((state) => ({
@@ -36,7 +37,10 @@ export const Editor:React.FC = ({children, ...props}) => {
     <div style={{ borderColor: "#EEECF1" }} className="p-4 w-full h-full overflow-auto flex items-center"  {...props}>
         {
           activeDOM && (
-          <div className='pointer-events-none fixed border-dashed border z-50 border-black' style={observerStyle}/>
+           <React.Fragment>
+              <div className='pointer-events-none fixed border-dashed border z-50 border-black' style={observerStyle}/>
+              <Actions />
+           </React.Fragment>
           )
         }
         {children} 
