@@ -1,29 +1,15 @@
 import React from 'react';
 import { useNode, Canvas } from 'craftjs';
 import { ToolbarSection } from '../../editor';
+import { TextSettings } from "./TextSettings";
 
-export const Text = ({ children} : any) => {
+export const Text = ({ fontSize = 12, children} : any) => {
   const { connectTarget, connectDragHandler } = useNode();
   return connectTarget(
-    connectDragHandler(
-      <div>
-        <h2>{children}</h2>
-        <Canvas id="main">
-          <h4>wow</h4>
-        </Canvas>
-      </div>
-    )
+    connectDragHandler(<h2 style={{ fontSize: `${fontSize}px` }}>{children}</h2>)
   )
 }
 
 Text.related = {
-  toolbar: () => {
-    return (
-      <React.Fragment>
-        <ToolbarSection title="Font">
-
-        </ToolbarSection>
-      </React.Fragment>
-    )
-  }
+  toolbar: TextSettings
 }
