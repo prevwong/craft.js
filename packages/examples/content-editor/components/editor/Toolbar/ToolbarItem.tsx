@@ -63,8 +63,10 @@ const SliderStyled = withStyles({
 export type ToolbarItem = {
   prefix?: string;
   label?: string;
-    full?: boolean;
-    propKey?: string;    type: string
+  full?: boolean;
+  propKey?: string;  
+  children?: React.ReactNode;  
+  type: string
 }
 export const ToolbarItem = ({  full = false, propKey, type, ...props }: ToolbarItem) => {
 

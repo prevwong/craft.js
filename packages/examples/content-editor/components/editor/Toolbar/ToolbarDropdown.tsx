@@ -3,10 +3,10 @@ import { FormControl, InputLabel, Select } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 const useStyles = makeStyles(theme => ({
   formControl: {
-    margin: theme.spacing(1),
+
   },
   selectEmpty: {
-    marginTop: theme.spacing(2),
+
   },
 }));
 
