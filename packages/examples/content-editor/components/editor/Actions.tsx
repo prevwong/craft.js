@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
-// import {ReactComponent as Move} from "../../icons/move.svg"
-// import {ReactComponent as Delete} from "../../icons/delete.svg"
+import Move from "../../public/icons/move.svg"
+import Delete from "../../public/icons/delete.svg"
 import styled from 'styled-components';
 import {useManager} from "craftjs";
 
@@ -42,8 +42,8 @@ export const Actions = () => {
       style={info}
     >
       <div className=' px-2 py-2 rounded bg-white shadow-md flex'>
-        {/* <Btn><Move /></Btn> */}
-        {/* <Btn><Delete /></Btn> */}
+        <Btn><Move /></Btn>
+        <Btn><Delete /></Btn>
     </div>
     </ActionDiv>
   )

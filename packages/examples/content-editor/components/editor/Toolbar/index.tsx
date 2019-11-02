@@ -4,6 +4,7 @@ import styled from 'styled-components';
 export * from "./ToolbarItem";
 export * from "./ToolbarSection";
 export * from "./ToolbarTextInput";
+export * from "./ToolbarDropdown";
 
 export const Toolbar = () => {
   const { active, related } = useManager(state => ({

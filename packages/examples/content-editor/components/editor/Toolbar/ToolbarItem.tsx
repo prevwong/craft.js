@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { Grid, Slider, makeStyles } from '@material-ui/core'
 import { useNode } from 'craftjs';
 import { ToolbarTextInput } from './ToolbarTextInput'
+import { ToolbarDropdown } from './ToolbarDropdown'
 import { withStyles } from '@material-ui/styles';
 const iOSBoxShadow =
   '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
@@ -72,7 +73,13 @@ export const ToolbarItem = ({  full = false, propKey, type, ...props }: ToolbarI
         <Grid item xs={full ? 12 : 6} >
            {
              ['text', 'color', 'bg', 'number'].includes(type) ? (
-            <ToolbarTextInput {...props} type={type} value={value} onChange={(value) => actions.setProp((props: any) => propKey ? props[propKey] = value : false)} />
+            <ToolbarTextInput {...props} type={type} value={value} onChange={(value) => {
+              console.log("receive", value, propKey)
+              actions.setProp((props: any) => {
+                props[propKey] = value
+              })
+            
+            }} />
              ) : type == 'slider' ? (
               <SliderStyled value={value || 0} onChange={(e, value: number) => {
                
@@ -81,6 +88,8 @@ export const ToolbarItem = ({  full = false, propKey, type, ...props }: ToolbarI
                   props[propKey] = value
                 })
               }} />
+             ) : type == 'select' ? (
+               <ToolbarDropdown value={value || ''} onChange={(value) => actions.setProp((props: any) => props[propKey] = value)}  {...props} />
              ) : null
            }
         </Grid>

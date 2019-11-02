@@ -61,7 +61,7 @@ export const ToolbarTextInput = ({ onChange, value, prefix, label, type, ...prop
   }, [value]);
 
 
-
+  const { actions: {setProp} } = useNode();
   return (
       <div style={{width:"100%", position: "relative"}} onClick={() => {
         setActive(true);
@@ -84,7 +84,14 @@ export const ToolbarTextInput = ({ onChange, value, prefix, label, type, ...prop
           label={label}
           style={{ margin: 0, width:"100%" }}
           value={internalValue || ''}
-          onChange={(e) => setInternalValue(e.currentTarget.value)}
+          onKeyDown={(e: React.KeyboardEvent) => {
+            if ( e.key == 'Enter' ) {
+              onChange(e.target.value);
+            }
+          }}
+          onChange={(e) => {
+            setInternalValue(e.target.value);
+          }}
           margin="dense"
           variant="filled"
           InputProps={{ 
