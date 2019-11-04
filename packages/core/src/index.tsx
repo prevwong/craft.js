@@ -4,7 +4,7 @@ export * from "./interfaces";
 export * from './connectors';
 import React from 'react';
 import { Options } from "interfaces";
-import { EventManager } from "./dnd/EventManager";
+import { EventManager } from "./events";
 import {ManagerContextProvider, createManagerContext} from "./manager";
 
 export const Craft: React.FC<Partial<Options>> = ({ children, ...options }: any) => {
