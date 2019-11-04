@@ -2,6 +2,10 @@ import React, { useState, useMemo, useLayoutEffect, useCallback } from "react";
 import { NodeElement, Canvas } from "../nodes";
 import { useManager } from "../connectors";
 import { ROOT_NODE } from "craftjs-utils";
+import { DNDManager } from "../dnd/DNDManager";
+import { useInternalManager } from "../manager/useInternalManager";
+import { useRef } from "react";
+
 const invariant = require("invariant");
 
 export type Renderer = {
@@ -9,11 +13,11 @@ export type Renderer = {
 } & any;
 
 export const Renderer: React.FC<Renderer> = ({
-  is,
+  is = 'span',
   children,
   ...props
 }) => {
-  const { actions: { add, replaceNodes, setNodeEvent }, query: {getNode, getOptions, transformJSXToNode, deserialize } } = useManager();
+  const { handlers: {internal}, actions: { add, replaceNodes, setNodeEvent }, query: {getNode, getOptions, transformJSXToNode, deserialize } } = useInternalManager();
   const { nodes } = getOptions();
   const [rootNode, setRootNode] = useState();
   
@@ -30,22 +34,32 @@ export const Renderer: React.FC<Renderer> = ({
       const rehydratedNodes = deserialize(nodes);
       replaceNodes(rehydratedNodes);
     }
-    setRootNode(getNode('ROOT'))
+    setRootNode(getNode(ROOT_NODE))
 
   }, []);
 
+  const dom = useRef<HTMLElement>(null);
+
   return useMemo(() => (
-          rootNode ? (
-            React.createElement(is, {
-              onMouseDown: () => {
-                setNodeEvent("active", null)
-              },
-              onMouseOver: () => {
-                setNodeEvent("hover", null)
-              },
-              ...props
-            }, <NodeElement id={ROOT_NODE} /> )
-          ) : null
+    <>
+      {
+        rootNode ? (
+          React.createElement(is, {
+            ref: (ref: HTMLElement) => {
+              if ( ref && !dom.current) {
+                ref.addEventListener("mousedown", e => internal.onMouseDown(e, null), true);
+                dom.current = ref;
+              }
+            },
+            style: {
+              width: "100%",
+              height: "100%"
+            },
+            ...props,
+          }, <NodeElement id={ROOT_NODE} />)
+        ) : null
+      }  
+    </>
   ), [rootNode])
 }
 
