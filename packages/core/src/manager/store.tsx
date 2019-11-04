@@ -3,7 +3,7 @@ import { NodeRefEvent, ManagerState, ManagerEvents, Options } from "../interface
 import Actions from "./actions";
 import { QueryMethods } from "./query";
 
-export type ManagerStore = SubscriberAndCallbacksFor<typeof Actions>;
+export type ManagerStore = SubscriberAndCallbacksFor<typeof Actions>
 
 export const createManagerStore = (
   nodes = {}, 
