@@ -1,7 +1,7 @@
 import React, { useRef, useLayoutEffect, useEffect } from "react";
 import styled from "styled-components";
 import { Resizable } from "re-resizable";
-import { useNode, useManager } from "craftjs";
+import { isRoot, useNode, useManager } from "craftjs";
 import cx from "classnames";
 import {  isPercentage, pxToPercent, measurementToPx, percentToPx } from "../../utils/numToMeasurement";
 import { useCallback } from "react";
@@ -34,6 +34,7 @@ const ResizerDiv = styled.div`
       display: block;
       box-shadow:0px 0px 12px -1px rgba(0, 0, 0, 0.32);
       z-index:99999;
+      pointer-events:none;
       &:nth-child(1) {
         left: -5px;
         top: -5px;
@@ -54,15 +55,21 @@ const ResizerDiv = styled.div`
   }
 `;
 
-export const Resizer = React.forwardRef(({ propKey, width: nodeWidth, height: nodeHeight, children, ...props }: any, domRef: (dom: HTMLElement) => void) => {
+export const Resizer = ({ 
+  propKey, 
+  children, 
+  ...props 
+}: any,) => {
   const resizable = useRef<Resizable>(null);
   const isResizing = useRef<boolean>(false);
 
-  const { id, isRoot, actions, active, _inNodeContext, connectTarget, connectDragHandler } = useNode(node => ({
+  const { nodeWidth, nodeHeight, id, isRootNode, actions, active, _inNodeContext, connectTarget, connectDragHandler } = useNode(node => ({
     id: node.id,
-    isRoot: node.id == "ROOT",
+    isRootNode: isRoot(node),
     parent: node.data.parent,
-    active: node.event.active
+    active: node.event.active,
+    nodeWidth: node.data.props[propKey.width],
+    nodeHeight: node.data.props[propKey.height]
   }));
 
 
@@ -71,22 +78,15 @@ export const Resizer = React.forwardRef(({ propKey, width: nodeWidth, height: no
 
   useEffect(() => {
     if (isResizing.current || (!dom || !dom.parentElement)) return;
-    // const width = measurementToPx(nodeWidth, dom, 'width');
-    // const height = measurementToPx(nodeHeight, dom, 'height');
-    // const {width, height} = updateInternalDimension(nodeWidth, nodeHeight);
-    // console.log(66, width, height)
-    // if ( internalDimensions.current.height == height && internalDimensions.current.width == width ) return;
     internalDimensions.current = {
       width: nodeWidth,
       height: nodeHeight
     }
     resizable.current.updateSize(internalDimensions.current);
-  }, [isResizing, nodeWidth, nodeHeight]);
- 
+  }, [nodeWidth, nodeHeight]);
 
-
-
-  const updateInternalDimension = useCallback((width, height) => {
+  const updateInternalDimension = (width, height) => {
+    if (!dom) return;
     let newWidth, newHeight;
 
     if (!isPercentage(nodeWidth)) {
@@ -100,27 +100,31 @@ export const Resizer = React.forwardRef(({ propKey, width: nodeWidth, height: no
     } else {
       newHeight = (parseInt(internalDimensions.current.height) + pxToPercent(height, dom.parentElement.clientHeight)).toFixed(2)+ "%";
     }
-
-    // console.log(newWidth);
+    
     return {
       width: newWidth,
       height: newHeight
     }
-  }, [internalDimensions, nodeWidth, nodeHeight, dom])
-
+  }
 
   return (
       <Resizable
-        enable={['top', 'left', 'bottom', 'right', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'].reduce((acc: any, key) => {
-          acc[key] = active && _inNodeContext;
-          return acc;
-        }, {})}
+      enable={['top', 'left', 'bottom', 'right', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'].reduce((acc: any, key) => {
+        acc[key] = active && _inNodeContext;
+        return acc;
+      }, {})}
+
         className={cx([{
-          'm-auto': isRoot,
+          'm-auto': isRootNode,
           'flex': true,
           'items-center': true
         }])}
-        ref={resizable}
+        ref={(ref) => {
+          if ( ref ) {
+            resizable.current = ref;
+            connectTarget(resizable.current.resizable);
+          }
+        }}
         defaultSize={{ width: nodeWidth, height: nodeHeight }}
         onResizeStart={(e) => {
           e.preventDefault();
@@ -131,57 +135,37 @@ export const Resizer = React.forwardRef(({ propKey, width: nodeWidth, height: no
           e.preventDefault();
           e.stopPropagation();
           const n = updateInternalDimension(d.width, d.height);
+          if (!n) return;
           actions.setProp((prop: any) => {
-            // if (isPercentage(prop[propKey.height])) {
-            //   prop[propKey.height] = pxToPercent(newHeight, dom.parentElement.getBoundingClientRect().height) + "%"
-            // } else {
-            //   prop[propKey.height] = newHeight + "px"
-            // }
-
-            // if (isPercentage(prop[propKey.width])) {
-            //   prop[propKey.width] = pxToPercent(newWidth, dom.parentElement.getBoundingClientRect().width) + "%"
-            // } else {
-            //   prop[propKey.width] = newWidth + "px"
-            // }
-
-           
             prop[propKey.width] = n.width;
             prop[propKey.height] = n.height;
-
           })
         }}
         onResizeStop={(e, __, ___, d) => {
           e.preventDefault();
           if (!active) return
-          const {width, height} = updateInternalDimension(d.width, d.height);
+          const n = updateInternalDimension(d.width, d.height);
+          if ( !n ) return;
           isResizing.current = false;
           internalDimensions.current = {
-            width,
-            height
+            width: n.width,
+            height: n.height
           }
         }}
-        
       >
-        {
-          connectTarget(
-            connectDragHandler(
-              <ResizerDiv
-                ref={domRef}
-                {...props}
-              >
-                {children}
-                {active && (
-                  <div className={cx(['resizer-indicators'])}>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                )}
-              </ResizerDiv>
-            )
-          )
-        }
+        <ResizerDiv
+          {...props}
+        >
+          {children}
+          {active && (
+            <div className={cx(['resizer-indicators'])}>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          )}
+        </ResizerDiv>
       </Resizable>
   );
-});
+};

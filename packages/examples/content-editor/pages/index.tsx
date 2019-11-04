@@ -41,7 +41,13 @@ function App() {
                 >
                   <Renderer is={EditorRenderer}>
                     <Canvas is={Container} background={{ r: 255, g: 255, b: 255, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }} height="100%" width="50%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}>
+                      <Canvas is={Container} background={{ r: 78, g: 78, b: 78, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }} height="100%" width="50%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}>
+                        <Canvas is={Container} background={{ r: 0, g: 0, b: 0, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }} height="100%" width="50%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}></Canvas>
+                        <Canvas is={Container} background={{ r: 128, g: 128, b: 128, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }} height="100%" width="20%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}>
+                          <Canvas is={Container} background={{ r: 0, g: 0, b: 0, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }} height="100%" width="50%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}></Canvas>
 
+                        </Canvas>
+                      </Canvas>
                     </Canvas>
                   </Renderer>
                 </div>

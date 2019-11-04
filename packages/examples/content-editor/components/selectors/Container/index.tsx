@@ -42,8 +42,6 @@ export const Container = ({
 }: Partial<Container>) => {
   return (
     <Resizer
-      width={width}
-      height={height}
       propKey={{ width: "width", height: "height" }}
       style={{ 
         background: `rgba(${Object.values(background)})`, 

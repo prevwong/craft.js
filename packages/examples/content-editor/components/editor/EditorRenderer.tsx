@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Ref } from 'react';
 import { useManager } from 'craftjs';
 import { useState } from 'react';
 import {Actions} from "./Actions"
 
-export const EditorRenderer:React.FC = ({children, ...props}) => {
+export const EditorRenderer = React.forwardRef(({children, ...props}, ref: (dom: HTMLElement) => void) => {
   const { activeDOM, activeProps, closestParent, index} = useManager((state) => ({
     activeDOM: state.events.active && state.events.active.ref.dom,
     activeProps: state.events.active && state.events.active.data.props,
@@ -33,8 +33,9 @@ export const EditorRenderer:React.FC = ({children, ...props}) => {
 
   }, [activeDOM, activeProps, closestParent, index ]);
 
+  // console.log('re2');
   return (
-    <div style={{ borderColor: "#EEECF1" }} className="p-4 w-full h-full overflow-auto flex items-center"  {...props}>
+    <div ref={(dom) => ref(dom) } style={{ borderColor: "#EEECF1" }} className="p-4 w-full h-full overflow-auto flex items-center"  {...props}>
         {
           activeDOM && (
            <React.Fragment>
@@ -46,4 +47,4 @@ export const EditorRenderer:React.FC = ({children, ...props}) => {
         {children} 
     </div>
   )
-}
+})
