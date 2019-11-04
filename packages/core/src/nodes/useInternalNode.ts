@@ -3,7 +3,6 @@ import { NodeContext, NodeProvider } from "./NodeContext";
 import { Node, NodeRef, NodeRefEvent } from "../interfaces";
 import { useManager } from "../connectors";
 
-type setProp<P> = (props: P) => void;
 
 type internalActions = NodeProvider & {
   _inNodeContext: boolean,
@@ -30,8 +29,8 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S): useInter
   }
   
   const { id, related } = context;
-
-  const { actions: managerActions, query, ...collected } = collect ? useManager((state) => collect(state.nodes[id])) : useManager();
+  
+  const { actions: managerActions, query, ...collected } = collect ? useManager((state) => id && state.nodes[id] && collect(state.nodes[id])) : useManager();
   const actions = useMemo(() => {
     return {
       setProp: (cb: any) => managerActions.setProp(id, cb),
