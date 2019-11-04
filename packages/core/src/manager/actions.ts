@@ -1,16 +1,18 @@
 import { NodeId, Node, Nodes, NodeRef } from "../interfaces";
 import { ManagerState } from "../interfaces";
 import { PlaceholderInfo } from "../dnd/interfaces";
-import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID } from "craftjs-utils";
-import { isCanvas } from "../nodes";
+import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID, ROOT_NODE, CallbacksFor } from "craftjs-utils";
+import { isCanvas, isTopLevelCanvas } from "../nodes";
 import { QueryMethods } from "./query";
 import { QueryCallbacksFor } from "craftjs-utils";
 import { updateEventsNode } from "../utils/updateEventsNode";
+import { debounce } from "lodash"
+
 const invariant = require('invariant');
 
 
 const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMethods>) => {
-  // console.log("actions", state, q)
+  const _ = <T extends keyof CallbacksFor<typeof Actions>>(name: T) => Actions(state, query)[name];
   return {
     
     setPlaceholder(placeholder: PlaceholderInfo) {
@@ -88,12 +90,26 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
 
     },
     delete(id: NodeId) {
+      invariant(id != ROOT_NODE, "Cannot delete Root node");
+      const targetNode = state.nodes[id];
+      if (isCanvas(targetNode)) {
+        invariant(isTopLevelCanvas(targetNode), "Cannot delete a Canvas that is not a direct child of another Canvas");
+        targetNode.data.nodes.map((childId) => {
+          _("delete")(childId);
+        })
+      }
+
+      const parentNode = state.nodes[targetNode.data.parent];
+      if (parentNode && parentNode.data.nodes.indexOf(id) > -1) {
+        parentNode.data.nodes.splice(parentNode.data.nodes.indexOf(id), 1);
+      }
+      updateEventsNode(state, id, true);
       delete state.nodes[id];
     },
     setProp(id: NodeId, cb: (props: any) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID);
       cb(state.nodes[id].data.props);
-      updateEventsNode(state, id);
+      // updateEventsNode(state, id);
     },
     setRef(id: NodeId, cb: (ref: NodeRef) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID)
