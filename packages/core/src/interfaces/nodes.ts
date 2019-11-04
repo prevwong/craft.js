@@ -1,4 +1,5 @@
 import React from "react";
+import { NodeProvider } from "nodes/NodeContext";
 
 export type NodeId = string;
 
@@ -49,12 +50,3 @@ export type SerializedNodeData = Omit<NodeData, 'type' | 'subtype' | 'name' | 'e
 export type Nodes = Record<NodeId, Node>
 export type TreeNode = Node & {children?: any}
 
-
-type ConnectedNodeShared = {
-  connectTarget: Function,
-  connectDragHandler: Function,
-  actions: any,
-  _inNodeContext: boolean
-}
-
-export type ConnectedNode<S = null> = S extends null ? ConnectedNodeShared : S & ConnectedNodeShared
