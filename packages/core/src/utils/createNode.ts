@@ -1,10 +1,10 @@
 import React from 'react';
-import { NodeData, NodeId, Node, NodeRef } from "../interfaces";
+import { NodeData, NodeId, Node, NodeRules } from "../interfaces";
 import produce from "immer";
 import { isCanvas } from "../nodes";
 import { NodeProvider } from "../nodes/NodeContext";
 
-export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id?: NodeId, ref: Partial<NodeRef> = {}): Node {
+export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id?: NodeId, rules: Partial<NodeRules> = {}): Node {
   let node = produce({}, (node: Node) => {
     node.id = id;
     node.data = {
@@ -17,12 +17,11 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
     };
 
     let actualType = ( data.subtype ? data.subtype : data.type ) as any;
-    node.ref = {
-      dom: null,
+    node.rules = {
       canDrag: () => true,
       incoming: () => true,
       outgoing: () => true,
-      ...ref
+      ...rules
     }
 
     node.event = {
@@ -36,12 +35,21 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
       actualType = node.data.subtype;
     }
 
-    if ( actualType.related ) {
-      node.related = {};
-      Object.keys(actualType.related).forEach((comp) => {
-          node.related[comp] = () => React.createElement(NodeProvider, {id, related: true}, React.createElement(actualType.related[comp])) 
-      });
-  }
+    if ( actualType.craft ) {
+      if ( actualType.craft.rules ) {
+        Object.keys(actualType.craft.rules).forEach(key => {
+          if (['canDrag', 'incoming', 'outgoing'].includes(key)) {
+            node.rules[key] = actualType.craft.rules[key];
+          } 
+        });
+      } 
+      if ( actualType.craft.related ) {
+        node.related = {}
+        Object.keys(actualType.craft.related).forEach((comp) => {
+          node.related[comp] = () => React.createElement(NodeProvider, { id, related: true }, React.createElement(actualType.craft.related[comp]))
+        });
+      }
+    }
 
     node.data.name = name;
   }) as Node;

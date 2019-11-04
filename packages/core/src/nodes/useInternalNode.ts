@@ -1,15 +1,14 @@
 import { useContext, useMemo } from "react";
 import { NodeContext, NodeProvider } from "./NodeContext";
-import { Node, NodeRef, NodeRefEvent } from "../interfaces";
+import { Node, NodeRefEvent } from "../interfaces";
 import { useManager } from "../connectors";
 
-type setProp<P> = (props: P) => void;
 
 type internalActions = NodeProvider & {
   _inNodeContext: boolean,
   actions : {
     setProp: (cb: any) => void,
-    setRef: (cb: (ref: NodeRef) => void) => void,
+    setDOM: (dom: HTMLElement) => void,
     setNodeEvent: Function
   }
 }
@@ -30,13 +29,13 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S): useInter
   }
   
   const { id, related } = context;
-
-  const { actions: managerActions, query, ...collected } = collect ? useManager((state) => collect(state.nodes[id])) : useManager();
+  
+  const { actions: managerActions, query, ...collected } = collect ? useManager((state) => id && state.nodes[id] && collect(state.nodes[id])) : useManager();
   const actions = useMemo(() => {
     return {
       setProp: (cb: any) => managerActions.setProp(id, cb),
-      setRef: (cb: (ref: NodeRef) => void) => {
-        return managerActions.setRef(id, cb);
+      setDOM: (dom: HTMLElement) => {
+        return managerActions.setDOM(id, dom);
       },
         setNodeEvent: (action: keyof NodeRefEvent) => managerActions.setNodeEvent(action, id)
     }

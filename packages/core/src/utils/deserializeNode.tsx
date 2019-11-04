@@ -1,7 +1,7 @@
 import React from "react";
 import { NodeData, SerializedNodeData, ReducedComp, ReduceCompType } from "../interfaces";
 import { Canvas } from "../nodes";
-import { Resolver } from "../interfaces/root";
+import { Resolver } from "../interfaces";
 import { resolveComponent } from "./resolveComponent";
 
 const restoreType = (type: ReduceCompType, resolver: Resolver) => 

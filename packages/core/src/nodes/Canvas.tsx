@@ -17,7 +17,6 @@ export type Canvas = {
 } & React.Props<any> & any;
 
 
-export const isCanvas = (node: Node) => node.data.type === Canvas
 
 export const Canvas = ({ is = "div", children, passThrough, ...props }: Canvas) => {
   const id = props.id;
