@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from "react";
 import { Node  } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { useInternalManager } from "../manager/useInternalManager";
-import { wrapConnectorHooks } from "../utils/connectElement";
+import { wrapConnectorHooks } from "../utils/wrapConnectorHooks";
 import { NodeProvider } from "nodes/NodeContext";
 
 type ConnectedNodeShared = NodeProvider & {
