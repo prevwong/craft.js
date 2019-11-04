@@ -4,7 +4,7 @@ import { QueryMethods } from "./query";
 import { useCollector } from "craftjs-utils";
 import Actions from "./actions";
 import { ManagerContext } from "./ManagerContext";
-import { EventContext } from "../dnd/DNDManager";
+import { EventContext } from "../events";
 
 export type useInternalManager<C = null> = (C extends null ? useCollector<typeof Actions, typeof QueryMethods> : useCollector<typeof Actions, typeof QueryMethods, C>) & {
   _inContext: boolean;
