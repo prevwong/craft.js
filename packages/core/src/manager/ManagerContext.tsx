@@ -1,5 +1,5 @@
 import React, { createContext, useMemo } from "react";
-import { Options } from "../interfaces/root";
+import { Options } from "../interfaces";
 import { createOptions } from "./createOptions";
 import { createManagerStore, ManagerStore } from "../manager/store";
 import { Nodes, ManagerEvents } from "../interfaces";
@@ -7,7 +7,10 @@ import { ROOT_NODE } from "craftjs-utils";
 import { Canvas } from "../nodes";
 import { transformJSXToNode } from "../utils/transformJSX";
 
-export type ManagerContext = ManagerStore
+export type ManagerContext = ManagerStore & {
+  handlers: any
+}
+
 export type ManagerContextIntializer = {
   nodes?: Nodes,
   events?: ManagerEvents,
@@ -31,7 +34,10 @@ export const createManagerContext = (
 ) => {
   const { nodes, events, options } = data;
 
-  return createManagerStore(nodes, events, createOptions(options))
+  return {
+    ...createManagerStore(nodes, events, createOptions(options)),
+    handlers: {}
+  }
 }
 
 export const ManagerContext = createContext<ManagerContext>(null);

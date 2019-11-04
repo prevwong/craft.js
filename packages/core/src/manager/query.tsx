@@ -136,7 +136,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
       if (newParent) {
         invariant(isCanvas(newParentNode), ERROR_MOVE_TO_NONCANVAS_PARENT);
         invariant(
-          newParentNode.ref.incoming(targetNode),
+          newParentNode.rules.incoming(targetNode),
           ERROR_MOVE_INCOMING_PARENT
         );
       }
@@ -150,7 +150,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
           ERROR_MOVE_TO_DESCENDANT
         );
         invariant(
-          currentParentNode.ref.outgoing(targetNode),
+          currentParentNode.rules.outgoing(targetNode),
           ERROR_MOVE_OUTGOING_PARENT
         );
       }
@@ -162,7 +162,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
       target: NodeId,
       pos: { x: number; y: number },
       nodesToDOM: (node: Node) => HTMLElement = node =>
-        manager.nodes[node.id].ref.dom
+        manager.nodes[node.id].dom
     ) => {
       // console.log(source, target);
       if (source === target) return;
