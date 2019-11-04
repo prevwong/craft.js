@@ -17,8 +17,8 @@
     "noEmit": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "module": "esnext"
+    "module": "esnext",
+    "isolatedModules": true
   },
   "include": [
     "src/index.tsx"
