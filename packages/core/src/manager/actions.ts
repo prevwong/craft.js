@@ -1,4 +1,4 @@
-import { NodeId, Node, Nodes, NodeRef } from "../interfaces";
+import { NodeId, Node, Nodes } from "../interfaces";
 import { ManagerState } from "../interfaces";
 import { PlaceholderInfo } from "../dnd/interfaces";
 import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID, ROOT_NODE, CallbacksFor } from "craftjs-utils";
@@ -16,7 +16,7 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
   return {
     
     setPlaceholder(placeholder: PlaceholderInfo) {
-      if (placeholder && (!placeholder.placement.parent.ref.dom || (placeholder.placement.currentNode && !placeholder.placement.currentNode.ref.dom))) return;
+      if (placeholder && (!placeholder.placement.parent.dom || (placeholder.placement.currentNode && !placeholder.placement.currentNode.dom))) return;
       state.events.placeholder = placeholder;
     },
     setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
@@ -111,9 +111,9 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
       cb(state.nodes[id].data.props);
       // updateEventsNode(state, id);
     },
-    setRef(id: NodeId, cb: (ref: NodeRef) => void) {
+    setDOM(id: NodeId, dom: HTMLElement) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID)
-      cb(state.nodes[id].ref as NodeRef);
+      state.nodes[id].dom = dom;
       // updateEventsNode(state, id);
     }
 

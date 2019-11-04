@@ -18,7 +18,7 @@ export function useNode(): ConnectedNode
 export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S>
 export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S> {
   const {handlers} = useInternalManager();
-  const { id, related, actions: { setRef, setProp }, _inNodeContext, ...collected } = useInternalNode(collect);
+  const { id, related, actions: { setDOM, setProp }, _inNodeContext, ...collected } = useInternalNode(collect);
 
   const currentNode = useRef<HTMLElement>();
 
@@ -56,7 +56,7 @@ export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S>
           node.addEventListener('dragend', event.onDragEnd);
           currentNode.current = node;
 
-          setRef((ref) => ref.dom = node);
+          setDOM(node);
         }
       }
     });

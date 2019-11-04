@@ -6,7 +6,7 @@ import { useInternalManager } from "../manager/useInternalManager";
 import {debounce} from "lodash"
 
 export type EventContext = {
-  internal: Record<'onMouseDown' | 'onMouseOver', (e: MouseEvent, id: NodeId) => void>;;
+  internal: Record<'onMouseDown' | 'onMouseOver', (e: MouseEvent, id: NodeId) => void>;
   dnd: Record<'onDragStart' | 'onDragOver' | 'onDragEnd', Function> ;
 }
 export const EventContext = React.createContext<EventContext>(null);
@@ -51,6 +51,7 @@ export const EventManager: React.FC = ({ children }) => {
           const dragId = typeof start == 'object' ? start.id : start;
 
           const getPlaceholder = query.getDropPlaceholder(dragId, id, { x: e.clientX, y: e.clientY });
+          console.log(33, getPlaceholder)
           if (getPlaceholder) {
             if (typeof start == 'object' && start.id) {
               start.data.index = getPlaceholder.placement.index + (getPlaceholder.placement.where == 'after' ? 1 : 0);
@@ -88,8 +89,8 @@ export const EventManager: React.FC = ({ children }) => {
             suggestedStyles: {
               ...movePlaceholder(
                 events.placeholder.placement,
-                getDOMInfo(events.placeholder.placement.parent.ref.dom),
-                events.placeholder.placement.currentNode ? getDOMInfo(events.placeholder.placement.currentNode.ref.dom) : null
+                getDOMInfo(events.placeholder.placement.parent.dom),
+                events.placeholder.placement.currentNode ? getDOMInfo(events.placeholder.placement.currentNode.dom) : null
               ),
               transition: '0.2s ease-in'
             }
