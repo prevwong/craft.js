@@ -1,8 +1,6 @@
-import React, { useState, useMemo, useLayoutEffect, useCallback } from "react";
+import React, { useState, useMemo, useLayoutEffect } from "react";
 import { NodeElement, Canvas } from "../nodes";
-import { useManager } from "../connectors";
 import { ROOT_NODE } from "craftjs-utils";
-import { DNDManager } from "../dnd/DNDManager";
 import { useInternalManager } from "../manager/useInternalManager";
 import { useRef } from "react";
 
@@ -44,19 +42,7 @@ export const Renderer: React.FC<Renderer> = ({
     <>
       {
         rootNode ? (
-          React.createElement(is, {
-            ref: (ref: HTMLElement) => {
-              if ( ref && !dom.current) {
-                ref.addEventListener("mousedown", e => internal.onMouseDown(e, null), true);
-                dom.current = ref;
-              }
-            },
-            style: {
-              width: "100%",
-              height: "100%"
-            },
-            ...props,
-          }, <NodeElement id={ROOT_NODE} />)
+          React.createElement(is, props, <NodeElement id={ROOT_NODE} />)
         ) : null
       }  
     </>

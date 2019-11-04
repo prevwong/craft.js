@@ -19,6 +19,8 @@ export const Text = ({ fontSize = 12, children} : any) => {
     )
 }
 
-Text.related = {
-  toolbar: TextSettings
+Text.craft = {
+  related : {
+    toolbar: TextSettings
+  }
 }

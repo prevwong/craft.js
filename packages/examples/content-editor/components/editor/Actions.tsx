@@ -30,7 +30,7 @@ export const Actions = () => {
   const { id, activeDOM, deletable, moveable, actions, activeId, handlers } = useManager((state) => ({ 
     id: state.events.active && state.events.active.id,
     activeId: state.events.active && state.events.active.id, 
-    activeDOM: state.events.active && state.events.active.ref.dom,
+    activeDOM: state.events.active && state.events.active.dom,
     deletable: state.events.active && isDeletable(state.events.active),
     moveable: state.events.active && isMoveable(state.events.active)
   }))

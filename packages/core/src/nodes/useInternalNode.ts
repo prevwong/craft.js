@@ -1,6 +1,6 @@
 import { useContext, useMemo } from "react";
 import { NodeContext, NodeProvider } from "./NodeContext";
-import { Node, NodeRef, NodeRefEvent } from "../interfaces";
+import { Node, NodeRefEvent } from "../interfaces";
 import { useManager } from "../connectors";
 
 
@@ -8,7 +8,7 @@ type internalActions = NodeProvider & {
   _inNodeContext: boolean,
   actions : {
     setProp: (cb: any) => void,
-    setRef: (cb: (ref: NodeRef) => void) => void,
+    setDOM: (dom: HTMLElement) => void,
     setNodeEvent: Function
   }
 }
@@ -34,8 +34,8 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S): useInter
   const actions = useMemo(() => {
     return {
       setProp: (cb: any) => managerActions.setProp(id, cb),
-      setRef: (cb: (ref: NodeRef) => void) => {
-        return managerActions.setRef(id, cb);
+      setDOM: (dom: HTMLElement) => {
+        return managerActions.setDOM(id, dom);
       },
         setNodeEvent: (action: keyof NodeRefEvent) => managerActions.setNodeEvent(action, id)
     }

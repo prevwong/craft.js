@@ -7,22 +7,19 @@ export type Node =  {
   id: NodeId;
   data: NodeData;
   event: NodeRefEvent;
-  ref: NodeRef;
-  related: Record<string, React.ElementType>
+  dom: HTMLElement;
+  related: Record<string, React.ElementType>;
+  rules: NodeRules
 }
 
 export type NodeEvents = 'active' | 'dragging' | 'hover';
 export type InternalNode = Pick<Node, 'id'> & NodeData
 export type NodeRefEvent = Record<NodeEvents, boolean>
-
-export type NodeRef = {
-  dom: HTMLElement;
+export type NodeRules = {
   canDrag(): boolean;
   incoming?(incoming: Node): boolean;
   outgoing?(outgoing: Node): boolean;
-  getSettings?(): JSX.Element;
 }
-
 
 export type NodeData = {
   props: Record<string, any>,
