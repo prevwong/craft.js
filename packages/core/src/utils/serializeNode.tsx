@@ -1,7 +1,7 @@
 import React,{  Children } from "react";
 import { NodeData, ReducedComp, SerializedNodeData } from "../interfaces";
 import { Canvas } from "../nodes";
-import { Resolver } from "../interfaces/root";
+import { Resolver } from "../interfaces";
 import { resolveComponent } from "./resolveComponent";
 
 const reduceType = (type: React.ElementType | string, resolver: Resolver) => {

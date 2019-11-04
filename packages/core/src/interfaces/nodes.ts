@@ -1,4 +1,5 @@
 import React from "react";
+import { NodeProvider } from "nodes/NodeContext";
 
 export type NodeId = string;
 
@@ -6,22 +7,19 @@ export type Node =  {
   id: NodeId;
   data: NodeData;
   event: NodeRefEvent;
-  ref: NodeRef;
-  related: Record<string, React.ElementType>
+  dom: HTMLElement;
+  related: Record<string, React.ElementType>;
+  rules: NodeRules
 }
 
 export type NodeEvents = 'active' | 'dragging' | 'hover';
 export type InternalNode = Pick<Node, 'id'> & NodeData
 export type NodeRefEvent = Record<NodeEvents, boolean>
-
-export type NodeRef = {
-  dom: HTMLElement;
+export type NodeRules = {
   canDrag(): boolean;
   incoming?(incoming: Node): boolean;
   outgoing?(outgoing: Node): boolean;
-  getSettings?(): JSX.Element;
 }
-
 
 export type NodeData = {
   props: Record<string, any>,
@@ -49,12 +47,3 @@ export type SerializedNodeData = Omit<NodeData, 'type' | 'subtype' | 'name' | 'e
 export type Nodes = Record<NodeId, Node>
 export type TreeNode = Node & {children?: any}
 
-
-type ConnectedNodeShared = {
-  connectTarget: Function,
-  connectDragHandler: Function,
-  actions: any,
-  _inNodeContext: boolean
-}
-
-export type ConnectedNode<S = null> = S extends null ? ConnectedNodeShared : S & ConnectedNodeShared

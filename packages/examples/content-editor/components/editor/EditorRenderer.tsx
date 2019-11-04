@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Ref } from 'react';
 import { useManager } from 'craftjs';
 import { useState } from 'react';
 import {Actions} from "./Actions"
 
-export const EditorRenderer:React.FC = ({children, ...props}) => {
+export const EditorRenderer = ({children, ...props}) => {
   const { activeDOM, activeProps, closestParent, index} = useManager((state) => ({
-    activeDOM: state.events.active && state.events.active.ref.dom,
+    activeDOM: state.events.active && state.events.active.dom,
     activeProps: state.events.active && state.events.active.data.props,
     closestParent: state.events.active && state.events.active.data.parent,
     index: state.events.active && state.events.active.data.index
@@ -33,6 +33,7 @@ export const EditorRenderer:React.FC = ({children, ...props}) => {
 
   }, [activeDOM, activeProps, closestParent, index ]);
 
+  // console.log('re2');
   return (
     <div style={{ borderColor: "#EEECF1" }} className="p-4 w-full h-full overflow-auto flex items-center"  {...props}>
         {

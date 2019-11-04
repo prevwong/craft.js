@@ -42,8 +42,6 @@ export const Container = ({
 }: Partial<Container>) => {
   return (
     <Resizer
-      width={width}
-      height={height}
       propKey={{ width: "width", height: "height" }}
       style={{ 
         background: `rgba(${Object.values(background)})`, 
@@ -59,6 +57,12 @@ export const Container = ({
   );
 };
 
-Container.related = {
-  toolbar: ContainerSettings
+
+Container.craft = {
+  rules: {
+    canDrag: () => true
+  },
+  related: {
+    toolbar: ContainerSettings
+  }
 }

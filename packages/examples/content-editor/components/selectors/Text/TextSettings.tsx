@@ -13,14 +13,7 @@ export const TextSettings = () => {
         summary={({ fontSize }: any) => {
           return `${fontSize}`;
         }}>
-        <ToolbarItem propKey="fontSize" type="select" label="Font size">
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </ToolbarItem>
+        
         <ToolbarItem propKey="fontSize" type="number" label="Font sise" />
       </ToolbarSection>
      
