@@ -1,77 +1,74 @@
-import React, { cloneElement, useContext } from "react";
-import { Node, ConnectedNode, NodeRef } from "../interfaces";
-import invariant from "invariant";
+import React, { useMemo, useRef } from "react";
+import { Node  } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
-import { NodeContext } from "../nodes/NodeContext";
-import { isCanvas } from "../nodes";
-import { DNDContext } from "../dnd/DNDManager";
-import { ROOT_NODE } from "craftjs-utils";
+import { useInternalManager } from "../manager/useInternalManager";
+import { wrapConnectorHooks } from "../utils/connectElement";
+import { NodeProvider } from "nodes/NodeContext";
 
+type ConnectedNodeShared = NodeProvider & {
+  connectTarget: Function;
+  connectDragHandler: Function;
+  actions: any;
+  _inNodeContext: boolean
+}
+
+export type ConnectedNode<S = null> = S extends null ? ConnectedNodeShared : S & ConnectedNodeShared
 
 export function useNode(): ConnectedNode
 export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S>
 export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S> {
-  const handlers = useContext(DNDContext);
-  const { id, related, actions: { setRef, setProp, setNodeEvent }, _inNodeContext, ...collected } = useInternalNode(collect);
+  const {handlers} = useInternalManager();
+  const { id, related, actions: { setRef, setProp }, _inNodeContext, ...collected } = useInternalNode(collect);
+
+  const currentNode = useRef<HTMLElement>();
+
+  const event = useMemo(() => {
+    return {
+      onMouseDown: (e: MouseEvent) => handlers.internal.onMouseDown(e, id),
+      onMouseOver: (e: MouseEvent) => handlers.internal.onMouseOver(e, id),
+      onDragStart: (e: MouseEvent) => handlers.dnd.onDragStart(e, id),
+      onDragOver: (e: MouseEvent) => handlers.dnd.onDragOver(e, id),
+      onDragEnd: (e: MouseEvent) => handlers.dnd.onDragEnd(e)
+    }
+  }, []);
+
+  const connectors = useMemo(() => {
+    return wrapConnectorHooks({
+      connectDragHandler: (node) => {
+        if (node && currentNode.current !== node) {
+          if (currentNode.current) {
+            currentNode.current.removeEventListener('dragstart', event.onDragStart);
+          }
+          node.addEventListener('dragstart', event.onDragStart);
+        }
+      },
+      connectTarget: (node) => {
+        if ( node && currentNode.current !== node )  {
+          if ( currentNode.current) {
+            currentNode.current.removeEventListener('mousedown', event.onMouseDown);
+            currentNode.current.removeEventListener('mouseover', event.onMouseOver);
+            currentNode.current.removeEventListener('dragover', event.onMouseOver);
+            currentNode.current.removeEventListener('dragend', event.onMouseOver);
+          }
+          node.addEventListener('mousedown', event.onMouseDown, true);
+          node.addEventListener('mouseover', event.onMouseOver, true);
+          node.addEventListener('dragover', event.onDragOver);
+          node.addEventListener('dragend', event.onDragEnd);
+          currentNode.current = node;
+
+          setRef((ref) => ref.dom = node);
+        }
+      }
+    });
+  },[]);
 
   return {
+    id,
+    related,
     ...collected as any,
     actions: { setProp },
     _inNodeContext,
-    connectDragHandler: (render: any) => {
-      // if (!_inNodeContext || related) return render;
-      return React.cloneElement(render, {
-        draggable: id !== ROOT_NODE,
-        onDragStart: (e: React.MouseEvent) => {
-          e.stopPropagation();
-          handlers.onDragStart(e, id);
-        }
-      })
-    },
-    connectTarget: (render: any, methods: Exclude<NodeRef, 'dom' | 'event'>): React.ReactElement => {
-      if ( related  ) console.warn("connectTarget has no effect on a node's related components")
-      if (!_inNodeContext || related ) return render;
-      const previousRef = render.ref;
-      invariant(previousRef !== "string", "Cannot connect to an element with an existing string ref. Please convert it into a callback ref instead.");
-     
-
-      if ( methods ) {
-        setRef((ref) => {
-          Object.keys(methods).forEach((key: keyof Exclude<NodeRef, 'dom'>) => {
-              ref[key] = methods[key] as any;
-          });
-        });
-      }
-
-
-      return cloneElement(render, {
-        ref: (dom: HTMLElement) => {
-          if (dom) {
-            setRef((ref) => ref.dom = dom);
-          }
-
-          if (previousRef) previousRef(dom);
-        },
-        onMouseDown: (e: React.MouseEvent) => {
-          e.stopPropagation();
-          setNodeEvent('active');
-        },
-        onMouseOver: (e: React.MouseEvent) => {
-          e.stopPropagation();
-          setNodeEvent('hover');
-        },
-        onDragOver: (e: React.MouseEvent) => {
-          e.preventDefault();
-          e.stopPropagation();
-          handlers.onDragOver(e, id);
-        },
-       
-        onDragEnd: (e: React.MouseEvent)  => {
-          e.stopPropagation();
-          handlers.onDragEnd(e);
-        }
-      })
-    }
+    ...connectors
   }
 }
 
