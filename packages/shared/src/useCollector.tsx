@@ -38,16 +38,14 @@ export function useCollector<M extends Methods, Q extends QueryMethods, C>
   const [renderCollected, setRenderCollected] = useState(onCollect(collected.current));
 
   useEffect(() => {
+    let cancelled = false;
     let unsubscribe: Unsubscribe;
     if (collect && typeof onChange === 'function') {
       unsubscribe = subscribe(() => {
         const { current } = getState();
         const recollect = collect(current);
         
-        // console.log(recollect, collected.current, isEqualWith(recollect, collected.current))
-        if (!isEqualWith(recollect, collected.current)) {
-          // console.log("CHANGED!", collected.current, recollect);
-
+        if (!isEqualWith(recollect, collected.current) && !cancelled) {
           collected.current = recollect;
           (window as any).state = current;
           onChange(onCollect(collected.current), setRenderCollected);
@@ -55,6 +53,7 @@ export function useCollector<M extends Methods, Q extends QueryMethods, C>
       });
     }
     return (() => {
+      cancelled = true;
       if (unsubscribe) unsubscribe();
 
     })
