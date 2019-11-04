@@ -57,6 +57,12 @@ export const Container = ({
   );
 };
 
-Container.related = {
-  toolbar: ContainerSettings
+
+Container.craft = {
+  rules: {
+    canDrag: () => true
+  },
+  related: {
+    toolbar: ContainerSettings
+  }
 }
