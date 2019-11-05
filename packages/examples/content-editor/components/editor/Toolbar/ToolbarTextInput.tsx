@@ -10,18 +10,20 @@ const useStyles = makeStyles({
   root: {
     padding: 0,
     width:"100%",
-    background:"#efeff1",
+    // background:"#efeff1",
     borderRadius:"100px",
     border:"none",
     margin: 0,
+    marginTop: 7,
     position: "relative"
   },
   input: {
-    // background: "#efeff1",
+    background: "#efeff1",
     borderRadius: "100px",
     fontSize: "12px",
-    paddingLeft: "15px",
+    paddingLeft: "28px",
     paddingBottom: "8px",
+    paddingTop: "8px",
     margin: 0
   }, // a style rule
   // notchedOutline: {
@@ -32,11 +34,17 @@ const useStyles = makeStyles({
 
 
 const useLabelStyles = makeStyles({
+  root: {
+    color:'rgb(128,128,128)'
+  },
   formControl: {
+    fontSize: "18px",
     borderRadius: "100px",
-    paddingLeft: "3px",
+    paddingLeft: "0px",
     paddingTop: "3px",
-    fontSize: "14px"
+    marginBottom: "3px",
+    position: "relative",
+    left: "-12px",
   }, // a style rule
 });
 
@@ -99,14 +107,16 @@ export const ToolbarTextInput = ({ onChange, value, prefix, label, type, ...prop
             disableUnderline: true,
             startAdornment: (
               ['color', 'bg'].includes(type) ? 
-                <InputAdornment position="start">
+                <InputAdornment position="start" style={{position: "absolute", marginTop: "2px", marginRight: "8px"}}>
                   <div className="w-2 h-2 inline-block rounded-full relative" style={{ left: "15px", background: internalValue }} />
                 </InputAdornment>
               : null
             ),
           }}
           
-        InputLabelProps={{ classes: labelClasses, shrink: true,}}
+        InputLabelProps={{ classes: {
+          ...labelClasses
+        }, shrink: true,}}
           {...props}
         />
       </div>

@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/classnames": "^2.2.9",
+    "@types/node": "^12.12.5",
     "@types/react-color": "^3.0.1",
     "@types/styled-components": "^4.1.20",
     "babel-plugin-inline-react-svg": "^1.1.0",
