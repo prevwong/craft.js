@@ -27,21 +27,24 @@ const Btn = styled.a`
 `
 
 export const Actions = () => {
-  const { id, activeDOM, deletable, moveable, actions, activeId, handlers } = useManager((state) => ({ 
-    id: state.events.active && state.events.active.id,
-    activeId: state.events.active && state.events.active.id, 
-    activeDOM: state.events.active && state.events.active.dom,
-    deletable: state.events.active && isDeletable(state.events.active),
-    moveable: state.events.active && isMoveable(state.events.active)
+  const { active, handlers, actions } = useManager((state) => ({
+    active: state.events.active && state.nodes[state.events.active]
   }))
-
+  
   const info = useMemo(() => {
-    const { width, right, left, top} = activeDOM.getBoundingClientRect();
+    const { width, right, left, top} = active.dom.getBoundingClientRect();
     return {
       left: right,
       top: top
     }
-  }, [activeDOM]);
+  }, [active]);
+
+  const {deletable, moveable} = useMemo(() => {
+    return {
+      deletable: active && isDeletable(active),
+      moveable: active && isMoveable(active)
+    }
+  }, [active]);
 
   // console.log("root", isRoot)
   return (!deletable && !moveable) ? null : (
@@ -59,7 +62,7 @@ export const Actions = () => {
               }}
               onDragStart={(e: React.MouseEvent) => {
                 e.stopPropagation();
-                handlers.onDragStart(e, id);
+                handlers.onDragStart(e, active.id);
               }}
               onDragEnd={(e: React.MouseEvent) => {
                 e.stopPropagation();
@@ -74,7 +77,7 @@ export const Actions = () => {
           deletable ? (
             <Btn onMouseDown={(e: React.MouseEvent) => {
               e.stopPropagation();
-              actions.delete(activeId);
+              actions.delete(active.id);
 
             }}><Delete /></Btn>
           ) : null
