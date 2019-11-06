@@ -16,7 +16,6 @@ const ResizerDiv = styled.div`
   height: 100%;
   position: relative;
   display: flex;
-  align-items: center;
   .resizer-indicators {
     position: absolute;
     top: 0;
@@ -87,19 +86,27 @@ export const Resizer = ({
     const dom = resizable.current.resizable;
     if (!dom) return;
     let newWidth, newHeight;
+    
+    let currentWidth = parseInt(internalDimensions.current.width), currentHeight = parseInt(internalDimensions.current.height);
+    if ( !currentWidth) currentWidth = dom.getBoundingClientRect().width;
+    if ( !currentHeight) currentHeight = dom.getBoundingClientRect().height;
+
 
     if (!isPercentage(nodeWidth)) {
-      newWidth = parseInt(internalDimensions.current.width) + parseInt(width) + "px";
+      newWidth = currentWidth + parseInt(width) + "px";
     } else {
-      newWidth = (parseInt(internalDimensions.current.width) + pxToPercent(width, dom.parentElement.clientWidth)).toFixed(2) + "%";
+      newWidth = (currentWidth + pxToPercent(width, dom.parentElement.clientWidth)).toFixed(2) + "%";
     }
-
+  
+    
+  
     if (!isPercentage(nodeHeight)) {
-      newHeight = parseInt(internalDimensions.current.height) + parseInt(height) + "px";
+      newHeight = currentHeight + parseInt(height) + "px";
     } else {
-      newHeight = (parseInt(internalDimensions.current.height) + pxToPercent(height, dom.parentElement.clientHeight)).toFixed(2)+ "%";
+      newHeight = (currentHeight + pxToPercent(height, dom.parentElement.clientHeight)).toFixed(2) + "%";
     }
     
+
     return {
       width: newWidth,
       height: newHeight
@@ -113,11 +120,10 @@ export const Resizer = ({
         return acc;
       }, {})}
 
-        className={cx([{
-          'm-auto': isRootNode,
-          'flex': true,
-          'items-center': true
-        }])}
+      className={cx([{
+        'm-auto': isRootNode,
+        'flex': true,
+      }])}
         ref={(ref) => {
           if ( ref ) {
             resizable.current = ref;
@@ -160,10 +166,9 @@ export const Resizer = ({
             }
           })
         }}
+      {...props}
       >
-        <ResizerDiv
-          {...props}
-        >
+       
           {children}
           {active && (
             <div className={cx(['resizer-indicators'])}>
@@ -173,7 +178,6 @@ export const Resizer = ({
               <span></span>
             </div>
           )}
-        </ResizerDiv>
       </Resizable>
   );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import {useNode} from 'craftjs';
 import { ToolbarSection, ToolbarItem } from "../../editor"
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Grid, Divider, Typography, Chip, TextField } from '@material-ui/core'
+import { ToolbarRadio } from '../../editor/Toolbar/ToolbarRadio';
 
 export const ContainerSettings = () => {
   const { width, height, actions: { setProp } } = useNode((node) => ({ width: node.data.props.width || 0, height: node.data.props.height || 0 }));
@@ -34,25 +35,25 @@ export const ContainerSettings = () => {
       </ToolbarSection>
       <ToolbarSection
         title="Margin"
-        props={['marginTop', 'marginBottom', 'marginLeft', 'marginRight']}
-        summary={({ marginTop, marginRight, marginBottom, marginLeft }: any) => {
-          return `${marginTop || 0}px ${marginRight || 0}px ${marginBottom || 0}px ${marginLeft || 0}px`;
+        props={['margin']}
+        summary={({ margin }: any) => {
+          return `${margin[0] || 0}px ${margin[1] || 0}px ${margin[2] || 0}px ${margin[3] || 0}px`;
         }}>
-        <ToolbarItem propKey="marginTop" type="number" label="Top" />
-        <ToolbarItem propKey="marginBottom" type="number" label="Bottom" />
-        <ToolbarItem propKey="marginLeft" type="number" label="Left" />
-        <ToolbarItem propKey="marginRight" type="number" label="Right" />
+        <ToolbarItem propKey="margin" index={0} type="slider" label="Top" />
+        <ToolbarItem propKey="margin" index={1} type="slider" label="Right" />
+        <ToolbarItem propKey="margin" index={2} type="slider" label="Bottom" />
+        <ToolbarItem propKey="margin" index={3} type="slider" label="Left" />
       </ToolbarSection>
       <ToolbarSection
         title="Padding"
-        props={['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight']}
-        summary={({ paddingTop, paddingRight, paddingBottom, paddingLeft }: any) => {
-          return `${paddingTop || 0}px ${paddingRight || 0}px ${paddingBottom || 0}px ${paddingLeft || 0}px`;
+        props={['padding']}
+        summary={({ padding}: any) => {
+          return `${padding[0] || 0}px ${padding[1] || 0}px ${padding[2] || 0}px ${padding[3] || 0}px`;
         }}>
-        <ToolbarItem propKey="paddingTop" type="number" label="Top" />
-        <ToolbarItem propKey="paddingBottom" type="number" label="Bottom" />
-        <ToolbarItem propKey="paddingLeft" type="number" label="Left" />
-        <ToolbarItem propKey="paddingRight" type="number" label="Right" />
+        <ToolbarItem propKey="padding" index={0} type="slider" label="Top" />
+        <ToolbarItem propKey="padding" index={1} type="slider" label="Right" />
+        <ToolbarItem propKey="padding" index={2} type="slider" label="Bottom" />
+        <ToolbarItem propKey="padding" index={3} type="slider" label="Left" />
       </ToolbarSection>
       <ToolbarSection
         title="Decoration"
@@ -61,7 +62,24 @@ export const ContainerSettings = () => {
         <ToolbarItem full={true} propKey="radius" type="slider" label="Radius" />
         <ToolbarItem full={true} propKey="shadow" type="slider" label="Shadow" />
       </ToolbarSection>
-     
+      <ToolbarSection
+        title="Allignment"
+        >
+        <ToolbarItem propKey="flexDirection" type="radio" label="Flex Direction">
+          <ToolbarRadio value="row" label="Row" />
+          <ToolbarRadio value="column" label="Column" />
+        </ToolbarItem>
+        <ToolbarItem propKey="alignItems" type="radio" label="Align Items">
+          <ToolbarRadio value="flex-start" label="Flex start" />
+          <ToolbarRadio value="center" label="Center" />
+          <ToolbarRadio value="flex-end" label="Flex end" />
+        </ToolbarItem>
+        <ToolbarItem propKey="justifyContent" type="radio" label="Justify Content">
+          <ToolbarRadio value="flex-start" label="Flex start" />
+          <ToolbarRadio value="center" label="Center" />
+          <ToolbarRadio value="flex-end" label="Flex end" />
+        </ToolbarItem>
+      </ToolbarSection>
 
     </React.Fragment>
   );

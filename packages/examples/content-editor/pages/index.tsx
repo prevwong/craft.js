@@ -9,7 +9,7 @@ import "../styles/tailwind.css";
 const theme = createMuiTheme({
   typography: {
     fontFamily: [
-      'Source Sans Pro',
+      'acumin-pro',
       'Roboto',
       '"Helvetica Neue"',
       'Arial',
@@ -40,8 +40,30 @@ function App() {
                   style={{ background: "rgb(224, 224, 224)", width: "100%", height: "100%" }}
                 >
                   <Renderer is={EditorRenderer}>
-                    <Canvas is={Container} background={{ r: 255, g: 255, b: 255, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }} height="100%" width="50%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}>
-                      <Text fontSize={20} fontWeight="400" textAlign="center" color={{ r: 0, g: 0, b: 0, a: 1 }} >Hi There</Text>
+                    <Canvas is={Container}  width="80%" height="3170px" background={{r:255,g:255,b:255,a:1}} padding={["40","40","40","40"]}>
+                      <Canvas is={Container} flexDirection="row" width="100%" height="227px" padding={["40", "40", "40", "40"]} margin={["0", "0", "40", "0"]}>
+                        <Canvas is={Container} width="40%" height="100%" padding={["0", "20", "0", "20"]}>
+                          <Text fontSize="23" text="Craft.js is a React framework for building powerful &amp; feature-rich drag-n-drop page editors."></Text>
+                        </Canvas>
+                        <Canvas is={Container} width="60%" height="100%" padding={["0", "20", "0", "20"]}>
+                          <Text fontSize="14" text="Everything you see here, including the editor itself are just React components. Craft.js comes only with the building blocks for a page editor - it provides a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things.<br/><br/>You control the way your editor looks and behave."></Text>
+                        </Canvas>
+                      </Canvas>
+                      <Canvas is={Container} background={{ r: 39, g: 41, b: 41, a: 1 }} flexDirection="row" width="100%" height="auto" padding={["60", "40", "60", "40"]} margin={["0", "0", "40", "0"]}>
+                        <Canvas is={Container} width="auto" height="100%" padding={["0", "20", "0", "20"]}>
+                          <Canvas is={Container} justifyContent="center" alignItems="center" background={{ r: 76, g: 78, b: 78, a: 1 }} shadow={25} width="300px" height="250px" padding={["10", "20", "10", "20"]}>
+                            <Canvas is={Container} justifyContent="center" alignItems="center" background={{ r: 76, g: 78, b: 78, a: 1 }} shadow={50} width="80%" height="80%" padding={["10", "20", "10", "20"]}>
+                              <Canvas is={Container} justifyContent="center" alignItems="center" background={{ r: 76, g: 78, b: 78, a: 1 }} shadow={50} width="60%" height="60%" padding={["10", "20", "10", "20"]} />
+                            </Canvas>
+                          </Canvas>
+                        </Canvas>
+                        <Canvas is={Container} width="400px" height="100%" padding={["0", "50", "0", "50"]}>
+                          <Canvas is={Container} width="100%" height="auto" padding={["0", "0", "20", "0"]}>
+                            <Text color={{r:"255",g:"255",b:"255",a:"1"}} fontSize="20" text="Design complex components"></Text>
+                          </Canvas>
+                          <Text color={{ r: "255", g: "255", b: "255", a: "0.8" }} fontSize="14" text="You can define areas within your React component that allows users to drop other components into.<br/><br/>You can even design how the component should be edited - content editable, drag to resize, have inputs on toolbars — anything really. "></Text>
+                        </Canvas>
+                      </Canvas>
                     </Canvas>
                   </Renderer>
                 </div>

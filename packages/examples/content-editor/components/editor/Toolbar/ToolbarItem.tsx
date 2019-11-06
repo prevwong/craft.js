@@ -65,13 +65,16 @@ export type ToolbarItem = {
   label?: string;
   full?: boolean;
   propKey?: string;  
+  index?: number;
   children?: React.ReactNode;  
   type: string;
   onChange?: (value: any) => any
 }
-export const ToolbarItem = ({  full = false, propKey, type, onChange, ...props }: ToolbarItem) => {
+export const ToolbarItem = ({  full = false, propKey, type, onChange, index, ...props }: ToolbarItem) => {
 
-  const { actions, value } = useNode((node) => ({ value: node.data.props[propKey] }));
+  const { actions, propValue } = useNode((node) => ({ propValue: node.data.props[propKey] }));
+  const value = Array.isArray(propValue) ? propValue[index] : propValue;
+
     return (
         <Grid item xs={full ? 12 : 6}>
           <div className='mb-2'>
@@ -79,7 +82,11 @@ export const ToolbarItem = ({  full = false, propKey, type, onChange, ...props }
              ['text', 'color', 'bg', 'number'].includes(type) ? (
             <ToolbarTextInput {...props} type={type} value={value} onChange={(value) => {
               actions.setProp((props: any) => {
-                props[propKey] = onChange ? onChange(value) : value
+                if ( Array.isArray(propValue) ) {
+                  props[propKey][index] = onChange ? onChange(value) : value
+                } else {
+                  props[propKey] = onChange ? onChange(value) : value
+                }
               })
             
             }} />
@@ -88,11 +95,14 @@ export const ToolbarItem = ({  full = false, propKey, type, onChange, ...props }
                 {
                   props.label ? <h4 className='text-sm text-light-gray-2'>{props.label}</h4> : null
                 }
-                <SliderStyled value={value || 0} onChange={(e, value: number) => {
+                <SliderStyled value={parseInt(value) || 0} onChange={(e, value: number) => {
                 
                   actions.setProp((props: any) => {
-                    // console.log("updating", propKey, value)
-                    props[propKey] = onChange ? onChange(value) : value;
+                    if (Array.isArray(propValue)) {
+                      props[propKey][index] = onChange ? onChange(value) : value
+                    } else {
+                      props[propKey] = onChange ? onChange(value) : value
+                    }
                   })
                 }} />
               </>
