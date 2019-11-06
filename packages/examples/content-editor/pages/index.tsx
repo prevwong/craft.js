@@ -9,7 +9,7 @@ import "../styles/tailwind.css";
 const theme = createMuiTheme({
   typography: {
     fontFamily: [
-      'Whitney',
+      'Source Sans Pro',
       'Roboto',
       '"Helvetica Neue"',
       'Arial',
@@ -41,13 +41,7 @@ function App() {
                 >
                   <Renderer is={EditorRenderer}>
                     <Canvas is={Container} background={{ r: 255, g: 255, b: 255, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }} height="100%" width="50%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}>
-                      <Canvas is={Container} background={{ r: 78, g: 78, b: 78, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }} height="100%" width="50%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}>
-                        <Canvas is={Container} background={{ r: 0, g: 0, b: 0, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }} height="100%" width="50%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}></Canvas>
-                        <Canvas is={Container} background={{ r: 128, g: 128, b: 128, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }} height="100%" width="20%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}>
-                          <Canvas is={Container} background={{ r: 0, g: 0, b: 0, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }} height="100%" width="50%" paddingTop={2} paddingLeft={2} paddingBottom={2} paddingRight={2}></Canvas>
-
-                        </Canvas>
-                      </Canvas>
+                      <Text fontSize={20} fontWeight="400" textAlign="center" color={{ r: 0, g: 0, b: 0, a: 1 }} >Hi There</Text>
                     </Canvas>
                   </Renderer>
                 </div>

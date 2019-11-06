@@ -1,7 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,500,700&display=swap');
 html, body {
-  font-family: Whitney, sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
+  color: rgb(75,75,75);
 }

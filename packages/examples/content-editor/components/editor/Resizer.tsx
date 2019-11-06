@@ -4,8 +4,7 @@ import { Resizable } from "re-resizable";
 import { isRoot, useNode, useManager } from "craftjs";
 import cx from "classnames";
 import {  isPercentage, pxToPercent, measurementToPx, percentToPx } from "../../utils/numToMeasurement";
-import { useCallback } from "react";
-
+import {debounce} from "lodash";
 export type Resizer = {
   propKey: Record<'width' | 'height', string>
   children: React.ReactNode;
@@ -72,20 +71,20 @@ export const Resizer = ({
     nodeHeight: node.data.props[propKey.height]
   }));
 
-
-  const dom = resizable.current && resizable.current.resizable;
   const internalDimensions = useRef<any>({ width: nodeWidth, height: nodeHeight });
 
-  useEffect(() => {
-    if (isResizing.current || (!dom || !dom.parentElement)) return;
-    internalDimensions.current = {
-      width: nodeWidth,
-      height: nodeHeight
-    }
-    resizable.current.updateSize(internalDimensions.current);
-  }, [nodeWidth, nodeHeight]);
+  // useEffect(() => {
+  //   const dom = resizable.current.resizable;
+  //   if (isResizing.current || (!dom || !dom.parentElement)) return;
+  //   internalDimensions.current = {
+  //     width: nodeWidth,
+  //     height: nodeHeight
+  //   }
+  //   resizable.current.updateSize(internalDimensions.current);
+  // }, [nodeWidth, nodeHeight]);
 
   const updateInternalDimension = (width, height) => {
+    const dom = resizable.current.resizable;
     if (!dom) return;
     let newWidth, newHeight;
 
@@ -125,32 +124,41 @@ export const Resizer = ({
             connectTarget(resizable.current.resizable);
           }
         }}
-        defaultSize={{ width: nodeWidth, height: nodeHeight }}
+        size={{width: nodeWidth, height: nodeHeight}}
         onResizeStart={(e) => {
           e.preventDefault();
           e.stopPropagation();
           isResizing.current = true;
         }}
-        onResize={(e, direction, ref, d) => {
+        onResize={debounce((e, direction, ref, d) => {
           e.preventDefault();
           e.stopPropagation();
           const n = updateInternalDimension(d.width, d.height);
           if (!n) return;
+
+      
+
           actions.setProp((prop: any) => {
             prop[propKey.width] = n.width;
             prop[propKey.height] = n.height;
           })
-        }}
+        })}
         onResizeStop={(e, __, ___, d) => {
           e.preventDefault();
-          if (!active) return
-          const n = updateInternalDimension(d.width, d.height);
-          if ( !n ) return;
-          isResizing.current = false;
-          internalDimensions.current = {
-            width: n.width,
-            height: n.height
-          }
+          setTimeout(() => {
+            if (!active) return
+            const n = updateInternalDimension(d.width, d.height);
+            // if ( !n ) return;
+            actions.setProp((prop: any) => {
+              prop[propKey.width] = n.width;
+              prop[propKey.height] = n.height;
+            })
+            isResizing.current = false;
+            internalDimensions.current = {
+              width: n.width,
+              height: n.height
+            }
+          })
         }}
       >
         <ResizerDiv

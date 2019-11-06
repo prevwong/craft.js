@@ -51,7 +51,7 @@ export const EventManager: React.FC = ({ children }) => {
           const dragId = typeof start == 'object' ? start.id : start;
 
           const getPlaceholder = query.getDropPlaceholder(dragId, id, { x: e.clientX, y: e.clientY });
-          console.log(33, getPlaceholder)
+
           if (getPlaceholder) {
             if (typeof start == 'object' && start.id) {
               start.data.index = getPlaceholder.placement.index + (getPlaceholder.placement.where == 'after' ? 1 : 0);

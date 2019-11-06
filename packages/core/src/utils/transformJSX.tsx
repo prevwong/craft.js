@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import { Canvas } from '../nodes';
-import { NodeId, NodeRef, NodeData } from '../interfaces';
+import { NodeId, NodeData, NodeRules } from '../interfaces';
 import { createNode } from './createNode';
 const shortid = require('shortid');
 
-type Extras = { id: NodeId, ref: Partial<NodeRef>, data: Partial<NodeData> };
-export function transformJSXToNode(child: React.ReactElement | string, extras: Partial<Extras> = {id: null, ref: {}, data:{}}) {
+type Extras = { id: NodeId, data: Partial<NodeData> };
+export function transformJSXToNode(child: React.ReactElement | string, extras: Partial<Extras> = {id: null, data:{}}) {
   if (typeof (child) === "string") {
     child = React.createElement(Fragment, {}, child);
   }
@@ -17,5 +17,5 @@ export function transformJSXToNode(child: React.ReactElement | string, extras: P
     type: type,
     props,
     ...extras.data
-  }, id, extras.ref);
+  }, id);
 }

@@ -27,8 +27,8 @@ import {
   ERROR_NOPARENT,
   getDOMInfo,
 } from "craftjs-utils";
-import findPosition from "../dnd/findPosition";
-import { PlaceholderInfo } from "../dnd/interfaces";
+import findPosition from "../events/findPosition";
+import { PlaceholderInfo } from "../events/interfaces";
 import { getDeepNodes } from "../utils/getDeepNodes";
 import { transformJSXToNode } from "../utils/transformJSX";
 

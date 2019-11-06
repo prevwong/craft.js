@@ -1,5 +1,5 @@
-import { Nodes, Node, NodeEvents } from "./nodes";
-import { PlaceholderInfo } from "../dnd/interfaces";
+import { Nodes, Node, NodeEvents, NodeId } from "./nodes";
+import { PlaceholderInfo } from "../events/interfaces";
 import { useInternalManager } from "../manager/useInternalManager";
 import { Placeholder } from "../render/RenderPlaceholder";
 
@@ -13,7 +13,7 @@ export type Options = {
 export type Resolver = Record<string, string | React.ElementType>;
 
 
-export type ManagerEvents = Record<NodeEvents, Node> & {
+export type ManagerEvents = Record<NodeEvents, NodeId> & {
   placeholder: PlaceholderInfo
 }
 

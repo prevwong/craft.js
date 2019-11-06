@@ -55,21 +55,13 @@ export const ContainerSettings = () => {
         <ToolbarItem propKey="paddingRight" type="number" label="Right" />
       </ToolbarSection>
       <ToolbarSection
-        title="Rounded"
-        props={['radius']}
-        summary={({ radius }: any) => {
-          return `${radius || 0}`;
-        }}>
+        title="Decoration"
+        props={['radius', 'shadow']}
+        >
         <ToolbarItem full={true} propKey="radius" type="slider" label="Radius" />
-      </ToolbarSection>
-       <ToolbarSection
-        title="Shadow"
-        props={['shadow']}
-        summary={({ shadow }: any) => {
-          return `${shadow || 0}`;
-        }}>
         <ToolbarItem full={true} propKey="shadow" type="slider" label="Shadow" />
       </ToolbarSection>
+     
 
     </React.Fragment>
   );

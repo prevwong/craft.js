@@ -1,5 +1,4 @@
 import React from "react";
-import { NodeProvider } from "nodes/NodeContext";
 
 export type NodeId = string;
 

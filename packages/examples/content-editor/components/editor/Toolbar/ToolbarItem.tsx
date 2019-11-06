@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import cx from 'classnames';
-import { Grid, Slider, makeStyles } from '@material-ui/core'
+import { Grid, Slider, makeStyles, RadioGroup } from '@material-ui/core'
 import { useNode } from 'craftjs';
 import { ToolbarTextInput } from './ToolbarTextInput'
 import { ToolbarDropdown } from './ToolbarDropdown'
@@ -66,34 +66,56 @@ export type ToolbarItem = {
   full?: boolean;
   propKey?: string;  
   children?: React.ReactNode;  
-  type: string
+  type: string;
+  onChange?: (value: any) => any
 }
-export const ToolbarItem = ({  full = false, propKey, type, ...props }: ToolbarItem) => {
+export const ToolbarItem = ({  full = false, propKey, type, onChange, ...props }: ToolbarItem) => {
 
   const { actions, value } = useNode((node) => ({ value: node.data.props[propKey] }));
     return (
-        <Grid item xs={full ? 12 : 6} >
+        <Grid item xs={full ? 12 : 6}>
+          <div className='mb-2'>
            {
              ['text', 'color', 'bg', 'number'].includes(type) ? (
             <ToolbarTextInput {...props} type={type} value={value} onChange={(value) => {
-              console.log("receive", value, propKey)
               actions.setProp((props: any) => {
-                props[propKey] = value
+                props[propKey] = onChange ? onChange(value) : value
               })
             
             }} />
              ) : type == 'slider' ? (
-              <SliderStyled value={value || 0} onChange={(e, value: number) => {
-               
-                actions.setProp((props: any) => {
-                  // console.log("updating", propKey, value)
-                  props[propKey] = value
-                })
-              }} />
+              <>
+                {
+                  props.label ? <h4 className='text-sm text-light-gray-2'>{props.label}</h4> : null
+                }
+                <SliderStyled value={value || 0} onChange={(e, value: number) => {
+                
+                  actions.setProp((props: any) => {
+                    // console.log("updating", propKey, value)
+                    props[propKey] = onChange ? onChange(value) : value;
+                  })
+                }} />
+              </>
+             ) : type == 'radio' ? (
+              <>
+                {
+                  props.label ? <h4 className='text-sm text-light-gray-2'>{props.label}</h4> : null
+                }
+                <RadioGroup value={value || 0} onChange={(e) => {
+                  const value = e.target.value;
+                  actions.setProp((props: any) => {
+                    // console.log("updating", propKey, value)
+                    props[propKey] = onChange ? onChange(value) : value;
+                  })
+                }}>
+                  {props.children}
+                </RadioGroup>
+              </>
              ) : type == 'select' ? (
-               <ToolbarDropdown value={value || ''} onChange={(value) => actions.setProp((props: any) => props[propKey] = value)}  {...props} />
+               <ToolbarDropdown value={value || ''} onChange={(value) => actions.setProp((props: any) => props[propKey] = onChange ? onChange(value) : value)}  {...props} />
              ) : null
            }
+           </div>
         </Grid>
     )
 }

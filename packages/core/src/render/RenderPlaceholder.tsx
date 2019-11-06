@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { PlaceholderInfo } from "../dnd/interfaces";
+import { PlaceholderInfo } from "../events/interfaces";
 import { useManager } from "../connectors";
 
 export type Placeholder = {

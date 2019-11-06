@@ -6,9 +6,12 @@ const usePanelStyles = makeStyles(theme => ({
   root: {
     background: "transparent", 
     boxShadow: "none",
+    "&:before" : {
+      backgroundColor: "rgba(0, 0, 0, 0.05)"
+    },
     "&.Mui-expanded": {
       margin: "0 0",
-      minHeight: "50px",
+      minHeight: "40px",
       "&:before" : {
         opacity: "1"
       },
@@ -50,18 +53,22 @@ export const ToolbarSection = ({title, props, summary, children}: any) => {
           spacing={3}
         >
           <Grid item xs={4}>
-            <h5 className='text-xs text-light-gray-1 text-left font-medium text-dark-blue uppercase'>{title}</h5>
+            <h5 className='text-xs text-light-gray-1 text-left font-medium uppercase text-dark-gray'>{title}</h5>
           </Grid>
-          <Grid item xs={8}>
-            <h5 className='text-light-gray-2 text-sm text-right text-dark-blue'>{
-              summary(
-                props.reduce((acc: any, key: any) => {
-                  acc[key] = nodeProps[key];
-                  return acc;
-                }, {})
-              )
-            }</h5>
-          </Grid>
+          {
+            summary ? (
+              <Grid item xs={8}>
+                <h5 className='text-light-gray-2 text-sm text-right text-dark-blue'>{
+                  summary(
+                    props.reduce((acc: any, key: any) => {
+                      acc[key] = nodeProps[key];
+                      return acc;
+                    }, {})
+                  )
+                }</h5>
+              </Grid> 
+            ) : null
+          }
         </Grid>
         </div>
       </ExpansionPanelSummary>
