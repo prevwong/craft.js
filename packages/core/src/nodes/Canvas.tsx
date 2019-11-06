@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { NodeId, Node } from "../interfaces";
 import { NodeElement } from "./NodeElement";
 import { SimpleElement } from "../render/RenderNode";
@@ -8,17 +8,20 @@ import { useInternalManager } from "../manager/useInternalManager";
 import { ERROR_ROOT_CANVAS_NO_ID, ERROR_INFINITE_CANVAS } from "craftjs-utils";
 const invariant = require("invariant");
 
-export type Canvas = {
+type GetComponentProps<T> = T extends React.ComponentType<infer P> | React.Component<infer P> ? P : never
+
+export type Canvas<T> = {
   id?: NodeId,
   style?: any,
   className?: any,
-  is?: React.ElementType
+  is?: T;
+  children?: React.ReactNode;
   passThrough?: boolean
-} & React.Props<any> & any;
+} & GetComponentProps<T>;
 
 
 
-export const Canvas = ({ is = "div", children, passThrough, ...props }: Canvas) => {
+export function Canvas<T>({ is, children, passThrough, ...props }: Canvas<T>) {
   const id = props.id;
   const { actions: { add }, query, _inContext } = useInternalManager();
   const { node, nodeId, _inNodeContext } = useInternalNode((node) => ({ node: node.data, nodeId: node.id }));
@@ -44,7 +47,9 @@ export const Canvas = ({ is = "div", children, passThrough, ...props }: Canvas) 
           let internalId;
 
           if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
-            const rootNode = query.transformJSXToNode(<Canvas is={is} {...props}>{children}</Canvas>);
+            const rootNode = query.transformJSXToNode(
+              React.createElement(Canvas, {is, ...props} as any, children)
+            );
             internalId = rootNode.id;
             add(rootNode, nodeId);
           } else {
@@ -79,7 +84,7 @@ export const Canvas = ({ is = "div", children, passThrough, ...props }: Canvas) 
                   <NodeElement id={internalId} />
                 ) : null
               )
-            ) : React.createElement(is, props, children)
+            ) : React.createElement(is as any, props, children)
         ) : null
       }
     </React.Fragment>
