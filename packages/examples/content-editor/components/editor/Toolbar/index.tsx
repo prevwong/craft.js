@@ -9,7 +9,7 @@ export * from "./ToolbarDropdown";
 export const Toolbar = () => {
   const { active, related } = useManager(state => ({
     active: state.events.active,
-    related: state.events.active && state.events.active.related
+    related: state.events.active && state.nodes[state.events.active].related
   }));
 
   return (

@@ -4,7 +4,9 @@ import produce from "immer";
 import { isCanvas } from "../nodes";
 import { NodeProvider } from "../nodes/NodeContext";
 
-export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id?: NodeId, rules: Partial<NodeRules> = {}): Node {
+export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id?: NodeId): Node {
+ 
+  let actualType = (data.subtype ? data.subtype : data.type) as any;
   let node = produce({}, (node: Node) => {
     node.id = id;
     node.data = {
@@ -12,16 +14,15 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
       parent: data.parent || null,
       name: null,
       props: {
-        ...data.props
+        ...data.props,
       }
     };
 
-    let actualType = ( data.subtype ? data.subtype : data.type ) as any;
+
     node.rules = {
       canDrag: () => true,
       incoming: () => true,
-      outgoing: () => true,
-      ...rules
+      outgoing: () => true
     }
 
     node.event = {
@@ -33,6 +34,11 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
     if (isCanvas(node)) {
       node.data.subtype = data.subtype ? data.subtype : node.data.props.is ? node.data.props.is : 'div';
       actualType = node.data.subtype;
+    }
+
+    node.data.props = {
+      ...((actualType.craft && actualType.craft.defaultProps) || {}),
+      ...node.data.props,
     }
 
     if ( actualType.craft ) {
@@ -54,5 +60,6 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
     node.data.name = name;
   }) as Node;
 
+  console.log("Create", node, actualType.craft)
   return node;
 }
