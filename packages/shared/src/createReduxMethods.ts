@@ -7,7 +7,8 @@ export type SubscriberAndCallbacksFor<M extends MethodsOrOptions, Q extends Quer
   subscribe: Subscriber,
   getState: () => { prev: StateFor<M>, current: StateFor<M> },
   actions: CallbacksFor<M>,
-  query: QueryCallbacksFor<Q>
+  query: QueryCallbacksFor<Q>,
+  cleanup: Unsubscribe
 };
 
 export type StateFor<M extends MethodsOrOptions> = M extends MethodsOrOptions<infer S, any>
@@ -57,10 +58,11 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<a
 export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends QueryMethods>(
   methodsOrOptions: Methods<S, R, QueryCallbacksFor<Q>>,
   initialState: any,
-  queryFactory?: {
-    methods: Q,
-    options: any
-  }
+  queryMethods?: Q,
+  // queryFactory?: {
+  //   methods: Q,
+  //   options: any
+  // }
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q> {
 
   let prevState = initialState;
@@ -76,8 +78,8 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
     return (produce as Function)(
       state,
       (draft: S) => {
-        if (methods(draft, queryFactory && queryFactory.methods(state, queryFactory.options))[action.type]) {
-          return methods(draft, queryFactory && queryFactory.methods(state, queryFactory.options))[action.type](...action.payload)
+        if (methods(draft, queryMethods(state))[action.type]) {
+          return methods(draft, queryMethods(state))[action.type](...action.payload)
         }
       },
       patchListener,
@@ -87,13 +89,16 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
 
   const { state, dispatch, subscribe, getState } = createStore(reducer, initialState);
 
+  let currentState = getState();
 
-  const query = queryFactory ? (Object.keys(queryFactory.methods()) as Array<keyof QueryCallbacksFor<typeof queryFactory.methods>>).reduce((accum, key) => {
+  const cleanup = subscribe(() => currentState = getState());
+
+  const query = queryMethods ? (Object.keys(queryMethods()) as Array<keyof QueryCallbacksFor<typeof methods>>).reduce((accum, key) => {
     return {
       ...accum,
-      [key]: (...args: any) => queryFactory.methods(getState(), queryFactory.options)[key](...args)
+      [key]: (...args: any) => queryMethods(currentState)[key](...args)
     };
-  }, {} as QueryCallbacksFor<typeof queryFactory.methods>) : null;
+  }, {} as QueryCallbacksFor<typeof queryMethods>) : null;
 
 
  
@@ -113,8 +118,9 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
   
   return {
     subscribe,
-    getState: () => ({ prev: prevState, current: getState() }),
+    getState: () => ({ prev: prevState, current: currentState }),
     actions,
-    query
+    query,
+    cleanup
   };
 }
