@@ -4,11 +4,16 @@ import { Canvas } from "../nodes";
 import { Resolver } from "../interfaces";
 import { resolveComponent } from "./resolveComponent";
 
-const restoreType = (type: ReduceCompType,  resolver: Resolver) => 
-  typeof type === "object" && type.resolvedName ? 
-    resolver[type.resolvedName] : 
-    typeof type === "string" ? 
+
+const restoreType = (type: ReduceCompType, resolver: Resolver) =>
+  typeof type === "object" && type.resolvedName ?
+    (
+      type.resolvedName == "Canvas" ? Canvas :
+        resolver[type.resolvedName]
+    ) :
+    typeof type === "string" ?
       type : null;
+
 
 export const deserializeComp = (data: ReducedComp, resolver: Resolver, index?: number): JSX.Element & {subtype?: React.ElementType | string} & { name: string } => {
   let { type, props } = data;
@@ -22,6 +27,12 @@ export const deserializeComp = (data: ReducedComp, resolver: Resolver, index?: n
     const prop = props[key];
     if (typeof prop === "object" && prop.resolvedName) {
       result[key] = deserializeComp(prop, resolver);
+    }
+    else if ( key === 'children' && typeof prop !== 'string') {
+      result[key] = prop.map((child) => {
+        if (typeof child === 'string') return child;
+        return deserializeComp(child, resolver);
+      })
     }
     else result[key] = prop;
     return result;
