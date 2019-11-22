@@ -33,8 +33,9 @@ export const createManagerContext = (
   }
 ) => {
   const { nodes, events, options } = data;
+  const store = createManagerStore(nodes, events, createOptions(options));
   return {
-    ...createManagerStore(nodes, events, createOptions(options)),
+    ...store,
     handlers: {}
   }
 }
@@ -42,14 +43,13 @@ export const createManagerContext = (
 export const ManagerContext = createContext<ManagerContext>(null);
 export const ManagerContextProvider: React.FC<{ options?: Options}> = ({ children, options }) => {
   // console.log(options);
-  const context = useMemo(() => {
-    return createManagerContext({ options })
-  }, []);
+  const context = createManagerContext({ options });
 
   useEffect(() => {
     // console
     if ( context ) context.actions.setOptions(options);
   }, [options]);
+  
 
   // useEffect(() => {
   //   return (() => {

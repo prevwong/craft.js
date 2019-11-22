@@ -1,5 +1,6 @@
 import produce, { PatchListener } from 'immer';
 import { createStore, Unsubscribe } from 'redux';
+import { useMemo, useEffect } from 'react';
 
 type Subscriber = (listener: () => void) => Unsubscribe;
 
@@ -7,8 +8,7 @@ export type SubscriberAndCallbacksFor<M extends MethodsOrOptions, Q extends Quer
   subscribe: Subscriber,
   getState: () => { prev: StateFor<M>, current: StateFor<M> },
   actions: CallbacksFor<M>,
-  query: QueryCallbacksFor<Q>,
-  cleanup: Unsubscribe
+  query: QueryCallbacksFor<Q>
 };
 
 export type StateFor<M extends MethodsOrOptions> = M extends MethodsOrOptions<infer S, any>
@@ -56,13 +56,9 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<a
 
 
 export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends QueryMethods>(
-  methodsOrOptions: Methods<S, R, QueryCallbacksFor<Q>>,
+  methodsOrOptions: Methods<S, R, QueryCallbacksFor<Q>>, // methods to manipulate the state
   initialState: any,
-  queryMethods?: Q,
-  // queryFactory?: {
-  //   methods: Q,
-  //   options: any
-  // }
+  queryMethods?: Q // methods to perform some queries/transformation on the current state
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q> {
 
   let prevState = initialState;
@@ -74,6 +70,7 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
     // methods = methodsOrOptions.methods;
     // patchListener = methodsOrOptions.patchListener;
   }
+
   const reducer = (state: S, action: ActionUnion<R>) => {
     return (produce as Function)(
       state,
@@ -91,8 +88,6 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
 
   let currentState = getState();
 
-  const cleanup = subscribe(() => currentState = getState());
-
   const query = queryMethods ? (Object.keys(queryMethods()) as Array<keyof QueryCallbacksFor<typeof methods>>).reduce((accum, key) => {
     return {
       ...accum,
@@ -100,8 +95,6 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
     };
   }, {} as QueryCallbacksFor<typeof queryMethods>) : null;
 
-
- 
   const actionTypes: ActionUnion<R>['type'][] = Object.keys(methodsFactory(state, query)),
         actions = actionTypes.reduce(
           (accum, type) => {
@@ -115,12 +108,24 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
           },
           {} as CallbacksFor<typeof methodsFactory>,
         );
+
+
+  const unsubscribe = useMemo(() => {
+    return subscribe(() => {
+      currentState = getState();
+    });
+  }, []);
+
+  useEffect(() => {
+    return (() => {
+      unsubscribe();
+    })
+  })
   
   return {
     subscribe,
     getState: () => ({ prev: prevState, current: currentState }),
     actions,
-    query,
-    cleanup
+    query
   };
 }
