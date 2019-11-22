@@ -1,4 +1,4 @@
-import { NodeId, Node, Nodes } from "../interfaces";
+import { NodeId, Node, Nodes, Options } from "../interfaces";
 import { ManagerState } from "../interfaces";
 import { PlaceholderInfo } from "../events/interfaces";
 import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID, ROOT_NODE, CallbacksFor } from "craftjs-utils";
@@ -14,7 +14,12 @@ const invariant = require('invariant');
 const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMethods>) => {
   const _ = <T extends keyof CallbacksFor<typeof Actions>>(name: T) => Actions(state, query)[name];
   return {
-    
+    setOptions(options: Options) {
+      state.options = {
+        ...state.options,
+        ...options,
+      };
+    },
     setPlaceholder(placeholder: PlaceholderInfo) {
       if (placeholder && (!placeholder.placement.parent.dom || (placeholder.placement.currentNode && !placeholder.placement.currentNode.dom))) return;
       state.events.placeholder = placeholder;
