@@ -9,7 +9,7 @@ import {ManagerContextProvider, createManagerContext} from "./manager";
 
 export const Craft: React.FC<Partial<Options>> = ({ children, ...options }: any) => {
   return (
-    <ManagerContextProvider context={createManagerContext({ options })}>
+    <ManagerContextProvider options={options}>
       <EventManager>
         {children}
       </EventManager>

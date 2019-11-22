@@ -11,16 +11,15 @@ export const SimpleElement = ({render}: any) => {
 }
 
 export const RenderNodeToElement: React.FC<any> = ({ ...injectedProps}: any) => {
-  const { type, props } = useInternalNode((node) => ({type: node.data.type, props: node.data.props}));
-  const { query: { getOptions }} = useInternalManager();
-  const {onRender} = getOptions();
+  const { type, props, isCanvas } = useInternalNode((node) => ({type: node.data.type, props: node.data.props, isCanvas: node.data.isCanvas}));
+  const { onRender } = useInternalManager((state) => ({ onRender: state.options.onRender }));
 
-  let Comp = type;
+  let Comp = isCanvas ? Canvas : type;
   let render = React.cloneElement(<Comp {...props} {...injectedProps}  />);
   if (typeof Comp === 'string') render = <SimpleElement render={render} />
   // To indicate the <Canvas /> is part of another Canvas' children
   else if (Comp == Canvas ) render = React.cloneElement(render, {passThrough: true}); 
-
+  
   return React.createElement(onRender, {render}, null);
   
 };

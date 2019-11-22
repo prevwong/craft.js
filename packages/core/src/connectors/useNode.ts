@@ -3,20 +3,18 @@ import { Node  } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { useInternalManager } from "../manager/useInternalManager";
 import { wrapConnectorHooks } from "../utils/wrapConnectorHooks";
-import { NodeProvider } from "nodes/NodeContext";
+import { NodeProvider } from "../nodes/NodeContext";
 
-type ConnectedNodeShared = NodeProvider & {
+
+export type useNode<S = null> = useInternalNode<S> & {
+  actions: Pick<useInternalNode<S>['actions'], 'setProp'>,
   connectTarget: Function;
   connectDragHandler: Function;
-  actions: any;
-  _inNodeContext: boolean
 }
 
-export type ConnectedNode<S = null> = S extends null ? ConnectedNodeShared : S & ConnectedNodeShared
-
-export function useNode(): ConnectedNode
-export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S>
-export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S> {
+export function useNode(): useNode
+export function useNode<S = null>(collect?: (node: Node) => S): useNode<S>
+export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
   const {handlers} = useInternalManager();
   const { id, related, actions: { setDOM, setProp }, _inNodeContext, ...collected } = useInternalNode(collect);
 
@@ -32,18 +30,17 @@ export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S>
     }
   }, []);
 
-  const connectors = useMemo(() => {
-    return wrapConnectorHooks({
+  const connectors = wrapConnectorHooks({
       connectDragHandler: (node) => {
-        if (node && currentNode.current !== node) {
+        if ( _inNodeContext && node && currentNode.current !== node) {
           if (currentNode.current) {
             currentNode.current.removeEventListener('dragstart', event.onDragStart);
           }
           node.addEventListener('dragstart', event.onDragStart);
         }
       },
-      connectTarget: (node) => {
-        if ( node && currentNode.current !== node )  {
+      connectTarget: (node, t) => {
+        if ( _inNodeContext && node && currentNode.current !== node )  {
           if ( currentNode.current) {
             currentNode.current.removeEventListener('mousedown', event.onMouseDown);
             currentNode.current.removeEventListener('mouseover', event.onMouseOver);
@@ -60,7 +57,6 @@ export function useNode<S = null>(collect?: (node: Node) => S): ConnectedNode<S>
         }
       }
     });
-  },[]);
 
   return {
     id,

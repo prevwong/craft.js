@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NodeId, Node } from "../interfaces";
+import { NodeId, Node, NodeRules } from "../interfaces";
 import { NodeElement } from "./NodeElement";
 import { SimpleElement } from "../render/RenderNode";
 import { mapChildrenToNodes } from "../nodes";
@@ -8,7 +8,7 @@ import { useInternalManager } from "../manager/useInternalManager";
 import { ERROR_ROOT_CANVAS_NO_ID, ERROR_INFINITE_CANVAS } from "craftjs-utils";
 const invariant = require("invariant");
 
-type GetComponentProps<T> = T extends React.ComponentType<infer P> | React.Component<infer P> ? P : never
+type GetComponentProps<T> = T extends string | React.ComponentType<infer P> | React.Component<infer P> ? P : never
 
 export type Canvas<T> = {
   id?: NodeId,
@@ -16,8 +16,8 @@ export type Canvas<T> = {
   className?: any,
   is?: T;
   children?: React.ReactNode;
-  passThrough?: boolean
-} & GetComponentProps<T>;
+  passThrough?: boolean;
+} & Pick<NodeRules, 'incoming' | 'outgoing'> & GetComponentProps<T>;
 
 
 
@@ -28,9 +28,8 @@ export function Canvas<T>({ is, children, passThrough, ...props }: Canvas<T>) {
   const [internalId, setInternalId] = useState(null);
   const [initialised, setInitialised] = useState(false);
   useEffect(() => {
-   
     if (_inContext && _inNodeContext) {
-      if (node.type === Canvas ) {
+      if (node.isCanvas ) {
         invariant(passThrough, ERROR_INFINITE_CANVAS)
         if ( !node.nodes ) {
           const childNodes = mapChildrenToNodes(children, (jsx) => {
@@ -41,14 +40,13 @@ export function Canvas<T>({ is, children, passThrough, ...props }: Canvas<T>) {
           add(childNodes, nodeId);
         }
       } else {
-
           invariant(id, ERROR_ROOT_CANVAS_NO_ID);
 
           let internalId;
 
           if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
             const rootNode = query.transformJSXToNode(
-              React.createElement(Canvas, {is, ...props} as any, children)
+              React.createElement(Canvas, {is,...props} as any, children)
             );
             internalId = rootNode.id;
             add(rootNode, nodeId);
@@ -58,7 +56,7 @@ export function Canvas<T>({ is, children, passThrough, ...props }: Canvas<T>) {
           setInternalId(internalId);
       }
     }
-    
+
     setInitialised(true);
   }, []);
 
@@ -68,8 +66,8 @@ export function Canvas<T>({ is, children, passThrough, ...props }: Canvas<T>) {
         initialised ? (
           (_inContext && _inNodeContext) ?
             (
-              node.type === Canvas && node.nodes ? (
-              <SimpleElement render={React.createElement(node.subtype, props, (
+              node.isCanvas && node.nodes ? (
+              <SimpleElement render={React.createElement(node.type, props, (
                 <React.Fragment>
                   {
                     node.nodes && node.nodes.map(((id: NodeId) => (

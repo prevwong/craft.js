@@ -37,9 +37,10 @@ import { transformJSXToNode } from "../utils/transformJSX";
  * @param nodes
  */
 
-export function QueryMethods(manager: ManagerState, options: Options) {
+export function QueryMethods(manager: ManagerState) {
   const _ = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) =>
-    QueryMethods(manager, options)[name];
+    QueryMethods(manager)[name];
+  const options = manager  && manager.options;
   return {
     getOptions(): Options {
       return options;
@@ -51,7 +52,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
       const node = transformJSXToNode(child, extras);
       const name = resolveComponent(
         options.resolver,
-        node.data.subtype ? node.data.subtype : node.data.type
+        node.data.type
       );
       invariant(name, ERRROR_NOT_IN_RESOLVER);
       node.data.name = name;
@@ -93,19 +94,21 @@ export function QueryMethods(manager: ManagerState, options: Options) {
       return Object.keys(reducedNodes).reduce((accum: Nodes, id) => {
         const {
           type: Comp,
-          subtype,
           props,
           parent,
           nodes,
           _childCanvas,
+          isCanvas,
           name,
         } = deserializeNode(reducedNodes[id], options.resolver);
         if (!Comp) return accum;
 
         accum[id] = _("transformJSXToNode")(<Comp {...props} />, {
+          id,
           data: {
+            ...(isCanvas && { isCanvas }),
             parent,
-            ...(Comp === Canvas && { subtype, nodes }),
+            ...(isCanvas && { nodes }),
             ...(_childCanvas && { _childCanvas }),
           },
         });
@@ -119,7 +122,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
           manager.nodes[targetNode.data.parent],
         newParentNode = manager.nodes[newParent];
 
-        
+
       invariant(
         currentParentNode ||
           (!currentParentNode && !manager.nodes[targetNode.id]),
@@ -136,7 +139,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
       if (newParent) {
         invariant(isCanvas(newParentNode), ERROR_MOVE_TO_NONCANVAS_PARENT);
         invariant(
-          newParentNode.rules.incoming(targetNode),
+          newParentNode.rules.incoming(targetNode, newParentNode),
           ERROR_MOVE_INCOMING_PARENT
         );
       }
@@ -150,7 +153,7 @@ export function QueryMethods(manager: ManagerState, options: Options) {
           ERROR_MOVE_TO_DESCENDANT
         );
         invariant(
-          currentParentNode.rules.outgoing(targetNode),
+          currentParentNode.rules.outgoing(targetNode, currentParentNode),
           ERROR_MOVE_OUTGOING_PARENT
         );
       }
@@ -164,12 +167,10 @@ export function QueryMethods(manager: ManagerState, options: Options) {
       nodesToDOM: (node: Node) => HTMLElement = node =>
         manager.nodes[node.id].dom
     ) => {
-      // console.log(source, target);
       if (source === target) return;
       const targetNode = manager.nodes[target],
         isTargetCanvas = isCanvas(targetNode);
 
-      const targetNodeInfo = getDOMInfo(nodesToDOM(targetNode));
       const targetParent =
           (isTargetCanvas) ? targetNode
             : manager.nodes[targetNode.data.parent];

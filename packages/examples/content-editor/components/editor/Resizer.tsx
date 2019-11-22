@@ -1,23 +1,17 @@
-import React, { useRef, useLayoutEffect, useEffect } from "react";
+import React, { useRef, useLayoutEffect, useEffect, useState, useMemo, useCallback } from "react";
 import styled from "styled-components";
 import { Resizable } from "re-resizable";
 import { isRoot, useNode, useManager } from "craftjs";
 import cx from "classnames";
-import {  isPercentage, pxToPercent, measurementToPx, percentToPx } from "../../utils/numToMeasurement";
-import {debounce} from "lodash";
+import { isPercentage, pxToPercent, percentToPx, getElementDimensions } from "../../utils/numToMeasurement";
+import { debounce } from "lodash";
 export type Resizer = {
   propKey: Record<'width' | 'height', string>
   children: React.ReactNode;
 };
 
-const ResizerDiv = styled.div`
-  
-  width: 100%;
-  height: 100%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  .resizer-indicators {
+const Indicators = styled.div<{bound?: 'row' | 'column'}>`
+
     position: absolute;
     top: 0;
     left: 0;
@@ -31,149 +25,215 @@ const ResizerDiv = styled.div`
       background: #fff;
       border-radius: 100%;
       display: block;
-      box-shadow:0px 0px 12px -1px rgba(0, 0, 0, 0.32);
+      box-shadow:0px 0px 12px -1px rgba(0, 0, 0, 0.25);
       z-index:99999;
       pointer-events:none;
+      border:2px solid #36a9e0;
       &:nth-child(1) {
-        left: -5px;
-        top: -5px;
+        ${props => 
+          props.bound ? 
+            props.bound == 'row' ? 
+              `
+                left: 50%;
+                top: -5px;
+                transform:translateX(-50%);
+              `
+            : `
+              top: 50%;
+              left: -5px;
+              transform:translateY(-50%);
+            `
+          : `
+              left: -5px;
+              top:-5px;
+            `
+        }
       }
       &:nth-child(2) {
         right: -5px;
         top: -5px;
+        display: ${props => props.bound ? "none" : "block" };
       }
       &:nth-child(3) {
-        bottom: -5px;
-        left: -5px;
+        ${props =>
+          props.bound ?
+            props.bound == 'row' ?
+              `
+                left: 50%;
+                bottom: -5px;
+                transform:translateX(-50%);
+              `
+              : `
+                bottom: 50%;
+                left: -5px;
+                transform:translateY(-50%);
+              `
+            : `
+              left: -5px;
+              bottom:-5px;
+            `
+        }
       }
       &:nth-child(4) {
         bottom: -5px;
         right: -5px;
+        display: ${props => props.bound ? "none" : "block" };
       }
+      
     }
-  }
 `;
 
-export const Resizer = ({ 
-  propKey, 
-  children, 
-  ...props 
-}: any,) => {
-  const resizable = useRef<Resizable>(null);
-  const isResizing = useRef<boolean>(false);
-
-  const { nodeWidth, nodeHeight, id, isRootNode, actions, active, _inNodeContext, connectTarget, connectDragHandler } = useNode(node => ({
+export const Resizer = ({
+  propKey,
+  children,
+  ...props
+}: any, ) => {
+  const { fillSpace, nodeWidth, nodeHeight, isRootNode, parent, actions, active, _inNodeContext, connectTarget } = useNode(node => ({
     id: node.id,
     isRootNode: isRoot(node),
     parent: node.data.parent,
     active: node.event.active,
     nodeWidth: node.data.props[propKey.width],
-    nodeHeight: node.data.props[propKey.height]
+    nodeHeight: node.data.props[propKey.height],
+    fillSpace: node.data.props.fillSpace
   }));
 
-  const internalDimensions = useRef<any>({ width: nodeWidth, height: nodeHeight });
 
-  // useEffect(() => {
-  //   const dom = resizable.current.resizable;
-  //   if (isResizing.current || (!dom || !dom.parentElement)) return;
-  //   internalDimensions.current = {
-  //     width: nodeWidth,
-  //     height: nodeHeight
-  //   }
-  //   resizable.current.updateSize(internalDimensions.current);
-  // }, [nodeWidth, nodeHeight]);
+  const {parentDirection} = useManager(state => ({
+    parentDirection: parent && state.nodes[parent].data.props.flexDirection
+  }));
 
-  const updateInternalDimension = (width, height) => {
+  // const { parentWidth, parentHeight } = useManager((state) => ({ parentWidth: parent && state.nodes[parent].data.props.width, parentHeight: parent && state.nodes[parent].data.props.height }))
+
+  const resizable = useRef<Resizable>(null);
+  const isResizing = useRef<Boolean>(false);
+  const editingDimensions = useRef<any>(null);
+  const nodeDimensions = useRef(null);
+  nodeDimensions.current = {width: nodeWidth, height: nodeHeight};
+
+  /**
+   * Using an internal value to ensure the width/height set in the node is converted to px
+   * because for some reason the <re-resizable /> library does not work well with percentages.
+   */
+  const [internalDimensions, setInternalDimensions] = useState({width: nodeWidth, height: nodeHeight });
+
+  const updateInternalDimensionsInPx = useCallback(() => {
+    const { width: nodeWidth, height: nodeHeight } = nodeDimensions.current;
+
+    const width = percentToPx(nodeWidth, resizable.current && getElementDimensions(resizable.current.resizable.parentElement).width);
+    const height = percentToPx(nodeHeight, resizable.current && getElementDimensions(resizable.current.resizable.parentElement).height);
+
+    setInternalDimensions({
+      width,
+      height
+    })
+  }, []);
+
+  const updateInternalDimensionsWithOriginal = useCallback(() => {
+    const { width: nodeWidth, height: nodeHeight } = nodeDimensions.current;
+    setInternalDimensions({
+      width: nodeWidth,
+      height: nodeHeight
+    })
+  }, []);
+
+  const getUpdatedDimensions = (width, height) => {
     const dom = resizable.current.resizable;
     if (!dom) return;
-    let newWidth, newHeight;
 
-    if (!isPercentage(nodeWidth)) {
-      newWidth = parseInt(internalDimensions.current.width) + parseInt(width) + "px";
-    } else {
-      newWidth = (parseInt(internalDimensions.current.width) + pxToPercent(width, dom.parentElement.clientWidth)).toFixed(2) + "%";
-    }
+    const currentWidth = parseInt(editingDimensions.current.width), 
+        currentHeight = parseInt(editingDimensions.current.height);
 
-    if (!isPercentage(nodeHeight)) {
-      newHeight = parseInt(internalDimensions.current.height) + parseInt(height) + "px";
-    } else {
-      newHeight = (parseInt(internalDimensions.current.height) + pxToPercent(height, dom.parentElement.clientHeight)).toFixed(2)+ "%";
-    }
-    
     return {
-      width: newWidth,
-      height: newHeight
+      width: currentWidth + parseInt(width),
+      height: currentHeight + parseInt(height),
     }
-  }
+  }  
 
+  useEffect(() => {
+    if (!isResizing.current) updateInternalDimensionsWithOriginal();
+  }, [nodeWidth, nodeHeight])
+
+  useEffect(() => {
+    const listener = debounce(updateInternalDimensionsWithOriginal, 1);
+    window.addEventListener("resize", listener);
+
+    return (() => {
+      window.removeEventListener("resize", listener);
+    });
+  }, [])
+
+  // console.log(internalDimensions)
   return (
-      <Resizable
+    <Resizable
       enable={['top', 'left', 'bottom', 'right', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'].reduce((acc: any, key) => {
         acc[key] = active && _inNodeContext;
         return acc;
       }, {})}
+      className={cx([{
+        'm-auto': isRootNode,
+        'flex': true,
+      }])}
+      ref={(ref) => {
+        if (ref) {
+          resizable.current = ref;
+          connectTarget(resizable.current.resizable);
+        }
+      }}
+      size={internalDimensions}
+      onResizeStart={(e) => {
+        updateInternalDimensionsInPx();
+        e.preventDefault();
+        e.stopPropagation();
+        const dom = resizable.current.resizable;
+        if (!dom) return;
+        editingDimensions.current = {
+          width: dom.getBoundingClientRect().width,
+          height: dom.getBoundingClientRect().height
+        };
+        isResizing.current = true;
+      }}
+      onResize={(e, direction, ref, d) => {
+        const dom = resizable.current.resizable;
+        let { width, height }: any = getUpdatedDimensions(d.width, d.height);
+        if (isPercentage(nodeWidth)) width = pxToPercent(width, getElementDimensions(dom.parentElement).width) + '%';
+        else width = `${width}px`;
 
-        className={cx([{
-          'm-auto': isRootNode,
-          'flex': true,
-          'items-center': true
-        }])}
-        ref={(ref) => {
-          if ( ref ) {
-            resizable.current = ref;
-            connectTarget(resizable.current.resizable);
-          }
-        }}
-        size={{width: nodeWidth, height: nodeHeight}}
-        onResizeStart={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          isResizing.current = true;
-        }}
-        onResize={debounce((e, direction, ref, d) => {
-          e.preventDefault();
-          e.stopPropagation();
-          const n = updateInternalDimension(d.width, d.height);
-          if (!n) return;
+        if (isPercentage(nodeHeight)) height = pxToPercent(height, getElementDimensions(dom.parentElement).height) + '%';
+        else height = `${height}px`;
 
-      
+        // console.log(window.getComputedStyle(dom.parentElement).height)
+        if (isPercentage(width) && dom.parentElement.style.width == "auto") {
+          width = editingDimensions.current.width + d.width + "px"
+        }
 
-          actions.setProp((prop: any) => {
-            prop[propKey.width] = n.width;
-            prop[propKey.height] = n.height;
-          })
-        })}
-        onResizeStop={(e, __, ___, d) => {
-          e.preventDefault();
-          setTimeout(() => {
-            if (!active) return
-            const n = updateInternalDimension(d.width, d.height);
-            // if ( !n ) return;
-            actions.setProp((prop: any) => {
-              prop[propKey.width] = n.width;
-              prop[propKey.height] = n.height;
-            })
-            isResizing.current = false;
-            internalDimensions.current = {
-              width: n.width,
-              height: n.height
-            }
-          })
-        }}
-      >
-        <ResizerDiv
-          {...props}
+        if (isPercentage(height) && dom.parentElement.style.height == "auto") {
+          height = editingDimensions.current.height + d.height + "px"
+        }
+
+        actions.setProp((prop: any) => {
+          prop[propKey.width] = width;
+          prop[propKey.height] = height;
+        });
+        
+      }}
+      onResizeStop={() => {
+        isResizing.current = false;
+        updateInternalDimensionsWithOriginal();
+      }}
+      {...props}
+    >
+      {children}
+      {active && (
+        <Indicators
+          bound={fillSpace == "yes" ? parentDirection  : false }
         >
-          {children}
-          {active && (
-            <div className={cx(['resizer-indicators'])}>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          )}
-        </ResizerDiv>
-      </Resizable>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </Indicators>
+      )}
+    </Resizable>
   );
 };

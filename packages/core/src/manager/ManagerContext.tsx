@@ -1,4 +1,4 @@
-import React, { createContext, useMemo } from "react";
+import React, { createContext, useMemo, useEffect } from "react";
 import { Options } from "../interfaces";
 import { createOptions } from "./createOptions";
 import { createManagerStore, ManagerStore } from "../manager/store";
@@ -21,7 +21,7 @@ export type ManagerContextIntializer = {
 export const createManagerContext = (
   data: ManagerContextIntializer = {
     nodes: {
-      [ROOT_NODE]: transformJSXToNode(<Canvas />)
+      [ROOT_NODE]: transformJSXToNode(<Canvas is="div" />)
     },
     events: {
       active: null,
@@ -33,7 +33,6 @@ export const createManagerContext = (
   }
 ) => {
   const { nodes, events, options } = data;
-
   return {
     ...createManagerStore(nodes, events, createOptions(options)),
     handlers: {}
@@ -41,12 +40,26 @@ export const createManagerContext = (
 }
 
 export const ManagerContext = createContext<ManagerContext>(null);
-export const ManagerContextProvider: React.FC<{ context?: ManagerContext}> = ({ children, context }) => {
+export const ManagerContextProvider: React.FC<{ options?: Options}> = ({ children, options }) => {
+  // console.log(options);
+  const context = useMemo(() => {
+    return createManagerContext({ options })
+  }, []);
 
-  const newContext = context ? context : createManagerContext();
+  useEffect(() => {
+    // console
+    if ( context ) context.actions.setOptions(options);
+  }, [options]);
+
+  // useEffect(() => {
+  //   return (() => {
+  //     context.cleanup();
+  //   })
+  // }, []);
+  
 
   return (
-    <ManagerContext.Provider value={newContext}>
+    <ManagerContext.Provider value={context}>
       {children}
     </ManagerContext.Provider>
   )

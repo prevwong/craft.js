@@ -37,7 +37,7 @@ export const ToolbarSection = ({title, props, summary, children}: any) => {
   const panelClasses = usePanelStyles({});
   const summaryClasses = useSummaryStyles({});
   const {nodeProps} = useNode((node) => ({
-    nodeProps: props.reduce((res: any, key: any) => {
+    nodeProps: props && props.reduce((res: any, key: any) => {
       res[key] = node.data.props[key] || null; 
       return res;
     }, {})
@@ -56,7 +56,7 @@ export const ToolbarSection = ({title, props, summary, children}: any) => {
             <h5 className='text-xs text-light-gray-1 text-left font-medium uppercase text-dark-gray'>{title}</h5>
           </Grid>
           {
-            summary ? (
+            summary && props ? (
               <Grid item xs={8}>
                 <h5 className='text-light-gray-2 text-sm text-right text-dark-blue'>{
                   summary(
@@ -74,7 +74,7 @@ export const ToolbarSection = ({title, props, summary, children}: any) => {
       </ExpansionPanelSummary>
       <ExpansionPanelDetails style={{ padding: "0px 24px 20px" }}>
         <Divider />
-        <Grid container alignItems="center" spacing={1}>
+        <Grid container spacing={1}>
           {children}
         </Grid>
       </ExpansionPanelDetails>

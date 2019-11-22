@@ -38,7 +38,7 @@ export const EditorRenderer = ({children, ...props}) => {
 
   // console.log('re2');
   return (
-    <div style={{ borderColor: "#EEECF1" }} className="p-4 w-full h-full overflow-auto flex items-center"  {...props}>
+    <div style={{ borderColor: "#EEECF1" }} className="p-4 w-full h-full overflow-auto items-center"  {...props}>
         {
           active && (
            <React.Fragment>
@@ -47,7 +47,9 @@ export const EditorRenderer = ({children, ...props}) => {
            </React.Fragment>
           )
         }
+       <div className="relative flex-col flex items-center">
         {children} 
+       </div>
     </div>
   )
 }

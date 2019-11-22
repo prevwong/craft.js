@@ -9,9 +9,10 @@ export function useManager(): useManager;
 export function useManager<S>(collect: (state: ManagerState) => S): useManager<S>;
 
 export function useManager<S>(collect?: any): useManager<S> {
-  const {handlers: {dnd}, ...collected} = collect ? useInternalManager(collect) : useInternalManager();
+  const {handlers, ...collected} = collect ? useInternalManager(collect) : useInternalManager();
+
   return {
-    handlers: dnd,
+    handlers: handlers && handlers.dnd,
     ...collected as any
   }
 }

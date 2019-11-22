@@ -1,8 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,500,700&display=swap');
+  @import url("https://use.typekit.net/mpa1wkh.css");
 html, body {
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'acumin-pro', sans-serif;
   color: rgb(75,75,75);
 }

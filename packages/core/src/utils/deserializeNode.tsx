@@ -4,18 +4,16 @@ import { Canvas } from "../nodes";
 import { Resolver } from "../interfaces";
 import { resolveComponent } from "./resolveComponent";
 
-const restoreType = (type: ReduceCompType, resolver: Resolver) => 
+const restoreType = (type: ReduceCompType,  resolver: Resolver) => 
   typeof type === "object" && type.resolvedName ? 
-    (
-      type.resolvedName === 'Canvas' ? Canvas :
-      resolver[type.resolvedName]
-    ) : 
+    resolver[type.resolvedName] : 
     typeof type === "string" ? 
       type : null;
 
 export const deserializeComp = (data: ReducedComp, resolver: Resolver, index?: number): JSX.Element & {subtype?: React.ElementType | string} & { name: string } => {
-  let { type, subtype, props } = data;
+  let { type, props } = data;
   const main = restoreType(type, resolver);
+
   if (!main) {
     return;
   }
@@ -33,20 +31,21 @@ export const deserializeComp = (data: ReducedComp, resolver: Resolver, index?: n
   if (index) props.key = index;
   
   const jsx = {
-    ...React.createElement(main, props),
-    ...(subtype && { subtype: restoreType(subtype, resolver) }),
+    ...React.createElement(main, {
+      ...props,
+    }),
   }
 
   return {
     ...jsx,
-    name: resolveComponent(resolver, jsx.subtype ? jsx.subtype : jsx.type)
+    name: resolveComponent(resolver, jsx.type)
   }
 }
 
 export const deserializeNode = (data: SerializedNodeData, resolver: Resolver): Omit<NodeData, 'event'> => {
-  let { type, subtype, props, ...nodeData } = data;
+  let { type , props, ...nodeData } = data;
 
-  const reducedComp = deserializeComp({ type, subtype, props }, resolver);
+  const reducedComp = deserializeComp({ type, props }, resolver);
 
   return {
     ...reducedComp,

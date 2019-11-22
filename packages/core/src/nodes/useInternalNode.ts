@@ -13,7 +13,7 @@ type internalActions = NodeProvider & {
   }
 }
 
-type useInternalNode<S = null> = S extends null ? internalActions : S & internalActions;
+export type useInternalNode<S = null> = S extends null ? internalActions : S & internalActions;
 export function useInternalNode() : useInternalNode
 export function useInternalNode<S = null>(collect?: (node: Node) => S): useInternalNode<S>
 export function useInternalNode<S = null>(collect?: (node: Node) => S): useInternalNode<S> {
@@ -24,7 +24,11 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S): useInter
       id: null,
       related: false,
       _inNodeContext: false,
-      actions: {}
+      actions: {
+        setProp: () => {},
+        setDOM: () => {},
+        setNodeEvent: () => {}
+      }
     }
   }
   
