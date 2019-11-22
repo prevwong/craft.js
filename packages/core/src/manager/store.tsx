@@ -14,14 +14,15 @@ export const createManagerStore = (
     placeholder:null
   },
   options: Partial<Options> = {}
-): ManagerStore => createReduxMethods(
-    Actions, 
+): ManagerStore => {
+
+  return createReduxMethods(
+    Actions,
     {
       nodes,
-      events
+      events,
+      options,
     },
-    {
-      methods: QueryMethods,
-      options
-    }
-);
+    QueryMethods
+  );
+}

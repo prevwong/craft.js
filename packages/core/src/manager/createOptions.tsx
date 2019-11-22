@@ -7,6 +7,7 @@ export const createOptions = (data: Partial<Options>) => {
     resolver: {},
     renderPlaceholder: defaultPlaceholder,
     nodes: null,
+    enabled: true,
     ...data
   } as Options;
 }
