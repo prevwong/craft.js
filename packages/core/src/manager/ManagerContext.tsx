@@ -21,7 +21,7 @@ export type ManagerContextIntializer = {
 export const createManagerContext = (
   data: ManagerContextIntializer = {
     nodes: {
-      [ROOT_NODE]: transformJSXToNode(<Canvas />)
+      [ROOT_NODE]: transformJSXToNode(<Canvas is="div" />)
     },
     events: {
       active: null,

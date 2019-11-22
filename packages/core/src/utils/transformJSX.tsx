@@ -10,7 +10,7 @@ export function transformJSXToNode(child: React.ReactElement | string, extras: P
     child = React.createElement(Fragment, {}, child);
   }
   let { type, props } = child;
-  const prefix = type === Canvas ? "canvas" : "node";
+  const prefix = (type === Canvas || (extras.data.isCanvas)) ? "canvas" : "node";
   const id = extras.id ? extras.id : `${prefix}-${shortid.generate()}`;
 
   return createNode({
