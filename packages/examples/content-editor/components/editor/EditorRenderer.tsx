@@ -47,7 +47,7 @@ export const EditorRenderer = ({children, ...props}) => {
            </React.Fragment>
           )
         }
-       <div className="flex-col flex items-center">
+       <div className="relative flex-col flex items-center">
         {children} 
        </div>
     </div>

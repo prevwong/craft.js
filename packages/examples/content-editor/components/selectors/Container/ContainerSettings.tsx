@@ -69,6 +69,10 @@ export const ContainerSettings = () => {
           <ToolbarRadio value="row" label="Row" />
           <ToolbarRadio value="column" label="Column" />
         </ToolbarItem>
+        <ToolbarItem propKey="fillSpace" type="radio" label="Fill space">
+          <ToolbarRadio value="yes" label="Yes" />
+          <ToolbarRadio value="no" label="No" />
+        </ToolbarItem>
         <ToolbarItem propKey="alignItems" type="radio" label="Align Items">
           <ToolbarRadio value="flex-start" label="Flex start" />
           <ToolbarRadio value="center" label="Center" />

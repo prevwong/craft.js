@@ -74,7 +74,7 @@ export const ToolbarSection = ({title, props, summary, children}: any) => {
       </ExpansionPanelSummary>
       <ExpansionPanelDetails style={{ padding: "0px 24px 20px" }}>
         <Divider />
-        <Grid container alignItems="center" spacing={1}>
+        <Grid container spacing={1}>
           {children}
         </Grid>
       </ExpansionPanelDetails>
