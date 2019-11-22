@@ -28,8 +28,8 @@ export const defaultPlaceholder: React.FC<Placeholder> = ({ placeholder: { error
 
 
 export const RenderPlaceholder: React.FC<Placeholder> = ({ placeholder, suggestedStyles }) => {
-  const { query: {getOptions} } = useManager();
-  return React.createElement(getOptions().renderPlaceholder, {
+  const { renderPlaceholder, query: { getOptions } } = useManager((state) => ({ renderPlaceholder: state.options.renderPlaceholder }));
+  return React.createElement(renderPlaceholder, {
     placeholder,
     suggestedStyles,
   });
