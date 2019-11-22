@@ -9,7 +9,7 @@ export * from './Selector';
 
 
 /** Some helper functions */
-export const isCanvas = (node: Node) => node.data.type === Canvas
+export const isCanvas = (node: Node) => node.data.isCanvas
 export const isRoot = (node: Node) => node.id == ROOT_NODE;
 export const isTopLevelCanvas = (node: Node) => !isRoot(node) && node.data.parent.startsWith("canvas-");
 export const isDeletable = (node: Node) => !isRoot(node) && (isCanvas(node) ? isTopLevelCanvas(node) : true);
