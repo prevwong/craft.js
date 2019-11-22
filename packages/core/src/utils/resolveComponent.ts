@@ -20,7 +20,7 @@ export const resolveComponent = (resolver: Resolver, comp: React.ElementType | s
         }
     }
 
-    if ( !Comp && comp == Canvas) return "Canvas";
+    // if ( !Comp && comp == Canvas) return "Canvas";
     if ( !Comp && typeof comp === "string" ) return comp;
     return Comp;
 }
