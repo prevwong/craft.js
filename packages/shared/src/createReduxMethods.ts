@@ -75,8 +75,8 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
     return (produce as Function)(
       state,
       (draft: S) => {
-        if (methods(draft, queryMethods(state))[action.type]) {
-          return methods(draft, queryMethods(state))[action.type](...action.payload)
+        if (methods(draft, queryMethods && queryMethods(state))[action.type]) {
+          return methods(draft, queryMethods && queryMethods(state))[action.type](...action.payload)
         }
       },
       patchListener,
