@@ -2,7 +2,7 @@ import { Resolver } from "../interfaces";
 import { Canvas } from "../nodes";
 
 export const resolveComponent = (resolver: Resolver, comp: React.ElementType | string) => {
-    let Comp;
+    let Comp: string;
     const name = (comp as any).name || (comp as any).displayName;
 
     if (comp === Canvas) return "Canvas";

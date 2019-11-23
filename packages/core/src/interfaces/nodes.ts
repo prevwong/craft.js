@@ -24,6 +24,7 @@ export type NodeData = {
   props: Record<string, any>,
   type: string | React.ElementType;
   name: string,
+  displayName: string,
   isCanvas?: boolean;
   parent: NodeId;
   index?: number;

@@ -55,6 +55,7 @@ export function QueryMethods(manager: ManagerState) {
         node.data.type
       );
       invariant(name, ERRROR_NOT_IN_RESOLVER);
+      node.data.displayName = node.data.displayName || name;
       node.data.name = name;
       return node;
     },

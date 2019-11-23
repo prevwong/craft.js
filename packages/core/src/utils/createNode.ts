@@ -40,6 +40,7 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
         incoming: incoming ? incoming : node.rules.incoming,
         outgoing: outgoing ? outgoing : node.rules.outgoing,
       }
+      delete node.data.props["is"]
     }
 
     node.data.props = {
@@ -52,17 +53,20 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
     //       if ( node.rules[key] ) node.rules[key] = node.rules[key];
     //   }
     // });
+    
 
-
-    if (actualType.craft && actualType.craft.related ) {
-      node.related = {}
-      Object.keys(actualType.craft.related).forEach((comp) => {
-        node.related[comp] = () => React.createElement(NodeProvider, { id, related: true }, React.createElement(actualType.craft.related[comp]))
-      });
+    if ( actualType.craft ) {
+      if ( actualType.craft.name ) {
+        node.data.displayName = actualType.craft.name;
+      }
+      if ( actualType.craft.related) {
+        node.related = {}
+        Object.keys(actualType.craft.related).forEach((comp) => {
+          node.related[comp] = () => React.createElement(NodeProvider, { id, related: true }, React.createElement(actualType.craft.related[comp]))
+        });
+      }
     }
 
-
-    node.data.name = name;
   }) as Node;
 
   return node;
