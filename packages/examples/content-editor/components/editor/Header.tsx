@@ -11,8 +11,8 @@ export const Header = ({setEnabled}) => {
       <button onClick={() => setEnabled(!enabled)}>{enabled ? "Disable" : "Enable"}</button>
       <button onClick={() => {
         const s = query.serialize();
-        const d = query.deserialize(JSON.stringify(s));
-        console.log(JSON.stringify(s), d);
+        // const d = query.deserialize(JSON.stringify(s));
+        console.log(JSON.stringify(s));
       }}>Serialize</button>
     </>
   )

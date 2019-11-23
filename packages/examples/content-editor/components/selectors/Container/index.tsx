@@ -67,6 +67,7 @@ export const Container = (props: Partial<Container>) => {
 
 
 Container.craft = {
+  name:"MyContainer",
   defaultProps,
   rules: {
     canDrag: () => true
