@@ -44,7 +44,7 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
     add(nodes: Node[] | Node, parentId?: NodeId ) {
       if (!Array.isArray(nodes)) nodes = [nodes];
       if (parentId && !state.nodes[parentId].data.nodes && isCanvas(state.nodes[parentId])) state.nodes[parentId].data.nodes = [];
-
+      
       (nodes as Node[]).forEach(node => {
         const parent = parentId ? parentId :  node.data.parent,
               parentNode = state.nodes[parent];   
@@ -58,6 +58,8 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
         } else {
           if ( parentId) query.canDropInParent(node, parentId);
           if (parentNode ) {
+            if ( parentNode.data.props.children ) delete parentNode.data.props["children"];
+            
             // if (parentId && !state.nodes[parentId].data.nodes) state.nodes[parentId].data.nodes = [];
             if (!parentNode.data.nodes) parentNode.data.nodes = [];
             const currentNodes = parentNode.data.nodes;
