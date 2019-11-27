@@ -4,7 +4,7 @@ import { useMemo, useEffect } from 'react';
 
 type Subscriber = (listener: () => void) => Unsubscribe;
 
-export type SubscriberAndCallbacksFor<M extends MethodsOrOptions, Q extends QueryMethods = null> = {
+export type SubscriberAndCallbacksFor<M extends MethodsOrOptions, Q extends QueryMethods = any> = {
   subscribe: Subscriber,
   getState: () => { prev: StateFor<M>, current: StateFor<M> },
   actions: CallbacksFor<M>,

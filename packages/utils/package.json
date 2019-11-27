@@ -4,15 +4,18 @@
   "version": "0.0.0",
   "description": "Shared utilities used across the craft.js monorepo",
   "author": "Prev Wong <prevwong@gmail.com>",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "build": "../../scripts/build.sh"
+    "build": "../../scripts/build.sh",
+    "start": "cross-env NODE_ENV=development && ../../scripts/start.sh"
   },
   "dependencies": {
     "@types/react": "^16.9.11",
+    "lodash": "^4.17.15",
     "redux": "^4.0.4"
   },
-  "devDependencies": {
+  "peerDependencies": {
     "react": "^16.11.0"
   }
 }

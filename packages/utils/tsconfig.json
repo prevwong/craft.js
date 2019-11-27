@@ -1,10 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "lib",
     "baseUrl": "./src",
     "allowSyntheticDefaultImports": true,
-    "jsx" : "react"
+    "jsx": "react"
   },
   "include": [
     "src/index.ts"
