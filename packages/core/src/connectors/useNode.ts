@@ -2,14 +2,14 @@ import React, { useMemo, useRef } from "react";
 import { Node  } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { useInternalManager } from "../manager/useInternalManager";
-import { wrapConnectorHooks } from "../utils/wrapConnectorHooks";
+import { wrapConnectorHooks, ConnectorElementWrapper } from "craftjs-utils";
 import { NodeProvider } from "../nodes/NodeContext";
 
 
 export type useNode<S = null> = useInternalNode<S> & {
   actions: Pick<useInternalNode<S>['actions'], 'setProp'>,
-  connectTarget: Function;
-  connectDragHandler: Function;
+  connectTarget: ConnectorElementWrapper;
+  connectDragHandler: ConnectorElementWrapper;
 }
 
 export function useNode(): useNode

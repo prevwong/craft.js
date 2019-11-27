@@ -1,10 +1,12 @@
 import React, { useContext, useRef, useCallback} from "react";
 import { ManagerState, Options } from "../interfaces";
 import { QueryMethods } from "./query";
-import { useCollector } from "craftjs-utils";
+import { useCollector, QueryCallbacksFor } from "craftjs-utils";
 import Actions from "./actions";
 import { ManagerContext } from "./ManagerContext";
 import { EventContext } from "../events";
+
+export type ManagerCollector<C> = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMethods>) => C
 
 export type useInternalManager<C = null> = (C extends null ? useCollector<typeof Actions, typeof QueryMethods> : useCollector<typeof Actions, typeof QueryMethods, C>) & {
   _inContext: boolean;
@@ -12,7 +14,7 @@ export type useInternalManager<C = null> = (C extends null ? useCollector<typeof
 };
 
 export function useInternalManager(): useInternalManager
-export function useInternalManager<C>(collector: (state: ManagerState) => C): useInternalManager<C>
+export function useInternalManager<C>(collector: ManagerCollector<C>): useInternalManager<C>
 export function useInternalManager<C>(collector?: any): useInternalManager<C> {
   const handlers = useContext(EventContext);
   const manager = useContext<ManagerContext>(ManagerContext);
