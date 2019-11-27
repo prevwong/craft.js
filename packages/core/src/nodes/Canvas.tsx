@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NodeId, Node, NodeRules } from "../interfaces";
+import { NodeId, NodeRules } from "../interfaces";
 import { NodeElement } from "./NodeElement";
 import { SimpleElement } from "../render/RenderNode";
 import { mapChildrenToNodes } from "../nodes";
@@ -8,20 +8,20 @@ import { useInternalManager } from "../manager/useInternalManager";
 import { ERROR_ROOT_CANVAS_NO_ID, ERROR_INFINITE_CANVAS } from "craftjs-utils";
 const invariant = require("invariant");
 
-type GetComponentProps<T> = T extends string | React.ComponentType<infer P> | React.Component<infer P> ? P : never
+type GetComponentProps<T extends React.ElementType> = React.ComponentProps<T>
 
-export type Canvas<T> = {
+export type Canvas<T extends React.ElementType> = {
   id?: NodeId,
   style?: any,
   className?: any,
   is?: T;
   children?: React.ReactNode;
   passThrough?: boolean;
-} & Pick<NodeRules, 'incoming' | 'outgoing'> & GetComponentProps<T>;
+} & Partial<Pick<NodeRules, 'incoming' | 'outgoing'>> & React.ComponentProps<T>;
 
 
 
-export function Canvas<T>({ is, children, passThrough, ...props }: Canvas<T>) {
+export function Canvas<T extends React.ElementType>({ is, children, passThrough, ...props }: Canvas<T>) {
   const id = props.id;
   const { actions: { add }, query, _inContext } = useInternalManager();
   const { node, nodeId, _inNodeContext } = useInternalNode((node) => ({ node: node.data, nodeId: node.id }));
@@ -46,7 +46,7 @@ export function Canvas<T>({ is, children, passThrough, ...props }: Canvas<T>) {
 
           if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
             const rootNode = query.transformJSXToNode(
-              React.createElement(Canvas, {is,...props} as any, children)
+              React.createElement(Canvas, { is, ...props }, children)
             );
             internalId = rootNode.id;
             add(rootNode, nodeId);
