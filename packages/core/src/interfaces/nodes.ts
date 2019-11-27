@@ -8,7 +8,8 @@ export type Node =  {
   event: NodeRefEvent;
   dom: HTMLElement;
   related: Record<string, React.ElementType>;
-  rules: NodeRules
+  rules: NodeRules;
+  hidden?: boolean;
 }
 
 export type NodeEvents = 'active' | 'dragging' | 'hover';

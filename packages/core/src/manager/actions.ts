@@ -122,8 +122,10 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
       invariant(state.nodes[id], ERROR_INVALID_NODEID)
       state.nodes[id].dom = dom;
       // updateEventsNode(state, id);
+    },
+    setHidden(id: NodeId, bool: boolean) {
+      state.nodes[id].hidden = bool;
     }
-
   }
 };
 
