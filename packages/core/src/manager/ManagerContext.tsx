@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useEffect } from "react";
+import React, { createContext, useEffect } from "react";
 import { Options } from "../interfaces";
 import { createOptions } from "./createOptions";
 import { createManagerStore, ManagerStore } from "../manager/store";
