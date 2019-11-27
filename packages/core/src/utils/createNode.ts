@@ -15,6 +15,7 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
       ...data,
       parent: data.parent || null,
       name: null,
+      displayName: null,
       props
     };
 
