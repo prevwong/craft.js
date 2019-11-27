@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useLayoutEffect } from "react";
+import React, { useState, useMemo, useLayoutEffect, useEffect } from "react";
 import { NodeElement, Canvas } from "../nodes";
 import { ROOT_NODE } from "craftjs-utils";
 import { useInternalManager } from "../manager/useInternalManager";
@@ -22,7 +22,7 @@ export const Renderer: React.FC<Renderer> = ({
   const [rootNode, setRootNode] = useState();
   
   
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!nodes) {
       const rootCanvas = React.Children.only(children) as React.ReactElement;
       invariant(rootCanvas.type && rootCanvas.type == Canvas, "The immediate child of <Renderer /> has to be a Canvas");
@@ -40,7 +40,6 @@ export const Renderer: React.FC<Renderer> = ({
 
   const dom = useRef<HTMLElement>(null);
 
-  console.log(rootNode)
   return useMemo(() => {
     return (
       <>
