@@ -2,7 +2,10 @@
   "allowSyntheticDefaultImports": true,
   "esModuleInterop": true,
   "compilerOptions": {
-    "lib" : ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "allowSyntheticDefaultImports": true,
     "jsx": "react",
     "module": "esnext",

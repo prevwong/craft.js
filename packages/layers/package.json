@@ -1,13 +1,30 @@
 {
   "name": "craftjs-layers",
   "version": "1.0.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "type": "module",
   "scripts": {
-    "build-b": "../../scripts/build.sh"
+    "start": "rollup -c -w src/index.tsx",
+    "build": "rollup -c src/index.tsx"
   },
   "dependencies": {
-    "craftjs": "file:../core",
-    "craftjs-utils": "file:../shared",
-    "react": "^16.8.6",
-    "styled-components": "^4.2.1"
+    "craftjs": "*",
+    "craftjs-utils": "*",
+    "lodash": "^4.17.15"
+  },
+  "peerDependencies": {
+    "react": ">= 16.11"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@rollup/plugin-image": "^2.0.0",
+    "rollup": "^1.27.5",
+    "rollup-plugin-terser": "^5.1.2",
+    "rollup-plugin-typescript": "^1.0.1",
+    "rollup-plugin-typescript2": "^0.25.2",
+    "styled-components": "^4.2.1",
+    "ts-lib": "^0.0.5",
+    "typescript": "^3.7.2"
   }
 }

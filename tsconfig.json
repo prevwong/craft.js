@@ -8,11 +8,14 @@
       "craftjs": [
         "packages/core/src/index"
       ],
+      "craftjs-layers": [
+        "packages/layers/src/index"
+      ],
       "craftjs/*": [
         "packages/core/src/*"
       ],
       "craftjs-utils": [
-        "packages/shared/index"
+        "packages/shared/src/index"
       ]
     }
   },

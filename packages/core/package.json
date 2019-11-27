@@ -14,16 +14,18 @@
   "author": "Prev Wong <prevwong@gmail.com>",
   "homepage": "https://github.com/prevwong/craft.js#readme",
   "license": "MIT",
-  "main": "./dist/index.js",
+  "main": "./dist/umd/index.js",
   "module": "./dist/index.js",
   "type": "module",
+  "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/prevwong/craft.js.git"
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "build": "../../scripts/build.sh"
+    "build": "../../scripts/build.sh",
+    "start": "cross-env NODE_ENV=development && ../../scripts/start.sh"
   },
   "bugs": {
     "url": "https://github.com/prevwong/craft.js/issues"

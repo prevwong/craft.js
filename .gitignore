@@ -2,6 +2,8 @@
 /dist
 /.cache
 *node_modules/
+*lib/
+*dist/
 *.cache/
 *dist/
 *.lock
