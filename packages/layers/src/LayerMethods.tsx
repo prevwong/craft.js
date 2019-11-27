@@ -14,6 +14,6 @@ export const LayerMethods = (state: LayerState) => ({
     layer[ref] = value;
   },
   toggleLayer: (id: string) => {
-    state.layers[id].expanded = true
+    state.layers[id].expanded = !state.layers[id].expanded
   }
 });

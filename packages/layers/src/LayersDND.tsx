@@ -1,122 +1,41 @@
-import React, { useEffect, useState, useCallback, useRef, useLayoutEffect, useMemo } from "react";
-import { useManager, isCanvas, PlaceholderInfo } from "craftjs";
+import React, { useEffect, useState, useCallback, useRef, useLayoutEffect, useMemo, useContext } from "react";
+import { useManager, isCanvas, NodeId } from "craftjs";
 import { useLayer } from "./useLayer";
-import { LayerState } from "./interfaces";
+import { useHandlerGuard } from "craftjs-utils";
+
+export const LayersDNDContext = React.createContext(null);
+
 
 export const LayersDND: React.FC<any> = ({ children }) => {
-    const {layers, events} = useLayer((state) => state);
-    const { query, actions: { move, setNodeEvent, setPlaceholder }, placeholder } = useManager((state) => ({ placeholder: state.events.placeholder }));
+    const {layers, events, actions } = useLayer((state) => state);
+    const { state, query, actions: { move, setNodeEvent, setPlaceholder } } = useManager((state) => ({state}));
     const {renderPlaceholder} = query.getOptions();
-    const [isMousePressed, setMousePressed] = useState(false);
+    const [placeholder, setInnerPlaceholder] = useState(null);
 
-    const mutable = useRef<LayerState & {placeholder: PlaceholderInfo, onCanvas: boolean}>({
+    // if ( window ) (window as any).l = state;
+
+    const mutable = useRef<any>({
         layers: null,
-        events: { hover: null, active: null },
-        placeholder: null,
-        onCanvas: false
+        events: {}
     });
 
     mutable.current = {
         layers,
-        events,
-        placeholder,
-        onCanvas: mutable.current.onCanvas
+        events
     }
-
-    const blockSelection = useCallback(() => {
-        // Element being dragged
-        const selection = window.getSelection ? window.getSelection() : (document as any).selection ? (document as any).selection : null;
-        if (!!selection) {
-            selection.empty ? selection.empty() : selection.removeAllRanges();
-        }
-    }, []);
-
-    const onDrag = useCallback((e: MouseEvent) => {
-        const { events, layers } = mutable.current;
-        setNodeEvent('hover', events.hover.id);
-        
-        let target = events.hover.id,
-            targetNode = query.getNode(target);
-
-        const hoverInfo = events.hover.dom.getBoundingClientRect();
-        if (e.clientY > hoverInfo.bottom - 5 && targetNode.data.parent ) {
-            const targetParent = query.getNode(targetNode.data.parent);
-            if ( targetParent.data.nodes.indexOf(target) === targetParent.data.nodes.length - 1 ) {
-
-                target = targetParent.data.parent ? targetParent.id : targetParent.data.closestParent ? targetParent.data.closestParent : target;
-            }
-        } 
-
-        const placeholderInfo = query.getDropPlaceholder(
-            events.active.id,
-            target,
-            { x: e.clientX, y: e.clientY },
-            (node) => layers[node.id] && layers[node.id].dom
-        );
-        if (placeholderInfo) {
-            blockSelection();
-            setNodeEvent('dragging', events.active.id);
-            const { placement: {parent} } = placeholderInfo;
-            const parentInfo = layers[parent.id].headingDom.getBoundingClientRect();
-            if (
-                (isCanvas(parent) && (e.clientY < (parentInfo.bottom - 5)))
-
-            ) {
-                mutable.current.onCanvas = true;
-                placeholderInfo.placement.currentNode = query.getNode(parent.data.nodes[parent.data.nodes.length - 1]);
-                placeholderInfo.placement.index = parent.data.nodes.length
-                placeholderInfo.placement.where = "after"
-            } else {
-                mutable.current.onCanvas = false;
-            }
-            
-            setPlaceholder(placeholderInfo)
-        }
-    }, []);
-
-    const onMouseUp = useCallback((e: MouseEvent) => {
-        const { events, placeholder } = mutable.current;
-        setMousePressed(false);
-        setNodeEvent("dragging", null);
-
-        if (placeholder && !placeholder.error) {
-            const { id: dragId } = events.active;
-            const { placement } = placeholder;
-            const { parent, index, where } = placement;
-            const { id: parentId } = parent;
-
-            move(dragId, parentId, index + (where === "after" ? 1 : 0));
-        }
-        setPlaceholder(null);
-    }, []);
-
-    useLayoutEffect(() => {
-        if (isMousePressed) {
-            window.addEventListener('mousemove', onDrag);
-            window.addEventListener('mouseup', onMouseUp);
-        }
-
-        return (() => {
-            window.removeEventListener("mousemove", onDrag);
-            window.removeEventListener('mouseup', onMouseUp);
-        })
-    }, [isMousePressed]);
-
-    useEffect(() => {
-        // if (events.active) setNodeEvent('selected', events.active.id)
-        if (events.active && query.getNode(events.active.id).data.parent) setMousePressed(true);
-    }, [events.active]);
 
     const placeholderPosition = useMemo(() => {
         if (placeholder) {
+            // console.log(placeholder)
             const { placement: { where, parent, currentNode } } = placeholder;
             const layerId = currentNode ? currentNode.id : parent.id;
-            if ( !layers[layerId] ) return;
+            
             let top;
-            if ( mutable.current.onCanvas ) {
+           
+            if (placeholder.onCanvas ) {
                 const parentPos = layers[parent.id].dom.getBoundingClientRect();
                 const parentHeadingPos = layers[parent.id].headingDom.getBoundingClientRect();
-                return {
+                return  {
                     top: parentHeadingPos.top,
                     left: parentPos.left,
                     width: parentPos.width,
@@ -125,6 +44,7 @@ export const LayersDND: React.FC<any> = ({ children }) => {
                     borderWidth: '1px',
                 }     
             } else {
+                if (!layers[layerId]) return;
                 const headingPos = layers[layerId].headingDom.getBoundingClientRect();
                 const pos = layers[layerId].dom.getBoundingClientRect();
 
@@ -134,26 +54,137 @@ export const LayersDND: React.FC<any> = ({ children }) => {
                     top = pos.top;
                 }
 
+
                 return {
                     top,
                     left: headingPos.left,
                     width: pos.width,
                     height: 2
                 }
+
             }
             
         }
     }, [placeholder]);
+    
+    const draggedNode = useRef<string>(null);
+    const handlers = useHandlerGuard({
+
+        onMouseDown: (e, id) => {
+            // setNodeEvent("active", id);
+            actions.setLayerEvent("active", id);
+        },
+        onDragStart: (e: React.MouseEvent, id: string) => {
+            e.stopPropagation();
+            draggedNode.current = id;
+        },
+        onMouseOver: (e: React.MouseEvent, id: NodeId) => {
+            e.stopPropagation();
+            actions.setLayerEvent("hover", id);
+        },
+        onDragOver: (e, id) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const { layers, events } = mutable.current;
+            const { current: dragId } = draggedNode;
+
+            if (!dragId) return;
+
+            let target = id;
+
+            const placeholderInfo = query.getDropPlaceholder(
+                dragId,
+                target,
+                { x: e.clientX, y: e.clientY },
+                (node) => layers[node.id] && layers[node.id].dom
+            );
+
+            let onCanvas;
+            if (placeholderInfo) {
+                const { placement: { parent } } = placeholderInfo;
+                const parentHeadingInfo = layers[parent.id].headingDom.getBoundingClientRect(),
+                      parentInfo = layers[parent.id].dom.getBoundingClientRect();
+                      
+                if (!layers[parent.id].dom.querySelector(".craft-layer-node-children")) {
+                    if (
+                        (isCanvas(parent) && (e.clientY < (parentHeadingInfo.bottom - 5)))
+                    ) {
+                        if (e.clientY > parentInfo.top + 10 && e.clientY < parentHeadingInfo.bottom - 10) {
+                            onCanvas = true;
+                            placeholderInfo.placement.currentNode = query.getNode(parent.data.nodes[parent.data.nodes.length - 1]);
+                            placeholderInfo.placement.index = parent.data.nodes.length
+                            placeholderInfo.placement.where = "after"
+                        } else {
+                            if (parent.data.parent) {
+                                const grandparent = query.getNode(parent.data.parent);
+                                if (isCanvas(grandparent)) {
+                                    placeholderInfo.placement.parent = grandparent;
+                                    placeholderInfo.placement.currentNode = parent;
+                                    placeholderInfo.placement.index = grandparent.data.nodes.indexOf(parent.id);
+                                    if (e.clientY > parentInfo.bottom - 10) {
+                                        placeholderInfo.placement.where = "after";
+                                    } else {
+                                        placeholderInfo.placement.where = "before";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                setInnerPlaceholder({
+                    ...placeholderInfo,
+                    onCanvas
+                })
+            }
+        },
+        onDragEnd: (e: React.MouseEvent) => {
+            e.stopPropagation();
+            const events = mutable.current;
+            // if (events.placeholder && !events.placeholder.error) {
+            //     const { placement } = events.placeholder;
+            //     const { parent, index, where } = placement;
+            //     const { id: parentId } = parent;
+
+            //     move(draggedNode.current as NodeId, parentId, index + (where === "after" ? 1 : 0));
+            // }
+            
+            draggedNode.current = null;
+            setPlaceholder(null);
+            setNodeEvent('dragging', null);
+        }
+        
+    })
+
+    const onOver = useCallback((e: React.MouseEvent) => {
+       
+    }, []);
+
+    useEffect(() => {
+        // window.addEventListener("dragover", e => {
+        //     e.preventDefault();
+        //     const { layers, events } = mutable.current;
+        //     const { current: dragId } = draggedNode;
+
+        //     console.log(dragId)
+        //     if (!dragId) return;
+
+        //     let target = events.hover.id,
+        //         targetNode = query.getNode(target);
+        //     console.log(10, events.hover.id);
+
+        // });
+    }, []);
 
     return (
-        <React.Fragment>
+        <LayersDNDContext.Provider value={handlers}>
             {
                 placeholder ? React.createElement(renderPlaceholder, {
                     placeholder,
                     suggestedStyles: placeholderPosition
                 }) : null
             }
-            
-        </React.Fragment>
+            {children}
+        </LayersDNDContext.Provider >
     )
 }
