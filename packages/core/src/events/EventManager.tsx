@@ -4,8 +4,8 @@ import movePlaceholder from "./movePlaceholder";
 import { getDOMInfo } from "craftjs-utils";
 import { useInternalManager } from "../manager/useInternalManager";
 import { debounce } from "lodash"
-import { useHandlerGuard } from "./useHandlerGuard";
-import { ManagerEvents } from "../../dist/interfaces";
+import {useHandlerGuard} from "craftjs-utils";
+import { ManagerEvents } from "../interfaces";
 
 export type EventContext = {
     internal: Record<'onMouseDown' | 'onMouseOver', (e: MouseEvent, id: NodeId) => void>;
@@ -34,62 +34,62 @@ export const EventManager: React.FC = ({ children }) => {
         }
     }, [enabled]);
 
-    
-    const handlers = useHandlerGuard({
-         
-            internal: {
-                onMouseDown: debounce((e: MouseEvent, id: NodeId) => {
-                    setNodeEvent('active', id);
-                }, 1),
-                onMouseOver: debounce((e: MouseEvent, id: NodeId) => {
-                    setNodeEvent('hover', id);
-                })
-            },
-            dnd: {
-                onDragStart: (e: React.MouseEvent, node: Node | NodeId) => {
-                    e.stopPropagation();
-                    if (typeof node === 'string') setNodeEvent('dragging', node);
-                    draggedNode.current = node;
-                },
-                onDragOver: (e: React.MouseEvent, id: NodeId) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const { current: start } = draggedNode;
-                    if (!start) return;
-                    const dragId = typeof start == 'object' ? start.id : start;
+    const internal = useHandlerGuard({
+        onMouseDown: debounce((e: MouseEvent, id: NodeId) => {
+            setNodeEvent('active', id);
+        }, 1),
+        onMouseOver: debounce((e: MouseEvent, id: NodeId) => {
+            setNodeEvent('hover', id);
+        })
+    });
 
-                    const getPlaceholder = query.getDropPlaceholder(dragId, id, { x: e.clientX, y: e.clientY });
+    const dnd = useHandlerGuard({
+        onDragStart: (e: React.MouseEvent, node: Node | NodeId) => {
+            e.stopPropagation();
+            if (typeof node === 'string') setNodeEvent('dragging', node);
+            draggedNode.current = node;
+        },
+        onDragOver: (e: React.MouseEvent, id: NodeId) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const { current: start } = draggedNode;
+            if (!start) return;
+            const dragId = typeof start == 'object' ? start.id : start;
 
-                    if (getPlaceholder) {
-                        if (typeof start == 'object' && start.id) {
-                            start.data.index = getPlaceholder.placement.index + (getPlaceholder.placement.where == 'after' ? 1 : 0);
-                            add(start, getPlaceholder.placement.parent.id);
-                            draggedNode.current = start.id;
-                        }
-                        setPlaceholder(getPlaceholder)
-                    }
-                },
-                onDragEnd: (e: React.MouseEvent) => {
-                    e.stopPropagation();
-                    const events = mutable.current;
-                    if (events.placeholder && !events.placeholder.error) {
-                        const { placement } = events.placeholder;
-                        const { parent, index, where } = placement;
-                        const { id: parentId } = parent;
+            const getPlaceholder = query.getDropPlaceholder(dragId, id, { x: e.clientX, y: e.clientY });
 
-                        move(draggedNode.current as NodeId, parentId, index + (where === "after" ? 1 : 0));
-                    }
-
-                    draggedNode.current = null;
-                    setPlaceholder(null);
-                    setNodeEvent('dragging', null);
+            if (getPlaceholder) {
+                if (typeof start == 'object' && start.id) {
+                    start.data.index = getPlaceholder.placement.index + (getPlaceholder.placement.where == 'after' ? 1 : 0);
+                    add(start, getPlaceholder.placement.parent.id);
+                    draggedNode.current = start.id;
                 }
+                setPlaceholder(getPlaceholder)
             }
+        },
+        onDragEnd: (e: React.MouseEvent) => {
+            e.stopPropagation();
+            const events = mutable.current;
+            if (events.placeholder && !events.placeholder.error) {
+                const { placement } = events.placeholder;
+                const { parent, index, where } = placement;
+                const { id: parentId } = parent;
+
+                move(draggedNode.current as NodeId, parentId, index + (where === "after" ? 1 : 0));
+            }
+
+            draggedNode.current = null;
+            setPlaceholder(null);
+            setNodeEvent('dragging', null);
         }
-    );
+    });
 
-
-
+    const handlers = useMemo(() => ({
+        internal,
+        dnd
+    }), [internal, dnd])
+    
+    
     return (
         <EventContext.Provider value={handlers}>
             {
