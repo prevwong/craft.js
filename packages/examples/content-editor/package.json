@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env NODE_ENV=development && next dev",
     "build-editor": "next build",
-    "start": "next start"
+    "start-next": "next start"
   },
   "dependencies": {
     "@material-ui/core": "^4.5.2",
@@ -33,6 +33,7 @@
     "@types/react-color": "^3.0.1",
     "@types/styled-components": "^4.1.20",
     "babel-plugin-inline-react-svg": "^1.1.0",
+    "cross-env": "^6.0.3",
     "postcss-preset-env": "^6.7.0",
     "tailwindcss": "^1.1.3"
   }

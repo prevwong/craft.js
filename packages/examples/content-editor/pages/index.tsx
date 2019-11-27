@@ -10,7 +10,6 @@ import { Custom2 } from '../components/selectors/Custom2';
 import { Custom3 } from '../components/selectors/Custom3';
 import { Button } from '../components/selectors/Button';
 import { Video } from '../components/selectors/Video';
-import { EventManager } from 'craftjs/dist/events';
 import { Header } from '../components/editor/Header';
 import { Layers } from "craftjs-layers";
 

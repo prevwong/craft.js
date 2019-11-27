@@ -22,8 +22,5 @@
   },
   "include": [
     "src/index.tsx"
-  ],
-  "exclude": [
-    "node_modules"
   ]
 }

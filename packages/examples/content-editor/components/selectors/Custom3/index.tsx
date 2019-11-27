@@ -28,4 +28,5 @@ export const Custom3 = (props: any) => {
 
 Custom3.craft = {
   ...Container.craft,
+  name: "Custom 3"
 }
