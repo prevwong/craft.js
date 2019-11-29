@@ -22,7 +22,7 @@ export function useInternalManager<C>(collector?: any): useInternalManager<C> {
 
   return {
     ...collected as any,
-    handlers,
+    handlers: handlers || {},
     _inContext: !!manager
   }
 }

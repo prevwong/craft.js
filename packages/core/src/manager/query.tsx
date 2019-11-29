@@ -4,8 +4,7 @@ import {
   NodeId,
   SerializedNodeData,
   ManagerState,
-  Resolver,
-  NodeData,
+  PlaceholderInfo,
   Node,
   Options,
 } from "../interfaces";
@@ -28,7 +27,6 @@ import {
   getDOMInfo,
 } from "craftjs-utils";
 import findPosition from "../events/findPosition";
-import { PlaceholderInfo } from "../events/interfaces";
 import { getDeepNodes } from "../utils/getDeepNodes";
 import { transformJSXToNode } from "../utils/transformJSX";
 

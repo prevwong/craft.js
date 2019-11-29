@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from "react";
+import React, { createContext, useEffect, useMemo, useState } from "react";
 import { Options } from "../interfaces";
 import { createOptions } from "./createOptions";
 import { createManagerStore, ManagerStore } from "../manager/store";
@@ -43,10 +43,19 @@ export const createManagerContext = (
 export const ManagerContext = createContext<ManagerContext>(null);
 export const ManagerContextProvider: React.FC<{ options?: Options}> = ({ children, options }) => {
   // console.log(options);
-  const context = createManagerContext({ options });
+  const memoizedOptions = useMemo(() => {
+    return options;
+  }, []);
+
+
+  const context = useMemo(() => {
+    return createManagerContext({options});
+  }, []);
+
 
   useEffect(() => {
     // console
+    // console.log("options", options)
     if ( context ) context.actions.setOptions(options);
   }, [options]);
   
@@ -58,9 +67,9 @@ export const ManagerContextProvider: React.FC<{ options?: Options}> = ({ childre
   // }, []);
   
 
-  return (
+  return context ? (
     <ManagerContext.Provider value={context}>
       {children}
     </ManagerContext.Provider>
-  )
+  ) : null
 }
