@@ -1,14 +1,15 @@
 import React from "react";
-import { LayerNode } from "./LayerNode";
-import { LayerContextProvider } from "./LayerContext";
+import { LayerContextProvider } from "./layers";
+import { LayerManagerContextProvider } from "./manager";
 import { ROOT_NODE } from 'craftjs-utils';
 import { LayerOptions } from "./interfaces";
 
 export const Layers: React.FC<Partial<LayerOptions>> = ({...options}) => {
   return (
-    <LayerContextProvider options={options}>
-      <LayerNode id={ROOT_NODE} /> 
-    </LayerContextProvider>
+    <LayerManagerContextProvider options={options}>
+      <LayerContextProvider id={ROOT_NODE} depth={0} />
+    </LayerManagerContextProvider>
   )
 }
+
 

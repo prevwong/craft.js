@@ -1,7 +1,7 @@
-import typescript from 'rollup-plugin-typescript2'
-import path from 'path';
-import { terser } from 'rollup-plugin-terser'
-import image from '@rollup/plugin-image'
+import typescript from 'rollup-plugin-typescript'
+// import { terser } from 'rollup-plugin-terser'
+import image from '@svgr/rollup'
+
 
 
 export default [
@@ -14,7 +14,7 @@ export default [
     plugins: [
       image(),
       typescript(),
-      terser()
+      // terser()
     ]
   }
 ]

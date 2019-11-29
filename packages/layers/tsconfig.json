@@ -4,7 +4,8 @@
     "baseUrl": "./src",
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "jsx" : "react"
   },
   "include": [
     "src/index.tsx",
