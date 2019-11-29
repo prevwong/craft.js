@@ -1,9 +1,8 @@
-import React, { useMemo, useRef } from "react";
+import React from "react";
 import { Node  } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { useInternalManager } from "../manager/useInternalManager";
-import { wrapConnectorHooks, ConnectorElementWrapper } from "craftjs-utils";
-import { NodeProvider } from "../nodes/NodeContext";
+import {  useConnectorHooks, ConnectorElementWrapper } from "craftjs-utils";
 
 
 export type useNode<S = null> = useInternalNode<S> & {
@@ -15,44 +14,28 @@ export type useNode<S = null> = useInternalNode<S> & {
 export function useNode(): useNode
 export function useNode<S = null>(collect?: (node: Node) => S): useNode<S>
 export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
-  const {handlers} = useInternalManager();
+  const { handlers } = useInternalManager();
+
   const { id, related, actions: { setDOM, setProp }, _inNodeContext, ...collected } = useInternalNode(collect);
 
-  const currentNode = useRef<HTMLElement>();
-
-  const event = useMemo(() => {
-    return {
-      onMouseDown: (e: MouseEvent) => handlers.internal.onMouseDown(e, id),
-      onMouseOver: (e: MouseEvent) => handlers.internal.onMouseOver(e, id),
-      onDragStart: (e: MouseEvent) => handlers.dnd.onDragStart(e, id),
-      onDragOver: (e: MouseEvent) => handlers.dnd.onDragOver(e, id),
-      onDragEnd: (e: MouseEvent) => handlers.dnd.onDragEnd(e)
-    }
-  }, []);
-
-  const connectors = wrapConnectorHooks({
-      connectDragHandler: (node) => {
-        if ( _inNodeContext && node && currentNode.current !== node) {
-          if (currentNode.current) {
-            currentNode.current.removeEventListener('dragstart', event.onDragStart);
+  const connectors = useConnectorHooks({
+      connectDragHandler: [
+        (node) => {
+          if ( _inNodeContext ) {
+            node.setAttribute("draggable", true)
+            handlers.dragNode(node, id);
+            handlers.dragNodeEnd(node, id);
           }
-          node.addEventListener('dragstart', event.onDragStart);
+        },
+        (node) => {
+          node.removeAttribute("draggable", true)
         }
-      },
-      connectTarget: (node, t) => {
-        if ( _inNodeContext && node && currentNode.current !== node )  {
-          if ( currentNode.current) {
-            currentNode.current.removeEventListener('mousedown', event.onMouseDown);
-            currentNode.current.removeEventListener('mouseover', event.onMouseOver);
-            currentNode.current.removeEventListener('dragover', event.onMouseOver);
-            currentNode.current.removeEventListener('dragend', event.onMouseOver);
-          }
-          node.addEventListener('mousedown', event.onMouseDown, true);
-          node.addEventListener('mouseover', event.onMouseOver, true);
-          node.addEventListener('dragover', event.onDragOver);
-          node.addEventListener('dragend', event.onDragEnd);
-          currentNode.current = node;
-
+      ],
+      connectTarget: (node) => {
+        if (_inNodeContext) {
+          handlers.selectNode(node, id);
+          handlers.hoverNode(node, id);
+          handlers.dragNodeOver(node, id);
           setDOM(node);
         }
       }
