@@ -9,7 +9,6 @@ export type Node =  {
   dom: HTMLElement;
   related: Record<string, React.ElementType>;
   rules: NodeRules;
-  hidden?: boolean;
 }
 
 export type NodeEvents = 'active' | 'dragging' | 'hover';
@@ -30,7 +29,9 @@ export type NodeData = {
   parent: NodeId;
   index?: number;
   _childCanvas?: Record<string, NodeId>
-  nodes?: NodeId[]
+  nodes?: NodeId[];
+  hidden?: boolean;
+  custom?: any;
 }
 
 export type ReduceCompType = string | {

@@ -15,7 +15,7 @@ export const RenderNodeToElement: React.FC<any> = ({ ...injectedProps}: any) => 
     type: node.data.type, 
     props: node.data.props, 
     isCanvas: node.data.isCanvas,
-    hidden: node.hidden
+    hidden: node.data.hidden
   }));
 
   const { onRender } = useInternalManager((state) => ({ onRender: state.options.onRender }));

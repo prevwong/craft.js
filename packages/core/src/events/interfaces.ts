@@ -21,7 +21,3 @@ export interface DropAction {
 export type Placement = DropAction & {
   currentNode: Node
 }
-export interface PlaceholderInfo {
-  placement: Placement;
-  error: string | false
-}

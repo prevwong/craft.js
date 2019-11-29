@@ -1,5 +1,5 @@
 import { Nodes, NodeEvents, NodeId } from "./nodes";
-import { PlaceholderInfo } from "../events/interfaces";
+import { Placement } from "../events/interfaces";
 import { useInternalManager } from "../manager/useInternalManager";
 import { Placeholder } from "../render/RenderPlaceholder";
 
@@ -11,6 +11,12 @@ export type Options = {
 }
 
 export type Resolver = Record<string, string | React.ElementType>;
+
+
+export interface PlaceholderInfo {
+  placement: Placement;
+  error: string | false
+}
 
 export type ManagerEvents = Record<NodeEvents, NodeId> & {
   placeholder: PlaceholderInfo;
