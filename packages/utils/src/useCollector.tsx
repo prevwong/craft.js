@@ -18,18 +18,27 @@ export function useCollector<M extends Methods, Q extends QueryMethods>(
 
 export function useCollector<M extends Methods, Q extends QueryMethods, C>(
   store: SubscriberAndCallbacksFor<M, Q>,
-  collect: (state: StateFor<M>, query: Q) => C, 
+  collector: (state: StateFor<M>, query: Q) => C, 
   onChange: (collected: useCollector<M, Q, C>, finalize: React.Dispatch<React.SetStateAction<useCollector<M,Q,C>>>) => void): 
   useCollector<M, Q, C>;
 
 export function useCollector<M extends Methods, Q extends QueryMethods, C>
   (
     store: SubscriberAndCallbacksFor<M, Q>,
-    collect?: any, 
+    collector?: any, 
     onChange?: any
   ) {
   const {subscribe, getState, actions, query } = store;
-  const collected = useRef<C>(collect ? collect(getState().current, query) : {});
+  const collectorFn = useRef(collector);
+  collectorFn.current = collector;
+
+  const initial = useRef(true);
+  const collected = useRef<C>(null);
+
+  if (initial.current && collectorFn.current) {
+    collected.current = collectorFn.current(getState().current, query);
+    initial.current = false;
+  }
 
   const onCollect = useCallback((collected): useCollector<M, Q, C> => {
     return { ...collected, actions, query }
@@ -40,16 +49,18 @@ export function useCollector<M extends Methods, Q extends QueryMethods, C>
   useEffect(() => {
     let cancelled = false;
     let unsubscribe: Unsubscribe;
-    if (collect && typeof onChange === 'function') {
+    if (collectorFn.current && typeof onChange === 'function') {
       unsubscribe = subscribe(() => {
-        const { current } = getState();
-        const recollect = collect(current, query);
-        
-        if (!isEqualWith(recollect, collected.current) && !cancelled) {
-          collected.current = recollect;
-          (window as any).state = current;
-          onChange(onCollect(collected.current), setRenderCollected);
-        }
+        try {
+          if (cancelled) return;
+          const { current } = getState();
+          const recollect = collectorFn.current(current, query);
+          if (!isEqualWith(recollect, collected.current)) {
+            collected.current = recollect;
+            (window as any).state = current;
+            onChange(onCollect(collected.current), setRenderCollected);
+          }
+        } catch (err){}
       });
     }
     return (() => {

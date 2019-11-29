@@ -86,12 +86,15 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
 
   const { state, dispatch, subscribe, getState } = createStore(reducer, initialState);
 
-  let currentState = getState();
+  // let currentState = getState();
 
   const query = queryMethods ? (Object.keys(queryMethods()) as Array<keyof QueryCallbacksFor<typeof methods>>).reduce((accum, key) => {
     return {
       ...accum,
-      [key]: (...args: any) => queryMethods(currentState)[key](...args)
+      [key]: (...args: any) => {
+        const state = getState();
+        return queryMethods(state)[key](...args)
+      }
     };
   }, {} as QueryCallbacksFor<typeof queryMethods>) : null;
 
@@ -110,21 +113,21 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
         );
 
 
-  const unsubscribe = useMemo(() => {
-    return subscribe(() => {
-      currentState = getState();
-    });
-  }, []);
+  // const unsubscribe = useMemo(() => {
+  //   return subscribe(() => {
+  //     currentState = getState();
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    return (() => {
-      unsubscribe();
-    })
-  })
+  // useEffect(() => {
+  //   return (() => {
+  //     unsubscribe();
+  //   })
+  // }, [])
   
   return {
     subscribe,
-    getState: () => ({ prev: prevState, current: currentState }),
+    getState: () => ({ prev: prevState, current: getState() }),
     actions,
     query
   };
