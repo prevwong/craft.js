@@ -1,6 +1,5 @@
 import { NodeId, Node, Nodes, Options } from "../interfaces";
-import { ManagerState } from "../interfaces";
-import { PlaceholderInfo } from "../events/interfaces";
+import { ManagerState, PlaceholderInfo } from "../interfaces";
 import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID, ROOT_NODE, CallbacksFor } from "craftjs-utils";
 import { isCanvas, isTopLevelCanvas } from "../nodes";
 import { QueryMethods } from "./query";
@@ -30,6 +29,7 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
         state.nodes[current].event[eventType] = false;
       }
 
+      // if ( eventType == "active") console.log("active", id)
       if (id) {
         const node = state.nodes[id];
         state.nodes[id].event[eventType] = true
@@ -124,7 +124,10 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
       // updateEventsNode(state, id);
     },
     setHidden(id: NodeId, bool: boolean) {
-      state.nodes[id].hidden = bool;
+      state.nodes[id].data.hidden = bool;
+    },
+    setCustom<T extends NodeId>(id: T, cb: (data: ManagerState['nodes'][T]['data']['custom']) => void) {
+      cb(state.nodes[id].data.custom);
     }
   }
 };
