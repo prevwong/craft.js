@@ -34,7 +34,7 @@ export const Actions = () => {
   const info = useMemo(() => {
     const { width, right, left, top} = active.dom.getBoundingClientRect();
     return {
-      left: right,
+      left: left,
       top: top
     }
   }, [active]);
@@ -49,7 +49,7 @@ export const Actions = () => {
   // console.log("root", isRoot)
   return (!deletable && !moveable) ? null : (
     <ActionDiv 
-      className='fixed'
+      className='absolute'
       style={info}
     >
       <div className='px-2 py-2 rounded bg-white shadow-md flex'>

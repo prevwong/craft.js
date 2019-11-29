@@ -88,7 +88,7 @@ export const Resizer = ({
   children,
   ...props
 }: any, ) => {
-  const { fillSpace, nodeWidth, nodeHeight, isRootNode, parent, actions, active, _inNodeContext, connectTarget } = useNode(node => ({
+  const { id, fillSpace, nodeWidth, nodeHeight, isRootNode, parent, actions, active, _inNodeContext, connectTarget } = useNode(node => ({
     id: node.id,
     isRootNode: isRoot(node),
     parent: node.data.parent,
@@ -99,9 +99,11 @@ export const Resizer = ({
   }));
 
 
-  const {parentDirection} = useManager(state => ({
-    parentDirection: parent && state.nodes[parent].data.props.flexDirection
-  }));
+  const {parentDirection} = useManager(state => {
+    return {
+      parentDirection: parent && state.nodes[parent] && state.nodes[parent].data.props.flexDirection
+    }
+  });
 
   // const { parentWidth, parentHeight } = useManager((state) => ({ parentWidth: parent && state.nodes[parent].data.props.width, parentHeight: parent && state.nodes[parent].data.props.height }))
 

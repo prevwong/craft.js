@@ -22,5 +22,8 @@
   },
   "include": [
     "src/index.tsx"
+  ],
+  "exclude": [
+    "./lib/**/*" // This is what fixed it!
   ]
 }

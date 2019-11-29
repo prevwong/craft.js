@@ -1,55 +1,22 @@
-import React, { useEffect, Ref } from 'react';
+import React, { useEffect, Ref, useRef, useMemo } from 'react';
 import { useManager } from 'craftjs';
-import { useState } from 'react';
-import {Actions} from "./Actions"
-import {debounce} from "lodash";
 
 export const EditorRenderer = ({children, ...props}) => {
-  const { active } = useManager((state) => {
-    const nodeId = state.events.active;
-    return {
-      active: nodeId && state.nodes[nodeId]
-    }
-  });
+  const { actions, connectors } = useManager();
 
 
-
-  const [observerStyle, setObserverStyle] = useState({
-    width:0,
-    height:0,
-    left:0,
-    top:0
-  });
-
-  useEffect(debounce(() => {
-    if (active ) {
-    //  setTimeout(() => {
-        const { width, height, top, left } = active.dom.getBoundingClientRect();
-        setObserverStyle({
-          width,
-          height,
-          left,
-          top
-        });
-    //  })
-    }
-
-  }), [active]);
-
-  // console.log('re2');
-  return (
-    <div style={{ borderColor: "#EEECF1" }} className="p-4 w-full h-full overflow-auto items-center"  {...props}>
-        {
-          active && (
-           <React.Fragment>
-              <div className='pointer-events-none fixed border-dashed border z-50 border-black' style={observerStyle}/>
-              <Actions />
-           </React.Fragment>
-          )
-        }
-       <div className="relative flex-col flex items-center">
-        {children} 
-       </div>
+  return (  
+    <div
+      className="craftjs-renderer bg-white h-full w-full overflow-auto"
+      style={{ background: "rgb(224, 224, 224)", width: "100%", height: "100%" }}
+      ref={ref => connectors.active(connectors.hover(ref, null), null)}
+      >
+      {/* <Indicator event="active" /> 
+      <Indicator event="hover" />  */}
+      <div className="p-4 relative flex-col flex items-center">
+        {children}
+      </div>
+     
     </div>
   )
 }

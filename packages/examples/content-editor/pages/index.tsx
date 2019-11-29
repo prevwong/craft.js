@@ -12,6 +12,8 @@ import { Button } from '../components/selectors/Button';
 import { Video } from '../components/selectors/Video';
 import { Header } from '../components/editor/Header';
 import { Layers } from "craftjs-layers";
+import { Sidebar } from "../components/editor/Sidebar";
+import { RenderNode } from '../components/editor/RenderNode';
 
 const theme = createMuiTheme({
   typography: {
@@ -34,24 +36,24 @@ function App() {
         className="h-full h-screen"
         style={{ background: "#e2efff" }}
       >
-        <div className='fixed w-full h-full'>
-          <div className="flex w-full h-full">
-            <Craft
-              resolver={{ Container, Text, Custom1, Custom2, Custom3, Button, Video }}
-              enabled={enabled}
-            >
+        <div className='fixed flex flex-col w-full h-full'>
+          <Craft
+            resolver={{ Container, Text, Custom1, Custom2, Custom3, Button, Video }}
+            enabled={enabled}
+            onRender={RenderNode}
+          >
+            <div className="w-full">
+              <Header setEnabled={val => setEnabled(val)} />
+            </div>
+            <div className="flex w-full h-full">
+
 
               <div className="w-12 border-r bg-gray-100 h-full bg-white">
                 <Toolbox />
               </div>
-              <div className="flex-1 h-full overflow-hidden">
-                <Header setEnabled={val => setEnabled(val)} />
-                <div
-                  className="bg-white h-full w-full"
-                  style={{ background: "rgb(224, 224, 224)", width: "100%", height: "100%" }}
-                >
-                  <Renderer is={EditorRenderer} >
-                    
+              <div className="flex-1 h-full">
+                
+                  <Renderer is={EditorRenderer}>
                     <Canvas is={Container} width="80%" height="auto" background={{ r: 255, g: 255, b: 255, a: 1 }} padding={["40", "40", "40", "40"]}>
                       <Canvas is={Container} flexDirection="row" width="100%" height="auto" padding={["40", "40", "40", "40"]} margin={["0", "0", "40", "0"]}>
                         <Canvas is={Container} width="40%" height="100%" padding={["0", "20", "0", "20"]}>
@@ -61,7 +63,7 @@ function App() {
                           <Text fontSize="14" text="Everything you see here, including the editor itself are just React components. Craft.js comes only with the building blocks for a page editor - it provides a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things.<br/><br/>You control the way your editor looks and behave."></Text>
                         </Canvas>
                       </Canvas>
-                      
+
                       <Canvas is={Container} background={{ r: 39, g: 41, b: 41, a: 1 }} flexDirection="column" width="100%" height="auto" padding={["40", "40", "40", "40"]} margin={["0", "0", "40", "0"]}>
                         <Canvas background={{ r: 76, g: 78, b: 78, a: 0 }} is={Container} flexDirection="row" margin={["0", "0", "0", "0"]} width="100%" height="auto" alignItems="center">
                           <Canvas background={{ r: 0, g: 0, b: 0, a: 0 }} is={Container} alignItems="center" padding={["0", "0", "0", "0"]} flexDirection="row" width="350px" height="250px">
@@ -122,17 +124,11 @@ function App() {
                       </Canvas>
                     </Canvas>
                   </Renderer>
-                </div>
               </div>
-              <div
-                style={{ width: "270px", background: "rgb(245, 245, 245)" }}
-                className="bg-white w-2 h-full overflow-auto"
-              >
-                <Toolbar />
-                <Layers />
-              </div>
-            </Craft>
-          </div>
+              <Sidebar />
+
+            </div>
+          </Craft>
         </div>
       </div>
     </ThemeProvider>

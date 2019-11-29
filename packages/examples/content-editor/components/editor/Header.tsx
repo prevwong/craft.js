@@ -13,7 +13,10 @@ export const Header = ({setEnabled}) => {
         const s = query.serialize();
         // const d = query.deserialize(JSON.stringify(s));
         console.log(JSON.stringify(s));
-      }}>Serialize</button>
+      }}>Serialize</button> 
+      <div className="w-full py-2 px-4 bg-light-gray-1 text-white">
+        <h2>craft.js</h2>
+      </div>
     </>
   )
 }
