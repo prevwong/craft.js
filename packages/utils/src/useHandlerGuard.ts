@@ -1,7 +1,9 @@
 import { useRef, useMemo } from "react";
 import { useManager } from "craftjs";
 
-export const useHandlerGuard = (handlers: Record<string, (...args) => void>): Record<string, (...args) => void> => {
+type Handlers = Record<string, [string, (...args) => void, boolean?]>;
+
+export const useHandlerGuard = (handlers: Handlers)  => {
   const { enabled } = useManager((state) => ({
     enabled: state.options.enabled,
   }));
@@ -10,12 +12,38 @@ export const useHandlerGuard = (handlers: Record<string, (...args) => void>): Re
 
   isEnabled.current = enabled;
 
-  return useMemo(() => {
-    const guarded = Object.keys(handlers).reduce((acc, key) => {
-      acc[key] = (...args) => isEnabled.current ? handlers[key](...args) : {};
+  // enable/disable callbacks depending on editor state
+
+  const guarded = Object.keys(handlers).reduce((acc, key) => {
+      acc[key] = (...args) => isEnabled.current ? handlers[key][1](...args) : {};
       return acc;
     }, {})
+  
+  // console.log(33, guarded);
+  // // create eventslisteners
+  const fnRefs = useRef({});
+  return useMemo( () => Object.keys(guarded).reduce((accum, key) => {
+    const ref = fnRefs.current[key] || {};
+    accum[key] = ((node, opts) => {
+      if (node) {
+        if (ref.node !== node || ref.opts !== opts) {
+          if ( ref.unsubscribe ) ref.unsubscribe();
+        }
 
-    return guarded;
-  }, []) as any;
+        const event = handlers[key][0];
+        const listener = (e) => guarded[key](e, opts);
+        const capture = !!handlers[key][2];
+        // console.log(33, node, handler, guarded[key], key)
+        node.addEventListener(event, listener, capture);
+        fnRefs.current = {
+          node,
+          opts,
+          unsubscribe: () => node.removeEventListener(event, listener, capture)
+        }
+      }
+    });
+    return accum;
+  }, {}), 
+  []);
+
 }
