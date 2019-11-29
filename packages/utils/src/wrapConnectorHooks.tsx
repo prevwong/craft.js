@@ -1,6 +1,9 @@
 import { isValidElement, ReactElement } from 'react'
 import { cloneElement } from 'react'
 import invariant from 'invariant'
+import { useManager } from 'craftjs'
+import { useMemo } from 'react'
+import { useInternalManager } from 'craftjs/lib/manager/useInternalManager'
 
 /**
  * Thank you react-dnd!
@@ -18,10 +21,12 @@ export function isRef(obj: any) {
 }
 
 function setRef(ref: any, node: any) {
-  if (typeof ref === 'function') {
-    ref(node)
-  } else {
-    ref.current = node
+  if ( node ) {
+    if (typeof ref === 'function') {
+      ref(node)
+    } else {
+      ref.current = node
+    }
   }
 }
 
@@ -64,12 +69,12 @@ function throwIfCompositeComponentElement(element: React.ReactElement<any>) {
   throw new Error()
 }
 
-function wrapHookToRecognizeElement(hook: (node: any) => void) {
-  return (elementOrNode = null) => {
+function wrapHookToRecognizeElement(hook: (node: any, opts: any) => void) {
+  return (elementOrNode = null, opts) => {
     // When passed a node, call the hook straight away.
     if (!isValidElement(elementOrNode)) {
       const node = elementOrNode
-      hook(node)
+      node && hook(node, opts)
       return node
     }
 
@@ -104,4 +109,29 @@ export function wrapConnectorHooks(hooks: any): Record<string, ConnectorElementW
     wrappedHooks[key] = wrappedHook
   })
   return wrappedHooks
+}
+
+export const useConnectorHooks = (hooks: any) => {
+  const {enabled} = useInternalManager((state) => ({
+    enabled: state.options.enabled
+  }));
+
+  // const wrappedHooks: any = {}
+
+  return useMemo(() => {
+    return Object.keys(hooks).reduce((accum, key) => {
+      let hook,
+          cleanupHook;
+
+      if (hooks[key] instanceof Array) {
+        hook = hooks[key][0],
+        cleanupHook = hooks[key][1];
+      } else {
+        hook = hooks[key];
+      }
+
+      accum[key] = (enabled || (!enabled && !cleanupHook)) ? (hook && wrapHookToRecognizeElement(hook)) : (cleanupHook && wrapHookToRecognizeElement(cleanupHook))
+      return accum;
+    }, {})
+  }, [enabled]);
 }
