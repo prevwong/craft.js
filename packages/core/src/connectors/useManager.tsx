@@ -1,8 +1,13 @@
 import { useInternalManager, ManagerCollector } from "../manager/useInternalManager";
-import { useConnectorHooks, ConnectorElementWrapper } from "craftjs-utils";
+import { ConnectorElementWrapper} from "craftjs-utils";
 
-export type useManager<S = null> = useInternalManager<S> & {
-  actions: string
+type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
+type Delete<T, U> = Pick<T, Exclude<keyof T, U>>;
+
+export type useManager<S = null> = 
+  Overwrite<useInternalManager<S>, {
+    actions: Delete<useInternalManager<S>['actions'], 'setNodeEvent' | 'setDOM'>
+  }> & {
   connectors: { 
     active: ConnectorElementWrapper,
     drag: ConnectorElementWrapper,
@@ -15,24 +20,9 @@ export function useManager<S>(collect: ManagerCollector<S>): useManager<S>;
 
 export function useManager<S>(collect?: any): useManager<S> {
   const {handlers, actions: {setDOM, setNodeEvent, ...actions}, ...collected} = collect ? useInternalManager(collect) : useInternalManager();
-
-  const connectors = useConnectorHooks({ 
-    active: handlers.selectNode,
-    drag: [
-      (node, id) => {
-        node.setAttribute("draggable", true);
-        handlers.dragNode(node, id);
-        handlers.dragNodeEnd(node, id);
-      },
-      (node, id) => {
-        node.removeAttribute("draggable", true);
-      }
-    ],
-    hover: handlers.hoverNode
-  })
-
+  
   return {
-    connectors,
+    connectors: handlers,
     actions,
     ...collected as any
   }

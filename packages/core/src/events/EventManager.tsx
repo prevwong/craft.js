@@ -1,15 +1,13 @@
 import React, { useRef, useMemo, useEffect, useCallback } from "react";
 import { Node, NodeId, ManagerEvents} from "../interfaces";
 import movePlaceholder from "./movePlaceholder";
-import { getDOMInfo, wrapConnectorHooks } from "craftjs-utils";
+import { getDOMInfo, useConnectorHooks } from "craftjs-utils";
 import { useInternalManager } from "../manager/useInternalManager";
 import { debounce } from "lodash"
 import {useHandlerGuard} from "craftjs-utils";
 
 export type EventContext = any;
-
 export const EventContext = React.createContext<EventContext>(null);
-
 export const EventManager: React.FC = ({ children }) => {
     const { enabled, events, renderPlaceholder, query, actions: { add, setNodeEvent, setPlaceholder, move } } = useInternalManager((state) => ({
         renderPlaceholder: state.options.renderPlaceholder,
@@ -18,7 +16,6 @@ export const EventManager: React.FC = ({ children }) => {
     }));
 
     const mutable = useRef<ManagerEvents>(null);
-
     mutable.current = events;
     const draggedNode = useRef<Node | NodeId>(null);
 
@@ -48,7 +45,7 @@ export const EventManager: React.FC = ({ children }) => {
         ],
         dragNode: [
             "dragstart",
-            (e: React.MouseEvent, node: Node | NodeId) => {
+            (e: MouseEvent, node: Node | NodeId) => {
                 e.stopPropagation();
                 if (typeof node === 'string') setNodeEvent('dragging', node);
                 draggedNode.current = node;
@@ -56,9 +53,17 @@ export const EventManager: React.FC = ({ children }) => {
         ],
         dragNodeOver: [
             "dragover",
-            (e: React.MouseEvent, id: NodeId) => {
+            (e: MouseEvent, id: NodeId) => {
                 e.preventDefault();
                 e.stopPropagation();
+            }
+        ],
+        dragNodeEnter: [
+            "dragenter",
+            (e: MouseEvent, id: NodeId) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log("dragenter")
                 const { current: start } = draggedNode;
                 if (!start) return;
                 const dragId = typeof start == 'object' ? start.id : start;
@@ -77,7 +82,7 @@ export const EventManager: React.FC = ({ children }) => {
         ],
         dragNodeEnd: [
             "dragend",
-            (e: React.MouseEvent) => {
+            (e: MouseEvent) => {
                 e.stopPropagation();
                 const events = mutable.current;
                 if (events.placeholder && !events.placeholder.error) {
@@ -93,10 +98,30 @@ export const EventManager: React.FC = ({ children }) => {
                 setNodeEvent('dragging', null);
             }
         ]
-    });
+    }, enabled);
+
+    const connectors = useConnectorHooks({ 
+        active: handlers.selectNode,
+        drag: [
+        (node, id) => {
+            node.setAttribute("draggable", "true");
+            handlers.dragNode(node, id);
+            handlers.dragNodeEnd(node, id);
+        },
+        (node, id) => {
+            node.removeAttribute("draggable");
+        }
+        ],
+        hover: handlers.hoverNode,
+        drop: (node, id) => {
+            handlers.dragNodeOver(node, id);
+            handlers.dragNodeEnter(node, id);
+        }
+    }, enabled);
+
 
     return (
-        <EventContext.Provider value={handlers}>
+        <EventContext.Provider value={connectors}>
             {
                 events.placeholder ? (
                     React.createElement(renderPlaceholder, {
@@ -109,7 +134,6 @@ export const EventManager: React.FC = ({ children }) => {
                             ),
                             transition: '0.2s ease-in'
                         }
-
                     })
                 ) : null
             }
