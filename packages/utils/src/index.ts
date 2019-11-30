@@ -1,7 +1,6 @@
 export * from './constants'
-export * from './createReduxMethods'
+export * from './useReduxMethods'
 export * from './getDOMInfo'
 export * from './useCollector'
 export * from './useHandlerGuard'
-export * from './wrapConnectorHooks'
-
+export * from './useConnectorHooks'

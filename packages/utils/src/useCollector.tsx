@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Unsubscribe } from "redux";
-import { CallbacksFor, Methods, StateFor, QueryCallbacksFor, QueryMethods } from "./createReduxMethods";
-import { SubscriberAndCallbacksFor } from "./createReduxMethods";
+import { CallbacksFor, Methods, StateFor, QueryCallbacksFor, QueryMethods, SubscriberAndCallbacksFor } from "./useReduxMethods";
 import {isEqualWith} from "lodash";
 
 // console.log(1001, shallowequal({}, {}));
