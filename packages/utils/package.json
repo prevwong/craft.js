@@ -5,6 +5,8 @@
   "description": "Shared utilities used across the craft.js monorepo",
   "author": "Prev Wong <prevwong@gmail.com>",
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "type": "module",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "../../scripts/build.sh",
