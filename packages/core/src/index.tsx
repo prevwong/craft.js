@@ -3,7 +3,7 @@ export * from "./render"
 export * from "./interfaces";
 export * from './connectors';
 import React from 'react';
-import { Options } from "interfaces";
+import { Options } from "./interfaces";
 import { EventManager } from "./events";
 import {ManagerContextProvider} from "./manager";
 

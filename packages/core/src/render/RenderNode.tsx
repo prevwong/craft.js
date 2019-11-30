@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from "react";
+import React from "react";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { useNode } from "../connectors";
 import { Canvas } from "../nodes";
