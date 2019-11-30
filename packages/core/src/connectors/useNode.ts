@@ -14,32 +14,32 @@ export type useNode<S = null> = useInternalNode<S> & {
 export function useNode(): useNode
 export function useNode<S = null>(collect?: (node: Node) => S): useNode<S>
 export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
-  const { handlers } = useInternalManager();
+  const { handlers: managerConnectors, enabled } = useInternalManager((state) => ({enabled: state.options.enabled}));
 
   const { id, related, actions: { setDOM, setProp }, _inNodeContext, ...collected } = useInternalNode(collect);
-
+  
   const connectors = useConnectorHooks({
       connectDragHandler: [
         (node) => {
+          console.log("adding draggable", _inNodeContext)
           if ( _inNodeContext ) {
-            node.setAttribute("draggable", true)
-            handlers.dragNode(node, id);
-            handlers.dragNodeEnd(node, id);
+            node.setAttribute("draggable", "true")
+            managerConnectors.drag(node, id);
           }
         },
         (node) => {
-          node.removeAttribute("draggable", true)
+          node.removeAttribute("draggable")
         }
       ],
       connectTarget: (node) => {
         if (_inNodeContext) {
-          handlers.selectNode(node, id);
-          handlers.hoverNode(node, id);
-          handlers.dragNodeOver(node, id);
+          managerConnectors.active(node, id);
+          managerConnectors.hover(node, id);
+          managerConnectors.drop(node, id);
           setDOM(node);
         }
       }
-    });
+  }, enabled);
 
   return {
     id,
