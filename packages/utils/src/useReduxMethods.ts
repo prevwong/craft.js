@@ -1,6 +1,6 @@
 import produce, { PatchListener } from 'immer';
 import { createStore, Unsubscribe } from 'redux';
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useRef } from 'react';
 
 type Subscriber = (listener: () => void) => Unsubscribe;
 
@@ -55,13 +55,17 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<a
 
 
 
-export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends QueryMethods>(
+export function useReduxMethods<S, R extends MethodRecordBase<S>, Q extends QueryMethods>(
   methodsOrOptions: Methods<S, R, QueryCallbacksFor<Q>>, // methods to manipulate the state
   initialState: any,
   queryMethods?: Q // methods to perform some queries/transformation on the current state
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q> {
 
-  let prevState = initialState;
+  let states = useRef({
+    old: initialState,
+    present: initialState
+  });
+
   let methods: Methods<S, R>;
   let patchListener: PatchListener | undefined;
   if (typeof methodsOrOptions === 'function') {
@@ -92,7 +96,7 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
     return {
       ...accum,
       [key]: (...args: any) => {
-        const state = getState();
+        const state = states.current.present;
         return queryMethods(state)[key](...args)
       }
     };
@@ -102,10 +106,8 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
         actions = actionTypes.reduce(
           (accum, type) => {
             accum[type] = (...payload) => {
-
-              prevState = { ...getState() };
-
-              return dispatch({ type, payload } as ActionUnion<R>)
+              const reducer = dispatch({ type, payload } as ActionUnion<R>);
+              return reducer;
             };
             return accum;
           },
@@ -113,22 +115,22 @@ export function createReduxMethods<S, R extends MethodRecordBase<S>, Q extends Q
         );
 
 
-  // const unsubscribe = useMemo(() => {
-  //   return subscribe(() => {
-  //     currentState = getState();
-  //   });
-  // }, []);
+  const unsubscribe = useMemo(() => {
+    return subscribe(() => {
+      states.current.present = getState();
+    });
+  }, []);
 
-  // useEffect(() => {
-  //   return (() => {
-  //     unsubscribe();
-  //   })
-  // }, [])
+  useEffect(() => {
+    return (() => {
+      unsubscribe();
+    })
+  }, [])
   
-  return {
+  return useMemo(() => ({
     subscribe,
-    getState: () => ({ prev: prevState, current: getState() }),
+    getState: () => ({ prev: states.current.old, current: states.current.present }),
     actions,
     query
-  };
+  }), []);
 }

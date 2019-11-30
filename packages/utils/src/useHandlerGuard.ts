@@ -1,15 +1,13 @@
 import { useRef, useMemo } from "react";
-import { useManager } from "craftjs";
+import { EventEmitter } from "events";
 
-type Handlers = Record<string, [string, (...args) => void, boolean?]>;
-
-export const useHandlerGuard = (handlers: Handlers)  => {
-  const { enabled } = useManager((state) => ({
-    enabled: state.options.enabled,
-  }));
-
+export function useHandlerGuard<
+  T extends string,
+>(
+  handlers: Record<T, [keyof DocumentEventMap, (e: MouseEvent, options?: any) => void, boolean?]>, 
+  enabled
+): Record<T, (e: any, options: any) => void>  {
   const isEnabled = useRef<boolean>(enabled);
-
   isEnabled.current = enabled;
 
   // enable/disable callbacks depending on editor state
@@ -44,6 +42,6 @@ export const useHandlerGuard = (handlers: Handlers)  => {
     });
     return accum;
   }, {}), 
-  []);
+  []) as any;
 
 }

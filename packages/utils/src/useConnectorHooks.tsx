@@ -1,19 +1,18 @@
 import { isValidElement, ReactElement } from 'react'
 import { cloneElement } from 'react'
 import invariant from 'invariant'
-import { useManager } from 'craftjs'
 import { useMemo } from 'react'
-import { useInternalManager } from 'craftjs/lib/manager/useInternalManager'
+// import { useInternalManager } from 'craftjs/lib/manager/useInternalManager'
 
 /**
  * Thank you react-dnd!
  */
 
-export interface Ref<T> {
+interface Ref<T> {
   current: T
 }
 
-export function isRef(obj: any) {
+function isRef(obj: any) {
   return (
     // eslint-disable-next-line no-prototype-builtins
     obj !== null && typeof obj === 'object' && obj.hasOwnProperty('current')
@@ -95,12 +94,10 @@ export type ConnectableElement =
   | Element
   | null
 
-export type ConnectorElementWrapper = (
-  elementOrNode: ConnectableElement
-) => React.ReactElement | null
+export type ConnectorElementWrapper = (elementOrNode: ConnectableElement, options?: any) => React.ReactElement | null
 
 
-export function wrapConnectorHooks(hooks: any): Record<string, ConnectorElementWrapper> {
+function wrapConnectorHooks(hooks: any): Record<string, ConnectorElementWrapper> {
   const wrappedHooks: any = {}
 
   Object.keys(hooks).forEach(key => {
@@ -111,13 +108,11 @@ export function wrapConnectorHooks(hooks: any): Record<string, ConnectorElementW
   return wrappedHooks
 }
 
-export const useConnectorHooks = (hooks: any) => {
-  const {enabled} = useInternalManager((state) => ({
-    enabled: state.options.enabled
-  }));
+type ConnectorMethod = (element: HTMLElement, options?: any) => void
 
-  // const wrappedHooks: any = {}
-
+export function useConnectorHooks<
+  T extends string
+  >(hooks: Record<T, ConnectorMethod | [ConnectorMethod, ConnectorMethod]>, active: boolean = true): Record<T, (node: ConnectableElement, options?: any) => void> {
   return useMemo(() => {
     return Object.keys(hooks).reduce((accum, key) => {
       let hook,
@@ -130,8 +125,8 @@ export const useConnectorHooks = (hooks: any) => {
         hook = hooks[key];
       }
 
-      accum[key] = (enabled || (!enabled && !cleanupHook)) ? (hook && wrapHookToRecognizeElement(hook)) : (cleanupHook && wrapHookToRecognizeElement(cleanupHook))
+      accum[key] = (active || (!active && !cleanupHook)) ? (hook && wrapHookToRecognizeElement(hook)) : (cleanupHook && wrapHookToRecognizeElement(cleanupHook))
       return accum;
     }, {})
-  }, [enabled]);
+  }, [active]) as any;
 }
