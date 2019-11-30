@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useMemo, useState } from "react";
 import { Options } from "../interfaces";
 import { createOptions } from "./createOptions";
-import { createManagerStore, ManagerStore } from "../manager/store";
+import { useManagerStore, ManagerStore } from "../manager/store";
 import { Nodes, ManagerEvents } from "../interfaces";
 import { ROOT_NODE } from "craftjs-utils";
 import { Canvas } from "../nodes";
@@ -33,7 +33,7 @@ export const createManagerContext = (
   }
 ) => {
   const { nodes, events, options } = data;
-  const store = createManagerStore(nodes, events, createOptions(options));
+  const store = useManagerStore(nodes, events, createOptions(options));
   return {
     ...store,
     handlers: {}
@@ -48,10 +48,7 @@ export const ManagerContextProvider: React.FC<{ options?: Options}> = ({ childre
   }, []);
 
 
-  const context = useMemo(() => {
-    return createManagerContext({options});
-  }, []);
-
+  const context = createManagerContext({options});
 
   useEffect(() => {
     // console

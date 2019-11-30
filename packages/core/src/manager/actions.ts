@@ -1,11 +1,9 @@
 import { NodeId, Node, Nodes, Options } from "../interfaces";
 import { ManagerState, PlaceholderInfo } from "../interfaces";
-import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID, ROOT_NODE, CallbacksFor } from "craftjs-utils";
+import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID, ROOT_NODE, CallbacksFor, QueryCallbacksFor } from "craftjs-utils";
 import { isCanvas, isTopLevelCanvas } from "../nodes";
 import { QueryMethods } from "./query";
-import { QueryCallbacksFor } from "craftjs-utils";
 import { updateEventsNode } from "../utils/updateEventsNode";
-import { debounce } from "lodash"
 
 const invariant = require('invariant');
 
@@ -29,7 +27,6 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
         state.nodes[current].event[eventType] = false;
       }
 
-      // if ( eventType == "active") console.log("active", id)
       if (id) {
         const node = state.nodes[id];
         state.nodes[id].event[eventType] = true

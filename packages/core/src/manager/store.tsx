@@ -1,11 +1,11 @@
-import { createReduxMethods, SubscriberAndCallbacksFor } from "craftjs-utils";
+import { useReduxMethods, SubscriberAndCallbacksFor } from "craftjs-utils";
 import { NodeRefEvent, ManagerState, ManagerEvents, Options } from "../interfaces";
 import Actions from "./actions";
 import { QueryMethods } from "./query";
 
 export type ManagerStore = SubscriberAndCallbacksFor<typeof Actions>
 
-export const createManagerStore = (
+export const useManagerStore = (
   nodes = {}, 
   events: ManagerEvents = {
     active: null, 
@@ -16,7 +16,7 @@ export const createManagerStore = (
   options: Partial<Options> = {}
 ): ManagerStore => {
 
-  return createReduxMethods(
+  return useReduxMethods(
     Actions,
     {
       nodes,
