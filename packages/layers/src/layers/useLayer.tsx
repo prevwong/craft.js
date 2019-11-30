@@ -28,8 +28,9 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer <S> 
     return id && state.layers[id] && collect(state.layers[id]) 
   }) : useLayerManager();
 
-  const { children } = useManager((state, query) => ({
-    children: state.nodes[id] && query.getDeepNodes(id, false)
+  const { enabled, children, connectors: managerConnectors } = useManager((state, query) => ({
+    children: state.nodes[id] && query.getDeepNodes(id, false),
+    enabled: state.options.enabled
   }));
 
 
@@ -38,10 +39,13 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer <S> 
 
   const connectors = useConnectorHooks({
     connectLayer: (node) => {
-      handlers.onMouseDown(node, id)
+      managerConnectors.active(node, id);
+      managerConnectors.hover(node, id);
       handlers.onMouseOver(node, id)
       handlers.onDragOver(node, id)
+      handlers.onDragEnter(node, id)
       handlers.onDragEnd(node, id)
+      managerConnectors.drag(node, id);
 
       managerActions.setDOM(id, {
         dom: node,
@@ -59,7 +63,7 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer <S> 
       },
       (node) => node.removeAttribute("draggable")
     ]
-  }) as any;
+  }, enabled) as any;
 
   const actions = useMemo(() => {
     return {

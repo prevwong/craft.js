@@ -1,6 +1,6 @@
 import React, { createContext, useMemo } from "react";
 import { EventManager } from "../events";
-import {createReduxMethods, SubscriberAndCallbacksFor } from "craftjs-utils";
+import { useReduxMethods, SubscriberAndCallbacksFor } from "craftjs-utils";
 import { LayerMethods } from "./actions";
 import { LayerOptions } from "../interfaces";
 import { DefaultLayer } from "../layers/DefaultLayer";
@@ -10,7 +10,7 @@ export type LayerStore = SubscriberAndCallbacksFor<typeof LayerMethods>;
 export const LayerManagerContext = createContext<{store: LayerStore }>(null);
 
 
-export const createLayersStore = (options: Partial<LayerOptions>) => createReduxMethods(LayerMethods, {
+export const createLayersStore = (options: Partial<LayerOptions>) => useReduxMethods(LayerMethods, {
     layers: {},
     events: {
         active: null,

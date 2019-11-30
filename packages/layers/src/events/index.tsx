@@ -7,7 +7,7 @@ export const EventContext = React.createContext(null);
 
 export const EventManager: React.FC<any> = ({ children }) => {
     const { layers, events, actions } = useLayerManager((state) => state);
-    const { query, actions: { move, setNodeEvent, setPlaceholder } } = useManager();
+    const { query, actions: { move, setPlaceholder }, enabled } = useManager((state) => ({enabled: state.options.enabled}));
     const {renderPlaceholder} = query.getOptions();
     const [placeholder, setInnerPlaceholder] = useState(null);
 
@@ -70,32 +70,29 @@ export const EventManager: React.FC<any> = ({ children }) => {
     
     const draggedNode = useRef<string>(null);
     const handlers = useHandlerGuard({
-
-        onMouseDown: [
-            "mousedown",
-            (e, id) => {
-                // e.preventDefault();
-                e.stopPropagation();
-                // setNodeEvent("active", id);
-                // actions.setLayerEvent("active", id);
-            }
-        ],
         onDragStart: [
             "dragstart",
-            (e: React.MouseEvent, id: string) => {
+            (e: MouseEvent, id: string) => {
                 e.stopPropagation();
                 draggedNode.current = id;
             }
         ],
         onMouseOver: [
             "mouseover",
-            (e: React.MouseEvent, id: NodeId) => {
+            (e: MouseEvent, id: NodeId) => {
                 e.stopPropagation();
                 actions.setLayerEvent("hover", id);
             }
         ],
         onDragOver: [
             "dragover",
+            (e, id) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        ],
+        onDragEnter: [
+            "dragenter",
             (e, id) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -167,7 +164,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
         ],
         onDragEnd: [
             "dragend",
-            (e: React.MouseEvent) => {
+            (e: MouseEvent) => {
                 e.stopPropagation();
                 const events = mutable.current;
                 if (events.placeholder && !events.placeholder.error) {
@@ -180,11 +177,10 @@ export const EventManager: React.FC<any> = ({ children }) => {
 
                 draggedNode.current = null;
                 setInnerPlaceholder(null);
-                setNodeEvent('dragging', null);
             }
         ]
         
-    })
+    }, enabled)
 
     const onOver = useCallback((e: MouseEvent) => {
         const { layers } = mutable.current;
