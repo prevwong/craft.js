@@ -20,14 +20,6 @@ export const EventManager: React.FC = ({ children }) => {
     const draggedNode = useRef<Node | NodeId>(null);
 
 
-    useEffect(() => {
-        if (!enabled) {
-            setNodeEvent("active", null);
-            setNodeEvent("hover", null);
-            setNodeEvent("dragging", null);
-        }
-    }, [enabled]);
-
     const handlers = useHandlerGuard({
         selectNode: [
             "mousedown", 
@@ -101,18 +93,25 @@ export const EventManager: React.FC = ({ children }) => {
     }, enabled);
 
     const connectors = useConnectorHooks({ 
-        active: handlers.selectNode,
-        drag: [
-        (node, id) => {
-            node.setAttribute("draggable", "true");
-            handlers.dragNode(node, id);
-            handlers.dragNodeEnd(node, id);
-        },
-        (node, id) => {
-            node.removeAttribute("draggable");
-        }
+        active: [
+            handlers.selectNode,
+            () => setNodeEvent('active', null)
         ],
-        hover: handlers.hoverNode,
+        drag: [
+            (node, id) => {
+                node.setAttribute("draggable", "true");
+                handlers.dragNode(node, id);
+                handlers.dragNodeEnd(node, id);
+            },
+            (node, id) => {
+                setNodeEvent("dragging", null);
+                node.removeAttribute("draggable");
+            }
+        ],
+        hover: [
+            handlers.hoverNode,
+            () => setNodeEvent("hover", null)
+        ],
         drop: (node, id) => {
             handlers.dragNodeOver(node, id);
             handlers.dragNodeEnter(node, id);
