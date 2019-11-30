@@ -1,26 +1,29 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "dist",
+   "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "paths": {
       "craftjs": [
         "packages/core/src/index"
       ],
-      "craftjs-layers": [
-        "packages/layers/src/index"
-      ],
       "craftjs/*": [
         "packages/core/src/*"
       ],
+      "craftjs-layers": [
+        "packages/layers/src/index"
+      ],
       "craftjs-utils": [
-        "packages/shared/src/index"
+        "packages/utils/src/index"
+      ],
+      "craftjs-utils/*": [
+        "packages/utils/src/*"
       ]
     }
   },
   "exclude": [
     "**/node_modules/**",
-    "**/dist/**"
+    "**/dist/**",
+    "**/lib/**"
   ]
 }
