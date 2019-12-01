@@ -15,7 +15,7 @@ export type NodeEvents = 'active' | 'dragging' | 'hover';
 export type InternalNode = Pick<Node, 'id'> & NodeData
 export type NodeRefEvent = Record<NodeEvents, boolean>
 export type NodeRules = {
-  canDrag(): boolean;
+  canDrag(node: Node): boolean;
   incoming?(incoming: Node, self: Node): boolean;
   outgoing?(outgoing: Node, self: Node): boolean;
 }

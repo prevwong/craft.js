@@ -8,7 +8,7 @@ import {
   Node,
   Options,
 } from "../interfaces";
-import { isCanvas, Canvas } from "../nodes";
+import { isCanvas, Canvas, isRoot } from "../nodes";
 import { serializeNode } from "../utils/serializeNode";
 import { deserializeNode } from "../utils/deserializeNode";
 import { resolveComponent } from "../utils/resolveComponent";
@@ -25,6 +25,8 @@ import {
   ERROR_DUPLICATE_NODEID,
   ERROR_NOPARENT,
   getDOMInfo,
+  ERROR_CANNOT_DRAG,
+  ERROR_MOVE_ROOT_CANVAS,
 } from "craftjs-utils";
 import findPosition from "../events/findPosition";
 import { getDeepNodes } from "../utils/getDeepNodes";
@@ -34,6 +36,8 @@ import { transformJSXToNode } from "../utils/transformJSX";
  * Manager methods used to query nodes
  * @param nodes
  */
+
+const getNodeFromIdOrNode = (node: NodeId | Node, cb: (id: NodeId) => Node) => typeof node === "string" ? cb(node) : node;
 
 export function QueryMethods(manager: ManagerState) {
   const _ = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) =>
@@ -114,13 +118,22 @@ export function QueryMethods(manager: ManagerState) {
         return accum;
       }, {});
     },
+    canDragNode: (node: Node | NodeId) => {
+      const targetNode = getNodeFromIdOrNode(node, (id) => manager.nodes[id]);
+      if ( !isRoot(targetNode) ) {
+        invariant(isCanvas(targetNode.data.parent) == true, ERROR_MOVE_ROOT_CANVAS);
+        invariant(targetNode.rules.canDrag(targetNode), ERROR_CANNOT_DRAG);
+      }
+
+      return true;
+    },
     canDropInParent: (node: Node | NodeId, newParent: NodeId) => {
-      const targetNode = typeof node === "string" ? manager.nodes[node] : node;
+      const targetNode = getNodeFromIdOrNode(node, (id) => manager.nodes[id]);
+
       const currentParentNode =
           targetNode.data.parent &&
           manager.nodes[targetNode.data.parent],
         newParentNode = manager.nodes[newParent];
-
 
       invariant(
         currentParentNode ||
@@ -170,6 +183,8 @@ export function QueryMethods(manager: ManagerState) {
       const targetNode = manager.nodes[target],
         isTargetCanvas = isCanvas(targetNode);
 
+      
+
       const targetParent =
           (isTargetCanvas) ? targetNode
             : manager.nodes[targetNode.data.parent];
@@ -203,10 +218,6 @@ export function QueryMethods(manager: ManagerState) {
         ? manager.nodes[targetParentNodes[dropAction.index]]
         : null;
 
-      // Prevent from dragging self into a descendant
-      // if (
-      //   ( _('getDeepNodes')(source).includes(targetNode.id))
-      // ) return;
       const output: PlaceholderInfo = {
         placement: {
           ...dropAction,
@@ -216,8 +227,10 @@ export function QueryMethods(manager: ManagerState) {
       };
 
       try {
+        _("canDragNode")(source);
         _("canDropInParent")(source, targetParent.id);
       } catch (error) {
+        // console.log(error);
         output.error = error;
       }
 

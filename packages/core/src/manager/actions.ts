@@ -97,7 +97,7 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
       invariant(id != ROOT_NODE, "Cannot delete Root node");
       const targetNode = state.nodes[id];
       if (isCanvas(targetNode)) {
-        invariant(isTopLevelCanvas(targetNode), "Cannot delete a Canvas that is not a direct child of another Canvas");
+        invariant(!isTopLevelCanvas(targetNode), "Cannot delete a Canvas that is not a direct child of another Canvas");
         targetNode.data.nodes.map((childId) => {
           _("delete")(childId);
         })
