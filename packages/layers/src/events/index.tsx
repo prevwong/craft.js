@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo, useEffect, useCallback } from "react";
-import { useManager, isCanvas, NodeId, PlaceholderInfo } from "craftjs";
+import { useManager, isCanvas, NodeId, PlaceholderInfo, isTopLevelCanvas } from "craftjs";
 import { useLayerManager } from "../manager/useLayerManager";
 import { useHandlerGuard, ROOT_NODE } from "craftjs-utils";
 import { LayerState } from "interfaces";
@@ -107,7 +107,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
 
                 const hoverInfo = layers[id].dom.getBoundingClientRect();
                 let moveOut;
-                if (e.clientY > hoverInfo.bottom - 5 && targetNode.data.parent) {
+                if (!isTopLevelCanvas(targetNode) && e.clientY > hoverInfo.bottom - 5 && targetNode.data.parent) {
                     const targetParent = query.getNode(targetNode.data.parent);
                     if (targetParent.data.nodes.indexOf(target) === targetParent.data.nodes.length - 1) {
 
