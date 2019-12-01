@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import ContentEditable from "react-contenteditable";
 import { useManager } from "craftjs";
-import { useLayer } from "../useLayer";
+import { useLayer } from "../../useLayer";
 
 export const EditableLayerName = () => {
   const {id} = useLayer();

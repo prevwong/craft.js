@@ -1,12 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import {LayerOptions} from "../../interfaces";
+import React from "react";
 import { useManager } from "craftjs";
 import styled from "styled-components";
 import Eye from './eye.svg'
 import Arrow from './arrow.svg'
-import ContentEditable from "react-contenteditable";
-import {useLayer} from "../../layers/useLayer";
-import { EditableLayerName } from "./EditableLayerName";
+import {useLayer} from "../../../layers/useLayer";
+import { EditableLayerName } from "./index";
 
 const StyledDiv = styled.div<{ depth: number, active: boolean }>`
   display:flex;

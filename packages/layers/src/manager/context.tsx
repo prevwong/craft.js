@@ -3,8 +3,7 @@ import { EventManager } from "../events";
 import { useReduxMethods, SubscriberAndCallbacksFor } from "craftjs-utils";
 import { LayerMethods } from "./actions";
 import { LayerOptions } from "../interfaces";
-import { DefaultLayer } from "../layers/DefaultLayer";
-import { DefaultLayerHeader } from "../layers/DefaultLayerHeader";
+import { DefaultLayer } from "../layers";
 
 export type LayerStore = SubscriberAndCallbacksFor<typeof LayerMethods>;
 export const LayerManagerContext = createContext<{store: LayerStore }>(null);
@@ -19,7 +18,6 @@ export const createLayersStore = (options: Partial<LayerOptions>) => useReduxMet
     },
     options: {
         renderLayer: DefaultLayer, 
-        renderLayerHeader: DefaultLayerHeader,
         ...options
     }
 });
