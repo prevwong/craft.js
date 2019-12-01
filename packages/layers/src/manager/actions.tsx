@@ -1,4 +1,4 @@
-import { LayerState, Layer, LayerEvents } from "../interfaces";
+import { LayerState, LayerEvents } from "../interfaces";
 
 export const LayerMethods = (state: LayerState) => ({
   setLayerEvent: (eventType: LayerEvents, id: string) => {

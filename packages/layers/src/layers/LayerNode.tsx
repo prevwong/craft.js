@@ -1,9 +1,8 @@
-import React, { useContext, useMemo, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { useManager } from "craftjs";
 import { useLayerManager } from "../manager/useLayerManager";
 import { useLayer } from "./useLayer";
 import { LayerContextProvider } from "./context";
-import { EventContext } from "../events";
 
 export const LayerNode: React.FC = () => {
   const { id, depth, children, expanded  } = useLayer((layer) => ({
@@ -30,13 +29,14 @@ export const LayerNode: React.FC = () => {
   }, [shouldBeExpanded])
   
 
-  actions.registerLayer(id);
+  const initRef = useRef<boolean>(false);
+  if ( !initRef.current ) {
+    actions.registerLayer(id);
+    initRef.current = true;
+  }
   return (
     data ? ( 
-      <div 
-        className={`craft-layer-node ${id}`}
-       
-      >
+      <div className={`craft-layer-node ${id}`}>
         {
           React.createElement(renderLayer, {}, 
             (children && expanded) ?
