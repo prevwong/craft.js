@@ -10,7 +10,7 @@ import LayerIcon from "../../../public/icons/layers.svg";
 
 export const SidebarDiv = styled.div`
   width: 270px;
-  background: #fafafa
+  background: #fff;
 `;
 
 export const Sidebar = () => {

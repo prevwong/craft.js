@@ -1,9 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-  @import url("https://use.typekit.net/mpa1wkh.css");
+@import url("https://use.typekit.net/mpa1wkh.css");
+
 html, body {
-  font-family: 'acumin-pro', sans-serif;
+  font-family: 'acumin-pro', sans-serif, serif;
   color: rgb(75,75,75);
 }
 
