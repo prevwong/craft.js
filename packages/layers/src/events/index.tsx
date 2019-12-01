@@ -1,7 +1,8 @@
 import React, { useState, useRef, useMemo, useEffect, useCallback } from "react";
-import { useManager, isCanvas, NodeId } from "craftjs";
+import { useManager, isCanvas, NodeId, PlaceholderInfo } from "craftjs";
 import { useLayerManager } from "../manager/useLayerManager";
 import { useHandlerGuard, ROOT_NODE } from "craftjs-utils";
+import { LayerState } from "interfaces";
 
 export const EventContext = React.createContext(null);
 
@@ -13,7 +14,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
 
     const dom = useRef<HTMLElement>();
 
-    const mutable = useRef<any>({
+    const mutable = useRef<Omit<LayerState, 'options'> & {placeholder: PlaceholderInfo}>({
         layers: null,
         events: null,
         placeholder
@@ -128,11 +129,9 @@ export const EventManager: React.FC<any> = ({ children }) => {
                     const parentHeadingInfo = layers[parent.id].headingDom.getBoundingClientRect(),
                         parentInfo = layers[parent.id].dom.getBoundingClientRect();
 
-                    if (!moveOut && !layers[parent.id].dom.querySelector(".craft-layer-node-children")) {
-                        if (
-                            (isCanvas(parent) && (e.clientY < (parentHeadingInfo.bottom - 5)))
-                        ) {
-                            if (e.clientY > parentInfo.top + 10 && e.clientY < parentHeadingInfo.bottom - 10) {
+                    if (!moveOut && !layers[parent.id].expanded ) {
+                        if ( isCanvas(parent) ) {
+                            if (e.clientY < parentHeadingInfo.bottom - 10)  {
                                 onCanvas = true;
                                 placeholderInfo.placement.currentNode = query.getNode(parent.data.nodes[parent.data.nodes.length - 1]);
                                 placeholderInfo.placement.index = parent.data.nodes.length
@@ -152,6 +151,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
                                     }
                                 }
                             }
+                            
                         }
                     }
 
