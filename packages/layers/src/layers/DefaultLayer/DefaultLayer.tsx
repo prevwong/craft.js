@@ -2,27 +2,58 @@ import React from "react";
 import styled from "styled-components";
 import { useLayer } from "../useLayer";
 import { DefaultLayerHeader } from "./index";
+import { useManager, hasTopLevelCanvases } from "craftjs";
 
 
-const LayerNodeDiv = styled.div<{hover: boolean}>`
+const LayerNodeDiv = styled.div<{expanded: boolean; hasCanvases: boolean; hover: boolean}>`
   background: ${props => props.hover ? '#f1f1f1' : 'transparent'};
   display:block;
+  padding-bottom: ${props => props.hasCanvases && props.expanded ? 5 : 0}px;
 
 `
 
-export const DefaultLayer: React.FC = ({children}) => {
-  const {id, hover, connectLayer} = useLayer((layer) => ({
-    hover: layer.event.hover
-  }));
+const LayerChildren = styled.div<{ hasCanvases: boolean }>`
+  margin: 0 0 0 ${props => props.hasCanvases ? 35 : 0}px;
+  background: ${props => props.hasCanvases ? "rgba(255, 255, 255, 0.02)": "transparent"};
+  position:relative;  
+
+  ${props => props.hasCanvases ? `
   
+  box-shadow: 0px 0px 44px -1px #00000014;
+  border-radius: 10px;
+  margin-right: 5px;
+  margin-bottom:5px;
+  margin-top:5px; 
+  > * { overflow:hidden; }
+    &:before { 
+      position:absolute;
+      left:-19px;
+      width: 2px;
+      height:100%;
+      content: " ";
+      background:#00000012;
+    }
+  ` : ""} 
+`;
+
+export const DefaultLayer: React.FC = ({children}) => {
+  const {id, expanded,  hover, connectLayer} = useLayer((layer) => ({
+    hover: layer.event.hover,
+    expanded: layer.expanded
+  }));
+  const { hasChildCanvases } = useManager((state) => {
+    return {
+      hasChildCanvases: hasTopLevelCanvases(state.nodes[id])
+    }
+  });
 
   return (
-    <LayerNodeDiv ref={connectLayer} hover={hover}>
+    <LayerNodeDiv ref={connectLayer} expanded={expanded} hasCanvases={hasChildCanvases} hover={hover}>
         <DefaultLayerHeader />
         {children ? (
-          <div className="craft-layer-children">
+          <LayerChildren hasCanvases={hasChildCanvases} className="craft-layer-children">
             {children}
-          </div>
+          </LayerChildren>
         ) : null}
     </LayerNodeDiv>
   )

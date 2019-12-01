@@ -1,8 +1,9 @@
 import React from "react";
-import { useManager } from "craftjs";
+import { useManager, hasTopLevelCanvases, isTopLevelCanvas } from "craftjs";
 import styled from "styled-components";
 import Eye from './eye.svg'
 import Arrow from './arrow.svg'
+import Linked from "./linked.svg"
 import {useLayer} from "../../../layers/useLayer";
 import { EditableLayerName } from "./index";
 
@@ -11,8 +12,8 @@ const StyledDiv = styled.div<{ depth: number, active: boolean }>`
   flex-direction: row;
   align-items: center;
   padding: 4px 10px;
-  background: ${props => props.active ? '#6794fd' : 'transparent' };
-  color: ${props => props.active ? '#fff' : '#2d2d2d' };
+  background: ${props => props.active ? '#2680eb' : 'transparent' };
+  color: ${props => props.active ? '#fff' : 'inherit' };
   svg {
     fill: ${props => props.active ? '#fff' : '#808184' };
     margin-top:2px;
@@ -20,25 +21,26 @@ const StyledDiv = styled.div<{ depth: number, active: boolean }>`
   .inner {
     flex:1;
     > div {
-      padding: 0px;
+
+      padding: 0px; 
       flex:1;
       display:flex;
       margin-left: ${props => props.depth * 10}px;
-     align-items: center;
-     div.layer-name {
-          flex:1;
-          h2 { 
-            font-size:15px;
-            line-height: 26px;
-          }
-       }
+      align-items: center;
+      div.layer-name {
+        flex:1;
+        h2 { 
+          font-size:15px;
+          line-height: 26px;
+        }
+      }
     }
   }
 `;
 
 const Expand = styled.a<{expanded: boolean}>`
-width: 20px;
-height: 20px;
+width: 8px;
+height: 8px;
 display:block;
 transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
 transform: rotate(${props => props.expanded ? 180 : 0}deg);
@@ -78,6 +80,16 @@ const Hide = styled.a<{active: boolean; isHidden: boolean}>`
   }
 `;
 
+const TopLevelIndicator = styled.div`
+  margin-left: -22px;
+  margin-right: 10px;
+
+  svg {
+    width: 12px;
+    height:12px;
+  }
+`
+
 export const DefaultLayerHeader: React.FC = () => {
 
   const { id, hover, depth, expanded, children, connectDrag, connectLayerHeader, actions: {toggleLayer}} = useLayer((layer) => {
@@ -88,9 +100,10 @@ export const DefaultLayerHeader: React.FC = () => {
   });
 
 
-  const { hidden, actions, active } = useManager((state) => ({
+  const { hidden, actions, active, topLevel } = useManager((state) => ({
     hidden: state.nodes[id] && state.nodes[id].data.hidden,
-    active:  state.events.active == id
+    active:  state.events.active == id,
+    topLevel: isTopLevelCanvas(state.nodes[id])
   }));  
   
 
@@ -101,7 +114,15 @@ export const DefaultLayerHeader: React.FC = () => {
       </Hide>
       <div className="inner">
         <div ref={connectLayerHeader}>
-          <div className='layer-name'>
+          {
+            topLevel ? (
+              <TopLevelIndicator>
+                <Linked />
+              </TopLevelIndicator>
+            ) : null
+          }
+
+          <div className='layer-name s'>
             <EditableLayerName />
           </div>
           <div>
