@@ -14,10 +14,10 @@ export const defaultPlaceholder: React.FC<Placeholder> = ({ placeholder: { error
         position: 'fixed',
         display: 'block',
         opacity: 1,
-        background: error ? 'red': 'rgb(98, 196, 98)',
-        borderColor: 'rgb(98, 196, 98)',
+        // background: error ? 'red': 'rgb(98, 196, 98)',
+        borderColor: error ? 'red' : 'rgb(98, 196, 98)',
         borderStyle: 'solid',
-        borderWidth: '0px',
+        borderWidth: '1px',
         zIndex: "99999",
         ...suggestedStyles
       }}

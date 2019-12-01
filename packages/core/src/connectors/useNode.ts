@@ -21,7 +21,6 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
   const connectors = useConnectorHooks({
       connectDragHandler: [
         (node) => {
-          console.log("adding draggable", _inNodeContext)
           if ( _inNodeContext ) {
             node.setAttribute("draggable", "true")
             managerConnectors.drag(node, id);
