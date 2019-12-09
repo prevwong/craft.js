@@ -1,8 +1,9 @@
 import React, { useState, useRef, useMemo, useEffect, useCallback } from "react";
-import { useManager, isCanvas, NodeId, PlaceholderInfo, isTopLevelCanvas } from "craftjs";
+import { useManager, isCanvas, NodeId, PlaceholderInfo, isTopLevelCanvas, Node } from "craftjs";
 import { useLayerManager } from "../manager/useLayerManager";
 import { useHandlerGuard, ROOT_NODE } from "craftjs-utils";
 import { LayerState } from "interfaces";
+// import { debounce } from "lodash";
 
 export const EventContext = React.createContext(null);
 
@@ -10,25 +11,27 @@ export const EventManager: React.FC<any> = ({ children }) => {
     const { layers, events, actions } = useLayerManager((state) => state);
     const { query, actions: { move, setPlaceholder }, enabled } = useManager((state) => ({enabled: state.options.enabled}));
     const {renderPlaceholder} = query.getOptions();
-    const [placeholder, setInnerPlaceholder] = useState(null);
+    const [placeholder, setInnerPlaceholder] = useState<PlaceholderInfo & {
+        onCanvas: boolean
+    }>(null);
 
     const dom = useRef<HTMLElement>();
-
-    const mutable = useRef<Omit<LayerState, 'options'> & {placeholder: PlaceholderInfo}>({
+    const mutable = useRef<Omit<LayerState, 'options'> & { placeholder: PlaceholderInfo, currentCanvasHovered?: Node }>({
         layers: null,
         events: null,
-        placeholder
+        placeholder,
+        currentCanvasHovered: null
     });
 
     mutable.current = {
         layers,
         events,
-        placeholder
+        placeholder,
+        currentCanvasHovered: mutable.current.currentCanvasHovered
     }
 
     const placeholderPosition = useMemo(() => {
         if (placeholder) {
-            // console.log(placeholder)
             const { placement: { where, parent, currentNode } } = placeholder;
             const layerId = currentNode ? currentNode.id : parent.id;
             
@@ -90,6 +93,25 @@ export const EventManager: React.FC<any> = ({ children }) => {
             (e, id) => {
                 e.preventDefault();
                 e.stopPropagation();
+
+                const { placeholder, layers, currentCanvasHovered } = mutable.current;
+            
+                console.log("hovering...")
+                if (currentCanvasHovered && placeholder ) {
+                    
+                    const heading = layers[currentCanvasHovered.id].headingDom.getBoundingClientRect();
+                    if ( e.clientY > heading.top + 10 && e.clientY < heading.bottom - 10) {
+                        placeholder.placement.currentNode = query.getNode(currentCanvasHovered.data.nodes[currentCanvasHovered.data.nodes.length - 1]);
+                        placeholder.placement.index = currentCanvasHovered.data.nodes.length
+                        placeholder.placement.where = "after";
+                        placeholder.placement.parent = currentCanvasHovered;
+
+                        setInnerPlaceholder({
+                           ...placeholder,
+                            onCanvas: true
+                        })
+                    }
+                }
             }
         ],
         onDragEnter: [
@@ -102,19 +124,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
 
                 if (!dragId) return;
 
-                let target = id,
-                    targetNode = query.getNode(target);
-
-                const hoverInfo = layers[id].dom.getBoundingClientRect();
-                let moveOut;
-                if (!isTopLevelCanvas(targetNode) && e.clientY > hoverInfo.bottom - 5 && targetNode.data.parent) {
-                    const targetParent = query.getNode(targetNode.data.parent);
-                    if (targetParent.data.nodes.indexOf(target) === targetParent.data.nodes.length - 1) {
-
-                        target = targetParent.data.parent ? targetParent.data.parent : target;
-                        moveOut = true;
-                    }
-                }
+                let target = id;
 
                 const placeholderInfo = query.getDropPlaceholder(
                     dragId,
@@ -123,38 +133,36 @@ export const EventManager: React.FC<any> = ({ children }) => {
                     (node) => layers[node.id] && layers[node.id].dom
                 );
 
+
+                
                 let onCanvas;
                 if (placeholderInfo) {
                     const { placement: { parent } } = placeholderInfo;
-                    const parentHeadingInfo = layers[parent.id].headingDom.getBoundingClientRect(),
-                        parentInfo = layers[parent.id].dom.getBoundingClientRect();
+                    const parentHeadingInfo = layers[parent.id].headingDom.getBoundingClientRect();
 
-                    if (!moveOut && !layers[parent.id].expanded ) {
-                        if ( isCanvas(parent) ) {
-                            if (e.clientY < parentHeadingInfo.bottom - 10)  {
-                                onCanvas = true;
-                                placeholderInfo.placement.currentNode = query.getNode(parent.data.nodes[parent.data.nodes.length - 1]);
-                                placeholderInfo.placement.index = parent.data.nodes.length
-                                placeholderInfo.placement.where = "after"
-                            } else {
-                                if (parent.data.parent) {
-                                    const grandparent = query.getNode(parent.data.parent);
-                                    if (isCanvas(grandparent)) {
-                                        placeholderInfo.placement.parent = grandparent;
-                                        placeholderInfo.placement.currentNode = parent;
-                                        placeholderInfo.placement.index = grandparent.data.nodes.indexOf(parent.id);
-                                        if (e.clientY > parentInfo.bottom - 10) {
-                                            placeholderInfo.placement.where = "after";
-                                        } else {
-                                            placeholderInfo.placement.where = "before";
-                                        }
+                    mutable.current.currentCanvasHovered = null;
+                    if ( isCanvas(parent) ) {
+                        if (parent.data.parent) {
+                            const grandparent = query.getNode(parent.data.parent);
+                            if (isCanvas(grandparent)) {
+                                mutable.current.currentCanvasHovered = parent;
+                                if ( 
+                                    (e.clientY > parentHeadingInfo.bottom - 10 && !layers[parent.id].expanded) || 
+                                    (e.clientY < parentHeadingInfo.top + 10)
+                                ) {
+                                    placeholderInfo.placement.parent = grandparent;
+                                    placeholderInfo.placement.currentNode = parent;
+                                    placeholderInfo.placement.index = grandparent.data.nodes.indexOf(parent.id);
+                                    if (e.clientY > parentHeadingInfo.bottom - 10 && !layers[parent.id].expanded) {
+                                        placeholderInfo.placement.where = "after";
+                                    } else if (e.clientY < parentHeadingInfo.top + 10) {
+                                        placeholderInfo.placement.where = "before";
+
                                     }
                                 }
                             }
-                            
                         }
                     }
-
                     setInnerPlaceholder({
                         ...placeholderInfo,
                         onCanvas
@@ -201,6 +209,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
             window.removeEventListener("mouseover", onOver)
         })
     }, []);
+
 
     return (
         <EventContext.Provider value={handlers}>
