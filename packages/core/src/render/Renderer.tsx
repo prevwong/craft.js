@@ -22,6 +22,7 @@ export const Renderer: React.FC<Renderer> = ({
   const [rootNode, setRootNode] = useState();
   
   
+  
   useEffect(() => {
     if (!nodes) {
       const rootCanvas = React.Children.only(children) as React.ReactElement;
@@ -32,20 +33,18 @@ export const Renderer: React.FC<Renderer> = ({
       add(node);
     } else {
       const rehydratedNodes = deserialize(nodes);
-      console.log("rehydrated", rehydratedNodes)
       replaceNodes(rehydratedNodes);
     }
     setRootNode(getNode(ROOT_NODE))
   }, []);
 
-  const dom = useRef<HTMLElement>(null);
 
   return useMemo(() => {
     return (
       <>
         {
           rootNode ? (
-            React.createElement(is, props, <NodeElement id={ROOT_NODE} />)
+            <NodeElement id={ROOT_NODE} />
           ) : null
         }
       </>

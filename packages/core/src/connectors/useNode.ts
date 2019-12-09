@@ -3,12 +3,13 @@ import { Node  } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { useInternalManager } from "../manager/useInternalManager";
 import {  useConnectorHooks, ConnectorElementWrapper } from "craftjs-utils";
+import { isRoot } from "../nodes";
 
 
 export type useNode<S = null> = useInternalNode<S> & {
   actions: Pick<useInternalNode<S>['actions'], 'setProp'>,
-  connectTarget: ConnectorElementWrapper;
-  connectDragHandler: ConnectorElementWrapper;
+  connect: ConnectorElementWrapper;
+  drag: ConnectorElementWrapper;
 }
 
 export function useNode(): useNode
@@ -19,9 +20,9 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
   const { id, related, actions: { setDOM, setProp }, _inNodeContext, ...collected } = useInternalNode(collect);
   
   const connectors = useConnectorHooks({
-      connectDragHandler: [
+      drag: [
         (node) => {
-          if ( _inNodeContext ) {
+          if ( _inNodeContext && !isRoot(id) ) {
             node.setAttribute("draggable", "true")
             managerConnectors.drag(node, id);
           }
@@ -30,7 +31,7 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
           node.removeAttribute("draggable")
         }
       ],
-      connectTarget: (node) => {
+      connect: (node) => {
         if (_inNodeContext) {
           managerConnectors.active(node, id);
           managerConnectors.hover(node, id);

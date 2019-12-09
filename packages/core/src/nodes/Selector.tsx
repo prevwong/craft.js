@@ -2,21 +2,18 @@ import React from 'react';
 import { useManager } from '../connectors';
 import invariant from 'invariant';
 export type Selector = { 
+  is?: string,
   render: JSX.Element
 }
 
-export const Selector: React.FC<Selector> = ({render, children, ...props}) => {
-  const {handlers, connectors, query} = useManager();
+export const Selector: React.FC<Selector> = ({render, is = "div", children, ...props}) => {
+  const {connectors, query} = useManager();
 
-  const child = React.Children.only(children) as React.ReactElement | string;
-  invariant(typeof child !== 'string', '<Selector> child cannot be a string. Please use an element instead');
+  invariant(typeof is == "string", "The 'is' prop passed to the <Selector /> must be a string");
   
-  if ( typeof child !== 'string' ) {
-    return React.cloneElement(child, {
-      draggable: true,   
-      ref: (ref) => connectors.drag(ref, query.transformJSXToNode(React.createElement(render.type, render.props)))
-    });
-  }
-  
-  return null;
+  return React.createElement(is, {
+    draggable: true,   
+    children,
+    ref: (ref) => connectors.drag(ref, query.transformJSXToNode(React.createElement(render.type, render.props)))
+  });
 }

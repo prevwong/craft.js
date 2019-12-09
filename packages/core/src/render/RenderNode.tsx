@@ -5,9 +5,9 @@ import { Canvas } from "../nodes";
 import { useInternalManager } from "../manager/useInternalManager";
 
 export const SimpleElement = ({render}: any) => {
-  const {connectTarget, connectDragHandler } = useNode();
+  const {connect, drag } = useNode();
 
-  return typeof render.type === "string" ? connectTarget(connectDragHandler(React.cloneElement(render, {draggable: true}))) : render;
+  return typeof render.type === "string" ? connect(drag(React.cloneElement(render))) : render;
 }
 
 export const RenderNodeToElement: React.FC<any> = ({ ...injectedProps}: any) => {

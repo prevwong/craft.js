@@ -55,7 +55,6 @@ export const EventManager: React.FC = ({ children }) => {
             (e: MouseEvent, id: NodeId) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log("dragenter")
                 const { current: start } = draggedNode;
                 if (!start) return;
                 const dragId = typeof start == 'object' ? start.id : start;

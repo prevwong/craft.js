@@ -11,7 +11,7 @@ const invariant = require('invariant');
 const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMethods>) => {
   const _ = <T extends keyof CallbacksFor<typeof Actions>>(name: T) => Actions(state, query)[name];
   return {
-    setOptions(options: Options) {
+    setOptions(options: Partial<Options>) {
       state.options = {
         ...state.options,
         ...options,
