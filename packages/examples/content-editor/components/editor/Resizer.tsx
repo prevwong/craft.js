@@ -88,7 +88,7 @@ export const Resizer = ({
   children,
   ...props
 }: any, ) => {
-  const { id, fillSpace, nodeWidth, nodeHeight, isRootNode, parent, actions, active, _inNodeContext, connectTarget } = useNode(node => ({
+  const { id, fillSpace, nodeWidth, nodeHeight, isRootNode, parent, actions, active, _inNodeContext, connect } = useNode(node => ({
     id: node.id,
     isRootNode: isRoot(node),
     parent: node.data.parent,
@@ -179,7 +179,7 @@ export const Resizer = ({
       ref={(ref) => {
         if (ref) {
           resizable.current = ref;
-          connectTarget(resizable.current.resizable);
+          connect(resizable.current.resizable);
         }
       }}
       size={internalDimensions}

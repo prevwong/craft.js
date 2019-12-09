@@ -5,7 +5,7 @@ import { Button } from "../Button";
 import { Video } from "../Video";
 
 export const Custom2 = (props: any) => {
-  const {actions: {setProp}, connectTarget, active, id} = useNode((node) => ({
+  const {actions: {setProp}, active, id} = useNode((node) => ({
     active: node.event.active
   }));
 

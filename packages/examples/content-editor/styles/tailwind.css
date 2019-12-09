@@ -15,3 +15,7 @@ html, body {
   content: " ";
   @apply border-primary border border-dashed w-full h-full absolute left-0 top-0 pointer-events-none block;
 }
+
+.transition {
+  transition:0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}

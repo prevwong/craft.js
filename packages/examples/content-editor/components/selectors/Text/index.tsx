@@ -15,11 +15,11 @@ export type Text = {
 }
 
 export const Text = ({ fontSize , textAlign, fontWeight, color, shadow, text, margin} : Partial<Text>) => {
-  const { connectTarget, actions } = useNode();
+  const { connect, actions } = useNode();
   const {enabled} = useManager((state) => ({enabled: state.options.enabled}))
   return (
       <ContentEditable
-        innerRef={connectTarget}
+        innerRef={connect}
         html={text} // innerHTML of the editable div
         disabled={!enabled} 
         onChange={(e) => {

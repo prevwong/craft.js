@@ -36,7 +36,7 @@ const Btn = styled.a`
 
 export const RenderNode = ({ render }) => {
   const { actions, handlers } = useManager();
-  const { id, isActive, isHover, dom, name, moveable, deletable, connectDragHandler } = useNode((node) => ({
+  const { id, isActive, isHover, dom, name, moveable, deletable, drag } = useNode((node) => ({
     isActive: node.event.active,
     isHover: node.event.hover,
     dom: node.dom,
@@ -98,7 +98,7 @@ export const RenderNode = ({ render }) => {
             <h2 className="flex-1 mr-4">{name}</h2>
             {
               moveable ? (
-                <Btn className="mr-2" ref={connectDragHandler}>
+                <Btn className="mr-2" ref={drag}>
                   <Move />
                 </Btn>
               ) : null

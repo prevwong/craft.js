@@ -19,14 +19,14 @@ iframe {
 
 export const Video = (props: any) => {
     const {enabled, query} = useManager((state) => ({ enabled: state.options.enabled }));
-    const {actions: {setProp}, connectTarget, active} = useNode((node) => ({
+    const {actions: {setProp}, connect, active} = useNode((node) => ({
         active: node.event.active
     }));
 
     const {text, textComponent, color, videoId, ...otherProps} = props;
 
     return (
-        <YoutubeDiv ref={connectTarget} enabled={enabled}>
+        <YoutubeDiv ref={connect} enabled={enabled}>
           <YouTube
             videoId={videoId}
             opts={{

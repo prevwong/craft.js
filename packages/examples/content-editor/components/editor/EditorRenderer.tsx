@@ -1,22 +1,31 @@
 import React, { useEffect, Ref, useRef, useMemo } from 'react';
 import { useManager } from 'craftjs';
+import cx from "classnames";
 
 export const EditorRenderer = ({children, ...props}) => {
-  const { actions, connectors } = useManager();
+  const { actions, connectors, enabled } = useManager((state) => ({enabled: state.options.enabled}));
 
 
   return (  
-    <div
-      className="craftjs-renderer bg-white h-full w-full overflow-auto"
-      style={{ background: "rgb(224, 224, 224)", width: "100%", height: "100%" }}
-      ref={ref => connectors.active(connectors.hover(ref, null), null)}
-      >
-      {/* <Indicator event="active" /> 
-      <Indicator event="hover" />  */}
-      <div className="p-4 relative flex-col flex items-center">
-        {children}
+    <div className="flex-1 h-full">
+      <div className="w-full h-full">
+        {/* <div className="w-full bg-light-gray-1 py-1">
+          <h1>Dashboard</h1>
+        </div> */}
+        <div
+          className={cx(["craftjs-renderer  w-full transition", {
+            "overflow-auto" : enabled,
+            "bg-renderer-gray": enabled,
+            "h-screen": enabled,
+            "h-full" : !enabled
+          }])}
+          // ref={ref => connectors.active(connectors.hover(ref, null), null)}
+        >
+          <div className="py-4 relative flex-col flex items-center">
+            {children}
+          </div>
+        </div>
       </div>
-     
     </div>
   )
 }

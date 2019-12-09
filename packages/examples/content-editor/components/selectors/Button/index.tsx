@@ -14,7 +14,7 @@ const StyledButton = styled.button<any>`
 `
 
 export const Button = (props: any) => {
-  const {actions: {setProp}, connectTarget, active} = useNode((node) => ({
+  const {actions: {setProp}, connect, active} = useNode((node) => ({
     active: node.event.active
   }));
 
@@ -22,7 +22,7 @@ export const Button = (props: any) => {
   const {text, textComponent, color, ...otherProps} = props;
   return (
     <StyledButton 
-      ref={connectTarget}
+      ref={connect}
       className={cx(["rounded w-full px-4 py-2", {
         "shadow-lg": props.buttonStyle == 'full'
       }])}
