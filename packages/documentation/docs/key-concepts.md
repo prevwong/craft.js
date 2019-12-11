@@ -51,14 +51,13 @@ const MyComponent = () => {
   )
 }
 ```
-`connect` tells Craft.js that this DOM element is what represents this component. Hence it's dimensions are taken into account when its being dragged/dropped. Additionally, clicking or hovering at this DOM element will update the component's corresponding Node's `active` and `hovered` event state.
+- `connect`: specifies the DOM that represents the user component. The dimensions of the DOM specified will taken into account during drag/drop.
+- `drag`: specifies the DOM element that should be made draggable. When the user drags this element will be considered as dragging the entire component, thus moving the entire component to the drop location.
 
-
-`drag` simply attaches the drag event handlers to the DOM element. Dragging this DOM element will be considered as the entire component is being dragged; thus the component's corresponding Node's `drag` event state will be updated.s
 
 
 ## Collectors
-It's pretty useful if we could read the internal state of Craft.js anywhere within our page editor. This is where we can use the collector functions.
+Craft.js has it's own internal state which it uses to keep track of and manages all the `Nodes` created and the events of the editor. 
 
 We can access the entire internal state via the `useManager` hook like so:
 
@@ -75,7 +74,7 @@ const Toolbar = () => {
 }
 ``` 
 
-Additionally, if the component is a User Component, we can collect the internal state relevant to its corresponding `Node`:
+Additionally, if the component is a User Component, we can collect the internal state relevant to its corresponding `Node` as such:
 
 ```jsx
 const MyComponent = () => {
