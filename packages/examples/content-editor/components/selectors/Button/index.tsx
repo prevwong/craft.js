@@ -14,8 +14,8 @@ const StyledButton = styled.button<any>`
 `
 
 export const Button = (props: any) => {
-  const {setProp, connectors:{connect}, active} = useNode((node) => ({
-    active: node.event.active
+  const {setProp, connectors:{connect}, selected} = useNode((node) => ({
+    selected: node.events.selected
   }));
 
 

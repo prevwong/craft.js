@@ -92,7 +92,7 @@ export const Resizer = ({
     id: node.id,
     isRootNode: isRoot(node),
     parent: node.data.parent,
-    active: node.event.active,
+    active: node.events.selected,
     nodeWidth: node.data.props[propKey.width],
     nodeHeight: node.data.props[propKey.height],
     fillSpace: node.data.props.fillSpace

@@ -37,8 +37,8 @@ const Btn = styled.a`
 export const RenderNode = ({ render }) => {
   const { actions, handlers } = useEditor();
   const { id, isActive, isHover, dom, name, moveable, deletable, connectors:{drag} } = useNode((node) => ({
-    isActive: node.event.active,
-    isHover: node.event.hover,
+    isActive: node.events.selected,
+    isHover: node.events.hovered,
     dom: node.dom,
     name: node.data.custom.displayName || node.data.displayName,
     moveable: isMoveable(node),
@@ -92,7 +92,7 @@ export const RenderNode = ({ render }) => {
             style={{
               left: getPos(dom).left,
               top: getPos(dom).top,
-              "zIndex": "9999"
+              zIndex: 9999
             }}
           >
             <h2 className="flex-1 mr-4">{name}</h2>

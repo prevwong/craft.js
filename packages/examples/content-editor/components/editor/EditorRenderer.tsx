@@ -3,7 +3,7 @@ import { useEditor } from 'craftjs';
 import cx from "classnames";
 
 export const EditorRenderer = ({children, ...props}) => {
-  const { actions, connectors, enabled } = useEditor((state) => ({enabled: state.options.enabled}));
+  const {  connectors, enabled } = useEditor((state) => ({enabled: state.options.enabled}));
 
 
   return (  
@@ -19,7 +19,7 @@ export const EditorRenderer = ({children, ...props}) => {
             "h-screen": enabled,
             "h-full" : !enabled
           }])}
-          // ref={ref => connectors.active(connectors.hover(ref, null), null)}
+          ref={ref => connectors.select(connectors.hover(ref, null), null)}
         >
           <div className="py-4 relative flex-col flex items-center">
             {children}

@@ -19,8 +19,8 @@ iframe {
 
 export const Video = (props: any) => {
     const {enabled, query} = useEditor((state) => ({ enabled: state.options.enabled }));
-    const {setProp, connectors:{connect}, active} = useNode((node) => ({
-        active: node.event.active
+    const {setProp, connectors:{connect}, selected} = useNode((node) => ({
+        selected: node.events.selected
     }));
 
     const {text, textComponent, color, videoId, ...otherProps} = props;
