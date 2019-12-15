@@ -9,7 +9,7 @@ export type useEditor<S = null> =
     actions: Delete<useInternalEditor<S>['actions'], 'setNodeEvent' | 'setDOM'>
   }> & {
   connectors: { 
-    active: ConnectorElementWrapper,
+    select: ConnectorElementWrapper,
     drag: ConnectorElementWrapper,
     hover: ConnectorElementWrapper,
     create: ConnectorElementWrapper

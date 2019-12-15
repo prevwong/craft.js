@@ -26,6 +26,8 @@
   --ifm-navbar-link-color: rgba(255,255,255,0.85);
   --ifm-font-family-base:  "Source Sans Pro", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   --ifm-font-family-monospace: "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --ifm-navbar-link-color: rgba(255,255,255,0.6);
+  --ifm-navbar-link-hover-color: #fff;
 }
 
 .docusaurus-highlight-code-line {
@@ -61,4 +63,10 @@ li.api-item {
 
 pre, .api-type {
   
+}
+
+.menu .menu__link.menu__link--sublist:after {
+  height: 20px;
+  width: 20px;
+  background-size: contain;
 }

@@ -24,9 +24,9 @@ import {API} from "./API";
     ["childCanvas", "Record<String, NodeId>", "A map of Canvas Nodes defined inside the User Component. Only applicable if the current Node's User Element is a Component which contains <Canvas /> inside its render"]
   ]],
   ["events", "Object", [
-    ["active", "boolean", "Is true if the user element is clicked"],
-    ["hover", "boolean", "Is true if the user element is being hovered"],
-    ["dragging", "boolean", "Is true if the user element is being dragged"],
+    ["selected", "boolean", "Is true if the user element is clicked"],
+    ["hovered", "boolean", "Is true if the user element is being hovered"],
+    ["dragged", "boolean", "Is true if the user element is being dragged"],
   ]],
   ["dom", "HTMLElement", "The DOM of the current Node's User Element. For User Components, this is defined by the `connect` connector"],
   ["related", "Record<String, React.ElementType>", "A map of React Components that shares the current Node context"],

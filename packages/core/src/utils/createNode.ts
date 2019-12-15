@@ -21,9 +21,9 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
     };
 
     node.events = {
-      active: false,
-      dragging: false,
-      hover: false
+      selected: false,
+      dragged: false,
+      hovered: false
     }
 
     node.rules = {

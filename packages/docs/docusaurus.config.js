@@ -7,7 +7,7 @@
 
 module.exports = {
   title: 'craft.js',
-  tagline: 'A React frameowrk for building drag-n-drop page editors',
+  tagline: 'A React framework for building drag-n-drop page editors',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
@@ -18,13 +18,12 @@ module.exports = {
       theme: require('prism-react-renderer/themes/shadesOfPurple'),
     },
     navbar: {
-      title: 'craft.js',
       logo: {
         alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        src: 'img/logo.png',
       },
       links: [
-        {to: 'docs/doc1', label: 'Docs', position: 'left'},
+        {to: 'docs/overview', label: 'Docs', position: 'left'},
         {to: 'blog', label: 'Blog', position: 'left'},
         {
           href: 'https://github.com/prevwong/craft.js',
@@ -34,14 +33,14 @@ module.exports = {
       ],
     },
     footer: {
-      style: 'dark',
+      style: 'light',
       links: [
         {
           title: 'Docs',
           items: [
             {
               label: 'Docs',
-              to: 'docs/doc1',
+              to: 'docs/',
             },
           ],
         },

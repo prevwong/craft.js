@@ -40,7 +40,7 @@ We'll explain what each of these values are in the following sections.
 The first thing we would want to do is to actually let Craft.js to manage the DOM for our component. 
 
 - `connect`: specifies the DOM that represents the user component. The dimensions of the DOM specified will taken into account during drag/drop.
-- `drag`: specifies the DOM element that should be made draggable. When the user drags this element will be considered as dragging the entire component, thus moving the entire component to the drop location.
+- `drag`: specifies the DOM element that should be made draggable. When the user drags this element will be considered as dragged the entire component, thus moving the entire component to the drop location.
 
 ```jsx
 const Hero = ({title}) => {
@@ -86,7 +86,7 @@ For instance, let's say we would like to enable the content editable text from t
 ```jsx
 const Hero = ({title}) => {
   const { connectors: {connect, drag}, setProp, isClicked } = useNode((node) => ({
-    isClicked: node.events.active
+    isClicked: node.events.selecteded
   }));
 
   return (
@@ -172,15 +172,15 @@ Now, let's say we have a Toolbar component somewhere in our editor. We can easil
 
 ```jsx
 const Toolbar = () => {
-  const { activeNodeId, toolbarSettings } = useEditor((state) => ({
-    activeNodeId : state.events.active,
-    toolbarSettings:  state.nodes[state.events.active].related.toolbar
+  const { selectededNodeId, toolbarSettings } = useEditor((state) => ({
+    selectededNodeId : state.eventselectedcted,
+    toolbarSettings:  state.nodes[state.events.selecteded].related.toolbar
   }));
   return (
     <div>
       <h2>My Awesome Toolbar</h2>
       {
-        activeNodeId && toolbarSettings ? 
+        selectededNodeId && toolbarSettings ? 
           React.createElement(toolbarSettings)
         : null
       }

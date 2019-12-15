@@ -46,7 +46,7 @@ import {useNode} from "craftjs";
 
 const Example = () => {
   const { isHovered, amIBeingDragged } = useNode((node) => ({
-    isHovered: node.events.hover,
+    isHovered: node.events.hovered,
     amIBeingDragged: node.events.drag,
 
   }));
@@ -54,7 +54,7 @@ const Example = () => {
   return (
     <div className={cx({
       "hovering" : isHovered,
-      "dragging" : amIBeingDragged
+      "dragged" : amIBeingDragged
     })}>
       Yo
     </div>

@@ -11,7 +11,7 @@ export type Node =  {
   rules: NodeRules;
 }
 
-export type NodeEvents = 'active' | 'dragging' | 'hover';
+export type NodeEvents = 'selected' | 'dragged' | 'hovered';
 export type InternalNode = Pick<Node, 'id'> & NodeData
 export type NodeRefEvent = Record<NodeEvents, boolean>
 export type NodeRules = {

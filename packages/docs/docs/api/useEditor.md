@@ -26,7 +26,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
 <API items={[
   [null, "Object", [
     ["connectors", "Object", [
-      ["active", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when clicked will in turn click the specified Node's user component"],
+      ["select", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when clicked will in turn click the specified Node's user component"],
       ["hover", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when hovered will in turn hover the specified Node's user component"],
       ["drag", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when dragged will move the specified Node's user component"]
     ]],
@@ -67,7 +67,7 @@ import {useEditor} from "craftjs";
 
 const Example = () => {
   const { hoveredNodeId } = useEditor((state) => ({
-    hoveredNodeId: state.events.hover
+    hoveredNodeId: state.events.hovered
   }));
 
   return (
@@ -81,14 +81,14 @@ const Example = () => {
 ### Hide and Deleting a Node
 ```jsx
 const Example = () => {
-  const {activeNodeId, actions} = useEditor((state) => ({
-    activeNodeId: state.events.active
+  const {selectedNodeId, actions} = useEditor((state) => ({
+    selectedNodeId: state.events.selected
   }));
-  return activeNodeId && (
+  return selectedNodeId && (
     <div>
-      <h2>Node selected: {activeNodeId}</h2>
-      <a onClick={() => actions.hide(activeNodeId)}>Hide</a>
-      <a onClick={() => actions.delete(activeNodeId)}>Delete</a>
+      <h2>Node selected: {selectedNodeId}</h2>
+      <a onClick={() => actions.hide(selectedNodeId)}>Hide</a>
+      <a onClick={() => actions.delete(selectedNodeId)}>Delete</a>
     </div>
   )
 }
@@ -100,20 +100,20 @@ const Example = () => {
   const [sourceId, setSourceId] = useState();
   const [targetId, setTargetId] = useState();
   
-  const {activeNodeId, actions, query} = useEditor((state) => ({
-    activeNodeId: state.events.active
+  const {selectedNodeId, actions, query} = useEditor((state) => ({
+    selectedNodeId: state.events.selected
   }));
 
-  return activeNodeId && (
+  return selectedNodeId && (
     <div>
-      <h2>Node selected: {activeNodeId}</h2>
+      <h2>Node selected: {selectedNodeId}</h2>
       <div>
         <input type="text" value={sourceId} placeholder="Source" disabled />
-        <button onClick={() => activeNodeId && setSourceId(activeNodeId)}>Set selected Node as source</button>
+        <button onClick={() => selectedNodeId && setSourceId(selectedNodeId)}>Set selected Node as source</button>
       </div>
       <div>
         <input type="text" value={targetId} placeholder="Target" disabled />
-        <button onClick={() => activeNodeId && setTargetId(activeNodeId)}>Set selected Node as target</button>
+        <button onClick={() => selectedNodeId && setTargetId(selectedNodeId)}>Set selected Node as target</button>
       </div>
       {
         sourceId && targeId ? (
@@ -139,7 +139,7 @@ import {useEditor} from "craftjs";
 
 const Example = () => {
   const { query, actions } = useEditor((state, query) => ({
-    hoveredNodeId: state.events.hover
+    hoveredNodeId: state.events.hovered
   }));
 
   return (
@@ -161,14 +161,14 @@ const Example = () => {
 import {useEditor} from "craftjs";
 
 const Example = () => {
-  const { activeDescendants } = useEditor((state, query) => ({
-    activeDescendants: state.events && query.getDeepNodes(state.events.active).map(node => node.id)
+  const { selectedDescendants } = useEditor((state, query) => ({
+    selectedDescendants: state.events && query.getDeepNodes(state.events.selected).map(node => node.id)
   }));
 
   return (
     <ul>
       {
-        activeDescendants && activeDescendants.map(id => <li>{id}</li> )
+        selectedDescendants && selectedDescendants.map(id => <li>{id}</li> )
       }
     </ul>
   )
@@ -182,8 +182,8 @@ const Example = () => {
   const [sourceId, setSourceId] = useState();
   const [targetId, setTargetId] = useState();
   
-  const {activeNodeId, actions, query} = useEditor((state) => ({
-    activeNodeId: state.events.active
+  const {selectedNodeId, actions, query} = useEditor((state) => ({
+    selectedNodeId: state.events.selected
   }));
 
   const disableScreenClick = useEffect((e) => {
@@ -208,16 +208,16 @@ const Example = () => {
     })
   }, [clickOnScreen, disableScreenClick]);
 
-  return activeNodeId && (
+  return selectedNodeId && (
     <div>
-      <h2>Node selected: {activeNodeId}</h2>
+      <h2>Node selected: {selectedNodeId}</h2>
       <div>
         <input type="text" value={sourceId} placeholder="Source" disabled />
-        <button onClick={() => activeNodeId && setSourceId(activeNodeId)}>Set selected Node as source</button>
+        <button onClick={() => selectedNodeId && setSourceId(selectedNodeId)}>Set selected Node as source</button>
       </div>
       <div>
         <input type="text" value={targetId} placeholder="Target" disabled />
-        <button onClick={() => activeNodeId && setTargetId(activeNodeId)}>Set selected Node as target</button>
+        <button onClick={() => selectedNodeId && setTargetId(selectedNodeId)}>Set selected Node as target</button>
       </div>
       {
         sourceId && targeId ? (

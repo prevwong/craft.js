@@ -20,7 +20,7 @@ Similar with the `useNode`, we can specify a collector function to the `useEdito
 ```tsx
 const App = () => {
   const { hoveredNodeName } = useEditor((state: Node) => {
-    const currentlyHoveredId = state.events.hover;
+    const currentlyHoveredId = state.events.hovered;
     return {
       hoveredNodeName: state.nodes[currentlyHoveredId].displayName
     }
@@ -32,7 +32,7 @@ const App = () => {
 ```
 
 ## Changing Node state
-In user components, we have seen connectors like `connect` and `drag` which are used to manage the DOM and manage a node's event state - `active`, `hover` and `dragging`. 
+In user components, we have seen connectors like `connect` and `drag` which are used to manage the DOM and manage a node's event state - `selected`, `hover` and `dragged`. 
 
 Now, what if we would need to modify a node's event state ?
 
@@ -41,11 +41,11 @@ Let's say, maybe you are creating a layers panel to display all nodes as a Photo
 
 ```jsx
 const LayerItem = (nodeId) => {
-  const { connectors: { active }} = useEditor();
+  const { connectors: { selected }} = useEditor();
 
   return (
    <div>
-      <a ref={ref => active(ref, nodeId)}>Click me to select node {nodeId}</a>
+      <a ref={ref => selected(ref, nodeId)}>Click me to select node {nodeId}</a>
    </div>
   );
 }
@@ -56,13 +56,13 @@ We can use the `actions` provided in order to manipulate the editor's internal s
 
 ```jsx
 const DeleteButtonThingy = () => {
-  const { actions, activeNodeId } = useEditor((state) => ({
-    activeNodeId: state.events.active
+  const { actions, selectedNodeId } = useEditor((state) => ({
+    selectedNodeId: state.events.selected
   }));
 
   return (
     <div>
-      <button onClick={() => actions.delete(activeNodeId) }>
+      <button onClick={() => actions.delete(selectedNodeId) }>
         Click me to delete the selected node
       </button>
     </div>
@@ -93,7 +93,7 @@ Queries are also accesible via the `useEditor` collector function. Let's look at
 ```jsx
 const ShowMeMyDecendants = () => {
   const { allDecendants } = useEditor((state, query) => {
-    const selectedNodeId = state.events.active;
+    const selectedNodeId = state.events.selected;
     let allDecendants = false;
 
     if (selectedNodeId)  allDecendants = query.getDeepNodes(selectedNodeId, true);  

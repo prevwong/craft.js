@@ -41,7 +41,7 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
       ],
       connect: (node) => {
         if (_inNodeContext) {
-          editorConnectors.active(node, id);
+          editorConnectors.select(node, id);
           editorConnectors.hover(node, id);
           editorConnectors.drop(node, id);
           setDOM(node);

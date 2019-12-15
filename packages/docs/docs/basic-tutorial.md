@@ -481,7 +481,7 @@ First, we need to get the currently selected component, which can be obtained fr
 
 ```jsx
 const { currentlySelectedId } = useEditor((state) => ({
-  currentlySelectedId: state.events.active
+  currentlySelectedId: state.events.selected
 }))
 ```
 
@@ -543,7 +543,7 @@ import { useEditor } from "craftjs";
 
 const SettingsPanel = () => {
   const { currentSettingsPanel } = useEditor((state) => {
-    const currentNodeId = state.events.active;
+    const currentNodeId = state.events.selected;
     let settingsPanel;
     if ( currentNodeId ) {
       settingsPanel = state.nodes[currentNodeId].related.settings;
@@ -580,7 +580,7 @@ import React, {useCallback} from "react";
 import ContentEditable from 'react-contenteditable'
 
 const Text = ({text}) => {
-  const { connectors: {connect, drag}, active, setProp } = useNode();
+  const { connectors: {connect, drag}, selected, setProp } = useNode();
 
   const refConnector = useCallback(ref => connect(drag(ref)), []);
 
@@ -605,7 +605,7 @@ But let's only enable content editable only when the component is being selected
 ```jsx
 const Text = ({text}) => {
   const { connectors: {connect, drag}, isActive, setProp } = useNode((node) => ({
-    isActive: node.events.active
+    isActive: node.events.selected
   }));
 
   ...

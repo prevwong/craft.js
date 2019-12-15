@@ -66,7 +66,7 @@ import {useNode} from "craftjs";
 const TextComponent = ({text}) => {
   const {connect, drag, isClicked, setProp } = useNode(
     (state) => ({ 
-      isClicked: state.event.active,
+      isClicked: state.event.selected,
     })
   );
 

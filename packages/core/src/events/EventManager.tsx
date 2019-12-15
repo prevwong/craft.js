@@ -24,14 +24,14 @@ export const EventManager: React.FC = ({ children }) => {
         selectNode: [
             "mousedown", 
             debounce((e: MouseEvent, id: NodeId) => {
-                setNodeEvent('active', id);
+                setNodeEvent('selected', id);
             }, 1), 
             true
         ],
         hoverNode: [
             "mouseover",
             debounce((e: MouseEvent, id: NodeId) => {
-                setNodeEvent('hover', id);
+                setNodeEvent('hovered', id);
             }, 1),
             true
         ],
@@ -39,7 +39,7 @@ export const EventManager: React.FC = ({ children }) => {
             "dragstart",
             (e: MouseEvent, node: Node | NodeId) => {
                 e.stopPropagation();
-                if (typeof node === 'string') setNodeEvent('dragging', node);
+                if (typeof node === 'string') setNodeEvent('dragged', node);
                 draggedNode.current = node;
             }
         ],
@@ -86,15 +86,15 @@ export const EventManager: React.FC = ({ children }) => {
 
                 draggedNode.current = null;
                 setIndicator(null);
-                setNodeEvent('dragging', null);
+                setNodeEvent('dragged', null);
             }
         ]
     }, enabled);
 
     const connectors = useConnectorHooks({ 
-        active: [
+        select: [
             handlers.selectNode,
-            () => setNodeEvent('active', null)
+            () => setNodeEvent('selected', null)
         ],
         drag: [
             (node, id) => {
@@ -103,13 +103,13 @@ export const EventManager: React.FC = ({ children }) => {
                 handlers.dragNodeEnd(node, id);
             },
             (node, id) => {
-                setNodeEvent("dragging", null);
+                setNodeEvent("dragged", null);
                 node.removeAttribute("draggable");
             }
         ],
         hover: [
             handlers.hoverNode,
-            () => setNodeEvent("hover", null)
+            () => setNodeEvent("hovered", null)
         ],
         create: (node, render) => {
             connectors.drag(node, query.createNode(React.createElement(render.type, render.props)));
@@ -120,7 +120,6 @@ export const EventManager: React.FC = ({ children }) => {
         }
     }, enabled);
 
-    console.log(events.indicator)
     return (
         <EventContext.Provider value={connectors}>
             {

@@ -24,9 +24,9 @@ export const createEditorContext = (
       [ROOT_NODE]: transformJSXToNode(<Canvas is="div" />)
     },
     events: {
-      active: null,
-      hover: null,
-      dragging: null,
+      selected: null,
+      hovered: null,
+      dragged: null,
       indicator: null
     },
     options: {}

@@ -1,4 +1,4 @@
-import { NodeId, Node, Nodes, Options } from "../interfaces";
+import { NodeId, Node, Nodes, Options, NodeEvents } from "../interfaces";
 import { EditorState, Indicator } from "../interfaces";
 import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID, ROOT_NODE, CallbacksFor, QueryCallbacksFor } from "craftjs-utils";
 import { isCanvas, isTopLevelCanvas } from "../nodes";
@@ -21,15 +21,15 @@ const Actions = (state: EditorState, query: QueryCallbacksFor<typeof QueryMethod
       if (indicator && (!indicator.placement.parent.dom || (indicator.placement.currentNode && !indicator.placement.currentNode.dom))) return;
       state.events.indicator = indicator;
     },
-    setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
+    setNodeEvent(eventType: NodeEvents, id: NodeId) {
       const current = state.events[eventType];
       if (current && id != current) {
-        state.nodes[current].event[eventType] = false;
+        state.nodes[current].events[eventType] = false;
       }
 
       if (id) {
         const node = state.nodes[id];
-        state.nodes[id].event[eventType] = true
+        state.nodes[id].events[eventType] = true
         state.events[eventType] = id;
       } else {
         state.events[eventType] = null;

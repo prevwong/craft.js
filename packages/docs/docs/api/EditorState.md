@@ -11,9 +11,9 @@ import {API} from "./API";
 <API items={[
   ["nodes", "Record<NodeId, Node>", "A map of all the Nodes in the editor"],
   ["events", "Object", [
-    ["active", "NodeId"],
-    ["hover", "NodeId"],
-    ["dragging", "NodeId"],
+    ["selected", "NodeId"],
+    ["hovered", "NodeId"],
+    ["dragged", "NodeId"],
   ]],
   ["options", "Object", [
     ["resolver", "Map<String, React.ComponentType>", "A map of the user components that will be used in the editor"],

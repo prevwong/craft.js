@@ -8,9 +8,9 @@ export type EditorStore = SubscriberAndCallbacksFor<typeof Actions>
 export const useEditorStore = (
   nodes = {}, 
   events: EditorEvents = {
-    active: null, 
-    dragging: null, 
-    hover:null, 
+    selected: null, 
+    dragged: null, 
+    hovered:null, 
     indicator:null
   },
   options: Partial<Options> = {}
