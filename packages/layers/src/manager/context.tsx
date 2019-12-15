@@ -12,9 +12,9 @@ export const LayerManagerContext = createContext<{store: LayerStore }>(null);
 export const createLayersStore = (options: Partial<LayerOptions>) => useReduxMethods(LayerMethods, {
     layers: {},
     events: {
-        active: null,
-        dragging: null,
-        hover: null,
+        selected: null,
+        dragged: null,
+        hovered: null,
     },
     options: {
         renderLayer: DefaultLayer, 

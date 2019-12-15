@@ -22,8 +22,8 @@ export const LayerMethods = (state: LayerState) => ({
       state.layers[id] = {
         id,
         event: {
-          active: false,
-          hover: false
+          selected: false,
+          hovered: false
         }
       };
     }

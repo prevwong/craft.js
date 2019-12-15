@@ -39,7 +39,7 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer <S> 
 
   const connectors = useConnectorHooks({
     connectLayer: (node) => {
-      managerConnectors.active(node, id);
+      managerConnectors.select(node, id);
       managerConnectors.hover(node, id);
       handlers.onMouseOver(node, id)
       handlers.onDragOver(node, id)
@@ -58,7 +58,7 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer <S> 
     },
     connectDrag: [
       (node) => {
-        node.setAttribute("draggable", true);
+        node.setAttribute("draggable", "true");
         handlers.onDragStart(node, id);
       },
       (node) => node.removeAttribute("draggable")

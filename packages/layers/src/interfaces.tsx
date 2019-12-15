@@ -12,7 +12,7 @@ export type Layer = {
 
 export type LayerRefEvents = Record<LayerEvents, boolean>;
 
-export type LayerEvents = 'active' | 'hover';
+export type LayerEvents = 'selected' | 'hovered';
 
 export type LayerOptions = {
   renderLayer: React.ElementType;

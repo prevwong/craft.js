@@ -7,15 +7,15 @@ import Linked from "./linked.svg"
 import {useLayer} from "../../../layers/useLayer";
 import { EditableLayerName } from "./index";
 
-const StyledDiv = styled.div<{ depth: number, active: boolean }>`
+const StyledDiv = styled.div<{ depth: number, selected: boolean }>`
   display:flex;
   flex-direction: row;
   align-items: center;
   padding: 4px 10px;
-  background: ${props => props.active ? '#2680eb' : 'transparent' };
-  color: ${props => props.active ? '#fff' : 'inherit' };
+  background: ${props => props.selected ? '#2680eb' : 'transparent' };
+  color: ${props => props.selected ? '#fff' : 'inherit' };
   svg {
-    fill: ${props => props.active ? '#fff' : '#808184' };
+    fill: ${props => props.selected ? '#fff' : '#808184' };
     margin-top:2px;
   }
   .inner {
@@ -50,7 +50,7 @@ transform-origin: 60% center;
 
 `
 
-const Hide = styled.a<{active: boolean; isHidden: boolean}>`
+const Hide = styled.a<{selected: boolean; isHidden: boolean}>`
   width: 14px;
   height:14px;
   margin-right:10px;
@@ -72,7 +72,7 @@ const Hide = styled.a<{active: boolean; isHidden: boolean}>`
     position: absolute;
     left: 2px;
     top: 3px;
-    background: ${props => props.active ? "#fff" : "#808184"};
+    background: ${props => props.selected ? "#fff" : "#808184"};
     transform: rotate(-45deg);
     transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     transform-origin: 0% 0%;
@@ -92,24 +92,24 @@ const TopLevelIndicator = styled.div`
 
 export const DefaultLayerHeader: React.FC = () => {
 
-  const { id, hover, depth, expanded, children, connectDrag, connectLayerHeader, actions: {toggleLayer}} = useLayer((layer) => {
+  const { id, hovered, depth, expanded, children, connectDrag, connectLayerHeader, actions: {toggleLayer}} = useLayer((layer) => {
     return {
       expanded: layer.expanded,
-      hover: layer.event.hover
+      hovered: layer.event.hovered
     }
   });
 
 
-  const { hidden, actions, active, topLevel } = useEditor((state) => ({
+  const { hidden, actions, selected, topLevel } = useEditor((state) => ({
     hidden: state.nodes[id] && state.nodes[id].data.hidden,
-    active:  state.events.active == id,
+    selected:  state.events.selected == id,
     topLevel: isTopLevelCanvas(state.nodes[id])
   }));  
   
 
   return (
-    <StyledDiv active={active} ref={connectDrag} depth={depth}>
-      <Hide active={active} isHidden={hidden} onClick={() => actions.setHidden(id, !hidden)}>
+    <StyledDiv selected={selected} ref={connectDrag} depth={depth}>
+      <Hide selected={selected} isHidden={hidden} onClick={() => actions.setHidden(id, !hidden)}>
         <Eye />
       </Hide>
       <div className="inner">

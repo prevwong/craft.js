@@ -62,7 +62,6 @@ export const EventManager: React.FC<any> = ({ children }) => {
                 }
 
                 
-                console.log("color", color);
                 return {
                     top,
                     left: headingPos.left,
@@ -90,7 +89,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
             "mouseover",
             (e: MouseEvent, id: NodeId) => {
                 e.stopPropagation();
-                actions.setLayerEvent("hover", id);
+                actions.setLayerEvent("hovered", id);
             }
         ],
         onDragOver: [
@@ -101,7 +100,6 @@ export const EventManager: React.FC<any> = ({ children }) => {
 
                 const { indicator, layers, currentCanvasHovered } = mutable.current;
             
-                console.log("hovering...")
                 if (currentCanvasHovered && indicator ) {
                     
                     const heading = layers[currentCanvasHovered.id].headingDom.getBoundingClientRect();
@@ -199,7 +197,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
         const { layers } = mutable.current;
         if ( layers && layers[ROOT_NODE]) { 
             if (!layers[ROOT_NODE].dom.contains(e.target as HTMLElement)) {
-                actions.setLayerEvent('hover', null);
+                actions.setLayerEvent('hovered', null);
             }
         }
        
