@@ -40,7 +40,19 @@ module.exports = {
           items: [
             {
               label: 'Docs',
-              to: 'docs/',
+              to: 'docs/overview',
+            },
+            {
+              label: 'Core Concepts',
+              to: 'docs/concepts/nodes',
+            },
+            {
+              label: 'Tutorial',
+              to: 'docs/basic-tutorial',
+            },
+            {
+              label: 'API Reference',
+              to: 'docs/api/editor-state',
             },
           ],
         },
@@ -49,19 +61,40 @@ module.exports = {
           items: [
             {
               label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              href: 'https://discord.gg/HrMjx5q',
+            },
+            {
+              label: 'Github Repo',
+              href: 'https://github.com/prevwong/craft.js',
+            },
+            {
+              label: 'NPM',
+              href: 'https://npmjs.com/package/craft.js',
             },
           ],
         },
         {
-          title: 'Social',
+          title: 'Find me elsewhere',
           items: [
             {
-              label: 'Blog',
-              to: 'blog',
+              label: 'Github',
+              href: 'https://github.com/prevwong',
+            },
+            {
+              label: 'LinkedIn',
+              href: 'https://linkedin.com/prevwong',
+            },
+            {
+              label: 'Dribbble',
+              href: 'https://dribbble.com/prevwong',
+            },
+            {
+              label: 'Twitter',
+              href: 'https://twitter.com/prevwong',
             },
           ],
         },
+        
       ],
      
       copyright: `Copyright © ${new Date().getFullYear()} Prev Wong.`,

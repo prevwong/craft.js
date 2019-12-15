@@ -12,7 +12,8 @@
  */
 
 /* You can override the default Infima variables here. */
-@import url('https://fonts.googleapis.com/css?family=Fira+Code|Source+Sans+Pro:400,600&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Fira+Code&display=swap');
+@import url("https://use.typekit.net/mpa1wkh.css");
 
 :root {
   --ifm-color-primary: rgb(129, 169, 169);
@@ -24,7 +25,7 @@
   --ifm-color-primary-lightest: rgb(146, 224, 208);
   --ifm-navbar-background-color: rgb(129, 169, 169);
   --ifm-navbar-link-color: rgba(255,255,255,0.85);
-  --ifm-font-family-base:  "Source Sans Pro", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --ifm-font-family-base:  "acumin-pro", "Source Sans Pro", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   --ifm-font-family-monospace: "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   --ifm-navbar-link-color: rgba(255,255,255,0.6);
   --ifm-navbar-link-hover-color: #fff;
@@ -69,4 +70,8 @@ pre, .api-type {
   height: 20px;
   width: 20px;
   background-size: contain;
+}
+
+.footer .footer__links {
+  margin-bottom: 3rem;
 }
