@@ -1,5 +1,5 @@
 import { NodeId, Node, Nodes, Options } from "../interfaces";
-import { ManagerState, PlaceholderInfo } from "../interfaces";
+import { EditorState, Indicator } from "../interfaces";
 import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID, ROOT_NODE, CallbacksFor, QueryCallbacksFor } from "craftjs-utils";
 import { isCanvas, isTopLevelCanvas } from "../nodes";
 import { QueryMethods } from "./query";
@@ -8,7 +8,7 @@ import { updateEventsNode } from "../utils/updateEventsNode";
 const invariant = require('invariant');
 
 
-const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMethods>) => {
+const Actions = (state: EditorState, query: QueryCallbacksFor<typeof QueryMethods>) => {
   const _ = <T extends keyof CallbacksFor<typeof Actions>>(name: T) => Actions(state, query)[name];
   return {
     setOptions(options: Partial<Options>) {
@@ -17,9 +17,9 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
         ...options,
       };
     },
-    setPlaceholder(placeholder: PlaceholderInfo) {
-      if (placeholder && (!placeholder.placement.parent.dom || (placeholder.placement.currentNode && !placeholder.placement.currentNode.dom))) return;
-      state.events.placeholder = placeholder;
+    setIndicator(indicator: Indicator) {
+      if (indicator && (!indicator.placement.parent.dom || (indicator.placement.currentNode && !indicator.placement.currentNode.dom))) return;
+      state.events.indicator = indicator;
     },
     setNodeEvent(eventType: "active" | "hover" | "dragging", id: NodeId) {
       const current = state.events[eventType];
@@ -123,7 +123,7 @@ const Actions = (state: ManagerState, query: QueryCallbacksFor<typeof QueryMetho
     setHidden(id: NodeId, bool: boolean) {
       state.nodes[id].data.hidden = bool;
     },
-    setCustom<T extends NodeId>(id: T, cb: (data: ManagerState['nodes'][T]['data']['custom']) => void) {
+    setCustom<T extends NodeId>(id: T, cb: (data: EditorState['nodes'][T]['data']['custom']) => void) {
       cb(state.nodes[id].data.custom);
     }
   }

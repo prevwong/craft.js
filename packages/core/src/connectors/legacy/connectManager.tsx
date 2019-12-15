@@ -1,12 +1,12 @@
-import { ManagerState } from "../../interfaces";
+import { EditorState } from "../../interfaces";
 import React from "react";
-import { useManager } from "../useManager";
+import { useEditor } from "../useEditor";
 
-export function connectManager<C>(collect?: (state: ManagerState) => C) {
+export function connectEditor<C>(collect?: (state: EditorState) => C) {
   return (WrappedComponent: React.ElementType) => { 
     return (props: any) => {
-      const manager = useManager(collect);
-      return <WrappedComponent {...manager} {...props} />;
+      const Editor = useEditor(collect);
+      return <WrappedComponent {...Editor} {...props} />;
     }
   } 
 }

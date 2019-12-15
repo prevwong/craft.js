@@ -40,7 +40,10 @@
   "devDependencies": {
     "@types/invariant": "^2.2.30",
     "@types/react": "^16.9.11",
-    "react": "^16.11.0"
+    "jsdoc": "^3.6.3",
+    "react": "^16.11.0",
+    "typedoc": "^0.15.4",
+    "typedoc-plugin-markdown": "^2.2.14"
   },
   "peerDependencies": {
     "react": ">= 16.11"

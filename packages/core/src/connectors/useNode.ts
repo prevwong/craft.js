@@ -1,21 +1,29 @@
 import React from "react";
 import { Node  } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
-import { useInternalManager } from "../manager/useInternalManager";
+import { useInternalEditor } from "../editor/useInternalEditor";
 import {  useConnectorHooks, ConnectorElementWrapper } from "craftjs-utils";
 import { isRoot } from "../nodes";
 
 
-export type useNode<S = null> = useInternalNode<S> & {
-  actions: Pick<useInternalNode<S>['actions'], 'setProp'>,
-  connect: ConnectorElementWrapper;
-  drag: ConnectorElementWrapper;
+export type useNode<S = null> = Omit<useInternalNode<S>, "actions"> & Pick<useInternalNode<S>['actions'], 'setProp'> & {
+  connectors: {
+    connect: ConnectorElementWrapper;
+    drag: ConnectorElementWrapper;
+  }
 }
 
 export function useNode(): useNode
+
+
 export function useNode<S = null>(collect?: (node: Node) => S): useNode<S>
+
+/**
+ * A Hook to that provides methods and state information related to the corresponding Node that manages the current component.
+ * @param {function(Node): Collected} [collector] - Transform values from the corresponding Node's state
+ */
 export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
-  const { handlers: managerConnectors, enabled } = useInternalManager((state) => ({enabled: state.options.enabled}));
+  const { handlers: editorConnectors, enabled } = useInternalEditor((state) => ({enabled: state.options.enabled}));
 
   const { id, related, actions: { setDOM, setProp }, _inNodeContext, ...collected } = useInternalNode(collect);
   
@@ -24,7 +32,7 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
         (node) => {
           if ( _inNodeContext && !isRoot(id) ) {
             node.setAttribute("draggable", "true")
-            managerConnectors.drag(node, id);
+            editorConnectors.drag(node, id);
           }
         },
         (node) => {
@@ -33,9 +41,9 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
       ],
       connect: (node) => {
         if (_inNodeContext) {
-          managerConnectors.active(node, id);
-          managerConnectors.hover(node, id);
-          managerConnectors.drop(node, id);
+          editorConnectors.active(node, id);
+          editorConnectors.hover(node, id);
+          editorConnectors.drop(node, id);
           setDOM(node);
         }
       }
@@ -45,9 +53,9 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
     id,
     related,
     ...collected as any,
-    actions: { setProp },
+    setProp,
     _inNodeContext,
-    ...connectors
+    connectors
   }
 }
 

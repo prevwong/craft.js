@@ -3,8 +3,8 @@ import {
   Nodes,
   NodeId,
   SerializedNodeData,
-  ManagerState,
-  PlaceholderInfo,
+  EditorState,
+  Indicator,
   Node,
   Options,
 } from "../interfaces";
@@ -33,24 +33,24 @@ import { getDeepNodes } from "../utils/getDeepNodes";
 import { transformJSXToNode } from "../utils/transformJSX";
 
 /**
- * Manager methods used to query nodes
+ * Editor methods used to query nodes
  * @param nodes
  */
 
 const getNodeFromIdOrNode = (node: NodeId | Node, cb: (id: NodeId) => Node) => typeof node === "string" ? cb(node) : node;
 
-export function QueryMethods(manager: ManagerState) {
+export function QueryMethods(Editor: EditorState) {
   const _ = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) =>
-    QueryMethods(manager)[name];
-  const options = manager  && manager.options;
+    QueryMethods(Editor)[name];
+  const options = Editor  && Editor.options;
   return {
     getOptions(): Options {
       return options;
     },
     getNode(id: NodeId) {
-      return manager.nodes[id];
+      return Editor.nodes[id];
     },
-    transformJSXToNode(child: React.ReactElement | string, extras?: any) {
+    createNode(child: React.ReactElement | string, extras?: any) {
       const node = transformJSXToNode(child, extras);
       const name = resolveComponent(
         options.resolver,
@@ -62,10 +62,10 @@ export function QueryMethods(manager: ManagerState) {
       return node;
     },
     getDeepNodes(id: NodeId, deep: boolean = true) {
-      return getDeepNodes(manager.nodes, id, deep);
+      return getDeepNodes(Editor.nodes, id, deep);
     },
     getAllParents(nodeId: NodeId, result: NodeId[] = []) {
-      const node = manager.nodes[nodeId];
+      const node = Editor.nodes[nodeId];
       const parent = node.data.parent;
       if (parent) {
         result.push(parent);
@@ -78,19 +78,21 @@ export function QueryMethods(manager: ManagerState) {
 
       return (parent === ROOT_NODE ? [ROOT_NODE, ...bound] : bound).filter(
         id => {
-          if (isCanvas(manager.nodes[id])) return true;
+          if (isCanvas(Editor.nodes[id])) return true;
           return false;
         }
       );
     },
     serialize(): string {
-      return Object.keys(manager.nodes).reduce((result: any, id: NodeId) => {
+      const simplifiedNodes = Object.keys(Editor.nodes).reduce((result: any, id: NodeId) => {
         const {
           data: { ...data },
-        } = manager.nodes[id];
+        } = Editor.nodes[id];
         result[id] = serializeNode({ ...data }, options.resolver);
         return result;
       }, {});
+
+      return JSON.stringify(simplifiedNodes);
     },
     deserialize(json: string): Nodes {
       const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
@@ -106,7 +108,7 @@ export function QueryMethods(manager: ManagerState) {
         } = deserializeNode(reducedNodes[id], options.resolver);
         if (!Comp) return accum;
 
-        accum[id] = _("transformJSXToNode")(<Comp {...props} />, {
+        accum[id] = _("createNode")(<Comp {...props} />, {
           id,
           data: {
             ...(isCanvas && { isCanvas }),
@@ -119,7 +121,7 @@ export function QueryMethods(manager: ManagerState) {
       }, {});
     },
     canDragNode: (node: Node | NodeId) => {
-      const targetNode = getNodeFromIdOrNode(node, (id) => manager.nodes[id]);
+      const targetNode = getNodeFromIdOrNode(node, (id) => Editor.nodes[id]);
       if ( !isRoot(targetNode) ) {
         invariant(isCanvas(targetNode.data.parent) == true, ERROR_MOVE_ROOT_CANVAS);
         invariant(targetNode.rules.canDrag(targetNode), ERROR_CANNOT_DRAG);
@@ -128,16 +130,16 @@ export function QueryMethods(manager: ManagerState) {
       return true;
     },
     canDropInParent: (node: Node | NodeId, newParent: NodeId) => {
-      const targetNode = getNodeFromIdOrNode(node, (id) => manager.nodes[id]);
+      const targetNode = getNodeFromIdOrNode(node, (id) => Editor.nodes[id]);
 
       const currentParentNode =
           targetNode.data.parent &&
-          manager.nodes[targetNode.data.parent],
-        newParentNode = manager.nodes[newParent];
+          Editor.nodes[targetNode.data.parent],
+        newParentNode = Editor.nodes[newParent];
 
       invariant(
         currentParentNode ||
-          (!currentParentNode && !manager.nodes[targetNode.id]),
+          (!currentParentNode && !Editor.nodes[targetNode.id]),
         ERROR_DUPLICATE_NODEID
       );
 
@@ -151,7 +153,7 @@ export function QueryMethods(manager: ManagerState) {
       if (newParent) {
         invariant(isCanvas(newParentNode), ERROR_MOVE_TO_NONCANVAS_PARENT);
         invariant(
-          newParentNode.rules.incoming(targetNode, newParentNode),
+          newParentNode.rules.canMoveIn(targetNode, newParentNode),
           ERROR_MOVE_INCOMING_PARENT
         );
       }
@@ -165,7 +167,7 @@ export function QueryMethods(manager: ManagerState) {
           ERROR_MOVE_TO_DESCENDANT
         );
         invariant(
-          currentParentNode.rules.outgoing(targetNode, currentParentNode),
+          currentParentNode.rules.canMoveOut(targetNode, currentParentNode),
           ERROR_MOVE_OUTGOING_PARENT
         );
       }
@@ -177,17 +179,17 @@ export function QueryMethods(manager: ManagerState) {
       target: NodeId,
       pos: { x: number; y: number },
       nodesToDOM: (node: Node) => HTMLElement = node =>
-        manager.nodes[node.id].dom
+        Editor.nodes[node.id].dom
     ) => {
       if (source === target) return;
-      const targetNode = manager.nodes[target],
+      const targetNode = Editor.nodes[target],
         isTargetCanvas = isCanvas(targetNode);
 
       
 
       const targetParent =
           (isTargetCanvas) ? targetNode
-            : manager.nodes[targetNode.data.parent];
+            : Editor.nodes[targetNode.data.parent];
 
       const targetParentNodes = targetParent.data._childCanvas
         ? Object.values(targetParent.data._childCanvas)
@@ -196,7 +198,7 @@ export function QueryMethods(manager: ManagerState) {
       // console.log("parent nodes", targetParentNodes);
       const dimensionsInContainer = targetParentNodes ? targetParentNodes.reduce(
         (result, id: NodeId) => {
-          const dom = nodesToDOM(manager.nodes[id]);
+          const dom = nodesToDOM(Editor.nodes[id]);
           if (dom) {
             result.push({
               id,
@@ -215,10 +217,10 @@ export function QueryMethods(manager: ManagerState) {
         pos.y
       );
       const currentNode = targetParentNodes.length
-        ? manager.nodes[targetParentNodes[dropAction.index]]
+        ? Editor.nodes[targetParentNodes[dropAction.index]]
         : null;
 
-      const output: PlaceholderInfo = {
+      const output: Indicator = {
         placement: {
           ...dropAction,
           currentNode,

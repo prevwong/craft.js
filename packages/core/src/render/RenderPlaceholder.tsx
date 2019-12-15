@@ -1,21 +1,24 @@
 import React, { useContext } from "react";
-import { PlaceholderInfo } from "../interfaces";
-import { useManager } from "../connectors";
+import { Indicator } from "craftjs";
+import { useEditor } from "../connectors";
 
 export type Placeholder = {
-  placeholder: PlaceholderInfo,
+  placeholder: Indicator,
   suggestedStyles: any
 }
 
-export const defaultPlaceholder: React.FC<Placeholder> = ({ placeholder: { error }, suggestedStyles}) => {
+export const RenderPlaceholder: React.FC<Placeholder> = ({ placeholder, suggestedStyles }) => {
+  const { indicator } = useEditor((state) => ({ 
+    indicator: state.options.indicator 
+  }));
+  
   return (
     <div
       style={{
         position: 'fixed',
         display: 'block',
         opacity: 1,
-        // background: error ? 'red': 'rgb(98, 196, 98)',
-        borderColor: error ? 'red' : 'rgb(98, 196, 98)',
+        borderColor: placeholder.error ? indicator.error : indicator.success,
         borderStyle: 'solid',
         borderWidth: '1px',
         zIndex: "99999",
@@ -24,13 +27,4 @@ export const defaultPlaceholder: React.FC<Placeholder> = ({ placeholder: { error
     >
     </div>
   )
-}
-
-
-export const RenderPlaceholder: React.FC<Placeholder> = ({ placeholder, suggestedStyles }) => {
-  const { renderPlaceholder, query: { getOptions } } = useManager((state) => ({ renderPlaceholder: state.options.renderPlaceholder }));
-  return React.createElement(renderPlaceholder, {
-    placeholder,
-    suggestedStyles,
-  });
 }

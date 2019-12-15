@@ -7,7 +7,7 @@ import { NodeProvider } from "../nodes/NodeContext";
 export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id?: NodeId): Node {
 
   let actualType = (data.type) as any;
-  const {incoming, outgoing, ...props} = data.props;
+  const {canMoveIn, canMoveOut, ...props} = data.props;
 
   let node = produce({}, (node: Node) => {
     node.id = id;
@@ -20,7 +20,7 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
       custom: {}
     };
 
-    node.event = {
+    node.events = {
       active: false,
       dragging: false,
       hover: false
@@ -28,8 +28,8 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
 
     node.rules = {
       canDrag: () => true,
-      incoming: () => true,
-      outgoing: () => true,
+      canMoveIn: () => true,
+      canMoveOut: () => true,
       ...((actualType.craft && actualType.craft.rules) || {}),
     };
 
@@ -39,8 +39,8 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
       actualType = node.data.type;
       node.rules = {
         ...node.rules,
-        incoming: incoming ? incoming : node.rules.incoming,
-        outgoing: outgoing ? outgoing : node.rules.outgoing,
+        canMoveIn: canMoveIn ? canMoveIn : node.rules.canMoveIn,
+        canMoveOut: canMoveOut ? canMoveOut : node.rules.canMoveOut,
       }
       delete node.data.props["is"]
     }
@@ -51,7 +51,7 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
     }
 
     // Object.keys(node.rules).forEach(key => {
-    //   if (['canDrag', 'incoming', 'outgoing'].includes(key)) {
+    //   if (['canDrag', 'canMoveIn', 'canMoveOut'].includes(key)) {
     //       if ( node.rules[key] ) node.rules[key] = node.rules[key];
     //   }
     // });

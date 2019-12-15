@@ -1,21 +1,21 @@
 import React, { useRef, useMemo, useEffect, useCallback } from "react";
-import { Node, NodeId, ManagerEvents} from "../interfaces";
+import { Node, NodeId, EditorEvents} from "../interfaces";
 import movePlaceholder from "./movePlaceholder";
-import { getDOMInfo, useConnectorHooks } from "craftjs-utils";
-import { useInternalManager } from "../manager/useInternalManager";
+import { getDOMInfo, useConnectorHooks, RenderIndicator } from "craftjs-utils";
+import { useInternalEditor } from "../editor/useInternalEditor";
 import { debounce } from "lodash"
 import {useHandlerGuard} from "craftjs-utils";
 
 export type EventContext = any;
 export const EventContext = React.createContext<EventContext>(null);
 export const EventManager: React.FC = ({ children }) => {
-    const { enabled, events, renderPlaceholder, query, actions: { add, setNodeEvent, setPlaceholder, move } } = useInternalManager((state) => ({
-        renderPlaceholder: state.options.renderPlaceholder,
+    const { enabled, events, query, indicator, actions: { add, setNodeEvent, setIndicator, move } } = useInternalEditor((state) => ({
         events: state.events,
         enabled: state.options.enabled,
+        indicator: state.options.indicator
     }));
 
-    const mutable = useRef<ManagerEvents>(null);
+    const mutable = useRef<EditorEvents>(null);
     mutable.current = events;
     const draggedNode = useRef<Node | NodeId>(null);
 
@@ -67,7 +67,7 @@ export const EventManager: React.FC = ({ children }) => {
                         add(start, getPlaceholder.placement.parent.id);
                         draggedNode.current = start.id;
                     }
-                    setPlaceholder(getPlaceholder)
+                    setIndicator(getPlaceholder)
                 }
             }
         ],
@@ -76,8 +76,8 @@ export const EventManager: React.FC = ({ children }) => {
             (e: MouseEvent) => {
                 e.stopPropagation();
                 const events = mutable.current;
-                if (events.placeholder && !events.placeholder.error) {
-                    const { placement } = events.placeholder;
+                if (events.indicator && !events.indicator.error) {
+                    const { placement } = events.indicator;
                     const { parent, index, where } = placement;
                     const { id: parentId } = parent;
 
@@ -85,7 +85,7 @@ export const EventManager: React.FC = ({ children }) => {
                 }
 
                 draggedNode.current = null;
-                setPlaceholder(null);
+                setIndicator(null);
                 setNodeEvent('dragging', null);
             }
         ]
@@ -111,25 +111,28 @@ export const EventManager: React.FC = ({ children }) => {
             handlers.hoverNode,
             () => setNodeEvent("hover", null)
         ],
+        create: (node, render) => {
+            connectors.drag(node, query.createNode(React.createElement(render.type, render.props)));
+        },
         drop: (node, id) => {
             handlers.dragNodeOver(node, id);
             handlers.dragNodeEnter(node, id);
         }
     }, enabled);
 
-
+    console.log(events.indicator)
     return (
         <EventContext.Provider value={connectors}>
             {
-                events.placeholder ? (
-                    React.createElement(renderPlaceholder, {
-                        placeholder: events.placeholder,
-                        suggestedStyles: {
+                events.indicator ? (
+                    React.createElement(RenderIndicator, {
+                        style : {
                             ...movePlaceholder(
-                                events.placeholder.placement,
-                                getDOMInfo(events.placeholder.placement.parent.dom),
-                                events.placeholder.placement.currentNode ? getDOMInfo(events.placeholder.placement.currentNode.dom) : null
+                                events.indicator.placement,
+                                getDOMInfo(events.indicator.placement.parent.dom),
+                                events.indicator.placement.currentNode ? getDOMInfo(events.indicator.placement.currentNode.dom) : null
                             ),
+                            backgroundColor: events.indicator.error ? indicator.error : indicator.success,
                             transition: '0.2s ease-in'
                         }
                     })

@@ -2,10 +2,10 @@ import React from "react";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { useNode } from "../connectors";
 import { Canvas } from "../nodes";
-import { useInternalManager } from "../manager/useInternalManager";
+import { useInternalEditor } from "../editor/useInternalEditor";
 
 export const SimpleElement = ({render}: any) => {
-  const {connect, drag } = useNode();
+  const { connectors: {connect, drag} } = useNode();
 
   return typeof render.type === "string" ? connect(drag(React.cloneElement(render))) : render;
 }
@@ -18,7 +18,7 @@ export const RenderNodeToElement: React.FC<any> = ({ ...injectedProps}: any) => 
     hidden: node.data.hidden
   }));
 
-  const { onRender } = useInternalManager((state) => ({ onRender: state.options.onRender }));
+  const { onRender } = useInternalEditor((state) => ({ onRender: state.options.onRender }));
 
   let Comp = isCanvas ? Canvas : type;
   let render = React.cloneElement(<Comp {...props} {...injectedProps}  />);

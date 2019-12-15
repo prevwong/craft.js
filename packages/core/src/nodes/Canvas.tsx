@@ -4,7 +4,7 @@ import { NodeElement } from "./NodeElement";
 import { SimpleElement } from "../render/RenderNode";
 import { mapChildrenToNodes } from "../nodes";
 import { useInternalNode } from "./useInternalNode";
-import { useInternalManager } from "../manager/useInternalManager";
+import { useInternalEditor } from "../editor/useInternalEditor";
 import { ERROR_ROOT_CANVAS_NO_ID, ERROR_INFINITE_CANVAS } from "craftjs-utils";
 const invariant = require("invariant");
 
@@ -17,13 +17,13 @@ export type Canvas<T extends React.ElementType> = {
   is?: T;
   children?: React.ReactNode;
   passThrough?: boolean;
-} & Partial<Pick<NodeRules, 'incoming' | 'outgoing'>> & React.ComponentProps<T>;
+} & Partial<Pick<NodeRules, 'canMoveIn' | 'canMoveOut'>> & React.ComponentProps<T>;
 
 
 
 export function Canvas<T extends React.ElementType>({ is, children, passThrough, ...props }: Canvas<T>) {
   const id = props.id;
-  const { actions: { add }, query, _inContext } = useInternalManager();
+  const { actions: { add }, query, _inContext } = useInternalEditor();
   const { node, nodeId, _inNodeContext } = useInternalNode((node) => ({ node: node.data, nodeId: node.id }));
   const [internalId, setInternalId] = useState(null);
   const [initialised, setInitialised] = useState(false);
@@ -33,7 +33,7 @@ export function Canvas<T extends React.ElementType>({ is, children, passThrough,
         invariant(passThrough, ERROR_INFINITE_CANVAS)
         if ( !node.nodes ) {
           const childNodes = mapChildrenToNodes(children, (jsx) => {
-            const node = query.transformJSXToNode(jsx)
+            const node = query.createNode(jsx)
             return node;
           });
 
@@ -45,7 +45,7 @@ export function Canvas<T extends React.ElementType>({ is, children, passThrough,
           let internalId;
 
           if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
-            const rootNode = query.transformJSXToNode(
+            const rootNode = query.createNode(
               React.createElement(Canvas, { is, ...props }, children)
             );
             internalId = rootNode.id;

@@ -1,8 +1,8 @@
 import { useContext, useMemo } from "react";
 import { NodeContext, NodeProvider } from "./NodeContext";
 import { Node, NodeRefEvent } from "../interfaces";
-import { useManager } from "../connectors";
-import { useInternalManager } from "../manager/useInternalManager";
+import { useEditor } from "../connectors";
+import { useInternalEditor } from "../editor/useInternalEditor";
 
 
 type internalActions = NodeProvider & {
@@ -35,12 +35,12 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S): useInter
   
   const { id, related } = context;
   
-  const { actions: managerActions, query, ...collected } = collect ? useInternalManager((state) => id && state.nodes[id] && collect(state.nodes[id])) : useInternalManager();
+  const { actions: EditorActions, query, ...collected } = collect ? useInternalEditor((state) => id && state.nodes[id] && collect(state.nodes[id])) : useInternalEditor();
   const actions = useMemo(() => {
     return {
-      setProp: (cb: any) => managerActions.setProp(id, cb),
+      setProp: (cb: any) => EditorActions.setProp(id, cb),
       setDOM: (dom: HTMLElement) => {
-        return managerActions.setDOM(id, dom);
+        return EditorActions.setDOM(id, dom);
       }
     }
   }, []);

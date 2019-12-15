@@ -1,32 +1,31 @@
 import { Nodes, NodeEvents, NodeId } from "./nodes";
 import { Placement } from "../events/interfaces";
-import { useInternalManager } from "../manager/useInternalManager";
-import { Placeholder } from "../render/RenderPlaceholder";
+import { useInternalEditor } from "../editor/useInternalEditor";
 
 export type Options = {
-  onRender: React.FC<{ render: React.ReactElement }>;
-  renderPlaceholder: React.FC<Placeholder>;
+  onRender?: React.ComponentType<{ render: React.ReactElement }>;
   resolver: Resolver;
-  enabled: boolean;
+  enabled?: boolean;
+  indicator?: Record<"success" | "error", string>
 }
 
 export type Resolver = Record<string, string | React.ElementType>;
 
 
-export interface PlaceholderInfo {
+export interface Indicator {
   placement: Placement;
   error: string | false
 }
 
-export type ManagerEvents = Record<NodeEvents, NodeId> & {
-  placeholder: PlaceholderInfo;
+export type EditorEvents = Record<NodeEvents, NodeId> & {
+  indicator: Indicator;
 }
 
-export type ManagerState = {
+export type EditorState = {
   nodes: Nodes;
-  events: ManagerEvents;
+  events: EditorEvents;
   options: Options;
   // enabled: Boolean;
 }
 
-export type ConnectedManager<S = null> = useInternalManager<S>;
+export type ConnectedEditor<S = null> = useInternalEditor<S>;

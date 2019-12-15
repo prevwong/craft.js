@@ -38,10 +38,12 @@ export default function movePlaceholder(
     }
   }
 
+  console.log(t,l)
+
   return {
-    top: t,
-    left: l,
-    width: w,
-    height: h
+    top: `${t}px`,
+    left: `${l}px`,
+    width: `${w}px`,
+    height: `${h}px`
   };
 }

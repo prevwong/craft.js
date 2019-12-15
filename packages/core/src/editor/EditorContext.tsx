@@ -1,25 +1,25 @@
 import React, { createContext, useEffect, useMemo, useState } from "react";
 import { Options } from "../interfaces";
 import { createOptions } from "./createOptions";
-import { useManagerStore, ManagerStore } from "../manager/store";
-import { Nodes, ManagerEvents } from "../interfaces";
+import { EditorStore, useEditorStore } from "../editor/store";
+import { Nodes, EditorEvents } from "../interfaces";
 import { ROOT_NODE } from "craftjs-utils";
 import { Canvas } from "../nodes";
 import { transformJSXToNode } from "../utils/transformJSX";
 
-export type ManagerContext = ManagerStore & {
+export type EditorContext = EditorStore & {
   handlers: any
 }
 
-export type ManagerContextIntializer = {
+export type EditorContextIntializer = {
   nodes?: Nodes,
-  events?: ManagerEvents,
+  events?: EditorEvents,
   options?: Partial<Options>
 
 }
 
-export const createManagerContext = (
-  data: ManagerContextIntializer = {
+export const createEditorContext = (
+  data: EditorContextIntializer = {
     nodes: {
       [ROOT_NODE]: transformJSXToNode(<Canvas is="div" />)
     },
@@ -27,28 +27,28 @@ export const createManagerContext = (
       active: null,
       hover: null,
       dragging: null,
-      placeholder: null
+      indicator: null
     },
     options: {}
   }
 ) => {
   const { nodes, events, options } = data;
-  const store = useManagerStore(nodes, events, createOptions(options));
+  const store = useEditorStore(nodes, events, createOptions(options));
   return {
     ...store,
     handlers: {}
   }
 }
 
-export const ManagerContext = createContext<ManagerContext>(null);
-export const ManagerContextProvider: React.FC<{ options?: Options}> = ({ children, options }) => {
+export const EditorContext = createContext<EditorContext>(null);
+export const EditorContextProvider: React.FC<{ options?: Options}> = ({ children, options }) => {
   // console.log(options);
   const memoizedOptions = useMemo(() => {
     return options;
   }, []);
 
 
-  const context = createManagerContext({options});
+  const context = createEditorContext({options});
 
   useEffect(() => {
     // console
@@ -65,8 +65,8 @@ export const ManagerContextProvider: React.FC<{ options?: Options}> = ({ childre
   
 
   return context ? (
-    <ManagerContext.Provider value={context}>
+    <EditorContext.Provider value={context}>
       {children}
-    </ManagerContext.Provider>
+    </EditorContext.Provider>
   ) : null
 }

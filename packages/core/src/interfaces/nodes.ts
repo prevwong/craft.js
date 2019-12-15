@@ -5,7 +5,7 @@ export type NodeId = string;
 export type Node =  {
   id: NodeId;
   data: NodeData;
-  event: NodeRefEvent;
+  events: NodeRefEvent;
   dom: HTMLElement;
   related: Record<string, React.ElementType>;
   rules: NodeRules;
@@ -16,8 +16,8 @@ export type InternalNode = Pick<Node, 'id'> & NodeData
 export type NodeRefEvent = Record<NodeEvents, boolean>
 export type NodeRules = {
   canDrag(node: Node): boolean;
-  incoming?(incoming: Node, self: Node): boolean;
-  outgoing?(outgoing: Node, self: Node): boolean;
+  canMoveIn?(canMoveIn: Node, self: Node): boolean;
+  canMoveOut?(canMoveOut: Node, self: Node): boolean;
 }
 
 export type NodeData = {
