@@ -1,0 +1,64 @@
+/**
+ * Copyright (c) 2017-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+@import url('https://fonts.googleapis.com/css?family=Fira+Code|Source+Sans+Pro:400,600&display=swap');
+
+:root {
+  --ifm-color-primary: rgb(129, 169, 169);
+  --ifm-color-primary-dark: rgb(33, 175, 144);
+  --ifm-color-primary-darker: rgb(31, 165, 136);
+  --ifm-color-primary-darkest: rgb(26, 136, 112);
+  --ifm-color-primary-light: rgb(70, 203, 174);
+  --ifm-color-primary-lighter: rgb(102, 212, 189);
+  --ifm-color-primary-lightest: rgb(146, 224, 208);
+  --ifm-navbar-background-color: rgb(129, 169, 169);
+  --ifm-navbar-link-color: rgba(255,255,255,0.85);
+  --ifm-font-family-base:  "Source Sans Pro", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --ifm-font-family-monospace: "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgb(72, 77, 91);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+
+strong.api-type {
+  margin-left: 5px;
+  color: rgb(50, 61, 199);
+  /* font-style: italic; */
+  font-size:13px;
+  font-weight: 400;
+  font-family: "Fira Code";
+}
+
+.api-description {
+  /* font-style: italic; */
+  margin-left: 3px;
+  color: rgba(0, 0, 0, 0.61);
+  /* margin: 2px 0; */
+  padding: 0px 2px;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+li.api-item {
+  padding: 6px 0 0px 0px;
+}
+
+pre, .api-type {
+  
+}
