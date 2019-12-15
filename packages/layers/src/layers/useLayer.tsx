@@ -3,7 +3,7 @@ import { LayerContext } from "./context";
 import { useConnectorHooks, ConnectorElementWrapper } from "craftjs-utils";
 import { EventContext } from "../events";
 import { useLayerManager } from "../manager";
-import { useManager } from "craftjs";
+import { useEditor } from "craftjs";
 import { Layer } from "../interfaces";
 
 
@@ -28,7 +28,7 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer <S> 
     return id && state.layers[id] && collect(state.layers[id]) 
   }) : useLayerManager();
 
-  const { enabled, children, connectors: managerConnectors } = useManager((state, query) => ({
+  const { enabled, children, connectors: managerConnectors } = useEditor((state, query) => ({
     children: state.nodes[id] && query.getDeepNodes(id, false),
     enabled: state.options.enabled
   }));

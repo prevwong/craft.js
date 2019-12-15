@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { useManager } from "craftjs";
+import { useEditor } from "craftjs";
 import { useLayerManager } from "../manager/useLayerManager";
 import { useLayer } from "./useLayer";
 import { LayerContextProvider } from "./context";
@@ -9,7 +9,7 @@ export const LayerNode: React.FC = () => {
     expanded: layer.expanded
   }));
 
-  const { data, query, shouldBeExpanded } = useManager((state, query) => ({
+  const { data, query, shouldBeExpanded } = useEditor((state, query) => ({
     data: state.nodes[id] && state.nodes[id].data,
     shouldBeExpanded: state.events.active && query.getAllParents(state.events.active).includes(id)
   }));

@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import ContentEditable from "react-contenteditable";
-import { useManager } from "craftjs";
+import { useEditor } from "craftjs";
 import { useLayer } from "../../useLayer";
 
 export const EditableLayerName = () => {
   const {id} = useLayer();
 
-  const { displayName, hidden, actions } = useManager((state) => ({
+  const { displayName, hidden, actions } = useEditor((state) => ({
     displayName: state.nodes[id] && state.nodes[id].data.custom.displayName || state.nodes[id].data.displayName,
     hidden: state.nodes[id] && state.nodes[id].data.hidden
   }));  

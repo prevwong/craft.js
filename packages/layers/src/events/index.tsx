@@ -1,43 +1,44 @@
 import React, { useState, useRef, useMemo, useEffect, useCallback } from "react";
-import { useManager, isCanvas, NodeId, PlaceholderInfo, isTopLevelCanvas, Node } from "craftjs";
+import { useEditor, isCanvas, NodeId, Indicator, isTopLevelCanvas, Node } from "craftjs";
 import { useLayerManager } from "../manager/useLayerManager";
-import { useHandlerGuard, ROOT_NODE } from "craftjs-utils";
-import { LayerState } from "interfaces";
+import { useHandlerGuard, ROOT_NODE, RenderIndicator } from "craftjs-utils";
+import { LayerState } from "../interfaces";
 // import { debounce } from "lodash";
 
 export const EventContext = React.createContext(null);
 
 export const EventManager: React.FC<any> = ({ children }) => {
     const { layers, events, actions } = useLayerManager((state) => state);
-    const { query, actions: { move, setPlaceholder }, enabled } = useManager((state) => ({enabled: state.options.enabled}));
-    const {renderPlaceholder} = query.getOptions();
-    const [placeholder, setInnerPlaceholder] = useState<PlaceholderInfo & {
+    const { query, actions: { move }, enabled } = useEditor((state) => ({enabled: state.options.enabled}));
+    const { indicator: indicatorStyles } = query.getOptions();
+    const [indicator, setInnerIndicator] = useState<Indicator & {
         onCanvas: boolean
     }>(null);
 
     const dom = useRef<HTMLElement>();
-    const mutable = useRef<Omit<LayerState, 'options'> & { placeholder: PlaceholderInfo, currentCanvasHovered?: Node }>({
+    const mutable = useRef<Omit<LayerState, 'options'> & { indicator: Indicator, currentCanvasHovered?: Node }>({
         layers: null,
         events: null,
-        placeholder,
+        indicator,
         currentCanvasHovered: null
     });
 
     mutable.current = {
         layers,
         events,
-        placeholder,
+        indicator,
         currentCanvasHovered: mutable.current.currentCanvasHovered
     }
 
-    const placeholderPosition = useMemo(() => {
-        if (placeholder) {
-            const { placement: { where, parent, currentNode } } = placeholder;
+    const indicatorPosition = useMemo(() => {
+        if (indicator) {
+            const { placement: { where, parent, currentNode }, error } = indicator;
             const layerId = currentNode ? currentNode.id : parent.id;
             
             let top;
-           
-            if (placeholder.onCanvas ) {
+            const color = error ? indicatorStyles.error : indicatorStyles.success;
+
+            if (indicator.onCanvas ) {
                 const parentPos = layers[parent.id].dom.getBoundingClientRect();
                 const parentHeadingPos = layers[parent.id].headingDom.getBoundingClientRect();
                 return  {
@@ -47,6 +48,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
                     height: parentHeadingPos.height,
                     background: 'transparent',
                     borderWidth: '1px',
+                    borderColor: color
                 }     
             } else {
                 if (!layers[layerId]) return;
@@ -59,18 +61,21 @@ export const EventManager: React.FC<any> = ({ children }) => {
                     top = pos.top;
                 }
 
-
+                
+                console.log("color", color);
                 return {
                     top,
                     left: headingPos.left,
                     width: pos.width,
-                    height: 2
+                    height: 2,
+                    borderWidth:0,
+                    background: color
                 }
 
             }
             
         }
-    }, [placeholder]);
+    }, [indicator]);
     
     const draggedNode = useRef<string>(null);
     const handlers = useHandlerGuard({
@@ -94,20 +99,20 @@ export const EventManager: React.FC<any> = ({ children }) => {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const { placeholder, layers, currentCanvasHovered } = mutable.current;
+                const { indicator, layers, currentCanvasHovered } = mutable.current;
             
                 console.log("hovering...")
-                if (currentCanvasHovered && placeholder ) {
+                if (currentCanvasHovered && indicator ) {
                     
                     const heading = layers[currentCanvasHovered.id].headingDom.getBoundingClientRect();
                     if ( e.clientY > heading.top + 10 && e.clientY < heading.bottom - 10) {
-                        placeholder.placement.currentNode = query.getNode(currentCanvasHovered.data.nodes[currentCanvasHovered.data.nodes.length - 1]);
-                        placeholder.placement.index = currentCanvasHovered.data.nodes.length
-                        placeholder.placement.where = "after";
-                        placeholder.placement.parent = currentCanvasHovered;
+                        indicator.placement.currentNode = query.getNode(currentCanvasHovered.data.nodes[currentCanvasHovered.data.nodes.length - 1]);
+                        indicator.placement.index = currentCanvasHovered.data.nodes.length
+                        indicator.placement.where = "after";
+                        indicator.placement.parent = currentCanvasHovered;
 
-                        setInnerPlaceholder({
-                           ...placeholder,
+                        setInnerIndicator({
+                           ...indicator,
                             onCanvas: true
                         })
                     }
@@ -126,7 +131,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
 
                 let target = id;
 
-                const placeholderInfo = query.getDropPlaceholder(
+                const indicatorInfo = query.getDropPlaceholder(
                     dragId,
                     target,
                     { x: e.clientX, y: e.clientY },
@@ -136,8 +141,8 @@ export const EventManager: React.FC<any> = ({ children }) => {
 
                 
                 let onCanvas;
-                if (placeholderInfo) {
-                    const { placement: { parent } } = placeholderInfo;
+                if (indicatorInfo) {
+                    const { placement: { parent } } = indicatorInfo;
                     const parentHeadingInfo = layers[parent.id].headingDom.getBoundingClientRect();
 
                     mutable.current.currentCanvasHovered = null;
@@ -150,21 +155,21 @@ export const EventManager: React.FC<any> = ({ children }) => {
                                     (e.clientY > parentHeadingInfo.bottom - 10 && !layers[parent.id].expanded) || 
                                     (e.clientY < parentHeadingInfo.top + 10)
                                 ) {
-                                    placeholderInfo.placement.parent = grandparent;
-                                    placeholderInfo.placement.currentNode = parent;
-                                    placeholderInfo.placement.index = grandparent.data.nodes.indexOf(parent.id);
+                                    indicatorInfo.placement.parent = grandparent;
+                                    indicatorInfo.placement.currentNode = parent;
+                                    indicatorInfo.placement.index = grandparent.data.nodes.indexOf(parent.id);
                                     if (e.clientY > parentHeadingInfo.bottom - 10 && !layers[parent.id].expanded) {
-                                        placeholderInfo.placement.where = "after";
+                                        indicatorInfo.placement.where = "after";
                                     } else if (e.clientY < parentHeadingInfo.top + 10) {
-                                        placeholderInfo.placement.where = "before";
+                                        indicatorInfo.placement.where = "before";
 
                                     }
                                 }
                             }
                         }
                     }
-                    setInnerPlaceholder({
-                        ...placeholderInfo,
+                    setInnerIndicator({
+                        ...indicatorInfo,
                         onCanvas
                     })
                 }
@@ -175,8 +180,8 @@ export const EventManager: React.FC<any> = ({ children }) => {
             (e: MouseEvent) => {
                 e.stopPropagation();
                 const events = mutable.current;
-                if (events.placeholder && !events.placeholder.error) {
-                    const { placement } = events.placeholder;
+                if (events.indicator && !events.indicator.error) {
+                    const { placement } = events.indicator;
                     const { parent, index, where } = placement;
                     const { id: parentId } = parent;
 
@@ -184,7 +189,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
                 }
 
                 draggedNode.current = null;
-                setInnerPlaceholder(null);
+                setInnerIndicator(null);
             }
         ]
         
@@ -220,9 +225,8 @@ export const EventManager: React.FC<any> = ({ children }) => {
                 dom.current = node;
             }}>
                 {
-                    placeholder ? React.createElement(renderPlaceholder, {
-                        placeholder,
-                        suggestedStyles: placeholderPosition
+                    indicator ? React.createElement(RenderIndicator, {
+                        style: indicatorPosition
                     }) : null
                 }
                 {children}

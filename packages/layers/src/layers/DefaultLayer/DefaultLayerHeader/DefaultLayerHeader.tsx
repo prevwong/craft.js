@@ -1,5 +1,5 @@
 import React from "react";
-import { useManager, hasTopLevelCanvases, isTopLevelCanvas } from "craftjs";
+import { useEditor, hasTopLevelCanvases, isTopLevelCanvas } from "craftjs";
 import styled from "styled-components";
 import Eye from './eye.svg'
 import Arrow from './arrow.svg'
@@ -100,7 +100,7 @@ export const DefaultLayerHeader: React.FC = () => {
   });
 
 
-  const { hidden, actions, active, topLevel } = useManager((state) => ({
+  const { hidden, actions, active, topLevel } = useEditor((state) => ({
     hidden: state.nodes[id] && state.nodes[id].data.hidden,
     active:  state.events.active == id,
     topLevel: isTopLevelCanvas(state.nodes[id])
