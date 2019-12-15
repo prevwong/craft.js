@@ -1,9 +1,9 @@
 import React from "react";
 import cx from "classnames";
-import { useManager } from "craftjs";
+import { useEditor } from "craftjs";
 
 export const Viewport: React.FC = ({children}) => {
-  const { enabled } = useManager((state) => ({ enabled: state.options.enabled }));
+  const { enabled } = useEditor(state => ({ enabled: state.options.enabled }));
 
   return (
     <div style={{paddingTop: "59px"}} className={cx(["flex flex-col w-full", {

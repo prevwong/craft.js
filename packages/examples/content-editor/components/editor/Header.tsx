@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useManager } from "craftjs";
+import { useEditor } from "craftjs";
 import styled from "styled-components";
 import Checkmark from "../../public/icons/check.svg";
 import Customize from "../../public/icons/customize.svg";
@@ -61,7 +61,7 @@ const Btn = styled.a`
 `;
 
 export const Header = ({setEnabled}) => {
-  const {enabled, actions: {setOptions}} = useManager((state) => ({
+  const {enabled, actions: {setOptions}} = useEditor((state) => ({
     enabled: state.options.enabled
   }));
   

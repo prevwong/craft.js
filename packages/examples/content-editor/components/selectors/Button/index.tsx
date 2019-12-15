@@ -14,7 +14,7 @@ const StyledButton = styled.button<any>`
 `
 
 export const Button = (props: any) => {
-  const {actions: {setProp}, connect, active} = useNode((node) => ({
+  const {setProp, connectors:{connect}, active} = useNode((node) => ({
     active: node.event.active
   }));
 

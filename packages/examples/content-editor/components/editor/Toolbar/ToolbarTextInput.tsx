@@ -69,7 +69,6 @@ export const ToolbarTextInput = ({ onChange, value, prefix, label, type, ...prop
   }, [value]);
 
 
-  const { actions: {setProp} } = useNode();
   return (
       <div style={{width:"100%", position: "relative"}} onClick={() => {
         setActive(true);

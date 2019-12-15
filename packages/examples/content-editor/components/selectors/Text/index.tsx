@@ -1,5 +1,5 @@
 import React, { Children } from 'react';
-import { useNode, Canvas, useManager } from 'craftjs';
+import { useNode, Canvas, useEditor} from 'craftjs';
 import { ToolbarSection } from '../../editor';
 import { TextSettings } from "./TextSettings";
 import ContentEditable from "react-contenteditable";
@@ -15,15 +15,15 @@ export type Text = {
 }
 
 export const Text = ({ fontSize , textAlign, fontWeight, color, shadow, text, margin} : Partial<Text>) => {
-  const { connect, actions } = useNode();
-  const {enabled} = useManager((state) => ({enabled: state.options.enabled}))
+  const { connectors: {connect}, setProp } = useNode();
+  const {enabled} = useEditor(state => ({enabled: state.options.enabled}))
   return (
       <ContentEditable
         innerRef={connect}
         html={text} // innerHTML of the editable div
         disabled={!enabled} 
         onChange={(e) => {
-          actions.setProp(prop => prop.text = e.target.value)
+          setProp(prop => prop.text = e.target.value)
         }}      // use true to disable editing
         tagName='h2' // Use a custom HTML tag (uses a div by default)
         style={{

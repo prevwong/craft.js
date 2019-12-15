@@ -1,9 +1,9 @@
 import React, { useEffect, Ref, useRef, useMemo } from 'react';
-import { useManager } from 'craftjs';
+import { useEditor } from 'craftjs';
 import cx from "classnames";
 
 export const EditorRenderer = ({children, ...props}) => {
-  const { actions, connectors, enabled } = useManager((state) => ({enabled: state.options.enabled}));
+  const { actions, connectors, enabled } = useEditor((state) => ({enabled: state.options.enabled}));
 
 
   return (  

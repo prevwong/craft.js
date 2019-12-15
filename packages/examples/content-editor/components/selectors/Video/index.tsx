@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "../Container";
-import { Canvas, useNode, useManager } from "craftjs";
+import { Canvas, useNode, useEditor} from "craftjs";
 import { Text } from "../Text";
 import { VideoSettings } from "./VideoSettings";
 import styled from "styled-components";
@@ -18,8 +18,8 @@ iframe {
 `
 
 export const Video = (props: any) => {
-    const {enabled, query} = useManager((state) => ({ enabled: state.options.enabled }));
-    const {actions: {setProp}, connect, active} = useNode((node) => ({
+    const {enabled, query} = useEditor((state) => ({ enabled: state.options.enabled }));
+    const {setProp, connectors:{connect}, active} = useNode((node) => ({
         active: node.event.active
     }));
 

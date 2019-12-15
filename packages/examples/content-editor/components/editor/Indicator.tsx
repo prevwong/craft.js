@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback } from "react";
-import { useManager } from "craftjs";
+import { useEditor } from "craftjs";
 import styled from "styled-components";
 import { isMoveable } from "craftjs";
 import Move from "../../public/icons/move.svg"
@@ -36,7 +36,7 @@ const Btn = styled.a`
 
 
 export const Indicator = ({event}) => {
-  const { id, dom, displayName, moveable, deletable, handlers, actions } = useManager((state) => {
+  const { id, dom, displayName, moveable, deletable, handlers, actions } = useEditor((state) => {
     const id = state.events[event];
     if ( !id ) return {};
 

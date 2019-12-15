@@ -1,5 +1,5 @@
 import React from 'react';
-import { Selector, Canvas, useManager } from 'craftjs';
+import { Selector, Canvas, useEditor} from 'craftjs';
 import { Container } from '../selectors/Container';
 import { Text } from "../selectors/Text";
 import SquareSvg from '../../public/icons/toolbox/rectangle.svg';
@@ -27,7 +27,7 @@ const Item = styled.div`
 
 
 export const Toolbox = () => {
-  const { enabled } = useManager((state) => ({enabled: state.options.enabled}));
+  const { enabled } = useEditor((state) => ({enabled: state.options.enabled}));
 
   return (
     <ToolboxDiv enabled={enabled} className="w-12 border-r bg-gray-100 h-full bg-white">

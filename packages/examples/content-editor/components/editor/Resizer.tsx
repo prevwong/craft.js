@@ -1,7 +1,7 @@
 import React, { useRef, useLayoutEffect, useEffect, useState, useMemo, useCallback } from "react";
 import styled from "styled-components";
 import { Resizable } from "re-resizable";
-import { isRoot, useNode, useManager } from "craftjs";
+import { isRoot, useNode, useEditor } from "craftjs";
 import cx from "classnames";
 import { isPercentage, pxToPercent, percentToPx, getElementDimensions } from "../../utils/numToMeasurement";
 import { debounce } from "lodash";
@@ -88,7 +88,7 @@ export const Resizer = ({
   children,
   ...props
 }: any, ) => {
-  const { id, fillSpace, nodeWidth, nodeHeight, isRootNode, parent, actions, active, _inNodeContext, connect } = useNode(node => ({
+  const { id, setProp, connectors:{connect}, fillSpace, nodeWidth, nodeHeight, isRootNode, parent, active, _inNodeContext } = useNode(node => ({
     id: node.id,
     isRootNode: isRoot(node),
     parent: node.data.parent,
@@ -99,13 +99,13 @@ export const Resizer = ({
   }));
 
 
-  const {parentDirection} = useManager(state => {
+  const {parentDirection} = useEditor(state => {
     return {
       parentDirection: parent && state.nodes[parent] && state.nodes[parent].data.props.flexDirection
     }
   });
 
-  // const { parentWidth, parentHeight } = useManager((state) => ({ parentWidth: parent && state.nodes[parent].data.props.width, parentHeight: parent && state.nodes[parent].data.props.height }))
+  // const { parentWidth, parentHeight } = useEditor((state) => ({ parentWidth: parent && state.nodes[parent].data.props.width, parentHeight: parent && state.nodes[parent].data.props.height }))
 
   const resizable = useRef<Resizable>(null);
   const isResizing = useRef<Boolean>(false);
@@ -213,7 +213,7 @@ export const Resizer = ({
           height = editingDimensions.current.height + d.height + "px"
         }
 
-        actions.setProp((prop: any) => {
+        setProp((prop: any) => {
           prop[propKey.width] = width;
           prop[propKey.height] = height;
         });

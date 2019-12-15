@@ -7,7 +7,7 @@ import {SidebarItem} from "./SidebarItem";
 import styled from "styled-components";
 import CustomizeIcon from "../../../public/icons/customize.svg";
 import LayerIcon from "../../../public/icons/layers.svg";
-import { useManager } from "craftjs";
+import { useEditor} from "craftjs";
 
 export const SidebarDiv = styled.div<{ enabled: boolean }>`
   width: ${props => props.enabled ? 270 : 0}px;
@@ -17,7 +17,7 @@ export const SidebarDiv = styled.div<{ enabled: boolean }>`
 export const Sidebar = () => {
   const [layersVisible, setLayerVisible] = useState(false);
   const [toolbarVisible, setToolbarVisible] = useState(false);
-  const { enabled } = useManager((state) => ({ enabled: state.options.enabled }));
+  const { enabled } = useEditor((state) => ({ enabled: state.options.enabled }));
 
   return (
     <SidebarDiv

@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { useManager } from "craftjs";
+import { useEditor } from "craftjs";
 
 export const ComponentHighlighter = () => {
-  const { activeDOM } = useManager((state) => {
+  const { activeDOM } = useEditor((state) => {
     const nodeId = state.events.active;
     return {
       activeDOM: nodeId && state.nodes[nodeId] && state.nodes[nodeId].dom

@@ -1,5 +1,5 @@
 import React from "react";
-import { useManager } from "craftjs";
+import { useEditor} from "craftjs";
 import styled from 'styled-components';
 export * from "./ToolbarItem";
 export * from "./ToolbarSection";
@@ -7,7 +7,7 @@ export * from "./ToolbarTextInput";
 export * from "./ToolbarDropdown";
 
 export const Toolbar = () => {
-  const { active, related } = useManager(state => ({
+  const { active, related } = useEditor(state => ({
     active: state.events.active,
     related: state.events.active && state.nodes[state.events.active].related
   }));

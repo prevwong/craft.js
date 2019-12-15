@@ -5,7 +5,6 @@ import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Grid, Div
 import { ToolbarRadio } from '../../editor/Toolbar/ToolbarRadio';
 
 export const VideoSettings = () => {
-  const { width, height, actions: { setProp } } = useNode((node) => ({ width: node.data.props.width || 0, height: node.data.props.height || 0 }));
 
   return (
     <React.Fragment>

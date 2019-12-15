@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Craft, Renderer, Canvas, useManager } from "craftjs";
+import { Editor, Renderer, Canvas, useEditor } from "craftjs";
 import { Toolbar, Toolbox, EditorRenderer } from '../components/editor';
 import { Container, Text } from "../components/selectors";
 import { Grid, createMuiTheme } from "@material-ui/core"
@@ -37,13 +37,12 @@ function App() {
         className="h-full h-screen"
       >
 
-          <Craft
+          <Editor
             resolver={{ Container, Text, Custom1, Custom2, Custom3, Button, Video }}
             enabled={enabled}
             onRender={RenderNode}
           >
-          
-              <Header setEnabled={val => setEnabled(val)} />
+            <Header setEnabled={val => setEnabled(val)} />
             <Viewport>
             <div className="flex w-full h-full">
               <Toolbox />
@@ -121,7 +120,7 @@ function App() {
               <Sidebar />
             </div>
           </Viewport>
-          </Craft>
+          </Editor>
       </div>
     </ThemeProvider>
   );

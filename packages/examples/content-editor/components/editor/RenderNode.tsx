@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useNode, isDeletable, useManager } from "craftjs";
+import { useNode, isDeletable, useEditor } from "craftjs";
 import styled from "styled-components";
 import { isMoveable } from "craftjs";
 import Move from "../../public/icons/move.svg"
@@ -35,8 +35,8 @@ const Btn = styled.a`
 `
 
 export const RenderNode = ({ render }) => {
-  const { actions, handlers } = useManager();
-  const { id, isActive, isHover, dom, name, moveable, deletable, drag } = useNode((node) => ({
+  const { actions, handlers } = useEditor();
+  const { id, isActive, isHover, dom, name, moveable, deletable, connectors:{drag} } = useNode((node) => ({
     isActive: node.event.active,
     isHover: node.event.hover,
     dom: node.dom,
@@ -92,7 +92,7 @@ export const RenderNode = ({ render }) => {
             style={{
               left: getPos(dom).left,
               top: getPos(dom).top,
-              zIndex: "9999"
+              "zIndex": "9999"
             }}
           >
             <h2 className="flex-1 mr-4">{name}</h2>

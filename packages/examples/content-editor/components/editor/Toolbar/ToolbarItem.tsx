@@ -72,7 +72,7 @@ export type ToolbarItem = {
 }
 export const ToolbarItem = ({  full = false, propKey, type, onChange, index, ...props }: ToolbarItem) => {
 
-  const { actions, propValue } = useNode((node) => ({ propValue: node.data.props[propKey] }));
+  const { setProp, propValue } = useNode((node) => ({ propValue: node.data.props[propKey] }));
   const value = Array.isArray(propValue) ? propValue[index] : propValue;
 
     return (
@@ -81,7 +81,7 @@ export const ToolbarItem = ({  full = false, propKey, type, onChange, index, ...
            {
              ['text', 'color', 'bg', 'number'].includes(type) ? (
             <ToolbarTextInput {...props} type={type} value={value} onChange={(value) => {
-              actions.setProp((props: any) => {
+              setProp((props: any) => {
                 if ( Array.isArray(propValue) ) {
                   props[propKey][index] = onChange ? onChange(value) : value
                 } else {
@@ -97,7 +97,7 @@ export const ToolbarItem = ({  full = false, propKey, type, onChange, index, ...
                 }
                 <SliderStyled value={parseInt(value) || 0} onChange={(e, value: number) => {
                 
-                  actions.setProp((props: any) => {
+                  setProp((props: any) => {
                     if (Array.isArray(propValue)) {
                       props[propKey][index] = onChange ? onChange(value) : value
                     } else {
@@ -113,7 +113,7 @@ export const ToolbarItem = ({  full = false, propKey, type, onChange, index, ...
                 }
                 <RadioGroup value={value || 0} onChange={(e) => {
                   const value = e.target.value;
-                  actions.setProp((props: any) => {
+                  setProp((props: any) => {
                     // console.log("updating", propKey, value)
                     props[propKey] = onChange ? onChange(value) : value;
                   })
@@ -122,7 +122,7 @@ export const ToolbarItem = ({  full = false, propKey, type, onChange, index, ...
                 </RadioGroup>
               </>
              ) : type == 'select' ? (
-               <ToolbarDropdown value={value || ''} onChange={(value) => actions.setProp((props: any) => props[propKey] = onChange ? onChange(value) : value)}  {...props} />
+               <ToolbarDropdown value={value || ''} onChange={(value) => setProp((props: any) => props[propKey] = onChange ? onChange(value) : value)}  {...props} />
              ) : null
            }
            </div>
