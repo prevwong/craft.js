@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState  } from "react";
 import Arrow from "../../../public/icons/arrow.svg";
 import styled from "styled-components";
 
@@ -19,7 +19,7 @@ const Chevron = styled.a<{visible: boolean}>`
 export type SidebarItem = {
   title: string;
   height?: string;
-  icon: React.ElementType;
+  icon: string;
   onChange?: (bool: boolean) => void;
 }
 
@@ -35,17 +35,17 @@ export const SidebarItem: React.FC<SidebarItem> = ({ icon, title, children, heig
  
   return (
     <SidebarItemDiv visible={visible} height={height} className="flex flex-col">
-      <HeaderDiv className={`bg-white border-b last:border-b-0 flex items-center px-2 py-2 ${visible ? 'shadow-sm' : ''}`}> 
+      <HeaderDiv onClick={() => {
+          if (onChange) onChange(!visible);
+          setVisible(!visible)
+        }} className={`cursor-pointer bg-white border-b last:border-b-0 flex items-center px-2 py-2 ${visible ? 'shadow-sm' : ''}`}> 
         <div className='flex-1 flex items-center'>
           {
             React.createElement(icon, { className: "w-4 h-4 mr-2"})
           }
           <h2 className="text-xs uppercase">{title}</h2>
         </div>
-        <Chevron visible={visible} onClick={() => {
-          if (onChange) onChange(!visible);
-          setVisible(!visible)
-        }}><Arrow /></Chevron>
+        <Chevron visible={visible}><Arrow /></Chevron>
       </HeaderDiv>
       {
         visible ? (

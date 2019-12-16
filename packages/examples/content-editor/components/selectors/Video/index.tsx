@@ -1,10 +1,7 @@
 import React from "react";
-import { Container } from "../Container";
-import { Canvas, useNode, useEditor} from "craftjs";
-import { Text } from "../Text";
+import { useNode, useEditor} from "craftjs";
 import { VideoSettings } from "./VideoSettings";
 import styled from "styled-components";
-import cx from "classnames";
 import YouTube from 'react-youtube';
 const YoutubeDiv = styled.div<any>`
 width:100%;
@@ -18,12 +15,12 @@ iframe {
 `
 
 export const Video = (props: any) => {
-    const {enabled, query} = useEditor((state) => ({ enabled: state.options.enabled }));
-    const {setProp, connectors:{connect}, selected} = useNode((node) => ({
+    const {enabled} = useEditor((state) => ({ enabled: state.options.enabled }));
+    const { connectors:{connect} } = useNode((node) => ({
         selected: node.events.selected
     }));
 
-    const {text, textComponent, color, videoId, ...otherProps} = props;
+    const {videoId } = props;
 
     return (
         <YoutubeDiv ref={connect} enabled={enabled}>

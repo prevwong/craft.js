@@ -43,7 +43,7 @@ export const Container = (props: Partial<Container>) => {
     ...defaultProps,
     ...props
   }
-  const { flexDirection, alignItems, justifyContent, fillSpace, background, color, padding, margin, shadow, radius, children, width, height } = props;
+  const { flexDirection, alignItems, justifyContent, fillSpace, background, color, padding, margin, shadow, radius, children } = props;
   return (
     <Resizer
       propKey={{ width: "width", height: "height" }}

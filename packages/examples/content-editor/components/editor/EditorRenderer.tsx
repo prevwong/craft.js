@@ -1,8 +1,8 @@
-import React, { useEffect, Ref, useRef, useMemo } from 'react';
+import React from 'react';
 import { useEditor } from 'craftjs';
 import cx from "classnames";
 
-export const EditorRenderer = ({children, ...props}) => {
+export const EditorRenderer = ({children}) => {
   const {  connectors, enabled } = useEditor((state) => ({enabled: state.options.enabled}));
 
 

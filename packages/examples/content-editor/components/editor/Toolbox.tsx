@@ -30,12 +30,12 @@ export const Toolbox = () => {
   const { enabled } = useEditor((state) => ({enabled: state.options.enabled}));
 
   return (
-    <ToolboxDiv enabled={enabled} className="w-12 border-r bg-gray-100 h-full bg-white">
+    <ToolboxDiv enabled={enabled && enabled} className="w-12 border-r bg-gray-100 h-screen bg-white">
       <div className='flex flex-col items-center pt-3'>
         <Selector render={<Canvas is={Container} background={{ r: 78, g: 78, b: 78, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }}  height="100%" width="50%"></Canvas>}>
           <Item className='m-2 pb-2 cursor-pointer block'><SquareSvg /></Item>
         </Selector>
-        <Selector render={<Text fontSize="12" textAItemgn="left" text="Hi there" />}>
+        <Selector render={<Text fontSize="12" textAlign="left" text="Hi there" />}>
           <Item className='m-2 pb-2 cursor-pointer block'><TypeSvg /></Item>
         </Selector> 
         <Selector render={<Button />}>

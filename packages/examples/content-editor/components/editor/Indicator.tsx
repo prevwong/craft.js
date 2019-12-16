@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useRef, useCallback } from "react";
 import { useEditor } from "craftjs";
 import styled from "styled-components";
 import { isMoveable } from "craftjs";
@@ -79,7 +79,7 @@ export const Indicator = ({event}) => {
       style={{
         left: `${dom.getBoundingClientRect().left}px`,
         top: `${dom.getBoundingClientRect().top}px`,
-        zIndex: "9999"
+        zIndex: 9999
       }}
     >
       <h2 className="flex-1">{displayName}</h2>

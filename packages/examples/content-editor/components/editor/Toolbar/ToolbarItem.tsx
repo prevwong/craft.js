@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
-import cx from 'classnames';
-import { Grid, Slider, makeStyles, RadioGroup } from '@material-ui/core'
+import React from 'react';
+import { Grid, Slider, RadioGroup } from '@material-ui/core'
 import { useNode } from 'craftjs';
 import { ToolbarTextInput } from './ToolbarTextInput'
 import { ToolbarDropdown } from './ToolbarDropdown'
@@ -95,7 +93,7 @@ export const ToolbarItem = ({  full = false, propKey, type, onChange, index, ...
                 {
                   props.label ? <h4 className='text-sm text-light-gray-2'>{props.label}</h4> : null
                 }
-                <SliderStyled value={parseInt(value) || 0} onChange={(e, value: number) => {
+                <SliderStyled value={parseInt(value) || 0} onChange={((_, value: number) => {
                 
                   setProp((props: any) => {
                     if (Array.isArray(propValue)) {
@@ -104,7 +102,7 @@ export const ToolbarItem = ({  full = false, propKey, type, onChange, index, ...
                       props[propKey] = onChange ? onChange(value) : value
                     }
                   })
-                }} />
+                }) as any} />
               </>
              ) : type == 'radio' ? (
               <>

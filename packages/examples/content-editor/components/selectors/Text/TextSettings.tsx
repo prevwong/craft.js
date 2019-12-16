@@ -1,7 +1,5 @@
 import React from 'react';
-import { useNode } from 'craftjs';
 import { ToolbarSection, ToolbarItem } from "../../editor"
-import { MenuItem, FormControlLabel, Radio } from '@material-ui/core'
 import { ToolbarRadio } from '../../editor/Toolbar/ToolbarRadio';
 import { capitalize, weightDescription } from '../../../utils/text';
 

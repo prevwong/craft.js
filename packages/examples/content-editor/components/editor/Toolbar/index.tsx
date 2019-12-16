@@ -1,6 +1,5 @@
 import React from "react";
 import { useEditor} from "craftjs";
-import styled from 'styled-components';
 export * from "./ToolbarItem";
 export * from "./ToolbarSection";
 export * from "./ToolbarTextInput";

@@ -1,8 +1,7 @@
 import React from "react";
 import { Container } from "../Container";
-import { Canvas, useNode, useEditor} from "craftjs";
+import { Canvas, useEditor} from "craftjs";
 import { Button } from "../Button";
-import { Video } from "../Video";
 
 export const Custom3 = (props: any) => {
   

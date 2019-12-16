@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect, useEffect, useState, useMemo, useCallback } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import { Resizable } from "re-resizable";
 import { isRoot, useNode, useEditor } from "craftjs";
@@ -88,7 +88,7 @@ export const Resizer = ({
   children,
   ...props
 }: any, ) => {
-  const { id, setProp, connectors:{connect}, fillSpace, nodeWidth, nodeHeight, isRootNode, parent, active, _inNodeContext } = useNode(node => ({
+  const { setProp, connectors:{connect}, fillSpace, nodeWidth, nodeHeight, isRootNode, parent, active, _inNodeContext } = useNode(node => ({
     id: node.id,
     isRootNode: isRoot(node),
     parent: node.data.parent,
@@ -195,7 +195,7 @@ export const Resizer = ({
         };
         isResizing.current = true;
       }}
-      onResize={(e, direction, ref, d) => {
+      onResize={(_, __, ___, d) => {
         const dom = resizable.current.resizable;
         let { width, height }: any = getUpdatedDimensions(d.width, d.height);
         if (isPercentage(nodeWidth)) width = pxToPercent(width, getElementDimensions(dom.parentElement).width) + '%';

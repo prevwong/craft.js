@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "../Container";
-import { Canvas, useNode } from "craftjs";
+import { Canvas } from "craftjs";
 import { Button } from "../Button";
 
 export const Custom1 = (props: any) => {

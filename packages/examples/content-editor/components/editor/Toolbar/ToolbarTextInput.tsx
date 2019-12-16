@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import cx from 'classnames';
 import { useState } from 'react';
-import { useNode } from 'craftjs';
 import { ChromePicker } from 'react-color'
 import { TextField, makeStyles, InputAdornment } from '@material-ui/core';
 
@@ -91,9 +89,9 @@ export const ToolbarTextInput = ({ onChange, value, prefix, label, type, ...prop
           label={label}
           style={{ margin: 0, width:"100%" }}
           value={internalValue || ''}
-          onKeyDown={(e: React.KeyboardEvent) => {
+          onKeyDown={(e) => {
             if ( e.key == 'Enter' ) {
-              onChange(e.target.value);
+              onChange((e.target as any).value );
             }
           }}
           onChange={(e) => {

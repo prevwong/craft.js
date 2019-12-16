@@ -1,6 +1,5 @@
-import React, { Children } from 'react';
-import { useNode, Canvas, useEditor} from 'craftjs';
-import { ToolbarSection } from '../../editor';
+import React from 'react';
+import { useNode, useEditor} from 'craftjs';
 import { TextSettings } from "./TextSettings";
 import ContentEditable from "react-contenteditable";
 

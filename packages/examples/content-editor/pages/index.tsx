@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Editor, Renderer, Canvas, useEditor } from "craftjs";
-import { Toolbar, Toolbox, EditorRenderer } from '../components/editor';
+import { NextSeo } from 'next-seo';
+
+import { Editor, Renderer, Canvas} from "craftjs";
+import { Toolbox, EditorRenderer } from '../components/editor';
 import { Container, Text } from "../components/selectors";
-import { Grid, createMuiTheme } from "@material-ui/core"
+import { createMuiTheme } from "@material-ui/core"
 import { ThemeProvider } from '@material-ui/styles';
 import "../styles/tailwind.css";
 import { Custom1 } from '../components/selectors/Custom1';
@@ -11,7 +13,6 @@ import { Custom3 } from '../components/selectors/Custom3';
 import { Button } from '../components/selectors/Button';
 import { Video } from '../components/selectors/Video';
 import { Header } from '../components/editor/Header';
-import { Layers } from "craftjs-layers";
 import { Sidebar } from "../components/editor/Sidebar";
 import { RenderNode } from '../components/editor/RenderNode';
 import { Viewport } from '../components/editor/Viewport';
@@ -29,24 +30,32 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  const [enabled, setEnabled] = useState(true);
+  const [enabled] = useState(true);
 
   return (
     <ThemeProvider theme={theme}>
       <div
         className="h-full h-screen"
       >
-
-          <Editor
-            resolver={{ Container, Text, Custom1, Custom2, Custom3, Button, Video }}
-            enabled={enabled}
-            onRender={RenderNode}
-          >
-            <Header setEnabled={val => setEnabled(val)} />
-            <Viewport>
-            <div className="flex w-full h-full">
-              <Toolbox />
-              <EditorRenderer>
+        <NextSeo
+          title="Craft.js"
+          description="A React framework the build drag-n-drop page editors."
+          canonical="https://www.canonical.ie/"
+          twitter={{
+            handle: '@handle',
+            site: '@site',
+            cardType: 'summary_large_image',
+          }}
+        />
+        <Editor
+          resolver={{ Container, Text, Custom1, Custom2, Custom3, Button, Video }}
+          enabled={enabled}
+          onRender={RenderNode}
+        >
+          <Header  />
+          <Viewport>
+            <Toolbox />
+            <EditorRenderer>
               <Renderer>
                 <Canvas is={Container} width="800px" height="auto" background={{ r: 255, g: 255, b: 255, a: 1 }} padding={["40", "40", "40", "40"]}>
                   <Canvas is={Container} flexDirection="row" width="100%" height="auto" padding={["40", "40", "40", "40"]} margin={["0", "0", "40", "0"]}>
@@ -116,11 +125,10 @@ function App() {
                   </Canvas>
                 </Canvas>
               </Renderer>
-              </EditorRenderer>
-              <Sidebar />
-            </div>
+            </EditorRenderer>
+            <Sidebar />
           </Viewport>
-          </Editor>
+        </Editor>
       </div>
     </ThemeProvider>
   );

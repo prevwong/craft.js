@@ -1,6 +1,4 @@
 import React, {useState} from "react"
-import { Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Layers } from "craftjs-layers";
 import { Toolbar } from '../Toolbar';
 import {SidebarItem} from "./SidebarItem";
@@ -22,7 +20,7 @@ export const Sidebar = () => {
   return (
     <SidebarDiv
       enabled={enabled}
-      className="transition bg-white flex-col flex w-2 h-full overflow-auto"
+      className="transition bg-white w-2"
     >
       <div className="flex flex-col h-full">
         <SidebarItem icon={CustomizeIcon} title="Customize" height={!layersVisible ? "full" : "300px"} onChange={(val) => setToolbarVisible(val)}>

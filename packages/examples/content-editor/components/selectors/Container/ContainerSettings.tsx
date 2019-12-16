@@ -1,6 +1,5 @@
 import React from 'react';
 import { ToolbarSection, ToolbarItem } from "../../editor"
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Grid, Divider, Typography, Chip, TextField } from '@material-ui/core'
 import { ToolbarRadio } from '../../editor/Toolbar/ToolbarRadio';
 
 export const ContainerSettings = () => {

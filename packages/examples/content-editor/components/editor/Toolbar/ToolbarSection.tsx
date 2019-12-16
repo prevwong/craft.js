@@ -1,8 +1,8 @@
 import React from 'react';
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Grid, Divider, Typography, Chip } from '@material-ui/core'
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Grid, Divider } from '@material-ui/core'
 import { useNode } from 'craftjs';
 import { makeStyles } from '@material-ui/core/styles';
-const usePanelStyles = makeStyles(theme => ({
+const usePanelStyles = makeStyles(_ => ({
   root: {
     background: "transparent", 
     boxShadow: "none",
@@ -23,7 +23,7 @@ const usePanelStyles = makeStyles(theme => ({
 }));
 
 
-const useSummaryStyles = makeStyles(theme => ({
+const useSummaryStyles = makeStyles(_ => ({
   root: {
     "min-height": "36px",
     "padding" : 0

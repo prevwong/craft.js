@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { useNode, isDeletable, useEditor } from "craftjs";
 import styled from "styled-components";
 import { isMoveable } from "craftjs";
@@ -35,7 +35,7 @@ const Btn = styled.a`
 `
 
 export const RenderNode = ({ render }) => {
-  const { actions, handlers } = useEditor();
+  const { actions  } = useEditor();
   const { id, isActive, isHover, dom, name, moveable, deletable, connectors:{drag} } = useNode((node) => ({
     isActive: node.events.selected,
     isHover: node.events.hovered,

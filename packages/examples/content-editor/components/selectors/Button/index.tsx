@@ -1,6 +1,5 @@
 import React from "react";
-import { Container } from "../Container";
-import { Canvas, useNode } from "craftjs";
+import { useNode } from "craftjs";
 import { Text } from "../Text";
 import { ButtonSettings } from "./ButtonSettings";
 import styled from "styled-components";
@@ -14,7 +13,7 @@ const StyledButton = styled.button<any>`
 `
 
 export const Button = (props: any) => {
-  const {setProp, connectors:{connect}, selected} = useNode((node) => ({
+  const { connectors:{connect} } = useNode((node) => ({
     selected: node.events.selected
   }));
 
