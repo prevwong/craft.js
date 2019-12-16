@@ -8,11 +8,11 @@
 module.exports = {
   title: 'craft.js',
   tagline: 'A React framework for building drag-n-drop page editors',
-  url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  url: 'https://prevwong.github.io/craft.js',
+  baseUrl: '/craft.js/',
   favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'prevwong', // Usually your GitHub org/user name.
+  projectName: 'craft.js', // Usually your repo name.
   themeConfig: {
     prism: {
       theme: require('prism-react-renderer/themes/shadesOfPurple'),
