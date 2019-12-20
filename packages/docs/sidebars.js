@@ -9,6 +9,7 @@ module.exports = {
   docs: {
     "Introduction": [
       "overview",
+      "acknowledgements",
     ],
     "Core Concepts" : [
       "concepts/nodes",
@@ -22,7 +23,7 @@ module.exports = {
       "api/editor-state",
       "api/node",
       "api/editor",
-      "api/renderer",
+      "api/frame",
       "api/canvas",
       "api/useEditor",
       "api/useNode"

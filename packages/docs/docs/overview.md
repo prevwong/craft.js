@@ -5,9 +5,9 @@ title: Overview
 
 ## Motivation
 
-Building page editors are difficult - you got to worry about the drag and drop system, how components should be designed and how they should be rendered/updated.
+Building page editors are difficult - you have to worry about the drag and drop system, how components should be designed and how they should be rendered/updated.
 
-Craft.js presents a solution in which it provides you the building blocks, which you can then use to iteratively add functionality to your user interface. In other words, you can build your page editor according to your own specifications.
+Craft.js provides you the building blocks, which you can then use to iteratively add page editor functionality to your user interface. In other words, you can build your page editor according to your own UI/UX specifications.
 
 
 ## Features
@@ -33,23 +33,18 @@ const TextComponent = ({text}) => {
 Heck, the entire UI of our page editor can just built using React as well
 ```jsx
 import React from "react";
-import {Craft, Editor, Canvas, Selector} from "craftjs";
+import {Craft, Frame, Canvas, Selector} from "craftjs";
 const App = () => {
   return (
     <div>
       <header>Some fancy header or whatever</header>
-      <Craft>
-        <Editor resolver={TextComponent, Container}>  
+      <Editor>
+        <Frame resolver={TextComponent, Container}>  
           <Canvas>
             <TextComponent text="I am already rendered here" />
           </Canvas>
-        </Editor>
-        <div>
-          <Selector render={<TextComponent text="Some default text" />}>
-            Drag me to create a new Text Component
-          </Selector>
-        </div>
-      </Craft>
+        </Frame>
+      </Editor>
     </div>
   )
 }
@@ -88,6 +83,7 @@ const TextComponent = ({text}) => {
   )
 }
 ```
+With this, you could easily implement content editable text or drag-to-resize components - just as any modern page editor would have.
 
 ### User components with droppable regions
 Let's say we need a "Container" component which users can drop into the editor. Additionally, we would also like them to be able to drag and drop other components into the Container. 
@@ -115,7 +111,7 @@ Craft.js provides and expressive API which allows you to easily manipulate the e
 ```jsx
 import {useEditor, useNode} from "craftjs";
 const Container = () => {
-  const { actions: {add}, query: { transformJSXToNode, getNode } } = useEditor();
+  const { actions: {add}, query: { createNode, getNode } } = useEditor();
   const { id, drag, connect} = useNode();
   return (
     <div ref={connect(drag)}>
@@ -123,7 +119,7 @@ const Container = () => {
       <a onClick={() => {
         const { data: {type, props}} = getNode(id);
         add(
-          transformJSXToNode(React.createElement(type, props));
+          createNode(React.createElement(type, props));
         );
       }}>
         Make a copy of me
@@ -136,5 +132,25 @@ const Container = () => {
 
 
 ### Serializable state
-The editor state can be serialized into JSON for storage. 
+The editor's state can be serialized into a simple JSON format for storage. 
 
+```jsx
+const SaveButton = () => {
+  const { query } = useManager();
+  return <a onClick={() => console.log(query.serialize()) }>Save</a>
+}
+```
+
+Of course, Craft.js will also able to recreate the entire state from the JSON string.
+```jsx
+const App = () => {
+  const jsonString = /* get JSON from server */
+  return (
+    <Editor>
+      <Frame nodes={jsonString}>
+        ...
+      </Frame>
+    </Editor>
+  )
+}
+```

@@ -4,9 +4,8 @@ title: Basic Tutorial
 ---
 
 ## Overview
-In this tutorial, we'll be designing a pretty simple editor. The editor should have a menu for which users can drag and drop new components. Each component will be editable via a toolbar. We'll be using `material-ui` to build the user interface.
+In this tutorial, we'll be designing a simple page editor. It's recommended that you have a basic to intermediate workings of React and it'd be even better if you first have a quick glance at the Key Concepts and come back here; but if you are feeling adventourous - that's fine too. 
 
-This tutorial assumes a basic knowledge of React.
 
 ## Installation
 
@@ -21,19 +20,26 @@ npm install --save craftjs
 
 
 ## Designing an user interface
-You might be wondering why are we doing this first. Well, Craft.js places you in charge of your own user interface and it's behaviors; and is intended to only supplement the page editor capabilities.
+With Craft.js you decide how your editor should look and function. So, let's build a user interface for our page editor. We'll add the page editor functionalities later.
 
-Lets start with writing some user components first. 
+We'll be using the `material-ui` library for this tutorial:
+```bash
+yarn add material-ui
+```
 
 ### User Components
+Let's first create the User Components - aka the components that our end users will be able create/edit/move around. 
+
 #### Text
 ```jsx
 import React from "react";
 import { Typography } from "@material-ui/core";
 
-export default function Text({text}) {
+export const Text = ({text, fontSize}) => {
   return (
-     <p>{text}</p>
+      <div>
+         <p style={{fontSize}}>{text}</p>
+      </div>
   )
 }
 ```
@@ -43,7 +49,7 @@ export default function Text({text}) {
 import React  from "react";
 import {Button as MaterialButton} from "@material-ui/core";
 
-export default function Button({size, variant, primary, children}) {
+export const Button = ({size, variant, primary, children}) => {
   return (
     <MaterialButton size={size} variant={variant} color={primary}>
       {children}
@@ -52,123 +58,173 @@ export default function Button({size, variant, primary, children}) {
 }
 ```
 
-#### Card
-Now, let's create another user component that will be more advanced. This component is intended to have 2 drop areas: 1 area for only text, and another for only buttons.
+#### Container
+We will also create a Container component which would allow our users to change it's background color and padding.
 
 ```jsx
-import React  from "react";
-import {Card as MaterialCard, CardContent} from "@material-ui/core";
-import Text from "./Text";
-import Button from "./Button";
-
-export default function Card({bg}) {
+export const Container = ({background, padding = 0, children}) => {
   return (
-    <MaterialCard style={{backgroundColor: bg, marginBottom: "20px"}}>
-      <CardContent>
-        <div>
-          <Text variant="p">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vehicula est quis dignissim placerat. Pellentesque aliquam ante a molestie porttitor. 
-          </Text>
-        </div>
-        <div>
-          <Button variant="contained">Click</Button>
-        </div>
-      </CardContent>
-    </MaterialCard>
+    <Paper style={{margin: "5px 0", background, padding: `${padding}px`}}>
+      {children}
+    </Paper>
   )
 }
 ```
 
-### The Editor
+#### Card
+Now, let's create another user component that will be more advanced. It will be composed of the Container component we made earlier, and it will contain 2 droppable regions - one for text and another for buttons.
 
+```jsx
+import React  from "react";
+import Text from "./Text";
+import Button from "./Button";
+import Container from "./Container";
+
+export const Card = ({background, padding = 20}) => {
+  return (
+    <Container background={background} padding={padding}>
+      <div ref={connect} className="text-only" style={{padding: "10px", marginBottom:"10px", borderBottom: "1px solid #eee", display: "flex", flexDirection: "column", alignItems:"flex-start"}}>
+        <Text text="Title" fontSize="20" />
+        <Text text="Subtitle" fontSize="15" />
+      </div>
+      <div className="button-only">
+        <Button size="small">Learn More</Button>
+      </div>
+    </Container>
+  )
+}
+
+```
+
+### The Editor
 #### Toolbox
 First, let's build a toolbox for which our users would be able to drag and drop to create new instances of those user components we just defined.
 
 ```jsx
 import React from "react";
-import { Grid } from "@material-ui/core";
+import { Button as MaterialButton, Grid } from "@material-ui/core";
 
-const Toolbox = () => {
+export const Toolbox = () => {
   return (
-    <div>
-      <Grid container direction="column">
-        <Button variant="contained">Button</Button>
+    <Grid container direction="column" spacing={1}>
+      <Grid container direction="column" item>
+        <MaterialButton variant="contained">Button</MaterialButton>
       </Grid>
-      <Grid container direction="column">
-        <Button variant="contained">Text</Button>
+      <Grid container direction="column" item>
+        <MaterialButton variant="contained">Text</MaterialButton>
       </Grid>
-      <Grid container direction="column">
-        <Button variant="contained">Card</Button>
+      <Grid container direction="column" item>
+        <MaterialButton variant="contained">Card</MaterialButton>
       </Grid>
-    </div>
+    </Grid>
   )
 }
 ```
 
-### Settings Panel
+#### Settings Panel
 We would also want to create a section here where we can display a bunch of settings for which our users could use them edit the props of the user components.
 
 For now, let's just put in some dummy text fields. We'll revisit this in the later sections.
 
 ```jsx
-import { Box, Grid, Typography, TextField } from "@material-ui/core";
+import { Box, Chip, Grid, Typography, Button as MaterialButton } from "@material-ui/core";
 
-const SettingsPanel = () => {
-  return (
-    <Box my={2} mx={1} borderTop={1} borderColor="grey.500">
-      <Box mt={1}>
-        <Grid container direction="column" spacing={0}>
-          <Grid item>
-            <Typography variant="subtitle1">Edit</Typography>
-          </Grid>
-          <Grid item container direction="column" >
-            <TextField size="small" margin="dense" id="outlined-basic" label="Setting 1" variant="outlined" />
-          </Grid>
-          <Grid item container direction="column">
-            <TextField size="small" margin="dense" id="outlined-basic" label="Setting 2" variant="outlined" />
-          </Grid>
+export const SettingsPanel = () => {
+  
+  return  (    
+    <Box bgcolor="rgba(0, 0, 0, 0.06)" mt={2} px={2} py={2}>
+      <Grid container direction="column" spacing={0}>
+        <Grid item>
+          <Box pb={2}>
+            <Grid container alignItems="center">
+              <Grid item xs><Typography variant="subtitle1">Selected</Typography></Grid>
+              <Grid item><Chip size="small" label={selected.name} color="primary" /></Grid>
+            </Grid>
+          </Box>
         </Grid>
-      </Box>
+        <FormControl size="small" component="fieldset">
+          <FormLabel component="legend">Prop</FormLabel>
+          <Slider
+            defaultValue={0}
+            step={1}
+            min={7}
+            max={50}
+            valueLabelDisplay="auto"
+          />
+        </FormControl>
+        <MaterialButton
+          variant="contained"
+          color="default"
+        >
+          Delete
+        </MaterialButton>
+      </Grid>
     </Box>
-  )
+  ) 
 }
 ```
 
+####  Top bar
+Let's design a section that is going to contain a switch for users to disable the editor's functionality and also a button that is simply going to output the serialized output in the browser's console.
+
+```jsx
+import React from "react";
+import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton } from "@material-ui/core";
+
+export const Topbar = () => {
+  return (
+    <Box px={1} py={1} mt={3} mb={1} bgcolor="#cbe8e7">
+      <Grid container alignItems="center">
+        <Grid item xs>
+          <FormControlLabel
+            control={<Switch checked={true} />}
+            label="Enable"
+          />
+        </Grid>
+        <Grid item>
+          <MaterialButton size="small" variant="outlined" color="secondary">Serialize JSON to console</MaterialButton>
+        </Grid>
+      </Grid>
+    </Box>
+  )
+};
+```
 
 #### Putting it all together
+Now, let's put together our entire React application. 
 
 ```jsx
 import React from 'react';
-import {Box, Container, Typography, Paper, Grid} from '@material-ui/core';
-import Toolbox from '../components/Toolbox';
-import Button from '../components/user/Button';
-import Card from '../components/user/Card';
-import SettingsPanel from '../components/SettingsPanel';
+import {Typography, Paper, Grid} from '@material-ui/core';
+
+import { Toolbox } from '../components/Toolbox';
+import { SettingsPanel } from '../components/SettingsPanel';
+import { Topbar } from '../components/Topbar';
+
+import { Container } from '../components/user/Container';
+import { Button } from '../components/user/Button';
+import { Card } from '../components/user/Card';
+import { Text } from '../components/user/Text';
 
 export default function App() {
   return (
-     <Container maxWidth="md">
-      <Typography style={{margin: "20px 0"}} variant="h5" align="center">A super simple page editor</Typography>
-          <Grid container>
-            <Grid item xs>
-            <Box bgcolor="#eee" p={1} style={{ minHeight: "350px"}}>
-              <Renderer>
-                <Canvas>
-                  <Card />
-                  <Button size="small" variant="outlined">Click</Button>
-                  <Button size="small" variant="outlined">Click</Button>
-                </Canvas>
-              </Renderer>
-              </Box>
-            </Grid>
-            <Paper>
-              <Grid container spacing={3} direction="column">
-                <Toolbox />
-                <SettingsPanel />
-              </Grid>
-            </Paper>
-          </Grid>
-    </Container>
+    <div style={{margin: "0 auto", width: "800px"}}>
+      <Typography variant="h5" align="center">A super simple page editor</Typography>
+      <Grid container spacing={3} style={{paddingTop: "10px"}}>
+        <Topbar />
+        <Grid item xs>
+          <Container padding={5} background="#eee">
+            <Card />
+          </Container>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper>
+              <Toolbox />
+              <SettingsPanel />
+          </Paper>          
+        </Grid>
+      </Grid>
+    </div>
   );
 }
 
@@ -178,223 +234,237 @@ export default function App() {
 Up to this point, we have made an user interface for our page editor. Now, let's get it to work!
 
 ### Setup
-- First wrap our application with `<Editor />` which sets up the required contexts. We'll also need to specify the list of user components in the `resolver` prop in order for Craft.js to be able to (de)serialize our user components.
+- First wrap our application with `<Editor />` which sets up the Editor's context. We'll also need to specify the list of user components in the `resolver` prop in order for Craft.js to be able to (de)serialize our User Components.
 
-- Then wrap the editable area with the `<Renderer />` which passess off the rendering process to Craft.js. 
+- Then wrap the editable area with `<Frame />`and `<Canvas />` 
+  - `<Frame />` passes the rendering process to Craft.js. 
+  - `<Canvas />` creates a droppable region where it's immediate children are draggable.
 
-- Since Craft.js renders based on the `Nodes` in its internal state, we will need to first convert the components below the Renderer into a `Node`. Additionally, since this is our editable area, hence it must also be made into a droppable region. The `<Canvas />` component creates a `Canvas` node and converts all of it's direct child into a `Node`.
 
 ```jsx
 import React from 'react';
-import {Box, Container, Typography, Paper, Grid} from '@material-ui/core';
-import Toolbox from '../components/Toolbox';
-import Button from '../components/user/Button';
-import Card from '../components/user/Card';
-import Text from '../components/user/Text';
-import SettingsPanel from '../components/SettingsPanel';
-import {Editor, Renderer, Canvas} from "craftjs";
+import {Typography, Paper, Grid} from '@material-ui/core';
 
+import { Toolbox } from '../components/Toolbox';
+import { SettingsPanel } from '../components/SettingsPanel';
+
+import { Container } from '../components/user/Container';
+import { Button } from '../components/user/Button';
+import { Card } from '../components/user/Card';
+import { Text } from '../components/user/Text';
+
+import {Editor, Frame, Canvas} from "craftjs";
 
 export default function App() {
-  const classes = useStyles();
   return (
-    <Container maxWidth="md">
+    <div>
       <Typography variant="h5" align="center">A super simple page editor</Typography>
         <Editor
-          resolver={{Card, Button, Text}}
+          resolver={{Card, Button, Text, Container}}
         > 
-          <Grid container>
+          <Grid container spacing={3}>
             <Grid item xs>
-            <Box p={1}>
-              <Renderer>
-                <Canvas>
+              <Frame>
+                <Canvas is={Container} padding={5} background="#eee">
                   <Card />
                   <Button size="small" variant="outlined">Click</Button>
-                  <Button size="small" variant="outlined">Click</Button>
+                  <Text size="small" text="Hi world!" />
+                  <Canvas is={Container} padding={6} background="#999">
+                    <Text size="small" text="It's me again!" />
+                  </Canvas>
                 </Canvas>
-              </Renderer>
-              </Box>
+              </Frame>
             </Grid>
-            <Paper>
-              <Grid container spacing={3} direction="column">
-                <Toolbox />
-                <SettingsPanel />
-              </Grid>
-            </Paper>
+            <Grid item xs={3}>
+              <Paper className={classes.root}>
+                  <Toolbox />
+                  <SettingsPanel />
+              </Paper>          
+            </Grid>
           </Grid>
-          
         </Editor>
-    </Container>
+    </div>
   );
 }
 
 ```
 
-### Integrating the user components
-Now, we need to get our user components to work. 
+Every element that is rendered in `<Frame />` is managed by an object in the editor's internal state called a `Node`  - which describes the element - it's events, props among other things. Whether an element is draggable or droppable depends on the type of `Node` that manages it. 
 
-The `useNode` hook provides us several information and methods related to the corresponding `Node` that manages the component. 
+- If the `Node` is a Canvas, then it's droppable
+- If the `Node` is an immediate child of a Canvas, then it's draggable.
 
 ```jsx
+// Previously, on Craft.js
+<Frame>
+  <Canvas is={Container} padding={5} background="#eee"> // Canvas Node of type Container, droppable
+    <Card /> // Node of type Card
+    <Button size="small" variant="outlined">Click</Button> // Node of type Button, draggable
+    <Text size="small" text="Hi world!" /> // Node of type Text, draggable
+    <Canvas is={Container} padding={2} background="#999"> // Canvas Node of type Text, droppable and draggable
+       <Text size="small" text="It's me again!" /> // Node of type Text, draggable
+    </Canvas>
+  </Canvas>
+</Frame>
+```
+
+If you refreshed the page, you would notice that absolutely nothing has changed - and that's a good thing!
+
+### Enabling Drag and Drop
+Inside a User Component, we have access to the `useNode` hook which provides several information and methods related to the corresponding `Node`. 
+
+The first thing we will need to do is to let Craft.js to manage the DOM of our component. The hook provides `connectors` which acts as a bridge between the DOM and the events in Craft.js:
+
+
+```jsx {3,5,6,8}
 import React from "react";
 import { Typography } from "@material-ui/core";
 import { useNode } from "craftjs";
 
-export default function Text({text}) {
+export const Text = ({text}) => {
   const { connectors: {connect, drag} } = useNode();
   return (
-    <p ref={connect(drag)}>
-      {text}
-    </p>
+     <div 
+      ref={ref => connect(drag(ref))}
+    >
+      <p>{text}</p>
+    </div>
   )
 }
 ```
-We pass the `connect` connector to the root element of our component, this tells Craft.js that this is DOM that represents the Text component. 
+Let's break this down a little:
+- We passed the `connect` connector to the root element of our component, this tells Craft.js that this element represents the Text component. If the component's corresponding Node is a Canvas, then this also defines the area that is droppable.
+- Then, we also passed `drag` connector to the same root element, this adds the drag handlers to the DOM. If the component's Node is a child of a Canvas, then the user will be able to drag this element and it will move the entire Text component.
 
-Then, we also passed `drag` connector to the same root element, this adds the drag handlers to the DOM - when users drag this element, it will move the entire Text component. 
-
-Let's add default props to our component. While this is not necessary, it helps to fill in the initial values into the corresponding Node. Additinally, let's also define some arbitary drag/drop rules.
-
+We can also specify additional configuration to our component via the `craft` prop. Let's define drag-n-drop rules for our Text Component:
 ```jsx
-const Text = () => {...}
+export const Text = () => {...}
 Text.craft = {
-  defaultProp: {
-      text: "Text"
-  },
+  ...
   rules: {
     canDrag: (node) => node.data.props.text != "Drag"
   }
 }
 ```
-Our Text component can now only be dragged as long as the `text` prop is not set to "Drag" 🤪
+Our Text component can now only be dragged if the `text` prop is not set to "Drag" 🤪
 
-Cool, now let's repeat the same steps for the other 2 components
-```jsx
-import React  from "react";
-import {Button as MaterialButton} from "@material-ui/core";
-import {useNode} from "craftjs";
-
-export default function Button({size, variant, color, children}) {
+Nice, now let's enable drag-n-drop for the other User Components:
+```jsx {3}
+//Button.js
+export const Button = ({size, variant, color, children}) => {
   const {connect, drag} = useNode();
   return (
-    <MaterialButton ref={ ref => connect(drag(ref))} style={{margin: "5px"}} size={size} variant={variant} color={color}>
+    <MaterialButton ref={ ref => connect(drag(ref))} size={size} variant={variant} color={color}>
       ...
     </MaterialButton>
   )
 }
-
-Button.craft = {
-  defaultProps = {
-      children: "My Button",
-      variant: "contained",
-      color: "primary",
-      size: "medium"
-  }
-}
-
 ```
 
-
 ```jsx
-export default function Card(({bg})) {
-  const { connectors: {connect, drag}} = useNode();
+// Container.js
+export const Container = ({background, padding = 0, children}) => {
+  const { connectors: {connect, drag} } = useNode();
   return (
-    <MaterialCard ref={connect(drag)} style={{backgroundColor: bg, marginBottom: "20px"}}>
+    <Paper ref={ref=> connect(drag(ref))} style={{ background, padding: `${padding}px`}}>
       ...
-    </MaterialCard>
+    </Paper>
   )
-}
-Card.defaultProps = {
-  bg: "#000"
 }
 ```
 
-#### Defining droppable regions
-Our Card component will need to have 2 droppable areas, we can do this by wrapping these areas with the `<Canvas />` component. Since we are defining `Canvas` inside a user-component, hence we must specify the `id`.
-
 ```jsx
-export default function Card(({bg})) {
+// Card.js (No changes)
+// It's not necessary to add connectors for our Card component since it's a composition of our Container component - which already has connectors applied.
+export const Card = ({background, padding = 0, children}) => {
+  return (
+    <Container background={background} padding={padding}>
+      ...
+    </Container>
+  )
+}
+```
+
+
+At this point, you could refresh the page and you would be able to drag stuff around.
+
+#### Defining Droppable regions
+Of course, our Card component is supposed to have 2 droppable regions. Remember how `<Canvas />` defined a droppable region earlier in our application ? We can do the same thing here insde our Card component.
+
+```jsx 
+export const Card = (({bg})) => {
   const { connectors: {connect, drag}} = useNode();
   return (
-    <MaterialCard ref={connect(drag)} style={{backgroundColor: bg, marginBottom: "20px"}}>
-      <CardContent>
-        <Canvas id="top" is="div">
-          <Text variant="p">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vehicula est quis dignissim placerat. Pellentesque aliquam ante a molestie porttitor. 
-          </Text>
-        </Canvas>
-        <Canvas id="bottom" is="div">
-          <Button variant="contained">Click</Button>
-        </Canvas>
-      </CardContent>
-    </MaterialCard>
+    <Container background={background} padding={padding}>
+      <Canvas id="text">
+        <Text text="Title" fontSize="20" />
+        <Text text="Subtitle" fontSize="15" />
+      </Canvas>
+      <Canvas id="buttons">
+        <Button size="small" text="Learn more" />
+      </Canvas>
+    </Container>
   )
 }
 ```
 
-You might be wondering how do we set drag/drop rules for those new droppable regions we made. Currently, we have set the `is` prop in our `<Canvas />` to a div, but we can actually point it to a user component. Hence, we can specify and create a new component and define rules via the `craft` prop just like what we have been doing so far.
+> `<Canvas />` used inside User Component must specify an `id` prop
 
-```jsx
+
+You might be wondering how do we set drag/drop rules for those new droppable regions we made. Currently, we have set the `is` prop in our `<Canvas />` to a div, but we can actually point it to a User Component. 
+
+Hence, we can specify and create a new User Component and define rules via the `craft` prop just like what we have done previously.
+
+```jsx 
 import React  from "react";
-import {Card as MaterialCard, CardContent} from "@material-ui/core";
 import Text from "./Text";
 import Button from "./Button";
 import { Canvas, useNode } from "craftjs";
 
+import { Container }  from "./Container";
 
-const TopCanvas = ({children}) => {
+// Notice how CardTop and CardBottom does not specify the drag connector. This is because we won't be using these components as draggables; thus adding the drag handler would be pointless.
+export const CardTop = ({children}) => {
+  const { connectors: {connect} } = useNode();
   return (
-    <div>
+    <div ref={connect} className="text-only">
       {children}
     </div>
   )
-};
-
-TopCanvas.craft = {
-  rules: {
-    canDrop: (incomingNode, topCanvasNode) => incomingNode.data.type == Text
-  }
 }
 
-const BottomCanvas = ({children}) => {
+export const CardBottom = ({children}) => {
+  const { connectors: {connect} } = useNode();
   return (
-    <div>
+    <div ref={connect} className="button-only">
       {children}
     </div>
   )
-};
-
-BottomCanvas.craft = {
-  rules: {
-    canDrop: (incomingNode, bottomCanvasNode) => incomingNode.data.type == Button
-  }
 }
 
-export default function Card() {
-  const {connect, drag} = useNode();
+export const Card = ({background, padding = 20}) => {
   return (
-    <MaterialCard ref={ref=> connect(drag(ref))} style={{marginBottom: "20px"}}>
-      <CardContent>
-        <Canvas id="top" is={TopCanvas}>
-          <Text variant="caption">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vehicula est quis dignissim placerat. Pellentesque aliquam ante a molestie porttitor. 
-          </Text>
-        </Canvas>
-        <Canvas id="bottom" is={BottomCanvas}>
-          <Button variant="contained">Click</Button>
-        </Canvas>
-      </CardContent>
-    </MaterialCard>
+    <Container background={background} padding={padding}>
+      <Canvas id="text" is={CardTop}>
+        <Text text="Title" fontSize="20" />
+        <Text text="Subtitle" fontSize="15" />
+      </Canvas>
+      <Canvas id="buttons" is={CardBottom}>
+        <Button size="small" text="Learn more" />
+      </Canvas>
+    </Container>
   )
 }
 ```
 
-Remember that every user component must be added to our resolver, hence let's add TopCanvas and BottomCanvas:
+Remember that every user component must be added to our resolver, so let's add CardTop and CardBottom:
 ```jsx
+...
 export default function App() {
   return (
     ...
         <Editor
-          resolver={{Card, Button, Text, TopCanvas, BottomCanvas}}
+          resolver={{Card, Button, Text, CardTop, CardBottom}}
         > 
          ...
         </Editor>
@@ -403,81 +473,339 @@ export default function App() {
 }
 ```
 
-### Making the Toolbox work
-Let's go back to our Toolbox component and make it so that dragging those buttons into the editor would actually create new instances of the user components they represent. 
 
-To do this, we can use the `create` connector supplied by `useEditor` which accepts a user component as its second arguement.
 
+### Implementing the Toolbox
+Let's go back to our Toolbox component and make it so that dragging those buttons into the editor would create new instances of the user components they represent. Just as `useNode` provides methods and information related to a specific `Node`, `useEditor` specifies methods and informations related to the entire editor's state.
+
+The `useEditor` also provides `connectors` - the one we are interested in right now is `create` which attaches a drag handler to the  DOM specified in it's first arguement, and creates the element specified in it's second arguement.
 
 ```jsx
 import React from "react";
 import { Paper, Grid, makeStyles, TextField, Box, Typography } from "@material-ui/core";
 import { useEditor } from "craftjs";
-import Card from "./user/Card";
-import Button from "./user/Button";
-import Text from "./user/Text";
+import { Card } from "./user/Card";
+import { Button } from "./user/Button";
+import { Text } from "./user/Text";
 
-const Toolbox = () => {
+
+export const Toolbox = () => {
   const { connectors } = useEditor();
 
   return (
-    <Paper>
-      <Grid container spacing={3} direction="column">
-        <Grid container direction="column" ref={ref=> connectors.create(ref, <Button>New</Button>)}>
-          <Button variant="contained">Button</Button>
-        </Grid>
-        <Grid container direction="column" ref={ref=> connectors.create(ref, <Text />)}>
-          <Button variant="contained">Text</Button>
-        </Grid>
-        <Grid container direction="column" ref={ref=> connectors.create(ref, <Card />)}>
-          <Button variant="contained">Card</Button>
-        </Grid>
-        <Box my={2} mx={1} borderTop={1} borderColor="grey.500">
-          <Box mt={1}>
-            <Grid container direction="column" spacing={0}>
-              <Grid item>
-                <Typography variant="subtitle">Edit</Typography>
-              </Grid>
-              <Grid item container direction="column" >
-                <TextField size="small" margin="dense" id="outlined-basic" label="Setting 1" variant="outlined" />
-              </Grid>
-              <Grid item container direction="column">
-                <TextField size="small" margin="dense" id="outlined-basic" label="Setting 2" variant="outlined" />
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
+    <Grid container direction="column" spacing={1}>
+      <Grid container direction="column" item>
+        <MaterialButton ref={ref=> connectors.create(ref, <Button />)}>Button</MaterialButton>
       </Grid>
-    </Paper>
+      <Grid container direction="column" item>
+        <MaterialButton ref={ref=> connectors.create(ref, <Text />)}>Text</MaterialButton>
+      </Grid>
+      <Grid container direction="column" item>
+        <MaterialButton ref={ref=> connectors.create(ref, <Card />)}>Card</MaterialButton>
+      </Grid>
+    </Grid>
+  )
+}
+```
+
+Now, you could drag and drop the Buttons, and it would actually create new instances of our User Components.
+
+### Making the components editable
+Up till this point, we have a page editor where our users can move elements around. But, we are missing one kinda important thing - enabling our users to edit these components' props.
+
+The `useNode` hook provides us with the method `setProp` which can be used to manipulate a component's props. Let's implement a content editable for our Text Component:
+
+For simplicity sake, we wil be using `react-contenteditable` 
+
+```jsx
+import React, {useCallback} from "react";
+import ContentEditable from 'react-contenteditable'
+
+export const Text = ({text, fontSize}) => {
+  const { connectors: {connect, drag}, setProp } = useNode();
+
+  return (
+     <div 
+      ref={ref => connect(drag(ref))}
+    >
+      <ContentEditable
+        html={text} 
+        onChange={e => 
+          setProp(props => 
+            props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")  
+          )
+        } 
+        tagName="p"
+        style={{fontSize: `${fontSize}px`, textAlign}}
+      />
+    </div>
+  )
+}
+```
+
+But let's only enable content editable only when the component is clicked when it's already selected - essentially, a double click. 
+
+The `useNode` hook accepts a collector function which can be used to retrieve state information related to the corresponding `Node`:
+
+```jsx
+export const Text = ({text, fontSize}) => {
+  const { connectors: {connect, drag}, selected, dragged, setProp } = useNode((state) => ({
+    selected: state.events.selected,
+    dragged: state.events.dragged
+  }));
+
+  const [editable, setEditable] = useState(false);
+
+  useEffect(() => {!selected && setEditable(false)}, [selected]);
+
+  return (
+     <div 
+      ref={ref => connect(drag(ref))}
+      onClick={e => setEditable(true)}
+    >
+      <ContentEditable
+        disabled={!editable}
+       ...
+      />
+    </div>
+  )
+}
+```
+This should give you an idea on the possibilities of implementing powerful visual editing features like what you'd see in most modern page editors.
+
+While we are at it, let's also add display a slider for users to edit the `fontSize`
+```jsx
+export const Text = ({text, fontSize}) => {
+  const { connectors: {connect, drag}, isActive, setProp } = useNode((node) => ({
+    isActive: node.events.selected
+  }));
+
+  ...
+  return (
+    <div>
+      <ContentEditable ... />
+      {
+        isActive && (
+          <FormControl className="text-additional-settings" size="small">
+            <FormLabel component="legend">Font size</FormLabel>
+            <Slider
+              defaultValue={fontSize}
+              step={1}
+              min={7}
+              max={50}
+              valueLabelDisplay="auto"
+              onChange={(_, value) => {
+                setProp(props => props.fontSize = value);
+              }}
+            />
+          </FormControl>
+        )
+      }
+    </div>
+  )
+}
+```
+
+Hm, we can agree that does not look all that good as it obstructs the user experience. Wouldn't it be better if the entire `.text-settings-area` Grid is relocated to the Settings Panel that we created earlier ?
+
+The question then, how will the Settings Panel be able render the `.text-settings-area`  when our Text component is selected ? 
+
+This is where Related Components becomes useful. Essentially, a Related component shares the same `Node` context as our actual User component; thus it can make use of the `useNode` hook. Additionally, a Related component is registered to a component's `Node` - which means we can access and render this component anywhere within the editor. 
+
+
+```jsx
+export const Text = ({text, fontSize}) => {
+  const { connectors: {connect, drag}, isActive, setProp } = useNode((node) => ({
+    isActive: node.events.selected
+  }));
+
+  ...
+  return (
+    <div {...}>
+      <ContentEditable {...} />
+    </div>
   )
 }
 
-export default Toolbox;
+Text.craft = {
+  ...
+  related: {
+    settings: () => {
+      const {fontSize, setProp} = useNode((node) => ({
+        fontSize: node.data.props.fontSize
+      }));
+      return (
+        <Grid container className='text-settings-area'>
+          <Grid item>Font Size</Grid>
+          <Grid item>
+            <Slider value={fontSize} onChange={(_, value) => setProp(props => props.fontSize = value)} />
+          </Grid>
+        </Grid>
+      )
+    }
+  }  
+}
 ```
 
-## Making our components editable
-Up till this point, we have a page editor where ours users can drag and drop new components, and move these components around. But, we are missing one more thing - lettings our users to edit these components' props.
-
-The `useNode` hook provides us with a method to manipulate a component's props:
-
+Before, we move on to the Settings Panel - let's quickly do the same for the other User Components:
 ```jsx
-const Test = ({text}) => {
-  const { setProp } = useNode();
+// Button.js
+import {Button as MaterialButton, Grid, FormControl, FormLabel, RadioGroup,Radio, FormControlLabel} from "@material-ui/core";
+export const Button = () => {}
+
+export const ButtonSettings = () => {
+  const { setProp, props } = useNode((node) => ({
+    props: node.data.props
+  }));
 
   return (
-    <input type="text" value={text} onChange={ e => 
-      setProp(props => {
-        props.text = e.target.value
-      })
-    } />
+    <div>
+      <FormControl size="small" component="fieldset">
+        <FormLabel component="legend">Size</FormLabel>
+        <RadioGroup defaultValue={props.size} onChange={(e) => setProp(props => props.size = e.target.value )}>
+          <FormControlLabel label="Small" value="small" control={<Radio size="small" color="primary" />} />
+          <FormControlLabel label="Medium" value="medium" control={<Radio size="small" color="primary" />} />
+          <FormControlLabel label="Large" value="large" control={<Radio size="small" color="primary" />} />
+        </RadioGroup>
+      </FormControl>
+      <FormControl component="fieldset">
+        <FormLabel component="legend">Variant</FormLabel>
+        <RadioGroup defaultValue={props.variant} onChange={(e) => setProp(props => props.variant = e.target.value )}>
+          <FormControlLabel label="Text" value="text" control={<Radio size="small" color="primary" />} />
+          <FormControlLabel label="Outlined" value="outlined" control={<Radio size="small" color="primary" />} />
+          <FormControlLabel label="Contained" value="contained" control={<Radio size="small" color="primary" />} />
+        </RadioGroup>
+      </FormControl>
+      <FormControl component="fieldset">
+        <FormLabel component="legend">Color</FormLabel>
+        <RadioGroup defaultValue={props.color} onChange={(e) => setProp(props => props.color = e.target.value )}>
+          <FormControlLabel label="Primary" value="primary" control={<Radio size="small" color="primary" />} />
+          <FormControlLabel label="Seconday" value="secondary" control={<Radio size="small" color="primary" />} />
+        </RadioGroup>
+      </FormControl>
+    </div>
   )
+};
+
+Button.craft = {
+  related: { 
+    settings: ButtonSettings
+  }
+}
+```
+```jsx
+// Container.js
+import {FormControl, FormLabel, Slider} from "@material-ui/core";
+import ColorPicker from 'material-ui-color-picker'
+
+export const Container = () => {...}
+
+export const ContainerSettings = () => {
+  const { background, padding, setProp } = useNode(node => ({
+    background: node.data.props.background,
+    padding: node.data.props.padding
+  }));
+  return (
+    <div>
+      <FormControl fullWidth={true} margin="normal" component="fieldset">
+        <FormLabel component="legend">Background</FormLabel>
+        <ColorPicker defaultValue={background || '#000'} onChange={color => {
+          setProp(props => props.background = color)
+        }} />
+      </FormControl>
+      <FormControl fullWidth={true} margin="normal" component="fieldset">
+        <FormLabel component="legend">Padding</FormLabel>
+        <Slider defaultValue={padding} onChange={(_, value) => setProp(props => props.padding = value)} />
+      </FormControl>
+    </div>
+  )
+}
+
+Container.craft = {
+  related: {
+    settings: ContainerSettings
+  }
+}
+```
+```jsx
+// Card.js
+import {ContainerSettings} from "./Container";
+
+export const Card({background, padding = 20}) { ... }
+
+Card.craft = {
+  related: {
+    // Since Card has the same settings as Container, so we'll just reuse ContainerSettings 
+    settings: ContainerSettings
+  }
+}
+```
+
+
+#### Setting default props
+Setting default props is not strictly necessary. However, it is helpful if we wish to access the component's props via it's corresponding `Node`, like what we are doing in the `settings` related component above.
+
+For instance, if an instance of Text component is rendereed as such: `<Text text="Hi" />`; we would get a null value when we tried to retrieve the `fontSize` prop via it's `Node`. An easy way to solve this is to explicity define each User Component's `defaultProps`:
+
+```jsx
+// Text.js
+export const Text = ({text, fontSize}) => {}
+
+Text.craft = {
+  defaultProps: {
+    text: "Hi",
+    fontSize: 20
+  },
+  rules: {...},
+  related: {...}
+}
+```
+
+```jsx
+// Button.js
+export const Button = ({size, variant, color, text}) => {}
+
+Button.craft = {
+  defaultProps: { 
+    size: "small", 
+    variant: "contained",
+    color: "primary",
+    text: "Click me"
+  },
+  related: {...}
+}
+```
+
+```jsx
+// Container.js
+export const Container = ({background, padding}) => {}
+
+// We export this because we'll be using this in the Card component as well
+export const ContainerDefaultProps = {
+  background : "#ffffff",
+  padding: 3
+};
+
+Container.craft = {
+  defaultProps: ContainerDefaultProps,
+  related: {...}
+}
+```
+
+```jsx
+// Card.js
+import {ContainerDefaultProps} from "./Container";
+
+export const Card = ({background, padding}) => {}
+
+Card.craft = {
+  defaultProps: ContainerDefaultProps,
+  related: {...}
 }
 ```
 
 ### Settings Panel
-Let's display some inputs for the user to edit the currently selected component's props. 
-
-First, we need to get the currently selected component, which can be obtained from the editor's internal state. To do this, we will need to specify a collector function to `useEditor`:
+We need to get the currently selected component, which can be obtained from the editor's internal state. Similar to `useNode`, a collector function can be specified to `useEditor` - the difference is here we'll be dealing with the editor's internal state rather than with a specific `Node`:
 
 ```jsx
 const { currentlySelectedId } = useEditor((state) => ({
@@ -485,137 +813,143 @@ const { currentlySelectedId } = useEditor((state) => ({
 }))
 ```
 
-But how do we know what inputs to create and what props to edit ? One way is to just get the currently selected Node's props, and conditionally create inputs for each prop. However, as you can imagine that it won't be very pretty.
-
-A better way is if each of our user components could explicitly define what should be displayed in the Settings Panel. This is where Related Components becomes useful.
-
-Let's take our Text component as an example:
+Now, let's replace the placeholder text fields in our Settings Panel with the Related Component:
 
 ```jsx
-const Text = () => {...};
-
-
-const TextSettings = () => {
-  const { setProp, children } = useNode((node) => ({
-    children: node.data.props.children
-  }));
-
-  return (
-    <>
-      <Grid item container direction="column" >
-        <TextField 
-          size="small" 
-          margin="dense" 
-          label="Text" 
-          variant="outlined" 
-          value={children}
-          onChange={e => 
-            {
-              setProp(props => {
-                props.children = e.target.value
-              })
-            }
-          }
-        />
-      </Grid>
-    </>
-  )
-}
-
-Text.craft = {
-  related: {
-    settings: TextSettings
-  }
-}
-```
-
-Essentially, a Related component shares the same `Node` context as our actual User component; thus it can make use of the `useNode` hook. 
-
-Additionally, a Related component is registered to a component's `Node` - which means we can access and render this component anywhere within the editor. 
-
-Let's build our Settings Panel now:
-
-
-
-```jsx
-import { Box, Grid, Typography } from "@material-ui/core";
+import { Box, Chip, Grid, Typography, Button as MaterialButton } from "@material-ui/core";
 import { useEditor } from "craftjs";
 
-const SettingsPanel = () => {
-  const { currentSettingsPanel } = useEditor((state) => {
+export const SettingsPanel = () => {
+  const { selected } = useEditor((state) => {
     const currentNodeId = state.events.selected;
-    let settingsPanel;
+    let selected;
+
     if ( currentNodeId ) {
-      settingsPanel = state.nodes[currentNodeId].related.settings;
+      selected = {
+        id: currentNodeId,
+        name: state.nodes[currentNodeId].data.name,
+        settings: state.nodes[currentNodeId].related && state.nodes[currentNodeId].related.settings
+      };
     }
+
     return {
-      currentSettingsPanel: settingsPanel
+      selected
     }
   });
 
-  return currentSettingsPanel ? (
-    <Box my={2} mx={1} borderTop={1} borderColor="grey.500">
-      <Box mt={1}>
-        <Grid container direction="column" spacing={0}>
-          <Grid item>
-            <Typography variant="subtitle1">Edit</Typography>
-          </Grid>
-          { 
-            React.createElement(currentSettingsPanel)
-          }
+  return selected ? (    
+    <Box bgcolor="rgba(0, 0, 0, 0.058823529411764705)" mt={2} px={2} py={2}>
+      <Grid container direction="column" spacing={0}>
+        <Grid item>
+          <Box pb={2}>
+            <Grid container alignItems="center">
+              <Grid item xs><Typography variant="subtitle1">Selected</Typography></Grid>
+              <Grid item><Chip size="small" label={selected.name} color="primary" /></Grid>
+            </Grid>
+          </Box>
         </Grid>
-      </Box>
+        { 
+          selected.settings && React.createElement(selected.settings)
+        }
+        <MaterialButton
+          variant="contained"
+          color="default"
+        >
+          Delete
+        </MaterialButton>
+      </Grid>
     </Box>
   ) : null
 }
 ```
 
-### Visual Editing
-In addition to the Settings Panel, let's make it so that our users can directly interact with the components and "visually" edit them - like what you'd see in most modern page editors where you could drag to resize a component for example.
-
-For now though, let's just make our `<Text />` component content editable so that our users can type directly on the DOM itself. For simplicity sake, we wil be using `react-contenteditable` 
+Now, we have to make our Delete button work! We can achieve this by using the `delete` action available from the `useEditor` hook:
 
 ```jsx
-import React, {useCallback} from "react";
-import ContentEditable from 'react-contenteditable'
+export const SettingsPanel = () => {
+  const { selected } = useEditor((state) => {
+    const currentNodeId = state.events.selected;
+    let selected;
 
-const Text = ({text}) => {
-  const { connectors: {connect, drag}, selected, setProp } = useNode();
+    if ( currentNodeId ) {
+      selected = {
+        id: currentNodeId,
+        name: state.nodes[currentNodeId].data.name,
+        settings: state.nodes[currentNodeId].related && state.nodes[currentNodeId].related.settings
+      };
+    }
 
-  const refConnector = useCallback(ref => connect(drag(ref)), []);
+    return {
+      selected
+    }
+  });
 
-  return (
-    <ContentEditable
-      innerRef={refConnector}
-      html={text} 
-      onChange={e => 
-        setProp(props => 
-          props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")  
-        )
-      } 
-      tagName="p" 
-    />
-  )
+  return selected ? (    
+    <Box bgcolor="rgba(0, 0, 0, 0.058823529411764705)" mt={2} px={2} py={2}>
+      <Grid container direction="column" spacing={0}>
+        ...
+        <MaterialButton
+          variant="contained"
+          color="default"
+          onClick={() => {
+            actions.delete(selected.id);
+          }}
+        >
+          Delete
+        </MaterialButton>
+      </Grid>
+    </Box>
+  ) : null
 }
 ```
-> `react-contenteditable` depends on `innerRef` to be memoized to maintain the cursor's caret when typing. Hence, we memoized our connectors in the above example using React's `useCallback` hook.
 
-But let's only enable content editable only when the component is being selected. Similar to what we did previously with `useEditor` - to know if our component is being selected, we can specify a collector function to the `useNode` hook:
+### Topbar
+The last part of the editor that we've to take care of and we're done! 
+
+First, we can get the editor's `enabled` state by passing in a collector function just like what we did before. Then, we can use the `setOptions` action to toggle the `enabled` state.
+
+Lastly, the `useEditor` hook also provides `query` methods which provides information based the editor'state. In our case,  we would like to get the current state of all the `Nodes` in a serialised form - we can do this by calling the `serialize` query method. 
 
 ```jsx
-const Text = ({text}) => {
-  const { connectors: {connect, drag}, isActive, setProp } = useNode((node) => ({
-    isActive: node.events.selected
+import { useEditor } from "craftjs";
+
+export const Topbar = () => {
+  const { actions, query, enabled } = useEditor((state) => ({
+    enabled: state.options.enabled
   }));
 
-  ...
+
   return (
-    <ContentEditable
-      ...
-      disabled={!isActive}
-    />
+    <Box px={1} py={1} mt={3} mb={1} bgcolor="#cbe8e7">
+      <Grid container alignItems="center">
+        <Grid item xs>
+          <FormControlLabel
+            control={<Switch checked={enabled} onChange={(_, value) => actions.setOptions({enabled: value})} />}
+            label="Enable"
+          />
+        </Grid>
+        <Grid item>
+          <MaterialButton 
+            size="small" 
+            variant="outlined" 
+            color="secondary"
+            onClick={() => {
+              console.log(query.serialize())
+            }}
+          >
+              Serialize JSON to console
+          </MaterialButton>
+        </Grid>
+      </Grid>
+    </Box>
   )
-}
+};
 ```
 
-## Finale
+## Finish
+We've made it till the end! Not too bad right ? Hopefully, you were able to see the simplicity of building a fully working page editor with Craft.js
+
+We did not need to worry about implementing the drag-n-drop system but rather simply focus on writing rules and attaching connectors to the desired elements. Defining droppable regions was simply by wrapping an area with `<Canvas />`.
+
+When it came to writing the components themselves, it was the same as writing any other React component - you control how the components react to different editor events, and even how they are edited. 
+

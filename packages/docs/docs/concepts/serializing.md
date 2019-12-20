@@ -29,12 +29,12 @@ const App = () => {
     <Manager resolvers={{
       "MyText" : Text
     }}>
-      <Renderer>
+      <Frame>
         <Canvas is="div">
           <h1>Hi</h1>
           <Text text="Hi" />
         </Canvas>
-      </Renderer>
+      </Frame>
     </Manager>
   )
 }

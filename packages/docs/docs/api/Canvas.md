@@ -25,7 +25,7 @@ const App = () => {
   return (
       <Craft resolver={{MyComp, Container}}>
         <h2>My Page Editor</h2>
-        <Renderer> 
+        <Frame> 
           <Canvas is="div"> 
             <Canvas is={MyComp} /> 
             <div>
@@ -35,7 +35,7 @@ const App = () => {
               <Canvas is="div" /> 
             </Container>
           </Canvas>
-        </Renderer>
+        </Frame>
       </Craft>
   )
 }
@@ -55,7 +55,7 @@ const Container = () => {
 
 ### Basics
 ```jsx 
-import {Craft, Renderer, Canvas} from "cradt";
+import {Craft, Frame, Canvas} from "cradt";
 
 const App = () => {
   return (
@@ -63,7 +63,7 @@ const App = () => {
       <h2>My App!</h2>
       <Craft resolver={{MyComp}}>
         <h2>My Page Editor</h2>
-        <Renderer> 
+        <Frame> 
           <Canvas is="div"> // defines the Root Node, droppable
             <h2>Drag me around</h2> // Node of type h2, draggable
             <MyComp text="You can drag me around too" /> // Node of type MyComp, draggable
@@ -71,7 +71,7 @@ const App = () => {
               <p>Same here</p> // Not a Node; not draggable
             </Canvas>
           </Canvas>
-        </Renderer>
+        </Frame>
       </Craft>
     </div>
   )
@@ -112,11 +112,11 @@ const App = () => {
       <h2>My App!</h2>
       <Craft resolver={{Container}}>
         <h2>My Page Editor</h2>
-        <Renderer> 
+        <Frame> 
           <Canvas is={Container}> // defines the Root Node, droppable
             <Canvas is={Container} />
           </Canvas>
-        </Renderer>
+        </Frame>
       </Craft>
     </div>
   )
