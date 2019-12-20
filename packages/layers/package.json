@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "rollup -c -w src/index.tsx",
-    "build": "rollup -c src/index.tsx"
+    "build": "rollup -c src/index.tsx",
+    "clean" : "rimraf node_modules lib dist"
   },
   "dependencies": {
     "craftjs": "*",
@@ -18,17 +19,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
-    "@rollup/plugin-image": "^2.0.0",
     "@svgr/rollup": "^4.3.3",
     "rollup": "^1.27.5",
-    "rollup-plugin-inline-svg": "^1.1.1",
-    "rollup-plugin-react-svg": "^3.0.3",
-    "rollup-plugin-svgi": "^0.2.0",
     "rollup-plugin-terser": "^5.1.2",
     "rollup-plugin-typescript": "^1.0.1",
-    "rollup-plugin-typescript2": "^0.25.2",
     "styled-components": "^4.2.1",
-    "ts-lib": "^0.0.5",
     "typescript": "^3.7.2"
   }
 }
