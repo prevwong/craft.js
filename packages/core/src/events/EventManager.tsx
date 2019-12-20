@@ -35,6 +35,15 @@ export const EventManager: React.FC = ({ children }) => {
             }, 1),
             true
         ],
+        dragCreateNode: [
+            "dragstart",
+            (e: MouseEvent, el: React.ReactElement) => {
+                e.stopPropagation();
+                const node = query.createNode(el);
+                if (typeof node === 'string') setNodeEvent('dragged', node);
+                draggedNode.current = node;
+            }
+        ],
         dragNode: [
             "dragstart",
             (e: MouseEvent, node: Node | NodeId) => {
@@ -100,7 +109,7 @@ export const EventManager: React.FC = ({ children }) => {
             (node, id) => {
                 node.setAttribute("draggable", "true");
                 handlers.dragNode(node, id);
-                handlers.dragNodeEnd(node, id);
+                handlers.dragNodeEnd(node);
             },
             (node, id) => {
                 setNodeEvent("dragged", null);
@@ -111,9 +120,17 @@ export const EventManager: React.FC = ({ children }) => {
             handlers.hoverNode,
             () => setNodeEvent("hovered", null)
         ],
-        create: (node, render) => {
-            connectors.drag(node, query.createNode(React.createElement(render.type, render.props)));
-        },
+        create: [
+            (node, el) => {
+                node.setAttribute("draggable", "true");
+                handlers.dragCreateNode(node, el);
+                handlers.dragNodeEnd(node);
+            },
+            (node, id) => {
+                setNodeEvent("dragged", null);
+                node.removeAttribute("draggable");
+            }
+        ],
         drop: (node, id) => {
             handlers.dragNodeOver(node, id);
             handlers.dragNodeEnter(node, id);

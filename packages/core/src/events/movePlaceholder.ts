@@ -37,9 +37,6 @@ export default function movePlaceholder(
       h = 2;
     }
   }
-
-  console.log(t,l)
-
   return {
     top: `${t}px`,
     left: `${l}px`,
