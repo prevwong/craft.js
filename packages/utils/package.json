@@ -10,7 +10,8 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "../../scripts/build.sh",
-    "start": "cross-env NODE_ENV=development && ../../scripts/start.sh"
+    "start": "cross-env NODE_ENV=development && ../../scripts/start.sh",
+    "clean" : "rimraf node_modules lib dist"
   },
   "dependencies": {
     "@types/react": "^16.9.11",
