@@ -4,7 +4,6 @@ import { ROOT_NODE } from "craftjs-utils";
 export * from "./Canvas";
 export * from "./NodeElement";
 export * from  "./mapChildrenToNodes"
-export * from './Selector';
 
 
 /** Some helper functions */
