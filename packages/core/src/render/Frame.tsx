@@ -5,11 +5,11 @@ import { useInternalEditor } from "../editor/useInternalEditor";
 
 const invariant = require("invariant");
 
-export type Renderer = {
+export type Frame = {
   nodes: String
 } & any;
 
-export const Renderer: React.FC<Renderer> = ({
+export const Frame: React.FC<Frame> = ({
   children,
   nodes,
   ...props
@@ -23,7 +23,7 @@ export const Renderer: React.FC<Renderer> = ({
   useEffect(() => {
     if (!nodes) {
       const rootCanvas = React.Children.only(children) as React.ReactElement;
-      invariant(rootCanvas.type && rootCanvas.type == Canvas, "The immediate child of <Renderer /> has to be a Canvas");
+      invariant(rootCanvas.type && rootCanvas.type == Canvas, "The immediate child of <Frame /> has to be a Canvas");
       let node = createNode(rootCanvas, {
         id: ROOT_NODE
       })
