@@ -6,7 +6,7 @@ export function useHandlerGuard<
 >(
   handlers: Record<T, [keyof DocumentEventMap, (e: MouseEvent, options?: any) => void, boolean?]>, 
   enabled
-): Record<T, (e: any, options: any) => void>  {
+): Record<T, (e: any, options?: any) => void>  {
   const isEnabled = useRef<boolean>(enabled);
   isEnabled.current = enabled;
 

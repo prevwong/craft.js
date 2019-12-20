@@ -59,7 +59,9 @@ export function useCollector<M extends Methods, Q extends QueryMethods, C>
             (window as any).state = current;
             onChange(onCollect(collected.current), setRenderCollected);
           }
-        } catch (err){}
+        } catch (err){
+          console.warn(err);
+        }
       });
     }
     return (() => {
