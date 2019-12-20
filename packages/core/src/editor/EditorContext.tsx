@@ -53,7 +53,9 @@ export const EditorContextProvider: React.FC<{ options?: Options}> = ({ children
   useEffect(() => {
     // console
     // console.log("options", options)
-    if ( context ) context.actions.setOptions(options);
+    if ( context ) context.actions.setOptions((editorOptions) => {
+      editorOptions = options;
+    });
   }, [options]);
   
 

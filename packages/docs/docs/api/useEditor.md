@@ -36,7 +36,8 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["move", "(nodeId: String, targetParentId: String, index: number) => void", "Move Node to the specified parent Node at the given index. Subject to the conditions in query.canDropInParent()"],
       ["setProp", "(nodeId: String, props: Object) => void", "Manipulate the props of the given Node"],
       ["setHidden", "(nodeId: String, bool: boolean) => void", "When set to true, the user component of the specified Node will be hidden"],
-      ["setCustom", "(nodeId: String, custom: (custom: Object) => void", "Update the given Node's custom properties"]
+      ["setCustom", "(nodeId: String, custom: (custom: Object) => void", "Update the given Node's custom properties"],
+      ["setOptions", "(options: Object) => void", "Update the editor's options. The options object passed is the same as the  `<Editor />` props."]
     ]],
     ["query", "Query", [
       ["createNode", "(child: React.ReactElement) => Node", "Create a Node from a React element"],

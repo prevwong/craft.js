@@ -11,11 +11,8 @@ const invariant = require('invariant');
 const Actions = (state: EditorState, query: QueryCallbacksFor<typeof QueryMethods>) => {
   const _ = <T extends keyof CallbacksFor<typeof Actions>>(name: T) => Actions(state, query)[name];
   return {
-    setOptions(options: Partial<Options>) {
-      state.options = {
-        ...state.options,
-        ...options,
-      };
+    setOptions(cb: (options: Partial<Options>) => void) {
+      cb(state.options);
     },
     setIndicator(indicator: Indicator) {
       if (indicator && (!indicator.placement.parent.dom || (indicator.placement.currentNode && !indicator.placement.currentNode.dom))) return;

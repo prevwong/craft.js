@@ -90,7 +90,7 @@ export const Header = () => {
               "bg-green-400" : enabled,
               "bg-primary" : !enabled
             }])}
-            onClick={() => setOptions({enabled: !enabled})}
+            onClick={() => setOptions(options => options.enabled = !enabled)}
           >
             {enabled ? <Checkmark /> : <Customize />}
             {
