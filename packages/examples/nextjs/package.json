@@ -6,6 +6,7 @@
     "@material-ui/core": "latest",
     "clsx": "latest",
     "craftjs": "*",
+    "material-ui-color-picker": "^3.2.0",
     "next": "latest",
     "next-transpile-modules": "^2.3.1",
     "prop-types": "latest",
@@ -14,8 +15,13 @@
     "react-dom": "16.11.0"
   },
   "scripts": {
-    "dev": "next",
+    "start": "cross-env NODE_ENV=development && next dev -p 3002",
     "build": "next build",
-    "start-next": "next start"
+    "demo-prod-start": "next start -p 3002",
+    "demo-export": "next export",
+    "clean": "rimraf lib node_modules .next out dist"
+  },
+  "devDependencies": {
+    "@zeit/next-css": "^1.0.1"
   }
 }

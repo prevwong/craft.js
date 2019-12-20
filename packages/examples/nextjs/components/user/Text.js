@@ -1,59 +1,72 @@
-import React, {useCallback} from "react";
-import { Grid, TextField } from "@material-ui/core";
+import React, {useState, useCallback, useEffect} from "react";
+import {Slider, FormControl, FormLabel} from "@material-ui/core";
 import { useNode } from "craftjs";
 import ContentEditable from 'react-contenteditable'
 
-export default function Text({text}) {
-  const { connectors: {connect, drag}, active, setProp } = useNode((state) => ({
-    active: state.event.active
+export const Text= ({text, fontSize, textAlign}) => {
+  const { connectors: {connect, drag}, selected, dragged, setProp } = useNode((state) => ({
+    selected: state.events.selected,
+    dragged: state.events.dragged
   }));
 
-  const refConnector = useCallback(ref => connect(drag(ref)), []);
+  const [editable, setEditable] = useState(false);
+
+  useEffect(() => {!selected && setEditable(false)}, [selected]);
 
   return (
+    <div 
+      ref={ref => connect(drag(ref))}
+      onClick={e =>  selected && setEditable(true)}
+    >
       <ContentEditable
-        innerRef={refConnector}
         html={text} 
+        disabled={!editable}
         onChange={e => 
           setProp(props => 
             props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")  
           )
         } 
-        tagName="p" 
+        tagName="p"
+        style={{fontSize: `${fontSize}px`, textAlign}}
       />
+    </div>
+
   )
 }
 
 
 const TextSettings = () => {
-  const { setProp, text } = useNode((node) => ({
-    text: node.data.props.text
+  const { setProp, fontSize } = useNode((node) => ({
+    text: node.data.props.text,
+    fontSize: node.data.props.fontSize
   }));
 
   return (
     <>
-      <Grid item container direction="column" >
-        <TextField 
-          size="small" 
-          margin="dense" 
-          label="Text" 
-          variant="outlined" 
-          value={text}
-          onChange={e => 
-            {
-              setProp(props => {
-                props.text = e.target.value
-              })
-            }
-          }
+      <FormControl size="small" component="fieldset">
+        <FormLabel component="legend">Font size</FormLabel>
+        <Slider
+          value={fontSize}
+          step={1}
+          min={7}
+          max={50}
+          onChange={(_, value) => {
+            setProp(props => props.fontSize = value);
+          }}
         />
-      </Grid>
+      </FormControl>
     </>
   )
 }
 
+export const TextDefaultProps = {
+  text: "Hi",
+  fontSize: 20
+};
+
 Text.craft = {
-  related: {
+  defaultProps: TextDefaultProps,
+  related : {
     settings: TextSettings
   }
 }

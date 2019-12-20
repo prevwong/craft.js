@@ -1,22 +1,44 @@
 import React  from "react";
-import {Card as MaterialCard, CardContent} from "@material-ui/core";
-import Text from "./Text";
-import Button from "./Button";
+import { Container, ContainerSettings, ContainerDefaultProps } from "./Container";
+import { Text } from "./Text";
+import { Button } from "./Button";
 import { Canvas, useNode } from "craftjs";
 
-
-export default function Card() {
-  const { connectors: {connect, drag} } = useNode();
+export const CardTop = ({children}) => {
+  const { connectors: {connect} } = useNode();
   return (
-    <MaterialCard ref={ref=> connect(drag(ref))} style={{marginBottom: "20px"}}>
-      <CardContent>
-        <Canvas id="main">
-          <Text text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vehicula est quis dignissim placerat. Pellentesque aliquam ante a molestie porttitor." /> 
-        </Canvas>
-        <Canvas id="second">
-          <Button variant="contained">Click</Button>
-        </Canvas>
-      </CardContent>
-    </MaterialCard>
+    <div ref={connect} className="text-only" style={{padding: "10px", marginBottom:"10px", borderBottom: "1px solid #eee", display: "flex", flexDirection: "column", alignItems:"flex-start"}}>
+      {children}
+    </div>
   )
+}
+
+export const CardBottom = ({children}) => {
+  const { connectors: {connect} } = useNode();
+  return (
+    <div ref={connect}>
+      {children}
+    </div>
+  )
+}
+
+export const Card = ({background, padding = 20}) => {
+  return (
+    <Container background={background} padding={padding}>
+      <Canvas id="text" is={CardTop}>
+        <Text text="Title" fontSize="20" />
+        <Text text="Subtitle" fontSize="15" />
+      </Canvas>
+      <Canvas id="buttons" is={CardBottom}>
+        <Button size="small" text="Learn more" />
+      </Canvas>
+    </Container>
+  )
+}
+
+Card.craft = {
+  defaultProps: ContainerDefaultProps,
+  related: {
+    settings: ContainerSettings
+  }
 }

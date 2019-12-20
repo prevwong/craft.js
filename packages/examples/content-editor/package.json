@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development && next dev",
-    "build-next": "next build",
-    "start-next": "next start",
-    "export": "next export"
+    "start": "cross-env NODE_ENV=development && next dev -p 3001",
+    "build": "next build",
+    "demo-prod-start": "next start -p 3001",
+    "demo-export": "next export",
+    "clean" : "rimraf lib node_modules .next out dist"
   },
   "dependencies": {
     "@material-ui/core": "^4.5.2",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Selector, Canvas, useEditor} from 'craftjs';
+import {  Canvas, useEditor} from 'craftjs';
 import { Container } from '../selectors/Container';
 import { Text } from "../selectors/Text";
 import SquareSvg from '../../public/icons/toolbox/rectangle.svg';
@@ -27,23 +27,23 @@ const Item = styled.div`
 
 
 export const Toolbox = () => {
-  const { enabled } = useEditor((state) => ({enabled: state.options.enabled}));
+  const { enabled, connectors: {create }} = useEditor((state) => ({enabled: state.options.enabled}));
 
   return (
     <ToolboxDiv enabled={enabled && enabled} className="w-12 border-r bg-gray-100 h-screen bg-white">
       <div className='flex flex-col items-center pt-3'>
-        <Selector render={<Canvas is={Container} background={{ r: 78, g: 78, b: 78, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }}  height="100%" width="50%"></Canvas>}>
+        <div ref={ref => create(ref, <Canvas is={Container} background={{ r: 78, g: 78, b: 78, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }}  height="100%" width="50%"></Canvas>)}>
           <Item className='m-2 pb-2 cursor-pointer block'><SquareSvg /></Item>
-        </Selector>
-        <Selector render={<Text fontSize="12" textAlign="left" text="Hi there" />}>
+        </div>
+        <div ref={ref => create(ref, <Text fontSize="12" textAlign="left" text="Hi there" />)}>
           <Item className='m-2 pb-2 cursor-pointer block'><TypeSvg /></Item>
-        </Selector> 
-        <Selector render={<Button />}>
+        </div> 
+        <div ref={ref => create(ref, <Button />)}>
           <Item className='m-2 pb-2 cursor-pointer block'><ButtonSvg /></Item>
-        </Selector> 
-        <Selector render={<Video videoId="jQctQKwMyl8" />}>
+        </div> 
+        <div ref={ref => create(ref, <Video videoId="jQctQKwMyl8" />)}>
           <Item className='m-2 pb-2 cursor-pointer block'><YoutubeSvg /></Item>
-        </Selector> 
+        </div> 
       </div>
     </ToolboxDiv>
   )

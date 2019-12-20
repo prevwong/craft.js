@@ -1,48 +1,55 @@
-import React from 'react';
-import {Box, Container, Typography, Paper, Grid, makeStyles} from '@material-ui/core';
-import Toolbox from '../components/Toolbox';
-import Button from '../components/user/Button';
-import Card from '../components/user/Card';
-import Text from '../components/user/Text';
-import SettingsPanel from '../components/SettingsPanel';
-import {Editor, Renderer, Canvas} from "craftjs";
+import React, {useState} from 'react';
+import "../styles/main.css";
+import {Typography, Button as MaterialButton, Paper, Grid, makeStyles} from '@material-ui/core';
+import {Toolbox} from '../components/Toolbox';
+import {Container} from '../components/user/Container';
+import {Button} from '../components/user/Button';
+import {Card, CardBottom, CardTop} from '../components/user/Card';
+import {Text} from '../components/user/Text';
+import {SettingsPanel} from '../components/SettingsPanel';
+import {Editor, Frame, Canvas} from "craftjs";
+import { Topbar } from '../components/Topbar';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(2, 2),
-    background: "rgb(210, 210, 210)",
-    width: "260px",
+    padding: 0,
+    background: "rgb(252, 253, 253)"
   }
 }))
 export default function App() {
   const classes = useStyles();
+  const [enabled, setEnabled] = useState(true);
+  
   return (
-    <Container maxWidth="md">
+    <div style={{margin: "0 auto", width: "800px"}}>
       <Typography style={{margin: "20px 0"}} variant="h5" align="center">A super simple page editor</Typography>
         <Editor
-          resolver={{Card, Button, "bbt" : Text}}
+          resolver={{Card, Button, Text, Container, CardTop, CardBottom}}
+          enabled={enabled}
         > 
-          <Grid container>
+          <Topbar />
+          <Grid container spacing={5} style={{paddingTop: "10px"}}>
             <Grid item xs>
-            <Box bgcolor="#eee" p={1} style={{ minHeight: "350px"}}>
-              <Renderer>
-                <Canvas>
+              <Frame>
+                <Canvas is={Container} padding={5} background="#eeeeee">
                   <Card />
-                  <Button size="small" variant="outlined">Click</Button>
-                  <Button size="small" variant="outlined">Click</Button>
+                  <Button text="Click me" size="small" />
+                  <Text fontSize={20} text="Hi world!" />
+                  <Canvas is={Container} padding={6} background="#999999">
+                    <Text size="small" text="It's me again!" />
+                  </Canvas>
                 </Canvas>
-              </Renderer>
-              </Box>
+              </Frame>
             </Grid>
-            <Paper className={classes.root}>
-              <Grid container spacing={3} direction="column">
+            <Grid item xs={4}>
+              <Paper className={classes.root}>
                 <Toolbox />
                 <SettingsPanel />
-              </Grid>
-            </Paper>
+              </Paper>
+            </Grid>
           </Grid>
-          
+            
         </Editor>
-    </Container>
+    </div>
   );
 }

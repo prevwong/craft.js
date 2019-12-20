@@ -1,32 +1,46 @@
-import { Box, Grid, Typography } from "@material-ui/core";
+import { Box, Chip, Grid, Typography, Button as MaterialButton } from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
 import { useEditor } from "craftjs";
 
-const SettingsPanel = () => {
-  const { currentSettingsPanel } = useEditor((state) => {
-    const currentNodeId = state.events.active;
-    let settingsPanel;
+export const SettingsPanel = () => {
+  const { selected } = useEditor((state) => {
+    const currentNodeId = state.events.selected;
+    let selected;
+
     if ( currentNodeId ) {
-      settingsPanel = state.nodes[currentNodeId].related.settings;
+      selected = {
+        name: state.nodes[currentNodeId].data.name,
+        settings: state.nodes[currentNodeId].related && state.nodes[currentNodeId].related.settings
+      };
     }
+
     return {
-      currentSettingsPanel: settingsPanel
+      selected
     }
   });
 
-  return currentSettingsPanel ? (
-    <Box my={2} mx={1} borderTop={1} borderColor="grey.500">
-      <Box mt={1}>
-        <Grid container direction="column" spacing={0}>
-          <Grid item>
-            <Typography variant="subtitle1">Edit</Typography>
-          </Grid>
-          { 
-            React.createElement(currentSettingsPanel)
-          }
+  return selected ? (    
+    <Box bgcolor="rgba(0, 0, 0, 0.058823529411764705)" mt={2} px={2} py={2}>
+      <Grid container direction="column" spacing={0}>
+        <Grid item>
+          <Box pb={2}>
+            <Grid container alignItems="center">
+              <Grid item xs><Typography variant="subtitle1">Selected</Typography></Grid>
+              <Grid item><Chip size="small" label={selected.name} color="primary" /></Grid>
+            </Grid>
+          </Box>
         </Grid>
-      </Box>
+        { 
+          selected.settings && React.createElement(selected.settings)
+        }
+        <MaterialButton
+          variant="contained"
+          color="default"
+        >
+          Delete
+        </MaterialButton>
+      </Grid>
     </Box>
   ) : null
 }
 
-export default SettingsPanel;
