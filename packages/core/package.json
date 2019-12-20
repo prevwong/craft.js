@@ -25,6 +25,7 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "build": "../../scripts/build.sh",
+    "clean" : "rimraf lib node_modules dist",
     "start": "cross-env NODE_ENV=development && ../../scripts/start.sh"
   },
   "bugs": {
@@ -40,10 +41,7 @@
   "devDependencies": {
     "@types/invariant": "^2.2.30",
     "@types/react": "^16.9.11",
-    "jsdoc": "^3.6.3",
-    "react": "^16.11.0",
-    "typedoc": "^0.15.4",
-    "typedoc-plugin-markdown": "^2.2.14"
+    "react": "^16.11.0"
   },
   "peerDependencies": {
     "react": ">= 16.11"

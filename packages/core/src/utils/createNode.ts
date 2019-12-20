@@ -17,7 +17,8 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
       name: null,
       displayName: null,
       props,
-      custom: {}
+      custom: {},
+      related : {}
     };
 
     node.events = {
