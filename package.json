@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "lerna run start --parallel",
     "build": "lerna run build --stream",
+    "clean": "lerna run clean --stream",
     "build-site" : "./scripts/build-site.sh",
     "deploy" : "./scripts/deploy.sh"
   },

@@ -8,4 +8,5 @@
 *dist/
 *.lock
 *-lock.json
+*out/
 /site
