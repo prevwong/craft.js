@@ -9,7 +9,7 @@ import { EditorContext } from "./EditorContext";
 export type EditorCollector<C> = (state: EditorState, query: QueryCallbacksFor<typeof QueryMethods>) => C
 
 export type useInternalEditor<C = null> = (C extends null ? useCollector<typeof Actions, typeof QueryMethods> : useCollector<typeof Actions, typeof QueryMethods, C>) & {
-  _inContext: boolean;
+  inContext: boolean;
   handlers: EventContext
 };
 
@@ -23,6 +23,6 @@ export function useInternalEditor<C>(collector?: any): useInternalEditor<C> {
   return {
     ...collected as any,
     handlers: handlers || {},
-    _inContext: !!Editor
+    inContext: !!Editor
   }
 }

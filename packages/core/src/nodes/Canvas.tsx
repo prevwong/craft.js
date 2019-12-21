@@ -23,12 +23,12 @@ export type Canvas<T extends React.ElementType> = {
 
 export function Canvas<T extends React.ElementType>({ is, children, passThrough, ...props }: Canvas<T>) {
   const id = props.id;
-  const { actions: { add }, query, _inContext } = useInternalEditor();
-  const { node, nodeId, _inNodeContext } = useInternalNode((node) => ({ node: node.data, nodeId: node.id }));
+  const { actions: { add }, query, inContext } = useInternalEditor();
+  const { node, nodeId, inNodeContext } = useInternalNode((node) => ({ node: node.data, nodeId: node.id }));
   const [internalId, setInternalId] = useState(null);
   const [initialised, setInitialised] = useState(false);
   useEffect(() => {
-    if (_inContext && _inNodeContext) {
+    if (inContext && inNodeContext) {
       if (node.isCanvas ) {
         invariant(passThrough, ERROR_INFINITE_CANVAS)
         if ( !node.nodes ) {
@@ -64,7 +64,7 @@ export function Canvas<T extends React.ElementType>({ is, children, passThrough,
     <React.Fragment>
       {
         initialised ? (
-          (_inContext && _inNodeContext) ?
+          (inContext && inNodeContext) ?
             (
               node.isCanvas && node.nodes ? (
               <SimpleElement render={React.createElement(node.type, props, (

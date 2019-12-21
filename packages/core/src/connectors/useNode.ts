@@ -25,12 +25,12 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S>
 export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
   const { handlers: editorConnectors, enabled } = useInternalEditor((state) => ({enabled: state.options.enabled}));
 
-  const { id, related, actions: { setDOM, setProp }, _inNodeContext, ...collected } = useInternalNode(collect);
+  const { id, related, actions: { setDOM, setProp }, inNodeContext, ...collected } = useInternalNode(collect);
   
   const connectors = useConnectorHooks({
       drag: [
         (node) => {
-          if ( _inNodeContext && !isRoot(id) ) {
+          if ( inNodeContext && !isRoot(id) ) {
             node.setAttribute("draggable", "true")
             editorConnectors.drag(node, id);
           }
@@ -40,7 +40,7 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
         }
       ],
       connect: (node) => {
-        if (_inNodeContext) {
+        if (inNodeContext) {
           editorConnectors.select(node, id);
           editorConnectors.hover(node, id);
           editorConnectors.drop(node, id);
@@ -54,7 +54,7 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
     related,
     ...collected as any,
     setProp,
-    _inNodeContext,
+    inNodeContext,
     connectors
   }
 }

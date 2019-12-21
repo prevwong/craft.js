@@ -6,7 +6,7 @@ import { useInternalEditor } from "../editor/useInternalEditor";
 
 
 type internalActions = NodeProvider & {
-  _inNodeContext: boolean,
+  inNodeContext: boolean,
   actions : {
     setProp: (cb: any) => void,
     setDOM: (dom: HTMLElement) => void,
@@ -24,7 +24,7 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S): useInter
       ...{} as any,
       id: null,
       related: false,
-      _inNodeContext: false,
+      inNodeContext: false,
       actions: {
         setProp: () => {},
         setDOM: () => {},
@@ -49,7 +49,7 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S): useInter
     id,
     related,
     ...collected as any,
-    _inNodeContext: true,
+    inNodeContext: true,
      actions 
   }
 }
