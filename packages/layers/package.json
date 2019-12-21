@@ -5,9 +5,9 @@
   "module": "./dist/index.js",
   "type": "module",
   "scripts": {
-    "start": "rollup -c -w src/index.tsx",
-    "build": "rollup -c src/index.tsx",
-    "clean" : "rimraf node_modules lib dist"
+    "start": "rollup -c -w",
+    "build": "rollup -c",
+    "clean": "rimraf node_modules lib dist"
   },
   "dependencies": {
     "craftjs": "*",
