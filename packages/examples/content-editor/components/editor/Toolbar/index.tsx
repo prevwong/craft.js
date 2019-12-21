@@ -12,8 +12,13 @@ export const Toolbar = () => {
   }));
 
   return (
-        <div className='py-1'>
-          {active && related && React.createElement(related.toolbar)}
+    <div className='py-1 h-full'>
+      {active && related && React.createElement(related.toolbar)}
+      {!active &&
+        <div className="px-2 py-2 flex items-center h-full justify-center text-center" style={{color:"rgba(0, 0, 0, 0.5607843137254902)", fontSize: "11px"}}>
+          <h2>Click on a component to start editing</h2>
         </div>
+      }
+    </div>
   );
 };

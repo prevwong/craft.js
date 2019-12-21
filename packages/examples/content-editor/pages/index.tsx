@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { NextSeo } from 'next-seo';
 import { Editor, Frame, Canvas} from "craftjs";
-import { Toolbox, EditorRenderer } from '../components/editor';
 import { Container, Text } from "../components/selectors";
 import { createMuiTheme } from "@material-ui/core"
 import { ThemeProvider } from '@material-ui/styles';
@@ -11,10 +10,7 @@ import { Custom2 } from '../components/selectors/Custom2';
 import { Custom3 } from '../components/selectors/Custom3';
 import { Button } from '../components/selectors/Button';
 import { Video } from '../components/selectors/Video';
-import { Header } from '../components/editor/Header';
-import { Sidebar } from "../components/editor/Sidebar";
-import { RenderNode } from '../components/editor/RenderNode';
-import { Viewport } from '../components/editor/Viewport';
+import { Viewport, RenderNode } from '../components/editor';
 
 const theme = createMuiTheme({
   typography: {
@@ -51,10 +47,7 @@ function App() {
           enabled={enabled}
           onRender={RenderNode}
         >
-          <Header  />
           <Viewport>
-            <Toolbox />
-            <EditorRenderer>
               <Frame>
                 <Canvas is={Container} width="800px" height="auto" background={{ r: 255, g: 255, b: 255, a: 1 }} padding={["40", "40", "40", "40"]}>
                   <Canvas is={Container} flexDirection="row" width="100%" height="auto" padding={["40", "40", "40", "40"]} margin={["0", "0", "40", "0"]}>
@@ -124,8 +117,6 @@ function App() {
                   </Canvas>
                 </Canvas>
               </Frame>
-            </EditorRenderer>
-            <Sidebar />
           </Viewport>
         </Editor>
       </div>

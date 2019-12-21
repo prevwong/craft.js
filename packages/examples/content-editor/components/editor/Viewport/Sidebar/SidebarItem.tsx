@@ -1,5 +1,5 @@
-import React, { useState  } from "react";
-import Arrow from "../../../public/icons/arrow.svg";
+import React from "react";
+import Arrow from "../../../../public/icons/arrow.svg";
 import styled from "styled-components";
 
 const SidebarItemDiv = styled.div<{visible?: boolean; height?: string}>`
@@ -20,6 +20,7 @@ export type SidebarItem = {
   title: string;
   height?: string;
   icon: string;
+  visible?: boolean;
   onChange?: (bool: boolean) => void;
 }
 
@@ -30,14 +31,12 @@ const HeaderDiv = styled.div`
   }
 `;
 
-export const SidebarItem: React.FC<SidebarItem> = ({ icon, title, children, height, onChange}) => {
-  const [visible, setVisible] = useState();
+export const SidebarItem: React.FC<SidebarItem> = ({ visible, icon, title, children, height, onChange}) => {
  
   return (
     <SidebarItemDiv visible={visible} height={height} className="flex flex-col">
       <HeaderDiv onClick={() => {
           if (onChange) onChange(!visible);
-          setVisible(!visible)
         }} className={`cursor-pointer bg-white border-b last:border-b-0 flex items-center px-2 py-2 ${visible ? 'shadow-sm' : ''}`}> 
         <div className='flex-1 flex items-center'>
           {

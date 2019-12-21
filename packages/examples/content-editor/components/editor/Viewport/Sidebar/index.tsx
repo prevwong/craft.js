@@ -1,6 +1,6 @@
 import React, {useState} from "react"
 import { Layers } from "craftjs-layers";
-import { Toolbar } from '../Toolbar';
+import { Toolbar } from '../../Toolbar';
 import {SidebarItem} from "./SidebarItem";
 import styled from "styled-components";
 import CustomizeIcon from "../../../public/icons/customize.svg";
@@ -13,8 +13,8 @@ export const SidebarDiv = styled.div<{ enabled: boolean }>`
 `;
 
 export const Sidebar = () => {
-  const [layersVisible, setLayerVisible] = useState(false);
-  const [toolbarVisible, setToolbarVisible] = useState(false);
+  const [layersVisible, setLayerVisible] = useState(true);
+  const [toolbarVisible, setToolbarVisible] = useState(true);
   const { enabled } = useEditor((state) => ({ enabled: state.options.enabled }));
 
   return (
@@ -23,12 +23,12 @@ export const Sidebar = () => {
       className="transition bg-white w-2"
     >
       <div className="flex flex-col h-full">
-        <SidebarItem icon={CustomizeIcon} title="Customize" height={!layersVisible ? "full" : "300px"} onChange={(val) => setToolbarVisible(val)}>
+        <SidebarItem icon={CustomizeIcon} title="Customize" height={!layersVisible ? "full" : "55%"} visible={toolbarVisible} onChange={(val) => setToolbarVisible(val)}>
           <Toolbar />
         </SidebarItem>
-        <SidebarItem icon={LayerIcon} title="Layers" height={!toolbarVisible ? "full" : "45%"}  onChange={(val) => setLayerVisible(val)}>
+        <SidebarItem icon={LayerIcon} title="Layers" height={!toolbarVisible ? "full" : "45%"}  visible={layersVisible} onChange={(val) => setLayerVisible(val)}>
           <div className="">
-            <Layers />
+            <Layers expandRootOnLoad={true} />
           </div>
         </SidebarItem>
     </div>

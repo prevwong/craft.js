@@ -1,8 +1,8 @@
 import React  from "react";
 import { useEditor } from "craftjs";
 import styled from "styled-components";
-import Checkmark from "../../public/icons/check.svg";
-import Customize from "../../public/icons/customize.svg";
+import Checkmark from "../../../public/icons/check.svg";
+import Customize from "../../../public/icons/customize.svg";
 import cx from "classnames"; 
 
 const HeaderDiv = styled.div<{ enabled: boolean}>`
@@ -80,9 +80,8 @@ export const Header = () => {
           <h2 className="mr-5" style={{ fontFamily: "Fakt Pro", fontWeight: 500, fontSize: "20px" }}>craft.js</h2>
         </div>
         <div className="flex items-end justify-end">
-          <Link selected={true}>Demo</Link>
-          <Link>Github</Link>
-          <Link>Documentation</Link>
+          <Link href="https://github.com/prevwong/craft.js">Github</Link>
+          <Link href="https://prevwong.github.io/craft.js/r/docs/overview">Documentation</Link>
         </div>
         <div className="flex">
           <Btn 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Resizer } from "../../editor/Resizer";
+import { Resizer } from "../Resizer";
 import { ContainerSettings } from "./ContainerSettings";
 
 export type Container = {
