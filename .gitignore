@@ -1,7 +1,6 @@
 /node_modules
 /dist
 /.cache
-/site
 *node_modules/
 *lib/
 *dist/
@@ -9,3 +8,4 @@
 *dist/
 *.lock
 *-lock.json
+/site
