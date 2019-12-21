@@ -6,7 +6,7 @@
     "dev": "lerna run start --parallel",
     "build": "lerna run build --stream",
     "build-site" : "./scripts/build-site.sh",
-    "deploy" : "git subtree push --prefix site origin gh-pages"
+    "deploy" : "./scripts/deploy.sh"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
