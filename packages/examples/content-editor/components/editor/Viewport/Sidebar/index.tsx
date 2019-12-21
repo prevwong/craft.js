@@ -3,8 +3,8 @@ import { Layers } from "craftjs-layers";
 import { Toolbar } from '../../Toolbar';
 import {SidebarItem} from "./SidebarItem";
 import styled from "styled-components";
-import CustomizeIcon from "../../../public/icons/customize.svg";
-import LayerIcon from "../../../public/icons/layers.svg";
+import CustomizeIcon from "../../../../public/icons/customize.svg";
+import LayerIcon from "../../../../public/icons/layers.svg";
 import { useEditor} from "craftjs";
 
 export const SidebarDiv = styled.div<{ enabled: boolean }>`

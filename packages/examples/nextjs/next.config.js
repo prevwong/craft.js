@@ -4,17 +4,11 @@ const withCSS = require('@zeit/next-css')
 
 
 let plugins = [
-  [withCSS]
+  [withCSS],
+  [withTM, {
+    transpileModules: ['craftjs']
+  }],
 ];
-
-if ( process.env.NODE_ENV !== "production" ) {
-  plugins = [
-    ...plugins,
-    [withTM, {
-      transpileModules: ['craftjs']
-    }],
-  ]
-}
 
 module.exports = withPlugins(plugins, {
   assetPrefix: process.env.NODE_ENV === 'production' ? '/craft.js/examples/basic' : '',

@@ -2,12 +2,14 @@ import React from 'react';
 import {  Canvas, useEditor} from 'craftjs';
 import { Container } from '../../selectors/Container';
 import { Text } from "../../selectors/Text";
-import SquareSvg from '../../public/icons/toolbox/rectangle.svg';
-import TypeSvg from '../../public/icons/toolbox/text.svg';
-import YoutubeSvg from '../../public/icons/toolbox/video-line.svg';
-import ButtonSvg from '../../public/icons/toolbox/button.svg';
 import { Video } from '../../selectors/Video';
 import { Button } from '../../selectors/Button';
+
+import SquareSvg from '../../../public/icons/toolbox/rectangle.svg';
+import TypeSvg from '../../../public/icons/toolbox/text.svg';
+import YoutubeSvg from '../../../public/icons/toolbox/video-line.svg';
+import ButtonSvg from '../../../public/icons/toolbox/button.svg';
+
 import styled from "styled-components";
 
 
