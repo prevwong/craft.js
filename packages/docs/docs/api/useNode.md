@@ -26,6 +26,9 @@ const { connectors, setProp, ...collected } = useNode(collector);
 
 <API items={[
   [null, "Object", [
+    ["id", "NodeId", "The corresponding Node's id"],
+    ["related", "boolean", "Identifies if the component is a being used as related component"],
+    ["inNodeContext", "boolean", "This is useful if you are designing a User component that you also wish to be used as an ordinary React component - this property helps to differentiate if the component is being used as an User Component"],
     ["connectors", "Object", [
       ["connect", "(dom: HTMLElement) => HTMLElement", "Specifies the DOM that represents the user component"],
       ["drag", "(dom: HTMLElement) => HTMLElement", "Specifies the DOM that should be draggable"]

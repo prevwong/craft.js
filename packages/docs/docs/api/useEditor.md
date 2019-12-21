@@ -50,10 +50,11 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["serialize", "() => String", "Return the current Nodes in JSON"],
       ["deserialize", "() => String", "Recreate Nodes from JSON"],
       ["getNode", "(id: NodeId) => Node", "Get a Node by its ID"],
-      ["getDeepNodes", "(id: NodeId) => Nodes[]", "Return all decendant Nodes"],
-      ["getAllParents", "(id: NodeId) => Nodes[]", "Return all ancestor Nodes"],
+      ["getDeepNodes", "(id: NodeId) => NodeId[]", "Return all decendant Nodes"],
+      ["getAllParents", "(id: NodeId) => NodeId[]", "Return all ancestor Nodes"],
       ["getOptions", "() => Object", "Get the options specified in the <Craft /> component"]
     ]],
+    ["inContext", "boolean", "Returns false if the component is rendered outside of the `<Editor />`. This is useful if you are designing a general component that you also wish to use outside of Craft.js."],
     ["...collected", "Collected", "The collected values returned from the collector"]
   ]
   ]

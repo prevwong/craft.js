@@ -9,7 +9,7 @@ module.exports = {
   title: 'craft.js',
   tagline: 'A React framework for building drag-n-drop page editors',
   url: 'https://prevwong.github.io/craft.js',
-  baseUrl: '/craft.js/',
+  baseUrl: '/r/',
   favicon: 'img/favicon.ico',
   organizationName: 'prevwong', // Usually your GitHub org/user name.
   projectName: 'craft.js', // Usually your repo name.
