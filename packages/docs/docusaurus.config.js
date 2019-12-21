@@ -9,7 +9,7 @@ module.exports = {
   title: 'craft.js',
   tagline: 'A React framework for building drag-n-drop page editors',
   url: 'https://prevwong.github.io/craft.js',
-  baseUrl: '/r/',
+  baseUrl: '/craft.js/r/',
   favicon: 'img/favicon.ico',
   organizationName: 'prevwong', // Usually your GitHub org/user name.
   projectName: 'craft.js', // Usually your repo name.
@@ -19,12 +19,11 @@ module.exports = {
     },
     navbar: {
       logo: {
-        alt: 'My Site Logo',
+        alt: 'Craft.js',
         src: 'img/logo.png',
       },
       links: [
         {to: 'docs/overview', label: 'Docs', position: 'left'},
-        {to: 'blog', label: 'Blog', position: 'left'},
         {
           href: 'https://github.com/prevwong/craft.js',
           label: 'GitHub',
