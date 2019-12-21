@@ -17,8 +17,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development && next dev -p 3002",
     "build": "next build",
-    "demo-prod-start": "next start -p 3002",
-    "demo-export": "next export",
+    "export": "next export",
     "clean": "rimraf lib node_modules .next out dist"
   },
   "devDependencies": {

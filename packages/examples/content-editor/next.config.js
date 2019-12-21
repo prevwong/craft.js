@@ -1,9 +1,21 @@
-const withTypescript = require('@zeit/next-typescript')
+const withPlugins = require('next-compose-plugins');
 const withTM = require('next-transpile-modules')
 const withCSS = require('@zeit/next-css')
 
-module.exports = withCSS(withTypescript(
-  withTM({
-    transpileModules: ['craftjs']
-  })
-))
+
+let plugins = [
+  [withCSS]
+];
+
+if ( process.env.NODE_ENV == "production" ) {
+  plugins = [
+    ...plugins,
+    [withTM, {
+      transpileModules: ['craftjs']
+    }],
+  ]
+}
+
+module.exports = withPlugins(plugins, {
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/craft.js' : '',
+});

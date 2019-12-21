@@ -5,9 +5,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development && next dev -p 3001",
     "build": "next build",
-    "demo-prod-start": "next start -p 3001",
-    "demo-export": "next export",
-    "clean" : "rimraf lib node_modules .next out dist"
+    "export": "next export",
+    "clean": "rimraf lib node_modules .next out dist"
   },
   "dependencies": {
     "@material-ui/core": "^4.5.2",
@@ -39,6 +38,7 @@
     "@types/styled-components": "^4.1.20",
     "babel-plugin-inline-react-svg": "^1.1.0",
     "cross-env": "^6.0.3",
+    "next-compose-plugins": "^2.2.0",
     "postcss-preset-env": "^6.7.0",
     "tailwindcss": "^1.1.3"
   }

@@ -88,7 +88,7 @@ export const Resizer = ({
   children,
   ...props
 }: any, ) => {
-  const { setProp, connectors:{connect}, fillSpace, nodeWidth, nodeHeight, isRootNode, parent, active, _inNodeContext } = useNode(node => ({
+  const { setProp, connectors:{connect}, fillSpace, nodeWidth, nodeHeight, isRootNode, parent, active, inNodeContext } = useNode(node => ({
     id: node.id,
     isRootNode: isRoot(node),
     parent: node.data.parent,
@@ -169,7 +169,7 @@ export const Resizer = ({
   return (
     <Resizable
       enable={['top', 'left', 'bottom', 'right', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'].reduce((acc: any, key) => {
-        acc[key] = active && _inNodeContext;
+        acc[key] = active && inNodeContext;
         return acc;
       }, {})}
       className={cx([{
