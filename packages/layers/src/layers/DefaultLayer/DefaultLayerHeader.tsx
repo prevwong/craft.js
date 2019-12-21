@@ -1,10 +1,10 @@
 import React from "react";
 import { useEditor, hasTopLevelCanvases, isTopLevelCanvas } from "craftjs";
 import styled from "styled-components";
-import Eye from './eye.svg'
-import Arrow from './arrow.svg'
-import Linked from "./linked.svg"
-import {useLayer} from "../../../layers/useLayer";
+import Eye from './svg/eye.svg'
+import Arrow from './svg/arrow.svg'
+import Linked from "./svg/linked.svg"
+import {useLayer} from "../useLayer";
 import { EditableLayerName } from "./index";
 
 const StyledDiv = styled.div<{ depth: number, selected: boolean }>`

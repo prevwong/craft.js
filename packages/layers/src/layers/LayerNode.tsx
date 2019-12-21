@@ -3,20 +3,21 @@ import { useEditor } from "craftjs";
 import { useLayerManager } from "../manager/useLayerManager";
 import { useLayer } from "./useLayer";
 import { LayerContextProvider } from "./context";
+import { ROOT_NODE } from "craftjs-utils";
 
 export const LayerNode: React.FC = () => {
   const { id, depth, children, expanded  } = useLayer((layer) => ({
     expanded: layer.expanded
   }));
 
-  const { data, query, shouldBeExpanded } = useEditor((state, query) => ({
+  const { data, shouldBeExpanded } = useEditor((state, query) => ({
     data: state.nodes[id] && state.nodes[id].data,
     shouldBeExpanded: state.events.selected && query.getAllParents(state.events.selected).includes(id)
   }));
 
-  const { actions, renderLayer, renderLayerHeader } = useLayerManager((state) => ({
+  const { actions, renderLayer, expandRootOnLoad } = useLayerManager((state) => ({
     renderLayer: state.options.renderLayer,
-    renderLayerHeader: state.options.renderLayerHeader
+    expandRootOnLoad: state.options.expandRootOnLoad
   }));
 
   const expandedRef = useRef<boolean>(expanded);
@@ -27,6 +28,12 @@ export const LayerNode: React.FC = () => {
       actions.toggleLayer(id);
     }
   }, [shouldBeExpanded])
+
+  useEffect(() => {
+    if ( expandRootOnLoad  && id == ROOT_NODE ) {
+      actions.toggleLayer(id);
+    }
+  }, []);
   
 
   const initRef = useRef<boolean>(false);

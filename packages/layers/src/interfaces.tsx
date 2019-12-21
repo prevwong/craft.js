@@ -15,8 +15,8 @@ export type LayerRefEvents = Record<LayerEvents, boolean>;
 export type LayerEvents = 'selected' | 'hovered';
 
 export type LayerOptions = {
+  expandRootOnLoad: boolean;
   renderLayer: React.ElementType;
-  renderLayerHeader: React.ElementType;
 }
 
 export type LayerState = {
