@@ -1,6 +1,7 @@
 /node_modules
 /dist
 /.cache
+/site
 *node_modules/
 *lib/
 *dist/
