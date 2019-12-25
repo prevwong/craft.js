@@ -39,11 +39,6 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
       node.data.type = node.data.props.is ? node.data.props.is : 'div';
       node.data.isCanvas = true;
       actualType = node.data.type;
-      node.rules = {
-        ...node.rules,
-        canMoveIn: canMoveIn ? canMoveIn : node.rules.canMoveIn,
-        canMoveOut: canMoveOut ? canMoveOut : node.rules.canMoveOut,
-      }
       delete node.data.props["is"]
     }
 
@@ -52,16 +47,20 @@ export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'pr
       ...node.data.props,
     }
 
-    // Object.keys(node.rules).forEach(key => {
-    //   if (['canDrag', 'canMoveIn', 'canMoveOut'].includes(key)) {
-    //       if ( node.rules[key] ) node.rules[key] = node.rules[key];
-    //   }
-    // });
     
 
     if ( actualType.craft ) {
       if ( actualType.craft.name ) {
         node.data.displayName = actualType.craft.name;
+      }
+      
+      if ( actualType.craft.rules ) {
+        Object.keys(actualType.craft.rules).forEach(key => {
+          if (['canDrag', 'canMoveIn', 'canMoveOut'].includes(key)) {
+             node.rules[key] = actualType.craft.rules[key];
+          }
+        });
+      
       }
       if ( actualType.craft.related) {
         node.related = {}
