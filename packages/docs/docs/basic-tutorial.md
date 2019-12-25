@@ -3,6 +3,9 @@ id: basic-tutorial
 title: Basic Tutorial
 ---
 
+import {Image} from "../src/components/Image.js";
+
+
 ## Overview
 In this tutorial, we'll be designing a simple page editor. It's recommended that you have a basic to intermediate workings of React and it'd be even better if you first have a quick glance at the Key Concepts and come back here; but if you are feeling adventourous - that's fine too. 
 
@@ -20,11 +23,18 @@ npm install --save craftjs
 
 
 ## Designing an user interface
+<Image img="tutorial/interface.png" />
+
 With Craft.js you decide how your editor should look and function. So, let's build a user interface for our page editor. We'll add the page editor functionalities later.
 
 We'll be using the `material-ui` library for this tutorial:
 ```bash
 yarn add material-ui
+```
+
+Additionally, we'll also need `react-contenteditable` and `material-ui-color-picker` later on
+```bash
+yarn add react-contenteditable material-ui-color-picker
 ```
 
 ### User Components
@@ -243,6 +253,7 @@ export default function App() {
 
 ```
 
+
 ## Implementing Craft.js
 Up to this point, we have made an user interface for our page editor. Now, let's get it to work!
 
@@ -400,9 +411,9 @@ export const Card = ({background, padding = 0, children}) => {
   )
 }
 ```
-
-
 At this point, you could refresh the page and you would be able to drag stuff around.
+
+<Image img="tutorial/dnd.gif" />
 
 #### Defining Droppable regions
 Of course, our Card component is supposed to have 2 droppable regions. Remember how `<Canvas />` defined a droppable region earlier in our application ? We can do the same thing here insde our Card component.
@@ -505,6 +516,7 @@ export default function App() {
 }
 ```
 
+<Image img="tutorial/droppable-regions.gif" />
 
 
 ### Implementing the Toolbox
@@ -553,9 +565,6 @@ Up till this point, we have a page editor where our users can move elements arou
 The `useNode` hook provides us with the method `setProp` which can be used to manipulate a component's props. Let's implement a content editable for our Text Component:
 
 For simplicity sake, we wil be using `react-contenteditable`
-```bash
-yarn add react-contenteditable
-```
 
 ```jsx
 import React, {useCallback} from "react";
@@ -612,6 +621,9 @@ export const Text = ({text, fontSize}) => {
   )
 }
 ```
+
+<Image img="tutorial/text-edit.gif" />
+
 This should give you an idea on the possibilities of implementing powerful visual editing features like what you'd see in most modern page editors.
 
 While we are at it, let's also add display a slider for users to edit the `fontSize`
@@ -650,8 +662,10 @@ export const Text= ({text, fontSize, textAlign}) => {
     </div>
   )
 }
-
 ```
+
+<Image img="tutorial/text-edit-others.gif" />
+
 
 Hm, we can agree that does not look all that good as it obstructs the user experience. Wouldn't it be better if the entire `.text-additional-settings` Grid is relocated to the Settings Panel that we created earlier ?
 
@@ -756,11 +770,6 @@ Button.craft = {
 }
 ```
 
-For our Container component, we'll a color picker that will allow our end-users to change the background color. We'll use the `material-ui-color-picker`:
-```bash
-yarn add material-ui-color-picker
-```
-
 ```jsx
 // components/user/Container.js
 import {FormControl, FormLabel, Slider} from "@material-ui/core";
@@ -808,7 +817,6 @@ Card.craft = {
   }
 }
 ```
-
 
 #### Setting default props
 Setting default props is not strictly necessary. However, it is helpful if we wish to access the component's props via it's corresponding `Node`, like what we are doing in the `settings` related component above.
@@ -933,6 +941,9 @@ export const SettingsPanel = () => {
 }
 ```
 
+<Image img="tutorial/settings-panel.gif" />
+
+
 Now, we have to make our Delete button work! We can achieve this by using the `delete` action available from the `useEditor` hook:
 
 ```jsx
@@ -1020,7 +1031,7 @@ export const Topbar = () => {
 };
 ```
 
-## Finish
+## You made it 🎉
 We've made it till the end! Not too bad right ? Hopefully, you were able to see the simplicity of building a fully working page editor with Craft.js
 
 We did not need to worry about implementing the drag-n-drop system but rather simply focus on writing rules and attaching connectors to the desired elements. Defining droppable regions was simply by wrapping an area with `<Canvas />`.

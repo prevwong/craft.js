@@ -30,7 +30,7 @@ export default function App() {
 } 
 ```
 
-## Reference
+## Types
 ### Layer
 #### Properties
 <API items={[
@@ -46,13 +46,14 @@ export default function App() {
 ]} /> 
 
 
+
+## Reference
 ### `<Layers />`
 #### Props
 <API items={[
   ["expandRootOnLoad", "boolean", "If enabled, the Root Node will be expanded by default"],
   ["renderLayer", "React.ReactElement", "Specify how to render each layer"],
 ]} /> 
-
 
 ### `useLayer`
 #### Parameters
@@ -77,7 +78,7 @@ export default function App() {
 ]} /> 
 
 
-### Default components
+## Default components
 These following components are available for you to extend upon if you wish to design your own component to render the layers (which can be specified in the `renderLayer` prop).
 
 - `<DefaultLayer />` 

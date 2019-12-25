@@ -59,11 +59,7 @@ module.exports = {
           title: 'Community',
           items: [
             {
-              label: 'Discord',
-              href: 'https://discord.gg/HrMjx5q',
-            },
-            {
-              label: 'Github Repo',
+              label: 'Project page',
               href: 'https://github.com/prevwong/craft.js',
             },
             {
