@@ -27,6 +27,9 @@ module.exports = {
       "api/canvas",
       "api/useEditor",
       "api/useNode"
+    ],
+    "Additional Packages" : [
+      "additional/layers"
     ]
   },
 };

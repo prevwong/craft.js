@@ -37,7 +37,7 @@ const LayerChildren = styled.div<{ hasCanvases: boolean }>`
 `;
 
 export const DefaultLayer: React.FC = ({children}) => {
-  const {id, expanded,  hovered, connectLayer} = useLayer((layer) => ({
+  const {id, expanded,  hovered, connectors: {layer}} = useLayer((layer) => ({
     hovered: layer.event.hovered,
     expanded: layer.expanded
   }));
@@ -48,7 +48,7 @@ export const DefaultLayer: React.FC = ({children}) => {
   });
 
   return (
-    <LayerNodeDiv ref={connectLayer} expanded={expanded} hasCanvases={hasChildCanvases} hovered={hovered}>
+    <LayerNodeDiv ref={layer} expanded={expanded} hasCanvases={hasChildCanvases} hovered={hovered}>
         <DefaultLayerHeader />
         {children ? (
           <LayerChildren hasCanvases={hasChildCanvases} className="craft-layer-children">

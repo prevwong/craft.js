@@ -92,10 +92,9 @@ const TopLevelIndicator = styled.div`
 
 export const DefaultLayerHeader: React.FC = () => {
 
-  const { id, hovered, depth, expanded, children, connectDrag, connectLayerHeader, actions: {toggleLayer}} = useLayer((layer) => {
+  const { id, depth, expanded, children, connectors:{drag, layerHeader}, actions: {toggleLayer}} = useLayer((layer) => {
     return {
-      expanded: layer.expanded,
-      hovered: layer.event.hovered
+      expanded: layer.expanded
     }
   });
 
@@ -108,12 +107,12 @@ export const DefaultLayerHeader: React.FC = () => {
   
 
   return (
-    <StyledDiv selected={selected} ref={connectDrag} depth={depth}>
+    <StyledDiv selected={selected} ref={drag} depth={depth}>
       <Hide selected={selected} isHidden={hidden} onClick={() => actions.setHidden(id, !hidden)}>
         <Eye />
       </Hide>
       <div className="inner">
-        <div ref={connectLayerHeader}>
+        <div ref={layerHeader}>
           {
             topLevel ? (
               <TopLevelIndicator>

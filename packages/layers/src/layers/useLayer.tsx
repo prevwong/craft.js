@@ -10,9 +10,11 @@ import { Layer } from "../interfaces";
 
 type internalActions = LayerContext & {
   children: string[],
-  connectDrag: ConnectorElementWrapper;
-  connectLayer: ConnectorElementWrapper;
-  connectLayerHeader: ConnectorElementWrapper;
+  connectors: {
+    drag: ConnectorElementWrapper;
+    layer: ConnectorElementWrapper;
+    layerHeader: ConnectorElementWrapper;
+  },
   actions: {
     toggleLayer: () => void
   }
