@@ -5,7 +5,7 @@ title: Layers
 
 import {API} from "../api/API";
 
-An additional package that allows you to display Photoshop-like layer representation of the editor's Nodes.
+Display Photoshop-like layer representation of the editor's Nodes.
 
 
 
@@ -31,13 +31,6 @@ export default function App() {
 ```
 
 ## Reference
-### `<Layers />`
-#### Props
-<API items={[
-  ["expandRootOnLoad", "boolean", "If enabled, the Root Node will be expanded by default"],
-  ["renderLayer", "React.ReactElement", "Specify how to render each layer"],
-]} /> 
-
 ### Layer
 #### Properties
 <API items={[
@@ -53,6 +46,14 @@ export default function App() {
 ]} /> 
 
 
+### `<Layers />`
+#### Props
+<API items={[
+  ["expandRootOnLoad", "boolean", "If enabled, the Root Node will be expanded by default"],
+  ["renderLayer", "React.ReactElement", "Specify how to render each layer"],
+]} /> 
+
+
 ### `useLayer`
 #### Parameters
 <API items={[
@@ -61,7 +62,7 @@ export default function App() {
 
 
 
-### Returns
+#### Returns
 <API items={[
   [null, "Object", [
     ["connectors", "Object", [
@@ -76,8 +77,7 @@ export default function App() {
 ]} /> 
 
 
-### Defaults
-
+### Default components
 These following components are available for you to extend upon if you wish to design your own component to render the layers (which can be specified in the `renderLayer` prop).
 
 - `<DefaultLayer />` 
