@@ -1,6 +1,6 @@
 ---
 id: layers
-title: @craftjs/layers
+title: Layers
 ---
 
 import {API} from "../api/API";
