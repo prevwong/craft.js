@@ -3,6 +3,8 @@ id: layers
 title: @craftjs/layers
 ---
 
+import {API} from "../api/API";
+
 An additional package that allows you to display Photoshop-like layer representation of the editor's Nodes.
 
 
@@ -70,7 +72,7 @@ export default function App() {
     ["actions", "Object", [
       ["toggleLayer", "() => void", "Toggle the corresponding Layer's expanded state"]
     ]]
-  ]
+  ]]
 ]} /> 
 
 
