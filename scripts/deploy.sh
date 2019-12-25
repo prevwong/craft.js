@@ -1,3 +1,4 @@
+yarn build && yarn build-site
 STATUS="$(git status)"
 
 if [[ $STATUS == *"nothing to commit, working tree clean"* ]]
