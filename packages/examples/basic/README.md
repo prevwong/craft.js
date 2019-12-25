@@ -1,21 +1,13 @@
-# Next.js example
+#  Basic demo
 
-## How to use
+This example is the end result of the tutorial [guide](https://craft.js/org/docs/basic-tutorial).
 
-Download the example [or clone the repo](https://github.com/mui-org/material-ui):
+Check out the live demo [here](https://craft.js.org/examples/basic)
 
-```sh
-curl https://codeload.github.com/mui-org/material-ui/tar.gz/master | tar -xz --strip=2  material-ui-master/examples/nextjs
-cd nextjs
+## Try it out
+```bash
+> git clone https://github.com/prevwong/craft.js/
+> cd craft.js/packages/examples/basic
+> yarn install
+> yarn dev
 ```
-
-Install it and run:
-
-```sh
-npm install
-npm run dev
-```
-
-## The idea behind the example
-
-[Next.js](https://github.com/zeit/next.js) is a framework for server-rendered React apps.
