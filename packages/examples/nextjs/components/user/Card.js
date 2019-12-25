@@ -13,6 +13,12 @@ export const CardTop = ({children}) => {
   )
 }
 
+CardTop.craft = {
+  rules: {
+    canMoveIn: (incomingNode) => incomingNode.data.type == Text
+  }
+}
+
 export const CardBottom = ({children}) => {
   const { connectors: {connect} } = useNode();
   return (
@@ -20,6 +26,12 @@ export const CardBottom = ({children}) => {
       {children}
     </div>
   )
+}
+
+CardBottom.craft = {
+  rules: {
+    canMoveIn : (incomingNode) => incomingNode.data.type == Button
+  }
 }
 
 export const Card = ({background, padding = 20}) => {

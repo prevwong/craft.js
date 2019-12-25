@@ -1,10 +1,10 @@
-import React, {useState, useCallback, useEffect} from "react";
-import {Slider, FormControl, FormLabel} from "@material-ui/core";
+import React, {useState, useEffect} from "react";
 import { useNode } from "craftjs";
 import ContentEditable from 'react-contenteditable'
+import {Slider, FormControl, FormLabel} from "@material-ui/core";
 
 export const Text= ({text, fontSize, textAlign}) => {
-  const { connectors: {connect, drag}, selected, dragged, setProp } = useNode((state) => ({
+  const { connectors: {connect, drag}, selected, setProp } = useNode((state) => ({
     selected: state.events.selected,
     dragged: state.events.dragged
   }));
