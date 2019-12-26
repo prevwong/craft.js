@@ -8,8 +8,9 @@ import LayerIcon from "../../../../public/icons/layers.svg";
 import { useEditor} from "craftjs";
 
 export const SidebarDiv = styled.div<{ enabled: boolean }>`
-  width: ${props => props.enabled ? 270 : 0}px;
-  background: #fff;
+width: ${props => props.enabled ? 270 : 0}px;
+opacity: ${props => props.enabled ? 1 : 0};
+background: #fff;
 `;
 
 export const Sidebar = () => {
@@ -20,7 +21,7 @@ export const Sidebar = () => {
   return (
     <SidebarDiv
       enabled={enabled}
-      className="transition bg-white w-2"
+      className="sidebar transition bg-white w-2"
     >
       <div className="flex flex-col h-full">
         <SidebarItem icon={CustomizeIcon} title="Customize" height={!layersVisible ? "full" : "55%"} visible={toolbarVisible} onChange={(val) => setToolbarVisible(val)}>

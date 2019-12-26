@@ -24,7 +24,7 @@ const Link = styled.a<any>`
   margin-right:35px;
   font-size:13px;
   position: relative;
-  opacity:${props => props.selected ? 1 : 0.8};
+  opacity: ${props => props.selected ? 1 : 0.8};
   cursor:pointer;
   &:hover {
     opacity:1;
@@ -65,8 +65,9 @@ export const Header = () => {
     enabled: state.options.enabled
   }));
   
+ 
   return (
-    <HeaderDiv enabled={enabled}  className="bg-light-gray-1 text-white transition w-full">
+    <HeaderDiv enabled={enabled} className="header bg-light-gray-1 text-white transition w-full">
       {/* <button onClick={() => setEnabled(!enabled)}>{enabled ? "Disable" : "Enable"}</button>
       <button onClick={() => {
 
@@ -77,7 +78,7 @@ export const Header = () => {
       <div className="items-center flex w-full px-4 ">
        
         <div className="flex-1">
-          <h2 className="mr-5" style={{ fontFamily: "Fakt Pro", fontWeight: 500, fontSize: "20px" }}>craft.js</h2>
+          <h2 className="mr-5 text-xl">craft.js</h2>
         </div>
         <div className="flex items-end justify-end">
           <Link href="https://github.com/prevwong/craft.js">Github</Link>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import cx from "classnames";
 import { useEditor } from "craftjs";
 import { Toolbox } from "./Toolbox";
@@ -7,9 +7,19 @@ import { Header } from "./Header";
 
 export const Viewport: React.FC = ({children}) => {
   const { enabled, connectors } = useEditor(state => ({ enabled: state.options.enabled }));
+  const [loaded, setLoaded] = useState(false);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLoaded(true);
+    }, 1000)
+  }, []);
+ 
   return (
-    <>
+    <div className={cx(["viewport"], {
+      "loaded" : loaded
+    })}>
+     
       <Header  />
       <div style={{paddingTop: "59px"}} className={cx(["flex h-full overflow-hidden flex-row w-full", {
         "h-full": !enabled,
@@ -26,7 +36,9 @@ export const Viewport: React.FC = ({children}) => {
               }])}
               ref={ref => connectors.select(connectors.hover(ref, null), null)}
             >
-              <div className="py-8 relative flex-col flex items-center">
+              <div className={cx(['relative flex-col flex items-center pb-8', {
+                "pt-8" : enabled
+              }])}>
                 {children}
               </div>
             </div>
@@ -34,6 +46,6 @@ export const Viewport: React.FC = ({children}) => {
         </div>
         <Sidebar />
       </div>
-    </>
+    </div>
   )
 }

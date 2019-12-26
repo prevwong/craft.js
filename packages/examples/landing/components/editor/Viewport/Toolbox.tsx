@@ -32,7 +32,7 @@ export const Toolbox = () => {
   const { enabled, connectors: {create }} = useEditor((state) => ({enabled: state.options.enabled}));
 
   return (
-    <ToolboxDiv enabled={enabled && enabled} className="w-12 border-r h-screen bg-white">
+    <ToolboxDiv enabled={enabled && enabled} className="toolbox transition w-12 border-r h-screen bg-white">
       <div className='flex flex-col items-center pt-3'>
         <div ref={ref => create(ref, <Canvas is={Container} background={{ r: 78, g: 78, b: 78, a: 1 }} color={{ r: 0, g: 0, b: 0, a: 1 }}  height="300px" width="300px"></Canvas>)}>
           <Item className='m-2 pb-2 cursor-pointer block'><SquareSvg /></Item>

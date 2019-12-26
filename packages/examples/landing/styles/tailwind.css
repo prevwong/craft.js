@@ -6,6 +6,7 @@
 html, body {
   font-family: 'acumin-pro', sans-serif, serif;
   color: rgb(75,75,75);
+  background:#e0e0e0;
 }
 
 .component-selected  {
@@ -19,3 +20,15 @@ html, body {
 .transition {
   transition:0.4s cubic-bezier(0.19, 1, 0.22, 1);
 }
+
+.viewport { pointer-events:none; }
+.viewport .header { top:-100%; }
+.viewport .toolbox { left:-100%; position:relative; }
+.viewport .sidebar { right:-100%; position:relative; }
+.viewport .craftjs-renderer { opacity: 0; transition-delay: 0.5s; } 
+
+.viewport.loaded { pointer-events: all; }
+.viewport.loaded .header { top: 0; }
+.viewport.loaded .toolbox { left: 0; }
+.viewport.loaded .sidebar { right: 0; }
+.viewport.loaded .craftjs-renderer { opacity: 1; }
