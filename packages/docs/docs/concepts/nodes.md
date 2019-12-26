@@ -4,13 +4,13 @@ title: Nodes
 ---
 
 ## User Elements
-User Elements are React Elements in which the end user will have the ability to manipulate. In other words, these are the elements you will want your users to edit, drag and/or drop in your editor.  
+User Elements are React Elements which the end user will have the ability to manipulate. In other words, these are the elements you will want your users to edit, drag and/or drop in your editor.  
 
 Just like React Elements, these can be either simple HTML tags or React Components. We'll refer to User Elements that are React Components simply as *User Components*.
 
 
 ## Node
-Craft.js maintains an internal state comprised of objects called Nodes, which represents and manages Use Elements that are rendered in the editor. These Nodes contains information about their corresponding elements, such as it's type, current props, DOM element, parent Node and so on. Hence, every User Element is rendered and managed by their corresponding Node.
+Craft.js maintains an internal state comprised of objects called Nodes, which represents and manages User Elements that are rendered in the editor. These Nodes contains information such as the element type, current props, DOM element, parent Node and so on. Hence, every User Element is rendered and managed by their corresponding Node.
 
 ## Canvas
 A Canvas is a special type of Node that is able to store child Nodes. The child Node's User Element will be made draggable.

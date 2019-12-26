@@ -4,7 +4,10 @@ title: useNode()
 sidebar_label: useNode()
 ---
 
-import {API} from "./API";
+import {API, Badge} from "./API";
+
+<Badge type="hook" />
+
 
 A Hook to that provides methods and state information related to the corresponding `Node` that manages the current component. 
 
@@ -163,4 +166,48 @@ const Example = ({someProp}) => {
     </div>
   )
 }
+```
+
+
+## Legacy API
+If you are using Class Components, use `connectNode` instead.
+
+<Badge type="hoc" title={false} />
+
+
+### Parameters
+<API items={[
+  ["collector", "(node: Node) => Collected", "A function that collects relevant state information from the corresponding Node. The component will re-render when the values returned by this function changes."]
+]} /> 
+
+### Injected Props
+<API items={[
+  ["...useNode(collector)", "Object", "Identical return values as the useNode() hook above"]
+]} /> 
+
+
+### Example
+```jsx
+
+import {connectNode} from "@craftjs/core";
+class ButtonInner extends React.Component {
+  render() {
+    const { connectors: {connect, drag}, isHovered, ...compProps } = this.props;
+    const { text, color  } = compProps;
+
+    return (
+      <button ref={ ref => connect(drag(ref))} style={{margin: "5px", backgroundColor: color}} >
+        {text}
+        {
+          isHovered ? "I'm being hovered" : null
+        }
+      </button>
+    );
+  }
+};
+
+export const Button = connectNode((node) => ({
+  isHovered: node.events.hovered
+}))(ButtonInner);
+
 ```

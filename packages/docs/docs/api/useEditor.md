@@ -4,7 +4,10 @@ title: useEditor()
 sidebar_label: useEditor()
 ---
 
-import {API} from "./API";
+import {API, Badge} from "./API";
+
+<Badge type="hook" />
+
 
 A Hook to that provides methods and state information associated with the entire editor.
 
@@ -28,7 +31,8 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
     ["connectors", "Object", [
       ["select", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when clicked will in turn click the specified Node's user component"],
       ["hover", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when hovered will in turn hover the specified Node's user component"],
-      ["drag", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when dragged will move the specified Node's user component. Only applicable if the component is rendered as an immediate child of a <Canvas /> component."]
+      ["drag", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when dragged will move the specified Node's user component. Only applicable if the component is rendered as an immediate child of a <Canvas /> component."],
+      ["create", "(dom: HTMLElement, userElement: React.ReactElement) => HTMLElement", "Specifies the DOM that when dragged will create a new instance of the specified User Element at the drop location."]
     ]],
     ["actions", "Object", [
       ["add", "(nodes: Node | Node[], parentId?: String) => void", "Add Node(s) to the given parent node ID. By default the parentId is the ROOT_ID"],
@@ -232,4 +236,51 @@ const Example = () => {
     </div>
   )
 }
+```
+
+
+## Legacy API
+If you are using Class Components, use `connectEditor` instead.
+
+<Badge type="hoc" title={false} />
+
+
+### Parameters
+<API items={[
+  ["collector", "(node: Node) => Collected", "A function that collects relevant state information from the corresponding Node. The component will re-render when the values returned by this function changes."]
+]} /> 
+
+### Injected Props
+<API items={[
+  ["...useEditor(collector)", "Object", "Identical return values as the useEditor() hook above"]
+]} /> 
+
+
+### Example
+```jsx
+import { connectEditor } from "@craftjs/core";
+
+class SidebarInner extends React.Component {
+  render() {
+    const { actions, query, enabled, currentSelectedNodeId } = this.props;
+    return (
+      <div>
+        <input type="checkbox" value={enabled} onChange={
+          e => actions.setOptions(options => options.enabled = !enabled)
+        } />
+        <button 
+          onClick={() => {
+            console.log(query.serialize())
+          }}
+        >
+            Serialize JSON to console
+        </button>
+      </div>
+    )
+  }
+}
+
+export const Sidebar = connectEditor((state) => ({
+  currentSelectedNodeId: state.events.selected
+}))(SidebarInner);
 ```

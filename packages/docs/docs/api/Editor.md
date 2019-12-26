@@ -4,7 +4,9 @@ title: <Editor />
 sidebar_label: <Editor />
 ---
 
-import {API} from "./API";
+import {API, Badge} from "./API";
+
+<Badge type="component" />
 
 Creates the context that stores the editor state.
 

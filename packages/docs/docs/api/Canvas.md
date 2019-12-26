@@ -4,7 +4,9 @@ title: <Canvas />
 sidebar_label: <Canvas />
 ---
 
-import {API} from "./API";
+import {API, Badge} from "./API";
+
+<Badge type="component" />
 
 Creates a Canvas Node and converts all immediate children into Nodes.
 

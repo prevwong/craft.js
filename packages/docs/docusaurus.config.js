@@ -64,7 +64,7 @@ module.exports = {
             },
             {
               label: 'NPM',
-              href: 'https://npmjs.com/package/craft.js',
+              href: 'https://npmjs.com/package/@craftjs/core',
             },
           ],
         },

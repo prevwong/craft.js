@@ -4,7 +4,9 @@ title: <Frame />
 sidebar_label: <Frame />
 ---
 
-import {API} from "./API";
+import {API, Badge} from "./API";
+
+<Badge type="component" />
 
 Frame defines the editable area in your page editor. It is rendered based on the editor's internal state (i.e. Nodes).
 

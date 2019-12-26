@@ -25,8 +25,6 @@ npm install --save @craftjs/core
 ## Designing an user interface
 With Craft.js you decide how your editor should look and function. So, let's build a user interface for our page editor. We'll add the page editor functionalities later.
 
-<Image img="tutorial/interface.png" />
-
 
 To make our lives easier, we'll use some external packages for designing our user interfaces
 ```bash
@@ -94,8 +92,8 @@ export const Card = ({background, padding = 20}) => {
   return (
     <Container background={background} padding={padding}>
       <div ref={connect} className="text-only" style={{padding: "10px", marginBottom:"10px", borderBottom: "1px solid #eee", display: "flex", flexDirection: "column", alignItems:"flex-start"}}>
-        <Text text="Title" fontSize="20" />
-        <Text text="Subtitle" fontSize="15" />
+        <Text text="Title" fontSize={20} />
+        <Text text="Subtitle" fontSize={15} />
       </div>
       <div className="button-only">
         <Button size="small">Learn More</Button>
@@ -248,6 +246,10 @@ export default function App() {
 }
 
 ```
+
+
+<Image img="tutorial/interface.png" />
+
 
 
 ## Implementing Craft.js
@@ -420,8 +422,8 @@ export const Card = (({bg})) => {
   return (
     <Container background={background} padding={padding}>
       <Canvas id="text">
-        <Text text="Title" fontSize="20" />
-        <Text text="Subtitle" fontSize="15" />
+        <Text text="Title" fontSize={20} />
+        <Text text="Subtitle" fontSize={15} />
       </Canvas>
       <Canvas id="buttons">
         <Button size="small" text="Learn more" />
@@ -485,8 +487,8 @@ export const Card = ({background, padding = 20}) => {
   return (
     <Container background={background} padding={padding}>
       <Canvas id="text" is={CardTop}>
-        <Text text="Title" fontSize="20" />
-        <Text text="Subtitle" fontSize="15" />
+        <Text text="Title" fontSize={20} />
+        <Text text="Subtitle" fontSize={15} />
       </Canvas>
       <Canvas id="buttons" is={CardBottom}>
         <Button size="small" text="Learn more" />

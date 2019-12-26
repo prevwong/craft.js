@@ -4,7 +4,10 @@ title: Node
 sidebar_label: Node
 ---
 
-import {API} from "./API";
+import {API, Badge} from "./API";
+
+<Badge type="type" />
+
 
 ## Reference
 ### Properties

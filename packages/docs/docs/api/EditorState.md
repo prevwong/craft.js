@@ -4,7 +4,9 @@ title: EditorState
 sidebar_label: EditorState
 ---
 
-import {API} from "./API";
+import {API, Badge} from "./API";
+
+<Badge type="type" />
 
 ## Reference
 ### Properties

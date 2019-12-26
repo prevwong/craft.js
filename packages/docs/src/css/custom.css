@@ -122,3 +122,23 @@ li.api-item {
 .img-wrapper > div > header > div:nth-child(3) {
   background : rgb(88, 203, 66);
 }
+
+.badge-wrapper {
+  display:flex;
+  width:100%;
+}
+.badge {
+  display: inline-block;
+  color: #fff;
+  background: #000;
+  padding: 10px 20px;
+  border-radius: 100px;
+  top: -10px;
+  position: relative;
+  border: none;
+}
+.badge.badge-title { top: -20px; }
+
+.badge.badge-component { background : #141890; }
+.badge.badge-hook { background: #4e31c5; }
+.badge.badge-hoc { background: #9284ca; }

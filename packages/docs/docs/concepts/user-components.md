@@ -3,7 +3,9 @@ id: user-components
 title: User components
 ---
 
-User Components are intended to be written just like any other React component. Let's start with a simple Hero component like so:
+User Components are intended to be written just like any other React Component. 
+
+Let's start with a simple Hero component:
 
 ```jsx
 const Hero = ({title}) => {
@@ -34,25 +36,48 @@ Hero.craft = {
 }
 ```
 
-We'll explain what each of these values are in the following sections.
+We'll explore each of these values in the following sections.
 
 ## Connectors
 The first thing we would want to do is to actually let Craft.js to manage the DOM for our component. 
 
-- `connect`: specifies the DOM that represents the user component. The dimensions of the DOM specified will taken into account during drag/drop. 
-- `drag`: specifies the DOM element that should be made draggable. When the user drags this element will be considered as dragged the entire component, thus moving the entire component to the drop location. Only takes effect if the component is rendered as an immediate child of `<Canvas />`
+- `connect`: specifies the DOM that represents the User Component.  If the component's corresponding Node is a Canvas, then this also defines the area that is droppable.
+- `drag`: specifies the DOM element that should be made draggable. When the user drags this element will be considered as dragged the entire component, thus moving the entire component to the drop location. This connector only takes effect if the component's corresponding node is a Canvas Node.
 
-```jsx
-const Hero = ({title}) => {
+```jsx {17,18,21}
+const Hero = ({title, children}) => {
   const { connectors: {connect, drag} } = useNode();
-
   return (
     <div ref={connect(drag)}>
       <h2>{title}</h2>
+      <div>
+        {children}
+      </div>
     </div>
   )
 }
+
+const App = () => {
+  return (
+    <Editor resolvers={{Hero}}>
+      <Frame>
+        <Canvas is={Hero}> // (i)
+          <Hero> // (ii)
+            <h2>Hi</h2>
+          </Hero>
+          <Canvas is={Hero}> // (iii)
+            <h2>Hi</h2>
+          </Canvas>
+        </Canvas>
+      </Frame>
+    </Editor>
+  )
+}
 ```
+
+- i. `Hero` is being rendered with a Canvas Node, thus it defines a droppable region. However, since it itself is not a child of a Canvas Node, thus it is not draggable (the `drag` handler will not do anything).
+- ii. `Hero` is an immediate child of a Canvas Node - it is draggable.
+- iii. `Hero` is an immediate child of a Canvas Node and is rendered with a Canvas Node - it is both draggable and droppable.
 
 ## Props manipulation
 You've probably seen page editors where you could directly interact with the components and manipulate them. For instance, drag to resize an image or visually edit a text. This is easily achievable with Craft.js as well.
@@ -116,7 +141,7 @@ Hero.craft = {
 ```
 
 ## Specify drag/drop rules
-You may want to restrict when your components could be dragged, or what goes in and out of your component. These rules can be specified in the static `craft.rules`:
+You may want to restrict how your components are dragged, or what goes in and out of your component. These rules can be specified in the static `craft.rules`:
 
 - `canDrag(currentNode)` : Specifies if a component can be dragged. Applicable only to components whose corresponding `Node` are direct children of a `Canvas`.
 - `canMoveIn(incomingNode, currentNode)`: Decide if an incoming Node can be dropped into the current component. Applicable only to components whose corresponding `Node` is a `Canvas`.
