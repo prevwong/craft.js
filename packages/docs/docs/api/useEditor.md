@@ -28,14 +28,14 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
     ["connectors", "Object", [
       ["select", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when clicked will in turn click the specified Node's user component"],
       ["hover", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when hovered will in turn hover the specified Node's user component"],
-      ["drag", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when dragged will move the specified Node's user component"]
+      ["drag", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when dragged will move the specified Node's user component. Only applicable if the component is rendered as an immediate child of a <Canvas /> component."]
     ]],
     ["actions", "Object", [
       ["add", "(nodes: Node | Node[], parentId?: String) => void", "Add Node(s) to the given parent node ID. By default the parentId is the ROOT_ID"],
       ["delete", "(nodeID: String) => void", "Delete the specified Node"],
-      ["move", "(nodeId: String, targetParentId: String, index: number) => void", "Move Node to the specified parent Node at the given index. Subject to the conditions in query.canDropInParent()"],
+      ["move", "(nodeId: String, targetParentId: String, index: number) => void", "Move a Node to the specified parent Node at the given index. Subject to the conditions in query.canDropInParent()"],
       ["setProp", "(nodeId: String, props: Object) => void", "Manipulate the props of the given Node"],
-      ["setHidden", "(nodeId: String, bool: boolean) => void", "When set to true, the user component of the specified Node will be hidden"],
+      ["setHidden", "(nodeId: String, bool: boolean) => void", "When set to true, the user component of the specified Node will be hidden, but not removed"],
       ["setCustom", "(nodeId: String, custom: (custom: Object) => void", "Update the given Node's custom properties"],
       ["setOptions", "(options: Object) => void", "Update the editor's options. The options object passed is the same as the  `<Editor />` props."]
     ]],
@@ -61,7 +61,6 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
 ]} /> 
 
 ## Examples
-`useEditor` is crucial when you are building components that interacts with the [editor](../concepts/editor-components).
 
 ### Collecting state information
 ```tsx

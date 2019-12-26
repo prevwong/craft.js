@@ -12,7 +12,7 @@ import {API} from "./API";
   ["id", "NodeId", "A randomly generated unique id"],
   ["data", "Object", [
     ["props", "Record<String, any>", "The current props for the user element"],
-    ["type", "React.ElementType", "The type of user element"],
+    ["type", "React.ElementType", "The type of User Element"],
     ["name", "String", "Name of the User Element"],
     ["displayName", "String", "By default, it will be set to the same value as 'name'. But User Components have the ability to opt for a more user-friendly name"],
     ["isCanvas", "boolean", "True if the current Node is a Canvas Node"],

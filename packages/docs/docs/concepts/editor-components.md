@@ -5,7 +5,7 @@ title: Interacting with the Editor
 
 Previously, we have checked out user components and how to write them; but what about all the other components that are integral to our page editor like a Toolbar for users to edit components, or maybe a layers panel. These components, while they don't deal with any specific `Node`, they need to read the internal state and be able to modify it.
 
-The `useEditor` hook allows us to access and manipulate the entire editor internal state. Essentially, this is similar to the `useNode` hook we have seen previously, except this deals with the entire editor rather than with a particular `Node`.
+The `useEditor` hook allows us to read and manipulate the entire editor internal state. Essentially, this is similar to the `useNode` hook we have seen previously, except this deals with the entire editor rather than with a particular `Node`.
 
 ```jsx
 const { actions, connectors, ...collected } = useEditor((state) => {});
@@ -32,27 +32,26 @@ const App = () => {
 ```
 
 ## Changing Node state
-In user components, we have seen connectors like `connect` and `drag` which are used to manage the DOM and manage a node's event state - `selected`, `hover` and `dragged`. 
+In User Components, we have seen connectors like `connect` and `drag` which are used to manage the DOM and manage a node's event state - `select`, `hover` and `drag`. 
 
 Now, what if we would need to modify a node's event state ?
-
 
 Let's say, maybe you are creating a layers panel to display all nodes as a Photoshop-like layers and would like to change the particular Node's event state when the user clicks/hovers/drags your layers ?
 
 ```jsx
 const LayerItem = (nodeId) => {
-  const { connectors: { selected }} = useEditor();
+  const { connectors: { select }} = useEditor();
 
   return (
    <div>
-      <a ref={ref => selected(ref, nodeId)}>Click me to select node {nodeId}</a>
+      <a ref={ref => select(ref, nodeId)}>Click me to select node {nodeId}</a>
    </div>
   );
 }
 ```
 
 ## Manipulating state
-We can use the `actions` provided in order to manipulate the editor's internal state
+We can use the `actions` provided to manipulate the editor's internal state
 
 ```jsx
 const DeleteButtonThingy = () => {

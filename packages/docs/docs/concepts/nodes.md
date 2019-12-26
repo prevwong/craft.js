@@ -10,12 +10,12 @@ Just like React Elements, these can be either simple HTML tags or React Componen
 
 
 ## Node
-Craft.js maintains an internal state comprised of objects called Nodes, which represents and manages user components that are rendered in the editor. These Nodes contains information about their corresponding components, such as it's type, current props, DOM element, parent Node and so on. Hence, every user component is rendered and managed by their corresponding Node.
+Craft.js maintains an internal state comprised of objects called Nodes, which represents and manages Use Elements that are rendered in the editor. These Nodes contains information about their corresponding elements, such as it's type, current props, DOM element, parent Node and so on. Hence, every User Element is rendered and managed by their corresponding Node.
 
 ## Canvas
-A Canvas is a special type of Node that is able to store child Nodes. The child Node's components will be made draggable.
+A Canvas is a special type of Node that is able to store child Nodes. The child Node's User Element will be made draggable.
 
-Essentially, if a user component is managed by a Canvas node, that would effectively turn that component into a droppable region where users can drag and drop components into and out.
+Essentially, if a User Element is managed by a Canvas node, that would effectively turn that component into a droppable region where users can drag and drop components into and out.
 
 
 In a nutshell:
@@ -25,7 +25,7 @@ In a nutshell:
 
 
 ## How Nodes are created
-We know what Nodes are and that every user component must be represented by a `Node`; but how do we actually represent our components as a Node ? 
+We know what Nodes are and that every user component must be represented by a `Node`; but how do we actually represent our React elements as Nodes ? 
 
 `<Canvas />` is a React component provided by Craft.js which automatically creates a Canvas node and a Node for each of its immediate child. 
 

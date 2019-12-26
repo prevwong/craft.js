@@ -12,8 +12,8 @@ Creates a Canvas Node and converts all immediate children into Nodes.
 ## Reference
 ### Props
 <API items={[
-  ["is", "React.ElementType", "A map of the user components that will be used in the editor"],
-  ["id", "String", "Required if the <Canvas /> is being used inside of a User Component"],
+  ["is", "React.ElementType", "A map of User Components that will be used in the editor"],
+  ["id", "String", "Required if the <Canvas /> is being used inside a User Component"],
   ["...elementProps", "Object", "The props of the element specified in 'is'"],
 ]} /> 
 

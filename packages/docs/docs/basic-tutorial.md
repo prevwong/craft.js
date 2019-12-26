@@ -23,18 +23,14 @@ npm install --save craftjs
 
 
 ## Designing an user interface
-<Image img="tutorial/interface.png" />
-
 With Craft.js you decide how your editor should look and function. So, let's build a user interface for our page editor. We'll add the page editor functionalities later.
 
-We'll be using the `material-ui` library for this tutorial:
-```bash
-yarn add material-ui
-```
+<Image img="tutorial/interface.png" />
 
-Additionally, we'll also need `react-contenteditable` and `material-ui-color-picker` later on
+
+To make our lives easier, we'll use some external packages for designing our user interfaces
 ```bash
-yarn add react-contenteditable material-ui-color-picker
+yarn add material-ui react-contenteditable material-ui-color-picker
 ```
 
 ### User Components
@@ -1030,6 +1026,9 @@ export const Topbar = () => {
   )
 };
 ```
+
+<Image img="tutorial/topbar.gif" />
+
 
 ## You made it 🎉
 We've made it till the end! Not too bad right ? Hopefully, you were able to see the simplicity of building a fully working page editor with Craft.js

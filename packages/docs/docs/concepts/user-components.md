@@ -3,7 +3,7 @@ id: user-components
 title: User components
 ---
 
-A user component is intended to be written just like any other React component. Let's start with a simple Hero component like so:
+User Components are intended to be written just like any other React component. Let's start with a simple Hero component like so:
 
 ```jsx
 const Hero = ({title}) => {
@@ -27,8 +27,8 @@ Hero.craft = {
   defaultProps: {},
   rules: {
     canDrag: () => true,
-    outgoing: () => true,
-    incoming: () => true
+    canMoveIn: () => true,
+    canMoveOut: () => true
   },
   related: {}
 }
@@ -39,8 +39,8 @@ We'll explain what each of these values are in the following sections.
 ## Connectors
 The first thing we would want to do is to actually let Craft.js to manage the DOM for our component. 
 
-- `connect`: specifies the DOM that represents the user component. The dimensions of the DOM specified will taken into account during drag/drop.
-- `drag`: specifies the DOM element that should be made draggable. When the user drags this element will be considered as dragged the entire component, thus moving the entire component to the drop location.
+- `connect`: specifies the DOM that represents the user component. The dimensions of the DOM specified will taken into account during drag/drop. 
+- `drag`: specifies the DOM element that should be made draggable. When the user drags this element will be considered as dragged the entire component, thus moving the entire component to the drop location. Only takes effect if the component is rendered as an immediate child of `<Canvas />`
 
 ```jsx
 const Hero = ({title}) => {
@@ -229,9 +229,9 @@ const Hero = ({title}) => {
 }
 ```
 
-But wait, what if I want to define rules for these 2 new droppable regions ? 
+But wait, what if we want to define rules for these 2 new droppable regions ? 
 
-The `is` is used to specify the `type` of the User Element for the Canvas Node. Hence, instead of specifying a simple DOM element which we don't have much control over - let's specify a brand new User Component.
+The `is` prop of the `<Canvas />` component is used to specify the `type` of the User Element for the Canvas Node. Hence, instead of specifying a simple DOM element which we don't have much control over - let's specify a brand new User Component.
 
 
 ```jsx {1-23,29,33}

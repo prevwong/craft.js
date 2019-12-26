@@ -86,7 +86,7 @@ const TextComponent = ({text}) => {
 With this, you could easily implement content editable text or drag-to-resize components - just as any modern page editor would have.
 
 ### User components with droppable regions
-Let's say we need a "Container" component which users can drop into the editor. Additionally, we would also like them to be able to drag and drop other components into the Container. 
+Let's say we need a "Container" component which users can drop into the editor. Additionally, we would also like our users to be able to drag and drop other components into the Container. 
 
 In Craft.js, it's as simple as calling the `<Canvas />`
 
@@ -107,7 +107,9 @@ const Container = () => {
 ```
 
 ### Extensible
-Craft.js provides and expressive API which allows you to easily manipulate the editor state. Let's say you would like to implement a copy function for a component:
+Craft.js provides and expressive API which allows you to easily manipulate the editor state. 
+
+Let's say you would like to implement a copy function for a component:
 ```jsx
 import {useEditor, useNode} from "craftjs";
 const Container = () => {
@@ -141,7 +143,7 @@ const SaveButton = () => {
 }
 ```
 
-Of course, Craft.js will also able to recreate the entire state from the JSON string.
+Of course, Craft.js will also able to recreate the entire state from the serialised JSON string.
 ```jsx
 const App = () => {
   const jsonString = /* get JSON from server */

@@ -26,13 +26,13 @@ const { connectors, setProp, ...collected } = useNode(collector);
 
 ### The default screen
 ```tsx {9,10,16,17}
-import {Craft, Frame, Canvas} from "cradt";
+import {Editor, Frame, Canvas} from "cradt";
 
 const App = () => {
   return (
     <div>
       <h2>My App!</h2>
-      <Craft>
+      <Editor>
         <h2>My Page Editor</h2>
         <Frame> 
           <Canvas is={Container}> // defines the Root Node
@@ -43,7 +43,7 @@ const App = () => {
             </Canvas>
           </Canvas>
         </Frame>
-      </Craft>
+      </Editor>
     </div>
   )
 }
@@ -51,13 +51,13 @@ const App = () => {
 
 ### Loading from serialised Nodes
 ```tsx {10}
-import {Craft, Frame, Canvas} from "cradt";
+import {Editor, Frame, Canvas} from "cradt";
 
 const App = () => {
   return (
     <div>
       <h2>My App!</h2>
-      <Craft>
+      <Editor>
         <h2>My Page Editor</h2>
         <Frame
           nodes='{"canvas-ROOT":{"type":"div","isCanvas":true,"props":{},"parent":null,"displayName":"div","custom":{},"nodes":["node-sdiwzXkvQ","node-rGFDi0G6m","node-yNBLMy5Oj"]},"node-sdiwzXkvQ":{"type":{"resolvedName":"Card"},"props":{},"parent":"canvas-ROOT","displayName":"Card","custom":{},"_childCanvas":{"main":"canvas-_EEw_eBD_","second":"canvas-lE4Ni9oIn"}}'
@@ -70,7 +70,7 @@ const App = () => {
             </Canvas>
           </Canvas>
         </Frame>
-      </Craft>
+      </Editor>
     </div>
   )
 }

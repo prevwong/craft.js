@@ -77,7 +77,7 @@ module.exports = {
             },
             {
               label: 'LinkedIn',
-              href: 'https://linkedin.com/prevwong',
+              href: 'https://www.linkedin.com/in/prev/',
             },
             {
               label: 'Dribbble',
