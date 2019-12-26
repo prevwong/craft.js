@@ -1,6 +1,6 @@
 import { NodeId, Node, Nodes, Options, NodeEvents } from "../interfaces";
 import { EditorState, Indicator } from "../interfaces";
-import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID, ROOT_NODE, CallbacksFor, QueryCallbacksFor } from "craftjs-utils";
+import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID, ROOT_NODE, CallbacksFor, QueryCallbacksFor } from "@craftjs/utils";
 import { isCanvas, isTopLevelCanvas } from "../nodes";
 import { QueryMethods } from "./query";
 import { updateEventsNode } from "../utils/updateEventsNode";

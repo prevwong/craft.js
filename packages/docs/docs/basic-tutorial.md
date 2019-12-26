@@ -13,12 +13,12 @@ In this tutorial, we'll be designing a simple page editor. It's recommended that
 ## Installation
 
 ```bash
-yarn add craftjs
+yarn add @craftjs/core
 ```
 
 or with npm:
 ```bash
-npm install --save craftjs
+npm install --save @craftjs/core
 ```
 
 
@@ -274,7 +274,7 @@ import { Button } from '../components/user/Button';
 import { Card } from '../components/user/Card';
 import { Text } from '../components/user/Text';
 
-import {Editor, Frame, Canvas} from "craftjs";
+import {Editor, Frame, Canvas} from "@craftjs/core";
 
 export default function App() {
   return (
@@ -341,7 +341,7 @@ The first thing we will need to do is to let Craft.js to manage the DOM of our c
 // components/user/Text.js
 import React from "react";
 import { Typography } from "@material-ui/core";
-import { useNode } from "craftjs";
+import { useNode } from "@craftjs/core";
 
 export const Text = ({text}) => {
   const { connectors: {connect, drag} } = useNode();
@@ -443,7 +443,7 @@ Hence, we can specify and create a new User Component and define rules via the `
 import React  from "react";
 import Text from "./Text";
 import Button from "./Button";
-import { Canvas, useNode } from "craftjs";
+import { Canvas, useNode } from "@craftjs/core";
 
 import { Container }  from "./Container";
 
@@ -524,7 +524,7 @@ The `useEditor` also provides `connectors` - the one we are interested in right 
 // components/Toolbox.js
 import React from "react";
 import { Box, Typography, Grid, Button as MaterialButton } from "@material-ui/core";
-import { useEditor } from "craftjs";
+import { useEditor } from "@craftjs/core";
 import { Card } from "./user/Card";
 import { Button } from "./user/Button";
 import { Text } from "./user/Text";
@@ -891,7 +891,7 @@ Now, let's replace the placeholder text fields in our Settings Panel with the `s
 // components/SettingsPanel.js
 
 import { Box, Chip, Grid, Typography, Button as MaterialButton } from "@material-ui/core";
-import { useEditor } from "craftjs";
+import { useEditor } from "@craftjs/core";
 
 export const SettingsPanel = () => {
   const { selected } = useEditor((state) => {
@@ -993,7 +993,7 @@ Lastly, the `useEditor` hook also provides `query` methods which provides inform
 // components/Topbar.js
 import React from "react";
 import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton } from "@material-ui/core";
-import { useEditor } from "craftjs";
+import { useEditor } from "@craftjs/core";
 
 export const Topbar = () => {
   const { actions, query, enabled } = useEditor((state) => ({

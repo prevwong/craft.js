@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NextSeo } from 'next-seo';
-import { Editor, Frame, Canvas} from "craftjs";
+import { Editor, Frame, Canvas} from "@craftjs/core";
 import { Container, Text } from "../components/selectors";
 import { createMuiTheme } from "@material-ui/core"
 import { ThemeProvider } from '@material-ui/styles';

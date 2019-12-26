@@ -1,5 +1,5 @@
 import React from "react";
-import { useEditor} from "craftjs";
+import { useEditor} from "@craftjs/core";
 export * from "./ToolbarItem";
 export * from "./ToolbarSection";
 export * from "./ToolbarTextInput";

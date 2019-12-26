@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton } from "@material-ui/core";
-import { useEditor } from "craftjs";
+import { useEditor } from "@craftjs/core";
 
 export const Topbar = () => {
   const { actions, query, enabled } = useEditor((state) => ({

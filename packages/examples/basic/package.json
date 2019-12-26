@@ -5,7 +5,7 @@
   "dependencies": {
     "@material-ui/core": "latest",
     "clsx": "latest",
-    "craftjs": "*",
+    "@craftjs/core": "*",
     "material-ui-color-picker": "^3.2.0",
     "next": "latest",
     "next-transpile-modules": "^2.3.1",

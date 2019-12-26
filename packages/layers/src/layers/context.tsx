@@ -1,5 +1,5 @@
 import React from "react";
-import { NodeId } from "craftjs";
+import { NodeId } from "@craftjs/core";
 import { LayerNode } from "./LayerNode";
 
 export type LayerContext = {

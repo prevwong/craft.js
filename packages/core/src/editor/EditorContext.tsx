@@ -3,7 +3,7 @@ import { Options } from "../interfaces";
 import { createOptions } from "./createOptions";
 import { EditorStore, useEditorStore } from "../editor/store";
 import { Nodes, EditorEvents } from "../interfaces";
-import { ROOT_NODE } from "craftjs-utils";
+import { ROOT_NODE } from "@craftjs/utils";
 import { Canvas } from "../nodes";
 import { transformJSXToNode } from "../utils/transformJSX";
 

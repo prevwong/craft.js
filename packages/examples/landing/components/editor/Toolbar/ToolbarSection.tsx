@@ -1,6 +1,6 @@
 import React from 'react';
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Grid, Divider } from '@material-ui/core'
-import { useNode } from 'craftjs';
+import { useNode } from "@craftjs/core";
 import { makeStyles } from '@material-ui/core/styles';
 const usePanelStyles = makeStyles(_ => ({
   root: {

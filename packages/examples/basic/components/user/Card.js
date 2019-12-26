@@ -2,7 +2,7 @@ import React  from "react";
 import { Container, ContainerSettings, ContainerDefaultProps } from "./Container";
 import { Text } from "./Text";
 import { Button } from "./Button";
-import { Canvas, useNode } from "craftjs";
+import { Canvas, useNode } from "@craftjs/core";
 
 export const CardTop = ({children}) => {
   const { connectors: {connect} } = useNode();

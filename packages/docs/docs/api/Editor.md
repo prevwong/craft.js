@@ -49,7 +49,7 @@ const App = () => {
 By default every user element is rendered just as is. However, if you'd like to for example - wrap every user element inside a `div`, you can do so through the `onRender` prop:
 
 ```jsx {3-9,13}
-import {Editor} from "craftjs";
+import {Editor} from "@craftjs/core";
 
 const RenderNode = ({element}) => {
   return (

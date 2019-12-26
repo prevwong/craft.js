@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import { Resizable } from "re-resizable";
-import { isRoot, useNode, useEditor } from "craftjs";
+import { isRoot, useNode, useEditor } from "@craftjs/core";
 import cx from "classnames";
 import { isPercentage, pxToPercent, percentToPx, getElementDimensions } from "../../utils/numToMeasurement";
 import { debounce } from "lodash";

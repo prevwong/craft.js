@@ -1,5 +1,5 @@
 import React from "react";
-import { useNode } from "craftjs";
+import { useNode } from "@craftjs/core";
 import { Text } from "../Text";
 import { ButtonSettings } from "./ButtonSettings";
 import styled from "styled-components";

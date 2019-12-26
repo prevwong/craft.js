@@ -1,6 +1,6 @@
 import React  from "react";
 import {Button as MaterialButton, FormControl, FormLabel, RadioGroup,Radio, FormControlLabel} from "@material-ui/core";
-import {useNode} from "craftjs";
+import {useNode} from "@craftjs/core";
 
 export const Button = ({size, variant, color, text}) => {
   const { connectors: {connect, drag} } = useNode();

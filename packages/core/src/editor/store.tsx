@@ -1,4 +1,4 @@
-import { useReduxMethods, SubscriberAndCallbacksFor } from "craftjs-utils";
+import { useReduxMethods, SubscriberAndCallbacksFor } from "@craftjs/utils";
 import { EditorEvents, Options } from "../interfaces";
 import Actions from "./actions";
 import { QueryMethods } from "./query";

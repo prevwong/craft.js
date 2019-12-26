@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useCallback } from "react";
-import { useNode, isDeletable, useEditor } from "craftjs";
+import { useNode, isDeletable, useEditor } from "@craftjs/core";
 import styled from "styled-components";
-import { isMoveable } from "craftjs";
+import { isMoveable } from "@craftjs/core";
 import Move from "../../public/icons/move.svg"
 import Delete from "../../public/icons/delete.svg"
 import ReactDOM from "react-dom";

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useLayer } from "../useLayer";
 import { DefaultLayerHeader } from "./index";
-import { useEditor, hasTopLevelCanvases } from "craftjs";
+import { useEditor, hasTopLevelCanvases } from "@craftjs/core";
 
 
 const LayerNodeDiv = styled.div<{expanded: boolean; hasCanvases: boolean; hovered: boolean}>`

@@ -1,5 +1,5 @@
 {
-  "name": "craftjs-layers",
+  "name": "@craftjs/layers",
   "version": "1.0.0",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -10,8 +10,8 @@
     "clean": "rimraf node_modules lib dist"
   },
   "dependencies": {
-    "craftjs": "*",
-    "craftjs-utils": "*",
+    "@craftjs/core": "*",
+    "@craftjs/utils": "*",
     "lodash": "^4.17.15"
   },
   "peerDependencies": {

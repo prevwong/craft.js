@@ -2,7 +2,7 @@ import React  from "react";
 import {Card as MaterialCard, CardContent, Slider} from "@material-ui/core";
 import Text from "./Text";
 import Button from "./Button";
-import { Canvas, useNode } from "craftjs";
+import { Canvas, useNode } from "@craftjs/core";
 import {Paper, FormControl, FormLabel, RadioGroup,Radio, FormControlLabel} from "@material-ui/core";
 import ColorPicker from 'material-ui-color-picker'
 

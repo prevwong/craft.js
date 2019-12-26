@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo, useEffect, useCallback } from "react";
-import { useEditor, isCanvas, NodeId, Indicator, isTopLevelCanvas, Node } from "craftjs";
+import { useEditor, isCanvas, NodeId, Indicator, isTopLevelCanvas, Node } from "@craftjs/core";
 import { useLayerManager } from "../manager/useLayerManager";
-import { useHandlerGuard, ROOT_NODE, RenderIndicator } from "craftjs-utils";
+import { useHandlerGuard, ROOT_NODE, RenderIndicator } from "@craftjs/utils";
 import { LayerState } from "../interfaces";
 // import { debounce } from "lodash";
 

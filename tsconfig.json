@@ -4,19 +4,19 @@
    "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "craftjs": [
+      "@craftjs/core": [
         "packages/core/src/index"
       ],
-      "craftjs/*": [
+      "@craftjs/*": [
         "packages/core/src/*"
       ],
-      "craftjs-layers": [
+      "@craftjs/layers": [
         "packages/layers/src/index"
       ],
-      "craftjs-utils": [
+      "@craftjs/utils": [
         "packages/utils/src/index"
       ],
-      "craftjs-utils/*": [
+      "@craftjs/utils/*": [
         "packages/utils/src/*"
       ]
     }

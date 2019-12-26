@@ -27,7 +27,7 @@ import {
   getDOMInfo,
   ERROR_CANNOT_DRAG,
   ERROR_MOVE_ROOT_CANVAS,
-} from "craftjs-utils";
+} from "@craftjs/utils";
 import findPosition from "../events/findPosition";
 import { getDeepNodes } from "../utils/getDeepNodes";
 import { transformJSXToNode } from "../utils/transformJSX";

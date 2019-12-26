@@ -1,7 +1,7 @@
 import { Node  } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { useInternalEditor } from "../editor/useInternalEditor";
-import {  useConnectorHooks, ConnectorElementWrapper } from "craftjs-utils";
+import {  useConnectorHooks, ConnectorElementWrapper } from "@craftjs/utils";
 import { isRoot } from "../nodes";
 
 

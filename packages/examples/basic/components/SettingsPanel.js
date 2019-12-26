@@ -1,5 +1,5 @@
 import { Box, Chip, Grid, Typography, Button as MaterialButton } from "@material-ui/core";
-import { useEditor } from "craftjs";
+import { useEditor } from "@craftjs/core";
 
 export const SettingsPanel = () => {
   const { actions, selected } = useEditor((state) => {

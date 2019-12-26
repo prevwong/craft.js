@@ -1,5 +1,5 @@
 import React from "react";
-import { useEditor, hasTopLevelCanvases, isTopLevelCanvas } from "craftjs";
+import { useEditor, hasTopLevelCanvases, isTopLevelCanvas } from "@craftjs/core";
 import styled from "styled-components";
 import Eye from './svg/eye.svg'
 import Arrow from './svg/arrow.svg'

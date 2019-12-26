@@ -1,4 +1,4 @@
-import { useCollector } from "craftjs-utils";
+import { useCollector } from "@craftjs/utils";
 import { useContext } from "react";
 import { LayerManagerContext } from "./context";
 import { LayerState } from "../interfaces";

@@ -192,7 +192,7 @@ import Button from '../components/user/Button';
 import Card from '../components/user/Card';
 import Text from '../components/user/Text';
 import SettingsPanel from '../components/SettingsPanel';
-import {Editor, Frame, Canvas} from "craftjs";
+import {Editor, Frame, Canvas} from "@craftjs/core";
 
 export default function App() {
   const classes = useStyles();
@@ -234,7 +234,7 @@ The `useNode` hook provides us several information and methods related to the co
 ```jsx {3,5,6,8}
 import React from "react";
 import { Typography } from "@material-ui/core";
-import { useNode } from "craftjs";
+import { useNode } from "@craftjs/core";
 
 export default function Text({text}) {
   const { connectors: {connect, drag} } = useNode();
@@ -280,7 +280,7 @@ Cool, now let's repeat the same steps for the other 2 components
 ```jsx
 import React  from "react";
 import {Button as MaterialButton} from "@material-ui/core";
-import {useNode} from "craftjs";
+import {useNode} from "@craftjs/core";
 
 export default function Button({size, variant, color, children}) {
   const {connect, drag} = useNode();
@@ -347,7 +347,7 @@ import React  from "react";
 import {Card as MaterialCard, CardContent} from "@material-ui/core";
 import Text from "./Text";
 import Button from "./Button";
-import { Canvas, useNode } from "craftjs";
+import { Canvas, useNode } from "@craftjs/core";
 
 const TopCanvas = ({children}) => {
   return (
@@ -543,7 +543,7 @@ Let's build our Settings Panel now:
 
 ```jsx
 import { Box, Grid, Typography } from "@material-ui/core";
-import { useEditor } from "craftjs";
+import { useEditor } from "@craftjs/core";
 
 const SettingsPanel = () => {
   const { currentSettingsPanel } = useEditor((state) => {
@@ -581,7 +581,7 @@ To do this, we can use a connector supplied by `useEditor` which accepts a user 
 ```jsx
 import React from "react";
 import { Paper, Grid, makeStyles, TextField, Box, Typography } from "@material-ui/core";
-import { useEditor } from "craftjs";
+import { useEditor } from "@craftjs/core";
 import Card from "./user/Card";
 import Button from "./user/Button";
 import Text from "./user/Text";

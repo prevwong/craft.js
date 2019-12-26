@@ -1,7 +1,7 @@
 import { useContext} from "react";
 import { EditorState } from "../interfaces";
 import { QueryMethods } from "./query";
-import { useCollector, QueryCallbacksFor } from "craftjs-utils";
+import { useCollector, QueryCallbacksFor } from "@craftjs/utils";
 import Actions from "./actions";
 import { EventContext } from "../events";
 import { EditorContext } from "./EditorContext";

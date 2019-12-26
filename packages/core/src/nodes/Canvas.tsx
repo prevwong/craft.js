@@ -5,7 +5,7 @@ import { SimpleElement } from "../render/RenderNode";
 import { mapChildrenToNodes } from "../nodes";
 import { useInternalNode } from "./useInternalNode";
 import { useInternalEditor } from "../editor/useInternalEditor";
-import { ERROR_ROOT_CANVAS_NO_ID, ERROR_INFINITE_CANVAS } from "craftjs-utils";
+import { ERROR_ROOT_CANVAS_NO_ID, ERROR_INFINITE_CANVAS } from "@craftjs/utils";
 const invariant = require("invariant");
 
 type GetComponentProps<T extends React.ElementType> = React.ComponentProps<T>

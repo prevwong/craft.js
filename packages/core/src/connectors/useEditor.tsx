@@ -1,5 +1,5 @@
 import { useInternalEditor, EditorCollector } from "../editor/useInternalEditor";
-import { ConnectorElementWrapper} from "craftjs-utils";
+import { ConnectorElementWrapper} from "@craftjs/utils";
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 type Delete<T, U> = Pick<T, Exclude<keyof T, U>>;

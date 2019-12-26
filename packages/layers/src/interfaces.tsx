@@ -1,5 +1,5 @@
-import { NodeId } from "craftjs";
-import { ConnectorElementWrapper } from "craftjs-utils";
+import { NodeId } from "@craftjs/core";
+import { ConnectorElementWrapper } from "@craftjs/utils";
 
 export type Layer = {
   id: NodeId,

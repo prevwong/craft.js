@@ -1,6 +1,6 @@
 import React, { createContext, useMemo } from "react";
 import { EventManager } from "../events";
-import { useReduxMethods, SubscriberAndCallbacksFor } from "craftjs-utils";
+import { useReduxMethods, SubscriberAndCallbacksFor } from "@craftjs/utils";
 import { LayerMethods } from "./actions";
 import { LayerOptions } from "../interfaces";
 import { DefaultLayer } from "../layers";

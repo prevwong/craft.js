@@ -1,5 +1,5 @@
 import { Node, NodeId } from "../interfaces";
-import { ROOT_NODE } from "craftjs-utils";
+import { ROOT_NODE } from "@craftjs/utils";
 
 export * from "./Canvas";
 export * from "./NodeElement";

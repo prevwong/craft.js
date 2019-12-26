@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "../Container";
-import { Canvas } from "craftjs";
+import { Canvas } from "@craftjs/core";
 import { Video } from "../Video";
 
 export const Custom2 = (props: any) => {

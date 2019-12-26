@@ -1,9 +1,9 @@
 import React, { useContext, useRef, useMemo } from "react";
 import { LayerContext } from "./context";
-import { useConnectorHooks, ConnectorElementWrapper } from "craftjs-utils";
+import { useConnectorHooks, ConnectorElementWrapper } from "@craftjs/utils";
 import { EventContext } from "../events";
 import { useLayerManager } from "../manager";
-import { useEditor } from "craftjs";
+import { useEditor } from "@craftjs/core";
 import { Layer } from "../interfaces";
 
 

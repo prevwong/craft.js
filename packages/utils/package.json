@@ -1,5 +1,5 @@
 {
-  "name": "craftjs-utils",
+  "name": "@craftjs/utils",
   "private": true,
   "version": "0.0.0",
   "description": "Shared utilities used across the craft.js monorepo",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@types/react": "^16.9.11",
-    "craftjs": "^0.0.0",
+    "@craftjs/core": "^0.0.0",
     "lodash": "^4.17.15",
     "redux": "^4.0.4"
   },

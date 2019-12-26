@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { useNode } from "craftjs";
+import { useNode } from "@craftjs/core";
 import ContentEditable from 'react-contenteditable'
 import {Slider, FormControl, FormLabel} from "@material-ui/core";
 

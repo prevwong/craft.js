@@ -64,7 +64,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
 
 ### Collecting state information
 ```tsx
-import {useEditor} from "craftjs";
+import {useEditor} from "@craftjs/core";
 
 const Example = () => {
   const { hoveredNodeId } = useEditor((state) => ({
@@ -136,7 +136,7 @@ const Example = () => {
 
 ### Creating and adding a new Node
 ```tsx
-import {useEditor} from "craftjs";
+import {useEditor} from "@craftjs/core";
 
 const Example = () => {
   const { query, actions } = useEditor((state, query) => ({
@@ -159,7 +159,7 @@ const Example = () => {
 > Query methods are also accessible from within the collector function.
 
 ```tsx
-import {useEditor} from "craftjs";
+import {useEditor} from "@craftjs/core";
 
 const Example = () => {
   const { selectedDescendants } = useEditor((state, query) => ({

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { NodeElement, Canvas } from "../nodes";
-import { ROOT_NODE } from "craftjs-utils";
+import { ROOT_NODE } from "@craftjs/utils";
 import { useInternalEditor } from "../editor/useInternalEditor";
 
 const invariant = require("invariant");
