@@ -4,10 +4,20 @@ Building page editors are difficult - you have to worry about the drag and drop 
 
 Craft.js provides you the building blocks, which you can then use to iteratively add page editor functionality to your user interface. In other words, you can build your page editor according to your own UI/UX specifications.
 
-![Landing page demo](assets/readme-demo.gif)
+<div align="center">
+  <a href="https://craft.js.org">
+    <img alt="styled-components" src="assets/readme-demo.gif"/>
+  </a>
+</div>
 
-[Documentation](https://craft.js.org/r)
+
 [Live Demo](https://craft.js.org)
+
+## Docs
+- [Core concepts](https://craft.js.org/r/docs/concepts/nodes)
+- [Tutorial](https://craft.js.org/r/docs/basic-tutorial)
+- [API Reference](https://craft.js.org/r/docs/api/editor-state)
+
 
 ## Features
 ### It's just React
@@ -15,7 +25,7 @@ No need for complicated plugin systems. Design your editor from top to bottom th
 
 A simple user component can easily be defined as such
 ```jsx
-import {useNode} from "craftjs";
+import {useNode} from "@craftjs/core";
 
 const TextComponent = ({text}) => {
   const {drag} = useNode();
@@ -31,7 +41,7 @@ const TextComponent = ({text}) => {
 Heck, the entire UI of your page editor is built using just React 
 ```jsx
 import React from "react";
-import {Craft, Frame, Canvas, Selector} from "craftjs";
+import {Craft, Frame, Canvas, Selector} from "@craftjs/core";
 const App = () => {
   return (
     <div>
@@ -54,7 +64,7 @@ An obvious requirement for page editors is that they need to allow users to edit
 In the following example, we are simply showing a modal that requests the user to input a value for `text` whenever the component is clicked by the user - as the input value changes, the component will be updated. 
 
 ```jsx
-import {useNode} from "craftjs";
+import {useNode} from "@craftjs/core";
 
 const TextComponent = ({text}) => {
   const {connect, drag, isClicked, setProp } = useNode(
@@ -89,7 +99,7 @@ Let's say we need a "Container" component which users can drop into the editor. 
 In Craft.js, it's as simple as calling the `<Canvas />`
 
 ```jsx
-import {useNode} from "craftjs";
+import {useNode} from "@craftjs/core";
 const Container = () => {
   const {drag} = useNode();
 
@@ -107,7 +117,7 @@ const Container = () => {
 ### Extensible
 Craft.js provides and expressive API which allows you to easily read and manipulate the editor state. Let's say you would like to implement a copy function for a component:
 ```jsx
-import {useEditor, useNode} from "craftjs";
+import {useEditor, useNode} from "@craftjs/core";
 const Container = () => {
   const { actions: {add}, query: { createNode, getNode } } = useEditor();
   const { id, connectors: {drag, connect}} = useNode();
@@ -152,13 +162,7 @@ const App = () => {
 }
 ```
 
-## Docs
-- [Core concepts](https://craft.js.org/r/docs/concepts/nodes)
-- [Tutorial](https://craft.js.org/r/docs/basic-tutorial)
-- [API Reference](https://craft.js.org/r/docs/api/editor-state)
-
 ## Examples
-- [Landing page](https://craft.js.org)
 - [Basic](https://craft.js.org/examples/basic)
 
 ## Acknowledgements

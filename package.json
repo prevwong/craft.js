@@ -7,7 +7,9 @@
     "build": "lerna run build --stream",
     "clean": "lerna run clean --stream",
     "build-site" : "./scripts/build-site.sh",
-    "deploy" : "./scripts/deploy.sh"
+    "deploy" : "./scripts/deploy.sh",
+    "release" : "run-s deploy clean release:npm ",
+    "release:npm" : "lerna publish"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
