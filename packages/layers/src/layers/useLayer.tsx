@@ -40,7 +40,7 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer <S> 
 
 
   const connectors = useConnectorHooks({
-    connectLayer: (node) => {
+    layer: (node) => {
       managerConnectors.select(node, id);
       managerConnectors.hover(node, id);
       handlers.onMouseOver(node, id)
@@ -53,12 +53,12 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer <S> 
         dom: node,
       });
     }, 
-    connectLayerHeader: (node) => {
+    layerHeader: (node) => {
       managerActions.setDOM(id, {
         headingDom: node,
       });
     },
-    connectDrag: [
+    drag: [
       (node) => {
         node.setAttribute("draggable", "true");
         handlers.onDragStart(node, id);
@@ -78,7 +78,7 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer <S> 
     depth,
     children,
     actions,
-    ...connectors as any,
+    connectors,
     ...collected as any
   }
 }
