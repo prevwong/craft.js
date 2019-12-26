@@ -6,7 +6,7 @@
 *dist/
 *.cache/
 *dist/
-*.lock
 *-lock.json
+*.log
 *out/
 /site
