@@ -1,7 +1,7 @@
 import React from 'react';
-import { NodeData, NodeId, Node, NodeRules } from "../interfaces";
-import {produce, original} from "immer";
-import { isCanvas, Canvas } from "../nodes";
+import { NodeData, NodeId, Node } from "../interfaces";
+import { produce } from "immer";
+import { Canvas } from "../nodes";
 import { NodeProvider } from "../nodes/NodeContext";
 
 export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id?: NodeId): Node {

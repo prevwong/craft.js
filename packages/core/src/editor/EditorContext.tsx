@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useEffect } from "react";
 import { Options } from "../interfaces";
 import { createOptions } from "./createOptions";
 import { EditorStore, useEditorStore } from "../editor/store";
@@ -42,30 +42,16 @@ export const createEditorContext = (
 
 export const EditorContext = createContext<EditorContext>(null);
 export const EditorContextProvider: React.FC<{ options?: Options}> = ({ children, options }) => {
-  // console.log(options);
-  const memoizedOptions = useMemo(() => {
-    return options;
-  }, []);
-
-
+  
   const context = createEditorContext({options});
 
   useEffect(() => {
-    // console
-    // console.log("options", options)
-    if ( context ) context.actions.setOptions((editorOptions) => {
-      editorOptions = options;
-    });
+    if ( context ) 
+      context.actions.setOptions((editorOptions) => {
+        editorOptions = options;
+      });
   }, [options]);
   
-
-  // useEffect(() => {
-  //   return (() => {
-  //     context.cleanup();
-  //   })
-  // }, []);
-  
-
   return context ? (
     <EditorContext.Provider value={context}>
       {children}

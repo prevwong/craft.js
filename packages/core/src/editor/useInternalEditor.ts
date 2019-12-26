@@ -1,5 +1,5 @@
-import React, { useContext, useRef, useCallback} from "react";
-import { EditorState, Options } from "../interfaces";
+import { useContext} from "react";
+import { EditorState } from "../interfaces";
 import { QueryMethods } from "./query";
 import { useCollector, QueryCallbacksFor } from "craftjs-utils";
 import Actions from "./actions";

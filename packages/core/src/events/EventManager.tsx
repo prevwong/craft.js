@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect, useCallback } from "react";
+import React, { useRef } from "react";
 import { Node, NodeId, EditorEvents} from "../interfaces";
 import movePlaceholder from "./movePlaceholder";
 import { getDOMInfo, useConnectorHooks, RenderIndicator } from "craftjs-utils";

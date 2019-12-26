@@ -8,7 +8,7 @@ import {
   Node,
   Options,
 } from "../interfaces";
-import { isCanvas, Canvas, isRoot } from "../nodes";
+import { isCanvas, isRoot } from "../nodes";
 import { serializeNode } from "../utils/serializeNode";
 import { deserializeNode } from "../utils/deserializeNode";
 import { resolveComponent } from "../utils/resolveComponent";
@@ -143,7 +143,6 @@ export function QueryMethods(Editor: EditorState) {
         ERROR_DUPLICATE_NODEID
       );
 
-      // console.log(targetNode);
       invariant(
         (targetNode.id !== ROOT_NODE && newParent) ||
           (targetNode.id === ROOT_NODE && !newParent),
@@ -195,7 +194,6 @@ export function QueryMethods(Editor: EditorState) {
         ? Object.values(targetParent.data._childCanvas)
         : targetParent.data.nodes || [];
 
-      // console.log("parent nodes", targetParentNodes);
       const dimensionsInContainer = targetParentNodes ? targetParentNodes.reduce(
         (result, id: NodeId) => {
           const dom = nodesToDOM(Editor.nodes[id]);
@@ -232,7 +230,6 @@ export function QueryMethods(Editor: EditorState) {
         _("canDragNode")(source);
         _("canDropInParent")(source, targetParent.id);
       } catch (error) {
-        // console.log(error);
         output.error = error;
       }
 

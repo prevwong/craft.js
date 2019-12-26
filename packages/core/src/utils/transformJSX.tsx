@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Canvas } from '../nodes';
-import { NodeId, NodeData, NodeRules } from '../interfaces';
+import { NodeId, NodeData } from '../interfaces';
 import { createNode } from './createNode';
 const shortid = require('shortid');
 

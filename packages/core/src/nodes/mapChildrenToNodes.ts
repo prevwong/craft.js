@@ -1,4 +1,4 @@
-import { NodeId, Node } from "../interfaces";
+import { Node } from "../interfaces";
 import React, { ReactNode } from "react";
 
 export function mapChildrenToNodes(children: ReactNode, cb: (JSX: React.ReactElement | string) => any): Node[] {

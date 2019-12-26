@@ -11,7 +11,6 @@ const reduceType = (type: React.ElementType | string, resolver: Resolver) => {
 
 export const serializeComp = (data: Pick<NodeData, 'type' | 'isCanvas' | 'props'>, resolver: Resolver): ReducedComp => {
   let { type, isCanvas, props} = data;
-  console.log(props)
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
     if (type === Canvas && key == 'children') return result;

@@ -1,4 +1,3 @@
-import React from "react";
 import { Node  } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { useInternalEditor } from "../editor/useInternalEditor";
