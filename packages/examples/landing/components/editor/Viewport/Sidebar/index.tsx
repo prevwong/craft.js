@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-// import { Layers } from "@craftjs/layers";
+import { Layers } from "@craftjs/layers";
 import { Toolbar } from '../../Toolbar';
 import {SidebarItem} from "./SidebarItem";
 import styled from "styled-components";
@@ -29,7 +29,7 @@ export const Sidebar = () => {
         </SidebarItem>
         <SidebarItem icon={LayerIcon} title="Layers" height={!toolbarVisible ? "full" : "45%"}  visible={layersVisible} onChange={(val) => setLayerVisible(val)}>
           <div className="">
-            {/* <Layers expandRootOnLoad={true} /> */}
+            <Layers expandRootOnLoad={true} />
           </div>
         </SidebarItem>
     </div>
