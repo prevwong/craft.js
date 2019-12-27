@@ -6,7 +6,7 @@ const withCSS = require('@zeit/next-css')
 let plugins = [
   [withCSS],
   [withTM, {
-    transpileModules: ['craftjs']
+    transpileModules: ['@craftjs/core', '@craftjs/utils']
   }],
 ];
 
