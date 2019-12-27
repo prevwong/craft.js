@@ -18,7 +18,7 @@
     "@craftjs/core": "*",
     "@craftjs/layers": "*",
     "lodash": "^4.17.15",
-    "next": "latest",
+    "next": "9.1.2",
     "next-seo": "^3.2.0",
     "next-transpile-modules": "^2.3.1",
     "re-resizable": "^6.1.0",

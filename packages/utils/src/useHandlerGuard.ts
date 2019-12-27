@@ -1,5 +1,4 @@
 import { useRef, useMemo } from "react";
-import { EventEmitter } from "events";
 
 export function useHandlerGuard<
   T extends string,

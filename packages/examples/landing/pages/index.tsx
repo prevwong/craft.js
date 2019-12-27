@@ -12,6 +12,7 @@ import { Button } from '../components/selectors/Button';
 import { Video } from '../components/selectors/Video';
 import { Viewport, RenderNode } from '../components/editor';
 
+console.log("page")
 const theme = createMuiTheme({
   typography: {
     fontFamily: [

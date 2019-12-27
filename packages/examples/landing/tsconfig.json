@@ -26,12 +26,6 @@
     "noImplicitAny": false,
     "strictNullChecks": false
   },
-  "exclude": [
-    "dist",
-    ".next",
-    "out",
-    "next.config.js"
-  ],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

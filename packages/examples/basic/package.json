@@ -7,7 +7,7 @@
     "clsx": "latest",
     "@craftjs/core": "*",
     "material-ui-color-picker": "^3.2.0",
-    "next": "latest",
+    "next": "9.1.2",
     "next-transpile-modules": "^2.3.1",
     "prop-types": "latest",
     "react": "16.11.0",

@@ -9,10 +9,15 @@ export const Viewport: React.FC = ({children}) => {
   const { enabled, connectors } = useEditor(state => ({ enabled: state.options.enabled }));
   const [loaded, setLoaded] = useState(false);
 
+  let unmounted = false;
   useEffect(() => {
     setTimeout(() => {
-      setLoaded(true);
+      if ( !unmounted ) setLoaded(true);
     }, 1000)
+
+    return (() => {
+      unmounted = true;
+    })
   }, []);
  
   return (

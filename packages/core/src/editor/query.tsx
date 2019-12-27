@@ -31,7 +31,7 @@ import {
 import findPosition from "../events/findPosition";
 import { getDeepNodes } from "../utils/getDeepNodes";
 import { transformJSXToNode } from "../utils/transformJSX";
-
+import lz from "lzutf8";
 /**
  * Editor methods used to query nodes
  * @param nodes
@@ -40,8 +40,7 @@ import { transformJSXToNode } from "../utils/transformJSX";
 const getNodeFromIdOrNode = (node: NodeId | Node, cb: (id: NodeId) => Node) => typeof node === "string" ? cb(node) : node;
 
 export function QueryMethods(Editor: EditorState) {
-  const _ = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) =>
-    QueryMethods(Editor)[name];
+  const _ = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) => QueryMethods(Editor)[name];
   const options = Editor  && Editor.options;
   return {
     getOptions(): Options {
@@ -56,7 +55,7 @@ export function QueryMethods(Editor: EditorState) {
         options.resolver,
         node.data.type
       );
-      invariant(name, ERRROR_NOT_IN_RESOLVER);
+      invariant(name != null, ERRROR_NOT_IN_RESOLVER);
       node.data.displayName = node.data.displayName || name;
       node.data.name = name;
       return node;
@@ -83,7 +82,7 @@ export function QueryMethods(Editor: EditorState) {
         }
       );
     },
-    serialize(): string {
+    serialize(compress = true): string {
       const simplifiedNodes = Object.keys(Editor.nodes).reduce((result: any, id: NodeId) => {
         const {
           data: { ...data },
@@ -91,8 +90,14 @@ export function QueryMethods(Editor: EditorState) {
         result[id] = serializeNode({ ...data }, options.resolver);
         return result;
       }, {});
-
-      return JSON.stringify(simplifiedNodes);
+      const json = JSON.stringify(simplifiedNodes);
+      if ( compress ) {
+        const compress = lz.compress(json);
+        const base64 = lz.encodeBase64(compress);
+        console.log(172227);
+        return base64;
+      }
+      return json;
     },
     deserialize(json: string): Nodes {
       const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
