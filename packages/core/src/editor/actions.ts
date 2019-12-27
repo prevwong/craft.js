@@ -66,6 +66,15 @@ const Actions = (state: EditorState, query: QueryCallbacksFor<typeof QueryMethod
 
      
     },
+    reset() {
+      state.nodes = {}
+      state.events = {
+          dragged: null,
+          selected: null,
+          hovered: null,
+          indicator: null
+        }
+    },
     move(targetId: NodeId, newParentId: NodeId, index: number) {
       const targetNode = state.nodes[targetId],
         newParent = state.nodes[newParentId],
