@@ -31,7 +31,7 @@ import {
 import findPosition from "../events/findPosition";
 import { getDeepNodes } from "../utils/getDeepNodes";
 import { transformJSXToNode } from "../utils/transformJSX";
-import lz from "lzutf8";
+
 /**
  * Editor methods used to query nodes
  * @param nodes
@@ -82,7 +82,7 @@ export function QueryMethods(Editor: EditorState) {
         }
       );
     },
-    serialize(compress = true): string {
+    serialize(): string {
       const simplifiedNodes = Object.keys(Editor.nodes).reduce((result: any, id: NodeId) => {
         const {
           data: { ...data },
@@ -91,12 +91,7 @@ export function QueryMethods(Editor: EditorState) {
         return result;
       }, {});
       const json = JSON.stringify(simplifiedNodes);
-      if ( compress ) {
-        const compress = lz.compress(json);
-        const base64 = lz.encodeBase64(compress);
-        console.log(172227);
-        return base64;
-      }
+      
       return json;
     },
     deserialize(json: string): Nodes {
@@ -109,6 +104,7 @@ export function QueryMethods(Editor: EditorState) {
           nodes,
           _childCanvas,
           isCanvas,
+          custom,
           name,
         } = deserializeNode(reducedNodes[id], options.resolver);
         if (!Comp) return accum;
@@ -120,6 +116,7 @@ export function QueryMethods(Editor: EditorState) {
             parent,
             ...(isCanvas && { nodes }),
             ...(_childCanvas && { _childCanvas }),
+            custom
           },
         });
         return accum;
