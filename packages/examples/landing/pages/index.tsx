@@ -55,7 +55,7 @@ function App() {
                       <Text fontSize="23" text="Craft.js is a React framework for building powerful &amp; feature-rich drag-n-drop page editors."></Text>
                     </Canvas>
                     <Canvas is={Container} width="60%" height="100%" padding={["0", "20", "0", "20"]}>
-                      <Text fontSize="14" text="Everything you see here, including the editor itself are just React components. Craft.js comes only with the building blocks for a page editor - it provides a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things.<br/><br/>You control the way your editor looks and behave."></Text>
+                      <Text fontSize="14" text="Everything you see here, including the editor, itself is made of React components. Craft.js comes only with the building blocks for a page editor; it provides a drag-n-drop system and handles the way user components should be rendered, updated and moved, among other things. <br /> <br /> You control the way your editor looks and behave."></Text>
                     </Canvas>
                   </Canvas>
 
@@ -70,7 +70,7 @@ function App() {
                       </Canvas>
                       <Canvas background={{ r: 0, g: 0, b: 0, a: 0 }} is={Container} padding={["0", "0", "0", "20"]} flexDirection="column" width="55%" height="100%" fillSpace="yes">
                         <Text color={{ r: "255", g: "255", b: "255", a: "1" }} margin={["0", "0", "18", "0"]} fontSize="20" text="Design complex components"></Text>
-                        <Text color={{ r: "255", g: "255", b: "255", a: "0.8" }} fontSize="14" text="You can define areas within your React component that allows users to drop other components into.<br/><br/>You can even design how the component should be edited - content editable, drag to resize, have inputs on toolbars — anything really. "></Text>
+                        <Text color={{ r: "255", g: "255", b: "255", a: "0.8" }} fontSize="14" text="You can define areas within your React component which users can drop other components into. <br/><br />You can even design how the component should be edited — content editable, drag to resize, have inputs on toolbars — anything really."></Text>
                       </Canvas>
 
                     </Canvas>

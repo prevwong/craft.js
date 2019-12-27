@@ -28,7 +28,7 @@ export const API = ({items}) => {
   )
 };
 
-export const Badge = (({type, title=true}) => {
+export const Badge = (({type, title=true, noMargin=true}) => {
   let name;
   switch(type) {
     case 'hoc' :
@@ -40,7 +40,7 @@ export const Badge = (({type, title=true}) => {
 
   return (
     <div className="badge-wrapper">
-      <span className={`badge badge-${type} ${title ? 'badge-title' : ''}`}>
+      <span className={`badge badge-${type} ${title ? 'badge-title' : ''} ${noMargin ? 'badge-no-margin' : ''}`}>
         {name}
       </span>
     </div>

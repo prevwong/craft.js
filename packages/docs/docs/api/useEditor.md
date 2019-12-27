@@ -240,7 +240,7 @@ const Example = () => {
 
 
 ## Legacy API
-If you are using Class Components, use `connectEditor` instead.
+For Class Components, use `connectEditor` instead.
 
 <Badge type="hoc" title={false} />
 

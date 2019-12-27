@@ -42,7 +42,7 @@ We'll explore each of these values in the following sections.
 The first thing we would want to do is to actually let Craft.js to manage the DOM for our component. 
 
 - `connect`: specifies the DOM that represents the User Component.  If the component's corresponding Node is a Canvas, then this also defines the area that is droppable.
-- `drag`: specifies the DOM element that should be made draggable. When the user drags this element will be considered as dragged the entire component, thus moving the entire component to the drop location. This connector only takes effect if the component's corresponding node is a Canvas Node.
+- `drag`: specifies the DOM element that should be made draggable. When the user drags this element, it'll be considered as dragging the entire component, therefore moving the entire component to the drop location. This connector only takes effect if the component's corresponding node is a Canvas Node.
 
 ```jsx {17,18,21}
 const Hero = ({title, children}) => {

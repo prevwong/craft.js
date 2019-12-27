@@ -170,7 +170,7 @@ const Example = ({someProp}) => {
 
 
 ## Legacy API
-If you are using Class Components, use `connectNode` instead.
+For Class Components, use `connectNode` instead.
 
 <Badge type="hoc" title={false} />
 

@@ -26,7 +26,9 @@ module.exports = {
       "api/frame",
       "api/canvas",
       "api/useEditor",
-      "api/useNode"
+      "api/useNode",
+      "api/utilities"
+
     ],
     "Additional Packages" : [
       "additional/layers"

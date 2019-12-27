@@ -18,10 +18,7 @@ module.exports = {
       theme: require('prism-react-renderer/themes/shadesOfPurple'),
     },
     navbar: {
-      logo: {
-        alt: 'Craft.js',
-        src: 'img/logo.png',
-      },
+      title: "craft.js",
       links: [
         {to: 'docs/overview', label: 'Docs', position: 'left'},
         {

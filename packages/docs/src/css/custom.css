@@ -136,9 +136,21 @@ li.api-item {
   top: -10px;
   position: relative;
   border: none;
+  margin-bottom:10px;
 }
 .badge.badge-title { top: -20px; }
-
+.badge.badge-no-margin { top: 0; }
 .badge.badge-component { background : #141890; }
 .badge.badge-hook { background: #4e31c5; }
 .badge.badge-hoc { background: #9284ca; }
+.badge.badge-function { background: #8870a7; }
+
+a.navbar__brand.active {
+  font-size: 20px;
+  font-weight: 200;
+  color: #fff;
+}
+
+a.navbar__brand.active  > strong {
+  font-weight: 500;
+}
