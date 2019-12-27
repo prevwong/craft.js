@@ -4,7 +4,7 @@ title: Interacting with the Editor
 ---
 
 
-Previously, we have looked at User Components and how to write them; but what about all the other components that are integral to our page editor like a Toolbar for users to edit components, or maybe a layers panel.
+Previously, we have looked at User Components and how to write them, but what about all the other components that are integral to our page editor like a Toolbar for users to edit components, or maybe a layers panel?
 
 The `useEditor` hook allows us to read and manipulate the entire editor's internal state. Essentially, this is similar to the `useNode` hook we have seen previously, except this deals with the entire editor rather than with a particular `Node`.
 
@@ -12,7 +12,7 @@ The `useEditor` hook allows us to read and manipulate the entire editor's intern
 const { actions, connectors, ...collected } = useEditor((state) => {});
 ```
 
-> Note: Unlike `useNode` which can be only used inside user components, `useEditor` can be used anywhere within the Craft context, including user components.
+> Note: Unlike `useNode` which can be only used inside User Components, `useEditor` can be used anywhere within the Craft context, including User Components.
 
 
 ## Getting state information
@@ -36,7 +36,7 @@ const App = () => {
 ## Connectors
 With`useEditor`, you can add connectors to DOM elements anywhere in the editor to make use of the editor's internal events. 
 
-Let's say, maybe you are creating a layers panel to display all nodes as a Photoshop-like layers (wink wink, `craftjs-layers`) and would like to change the particular Node's event state when the user clicks/hovers/drags your layers.
+Let's say, maybe you are creating a layers panel to display all nodes as Photoshop-like layers (wink wink, `craftjs-layers`) and would like to change the particular Node's event state when the user clicks/hovers/drags your layers.
 
 ```jsx
 const LayerItem = (nodeId) => {
@@ -86,7 +86,7 @@ const DeleteButtonThingy = () => {
 
 ## Querying
 
-What if you need to know if two nodes are compatible; get all parents of a Node or simply deserialize all Node ? Queries are methods that provides helpful infomation based on the editor's state.
+What if you need to know if two nodes are compatible, how to get all parents of a Node or simply deserialize all Nodes? Queries are methods that provide helpful information based on the editor's state.
 
 
 ```jsx
@@ -102,23 +102,23 @@ const Sidebar = () => {
 }
 
 ```
-Queries are also accesible via the `useEditor` collector function. Let's look at an example where we build a component that returns all the decendants of the current selected Node:
+Queries are also accesible via the `useEditor` collector function. Let's look at an example where we build a component that returns all the descendants of the current selected Node:
 
 ```jsx
-const ShowMeMyDecendants = () => {
-  const { allDecendants } = useEditor((state, query) => {
+const ShowMeMyDescendants = () => {
+  const { allDescendants } = useEditor((state, query) => {
     const selectedNodeId = state.events.selected;
-    let allDecendants = false;
+    let allDescendants = false;
 
-    if (selectedNodeId)  allDecendants = query.getDeepNodes(selectedNodeId, true);  
+    if (selectedNodeId)  allDescendants = query.getDeepNodes(selectedNodeId, true);  
 
-    return { allDecendants }
+    return { allDescendants }
   }); 
 
-  return allDecendants ? (
+  return allDescendants ? (
     <div>
       {
-        allDecendants.map(node => 
+        allDescendants.map(node => 
           <li>{node.id}</li>
         )
       }
