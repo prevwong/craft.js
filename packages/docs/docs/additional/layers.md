@@ -30,6 +30,7 @@ export default function App() {
 } 
 ```
 
+
 ## Types
 ### Layer
 #### Properties
@@ -41,7 +42,7 @@ export default function App() {
     ["selected", "boolean", "Is true if the layer is clicked"],
     ["hovered", "boolean", "Is true if the layer is being hovered"],
   ]],
-  ["dom", "HTMLElement", "The DOM of the current layer including it's header and children. This is defined by the `connectLayer` connector"],
+  ["dom", "HTMLElement", "The DOM of the current layer including its header and children. This is defined by the `connectLayer` connector"],
   ["headingDom", "HTMLElement", "The DOM of the current Layer's heading. This is defined by the `connectLayerHeader` connector"]
 ]} /> 
 

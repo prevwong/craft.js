@@ -4,9 +4,12 @@ title: useEditor()
 sidebar_label: useEditor()
 ---
 
-import {API} from "./API";
+import {API, Badge} from "./API";
 
-A Hook to that provides methods and state information associated with the entire editor.
+<Badge type="hook" />
+
+
+A Hook that provides methods and state information associated with the entire editor.
 
 ```tsx
 const { connectors, actions, query, ...collected } = useEditor(collector);
@@ -28,14 +31,15 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
     ["connectors", "Object", [
       ["select", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when clicked will in turn click the specified Node's user component"],
       ["hover", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when hovered will in turn hover the specified Node's user component"],
-      ["drag", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when dragged will move the specified Node's user component. Only applicable if the component is rendered as an immediate child of a <Canvas /> component."]
+      ["drag", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when dragged will move the specified Node's user component. Only applicable if the component is rendered as an immediate child of a <Canvas /> component."],
+      ["create", "(dom: HTMLElement, userElement: React.ReactElement) => HTMLElement", "Specifies the DOM that when dragged will create a new instance of the specified User Element at the drop location."]
     ]],
     ["actions", "Object", [
       ["add", "(nodes: Node | Node[], parentId?: String) => void", "Add Node(s) to the given parent node ID. By default the parentId is the ROOT_ID"],
       ["delete", "(nodeID: String) => void", "Delete the specified Node"],
       ["move", "(nodeId: String, targetParentId: String, index: number) => void", "Move a Node to the specified parent Node at the given index. Subject to the conditions in query.canDropInParent()"],
       ["setProp", "(nodeId: String, props: Object) => void", "Manipulate the props of the given Node"],
-      ["setHidden", "(nodeId: String, bool: boolean) => void", "When set to true, the user component of the specified Node will be hidden, but not removed"],
+      ["setHidden", "(nodeId: String, bool: boolean) => void", "When set to true, the User Component of the specified Node will be hidden, but not removed"],
       ["setCustom", "(nodeId: String, custom: (custom: Object) => void", "Update the given Node's custom properties"],
       ["setOptions", "(options: Object) => void", "Update the editor's options. The options object passed is the same as the  `<Editor />` props."]
     ]],
@@ -45,12 +49,12 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["canDropInParent", "(nodeId: String, parenNodeId: String) => boolean", "Check if the Node can be dropped in the specified Canvas Node"],
       ["getDropPlaceholder", 
         "(sourceNodeId: String, targetNodeId: String, pos: {x: number, y: number}, nodesToDOM?: (node: Node) => HTMLElement = node => node.dom)",
-        "Given the target Node and mouse coordinates on the screen, determine the best possible location to drop the source Node. By default, the Node's dom property is taken for consideration."
+        "Given the target Node and mouse coordinates on the screen, determine the best possible location to drop the source Node. By default, the Node's DOM property is taken into consideration."
       ],
       ["serialize", "() => String", "Return the current Nodes in JSON"],
       ["deserialize", "() => String", "Recreate Nodes from JSON"],
       ["getNode", "(id: NodeId) => Node", "Get a Node by its ID"],
-      ["getDeepNodes", "(id: NodeId) => NodeId[]", "Return all decendant Nodes"],
+      ["getDeepNodes", "(id: NodeId) => NodeId[]", "Return all descendant Nodes"],
       ["getAllParents", "(id: NodeId) => NodeId[]", "Return all ancestor Nodes"],
       ["getOptions", "() => Object", "Get the options specified in the <Craft /> component"]
     ]],
@@ -79,7 +83,7 @@ const Example = () => {
 }
 ```
 
-### Hide and Deleting a Node
+### Hiding and Deleting a Node
 ```jsx
 const Example = () => {
   const {selectedNodeId, actions} = useEditor((state) => ({
@@ -95,7 +99,7 @@ const Example = () => {
 }
 ```
 
-### Move a Node
+### Moving a Node
 ```jsx
 const Example = () => {
   const [sourceId, setSourceId] = useState();
@@ -134,7 +138,7 @@ const Example = () => {
 }
 ```
 
-### Creating and adding a new Node
+### Creating and Adding a new Node
 ```tsx
 import {useEditor} from "@craftjs/core";
 
@@ -155,7 +159,7 @@ const Example = () => {
 ```
 
 
-### Get the currently selected Node's descendants
+### Getting the currently selected Node's descendants
 > Query methods are also accessible from within the collector function.
 
 ```tsx
@@ -176,7 +180,7 @@ const Example = () => {
 }
 ```
 
-### Display Drop Indicator for best possible drop location
+### Displaying Drop Indicator for the best possible drop location
 ```jsx
 const Example = () => {
   const [screenClick, setScreenClick] = useState(false);
@@ -232,4 +236,51 @@ const Example = () => {
     </div>
   )
 }
+```
+
+
+## Legacy API
+For Class Components, use `connectEditor` instead.
+
+<Badge type="hoc" title={false} />
+
+
+### Parameters
+<API items={[
+  ["collector", "(node: Node) => Collected", "A function that collects relevant state information from the corresponding Node. The component will re-render when the values returned by this function changes."]
+]} /> 
+
+### Injected Props
+<API items={[
+  ["...useEditor(collector)", "Object", "Identical return values as the useEditor() hook above"]
+]} /> 
+
+
+### Example
+```jsx
+import { connectEditor } from "@craftjs/core";
+
+class SidebarInner extends React.Component {
+  render() {
+    const { actions, query, enabled, currentSelectedNodeId } = this.props;
+    return (
+      <div>
+        <input type="checkbox" value={enabled} onChange={
+          e => actions.setOptions(options => options.enabled = !enabled)
+        } />
+        <button 
+          onClick={() => {
+            console.log(query.serialize())
+          }}
+        >
+            Serialize JSON to console
+        </button>
+      </div>
+    )
+  }
+}
+
+export const Sidebar = connectEditor((state) => ({
+  currentSelectedNodeId: state.events.selected
+}))(SidebarInner);
 ```

@@ -40,8 +40,7 @@ import { transformJSXToNode } from "../utils/transformJSX";
 const getNodeFromIdOrNode = (node: NodeId | Node, cb: (id: NodeId) => Node) => typeof node === "string" ? cb(node) : node;
 
 export function QueryMethods(Editor: EditorState) {
-  const _ = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) =>
-    QueryMethods(Editor)[name];
+  const _ = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) => QueryMethods(Editor)[name];
   const options = Editor  && Editor.options;
   return {
     getOptions(): Options {
@@ -56,7 +55,7 @@ export function QueryMethods(Editor: EditorState) {
         options.resolver,
         node.data.type
       );
-      invariant(name, ERRROR_NOT_IN_RESOLVER);
+      invariant(name != null, ERRROR_NOT_IN_RESOLVER);
       node.data.displayName = node.data.displayName || name;
       node.data.name = name;
       return node;
@@ -91,8 +90,9 @@ export function QueryMethods(Editor: EditorState) {
         result[id] = serializeNode({ ...data }, options.resolver);
         return result;
       }, {});
-
-      return JSON.stringify(simplifiedNodes);
+      const json = JSON.stringify(simplifiedNodes);
+      
+      return json;
     },
     deserialize(json: string): Nodes {
       const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
@@ -104,6 +104,7 @@ export function QueryMethods(Editor: EditorState) {
           nodes,
           _childCanvas,
           isCanvas,
+          custom,
           name,
         } = deserializeNode(reducedNodes[id], options.resolver);
         if (!Comp) return accum;
@@ -115,6 +116,7 @@ export function QueryMethods(Editor: EditorState) {
             parent,
             ...(isCanvas && { nodes }),
             ...(_childCanvas && { _childCanvas }),
+            custom
           },
         });
         return accum;

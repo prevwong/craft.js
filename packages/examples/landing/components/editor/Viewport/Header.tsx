@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Checkmark from "../../../public/icons/check.svg";
 import Customize from "../../../public/icons/customize.svg";
 import cx from "classnames"; 
+import lzutf8 from "lzutf8";
 
 const HeaderDiv = styled.div<{ enabled: boolean}>`
   width: ${props => props.enabled ? "100%" : "800px"};
@@ -61,20 +62,14 @@ const Btn = styled.a`
 `;
 
 export const Header = () => {
-  const {enabled, actions: {setOptions}} = useEditor((state) => ({
+  const {enabled, query} = useEditor((state) => ({
     enabled: state.options.enabled
   }));
   
  
   return (
     <HeaderDiv enabled={enabled} className="header bg-light-gray-1 text-white transition w-full">
-      {/* <button onClick={() => setEnabled(!enabled)}>{enabled ? "Disable" : "Enable"}</button>
-      <button onClick={() => {
-
-        const s = query.serialize();
-        // const d = query.deserialize(JSON.stringify(s));
-        console.log(JSON.stringify(s));
-      }}>Serialize</button>  */}
+      
       <div className="items-center flex w-full px-4 ">
        
         <div className="flex-1">
@@ -90,7 +85,13 @@ export const Header = () => {
               "bg-green-400" : enabled,
               "bg-primary" : !enabled
             }])}
-            onClick={() => setOptions(options => options.enabled = !enabled)}
+            onClick={() => {
+              const json = query.serialize();
+              const compressed = lzutf8.compress(json);
+              const base64 = lzutf8.encodeBase64(compressed);
+              console.log(base64);
+              // setOptions(options => options.enabled = !enabled)
+            }}
           >
             {enabled ? <Checkmark /> : <Customize />}
             {
@@ -98,7 +99,6 @@ export const Header = () => {
             }
           </Btn>
         </div>
-        {/* <a className="font-medium text-sm px-5 py-1 margin-0 rounded-full bg-primary text-white">Documentation</a> */}
       </div>
     </HeaderDiv>
   )

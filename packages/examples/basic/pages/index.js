@@ -19,7 +19,9 @@ const useStyles = makeStyles(theme => ({
 export default function App() {
   const classes = useStyles();
   const [enabled, setEnabled] = useState(true);
-  
+
+  const [json, setJson] = useState(null);
+
   return (
     <div style={{margin: "0 auto", width: "800px"}}>
       <Typography style={{margin: "20px 0"}} variant="h5" align="center">Basic Page Editor</Typography>
@@ -27,10 +29,10 @@ export default function App() {
           resolver={{Card, Button, Text, Container, CardTop, CardBottom}}
           enabled={enabled}
         > 
-          <Topbar />
+          <Topbar onLoadState={(json) => setJson(json)} />
           <Grid container spacing={5} style={{paddingTop: "10px"}}>
             <Grid item xs>
-              <Frame>
+              <Frame nodes={json}>
                 <Canvas is={Container} padding={5} background="#eeeeee">
                   <Card />
                   <Button text="Click me" size="small" />

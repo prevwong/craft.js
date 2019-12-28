@@ -5,16 +5,18 @@ title: Overview
 
 ## Motivation
 
-Building page editors are difficult - you have to worry about the drag and drop system, how components should be designed and how they should be rendered/updated.
+Page editors are a great way to provide an excellent user experience. However, to build one is often a pretty dreadful task. 
 
-Craft.js provides you the building blocks, which you can then use to iteratively add page editor functionality to your user interface. In other words, you can build your page editor according to your own UI/UX specifications.
+There're existing libraries that come with a fully working page editor out of the box with a user interface and editable components. However, if you wish to make customisations such as tweaking the user interface, it will most definitely involve modifying the library itself. 
+
+Craft.js solves this problem by providing the building blocks of a page editor. It provides a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things. With this, you'll be able to focus on building the page editor according to your own specifications and needs.
 
 
 ## Features
 ### It's just React
-No need for complicated plugin systems. Design your editor from top to bottom the same way as you would design any ordinary user interface in React.
+No need for complicated plugin systems. Design your editor from top to bottom the same way as you would design any other frontend application in React.
 
-A simple user component can easily be defined as such
+A simple user component can easily be defined as such:
 ```jsx
 import {useNode} from "@craftjs/core";
 
@@ -29,7 +31,7 @@ const TextComponent = ({text}) => {
 }
 ```
 
-Heck, the entire UI of your page editor is built using just React 
+Heck, the entire UI of your page editor is built using just React. 
 ```jsx
 import React from "react";
 import {Craft, Frame, Canvas, Selector} from "@craftjs/core";
@@ -50,9 +52,9 @@ const App = () => {
 ```
 
 ### Control how your components are edited
-An obvious requirement for page editors is that they need to allow users to edit components. With Craft.js, you control how these components should be edited. 
+An obvious requirement for page editors is that they need to allow users to edit components. With Craft.js, you control the process of which these components should be edited. 
 
-In the following example, we are simply showing a modal that requests the user to input a value for `text` whenever the component is clicked by the user - as the input value changes, the component will be updated. 
+In the following example, when the user clicks on a component, we'll display a modal that requires the user to input a value for the `text` prop. As the input value changes, the component will be re-rendered with updated prop. 
 
 ```jsx
 import {useNode} from "@craftjs/core";
@@ -82,7 +84,7 @@ const TextComponent = ({text}) => {
   )
 }
 ```
-With this, you could easily implement content editable text or drag-to-resize components - just as any modern page editor would have.
+With this, you could easily implement content editable text or drag-to-resize components, just as any modern page editor would have.
 
 ### User components with droppable regions
 Let's say we need a "Container" component which users can drop into the editor. Additionally, we would also like them to be able to drag and drop other components into the Container. 
@@ -106,7 +108,7 @@ const Container = () => {
 ```
 
 ### Extensible
-Craft.js provides and expressive API which allows you to easily read and manipulate the editor state. Let's say you would like to implement a copy function for a component:
+Craft.js provides an expressive API which allows you to easily read and manipulate the editor state. Let's say you would like to implement a copy function for a component:
 ```jsx
 import {useEditor, useNode} from "@craftjs/core";
 const Container = () => {

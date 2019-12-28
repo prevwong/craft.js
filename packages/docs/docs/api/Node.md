@@ -4,7 +4,10 @@ title: Node
 sidebar_label: Node
 ---
 
-import {API} from "./API";
+import {API, Badge} from "./API";
+
+<Badge type="type" />
+
 
 ## Reference
 ### Properties
@@ -17,8 +20,8 @@ import {API} from "./API";
     ["displayName", "String", "By default, it will be set to the same value as 'name'. But User Components have the ability to opt for a more user-friendly name"],
     ["isCanvas", "boolean", "True if the current Node is a Canvas Node"],
     ["parent", "NodeId", "The parent Node's id"],
-    ["index", "number", "Position of current Node in it's parent"],
-    ["nodes", "NodeId[]", "The id of the child Nodes, only applicable if the current Node is a Canvas"],
+    ["index", "number", "Position of current Node in its parent"],
+    ["nodes", "NodeId[]", "The id of the child Nodes; only applicable if the current Node is a Canvas"],
     ["hidden", "boolean"],
     ["custom", "Record<String, any>", "Custom properties stored in the Node"],
     ["childCanvas", "Record<String, NodeId>", "A map of Canvas Nodes defined inside the User Component. Only applicable if the current Node's User Element is a Component which contains <Canvas /> inside its render"]

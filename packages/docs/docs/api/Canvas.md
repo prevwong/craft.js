@@ -4,7 +4,9 @@ title: <Canvas />
 sidebar_label: <Canvas />
 ---
 
-import {API} from "./API";
+import {API, Badge} from "./API";
+
+<Badge type="component" />
 
 Creates a Canvas Node and converts all immediate children into Nodes.
 
@@ -93,15 +95,15 @@ const Container = ({children}) => {
 Container.craft = {
   rules: {
     // Only allow the Container to be dragged when it has at least 2 children
-    // This only applies when the Container is being managed by a Node that is a child of a Canvas Node
+    // This is only applied when the Container is being managed by a Node that is a child of a Canvas Node
     canDrag: (node) => node.data.props.children.length >= 2,
 
     // Only allow the incoming Node to be dropped in the Container if its a "h1" or a "Container" user element
-    // This only applies when the Container is being managed by a Canvas Node
+    // This is only applied when the Container is being managed by a Canvas Node
     canMoveIn: (incomingChildNode, node) => ["h1", Container].includes(incomingChildNode.data.type),
 
     // Don't allow child Nodes that are "h1" to be dragged out of the Container
-    // This only applies when the Container is being managed by a Canvas Node
+    // This is only applied when the Container is being managed by a Canvas Node
     canMoveOut: (incomingChildNode, node) => incomingChildNode.data.type != "h1"
   }
 }

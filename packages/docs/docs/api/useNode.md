@@ -4,9 +4,12 @@ title: useNode()
 sidebar_label: useNode()
 ---
 
-import {API} from "./API";
+import {API, Badge} from "./API";
 
-A Hook to that provides methods and state information related to the corresponding `Node` that manages the current component. 
+<Badge type="hook" />
+
+
+A Hook that provides methods and state information related to the corresponding `Node` that manages the current component. 
 
 ```tsx
 const { connectors, setProp, ...collected } = useNode(collector);
@@ -27,10 +30,10 @@ const { connectors, setProp, ...collected } = useNode(collector);
 <API items={[
   [null, "Object", [
     ["id", "NodeId", "The corresponding Node's id"],
-    ["related", "boolean", "Identifies if the component is a being used as related component"],
-    ["inNodeContext", "boolean", "This is useful if you are designing a User component that you also wish to be used as an ordinary React component - this property helps to differentiate if the component is being used as an User Component"],
+    ["related", "boolean", "Identifies if the component is being used as related component"],
+    ["inNodeContext", "boolean", "This is useful if you are designing a User Component that you also wish to be used as an ordinary React Component; this property helps to differentiate whether the component is being used as a User Component or not"],
     ["connectors", "Object", [
-      ["connect", "(dom: HTMLElement) => HTMLElement", "Specifies the DOM that represents the user component"],
+      ["connect", "(dom: HTMLElement) => HTMLElement", "Specifies the DOM that represents the User Component"],
       ["drag", "(dom: HTMLElement) => HTMLElement", "Specifies the DOM that should be draggable"]
     ]],
     ["setProp", "(props: Object) => void", "Manipulate the current component's props"],
@@ -66,9 +69,9 @@ const Example = () => {
 ```
 
 ### Connectors
-Connectors must receive a HTML element - which can be obtained via an element's `ref`.
+Connectors must receive a HTML element which can be obtained via an element's `ref`.
 
-Typically, you would want to chain the `connect` and `drag` connectors on the root element of your component. This way, users would be able to drag anywhere within the DOM to move the component.
+Typically, you would want to chain the `connect` and `drag` connectors to the root element of your component. This way, users would be able to drag anywhere within the DOM to move the component.
 ```jsx
 const Example = () => {
   const { connectors: {connect, drag} } = useNode();
@@ -97,7 +100,7 @@ const Example = () => {
 }
 ```
 
-You could place the connectors on a React Component as well. However, the component must expose/forward it's DOM in it's `ref`
+You could place the connectors on a React Component as well. However, the component must expose/forward its DOM in its `ref`
 ```jsx
 const CustomDragHandler = React.forwardRef((props, ref) => {
   return(
@@ -120,7 +123,7 @@ const Example = () => {
 ### Usage within child components
 Since User Components are contextually bounded by the `Node` that they are being managed by, thus `useNode` can be used anywhere **within** the component tree.
 
-In the previous example, we didn't actually need to forward refs from `CustomDragHandler` since it's bounded by the same `Node` as it's parent. Instead, we can just use the connectors from `useNode` directly.
+In the previous example, we didn't actually need to forward refs from `CustomDragHandler` since it's bounded by the same `Node` as its parent. Instead, we can just use the connectors from `useNode` directly.
 
 
 ```jsx
@@ -163,4 +166,48 @@ const Example = ({someProp}) => {
     </div>
   )
 }
+```
+
+
+## Legacy API
+For Class Components, use `connectNode` instead.
+
+<Badge type="hoc" title={false} />
+
+
+### Parameters
+<API items={[
+  ["collector", "(node: Node) => Collected", "A function that collects relevant state information from the corresponding Node. The component will re-render when the values returned by this function changes."]
+]} /> 
+
+### Injected Props
+<API items={[
+  ["...useNode(collector)", "Object", "Identical return values as the useNode() hook above"]
+]} /> 
+
+
+### Example
+```jsx
+
+import {connectNode} from "@craftjs/core";
+class ButtonInner extends React.Component {
+  render() {
+    const { connectors: {connect, drag}, isHovered, ...compProps } = this.props;
+    const { text, color  } = compProps;
+
+    return (
+      <button ref={ ref => connect(drag(ref))} style={{margin: "5px", backgroundColor: color}} >
+        {text}
+        {
+          isHovered ? "I'm being hovered" : null
+        }
+      </button>
+    );
+  }
+};
+
+export const Button = connectNode((node) => ({
+  isHovered: node.events.hovered
+}))(ButtonInner);
+
 ```
