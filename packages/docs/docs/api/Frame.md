@@ -20,7 +20,7 @@ const { connectors, setProp, ...collected } = useNode(collector);
 ### Props
 <API items={[
   ["nodes?", "String", "The serialised Nodes"],
-  ["children", "React.ReactElement<Canvas>", "This would define how the editor state would look like by default when there is no serialised nodes passed. Must begin with a <Canvas /> which creates the Root Node."]
+  ["children", "React.ReactElement<Canvas>", "This would define how the editor state would look like by default when there are no serialised nodes passed. Must begin with a <Canvas /> which creates the Root Node."]
 ]} /> 
 
 

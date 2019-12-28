@@ -9,7 +9,7 @@ import {API, Badge} from "./API";
 <Badge type="hook" />
 
 
-A Hook to that provides methods and state information associated with the entire editor.
+A Hook that provides methods and state information associated with the entire editor.
 
 ```tsx
 const { connectors, actions, query, ...collected } = useEditor(collector);
@@ -39,7 +39,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["delete", "(nodeID: String) => void", "Delete the specified Node"],
       ["move", "(nodeId: String, targetParentId: String, index: number) => void", "Move a Node to the specified parent Node at the given index. Subject to the conditions in query.canDropInParent()"],
       ["setProp", "(nodeId: String, props: Object) => void", "Manipulate the props of the given Node"],
-      ["setHidden", "(nodeId: String, bool: boolean) => void", "When set to true, the user component of the specified Node will be hidden, but not removed"],
+      ["setHidden", "(nodeId: String, bool: boolean) => void", "When set to true, the User Component of the specified Node will be hidden, but not removed"],
       ["setCustom", "(nodeId: String, custom: (custom: Object) => void", "Update the given Node's custom properties"],
       ["setOptions", "(options: Object) => void", "Update the editor's options. The options object passed is the same as the  `<Editor />` props."]
     ]],
@@ -49,12 +49,12 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["canDropInParent", "(nodeId: String, parenNodeId: String) => boolean", "Check if the Node can be dropped in the specified Canvas Node"],
       ["getDropPlaceholder", 
         "(sourceNodeId: String, targetNodeId: String, pos: {x: number, y: number}, nodesToDOM?: (node: Node) => HTMLElement = node => node.dom)",
-        "Given the target Node and mouse coordinates on the screen, determine the best possible location to drop the source Node. By default, the Node's dom property is taken for consideration."
+        "Given the target Node and mouse coordinates on the screen, determine the best possible location to drop the source Node. By default, the Node's DOM property is taken into consideration."
       ],
       ["serialize", "() => String", "Return the current Nodes in JSON"],
       ["deserialize", "() => String", "Recreate Nodes from JSON"],
       ["getNode", "(id: NodeId) => Node", "Get a Node by its ID"],
-      ["getDeepNodes", "(id: NodeId) => NodeId[]", "Return all decendant Nodes"],
+      ["getDeepNodes", "(id: NodeId) => NodeId[]", "Return all descendant Nodes"],
       ["getAllParents", "(id: NodeId) => NodeId[]", "Return all ancestor Nodes"],
       ["getOptions", "() => Object", "Get the options specified in the <Craft /> component"]
     ]],
@@ -83,7 +83,7 @@ const Example = () => {
 }
 ```
 
-### Hide and Deleting a Node
+### Hiding and Deleting a Node
 ```jsx
 const Example = () => {
   const {selectedNodeId, actions} = useEditor((state) => ({
@@ -99,7 +99,7 @@ const Example = () => {
 }
 ```
 
-### Move a Node
+### Moving a Node
 ```jsx
 const Example = () => {
   const [sourceId, setSourceId] = useState();
@@ -138,7 +138,7 @@ const Example = () => {
 }
 ```
 
-### Creating and adding a new Node
+### Creating and Adding a new Node
 ```tsx
 import {useEditor} from "@craftjs/core";
 
@@ -159,7 +159,7 @@ const Example = () => {
 ```
 
 
-### Get the currently selected Node's descendants
+### Getting the currently selected Node's descendants
 > Query methods are also accessible from within the collector function.
 
 ```tsx
@@ -180,7 +180,7 @@ const Example = () => {
 }
 ```
 
-### Display Drop Indicator for best possible drop location
+### Displaying Drop Indicator for the best possible drop location
 ```jsx
 const Example = () => {
   const [screenClick, setScreenClick] = useState(false);

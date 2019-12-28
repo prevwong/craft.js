@@ -16,7 +16,7 @@ const Hero = ({title}) => {
   )
 }
 ```
-Now, let's actually get the component to work with the editor. The `useNode` hook provides us several information and methods related to the corresponding `Node` that manages the component.
+Now, let's actually get the component to work with the editor. The `useNode` hook provides us with several information and methods related to the corresponding `Node` that manages the component.
 
 ```jsx
 const { connectors: {connect, drag}, setProp, ...collected } = useNode((node) => {});
@@ -75,8 +75,8 @@ const App = () => {
 }
 ```
 
-- i. `Hero` is being rendered with a Canvas Node, thus it defines a droppable region. However, since it itself is not a child of a Canvas Node, thus it is not draggable (the `drag` handler will not do anything).
-- ii. `Hero` is an immediate child of a Canvas Node - it is draggable.
+- i. `Hero` is being rendered with a Canvas Node, thus it defines a droppable region. However, since it is not a child of a Canvas Node, it is not draggable (the `drag` handler will not do anything).
+- ii. `Hero` is an immediate child of a Canvas Node; it is draggable.
 - iii. `Hero` is an immediate child of a Canvas Node and is rendered with a Canvas Node - it is both draggable and droppable.
 
 ## Props manipulation
@@ -100,10 +100,10 @@ const Hero = ({title}) => {
 }
 ```
 
-In the above example, we have created updated our `h2` element to be content editable, and added an event handler to update the `text` prop as the user visually enters in a new value.
+In the above example, we have updated our `h2` element to be content editable and added an event handler to update the `text` prop as the user visually enters in a new value.
 
 ## Collecting Node's state
-The information stored in a corresponding `Node` could be useful in helping you build more usable components. We can retrieve information from a `Node` by passing a collector function to the `useNode` hook, every time the values we retrieved via the collector function changes, our component will re-render. This is very much similar to Redux's `connect` pattern.
+The information stored in a corresponding `Node` could be useful in helping you build more usable components. We can retrieve information from a `Node` by passing a collector function to the `useNode` hook. Every time the values we retrieved via the collector function changes, our component will re-render. This is very much similar to Redux's `connect` pattern.
 
 
 For instance, let's say we would like to enable the content editable text from the previous section only when the user has actually clicked on our component: 
@@ -127,9 +127,9 @@ const Hero = ({title}) => {
 ```
 
 ## Default Props
-While it's not necessary as we could simply define default parameters (eg: ES6 defaults) directly within our components, however these default values will not actually be recorded into the component's corresponding `Node`, which could leave us with a lots of empty prop values when we wish to retrieve the `Node` for a component when building other parts of our editor (eg: a Toolbar for editing a component's values).
+While it's not necessary as we could simply define default parameters (e.g.: ES6 defaults) directly within our components, these default values will not actually be recorded into the component's corresponding `Node`, which could leave us with a lot of empty prop values when we wish to retrieve the `Node` for a component when building other parts of our editor (eg: a Toolbar for editing a component's values).
 
-To prevent that, we can explicitly specify default prop values via the `craft.defaultProps` like so:
+To prevent that, we can explicitly specify default prop values via the `craft.defaultProps` like the following:
 
 ```jsx
 const Hero = ({text}) => { /** same as previous example **/ }
@@ -141,18 +141,18 @@ Hero.craft = {
 ```
 
 ## Specify drag/drop rules
-You may want to restrict how your components are dragged, or what goes in and out of your component. These rules can be specified in the static `craft.rules`:
+You may want to restrict how your components are dragged or what goes in and out of your component. These rules can be specified in the static `craft.rules`:
 
-- `canDrag(currentNode)` : Specifies if a component can be dragged. Applicable only to components whose corresponding `Node` are direct children of a `Canvas`.
-- `canMoveIn(incomingNode, currentNode)`: Decide if an incoming Node can be dropped into the current component. Applicable only to components whose corresponding `Node` is a `Canvas`.
-- `canMoveOut(outgoingNode, currentNode)` : Decide if a child Node can be dragged out of the current component. Applicable only to components whose corresponding `Node` is a `Canvas`.
+- `canDrag(currentNode)` : Specifies if a component can be dragged. Applicable only to components whose corresponding `Node` is a direct child of a `Canvas`.
+- `canMoveIn(incomingNode, currentNode)`: Decides if an incoming Node can be dropped into the current component. Applicable only to components whose corresponding `Node` is a `Canvas`.
+- `canMoveOut(outgoingNode, currentNode)` : Decides if a child Node can be dragged out of the current component. Applicable only to components whose corresponding `Node` is a `Canvas`.
 
 
-Let us write a (pretty strange) rule for our Hero component, whereby users can only drag it if they change the `text` prop to "Drag": 
+Let us write a (pretty strange) rule for our Hero component which users can only drag if they change the `text` prop to "Drag": 
 ```jsx
-const Hero = ({text}) => { /** same as previous example **/ }
+const Hero = ({text}) => { /** same as the previous example **/ }
 Hero.craft = {
-  defaultProps: { /** same as previous example **/ },
+  defaultProps: { /** same as the previous example **/ },
   rules: {
     canDrag: (node) => !!node.data.props.text == "Drag"
   }
@@ -161,13 +161,13 @@ Hero.craft = {
 
 
 ## Related components
-What happens if you need to design some component to complement our  user component ? For instance, if we were planning on building a Toolbar somewhere in our page editor, we would like the Toolbar to display a bunch of text inputs to allow the user the edit the currently selected component. It would be great if we could retrieve a specific component that has all the relevant inputs for the user to edit the currently selected component.
+What happens if you need to design some component to complement our  user component? For instance, if we were planning on building a Toolbar somewhere in our page editor, we would like the Toolbar to display a bunch of text inputs to allow the user the edit the currently selected component. It would be great if we could retrieve a specific component that has all the relevant inputs for the user to edit the currently selected component.
 
 
-This is where related components becomes useful. These components share the same corresponding `Node` as the actual user component, hence the `useNode` hook that we have using all these while will be made available to these components as well. 
+This is where related components become useful. These components share the same corresponding `Node` as the actual user component, hence the `useNode` hook that we have been using all this while will be made available to these components as well. 
 
 ```jsx
-const Hero = ({text}) => { /** same as previous example **/ }
+const Hero = ({text}) => { /** same as the previous example **/ }
 Hero.craft = {
   related: {
     toolbar: HeroToolbarSettings
@@ -216,7 +216,7 @@ const Toolbar = () => {
 ```
 
 ## Defining droppable regions
-Let's say we are creating a Hero component that has 2 sections where the users could drop other user elements into. 
+Let's say we are creating a Hero component that has two sections where the users could drop other user elements into. 
 
 ```jsx
 const Hero = ({title}) => {
@@ -254,9 +254,9 @@ const Hero = ({title}) => {
 }
 ```
 
-But wait, what if we want to define rules for these 2 new droppable regions ? 
+But wait, what if we want to define rules for these two new droppable regions? 
 
-The `is` prop of the `<Canvas />` component is used to specify the `type` of the User Element for the Canvas Node. Hence, instead of specifying a simple DOM element which we don't have much control over - let's specify a brand new User Component.
+The `is` prop of the `<Canvas />` component is used to specify the `type` of the User Element for the Canvas Node. Hence, instead of specifying a simple DOM element which we don't have much control over, let's specify a brand new User Component.
 
 
 ```jsx {1-23,29,33}
@@ -300,4 +300,4 @@ const Hero = ({title}) => {
 }
 ```
 
-`HeroHeader` and `HeroFooter` are user components, so we can now design and configure them just like any other user components. On that note, don't forget that you will need to include these in the `resolver` as well.
+`HeroHeader` and `HeroFooter` are User Components, so we can now design and configure them just like any other User Components. On that note, don't forget that you will need to include these in the `resolver` as well.

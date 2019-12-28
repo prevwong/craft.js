@@ -7,7 +7,7 @@ import {Image} from "../src/components/Image.js";
 
 
 ## Overview
-In this tutorial, we'll be designing a simple page editor. It's recommended that you have a basic to intermediate workings of React and it'd be even better if you first have a quick glance at the Key Concepts and come back here; but if you are feeling adventourous - that's fine too. 
+In this tutorial, we'll be designing a simple page editor. It's recommended that you have a basic to intermediate workings of React and it'd be even better if you first have a quick glance at the Key Concepts and come back here; if you are feeling adventurous, that's fine too. 
 
 
 ## Installation
@@ -22,17 +22,17 @@ npm install --save @craftjs/core
 ```
 
 
-## Designing an user interface
+## Designing a user interface
 With Craft.js you decide how your editor should look and function. So, let's build a user interface for our page editor. We'll add the page editor functionalities later.
 
 
-To make our lives easier, we'll use some external packages for designing our user interfaces
+To make our lives easier, we'll use some external packages for designing our user interfaces.
 ```bash
 yarn add material-ui react-contenteditable material-ui-color-picker
 ```
 
 ### User Components
-Let's first create the User Components - aka the components that our end users will be able create/edit/move around. 
+Let's first create the User Components - the components that our end users will be able create/edit/move around. 
 
 #### Text
 ```jsx
@@ -65,7 +65,7 @@ export const Button = ({size, variant, primary, children}) => {
 ```
 
 #### Container
-We will also create a Container component which would allow our users to change it's background color and padding.
+We will also create a Container component which would allow our users to change its background colour and padding.
 
 ```jsx
 // components/user/Container.js
@@ -79,7 +79,7 @@ export const Container = ({background, padding = 0, children}) => {
 ```
 
 #### Card
-Now, let's create another user component that will be more advanced. It will be composed of the Container component we made earlier, and it will contain 2 droppable regions - one for text and another for buttons.
+Now, let's create another user component that will be more advanced. It will be composed of the Container component we made earlier, and it will contain two droppable regions; one for text and another for buttons.
 
 ```jsx
 // components/user/Card.js
@@ -106,7 +106,7 @@ export const Card = ({background, padding = 20}) => {
 
 ### The Editor
 #### Toolbox
-First, let's build a toolbox for which our users would be able to drag and drop to create new instances of those user components we just defined.
+First, let's build a toolbox which our users would be able to drag and drop to create new instances of those user components we just defined.
 
 ```jsx
 // components/Toolbox.js
@@ -136,7 +136,7 @@ export const Toolbox = () => {
 ```
 
 #### Settings Panel
-We would also want to create a section here where we can display a bunch of settings for which our users could use them edit the props of the user components.
+We would also want to create a section here where we can display a bunch of settings which our users could use to edit the props of the user components.
 
 For now, let's just put in some dummy text fields. We'll revisit this in the later sections.
 
@@ -253,14 +253,14 @@ export default function App() {
 
 
 ## Implementing Craft.js
-Up to this point, we have made an user interface for our page editor. Now, let's get it to work!
+Up to this point, we have made a user interface for our page editor. Now, let's get it to work!
 
 ### Setup
-- First wrap our application with `<Editor />` which sets up the Editor's context. We'll also need to specify the list of user components in the `resolver` prop in order for Craft.js to be able to (de)serialize our User Components.
+- First wrap our application with `<Editor />` which sets up the Editor's context. We'll also need to specify the list of user components in the `resolver` prop for Craft.js to be able to (de)serialize our User Components.
 
 - Then wrap the editable area with `<Frame />`and `<Canvas />` 
   - `<Frame />` passes the rendering process to Craft.js. 
-  - `<Canvas />` creates a droppable region where it's immediate children are draggable.
+  - `<Canvas />` creates a droppable region where its immediate children are draggable.
 
 
 ```jsx
@@ -312,7 +312,7 @@ export default function App() {
 
 ```
 
-Every element that is rendered in `<Frame />` is managed by an object in the editor's internal state called a `Node`  - which describes the element - it's events, props among other things. Whether an element is draggable or droppable depends on the type of `Node` that manages it. 
+Every element that is rendered in `<Frame />` is managed by an object in the editor's internal state called a `Node` which describes the element, its events, and props among other things. Whether an element is draggable or droppable or not depends on the type of `Node` that manages it. 
 
 - If the `Node` is a Canvas, then it's droppable
 - If the `Node` is an immediate child of a Canvas, then it's draggable.
@@ -331,12 +331,12 @@ Every element that is rendered in `<Frame />` is managed by an object in the edi
 </Frame>
 ```
 
-If you refreshed the page, you would notice that absolutely nothing has changed - and that's a good thing!
+If you refreshed the page, you will notice that absolutely nothing has changed - and that's a good thing!
 
 ### Enabling Drag and Drop
 Inside a User Component, we have access to the `useNode` hook which provides several information and methods related to the corresponding `Node`. 
 
-The first thing we will need to do is to let Craft.js to manage the DOM of our component. The hook provides `connectors` which acts as a bridge between the DOM and the events in Craft.js:
+The first thing we will need to do is to let Craft.js to manage the DOM of our component. The hook provides `connectors` which act as a bridge between the DOM and the events in Craft.js:
 
 
 ```jsx {3,5,6,8}
@@ -357,8 +357,8 @@ export const Text = ({text}) => {
 }
 ```
 Let's break this down a little:
-- We passed the `connect` connector to the root element of our component, this tells Craft.js that this element represents the Text component. If the component's corresponding Node is a Canvas, then this also defines the area that is droppable.
-- Then, we also passed `drag` connector to the same root element, this adds the drag handlers to the DOM. If the component's Node is a child of a Canvas, then the user will be able to drag this element and it will move the entire Text component.
+- We passed the `connect` connector to the root element of our component; this tells Craft.js that this element represents the Text component. If the component's corresponding Node is a Canvas, then this also defines the area that is droppable.
+- Then, we also passed `drag` connector to the same root element; this adds the drag handlers to the DOM. If the component's Node is a child of a Canvas, then the user will be able to drag this element and it will move the entire Text component.
 
 We can also specify additional configuration to our component via the `craft` prop. Let's define drag-n-drop rules for our Text Component:
 ```jsx
@@ -414,7 +414,7 @@ At this point, you could refresh the page and you would be able to drag stuff ar
 <Image img="tutorial/dnd.gif" />
 
 #### Defining Droppable regions
-Of course, our Card component is supposed to have 2 droppable regions. Remember how `<Canvas />` defined a droppable region earlier in our application ? We can do the same thing here insde our Card component.
+Of course, our Card component is supposed to have two droppable regions. Remember how `<Canvas />` defined a droppable region earlier in our application? We can do the same here insde our Card component.
 
 ```jsx 
 export const Card = (({bg})) => {
@@ -436,7 +436,7 @@ export const Card = (({bg})) => {
 > `<Canvas />` used inside User Component must specify an `id` prop
 
 
-You might be wondering how do we set drag/drop rules for those new droppable regions we made. Currently, we have set the `is` prop in our `<Canvas />` to a div, but we can actually point it to a User Component. 
+You might be wondering how do we set drag/drop rules for the new droppable regions we made. Currently, we have set the `is` prop in our `<Canvas />` to a div, but we can actually point it to a User Component. 
 
 Hence, we can specify and create a new User Component and define rules via the `craft` prop just like what we have done previously.
 
@@ -449,7 +449,7 @@ import { Canvas, useNode } from "@craftjs/core";
 
 import { Container }  from "./Container";
 
-// Notice how CardTop and CardBottom does not specify the drag connector. This is because we won't be using these components as draggables; thus adding the drag handler would be pointless.
+// Notice how CardTop and CardBottom do not specify the drag connector. This is because we won't be using these components as draggables; adding the drag handler would be pointless.
 
 export const CardTop = ({children}) => {
   const { connectors: {connect} } = useNode();
@@ -498,7 +498,7 @@ export const Card = ({background, padding = 20}) => {
 }
 ```
 
-Remember that every user component must be added to our resolver, so let's add CardTop and CardBottom:
+Remember that every User Component must be added to our resolver, so let's add CardTop and CardBottom:
 ```jsx
 ...
 export default function App() {
@@ -518,9 +518,9 @@ export default function App() {
 
 
 ### Implementing the Toolbox
-Let's go back to our Toolbox component and make it so that dragging those buttons into the editor would create new instances of the user components they represent. Just as `useNode` provides methods and information related to a specific `Node`, `useEditor` specifies methods and informations related to the entire editor's state.
+Let's go back to our Toolbox component and make it so that dragging those buttons into the editor would create new instances of the user components they represent. Just as `useNode` provides methods and information related to a specific `Node`, `useEditor` specifies methods and information related to the entire editor's state.
 
-The `useEditor` also provides `connectors` - the one we are interested in right now is `create` which attaches a drag handler to the  DOM specified in it's first arguement, and creates the element specified in it's second arguement.
+The `useEditor` also provides `connectors`; the one we are interested in right now is `create` which attaches a drag handler to the  DOM specified in its first arguement and creates the element specified in its second arguement.
 
 ```jsx
 // components/Toolbox.js
@@ -555,14 +555,14 @@ export const Toolbox = () => {
 };
 ```
 
-Now, you could drag and drop the Buttons, and it would actually create new instances of our User Components.
+Now, you could drag and drop the Buttons, and they would actually create new instances of our User Components.
 
 ### Making the components editable
-Up till this point, we have a page editor where our users can move elements around. But, we are missing one kinda important thing - enabling our users to edit these components' props.
+Up until this point, we have a page editor where our users can move elements around. But, we are missing one important thing - enabling our users to edit these components' props.
 
 The `useNode` hook provides us with the method `setProp` which can be used to manipulate a component's props. Let's implement a content editable for our Text Component:
 
-For simplicity sake, we wil be using `react-contenteditable`
+For simplicity's sake, we will be using `react-contenteditable`
 
 ```jsx
 import React, {useCallback} from "react";
@@ -590,7 +590,7 @@ export const Text = ({text, fontSize}) => {
 }
 ```
 
-But let's only enable content editable only when the component is clicked when it's already selected - essentially, a double click. 
+But let's only enable content editable only when the component is clicked when it's already selected; a double click is essential. 
 
 The `useNode` hook accepts a collector function which can be used to retrieve state information related to the corresponding `Node`:
 
@@ -665,11 +665,11 @@ export const Text= ({text, fontSize, textAlign}) => {
 <Image img="tutorial/text-edit-others.gif" />
 
 
-Hm, we can agree that does not look all that good as it obstructs the user experience. Wouldn't it be better if the entire `.text-additional-settings` Grid is relocated to the Settings Panel that we created earlier ?
+We can agree that it does not look all that good since it obstructs the user experience. Wouldn't it be better if the entire `.text-additional-settings` Grid is relocated to the Settings Panel that we created earlier?
 
-The question then, how will the Settings Panel be able render the `.text-additional-settings`  when our Text component is selected ? 
+The question is, how will the Settings Panel be able render the `.text-additional-settings`  when our Text component is selected? 
 
-This is where Related Components becomes useful. Essentially, a Related component shares the same `Node` context as our actual User component; thus it can make use of the `useNode` hook. Additionally, a Related component is registered to a component's `Node` - which means we can access and render this component anywhere within the editor. 
+This is where Related Components become useful. Essentially, a Related Component shares the same `Node` context as our actual User component; it can make use of the `useNode` hook. Additionally, a Related Component is registered to a component's `Node`, which means we can access and render this component anywhere within the editor. 
 
 
 ```jsx
@@ -719,7 +719,7 @@ Text.craft = {
 }
 ```
 
-Before, we move on to the Settings Panel - let's quickly do the same for the other User Components:
+Before we move on to the Settings Panel, let's quickly do the same for the other User Components:
 ```jsx
 // components/user/Button.js
 import {Button as MaterialButton, Grid, FormControl, FormLabel, RadioGroup,Radio, FormControlLabel} from "@material-ui/core";
@@ -810,16 +810,16 @@ export const Card({background, padding = 20}) { ... }
 
 Card.craft = {
   related: {
-    // Since Card has the same settings as Container, so we'll just reuse ContainerSettings 
+    // Since Card has the same settings as Container, we'll just reuse ContainerSettings 
     settings: ContainerSettings
   }
 }
 ```
 
 #### Setting default props
-Setting default props is not strictly necessary. However, it is helpful if we wish to access the component's props via it's corresponding `Node`, like what we are doing in the `settings` related component above.
+Setting default props is not strictly necessary. However, it is helpful if we wish to access the component's props via its corresponding `Node`, like what we did in the `settings` related component above.
 
-For instance, if an instance of Text component is rendereed as such: `<Text text="Hi" />`; we would get a null value when we tried to retrieve the `fontSize` prop via it's `Node`. An easy way to solve this is to explicity define each User Component's `defaultProps`:
+For instance, if a Text component is rendered as `<Text text="Hi" />`, we would get a null value when we try to retrieve the `fontSize` prop via its `Node`. An easy way to solve this is to explicity define each User Component's `defaultProps`:
 
 ```jsx
 // components/user/Text.js
@@ -879,7 +879,7 @@ Card.craft = {
 ```
 
 ### Settings Panel
-We need to get the currently selected component, which can be obtained from the editor's internal state. Similar to `useNode`, a collector function can be specified to `useEditor` - the difference is here we'll be dealing with the editor's internal state rather than with a specific `Node`:
+We need to get the currently selected component which can be obtained from the editor's internal state. Similar to `useNode`, a collector function can be specified to `useEditor`. The difference is here, we'll be dealing with the editor's internal state rather than with a specific `Node`:
 
 ```jsx
 const { currentlySelectedId } = useEditor((state) => ({
@@ -942,7 +942,7 @@ export const SettingsPanel = () => {
 <Image img="tutorial/settings-panel.gif" />
 
 
-Now, we have to make our Delete button work! We can achieve this by using the `delete` action available from the `useEditor` hook:
+Now, we have to make our Delete button work. We can achieve this by using the `delete` action available from the `useEditor` hook:
 
 ```jsx
 // components/SettingsPanel.js
@@ -985,11 +985,11 @@ export const SettingsPanel = () => {
 ```
 
 ### Topbar
-The last part of the editor that we've to take care of and we're done! 
+This is the last part of the editor that we have to take care of and then we're done! 
 
 First, we can get the editor's `enabled` state by passing in a collector function just like what we did before. Then, we can use the `setOptions` action to toggle the `enabled` state.
 
-Lastly, the `useEditor` hook also provides `query` methods which provides information based the editor'state. In our case,  we would like to get the current state of all the `Nodes` in a serialised form - we can do this by calling the `serialize` query method. 
+Lastly, the `useEditor` hook also provides `query` methods which provide information based the editor'state. In our case,  we would like to get the current state of all the `Nodes` in a serialised form; we can do this by calling the `serialize` query method. 
 
 ```jsx
 // components/Topbar.js
@@ -1079,9 +1079,9 @@ export const Topbar = () => {
 Lastly, go ahead and play around with the editor. Then, click on the Serialize JSON to console
 
 ## You made it 🎉
-We've made it till the end! Not too bad right ? Hopefully, you were able to see the simplicity of building a fully working page editor with Craft.js
+We've made it until the end! Not too bad right? Hopefully, you're able to see the simplicity of building a fully working page editor with Craft.js.
 
-We did not need to worry about implementing the drag-n-drop system but rather simply focus on writing rules and attaching connectors to the desired elements. Defining droppable regions was simply by wrapping an area with `<Canvas />`.
+We do not need to worry about implementing the drag-n-drop system but rather simply focus on writing rules and attaching connectors to the desired elements. Defining droppable regions is simply wrapping an area with `<Canvas />`.
 
-When it came to writing the components themselves, it was the same as writing any other React component - you control how the components react to different editor events, and even how they are edited. 
+When it comes to writing the components themselves, it is the same as writing any other React component - you control how the components react to different editor events and how they are edited. 
 

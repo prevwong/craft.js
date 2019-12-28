@@ -122,7 +122,7 @@ const Container = () => {
 
 A Node may be moved if it satisfies both of the following conditions:
 - The Node is an immediate child of a Canvas Node, hence it's draggable
-- The Node's `canDrag` rule allows it
+- The Node's `canDrag` rule allows it to be moved 
 
 #### Parameters
 <API items={[
@@ -138,7 +138,7 @@ A Node may be moved if it satisfies both of the following conditions:
 ### isTopLevelCanvas
 <Badge type="function" noMargin={true} />
 
-A Canvas Node is considered top-level if it's defined inside a User Component and it is not rendered as an immediate child of another Node.
+A Canvas Node is considered top-level if it is defined inside a User Component and it is not rendered as an immediate child of another Node.
 
 #### Parameters
 <API items={[
@@ -192,7 +192,7 @@ const Container = () => {
 ### hasTopLevelCanvases
 <Badge type="function" noMargin={true} />
 
-This returns `true` if a Node's User Component defines a `<Canvas />` in it's render method.
+This returns `true` if a Node's User Component defines a `<Canvas />` in its render method.
 
 #### Parameters
 <API items={[
