@@ -5,9 +5,13 @@ title: Basic Tutorial
 
 import {Image} from "../src/components/Image.js";
 
+<a href="https://craft.js.org/examples/basic" className="btn">Live Demo</a> 
+<a href="https://github.com/prevwong/craft.js/tree/master/packages/examples/basic" className="btn btn-text">View Code</a> 
 
 ## Overview
 In this tutorial, we'll be designing a simple page editor. It's recommended that you have a basic to intermediate workings of React and it'd be even better if you first have a quick glance at the Key Concepts and come back here; if you are feeling adventurous, that's fine too. 
+
+
 
 
 ## Installation
@@ -991,6 +995,9 @@ First, we can get the editor's `enabled` state by passing in a collector functio
 
 Lastly, the `useEditor` hook also provides `query` methods which provide information based the editor'state. In our case,  we would like to get the current state of all the `Nodes` in a serialised form; we can do this by calling the `serialize` query method. 
 
+> We'll explore how to compress this output and have the editor load from the serialised JSON in the [Save and Load](/craft.js/r/docs/save-load-state) guide.
+
+
 ```jsx
 // components/Topbar.js
 import React from "react";
@@ -1029,54 +1036,9 @@ export const Topbar = () => {
 };
 ```
 
-#### Compressing serialised output
-For obvious reasons, you probably will not want to save that big chunk of JSON output directly, to a server or a database for example. Instead, this is where you should employ a text compression technique of your choice to obtain a more manageable format of the serialised output.
-
-Let's use the `lz-utf8` text compression library to help us with this:
-```jsx
-
-import lz from "lzutf8";
-
-export const Topbar = () => {
-  const { actions, query, enabled } = useEditor((state) => ({
-    enabled: state.options.enabled
-  }));
-
-  return (
-    <Box px={1} py={1} mt={3} mb={1} bgcolor="#cbe8e7">
-      <Grid container alignItems="center">
-        <Grid item xs>...</Grid>
-        <Grid item>
-          <MaterialButton 
-            size="small" 
-            variant="outlined" 
-            color="secondary"
-            onClick={() => {
-              console.log("Please wait, getting compressed output:")
-              const json = query.serialize();
-              const uint8array = lz.compress(json);
-              const base64 = lz.encodeBase64(uint8array);
-              console.log({
-                json,
-                uint8array, 
-                base64
-              });
-            }}
-          >
-              Serialize JSON to console
-          </MaterialButton>
-        </Grid>
-      </Grid>
-    </Box>
-  )
-};
-```
-
 <Image img="tutorial/topbar.gif" />
 
 
-#### Recovering state from JSON
-Lastly, go ahead and play around with the editor. Then, click on the Serialize JSON to console
 
 ## You made it 🎉
 We've made it until the end! Not too bad right? Hopefully, you're able to see the simplicity of building a fully working page editor with Craft.js.
