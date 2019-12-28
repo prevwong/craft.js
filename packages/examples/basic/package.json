@@ -3,9 +3,10 @@
   "version": "4.0.0",
   "private": true,
   "dependencies": {
+    "@craftjs/core": "*",
     "@material-ui/core": "latest",
     "clsx": "latest",
-    "@craftjs/core": "*",
+    "lzutf8": "^0.5.5",
     "material-ui-color-picker": "^3.2.0",
     "next": "9.1.2",
     "next-transpile-modules": "^2.3.1",

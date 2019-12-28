@@ -179,7 +179,7 @@ export const SettingsPanel = () => {
 ```
 
 ####  Top bar
-Let's design a section that is going to contain a switch for users to disable the editor's functionality and also a button that is simply going to output the serialized output in the browser's console.
+Let's design a section that is going to contain a switch for users to disable the editor's functionality and also a button that is simply going to display the serialized output in the browser's console.
 
 ```jsx
 // components/Topbar.js
@@ -1029,8 +1029,54 @@ export const Topbar = () => {
 };
 ```
 
+#### Compressing serialised output
+For obvious reasons, you probably will not want to save that big chunk of JSON output directly, to a server or a database for example. Instead, this is where you should employ a text compression technique of your choice to obtain a more manageable format of the serialised output.
+
+Let's use the `lz-utf8` text compression library to help us with this:
+```jsx
+
+import lz from "lzutf8";
+
+export const Topbar = () => {
+  const { actions, query, enabled } = useEditor((state) => ({
+    enabled: state.options.enabled
+  }));
+
+  return (
+    <Box px={1} py={1} mt={3} mb={1} bgcolor="#cbe8e7">
+      <Grid container alignItems="center">
+        <Grid item xs>...</Grid>
+        <Grid item>
+          <MaterialButton 
+            size="small" 
+            variant="outlined" 
+            color="secondary"
+            onClick={() => {
+              console.log("Please wait, getting compressed output:")
+              const json = query.serialize();
+              const uint8array = lz.compress(json);
+              const base64 = lz.encodeBase64(uint8array);
+              console.log({
+                json,
+                uint8array, 
+                base64
+              });
+            }}
+          >
+              Serialize JSON to console
+          </MaterialButton>
+        </Grid>
+      </Grid>
+    </Box>
+  )
+};
+```
+
 <Image img="tutorial/topbar.gif" />
 
+
+#### Recovering state from JSON
+Lastly, go ahead and play around with the editor. Then, click on the Serialize JSON to console
 
 ## You made it 🎉
 We've made it till the end! Not too bad right ? Hopefully, you were able to see the simplicity of building a fully working page editor with Craft.js

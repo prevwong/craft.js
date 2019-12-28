@@ -1,5 +1,4 @@
 {
-  "name": "root",
   "npmClient": "yarn",
   "private": true,
   "scripts": {
