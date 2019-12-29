@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "incremental": true,
+    "incremental": false,
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
@@ -14,7 +14,8 @@
     "jsx": "react",
     "forceConsistentCasingInFileNames": false,
     "declaration": true,
-    "allowSyntheticDefaultImports": false
+    "allowSyntheticDefaultImports": false,
+    "allowJs": false
   },
   "exclude": [
     "**/node_modules/**",

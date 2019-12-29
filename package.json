@@ -2,7 +2,7 @@
   "npmClient": "yarn",
   "private": true,
   "scripts": {
-    "dev": "lerna run start --parallel",
+    "start": "lerna run start --parallel",
     "build": "lerna run build --stream",
     "clean": "lerna run clean --stream",
     "build-site": "./scripts/build-site.sh",
@@ -24,7 +24,8 @@
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^5.1.2",
+    "rollup-plugin-terser": "^5.1.3",
+    "sade": "^1.7.0",
     "typescript": "^3.5.1"
   },
   "workspaces": {
@@ -34,7 +35,8 @@
     ]
   },
   "dependencies": {
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "rollup-plugin-typescript": "^1.0.1"
   },
   "license": "MIT"
 }

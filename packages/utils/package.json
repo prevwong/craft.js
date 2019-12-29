@@ -4,16 +4,15 @@
   "version": "0.0.0",
   "description": "Shared utilities used across the craft.js monorepo",
   "author": "Prev Wong <prevwong@gmail.com>",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "lib/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "../../scripts/build.sh",
-    "start": "cross-env NODE_ENV=development && ../../scripts/start.sh",
+    "build": "rollup -c -w",
+    "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
     "clean": "rimraf node_modules lib dist"
   },
   "dependencies": {
-    "@craftjs/core": "^0.0.0",
     "@types/react": "^16.9.11",
     "lodash-es": "^4.17.15",
     "redux": "^4.0.4",
@@ -21,5 +20,9 @@
   },
   "peerDependencies": {
     "react": "^16.11.0"
+  },
+  "devDependencies": {
+    "rollup-plugin-typescript2": "^0.25.3",
+    "typescript": "^3.7.4"
   }
 }

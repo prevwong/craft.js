@@ -1,10 +1,12 @@
 {
   "name": "@craftjs/layers",
   "version": "1.0.0",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "license": "MIT",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "start": "rollup -c -w",
+    "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
     "build": "rollup -c",
     "clean": "rimraf node_modules lib dist"
   },

@@ -1,20 +1,11 @@
-import typescript from 'rollup-plugin-typescript'
-// import { terser } from 'rollup-plugin-terser'
+import config from "../../rollup.config";
 import image from '@svgr/rollup'
 
-
-
-export default [
-  {
-    input: 'src/index.tsx',
-    output: {
-      dir: "dist",
-      format: "esm"
-    },
-    plugins: [
-      image(),
-      typescript(),
-      // terser()
-    ]
-  }
-]
+export default {
+  ...config,
+  input: "./src/index.tsx",
+  plugins: [
+    ...config.plugins,
+    image()
+  ]
+}
