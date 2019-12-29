@@ -12,7 +12,7 @@ import { isCanvas, isRoot } from "../nodes";
 import { serializeNode } from "../utils/serializeNode";
 import { deserializeNode } from "../utils/deserializeNode";
 import { resolveComponent } from "../utils/resolveComponent";
-import invariant from "invariant";
+import invariant from "tiny-invariant";
 import {
   QueryCallbacksFor,
   ROOT_NODE,

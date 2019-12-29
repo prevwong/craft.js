@@ -4,8 +4,7 @@ import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID, ROOT_NODE, CallbacksFor,
 import { isCanvas, isTopLevelCanvas } from "../nodes";
 import { QueryMethods } from "./query";
 import { updateEventsNode } from "../utils/updateEventsNode";
-
-const invariant = require('invariant');
+import invariant from "tiny-invariant";
 
 
 const Actions = (state: EditorState, query: QueryCallbacksFor<typeof QueryMethods>) => {

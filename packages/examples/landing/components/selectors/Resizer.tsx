@@ -165,7 +165,6 @@ export const Resizer = ({
     });
   }, [])
 
-  // console.log(internalDimensions)
   return (
     <Resizable
       enable={['top', 'left', 'bottom', 'right', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'].reduce((acc: any, key) => {
@@ -204,7 +203,6 @@ export const Resizer = ({
         if (isPercentage(nodeHeight)) height = pxToPercent(height, getElementDimensions(dom.parentElement).height) + '%';
         else height = `${height}px`;
 
-        // console.log(window.getComputedStyle(dom.parentElement).height)
         if (isPercentage(width) && dom.parentElement.style.width == "auto") {
           width = editingDimensions.current.width + d.width + "px"
         }

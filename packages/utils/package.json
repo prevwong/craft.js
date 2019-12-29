@@ -10,13 +10,14 @@
   "scripts": {
     "build": "../../scripts/build.sh",
     "start": "cross-env NODE_ENV=development && ../../scripts/start.sh",
-    "clean" : "rimraf node_modules lib dist"
+    "clean": "rimraf node_modules lib dist"
   },
   "dependencies": {
-    "@types/react": "^16.9.11",
     "@craftjs/core": "^0.0.0",
-    "lodash": "^4.17.15",
-    "redux": "^4.0.4"
+    "@types/react": "^16.9.11",
+    "lodash-es": "^4.17.15",
+    "redux": "^4.0.4",
+    "tiny-invariant": "^1.0.6"
   },
   "peerDependencies": {
     "react": "^16.11.0"

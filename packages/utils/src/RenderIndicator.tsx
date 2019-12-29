@@ -1,7 +1,6 @@
 import React from "react";
 
 export const RenderIndicator = ({style}) => {
-  // console.log("style", style);
   return (
     <div
       style={{

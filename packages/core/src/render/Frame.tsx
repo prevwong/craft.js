@@ -3,8 +3,8 @@ import { NodeElement, Canvas } from "../nodes";
 import { ROOT_NODE } from "@craftjs/utils";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import { useCallback } from "react";
+import invariant from "tiny-invariant";
 
-const invariant = require("invariant");
 let i= 0;
 export type Frame = {
   nodes: String

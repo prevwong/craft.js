@@ -1,6 +1,6 @@
 import { isValidElement, ReactElement } from 'react'
 import { cloneElement } from 'react'
-import invariant from 'invariant'
+import invariant from 'tiny-invariant'
 import { useMemo } from 'react'
 // import { useInternalManager } from 'craftjs/lib/manager/useInternalManager'
 
