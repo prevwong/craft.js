@@ -1,4 +1,14 @@
-yarn build && yarn build-site
+yarn build
+
+lerna run export --stream
+rm -rf site/
+mkdir site
+cp -r ./packages/examples/landing/out/* site/
+touch site/.nojekyll
+cp -r ./packages/docs/build site/r
+mkdir site/examples
+cp -r ./packages/examples/basic/out/ site/examples/basic
+
 STATUS="$(git status)"
 
 if [[ $STATUS == *"nothing to commit, working tree clean"* ]]

@@ -5,9 +5,11 @@ const withCSS = require('@zeit/next-css')
 
 let plugins = [
   [withCSS],
-  [withTM, {
-    transpileModules: ['@craftjs/core', '@craftjs/utils']
-  }],
+  (process.env.NODE_ENV != "production" ? 
+    [withTM, {
+     transpileModules: ['@craftjs/core', '@craftjs/utils']
+    }] : []
+  ),
 ];
 
 module.exports = withPlugins(plugins, {

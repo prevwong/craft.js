@@ -3,6 +3,8 @@ id: save-load-state
 title: Save and Load
 ---
 
+import {Image} from "../src/components/Image.js";
+
 This guide extends upon the [Basic Tutorial](/craft.js/r/docs/basic-tutorial)
 
 ## Overview
@@ -233,3 +235,4 @@ export const Topbar = ({setJson}) => {
 
 Now, play with the editor and press the `Copy Current State` button when you are done. Refresh the page so the editor returns to its default state, then press the `Load State` button and paste the copied output - you should see the editor displaying the elements in the state from the time you copied.
 
+<Image img="tutorial/save-and-load.gif" />

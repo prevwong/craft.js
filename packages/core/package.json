@@ -16,7 +16,6 @@
   "license": "MIT",
   "main": "./dist/umd/index.js",
   "module": "./dist/index.js",
-  "type": "module",
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",

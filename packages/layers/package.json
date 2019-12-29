@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
-  "type": "module",
   "scripts": {
     "start": "rollup -c -w",
     "build": "rollup -c",

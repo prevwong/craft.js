@@ -6,7 +6,6 @@
   "author": "Prev Wong <prevwong@gmail.com>",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
-  "type": "module",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "../../scripts/build.sh",

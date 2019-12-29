@@ -48,6 +48,7 @@ export function Canvas<T extends React.ElementType>({ is, children, passThrough,
             const rootNode = query.createNode(
               React.createElement(Canvas, { is, ...props }, children)
             );
+            console.log("adding")
             internalId = rootNode.id;
             add(rootNode, nodeId);
           } else {

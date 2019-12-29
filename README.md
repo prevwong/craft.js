@@ -1,4 +1,4 @@
-# Craft.js
+# craft.js
 
 Building page editors are difficult - you have to worry about the drag and drop system, how components should be designed and how they should be rendered/updated.
 
@@ -8,16 +8,17 @@ Craft.js provides you the building blocks, which you can then use to iteratively
   <a href="https://craft.js.org">
     <img alt="styled-components" src="assets/readme-demo.gif"/>
   </a>
+  <a herf="https://craft.js.org">Live Demo</a>
 </div>
 
-
-[Live Demo](https://craft.js.org)
 
 ## Docs
 - [Core concepts](https://craft.js.org/r/docs/concepts/nodes)
 - [Tutorial](https://craft.js.org/r/docs/basic-tutorial)
 - [API Reference](https://craft.js.org/r/docs/api/editor-state)
 
+## Examples
+- [Basic](https://craft.js.org/examples/basic)
 
 ## Features
 ### It's just React
@@ -161,9 +162,6 @@ const App = () => {
   )
 }
 ```
-
-## Examples
-- [Basic](https://craft.js.org/examples/basic)
 
 ## Acknowledgements
 

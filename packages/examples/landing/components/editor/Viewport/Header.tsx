@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Checkmark from "../../../public/icons/check.svg";
 import Customize from "../../../public/icons/customize.svg";
 import cx from "classnames"; 
-import lzutf8 from "lzutf8";
 
 const HeaderDiv = styled.div<{ enabled: boolean}>`
   width: ${props => props.enabled ? "100%" : "800px"};
@@ -62,7 +61,7 @@ const Btn = styled.a`
 `;
 
 export const Header = () => {
-  const {enabled, query} = useEditor((state) => ({
+  const {enabled, actions: {setOptions}} = useEditor((state) => ({
     enabled: state.options.enabled
   }));
   
@@ -81,16 +80,12 @@ export const Header = () => {
         </div>
         <div className="flex">
           <Btn 
-            className={cx(["transition", {
+            className={cx(["transition cursor-pointer", {
               "bg-green-400" : enabled,
               "bg-primary" : !enabled
             }])}
             onClick={() => {
-              const json = query.serialize();
-              const compressed = lzutf8.compress(json);
-              const base64 = lzutf8.encodeBase64(compressed);
-              console.log(base64);
-              // setOptions(options => options.enabled = !enabled)
+              setOptions(options => options.enabled = !enabled)
             }}
           >
             {enabled ? <Checkmark /> : <Customize />}
