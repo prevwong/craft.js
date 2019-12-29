@@ -13,9 +13,14 @@ export function transformJSXToNode(child: React.ReactElement | string, extras: P
   const prefix = (type === Canvas || (extras.data.isCanvas)) ? "canvas" : "node";
   const id = extras.id ? extras.id : `${prefix}-${shortid.generate()}`;
 
+  const mergedProps = {
+    ...props,
+    ...((extras && extras.data && extras.data.props) ? extras.data.props : {})
+  }
+
   return createNode({
+    ...extras.data,
     type: type,
-    props,
-    ...extras.data
+    props: mergedProps
   }, id);
 }

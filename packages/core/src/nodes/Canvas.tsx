@@ -6,9 +6,7 @@ import { mapChildrenToNodes } from "../nodes";
 import { useInternalNode } from "./useInternalNode";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import { ERROR_ROOT_CANVAS_NO_ID, ERROR_INFINITE_CANVAS } from "@craftjs/utils";
-const invariant = require("invariant");
-
-type GetComponentProps<T extends React.ElementType> = React.ComponentProps<T>
+import invariant from "tiny-invariant";
 
 export type Canvas<T extends React.ElementType> = {
   id?: NodeId,
@@ -18,8 +16,6 @@ export type Canvas<T extends React.ElementType> = {
   children?: React.ReactNode;
   passThrough?: boolean;
 } & Partial<Pick<NodeRules, 'canMoveIn' | 'canMoveOut'>> & React.ComponentProps<T>;
-
-
 
 export function Canvas<T extends React.ElementType>({ is, children, passThrough, ...props }: Canvas<T>) {
   const id = props.id;
@@ -44,16 +40,34 @@ export function Canvas<T extends React.ElementType>({ is, children, passThrough,
 
           let internalId;
 
-          if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
-            const rootNode = query.createNode(
-              React.createElement(Canvas, { is, ...props }, children)
-            );
-            console.log("adding")
-            internalId = rootNode.id;
-            add(rootNode, nodeId);
-          } else {
-            internalId = node._childCanvas[id];
+          // if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
+          const existingNode = node._childCanvas && node._childCanvas[id] && query.getNode(node._childCanvas[id]);
+
+          let newProps = { is, ...props };
+
+          if ( existingNode ) {
+            if ( existingNode.data.type == is && typeof is != "string" ) {
+              newProps = {
+                ...newProps, 
+                ...existingNode.data.props
+              }
+            }
           }
+
+          const rootNode = query.createNode(
+            React.createElement(Canvas, newProps, children),
+            existingNode && { 
+              id: existingNode.id,
+              data: existingNode.data
+            }
+          );
+
+          internalId = rootNode.id;
+          add(rootNode, nodeId);
+
+          // } else {
+            // internalId = node._childCanvas[id];
+          // }
           setInternalId(internalId);
       }
     }
