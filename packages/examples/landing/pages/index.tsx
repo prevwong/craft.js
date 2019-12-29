@@ -5,7 +5,7 @@ import { Container, Text } from "../components/selectors";
 import { createMuiTheme } from "@material-ui/core"
 import { ThemeProvider } from '@material-ui/styles';
 import "../styles/tailwind.css";
-import { Custom1 } from '../components/selectors/Custom1';
+import { Custom1, OnlyButtons} from '../components/selectors/Custom1';
 import { Custom2 } from '../components/selectors/Custom2';
 import { Custom3 } from '../components/selectors/Custom3';
 import { Button } from '../components/selectors/Button';
@@ -47,7 +47,7 @@ function App() {
           }}
         />
         <Editor
-          resolver={{ Container, Text, Custom1, Custom2, Custom3, Button, Video }}
+          resolver={{ Container, Text, Custom1, Custom2, Custom3, OnlyButtons, Button, Video }}
           enabled={enabled}
           onRender={RenderNode}
         >
