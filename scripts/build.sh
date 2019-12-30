@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 args=()
 if [ $NODE_ENV == 'development' ]

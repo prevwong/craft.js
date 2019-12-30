@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+
 lerna run export --stream
 rm -rf site/
 mkdir site

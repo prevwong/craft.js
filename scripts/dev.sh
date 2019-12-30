@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 npx lerna run clean --stream
 wait
