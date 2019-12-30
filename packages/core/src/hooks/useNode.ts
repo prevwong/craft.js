@@ -2,7 +2,6 @@ import { Node  } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import {  useConnectorHooks, ConnectorElementWrapper } from "@craftjs/utils";
-import { isRoot } from "../nodes";
 
 
 export type useNode<S = null> = Omit<useInternalNode<S>, "actions"> & Pick<useInternalNode<S>['actions'], 'setProp'> & {
@@ -22,14 +21,16 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S>
  * @param {function(Node): Collected} [collector] - Transform values from the corresponding Node's state
  */
 export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
-  const { handlers: editorConnectors, enabled } = useInternalEditor((state) => ({enabled: state.options.enabled}));
-
   const { id, related, actions: { setDOM, setProp }, inNodeContext, ...collected } = useInternalNode(collect);
-  
+  const { isRoot, handlers: editorConnectors, enabled } = useInternalEditor((state, query) => ({
+    enabled: state.options.enabled,
+    isRoot: query.isRoot(id)
+  }));
+
   const connectors = useConnectorHooks({
       drag: [
         (node) => {
-          if ( inNodeContext && !isRoot(id) ) {
+          if ( inNodeContext && !isRoot ) {
             node.setAttribute("draggable", "true")
             editorConnectors.drag(node, id);
           }

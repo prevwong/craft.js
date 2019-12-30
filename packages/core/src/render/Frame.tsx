@@ -1,19 +1,18 @@
 import React, {useEffect, useState, useMemo, useRef } from "react";
-import { NodeElement, Canvas } from "../nodes";
+import { NodeElement } from "../nodes/NodeElement";
+import {Canvas} from "../nodes/Canvas";
 import { ROOT_NODE } from "@craftjs/utils";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import { useCallback } from "react";
 import invariant from "tiny-invariant";
 
-let i= 0;
 export type Frame = {
   nodes: String
 } & any;
 
 export const Frame: React.FC<Frame> = ({
   children,
-  nodes,
-  ...props
+  nodes
 }) => {
   const { actions: {  reset, replaceNodes }, query: { createNode, deserialize } } = useInternalEditor();
 
@@ -21,7 +20,7 @@ export const Frame: React.FC<Frame> = ({
     return children;
   }, []);
   
-  const [render, setRender] = useState(null);
+  const [render, setRender] = useState<React.ReactElement | null>(null);
   const rerender = useRef(false);
 
   const guard = useCallback((nodes) => {

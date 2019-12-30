@@ -1,5 +1,4 @@
-import { NodeId, Node } from "../interfaces";
-import { NodeInfo, DropAction } from "./interfaces";
+import {  Node, NodeInfo, DropAction } from "../interfaces";
 
 export default function findPosition(
   parent: Node,
@@ -19,13 +18,11 @@ export default function findPosition(
     yLimit = 0,
     xCenter = 0,
     yCenter = 0,
-    dimDown = 0,
-    dim = null,
-    id = null;
+    dimDown = 0;
+
   // Each dim is: Top, Left, Height, Width
   for (var i = 0, len = dims.length; i < len; i++) {
-    dim = dims[i];
-    id = dims[i].id as NodeId;
+    const dim = dims[i];
 
     // Right position of the element. Left + Width
     dimRight = dim.left + dim.outerWidth;

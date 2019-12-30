@@ -1,4 +1,4 @@
-import { NodeId, Node } from "../interfaces/nodes";
+import { NodeId, Node } from "./nodes";
 
 export type NodeInfo =  {
   id?: NodeId;
@@ -19,5 +19,5 @@ export interface DropAction {
 }
 
 export type Placement = DropAction & {
-  currentNode: Node
+  currentNode: Node | null
 }

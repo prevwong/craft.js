@@ -1,24 +1,24 @@
 import React from 'react';
 import { NodeData, NodeId, Node } from "../interfaces";
 import { produce } from "immer";
-import { Canvas } from "../nodes";
+import { Canvas } from "../nodes/Canvas";
 import { NodeProvider } from "../nodes/NodeContext";
 
-export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id?: NodeId): Node {
+export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id: NodeId): Node {
 
   let actualType = (data.type) as any;
   const {canMoveIn, canMoveOut, ...props} = data.props;
 
   let node = produce({}, (node: Node) => {
     node.id = id;
+
     node.data = {
       ...data,
-      parent: data.parent || null,
-      name: null,
-      displayName: null,
+      name: (data.type as any).name,
+      displayName: (data.type as any).name,
       props,
       custom: data.custom || {}
-    };
+    } as NodeData;
 
     node.related = {};
 

@@ -6,7 +6,7 @@ export const getDeepNodes = (nodes:Nodes, id: NodeId, deep: boolean = true) => {
     if (deep || (!deep && depth == 0)) {
       if (node.data._childCanvas) {
         Object.keys(node.data._childCanvas).map(canvasName => {
-          const virtualId = node.data._childCanvas[canvasName];
+          const virtualId = node.data._childCanvas![canvasName];
           result.push(virtualId);
           result = recursive(virtualId, result, depth + 1);
         })

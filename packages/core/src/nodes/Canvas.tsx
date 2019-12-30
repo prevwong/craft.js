@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { NodeId, NodeRules } from "../interfaces";
-import { NodeElement } from "./NodeElement";
-import { SimpleElement } from "../render/RenderNode";
-import { mapChildrenToNodes } from "../nodes";
+import { mapChildrenToNodes } from "../utils/mapChildrenToNodes";
 import { useInternalNode } from "./useInternalNode";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import { ERROR_ROOT_CANVAS_NO_ID, ERROR_INFINITE_CANVAS } from "@craftjs/utils";
 import invariant from "tiny-invariant";
+import { SimpleElement } from "../render/SimpleElement";
+import { NodeElement } from "./NodeElement";
 
 export type Canvas<T extends React.ElementType> = {
   id?: NodeId,
@@ -21,7 +21,7 @@ export function Canvas<T extends React.ElementType>({ is, children, passThrough,
   const id = props.id;
   const { actions: { add }, query, inContext } = useInternalEditor();
   const { node, nodeId, inNodeContext } = useInternalNode((node) => ({ node: node.data, nodeId: node.id }));
-  const [internalId, setInternalId] = useState(null);
+  const [internalId, setInternalId] = useState<NodeId | null>(null);
   const [initialised, setInitialised] = useState(false);
   useEffect(() => {
     if (inContext && inNodeContext) {

@@ -7,8 +7,8 @@ import {
   Indicator,
   Node,
   Options,
+  NodeInfo,
 } from "../interfaces";
-import { isCanvas, isRoot } from "../nodes";
 import { serializeNode } from "../utils/serializeNode";
 import { deserializeNode } from "../utils/deserializeNode";
 import { resolveComponent } from "../utils/resolveComponent";
@@ -42,11 +42,18 @@ const getNodeFromIdOrNode = (node: NodeId | Node, cb: (id: NodeId) => Node) => t
 export function QueryMethods(Editor: EditorState) {
   const _ = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) => QueryMethods(Editor)[name];
   const options = Editor  && Editor.options;
+
+  // const nodeGuard = (...params) => {
+  //   const cb = params[params.length - 1];
+  //   const nodeIdsToCheck = 
+  // }
+
   return {
     getOptions(): Options {
       return options;
     },
     getNode(id: NodeId) {
+      invariant(Editor.nodes[id], "Node does not exist in the Editor state");
       return Editor.nodes[id];
     },
     createNode(child: React.ReactElement | string, extras?: any) {
@@ -77,7 +84,7 @@ export function QueryMethods(Editor: EditorState) {
 
       return (parent === ROOT_NODE ? [ROOT_NODE, ...bound] : bound).filter(
         id => {
-          if (isCanvas(Editor.nodes[id])) return true;
+          if (_("isCanvas")(id)) return true;
           return false;
         }
       );
@@ -104,8 +111,7 @@ export function QueryMethods(Editor: EditorState) {
           nodes,
           _childCanvas,
           isCanvas,
-          custom,
-          name,
+          custom
         } = deserializeNode(reducedNodes[id], options.resolver);
         if (!Comp) return accum;
 
@@ -124,8 +130,8 @@ export function QueryMethods(Editor: EditorState) {
     },
     canDragNode: (node: Node | NodeId) => {
       const targetNode = getNodeFromIdOrNode(node, (id) => Editor.nodes[id]);
-      if ( !isRoot(targetNode) ) {
-        invariant(isCanvas(targetNode.data.parent) == true, ERROR_MOVE_ROOT_CANVAS);
+      if ( !_("isRoot")(targetNode.id) ) {
+        invariant(_("isCanvas")(targetNode.data.parent) == true, ERROR_MOVE_ROOT_CANVAS);
         invariant(targetNode.rules.canDrag(targetNode), ERROR_CANNOT_DRAG);
       }
 
@@ -152,7 +158,7 @@ export function QueryMethods(Editor: EditorState) {
       );
 
       if (newParent) {
-        invariant(isCanvas(newParentNode), ERROR_MOVE_TO_NONCANVAS_PARENT);
+        invariant(_("isCanvas")(newParentNode.id), ERROR_MOVE_TO_NONCANVAS_PARENT);
         invariant(
           newParentNode.rules.canMoveIn(targetNode, newParentNode),
           ERROR_MOVE_INCOMING_PARENT
@@ -184,7 +190,7 @@ export function QueryMethods(Editor: EditorState) {
     ) => {
       if (source === target) return;
       const targetNode = Editor.nodes[target],
-        isTargetCanvas = isCanvas(targetNode);
+        isTargetCanvas = _("isCanvas")(targetNode.id);
 
       
 
@@ -200,14 +206,16 @@ export function QueryMethods(Editor: EditorState) {
         (result, id: NodeId) => {
           const dom = nodesToDOM(Editor.nodes[id]);
           if (dom) {
-            result.push({
+            const info: NodeInfo = {
               id,
               ...getDOMInfo(dom),
-            });
+            };
+
+            result.push(info);
           }
           return result;
         },
-        []
+        [] as  NodeInfo[] 
       ): [];
 
       const dropAction = findPosition(
@@ -225,7 +233,7 @@ export function QueryMethods(Editor: EditorState) {
           ...dropAction,
           currentNode,
         },
-        error: null,
+        error: false,
       };
 
       try {
@@ -237,5 +245,30 @@ export function QueryMethods(Editor: EditorState) {
 
       return output;
     },
+
+    isCanvas(id: NodeId) {
+      const node = _("getNode")(id);
+      return node.data.isCanvas;
+    },
+    isRoot(id: NodeId) {
+      const node = _("getNode")(id);
+      return node.id == ROOT_NODE;
+    },
+    isTopLevelCanvas (id: NodeId) {
+      const node = _("getNode")(id);
+      return !_("isRoot")(id) && !node.data.parent.startsWith("canvas-");
+    },
+    isDeletable(id: NodeId) {
+      return !_("isRoot")(id) && (_("isCanvas")(id) ? !_("isTopLevelCanvas")(id) : true);
+    },
+    isMoveable(id: NodeId) {
+      const node = _("getNode")(id);
+      return _("isDeletable")(id) && node.rules.canDrag(node);
+    },
+    hasTopLevelCanvases(id: NodeId) {
+      const node = _("getNode")(id);
+      return !!node.data._childCanvas;
+    },
+
   };
 }
