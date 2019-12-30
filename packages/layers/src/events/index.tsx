@@ -153,10 +153,10 @@ export const EventManager: React.FC<any> = ({ children }) => {
                     const parentHeadingInfo = layers[parent.id].headingDom.getBoundingClientRect();
 
                     mutable.current.currentCanvasHovered = null;
-                    if ( query.isCanvas(parent.id) ) {
+                    if ( query.is(parent.id).Canvas() ) {
                         if (parent.data.parent) {
                             const grandparent = query.getNode(parent.data.parent);
-                            if (query.isCanvas(grandparent.id)) {
+                            if (query.is(grandparent.id).Canvas())  {
                                 mutable.current.currentCanvasHovered = parent;
                                 if ( 
                                     (e.clientY > parentHeadingInfo.bottom - 10 && !layers[parent.id].expanded) || 
