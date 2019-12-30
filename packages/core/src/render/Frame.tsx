@@ -7,12 +7,12 @@ import { useCallback } from "react";
 import invariant from "tiny-invariant";
 
 export type Frame = {
-  nodes: String
-} & any;
+  json: String
+} 
 
 export const Frame: React.FC<Frame> = ({
   children,
-  nodes
+  json
 }) => {
   const { actions: {  reset, replaceNodes }, query: { createNode, deserialize } } = useInternalEditor();
 
@@ -23,8 +23,8 @@ export const Frame: React.FC<Frame> = ({
   const [render, setRender] = useState<React.ReactElement | null>(null);
   const rerender = useRef(false);
 
-  const guard = useCallback((nodes) => {
-    if (!nodes) {
+  const guard = useCallback((json) => {
+    if (!json) {
       const rootCanvas = React.Children.only(memoizedChildren) as React.ReactElement;
       invariant(rootCanvas.type && rootCanvas.type == Canvas, "The immediate child of <Frame /> has to be a Canvas");
       let node = createNode(rootCanvas, {
@@ -35,10 +35,12 @@ export const Frame: React.FC<Frame> = ({
         [ROOT_NODE]: node
       });
     } else {
-      const rehydratedNodes = deserialize(nodes);
+      const rehydratedNodes = deserialize(json);
       replaceNodes(rehydratedNodes);
     }
-    setRender(<NodeElement id={ROOT_NODE} />);
+    // setTimeout(() => {
+      setRender(<NodeElement id={ROOT_NODE} />);
+    // }, 2000) 
   }, []);
 
   useMemo(() => {
@@ -46,14 +48,14 @@ export const Frame: React.FC<Frame> = ({
       rerender.current = true;
       setRender(null);
     } else {
-      guard(nodes);
+      guard(json);
     }
-  }, [nodes]);
+  }, [json]);
 
   useEffect(() => {
    if ( rerender.current ) {
      rerender.current = false;
-     guard(nodes);
+     guard(json);
    }
   }, [rerender.current]);
 
