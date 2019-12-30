@@ -1,11 +1,9 @@
 import { NodeId, Node, Nodes, Options, NodeEvents } from "../interfaces";
 import { EditorState, Indicator } from "../interfaces";
 import { ERROR_INVALID_NODEID, ERROR_ROOT_CANVAS_NO_ID, ROOT_NODE, CallbacksFor, QueryCallbacksFor, ERROR_NOPARENT } from "@craftjs/utils";
-// import { isCanvas, isTopLevelCanvas } from "../nodes/helpers";
 import { QueryMethods } from "./query";
 import { updateEventsNode } from "../utils/updateEventsNode";
-import invariant from "ts-invariant";
-import {isCanvas} from "../nodes/helpers";
+import invariant from "tiny-invariant";
 
 export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof QueryMethods>) => {
   const _ = <T extends keyof CallbacksFor<typeof Actions>>(name: T) => Actions(state, query)[name];
@@ -34,6 +32,8 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
       state.nodes = nodes;
     },
     add(nodes: Node[] | Node, parentId?: NodeId ) {
+      const isCanvas = (node: Node | NodeId) => node && (typeof node == 'string' ? node.startsWith("canvas-") : node.data.isCanvas)
+
       if (!Array.isArray(nodes)) nodes = [nodes];
       if (parentId && !state.nodes[parentId].data.nodes && isCanvas(parentId)) state.nodes[parentId].data.nodes = [];
       
@@ -43,15 +43,18 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
 
         const parentNode = state.nodes[parent!];   
         
-        if (parentNode && isCanvas(node.id) && !isCanvas(parentNode.id) ) {
+        if (parentNode && isCanvas(node) && !isCanvas(parentNode) ) {
           invariant(node.data.props.id, ERROR_ROOT_CANVAS_NO_ID);
           if (!parentNode.data._childCanvas) parentNode.data._childCanvas = {};
           node.data.parent = parentNode.id;
           parentNode.data._childCanvas[node.data.props.id] = node.id;
           delete node.data.props.id;
         } else {
-          if ( parentId) query.canDropInParent(node, parentId);
-          if (parentNode ) {
+          if ( parentId) {
+            query.is(parentId).Droppable(node, (err) => {
+              throw new Error(err);
+            });
+
             if ( parentNode.data.props.children ) delete parentNode.data.props["children"];
             
             // if (parentId && !state.nodes[parentId].data.nodes) state.nodes[parentId].data.nodes = [];
@@ -59,7 +62,7 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
             const currentNodes = parentNode.data.nodes;
             currentNodes.splice((node.data.index !== undefined) ? node.data.index : currentNodes.length, 0, node.id);
             node.data.parent =  parent;
-          } 
+          }
         }        
         state.nodes[node.id] = node;
       });
@@ -81,7 +84,9 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
         newParent = state.nodes[newParentId],
         newParentNodes = newParent.data.nodes;
 
-      query.canDropInParent(targetNode, newParentId);
+      query.is(newParentId).Droppable(targetNode, (err) => {
+        throw new Error(err);
+      });
 
       const currentParent = state.nodes[currentParentId],
             currentParentNodes = currentParent.data.nodes!;
@@ -103,8 +108,8 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
     delete(id: NodeId) {
       invariant(id != ROOT_NODE, "Cannot delete Root node");
       const targetNode = state.nodes[id];
-      if (query.isCanvas(targetNode.id)) {
-        invariant(!query.isTopLevelCanvas(targetNode.id), "Cannot delete a Canvas that is not a direct child of another Canvas");
+      if (query.is(targetNode.id).Canvas()) {
+        invariant(!query.is(targetNode.id).TopLevelCanvas(), "Cannot delete a Canvas that is not a direct child of another Canvas");
         targetNode.data.nodes!.map((childId) => {
           _("delete")(childId);
         })
