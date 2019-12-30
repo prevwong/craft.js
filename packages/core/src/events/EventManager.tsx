@@ -3,7 +3,7 @@ import { Node, NodeId, EditorEvents} from "../interfaces";
 import movePlaceholder from "./movePlaceholder";
 import { getDOMInfo, useConnectorHooks, RenderIndicator } from "@craftjs/utils";
 import { useInternalEditor } from "../editor/useInternalEditor";
-import { debounce } from "lodash-es"
+import { debounce } from "debounce"
 import {useHandlerGuard} from "@craftjs/utils";
 import {EventContext} from "./EventContext";
 
