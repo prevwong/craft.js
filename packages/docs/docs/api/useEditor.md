@@ -31,22 +31,20 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
     ["connectors", "Object", [
       ["select", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when clicked will in turn click the specified Node's user component"],
       ["hover", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when hovered will in turn hover the specified Node's user component"],
-      ["drag", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when dragged will move the specified Node's user component. Only applicable if the component is rendered as an immediate child of a <Canvas /> component."],
+      ["drag", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that when dragged will move the specified Node's user component. Only applicable if the component is rendered as an immediate child of a &lt;Canvas /&gt; component."],
       ["create", "(dom: HTMLElement, userElement: React.ReactElement) => HTMLElement", "Specifies the DOM that when dragged will create a new instance of the specified User Element at the drop location."]
     ]],
     ["actions", "Object", [
       ["add", "(nodes: Node | Node[], parentId?: String) => void", "Add Node(s) to the given parent node ID. By default the parentId is the ROOT_ID"],
       ["delete", "(nodeID: String) => void", "Delete the specified Node"],
-      ["move", "(nodeId: String, targetParentId: String, index: number) => void", "Move a Node to the specified parent Node at the given index. Subject to the conditions in query.canDropInParent()"],
+      ["move", "(nodeId: String, targetParentId: String, index: number) => void", "Move a Node to the specified parent Node at the given index."],
       ["setProp", "(nodeId: String, props: Object) => void", "Manipulate the props of the given Node"],
       ["setHidden", "(nodeId: String, bool: boolean) => void", "When set to true, the User Component of the specified Node will be hidden, but not removed"],
       ["setCustom", "(nodeId: String, custom: (custom: Object) => void", "Update the given Node's custom properties"],
-      ["setOptions", "(options: Object) => void", "Update the editor's options. The options object passed is the same as the  `<Editor />` props."]
+      ["setOptions", "(options: Object) => void", "Update the editor's options. The options object passed is the same as the &lt;Editor /&gt; props."]
     ]],
     ["query", "Query", [
       ["createNode", "(child: React.ReactElement) => Node", "Create a Node from a React element"],
-      ["canDragNode", "(nodeId: String) => boolean", "Check if the given Node can be dragged"],
-      ["canDropInParent", "(nodeId: String, parenNodeId: String) => boolean", "Check if the Node can be dropped in the specified Canvas Node"],
       ["getDropPlaceholder", 
         "(sourceNodeId: String, targetNodeId: String, pos: {x: number, y: number}, nodesToDOM?: (node: Node) => HTMLElement = node => node.dom)",
         "Given the target Node and mouse coordinates on the screen, determine the best possible location to drop the source Node. By default, the Node's DOM property is taken into consideration."
@@ -56,7 +54,8 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["getNode", "(id: NodeId) => Node", "Get a Node by its ID"],
       ["getDeepNodes", "(id: NodeId) => NodeId[]", "Return all descendant Nodes"],
       ["getAllParents", "(id: NodeId) => NodeId[]", "Return all ancestor Nodes"],
-      ["getOptions", "() => Object", "Get the options specified in the <Craft /> component"]
+      ["getOptions", "() => Object", "Get the options specified in the &lt;Editor /&gt; component"],
+      ["is", "(id: NodeId) => Object", "Returns an object containing helper methods to describe the specified Node. Click <a href='/craft.js/r/docs/api/utilities/'>here</a> for more information."]
     ]],
     ["inContext", "boolean", "Returns false if the component is rendered outside of the `<Editor />`. This is useful if you are designing a general component that you also wish to use outside of Craft.js."],
     ["...collected", "Collected", "The collected values returned from the collector"]

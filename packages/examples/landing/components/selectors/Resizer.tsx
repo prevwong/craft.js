@@ -4,7 +4,8 @@ import { Resizable } from "re-resizable";
 import {  useNode, useEditor } from "@craftjs/core";
 import cx from "classnames";
 import { isPercentage, pxToPercent, percentToPx, getElementDimensions } from "../../utils/numToMeasurement";
-import { debounce } from "lodash";
+import { debounce } from "debounce";
+
 export type Resizer = {
   propKey: Record<'width' | 'height', string>
   children: React.ReactNode;
@@ -100,7 +101,7 @@ export const Resizer = ({
   const {isRootNode, parentDirection} = useEditor((state, query) => {
     return {
       parentDirection: parent && state.nodes[parent] && state.nodes[parent].data.props.flexDirection,
-      isRootNode: query.isRoot(id)
+      isRootNode: query.is(id).Root()
     }
   });
 

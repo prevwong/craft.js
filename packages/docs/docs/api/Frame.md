@@ -19,8 +19,8 @@ const { connectors, setProp, ...collected } = useNode(collector);
 ## Reference
 ### Props
 <API items={[
-  ["nodes?", "String", "The serialised Nodes"],
-  ["children", "React.ReactElement<Canvas>", "This would define how the editor state would look like by default when there are no serialised nodes passed. Must begin with a <Canvas /> which creates the Root Node."]
+  ["json?", "String", "The serialised Nodes"],
+  ["children", "React.ReactElement<Canvas>", "This would define how the editor state would look like by default when there is nothing passed to the `json` prop. Must begin with a &lt;Canvas /&gt; which creates the Root Node."]
 ]} /> 
 
 
@@ -62,7 +62,7 @@ const App = () => {
       <Editor>
         <h2>My Page Editor</h2>
         <Frame
-          nodes='{"canvas-ROOT":{"type":"div","isCanvas":true,"props":{},"parent":null,"displayName":"div","custom":{},"nodes":["node-sdiwzXkvQ","node-rGFDi0G6m","node-yNBLMy5Oj"]},"node-sdiwzXkvQ":{"type":{"resolvedName":"Card"},"props":{},"parent":"canvas-ROOT","displayName":"Card","custom":{},"_childCanvas":{"main":"canvas-_EEw_eBD_","second":"canvas-lE4Ni9oIn"}}'
+          json='{"canvas-ROOT":{"type":"div","isCanvas":true,"props":{},"parent":null,"displayName":"div","custom":{},"nodes":["node-sdiwzXkvQ","node-rGFDi0G6m","node-yNBLMy5Oj"]},"node-sdiwzXkvQ":{"type":{"resolvedName":"Card"},"props":{},"parent":"canvas-ROOT","displayName":"Card","custom":{},"_childCanvas":{"main":"canvas-_EEw_eBD_","second":"canvas-lE4Ni9oIn"}}'
         > 
           <Canvas is={Container}> // defines the Root Node
             <h2>Drag me around</h2>

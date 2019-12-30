@@ -6,7 +6,7 @@
     "start": "cross-env NODE_ENV=development && next dev -p 3001",
     "build": "next build",
     "export": "next export",
-    "clean": "rimraf lib node_modules .next out dist"
+    "clean": "rimraf lib .next out dist"
   },
   "dependencies": {
     "@craftjs/core": "*",
@@ -17,7 +17,7 @@
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-typescript": "^1.1.1",
     "classnames": "^2.2.6",
-    "lodash": "^4.17.15",
+    "debounce": "^1.2.0",
     "lzutf8": "^0.5.5",
     "next": "9.1.2",
     "next-seo": "^3.2.0",

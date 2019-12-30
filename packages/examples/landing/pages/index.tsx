@@ -52,7 +52,7 @@ function App() {
           onRender={RenderNode}
         >
           <Viewport>
-              <Frame nodes={json}>
+              <Frame json={json}>
                 <Canvas is={Container} width="800px" height="auto" background={{ r: 255, g: 255, b: 255, a: 1 }} padding={["40", "40", "40", "40"]}>
                   <Canvas is={Container} flexDirection="row" width="100%" height="auto" padding={["40", "40", "40", "40"]} margin={["0", "0", "40", "0"]}>
                     <Canvas is={Container} width="40%" height="100%" padding={["0", "20", "0", "20"]}>
