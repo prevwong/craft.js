@@ -1,13 +1,28 @@
 import React from "react";
 import { Container } from "../Container";
-import { Canvas } from "@craftjs/core";
+import { Canvas, useNode } from "@craftjs/core";
 import { Button } from "../Button";
+
+export const OnlyButtons = ({children, ...props}) => {
+  const { connectors: {connect}} = useNode();
+  return (
+    <div title="only-buttons" ref={connect} {...props}>
+      {children}
+    </div>
+  )
+}
+
+OnlyButtons.craft = {
+  rules: {
+    canMoveIn: (node) => node.data.type == Button
+  }
+}
 
 export const Custom1 = (props: any) => {
   return (
     <Container {...props}>
       <h2 className="text-lg px-10 py-5 text-white">I'm a component that only accepts<br/> buttons.</h2>
-      <Canvas is="div" id="wow" className="w-full mt-5" canMoveIn={(node) => node.data.type == Button}>
+      <Canvas id="wow" className="w-full mt-5">
         <Button />
         <Button buttonStyle="outline" color={{r:255,g:255,b:255,a:1}}/>
       </Canvas>

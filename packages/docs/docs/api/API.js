@@ -13,7 +13,7 @@ const Item = (({item}) => {
         {title && <code className="api-title">{title}</code>}
         {type && <strong className="api-type">{type}</strong>}
       </div>
-      {description && <div className="api-description">{description}</div>}
+      {description && <div className="api-description" dangerouslySetInnerHTML={{__html: description }}></div>}
       {children && <API items={children} />}
     </li>
   )

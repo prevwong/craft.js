@@ -1,7 +1,6 @@
 import { useContext, useMemo } from "react";
 import { NodeContext, NodeProvider } from "./NodeContext";
-import { Node, NodeRefEvent } from "../interfaces";
-import { useEditor } from "../connectors";
+import { Node } from "../interfaces";
 import { useInternalEditor } from "../editor/useInternalEditor";
 
 

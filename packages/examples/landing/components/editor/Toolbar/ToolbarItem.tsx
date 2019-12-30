@@ -112,7 +112,6 @@ export const ToolbarItem = ({  full = false, propKey, type, onChange, index, ...
                 <RadioGroup value={value || 0} onChange={(e) => {
                   const value = e.target.value;
                   setProp((props: any) => {
-                    // console.log("updating", propKey, value)
                     props[propKey] = onChange ? onChange(value) : value;
                   })
                 }}>

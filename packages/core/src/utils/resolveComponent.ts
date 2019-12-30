@@ -1,5 +1,5 @@
 import { Resolver } from "../interfaces";
-import { Canvas } from "../nodes";
+import { Canvas } from "../nodes/Canvas";
 
 export const resolveComponent = (resolver: Resolver, comp: React.ElementType | string) => {
     let Comp: string;
@@ -9,18 +9,16 @@ export const resolveComponent = (resolver: Resolver, comp: React.ElementType | s
 
     if (resolver[name]) return name;
 
-    if (!Comp) {
-        for (let i = 0; i < Object.keys(resolver).length; i++) {
-            const name = Object.keys(resolver)[i],
-                fn = resolver[name];
-            if (fn === comp) {
-                Comp = name;
-                break;
-            }
+    for (let i = 0; i < Object.keys(resolver).length; i++) {
+        const name = Object.keys(resolver)[i],
+            fn = resolver[name];
+        if (fn === comp) {
+            Comp = name;
+            return Comp;
+            break;
         }
     }
+    
 
     // if ( !Comp && comp == Canvas) return "Canvas";
-    if ( !Comp && typeof comp === "string" ) return comp;
-    return Comp;
-}
+    if ( typeof comp === "string" ) return comp;}

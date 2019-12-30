@@ -3,4 +3,5 @@
  */
 
 export * from "./nodes";
-export * from "./manager";
+export * from "./editor";
+export * from "./events";

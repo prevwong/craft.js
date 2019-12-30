@@ -6,15 +6,27 @@ sidebar_label: Helpers
 
 import {API, Badge} from "./API";
 
+Methods that helps describe a `Node`. 
 
-### isRoot
+## Usage
+These methods are accessible via the `is` query in the `useEditor` hook:
+```jsx
+import {useEditor} from "@craftjs/core";
+
+const TextComponent = () => {
+  const { id } = useNode();
+  const { query: {is} } = useEditor();
+  const isRoot = is(id).Root(),
+        isDraggable = is(id).Draggable();
+  ...
+}
+```
+
+## Methods
+### Root
 <Badge type="function" />
 
 Returns `true` if a given Node is the Root Node
-#### Parameters
-<API items={[
-  ["node", "Node | NodeId", "The Node object or Node id to check"]
-]} /> 
 
 #### Returns
 <API items={[
@@ -39,14 +51,10 @@ const App  = () => {
 }
 ```
 
-### isCanvas
+### Canvas
 <Badge type="function" noMargin={true} />
 
 Check if a given Node is a Canvas
-#### Parameters
-<API items={[
-  ["node", "Node | NodeId", "The Node object or Node id to check"]
-]} /> 
 
 #### Returns
 <API items={[
@@ -71,7 +79,7 @@ const App  = () => {
 }
 ```
 
-### isDeletable
+### Deletable
 <Badge type="function" noMargin={true} />
 
 A Node may be deleted as long as it is **not** one of the following:
@@ -117,25 +125,8 @@ const Container = () => {
 }
 ```
 
-### isMoveable
-<Badge type="function" noMargin={true} />
 
-A Node may be moved if it satisfies both of the following conditions:
-- The Node is an immediate child of a Canvas Node, hence it's draggable
-- The Node's `canDrag` rule allows it to be moved 
-
-#### Parameters
-<API items={[
-  ["node", "Node", "The Node object to check"]
-]} /> 
-
-#### Returns
-<API items={[
-  ["boolean"]
-]} /> 
-
-
-### isTopLevelCanvas
+### TopLevelCanvas
 <Badge type="function" noMargin={true} />
 
 A Canvas Node is considered top-level if it is defined inside a User Component and it is not rendered as an immediate child of another Node.
@@ -189,15 +180,11 @@ const Container = () => {
 ```
 
 
-### hasTopLevelCanvases
+### ParentOfTopLevelCanvas
 <Badge type="function" noMargin={true} />
 
 This returns `true` if a Node's User Component defines a `<Canvas />` in its render method.
 
-#### Parameters
-<API items={[
-  ["node", "Node", "The Node object to check"]
-]} /> 
 
 #### Returns
 <API items={[
@@ -241,5 +228,58 @@ const Container = () => {
       </Canvas>
     </div>
   )
+}
+```
+
+
+
+### Draggable
+<Badge type="function" noMargin={true} />
+
+A Node may be dragged and moved if it satisfies both of the following conditions:
+- The Node is an immediate child of a Canvas Node, hence it's draggable
+- The Node's `canDrag` rule allows it to be moved 
+
+
+#### Parameters
+<API items={[
+  ["onError", "(err: string) => void", "Error callback"]
+]} /> 
+
+
+
+#### Returns
+<API items={[
+  ["boolean"]
+]} /> 
+
+
+
+### Droppable
+<Badge type="function" noMargin={true} />
+
+
+Check if a Node is Droppable relative to the target Node.
+
+#### Parameters
+<API items={[
+  ["targetId", "NodeId", "The target Node"],
+  ["onError", "(err: string) => void", "Error callback"]
+]} /> 
+
+#### Returns
+<API items={[
+  ["boolean"]
+]} /> 
+
+
+#### Example
+In the following example, we're checking if our `MyCanvas` component would be able to accept the current selected Node in the editor.
+```jsx
+const MyCanvas = () => {
+  const { id } = useNode();
+  const { canWeAcceptTheSelectedNode } = useEditor((state, query) => ({
+    canWeAcceptTheSelectedNode: state.events.selected && query.is(id).Droppable(state.events.selected)
+  }));
 }
 ```

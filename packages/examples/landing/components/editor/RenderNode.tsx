@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useCallback } from "react";
-import { useNode, isDeletable, useEditor } from "@craftjs/core";
+import { useNode, useEditor } from "@craftjs/core";
 import styled from "styled-components";
-import { isMoveable } from "@craftjs/core";
 import Move from "../../public/icons/move.svg"
 import Delete from "../../public/icons/delete.svg"
 import ReactDOM from "react-dom";
@@ -35,14 +34,14 @@ const Btn = styled.a`
 `
 
 export const RenderNode = ({ render }) => {
-  const { actions  } = useEditor();
+  const { actions, query } = useEditor();
   const { id, isActive, isHover, dom, name, moveable, deletable, connectors:{drag} } = useNode((node) => ({
     isActive: node.events.selected,
     isHover: node.events.hovered,
     dom: node.dom,
     name: node.data.custom.displayName || node.data.displayName,
-    moveable: isMoveable(node),
-    deletable: isDeletable(node)
+    moveable: query.is(node.id).Draggable(),
+    deletable: query.is(node.id).Deletable()
   }));
 
   const currentRef = useRef<HTMLDivElement>();

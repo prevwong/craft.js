@@ -21,7 +21,7 @@ A simple user component can easily be defined as such:
 import {useNode} from "@craftjs/core";
 
 const TextComponent = ({text}) => {
-  const {drag} = useNode();
+  const { connectors:{drag} } = useNode();
 
   return (
     <div ref={drag}>
@@ -60,7 +60,7 @@ In the following example, when the user clicks on a component, we'll display a m
 import {useNode} from "@craftjs/core";
 
 const TextComponent = ({text}) => {
-  const {connect, drag, isClicked, setProp } = useNode(
+  const { connectors:{ connect, drag }, isClicked, setProp } = useNode(
     (state) => ({ 
       isClicked: state.event.selected,
     })
@@ -94,7 +94,7 @@ In Craft.js, it's as simple as calling the `<Canvas />`
 ```jsx
 import {useNode} from "@craftjs/core";
 const Container = () => {
-  const {drag} = useNode();
+  const { connectors: {drag} } = useNode();
 
   return (
     <div ref={drag}>
@@ -147,7 +147,7 @@ const App = () => {
   const jsonString = /* get JSON from server */
   return (
     <Editor>
-      <Frame nodes={jsonString}>
+      <Frame json={jsonString}>
         ...
       </Frame>
     </Editor>

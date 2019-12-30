@@ -1,10 +1,11 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import { Resizable } from "re-resizable";
-import { isRoot, useNode, useEditor } from "@craftjs/core";
+import {  useNode, useEditor } from "@craftjs/core";
 import cx from "classnames";
 import { isPercentage, pxToPercent, percentToPx, getElementDimensions } from "../../utils/numToMeasurement";
-import { debounce } from "lodash";
+import { debounce } from "debounce";
+
 export type Resizer = {
   propKey: Record<'width' | 'height', string>
   children: React.ReactNode;
@@ -88,9 +89,7 @@ export const Resizer = ({
   children,
   ...props
 }: any, ) => {
-  const { setProp, connectors:{connect}, fillSpace, nodeWidth, nodeHeight, isRootNode, parent, active, inNodeContext } = useNode(node => ({
-    id: node.id,
-    isRootNode: isRoot(node),
+  const { id, setProp, connectors:{connect}, fillSpace, nodeWidth, nodeHeight, parent, active, inNodeContext } = useNode(node => ({
     parent: node.data.parent,
     active: node.events.selected,
     nodeWidth: node.data.props[propKey.width],
@@ -99,9 +98,10 @@ export const Resizer = ({
   }));
 
 
-  const {parentDirection} = useEditor(state => {
+  const {isRootNode, parentDirection} = useEditor((state, query) => {
     return {
-      parentDirection: parent && state.nodes[parent] && state.nodes[parent].data.props.flexDirection
+      parentDirection: parent && state.nodes[parent] && state.nodes[parent].data.props.flexDirection,
+      isRootNode: query.is(id).Root()
     }
   });
 
@@ -165,7 +165,6 @@ export const Resizer = ({
     });
   }, [])
 
-  // console.log(internalDimensions)
   return (
     <Resizable
       enable={['top', 'left', 'bottom', 'right', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'].reduce((acc: any, key) => {
@@ -204,7 +203,6 @@ export const Resizer = ({
         if (isPercentage(nodeHeight)) height = pxToPercent(height, getElementDimensions(dom.parentElement).height) + '%';
         else height = `${height}px`;
 
-        // console.log(window.getComputedStyle(dom.parentElement).height)
         if (isPercentage(width) && dom.parentElement.style.width == "auto") {
           width = editingDimensions.current.width + d.width + "px"
         }

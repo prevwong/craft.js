@@ -1,17 +1,18 @@
 {
   "name": "@craftjs/layers",
   "version": "1.0.0",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "license": "MIT",
+  "types": "./lib/index.d.ts",
   "scripts": {
-    "start": "rollup -c -w",
-    "build": "rollup -c",
-    "clean": "rimraf node_modules lib dist"
+    "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
+    "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
+    "clean": "rimraf lib dist"
   },
   "dependencies": {
     "@craftjs/core": "*",
-    "@craftjs/utils": "*",
-    "lodash": "^4.17.15"
+    "@craftjs/utils": "*"
   },
   "peerDependencies": {
     "react": ">= 16.11"
@@ -19,10 +20,6 @@
   "devDependencies": {
     "@babel/core": "^7.7.4",
     "@svgr/rollup": "^4.3.3",
-    "rollup": "^1.27.5",
-    "rollup-plugin-terser": "^5.1.2",
-    "rollup-plugin-typescript": "^1.0.1",
-    "styled-components": "^4.2.1",
-    "typescript": "^3.7.2"
+    "styled-components": "^4.2.1"
   }
 }

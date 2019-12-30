@@ -7,12 +7,12 @@ import {
   Indicator,
   Node,
   Options,
+  NodeInfo,
 } from "../interfaces";
-import { isCanvas, isRoot } from "../nodes";
 import { serializeNode } from "../utils/serializeNode";
 import { deserializeNode } from "../utils/deserializeNode";
 import { resolveComponent } from "../utils/resolveComponent";
-import invariant from "invariant";
+import invariant from "tiny-invariant";
 import {
   QueryCallbacksFor,
   ROOT_NODE,
@@ -26,7 +26,8 @@ import {
   ERROR_NOPARENT,
   getDOMInfo,
   ERROR_CANNOT_DRAG,
-  ERROR_MOVE_ROOT_CANVAS,
+  ERROR_MOVE_TOP_LEVEL_CANVAS,
+  ERROR_MOVE_ROOT_NODE
 } from "@craftjs/utils";
 import findPosition from "../events/findPosition";
 import { getDeepNodes } from "../utils/getDeepNodes";
@@ -42,11 +43,14 @@ const getNodeFromIdOrNode = (node: NodeId | Node, cb: (id: NodeId) => Node) => t
 export function QueryMethods(Editor: EditorState) {
   const _ = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) => QueryMethods(Editor)[name];
   const options = Editor  && Editor.options;
+
+
   return {
     getOptions(): Options {
       return options;
     },
     getNode(id: NodeId) {
+      invariant(Editor.nodes[id], "Node does not exist in the Editor state");
       return Editor.nodes[id];
     },
     createNode(child: React.ReactElement | string, extras?: any) {
@@ -77,7 +81,7 @@ export function QueryMethods(Editor: EditorState) {
 
       return (parent === ROOT_NODE ? [ROOT_NODE, ...bound] : bound).filter(
         id => {
-          if (isCanvas(Editor.nodes[id])) return true;
+          if (_("is")(id).Canvas) return true;
           return false;
         }
       );
@@ -104,8 +108,7 @@ export function QueryMethods(Editor: EditorState) {
           nodes,
           _childCanvas,
           isCanvas,
-          custom,
-          name,
+          custom
         } = deserializeNode(reducedNodes[id], options.resolver);
         if (!Comp) return accum;
 
@@ -121,15 +124,6 @@ export function QueryMethods(Editor: EditorState) {
         });
         return accum;
       }, {});
-    },
-    canDragNode: (node: Node | NodeId) => {
-      const targetNode = getNodeFromIdOrNode(node, (id) => Editor.nodes[id]);
-      if ( !isRoot(targetNode) ) {
-        invariant(isCanvas(targetNode.data.parent) == true, ERROR_MOVE_ROOT_CANVAS);
-        invariant(targetNode.rules.canDrag(targetNode), ERROR_CANNOT_DRAG);
-      }
-
-      return true;
     },
     canDropInParent: (node: Node | NodeId, newParent: NodeId) => {
       const targetNode = getNodeFromIdOrNode(node, (id) => Editor.nodes[id]);
@@ -152,7 +146,7 @@ export function QueryMethods(Editor: EditorState) {
       );
 
       if (newParent) {
-        invariant(isCanvas(newParentNode), ERROR_MOVE_TO_NONCANVAS_PARENT);
+        invariant(_("is")(newParentNode.id).Canvas(), ERROR_MOVE_TO_NONCANVAS_PARENT);
         invariant(
           newParentNode.rules.canMoveIn(targetNode, newParentNode),
           ERROR_MOVE_INCOMING_PARENT
@@ -184,7 +178,7 @@ export function QueryMethods(Editor: EditorState) {
     ) => {
       if (source === target) return;
       const targetNode = Editor.nodes[target],
-        isTargetCanvas = isCanvas(targetNode);
+        isTargetCanvas = _("is")(targetNode.id).Canvas();
 
       
 
@@ -200,14 +194,16 @@ export function QueryMethods(Editor: EditorState) {
         (result, id: NodeId) => {
           const dom = nodesToDOM(Editor.nodes[id]);
           if (dom) {
-            result.push({
+            const info: NodeInfo = {
               id,
               ...getDOMInfo(dom),
-            });
+            };
+
+            result.push(info);
           }
           return result;
         },
-        []
+        [] as  NodeInfo[] 
       ): [];
 
       const dropAction = findPosition(
@@ -225,17 +221,81 @@ export function QueryMethods(Editor: EditorState) {
           ...dropAction,
           currentNode,
         },
-        error: null,
+        error: false,
       };
 
-      try {
-        _("canDragNode")(source);
-        _("canDropInParent")(source, targetParent.id);
-      } catch (error) {
-        output.error = error;
-      }
+
+      _("is")(source).Draggable((err) => output.error = err);
+      _("is")(targetParent.id).Droppable(source, (err) => output.error = err);
 
       return output;
     },
+    is(id: NodeId)  {
+      const node = _("getNode")(id);
+      const is = _("is");
+
+      return {
+        Canvas: () => node.data.isCanvas,
+        Root: () => node.id == ROOT_NODE,
+        TopLevelCanvas: () => !is(node.id).Root && !node.data.parent.startsWith("canvas-"),
+        Deletable : () => !is(id).Root && (is(id).Canvas ? !is(id).TopLevelCanvas : true),
+        ParentOfTopLevelCanvas : () => !!node.data._childCanvas,
+        Draggable : (onError?: (err: string) => void) => {
+          try {
+            const targetNode = node;
+            invariant(!is(targetNode.id).Root(), ERROR_MOVE_ROOT_NODE);
+            if ( !is(targetNode.id).Root() ) {
+              invariant(is(targetNode.data.parent).Canvas() == true, ERROR_MOVE_TOP_LEVEL_CANVAS);
+              invariant(targetNode.rules.canDrag(targetNode), ERROR_CANNOT_DRAG);
+            }
+            return true;
+          } catch (err) {
+            if ( onError ) onError(err);
+            return false;
+          }
+        },
+        Droppable: (target: NodeId | Node, onError?: (err: string) => void) => {
+          try {
+            const targetNode = getNodeFromIdOrNode(target, (id) => Editor.nodes[id]);
+
+            const currentParentNode =
+                targetNode.data.parent &&
+                Editor.nodes[targetNode.data.parent],
+                newParentNode = node;
+
+            invariant(
+              currentParentNode ||
+                (!currentParentNode && !Editor.nodes[targetNode.id]),
+              ERROR_DUPLICATE_NODEID
+            );
+
+            invariant(is(newParentNode.id).Canvas(), ERROR_MOVE_TO_NONCANVAS_PARENT);
+            invariant(
+              newParentNode.rules.canMoveIn(targetNode, newParentNode),
+              ERROR_MOVE_INCOMING_PARENT
+            );
+          
+
+            if (currentParentNode) {
+              const targetDeepNodes = _("getDeepNodes")(targetNode.id);
+              invariant(targetNode.data.parent, ERROR_MOVE_NONCANVAS_CHILD);
+              invariant(
+                !targetDeepNodes.includes(newParentNode.id),
+                ERROR_MOVE_TO_DESCENDANT
+              );
+              invariant(
+                currentParentNode.rules.canMoveOut(targetNode, currentParentNode),
+                ERROR_MOVE_OUTGOING_PARENT
+              );
+            }
+            return true;
+          } catch(err) {
+            if ( onError ) onError(err);
+            return false;
+          } 
+        }
+      }
+    },
+   
   };
 }

@@ -16,8 +16,8 @@ export type InternalNode = Pick<Node, 'id'> & NodeData
 export type NodeRefEvent = Record<NodeEvents, boolean>
 export type NodeRules = {
   canDrag(node: Node): boolean;
-  canMoveIn?(canMoveIn: Node, self: Node): boolean;
-  canMoveOut?(canMoveOut: Node, self: Node): boolean;
+  canMoveIn(canMoveIn: Node, self: Node): boolean;
+  canMoveOut(canMoveOut: Node, self: Node): boolean;
 }
 
 export type NodeData = {
@@ -30,7 +30,7 @@ export type NodeData = {
   index?: number;
   _childCanvas?: Record<string, NodeId>
   nodes?: NodeId[];
-  hidden?: boolean;
+  hidden: boolean;
   custom?: any;
 }
 

@@ -1,9 +1,10 @@
 import React from "react";
 import { NodeData, SerializedNodeData, ReducedComp, ReduceCompType } from "../interfaces";
-import { Canvas } from "../nodes";
+import { Canvas } from "../nodes/Canvas";
 import { Resolver } from "../interfaces";
 import { resolveComponent } from "./resolveComponent";
 
+type DeserialisedType = JSX.Element & { name: string };
 
 const restoreType = (type: ReduceCompType, resolver: Resolver) =>
   typeof type === "object" && type.resolvedName ?
@@ -15,7 +16,8 @@ const restoreType = (type: ReduceCompType, resolver: Resolver) =>
       type : null;
 
 
-export const deserializeComp = (data: ReducedComp, resolver: Resolver, index?: number): JSX.Element & {subtype?: React.ElementType | string} & { name: string } => {
+
+export const deserializeComp = (data: ReducedComp, resolver: Resolver, index?: number): DeserialisedType | void => {
   let { type, props } = data;
   const main = restoreType(type, resolver);
 
@@ -56,8 +58,9 @@ export const deserializeComp = (data: ReducedComp, resolver: Resolver, index?: n
 export const deserializeNode = (data: SerializedNodeData, resolver: Resolver): Omit<NodeData, 'event'> => {
   let { type , props, ...nodeData } = data;
 
-  const reducedComp = deserializeComp({ type, props }, resolver);
+  const reducedComp = deserializeComp({ type, props }, resolver) as NonNullable<DeserialisedType>;
 
+  
   return {
     ...reducedComp,
     ...nodeData

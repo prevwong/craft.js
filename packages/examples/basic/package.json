@@ -20,7 +20,7 @@
     "start": "cross-env NODE_ENV=development && next dev -p 3002",
     "build": "next build",
     "export": "next export",
-    "clean": "rimraf lib node_modules .next out dist"
+    "clean": "rimraf lib .next out dist"
   },
   "devDependencies": {
     "@zeit/next-css": "^1.0.1"

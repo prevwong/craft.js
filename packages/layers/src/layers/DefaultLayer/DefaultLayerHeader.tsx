@@ -1,11 +1,11 @@
 import React from "react";
-import { useEditor, hasTopLevelCanvases, isTopLevelCanvas } from "@craftjs/core";
+import { useEditor } from "@craftjs/core";
 import styled from "styled-components";
 import Eye from './svg/eye.svg'
 import Arrow from './svg/arrow.svg'
 import Linked from "./svg/linked.svg"
 import {useLayer} from "../useLayer";
-import { EditableLayerName } from "./index";
+import { EditableLayerName } from "./EditableLayerName";
 
 const StyledDiv = styled.div<{ depth: number, selected: boolean }>`
   display:flex;
@@ -99,10 +99,10 @@ export const DefaultLayerHeader: React.FC = () => {
   });
 
 
-  const { hidden, actions, selected, topLevel } = useEditor((state) => ({
+  const { hidden, actions, selected, topLevel } = useEditor((state, query) => ({
     hidden: state.nodes[id] && state.nodes[id].data.hidden,
     selected:  state.events.selected == id,
-    topLevel: isTopLevelCanvas(state.nodes[id])
+    topLevel: query.is(id).TopLevelCanvas()
   }));  
   
 

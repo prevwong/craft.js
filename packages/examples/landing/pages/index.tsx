@@ -5,7 +5,7 @@ import { Container, Text } from "../components/selectors";
 import { createMuiTheme } from "@material-ui/core"
 import { ThemeProvider } from '@material-ui/styles';
 import "../styles/tailwind.css";
-import { Custom1 } from '../components/selectors/Custom1';
+import { Custom1, OnlyButtons} from '../components/selectors/Custom1';
 import { Custom2 } from '../components/selectors/Custom2';
 import { Custom3 } from '../components/selectors/Custom3';
 import { Button } from '../components/selectors/Button';
@@ -47,12 +47,12 @@ function App() {
           }}
         />
         <Editor
-          resolver={{ Container, Text, Custom1, Custom2, Custom3, Button, Video }}
+          resolver={{ Container, Text, Custom1, Custom2, Custom3, OnlyButtons, Button, Video }}
           enabled={enabled}
           onRender={RenderNode}
         >
           <Viewport>
-              <Frame nodes={json}>
+              <Frame json={json}>
                 <Canvas is={Container} width="800px" height="auto" background={{ r: 255, g: 255, b: 255, a: 1 }} padding={["40", "40", "40", "40"]}>
                   <Canvas is={Container} flexDirection="row" width="100%" height="auto" padding={["40", "40", "40", "40"]} margin={["0", "0", "40", "0"]}>
                     <Canvas is={Container} width="40%" height="100%" padding={["0", "20", "0", "20"]}>

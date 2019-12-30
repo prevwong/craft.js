@@ -1,5 +1,5 @@
 export * from "./nodes"
 export * from "./render"
 export * from "./interfaces";
-export * from './connectors';
+export * from './hooks';
 export * from "./editor";

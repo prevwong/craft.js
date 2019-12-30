@@ -6,14 +6,14 @@ import { useLayer } from "../useLayer";
 export const EditableLayerName = () => {
   const {id} = useLayer();
 
-  const { displayName, hidden, actions } = useEditor((state) => ({
+  const { displayName, actions } = useEditor((state) => ({
     displayName: state.nodes[id] && state.nodes[id].data.custom.displayName ? state.nodes[id].data.custom.displayName : state.nodes[id].data.displayName,
     hidden: state.nodes[id] && state.nodes[id].data.hidden
   }));  
 
   const [editingName, setEditingName] = useState(false);
   const [internalDisplayName, setInternalDisplayName] = useState<string>(displayName);
-  const nameDOM = useRef<HTMLElement>(null);
+  const nameDOM = useRef<HTMLElement | null>(null);
 
   const clickOutside = useCallback((e) => {
     if (nameDOM.current && !nameDOM.current.contains(e.target)) {

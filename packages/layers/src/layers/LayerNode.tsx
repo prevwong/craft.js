@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { useEditor } from "@craftjs/core";
 import { useLayerManager } from "../manager/useLayerManager";
 import { useLayer } from "./useLayer";
-import { LayerContextProvider } from "./context";
+import { LayerContextProvider } from "./LayerContextProvider";
 import { ROOT_NODE } from "@craftjs/utils";
 
 export const LayerNode: React.FC = () => {

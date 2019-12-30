@@ -3,11 +3,10 @@ import { Node, NodeId, EditorEvents} from "../interfaces";
 import movePlaceholder from "./movePlaceholder";
 import { getDOMInfo, useConnectorHooks, RenderIndicator } from "@craftjs/utils";
 import { useInternalEditor } from "../editor/useInternalEditor";
-import { debounce } from "lodash"
+import { debounce } from "debounce"
 import {useHandlerGuard} from "@craftjs/utils";
+import {EventContext} from "./EventContext";
 
-export type EventContext = any;
-export const EventContext = React.createContext<EventContext>(null);
 export const EventManager: React.FC = ({ children }) => {
     const { enabled, events, query, indicator, actions: { add, setNodeEvent, setIndicator, move } } = useInternalEditor((state) => ({
         events: state.events,
@@ -15,10 +14,10 @@ export const EventManager: React.FC = ({ children }) => {
         indicator: state.options.indicator
     }));
 
-    const mutable = useRef<EditorEvents>(null);
-    mutable.current = events;
-    const draggedNode = useRef<Node | NodeId>(null);
+    const mutable = useRef<EditorEvents>(events);
+    const draggedNode = useRef<Node | NodeId | null>(null);
 
+    mutable.current = events;
 
     const handlers = useHandlerGuard({
         selectNode: [

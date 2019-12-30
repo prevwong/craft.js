@@ -32,7 +32,7 @@ export default function App() {
           <Topbar onLoadState={(json) => setJson(json)} />
           <Grid container spacing={5} style={{paddingTop: "10px"}}>
             <Grid item xs>
-              <Frame nodes={json}>
+              <Frame json={json}>
                 <Canvas is={Container} padding={5} background="#eeeeee">
                   <Card />
                   <Button text="Click me" size="small" />

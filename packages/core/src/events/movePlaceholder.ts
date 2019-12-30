@@ -1,9 +1,9 @@
-import { DropAction, DOMInfo } from "./interfaces";
+import { DropAction, DOMInfo } from "../interfaces";
 
 export default function movePlaceholder(
   pos: DropAction,
   canvasDOMInfo: DOMInfo, // which canvas is cursor at
-  bestTargetDomInfo: DOMInfo // closest element in canvas (null if canvas is empty)
+  bestTargetDomInfo: DOMInfo | null// closest element in canvas (null if canvas is empty)
 ) {
   let t = 0,
     l = 0,
@@ -11,7 +11,7 @@ export default function movePlaceholder(
     h = 0,
     where = pos.where;
 
-  const elDim = bestTargetDomInfo ? bestTargetDomInfo : null;
+  const elDim = bestTargetDomInfo;
 
 
   if (elDim) {

@@ -1,5 +1,5 @@
-import React, { useContext, useRef, useMemo } from "react";
-import { LayerContext } from "./context";
+import { useContext, useMemo } from "react";
+import { LayerContext } from "./LayerContext";
 import { useConnectorHooks, ConnectorElementWrapper } from "@craftjs/utils";
 import { EventContext } from "../events";
 import { useLayerManager } from "../manager";
@@ -26,45 +26,22 @@ export function useLayer<S = null>(collect?: (node: Layer) => S): useLayer<S>
 export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer <S> {
   
   const {id, depth } = useContext(LayerContext);
+  const eventConnectors = useContext(EventContext);
+
   const { actions: managerActions, ...collected } = collect ? useLayerManager((state) => {
     return id && state.layers[id] && collect(state.layers[id]) 
   }) : useLayerManager();
 
-  const { enabled, children, connectors: managerConnectors } = useEditor((state, query) => ({
+  const { enabled, children } = useEditor((state, query) => ({
     children: state.nodes[id] && query.getDeepNodes(id, false),
     enabled: state.options.enabled
   }));
 
 
-  const handlers = useContext(EventContext);
-
-
   const connectors = useConnectorHooks({
-    layer: (node) => {
-      managerConnectors.select(node, id);
-      managerConnectors.hover(node, id);
-      handlers.onMouseOver(node, id)
-      handlers.onDragOver(node, id)
-      handlers.onDragEnter(node, id)
-      handlers.onDragEnd(node, id)
-      managerConnectors.drag(node, id);
-
-      managerActions.setDOM(id, {
-        dom: node,
-      });
-    }, 
-    layerHeader: (node) => {
-      managerActions.setDOM(id, {
-        headingDom: node,
-      });
-    },
-    drag: [
-      (node) => {
-        node.setAttribute("draggable", "true");
-        handlers.onDragStart(node, id);
-      },
-      (node) => node.removeAttribute("draggable")
-    ]
+    layer: (node) => eventConnectors.layer(node, id), 
+    layerHeader: (node) => eventConnectors.layerHeader(node, id),
+    drag: (node) => eventConnectors.drag(node, id), 
   }, enabled) as any;
 
   const actions = useMemo(() => {

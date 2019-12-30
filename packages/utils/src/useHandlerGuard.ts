@@ -4,7 +4,7 @@ export function useHandlerGuard<
   T extends string,
 >(
   handlers: Record<T, [keyof DocumentEventMap, (e: MouseEvent, options?: any) => void, boolean?]>, 
-  enabled
+  enabled: boolean
 ): Record<T, (e: any, options?: any) => void>  {
   const isEnabled = useRef<boolean>(enabled);
   isEnabled.current = enabled;
@@ -16,8 +16,7 @@ export function useHandlerGuard<
       return acc;
     }, {})
   
-  // console.log(33, guarded);
-  // // create eventslisteners
+  // create eventslisteners
   const fnRefs = useRef({});
   return useMemo( () => Object.keys(guarded).reduce((accum, key) => {
     const ref = fnRefs.current[key] || {};
@@ -30,7 +29,6 @@ export function useHandlerGuard<
         const event = handlers[key][0];
         const listener = (e) => guarded[key](e, opts);
         const capture = !!handlers[key][2];
-        // console.log(33, node, handler, guarded[key], key)
         node.addEventListener(event, listener, capture);
         fnRefs.current = {
           node,
