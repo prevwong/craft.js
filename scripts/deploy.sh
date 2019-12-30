@@ -1,9 +1,12 @@
 
+#!/bin/sh
+
+set -e 
 yarn clean 
 wait
 
 yarn build
-
+wait
 lerna run export --stream
 rm -rf site/
 mkdir site

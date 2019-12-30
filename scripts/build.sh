@@ -1,5 +1,6 @@
 
 #!/bin/sh
+
 args=()
 if [ $NODE_ENV == 'development' ]
 then
