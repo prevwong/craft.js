@@ -1,5 +1,6 @@
 
-# utilities
+# @crafjts/utils
 
-Common utilities used across the craftjs monorepo.
+Internal package containing common utilities used across the Craft.js monorepo. 
+
 
