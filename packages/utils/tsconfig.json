@@ -6,7 +6,8 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "jsx" : "react",
-    "declaration": true
+    "declaration": true,
+    "declarationDir": "./lib",
   },
   "include": [
     "./src/index.ts"

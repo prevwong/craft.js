@@ -8,7 +8,7 @@ export type SubscriberAndCallbacksFor<M extends MethodsOrOptions, Q extends Quer
   subscribe: Subscriber,
   getState: () => { prev: StateFor<M>, current: StateFor<M> },
   actions: CallbacksFor<M>,
-  query: QueryCallbacksFor<Q>
+  query: QueryCallbacksFor<Q>,
 };
 
 export type StateFor<M extends MethodsOrOptions> = M extends MethodsOrOptions<infer S, any>
@@ -23,7 +23,7 @@ export type CallbacksFor<M extends MethodsOrOptions> = M extends MethodsOrOption
   }
   : never;
 
-export type Methods<S = any, R extends MethodRecordBase<S> = any, Q = any> = (state?: S, query?: Q) => R;
+export type Methods<S = any, R extends MethodRecordBase<S> = any, Q = any> = (state: S, query: Q) => R;
 
 export type Options<S = any, R extends MethodRecordBase<S> = any, Q=any> = {
   methods: Methods<S, R, Q>;
@@ -54,11 +54,21 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<a
   : never;
 
 
+export function useReduxMethods<S, R extends MethodRecordBase<S>>(
+  methodsOrOptions: Methods<S, R>,
+  initialState: any
+) : SubscriberAndCallbacksFor<MethodsOrOptions<S, R>>;
 
 export function useReduxMethods<S, R extends MethodRecordBase<S>, Q extends QueryMethods>(
   methodsOrOptions: Methods<S, R, QueryCallbacksFor<Q>>, // methods to manipulate the state
   initialState: any,
-  queryMethods?: Q // methods to perform some queries/transformation on the current state
+  queryMethods: Q 
+) : SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q>
+
+export function useReduxMethods<S, R extends MethodRecordBase<S>, Q extends QueryMethods = null>(
+  methodsOrOptions: any, // methods to manipulate the state
+  initialState: any,
+  queryMethods?: Q// methods to perform some queries/transformation on the current state
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q> {
 
   let states = useRef({
@@ -90,8 +100,6 @@ export function useReduxMethods<S, R extends MethodRecordBase<S>, Q extends Quer
 
   const { state, dispatch, subscribe, getState } = createStore(reducer, initialState);
 
-  // let currentState = getState();
-
   const query = queryMethods ? (Object.keys(queryMethods()) as Array<keyof QueryCallbacksFor<typeof methods>>).reduce((accum, key) => {
     return {
       ...accum,
@@ -102,17 +110,17 @@ export function useReduxMethods<S, R extends MethodRecordBase<S>, Q extends Quer
     };
   }, {} as QueryCallbacksFor<typeof queryMethods>) : null;
 
-  const actionTypes: ActionUnion<R>['type'][] = Object.keys(methodsFactory(state, query)),
-        actions = actionTypes.reduce(
-          (accum, type) => {
-            accum[type] = (...payload) => {
-              const reducer = dispatch({ type, payload } as ActionUnion<R>);
-              return reducer;
-            };
-            return accum;
-          },
-          {} as CallbacksFor<typeof methodsFactory>,
-        );
+  
+  const actions = useMemo(() => {
+    const actionTypes: ActionUnion<R>['type'][] = Object.keys(methodsFactory(state, null));
+    return actionTypes.reduce(
+      (accum, type) => {
+        accum[type] = (...payload) => dispatch({ type, payload } as ActionUnion<R>);
+        return accum;
+      },
+      {} as CallbacksFor<typeof methodsFactory>,
+    );
+  }, []);
 
 
   const unsubscribe = useMemo(() => {

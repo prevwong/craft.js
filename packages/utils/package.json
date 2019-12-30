@@ -8,21 +8,17 @@
   "module": "./dist/esm/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "rollup -c -w",
     "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
-    "clean": "rimraf node_modules lib dist"
+    "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
+    "clean": "rimraf lib dist"
   },
   "dependencies": {
     "@types/react": "^16.9.11",
-    "lodash-es": "^4.17.15",
+    "lodash.isequalwith": "^4.4.0",
     "redux": "^4.0.4",
     "tiny-invariant": "^1.0.6"
   },
   "peerDependencies": {
     "react": "^16.11.0"
-  },
-  "devDependencies": {
-    "rollup-plugin-typescript2": "^0.25.3",
-    "typescript": "^3.7.4"
   }
 }

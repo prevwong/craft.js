@@ -1,13 +1,11 @@
 import { NodeId } from "@craftjs/core";
-import { ConnectorElementWrapper } from "@craftjs/utils";
 
 export type Layer = {
   id: NodeId,
-  depth?: number;
-  dom?: HTMLElement,
-  headingDom?: HTMLElement,
-  expanded?: boolean
-  event?: LayerRefEvents
+  dom: HTMLElement,
+  headingDom: HTMLElement,
+  expanded: boolean
+  event: LayerRefEvents
 };
 
 export type LayerRefEvents = Record<LayerEvents, boolean>;
@@ -21,6 +19,6 @@ export type LayerOptions = {
 
 export type LayerState = {
   layers: Record<NodeId, Layer>,
-  events: Record<LayerEvents, NodeId>
+  events: Record<LayerEvents, NodeId | null>
   options: LayerOptions
 }

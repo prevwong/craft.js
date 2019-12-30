@@ -1,24 +1,32 @@
-import React, { useState, useRef, useMemo, useEffect, useCallback } from "react";
-import { useEditor, isCanvas, NodeId, Indicator, isTopLevelCanvas, Node } from "@craftjs/core";
+import React, { useState, useRef, useMemo } from "react";
+import { useEditor, NodeId, Indicator, Node } from "@craftjs/core";
 import { useLayerManager } from "../manager/useLayerManager";
-import { useHandlerGuard, ROOT_NODE, RenderIndicator } from "@craftjs/utils";
+import { useHandlerGuard, RenderIndicator, useConnectorHooks, ConnectorElementWrapper } from "@craftjs/utils";
 import { LayerState } from "../interfaces";
-// import { debounce } from "lodash";
 
-export const EventContext = React.createContext(null);
+export type EventContext = {
+    layer: ConnectorElementWrapper,
+    layerHeader: ConnectorElementWrapper,
+    drag: ConnectorElementWrapper
+};
+
+export const EventContext = React.createContext<EventContext>({} as EventContext);
 
 export const EventManager: React.FC<any> = ({ children }) => {
     const { layers, events, actions } = useLayerManager((state) => state);
-    const { query, actions: { move }, enabled } = useEditor((state) => ({enabled: state.options.enabled}));
+    const { query, actions: managerActions, enabled, connectors: editorConnectors } = useEditor((state) => ({enabled: state.options.enabled}));
     const { indicator: indicatorStyles } = query.getOptions();
-    const [indicator, setInnerIndicator] = useState<Indicator & {
-        onCanvas: boolean
-    }>(null);
+    const [indicator, setInnerIndicator] = useState<
+        Indicator & {
+            onCanvas: boolean
+        } | null
+    >(null);
 
-    const dom = useRef<HTMLElement>();
-    const mutable = useRef<Omit<LayerState, 'options'> & { indicator: Indicator, currentCanvasHovered?: Node }>({
-        layers: null,
-        events: null,
+    const dom = useRef<HTMLElement | null>(null);
+    const mutable = useRef<
+        Omit<LayerState, 'options'> & { indicator: Indicator | null, currentCanvasHovered: Node | null }>({
+        layers,
+        events,
         indicator,
         currentCanvasHovered: null
     });
@@ -29,6 +37,8 @@ export const EventManager: React.FC<any> = ({ children }) => {
         indicator,
         currentCanvasHovered: mutable.current.currentCanvasHovered
     }
+    
+   
 
     const indicatorPosition = useMemo(() => {
         if (indicator) {
@@ -37,8 +47,8 @@ export const EventManager: React.FC<any> = ({ children }) => {
             
             let top;
             const color = error ? indicatorStyles.error : indicatorStyles.success;
-
-            if (indicator.onCanvas ) {
+            
+            if (indicator.onCanvas && layers[parent.id].dom != null ) {
                 const parentPos = layers[parent.id].dom.getBoundingClientRect();
                 const parentHeadingPos = layers[parent.id].headingDom.getBoundingClientRect();
                 return  {
@@ -76,7 +86,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
         }
     }, [indicator]);
     
-    const draggedNode = useRef<string>(null);
+    const draggedNode = useRef<string | null>(null);
     const handlers = useHandlerGuard({
         onDragStart: [
             "dragstart",
@@ -100,8 +110,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
 
                 const { indicator, layers, currentCanvasHovered } = mutable.current;
             
-                if (currentCanvasHovered && indicator ) {
-                    
+                if (currentCanvasHovered && indicator && currentCanvasHovered.data.nodes ) {
                     const heading = layers[currentCanvasHovered.id].headingDom.getBoundingClientRect();
                     if ( e.clientY > heading.top + 10 && e.clientY < heading.bottom - 10) {
                         indicator.placement.currentNode = query.getNode(currentCanvasHovered.data.nodes[currentCanvasHovered.data.nodes.length - 1]);
@@ -122,7 +131,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
             (e, id) => {
                 e.preventDefault();
                 e.stopPropagation();
-                const { layers, events } = mutable.current;
+                const { layers } = mutable.current;
                 const { current: dragId } = draggedNode;
 
                 if (!dragId) return;
@@ -144,10 +153,10 @@ export const EventManager: React.FC<any> = ({ children }) => {
                     const parentHeadingInfo = layers[parent.id].headingDom.getBoundingClientRect();
 
                     mutable.current.currentCanvasHovered = null;
-                    if ( isCanvas(parent) ) {
+                    if ( query.isCanvas(parent.id) ) {
                         if (parent.data.parent) {
                             const grandparent = query.getNode(parent.data.parent);
-                            if (isCanvas(grandparent)) {
+                            if (query.isCanvas(grandparent.id)) {
                                 mutable.current.currentCanvasHovered = parent;
                                 if ( 
                                     (e.clientY > parentHeadingInfo.bottom - 10 && !layers[parent.id].expanded) || 
@@ -155,7 +164,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
                                 ) {
                                     indicatorInfo.placement.parent = grandparent;
                                     indicatorInfo.placement.currentNode = parent;
-                                    indicatorInfo.placement.index = grandparent.data.nodes.indexOf(parent.id);
+                                    indicatorInfo.placement.index = grandparent.data.nodes ? grandparent.data.nodes.indexOf(parent.id) : 0;
                                     if (e.clientY > parentHeadingInfo.bottom - 10 && !layers[parent.id].expanded) {
                                         indicatorInfo.placement.where = "after";
                                     } else if (e.clientY < parentHeadingInfo.top + 10) {
@@ -183,7 +192,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
                     const { parent, index, where } = placement;
                     const { id: parentId } = parent;
 
-                    move(draggedNode.current as NodeId, parentId, index + (where === "after" ? 1 : 0));
+                    managerActions.move(draggedNode.current as NodeId, parentId, index + (where === "after" ? 1 : 0));
                 }
 
                 draggedNode.current = null;
@@ -192,35 +201,63 @@ export const EventManager: React.FC<any> = ({ children }) => {
         ]
         
     }, enabled)
+    
+    const connectors = useConnectorHooks({
+        layer: (node, id) => {
+          editorConnectors.select(node, id);
+          editorConnectors.hover(node, id);
+          handlers.onMouseOver(node, id)
+          handlers.onDragOver(node, id)
+          handlers.onDragEnter(node, id)
+          handlers.onDragEnd(node, id)
+          editorConnectors.drag(node, id);
+    
+          actions.setDOM(id, {
+            dom: node,
+          });
+        }, 
+        layerHeader: (node, id) => {
+          actions.setDOM(id, {
+            headingDom: node,
+          });
+        },
+        drag: [
+          (node, id) => {
+            node.setAttribute("draggable", "true");
+            handlers.onDragStart(node, id);
+          },
+          (node, id) => node.removeAttribute("draggable")
+        ]
+      }, enabled) as any;
 
-    const onOver = useCallback((e: MouseEvent) => {
-        const { layers } = mutable.current;
-        if ( layers && layers[ROOT_NODE]) { 
-            if (!layers[ROOT_NODE].dom.contains(e.target as HTMLElement)) {
-                actions.setLayerEvent('hovered', null);
-            }
-        }
+    // const onOver = useCallback((e: MouseEvent) => {
+    //     const { layers } = mutable.current;
+    //     if ( layers && layers[ROOT_NODE]) { 
+    //         if (!layers[ROOT_NODE].dom.contains(e.target as HTMLElement)) {
+    //             actions.setLayerEvent('hovered', null);
+    //         }
+    //     }
        
-    }, []);
+    // }, []);
 
 
-    useEffect(() => {
-        // if ( mutable.current.layers[ROOT_NODE] )
-        window.addEventListener("mouseover", onOver);
+    // useEffect(() => {
+    //     // if ( mutable.current.layers[ROOT_NODE] )
+    //     window.addEventListener("mouseover", onOver);
 
-        return (() => {
-            window.removeEventListener("mouseover", onOver)
-        })
-    }, []);
+    //     return (() => {
+    //         window.removeEventListener("mouseover", onOver)
+    //     })
+    // }, []);
 
 
     return (
-        <EventContext.Provider value={handlers}>
+        <EventContext.Provider value={connectors}>
             <div ref={(node) => {
                 if ( dom.current ) {
-
+                    dom.current = node;
                 }
-                dom.current = node;
+
             }}>
                 {
                     indicator ? React.createElement(RenderIndicator, {

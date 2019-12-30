@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useLayer } from "../useLayer";
-import { DefaultLayerHeader } from "./index";
-import { useEditor, hasTopLevelCanvases } from "@craftjs/core";
+import { DefaultLayerHeader } from "./DefaultLayerHeader";
+import { useEditor } from "@craftjs/core";
 
 
 const LayerNodeDiv = styled.div<{expanded: boolean; hasCanvases: boolean; hovered: boolean}>`
@@ -41,9 +41,9 @@ export const DefaultLayer: React.FC = ({children}) => {
     hovered: layer.event.hovered,
     expanded: layer.expanded
   }));
-  const { hasChildCanvases } = useEditor((state) => {
+  const { hasChildCanvases } = useEditor((state, query) => {
     return {
-      hasChildCanvases: hasTopLevelCanvases(state.nodes[id])
+      hasChildCanvases: query.is(id).ParentOfTopLevelCanvas()
     }
   });
 

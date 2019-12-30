@@ -1,6 +1,6 @@
 import React from "react";
 
-export const RenderIndicator = ({style}) => {
+export const RenderIndicator: React.FC<any> = ({style}) => {
   return (
     <div
       style={{

@@ -8,16 +8,6 @@ import { useMemo } from 'react'
  * Thank you react-dnd!
  */
 
-interface Ref<T> {
-  current: T
-}
-
-function isRef(obj: any) {
-  return (
-    // eslint-disable-next-line no-prototype-builtins
-    obj !== null && typeof obj === 'object' && obj.hasOwnProperty('current')
-  )
-}
 
 function setRef(ref: any, node: any) {
   if ( node ) {
@@ -69,7 +59,7 @@ function throwIfCompositeComponentElement(element: React.ReactElement<any>) {
 }
 
 function wrapHookToRecognizeElement(hook: (node: any, opts: any) => void) {
-  return (elementOrNode = null, opts) => {
+  return (elementOrNode = null, opts: any) => {
     // When passed a node, call the hook straight away.
     if (!isValidElement(elementOrNode)) {
       const node = elementOrNode
@@ -96,25 +86,13 @@ export type ConnectableElement =
 
 export type ConnectorElementWrapper = (elementOrNode: ConnectableElement, options?: any) => React.ReactElement | null
 
-
-function wrapConnectorHooks(hooks: any): Record<string, ConnectorElementWrapper> {
-  const wrappedHooks: any = {}
-
-  Object.keys(hooks).forEach(key => {
-    const hook = hooks[key]
-    const wrappedHook = hook && wrapHookToRecognizeElement(hook)
-    wrappedHooks[key] = wrappedHook
-  })
-  return wrappedHooks
-}
-
 type ConnectorMethod = (element: HTMLElement, options?: any) => void
 
 export function useConnectorHooks<
   T extends string
   >(hooks: Record<T, ConnectorMethod | [ConnectorMethod, ConnectorMethod]>, active: boolean = true): Record<T, (node: ConnectableElement, options?: any) => void> {
   return useMemo(() => {
-    return Object.keys(hooks).reduce((accum, key) => {
+    return Object.keys(hooks).reduce((accum, key: any) => {
       let hook,
           cleanupHook;
 
