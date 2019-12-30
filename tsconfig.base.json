@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "incremental": false,
+    "skipLibCheck": true,
+    "incremental": true,
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
@@ -14,12 +15,9 @@
     "jsx": "react",
     "forceConsistentCasingInFileNames": false,
     "declaration": true,
-    "allowSyntheticDefaultImports": false,
-    "allowJs": false
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
-    "**/node_modules/**",
-    "**/dist/**",
-    "**/lib/**"
+    "**/node_modules/**"
   ]
 }

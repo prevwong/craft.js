@@ -2,9 +2,9 @@
   "npmClient": "yarn",
   "private": true,
   "scripts": {
-    "start": "lerna run start --parallel",
-    "build": "lerna run build --stream",
+    "dev": "./scripts/dev.sh",
     "clean": "lerna run clean --stream",
+    "build": "lerna run build --stream",
     "build-site": "./scripts/build-site.sh",
     "deploy": "./scripts/deploy.sh",
     "release": "run-s deploy clean release:npm ",
@@ -35,7 +35,7 @@
     ]
   },
   "dependencies": {
-    "lodash": "^4.17.15",
+    "@babel/preset-typescript": "^7.7.7",
     "rollup-plugin-typescript": "^1.0.1"
   },
   "license": "MIT"

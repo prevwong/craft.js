@@ -1,8 +1,5 @@
 
 #!/bin/sh
-rm -rf dist lib
-wait
-
 args=()
 if [ $NODE_ENV == 'development' ]
 then
@@ -16,5 +13,5 @@ then
   defaultRollupConfig=rollup.config.js
 fi
 
-npx tsc --emitDeclarationOnly "${args[@]}" &
+npx tsc --skipLibCheck --emitDeclarationOnly "${args[@]}" &
 npx rollup -c "${defaultRollupConfig}" "${args[@]}"
