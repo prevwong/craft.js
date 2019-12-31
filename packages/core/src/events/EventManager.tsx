@@ -7,6 +7,20 @@ import { debounce } from "debounce"
 import {useHandlerGuard} from "@craftjs/utils";
 import {EventContext} from "./EventContext";
 
+// TODO: improve drag preview image
+const createShadow = (e: DragEvent) => {
+    const shadow = (e.target as HTMLElement).cloneNode(true) as HTMLElement;
+    const {width, height} = (e.target as HTMLElement).getBoundingClientRect();
+    shadow.style.width = `${width}px`;
+    shadow.style.height = `${height}px`;
+    shadow.style.position = 'fixed';
+    
+    document.body.appendChild(shadow);
+    e.dataTransfer.setDragImage(shadow, 0, 0);
+
+    return shadow;
+}
+
 export const EventManager: React.FC = ({ children }) => {
     const { enabled, events, query, indicator, actions: { add, setNodeEvent, setIndicator, move } } = useInternalEditor((state) => ({
         events: state.events,
@@ -16,6 +30,7 @@ export const EventManager: React.FC = ({ children }) => {
 
     const mutable = useRef<EditorEvents>(events);
     const draggedNode = useRef<Node | NodeId | null>(null);
+    const draggedNodeShadow = useRef<HTMLElement | null>(null);
 
     mutable.current = events;
 
@@ -34,19 +49,25 @@ export const EventManager: React.FC = ({ children }) => {
             }, 1),
             true
         ],
+        /** TODO: Merge dragCreateNode and dragNode */
+        /** TODO: Fix drag preview image */
         dragCreateNode: [
             "dragstart",
-            (e: MouseEvent, el: React.ReactElement) => {
+            (e: DragEvent, el: React.ReactElement) => {
                 e.stopPropagation();
+                e.stopImmediatePropagation();
                 const node = query.createNode(el);
+                draggedNodeShadow.current = createShadow(e);
                 if (typeof node === 'string') setNodeEvent('dragged', node);
                 draggedNode.current = node;
             }
         ],
         dragNode: [
             "dragstart",
-            (e: MouseEvent, node: Node | NodeId) => {
+            (e: DragEvent, node: Node | NodeId) => {
                 e.stopPropagation();
+                e.stopImmediatePropagation();
+                draggedNodeShadow.current = createShadow(e);
                 if (typeof node === 'string') setNodeEvent('dragged', node);
                 draggedNode.current = node;
             }
@@ -70,12 +91,16 @@ export const EventManager: React.FC = ({ children }) => {
                 const getPlaceholder = query.getDropPlaceholder(dragId, id, { x: e.clientX, y: e.clientY });
 
                 if (getPlaceholder) {
+                    // TODO: Refactor creation of new Nodes via connectors.new()
+                    // Currently, no Indicator will be displayed if a new Node is dragged to a parent Container that rejects it
+                   try {
                     if (typeof start == 'object' && start.id) {
                         start.data.index = getPlaceholder.placement.index + (getPlaceholder.placement.where == 'after' ? 1 : 0);
                         add(start, getPlaceholder.placement.parent.id);
                         draggedNode.current = start.id;
                     }
                     setIndicator(getPlaceholder)
+                   } catch(err) { }
                 }
             }
         ],
@@ -84,12 +109,18 @@ export const EventManager: React.FC = ({ children }) => {
             (e: MouseEvent) => {
                 e.stopPropagation();
                 const events = mutable.current;
+
                 if (events.indicator && !events.indicator.error) {
                     const { placement } = events.indicator;
                     const { parent, index, where } = placement;
                     const { id: parentId } = parent;
 
                     move(draggedNode.current as NodeId, parentId, index + (where === "after" ? 1 : 0));
+                }
+
+                if ( draggedNodeShadow.current ) {
+                    draggedNodeShadow.current.parentNode.removeChild(draggedNodeShadow.current);
+                    draggedNodeShadow.current = null;
                 }
 
                 draggedNode.current = null;
