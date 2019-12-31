@@ -1,4 +1,17 @@
 import React from "react";
+import { QueryMethods } from "../editor/query";
+import { QueryCallbacksFor } from "@craftjs/utils";
+
+type CraftComponentConfig<T> = {
+  name: string;
+  rules: Partial<NodeRules>;
+  related: Partial<NodeRelated>;
+  defaultProps: Partial<T>
+}
+
+export type CraftComponent<T = any> = React.ComponentType<T> & {
+  craft?: Partial<CraftComponentConfig<T>>
+}
 
 export type NodeId = string;
 
@@ -11,14 +24,16 @@ export type Node =  {
   rules: NodeRules;
 }
 
+export type NodeHelpers =  QueryCallbacksFor<typeof QueryMethods>['node'];
 export type NodeEvents = 'selected' | 'dragged' | 'hovered';
 export type InternalNode = Pick<Node, 'id'> & NodeData
 export type NodeRefEvent = Record<NodeEvents, boolean>
 export type NodeRules = {
-  canDrag(node: Node): boolean;
-  canMoveIn(canMoveIn: Node, self: Node): boolean;
-  canMoveOut(canMoveOut: Node, self: Node): boolean;
+  canDrag(node: Node, helpers: NodeHelpers): boolean;
+  canMoveIn(canMoveIn: Node, self: Node, helpers: NodeHelpers): boolean;
+  canMoveOut(canMoveOut: Node, self: Node, helpers: NodeHelpers): boolean;
 }
+export type NodeRelated = Record<string, React.ElementType>;
 
 export type NodeData = {
   props: Record<string, any>,
