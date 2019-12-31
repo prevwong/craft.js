@@ -1,6 +1,7 @@
 {
   "npmClient": "yarn",
   "private": true,
+  "author": "Prev Wong <prevwong@gmail.com>",
   "scripts": {
     "dev": "./scripts/dev.sh",
     "clean": "lerna run clean --stream",

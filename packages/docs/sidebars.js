@@ -17,8 +17,8 @@ module.exports = {
       "concepts/editor-components"
     ],
     "Guides" : [
-      "basic-tutorial",
-      "save-load-state"
+      "guides/basic-tutorial",
+      "guides/save-load-state"
     ], 
     "API Reference" : [
       "api/editor-state",

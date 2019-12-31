@@ -7,6 +7,7 @@ let plugins = [
   [withCSS]
 ];
 
+/** For development purposes */
 if ( process.env.NODE_ENV != "production" ) {
   plugins.push(
     [withTM, {

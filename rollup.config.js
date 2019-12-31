@@ -4,7 +4,7 @@ import { terser } from 'rollup-plugin-terser'
 import typescript from 'rollup-plugin-typescript'
 import babel from 'rollup-plugin-babel'
 
-const shouldMinify = process.env.NODE_ENV == 'PRODUCTION';
+const shouldMinify = process.env.NODE_ENV == 'production';
 const bundle = ['@craftjs/utils', 'tslib'];
 
 export default {
@@ -29,7 +29,24 @@ export default {
   plugins: [
     resolve(),
     typescript(),
-    babel(),
+    babel({
+      presets: [
+        ["@babel/preset-typescript"],
+        [
+          '@babel/preset-env',
+          {
+            modules: false,
+            targets: {
+              browsers: ['>0.25%, not dead']
+            }
+          }
+        ]
+      ],
+      plugins: [
+        '@babel/proposal-class-properties',
+        '@babel/proposal-object-rest-spread'
+      ]
+    }),
     shouldMinify &&
       terser({
         sourcemap: true,
@@ -40,7 +57,6 @@ export default {
           passes: 10,
         },
         ecma: 5,
-        toplevel: opts.format === 'cjs',
         warnings: true,
       }),
   ]
