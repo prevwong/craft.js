@@ -24,7 +24,7 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
   const { id, related, actions: { setDOM, setProp }, inNodeContext, ...collected } = useInternalNode(collect);
   const { isRoot, handlers: editorConnectors, enabled } = useInternalEditor((state, query) => ({
     enabled: state.options.enabled,
-    isRoot: query.is(id).Root()
+    isRoot: query.node(id).isRoot()
   }));
 
   const connectors = useConnectorHooks({

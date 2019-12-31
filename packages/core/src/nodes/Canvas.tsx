@@ -41,7 +41,7 @@ export function Canvas<T extends React.ElementType>({ is, children, passThrough,
           let internalId;
 
           // if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
-          const existingNode = node._childCanvas && node._childCanvas[id] && query.getNode(node._childCanvas[id]);
+          const existingNode = node._childCanvas && node._childCanvas[id] && query.node(node._childCanvas[id]).get();
 
           let newProps = { is, ...props };
 

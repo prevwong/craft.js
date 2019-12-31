@@ -51,7 +51,7 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
           delete node.data.props.id;
         } else {
           if ( parentId) {
-            query.is(parentId).Droppable(node, (err) => {
+            query.node(parentId).isDroppable(node, (err) => {
               throw new Error(err);
             });
 
@@ -83,7 +83,7 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
         newParent = state.nodes[newParentId],
         newParentNodes = newParent.data.nodes;
 
-      query.is(newParentId).Droppable(targetNode, (err) => {
+      query.node(newParentId).isDroppable(targetNode, (err) => {
         throw new Error(err);
       });
 
@@ -107,8 +107,8 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
     delete(id: NodeId) {
       invariant(id != ROOT_NODE, "Cannot delete Root node");
       const targetNode = state.nodes[id];
-      if (query.is(targetNode.id).Canvas()) {
-        invariant(!query.is(targetNode.id).TopLevelCanvas(), "Cannot delete a Canvas that is not a direct child of another Canvas");
+      if (query.node(targetNode.id).isCanvas()) {
+        invariant(!query.node(targetNode.id).isTopLevelCanvas(), "Cannot delete a Canvas that is not a direct child of another Canvas");
         targetNode.data.nodes!.map((childId) => {
           _("delete")(childId);
         })

@@ -41,17 +41,13 @@ import { transformJSXToNode } from "../utils/transformJSX";
 const getNodeFromIdOrNode = (node: NodeId | Node, cb: (id: NodeId) => Node) => typeof node === "string" ? cb(node) : node;
 
 export function QueryMethods(Editor: EditorState) {
-  const _ = <T extends keyof QueryCallbacksFor<typeof QueryMethods>>(name: T) => QueryMethods(Editor)[name];
   const options = Editor  && Editor.options;
 
+  const _: () => QueryCallbacksFor<typeof QueryMethods> = () => QueryMethods(Editor);
 
   return {
     getOptions(): Options {
       return options;
-    },
-    getNode(id: NodeId) {
-      invariant(Editor.nodes[id], "Node does not exist in the Editor state");
-      return Editor.nodes[id];
     },
     createNode(child: React.ReactElement | string, extras?: any) {
       const node = transformJSXToNode(child, extras);
@@ -60,31 +56,10 @@ export function QueryMethods(Editor: EditorState) {
         node.data.type
       );
       invariant(name != null, ERRROR_NOT_IN_RESOLVER);
-      node.data.displayName = node.data.displayName || name;
+      node.data.displayName = node.data.displayName ? node.data.displayName : name;
+
       node.data.name = name;
       return node;
-    },
-    getDeepNodes(id: NodeId, deep: boolean = true) {
-      return getDeepNodes(Editor.nodes, id, deep);
-    },
-    getAllParents(nodeId: NodeId, result: NodeId[] = []) {
-      const node = Editor.nodes[nodeId];
-      const parent = node.data.parent;
-      if (parent) {
-        result.push(parent);
-        _("getAllParents")(parent, result);
-      }
-      return result;
-    },
-    getAllCanvas(parent: NodeId = ROOT_NODE) {
-      const bound = _("getDeepNodes")(parent);
-
-      return (parent === ROOT_NODE ? [ROOT_NODE, ...bound] : bound).filter(
-        id => {
-          if (_("is")(id).Canvas) return true;
-          return false;
-        }
-      );
     },
     serialize(): string {
       const simplifiedNodes = Object.keys(Editor.nodes).reduce((result: any, id: NodeId) => {
@@ -112,7 +87,7 @@ export function QueryMethods(Editor: EditorState) {
         } = deserializeNode(reducedNodes[id], options.resolver);
         if (!Comp) return accum;
 
-        accum[id] = _("createNode")(<Comp {...props} />, {
+        accum[id] = _().createNode(<Comp {...props} />, {
           id,
           data: {
             ...(isCanvas && { isCanvas }),
@@ -125,50 +100,6 @@ export function QueryMethods(Editor: EditorState) {
         return accum;
       }, {});
     },
-    canDropInParent: (node: Node | NodeId, newParent: NodeId) => {
-      const targetNode = getNodeFromIdOrNode(node, (id) => Editor.nodes[id]);
-
-      const currentParentNode =
-          targetNode.data.parent &&
-          Editor.nodes[targetNode.data.parent],
-        newParentNode = Editor.nodes[newParent];
-
-      invariant(
-        currentParentNode ||
-          (!currentParentNode && !Editor.nodes[targetNode.id]),
-        ERROR_DUPLICATE_NODEID
-      );
-
-      invariant(
-        (targetNode.id !== ROOT_NODE && newParent) ||
-          (targetNode.id === ROOT_NODE && !newParent),
-        ERROR_NOPARENT
-      );
-
-      if (newParent) {
-        invariant(_("is")(newParentNode.id).Canvas(), ERROR_MOVE_TO_NONCANVAS_PARENT);
-        invariant(
-          newParentNode.rules.canMoveIn(targetNode, newParentNode),
-          ERROR_MOVE_INCOMING_PARENT
-        );
-      }
-
-      if (currentParentNode) {
-        // moving
-        const targetDeepNodes = _("getDeepNodes")(targetNode.id);
-        invariant(targetNode.data.parent, ERROR_MOVE_NONCANVAS_CHILD);
-        invariant(
-          !targetDeepNodes.includes(newParent),
-          ERROR_MOVE_TO_DESCENDANT
-        );
-        invariant(
-          currentParentNode.rules.canMoveOut(targetNode, currentParentNode),
-          ERROR_MOVE_OUTGOING_PARENT
-        );
-      }
-
-      return true;
-    },
     getDropPlaceholder: (
       source: NodeId,
       target: NodeId,
@@ -179,7 +110,7 @@ export function QueryMethods(Editor: EditorState) {
       if (source === target) return;
       const sourceNode = Editor.nodes[source],
         targetNode = Editor.nodes[target],
-        isTargetCanvas = _("is")(targetNode.id).Canvas();
+        isTargetCanvas = _().node(targetNode.id).isCanvas();
 
     
       const targetParent =
@@ -226,30 +157,42 @@ export function QueryMethods(Editor: EditorState) {
 
 
       if ( sourceNode ) {
-        _("is")(source).Draggable((err) => output.error = err);
-        _("is")(targetParent.id).Droppable(source, (err) => output.error = err);
+        _().node(source).isDraggable((err) => output.error = err);
+        _().node(targetParent.id).isDroppable(source, (err) => output.error = err);
       } 
      
 
       return output;
     },
-    is(id: NodeId)  {
-      const node = _("getNode")(id);
-      const is = _("is");
+    node(id: NodeId)  {
+      const node = Editor.nodes[id];
+      const nodeQuery = _().node;
 
       return {
-        Canvas: () => node.data.isCanvas,
-        Root: () => node.id == ROOT_NODE,
-        TopLevelCanvas: () => !is(node.id).Root && !node.data.parent.startsWith("canvas-"),
-        Deletable : () => !is(id).Root && (is(id).Canvas ? !is(id).TopLevelCanvas : true),
-        ParentOfTopLevelCanvas : () => !!node.data._childCanvas,
-        Draggable : (onError?: (err: string) => void) => {
+        isCanvas: () => node.data.isCanvas,
+        isRoot: () => node.id == ROOT_NODE,
+        isTopLevelCanvas: () => !nodeQuery(node.id).isRoot() && !node.data.parent.startsWith("canvas-"),
+        isDeletable : () => !nodeQuery(id).isRoot() && (nodeQuery(id).isCanvas() ? !nodeQuery(id).isTopLevelCanvas() : true),
+        isParentOfTopLevelCanvas : () => !!node.data._childCanvas,
+        get: () => node,
+        ancestors: (result = []) => {
+          const parent = node.data.parent;
+          if (parent) {
+            result.push(parent);
+            nodeQuery(parent).ancestors(result);
+          }
+          return result;
+        },
+        decendants: (deep = false) => {
+          return getDeepNodes(Editor.nodes, id, deep);
+        },
+        isDraggable : (onError?: (err: string) => void) => {
           try {
             const targetNode = node;
-            invariant(!is(targetNode.id).Root(), ERROR_MOVE_ROOT_NODE);
-            if ( !is(targetNode.id).Root() ) {
-              invariant(is(targetNode.data.parent).Canvas() == true, ERROR_MOVE_TOP_LEVEL_CANVAS);
-              invariant(targetNode.rules.canDrag(targetNode), ERROR_CANNOT_DRAG);
+            invariant(!nodeQuery(targetNode.id).isRoot(), ERROR_MOVE_ROOT_NODE);
+            if ( !nodeQuery(targetNode.id).isRoot() ) {
+              invariant(nodeQuery(targetNode.data.parent).isCanvas() == true, ERROR_MOVE_TOP_LEVEL_CANVAS);
+              invariant(targetNode.rules.canDrag(targetNode, _().node), ERROR_CANNOT_DRAG);
             }
             return true;
           } catch (err) {
@@ -257,7 +200,7 @@ export function QueryMethods(Editor: EditorState) {
             return false;
           }
         },
-        Droppable: (target: NodeId | Node, onError?: (err: string) => void) => {
+        isDroppable: (target: NodeId | Node, onError?: (err: string) => void) => {
           try {
             const targetNode = getNodeFromIdOrNode(target, (id) => Editor.nodes[id]);
 
@@ -272,22 +215,22 @@ export function QueryMethods(Editor: EditorState) {
               ERROR_DUPLICATE_NODEID
             );
 
-            invariant(is(newParentNode.id).Canvas(), ERROR_MOVE_TO_NONCANVAS_PARENT);
+            invariant(nodeQuery(newParentNode.id).isCanvas(), ERROR_MOVE_TO_NONCANVAS_PARENT);
             invariant(
-              newParentNode.rules.canMoveIn(targetNode, newParentNode),
+              newParentNode.rules.canMoveIn(targetNode, newParentNode, _().node),
               ERROR_MOVE_INCOMING_PARENT
             );
           
 
             if (currentParentNode) {
-              const targetDeepNodes = _("getDeepNodes")(targetNode.id);
+              const targetDeepNodes = nodeQuery(targetNode.id).decendants();
               invariant(targetNode.data.parent, ERROR_MOVE_NONCANVAS_CHILD);
               invariant(
                 !targetDeepNodes.includes(newParentNode.id),
                 ERROR_MOVE_TO_DESCENDANT
               );
               invariant(
-                currentParentNode.rules.canMoveOut(targetNode, currentParentNode),
+                currentParentNode.rules.canMoveOut(targetNode, currentParentNode, _().node),
                 ERROR_MOVE_OUTGOING_PARENT
               );
             }
