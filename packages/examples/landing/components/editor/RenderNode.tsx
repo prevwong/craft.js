@@ -23,7 +23,6 @@ const IndicatorDiv = styled.div`
 const Btn = styled.a`
   padding:0 0px;
   opacity:0.9;
-  cursor:pointer;
   display:flex;
   align-items:center;
   > div {
@@ -97,14 +96,14 @@ export const RenderNode = ({ render }) => {
             <h2 className="flex-1 mr-4">{name}</h2>
             {
               moveable ? (
-                <Btn className="mr-2" ref={drag}>
+                <Btn className="mr-2 cursor-move" ref={drag}>
                   <Move />
                 </Btn>
               ) : null
             }
             {
               deletable ? (
-                <Btn onMouseDown={(e: React.MouseEvent) => {
+                <Btn className="cursor-pointer" onMouseDown={(e: React.MouseEvent) => {
                   e.stopPropagation();
                   actions.delete(id);
 

@@ -20,7 +20,7 @@ export const ContainerSettings = () => {
     background: node.data.props.background,
     padding: node.data.props.padding
   }));
-  console.log("background", background)
+
   return (
     <div>
       <FormControl fullWidth={true} margin="normal" component="fieldset">
