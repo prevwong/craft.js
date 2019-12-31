@@ -95,13 +95,15 @@ import Container from "./Container";
 export const Card = ({background, padding = 20}) => {
   return (
     <Container background={background} padding={padding}>
-      <div ref={connect} className="text-only" style={{padding: "10px", marginBottom:"10px", borderBottom: "1px solid #eee", display: "flex", flexDirection: "column", alignItems:"flex-start"}}>
+      <Container background={background} padding={padding}>
+      <div className="text-only">
         <Text text="Title" fontSize={20} />
         <Text text="Subtitle" fontSize={15} />
       </div>
-      <div className="button-only">
-        <Button size="small">Learn More</Button>
+      <div className="buttons-only">
+        <Button size="small" text="Learn more" variant="contained" color="primary" />
       </div>
+    </Container>
     </Container>
   )
 }
@@ -110,7 +112,7 @@ export const Card = ({background, padding = 20}) => {
 
 ### The Editor
 #### Toolbox
-First, let's build a toolbox which our users would be able to drag and drop to create new instances of those user components we just defined.
+Let's build a "toolbox" which our users would be able to drag and drop to create new instances of those User Components we just defined.
 
 ```jsx
 // components/Toolbox.js
@@ -129,6 +131,9 @@ export const Toolbox = () => {
         </Grid>
         <Grid container direction="column" item>
           <MaterialButton variant="contained">Text</MaterialButton>
+        </Grid>
+        <Grid container direction="column" item>
+          <MaterialButton variant="contained">Container</MaterialButton>
         </Grid>
         <Grid container direction="column" item>
           <MaterialButton variant="contained">Card</MaterialButton>
@@ -267,7 +272,7 @@ Up to this point, we have made a user interface for our page editor. Now, let's 
   - `<Canvas />` creates a droppable region where its immediate children are draggable.
 
 
-```jsx
+```jsx {19,22,23,27,29-31,40}
 // pages/index.js
 import React from 'react';
 import {Typography, Paper, Grid} from '@material-ui/core';
@@ -286,9 +291,7 @@ export default function App() {
   return (
     <div>
       <Typography variant="h5" align="center">A super simple page editor</Typography>
-        <Editor
-          resolver={{Card, Button, Text, Container}}
-        > 
+        <Editor resolver={{Card, Button, Text, Container}}> 
           <Grid container spacing={3}>
             <Grid item xs>
               <Frame>
@@ -313,7 +316,6 @@ export default function App() {
     </div>
   );
 }
-
 ```
 
 Every element that is rendered in `<Frame />` is managed by an object in the editor's internal state called a `Node` which describes the element, its events, and props among other things. Whether an element is draggable or droppable or not depends on the type of `Node` that manages it. 
@@ -343,7 +345,7 @@ Inside a User Component, we have access to the `useNode` hook which provides sev
 The first thing we will need to do is to let Craft.js to manage the DOM of our component. The hook provides `connectors` which act as a bridge between the DOM and the events in Craft.js:
 
 
-```jsx {3,5,6,8}
+```jsx {4,7,10}
 // components/user/Text.js
 import React from "react";
 import { Typography } from "@material-ui/core";
@@ -377,7 +379,7 @@ Text.craft = {
 Our Text component can now only be dragged if the `text` prop is not set to "Drag" 🤪
 
 Nice, now let's enable drag-n-drop for the other User Components:
-```jsx {3}
+```jsx {3,5}
 // components/user/Button.js
 export const Button = ({size, variant, color, children}) => {
   const { connectors: {connect, drag} } = useNode();
@@ -389,7 +391,7 @@ export const Button = ({size, variant, color, children}) => {
 }
 ```
 
-```jsx
+```jsx {3,5}
 // components/user/Container.js
 export const Container = ({background, padding = 0, children}) => {
   const { connectors: {connect, drag} } = useNode();
@@ -420,7 +422,10 @@ At this point, you could refresh the page and you would be able to drag stuff ar
 #### Defining Droppable regions
 Of course, our Card component is supposed to have two droppable regions. Remember how `<Canvas />` defined a droppable region earlier in our application? We can do the same here insde our Card component.
 
-```jsx 
+```jsx {2,8,11,12,14}
+// components/user/Card.js
+import {useNode, Canvas} from "@craftjs/core";
+
 export const Card = (({bg})) => {
   const { connectors: {connect, drag}} = useNode();
   return (
@@ -526,11 +531,12 @@ Let's go back to our Toolbox component and make it so that dragging those button
 
 The `useEditor` also provides `connectors`; the one we are interested in right now is `create` which attaches a drag handler to the  DOM specified in its first arguement and creates the element specified in its second arguement.
 
-```jsx
+```jsx {19,22,25}
 // components/Toolbox.js
 import React from "react";
 import { Box, Typography, Grid, Button as MaterialButton } from "@material-ui/core";
-import { useEditor } from "@craftjs/core";
+import { Canvas, useEditor } from "@craftjs/core";
+import { Container } from "./user/Container";
 import { Card } from "./user/Card";
 import { Button } from "./user/Button";
 import { Text } from "./user/Text";
@@ -551,6 +557,9 @@ export const Toolbox = () => {
           <MaterialButton ref={ref=> connectors.create(ref, <Text text="Hi world" />)} variant="contained">Text</MaterialButton>
         </Grid>
         <Grid container direction="column" item>
+          <MaterialButton ref={ref=> connectors.create(ref, <Canvas is={Container} padding={20} />)} variant="contained">Container</MaterialButton>
+        </Grid>
+        <Grid container direction="column" item>
           <MaterialButton ref={ref=> connectors.create(ref, <Card />)} variant="contained">Card</MaterialButton>
         </Grid>
       </Grid>
@@ -558,6 +567,8 @@ export const Toolbox = () => {
   )
 };
 ```
+
+Notice for our Container component, we wrapped it with the `<Canvas />` - this makes it so that our users will be able to drag and drop a new Container component that is droppable.
 
 Now, you could drag and drop the Buttons, and they would actually create new instances of our User Components.
 
@@ -568,7 +579,7 @@ The `useNode` hook provides us with the method `setProp` which can be used to ma
 
 For simplicity's sake, we will be using `react-contenteditable`
 
-```jsx
+```jsx {11-20}
 import React, {useCallback} from "react";
 import ContentEditable from 'react-contenteditable'
 
@@ -598,7 +609,7 @@ But let's only enable content editable only when the component is clicked when i
 
 The `useNode` hook accepts a collector function which can be used to retrieve state information related to the corresponding `Node`:
 
-```jsx
+```jsx {4-5,8,10,18}
 // components/user/Text.js
 export const Text = ({text, fontSize}) => {
   const { connectors: {connect, drag}, selected, dragged, setProp } = useNode((state) => ({
@@ -893,7 +904,7 @@ const { currentlySelectedId } = useEditor((state) => ({
 
 Now, let's replace the placeholder text fields in our Settings Panel with the `settings` Related Component:
 
-```jsx
+```jsx {4,7-22,24,35-37}
 // components/SettingsPanel.js
 
 import { Box, Chip, Grid, Typography, Button as MaterialButton } from "@material-ui/core";
@@ -942,17 +953,15 @@ export const SettingsPanel = () => {
   ) : null
 }
 ```
+Now, we have to make our Delete button work. We can achieve this by using the `delete` action available from the `useEditor` hook.
 
-<Image img="tutorial/settings-panel.gif" />
+Also, it's important to note that not all nodes are deletable - if we try to delete an undeletable Node, it'll result in an error. Hence, it's good to make use of the [helper](/craft.js/docs/utilities) methods which helps describe a Node. In our case, we would like to know if the currently selected Node is deletable before actually displaying the "Delete" button. These methods can be accessed via the `is` query in the `useEditor` hook.
 
-
-Now, we have to make our Delete button work. We can achieve this by using the `delete` action available from the `useEditor` hook:
-
-```jsx
+```jsx {13,27-37}
 // components/SettingsPanel.js
 
 export const SettingsPanel = () => {
-  const { actions, selected } = useEditor((state) => {
+  const { actions, selected } } = useEditor((state, query) => {
     const currentNodeId = state.events.selected;
     let selected;
 
@@ -960,7 +969,8 @@ export const SettingsPanel = () => {
       selected = {
         id: currentNodeId,
         name: state.nodes[currentNodeId].data.name,
-        settings: state.nodes[currentNodeId].related && state.nodes[currentNodeId].related.settings
+        settings: state.nodes[currentNodeId].related && state.nodes[currentNodeId].related.settings,
+        isDeletable: query.is(currentNodeId).Deletable()
       };
     }
 
@@ -973,20 +983,25 @@ export const SettingsPanel = () => {
     <Box bgcolor="rgba(0, 0, 0, 0.058823529411764705)" mt={2} px={2} py={2}>
       <Grid container direction="column" spacing={0}>
         ...
-        <MaterialButton
-          variant="contained"
-          color="default"
-          onClick={() => {
-            actions.delete(selected.id);
-          }}
-        >
-          Delete
-        </MaterialButton>
+        {
+          selected.isDeletable ? (
+            <MaterialButton
+              variant="contained"
+              color="default"
+              onClick={() => {
+                actions.delete(selected.id);
+              }}
+            >
+              Delete
+            </MaterialButton>
+          ) : null
+        }
       </Grid>
     </Box>
   ) : null
 }
 ```
+<Image img="tutorial/settings-panel.gif" />
 
 ### Topbar
 This is the last part of the editor that we have to take care of and then we're done! 
@@ -995,10 +1010,7 @@ First, we can get the editor's `enabled` state by passing in a collector functio
 
 Lastly, the `useEditor` hook also provides `query` methods which provide information based the editor'state. In our case,  we would like to get the current state of all the `Nodes` in a serialised form; we can do this by calling the `serialize` query method. 
 
-> We'll explore how to compress this output and have the editor load from the serialised JSON in the [Save and Load](/craft.js/r/docs/save-load-state) guide.
-
-
-```jsx
+```jsx {4,7-9,16,25-27}
 // components/Topbar.js
 import React from "react";
 import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton } from "@material-ui/core";
@@ -1038,6 +1050,7 @@ export const Topbar = () => {
 
 <Image img="tutorial/topbar.gif" />
 
+> We'll explore how to compress the JSON output and have the editor load from the serialised JSON in the [Save and Load](/craft.js/r/docs/save-load-state) guide.
 
 
 ## You made it 🎉
