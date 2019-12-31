@@ -23,12 +23,12 @@ Craft.js provides you the building blocks, which you can then use to iteratively
 
 
 ## Docs
-- [Core concepts](https://craft.js.org/r/docs/concepts/nodes)
-- [Tutorial](https://craft.js.org/r/docs/basic-tutorial)
-- [API Reference](https://craft.js.org/r/docs/api/editor-state)
+- [Core concepts](https://prewong.github.io/craft.js/r/docs/concepts/nodes)
+- [Tutorial](https://prewong.github.io/craft.js/r/docs/basic-tutorial)
+- [API Reference](https://prewong.github.io/craft.js/r/docs/api/editor-state)
 
 ## Examples
-- [Basic](https://craft.js.org/examples/basic)
+- [Basic](https://prewong.github.io/craft.js/examples/basic)
 
 
 ## Features

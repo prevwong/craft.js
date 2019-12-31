@@ -5,7 +5,7 @@ title: Basic Tutorial
 
 import {Image} from "../src/components/Image.js";
 
-<a href="https://craft.js.org/examples/basic" className="btn">Live Demo</a> 
+<a href="https://prewong.github.io/craft.js/examples/basic" className="btn">Live Demo</a> 
 <a href="https://github.com/prevwong/craft.js/tree/master/packages/examples/basic" className="btn btn-text">View Code</a> 
 
 ## Overview
