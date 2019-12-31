@@ -3,7 +3,7 @@ id: save-load-state
 title: Save and Load
 ---
 
-import {Image} from "../src/components/Image.js";
+import {Image} from "../../src/components/Image.js";
 
 This guide extends upon the [Basic Tutorial](/craft.js/r/docs/basic-tutorial)
 

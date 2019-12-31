@@ -5,7 +5,6 @@
     "dev": "./scripts/dev.sh",
     "clean": "lerna run clean --stream",
     "build": "lerna run build --stream",
-    "build-site": "./scripts/build-site.sh",
     "deploy": "./scripts/deploy.sh",
     "release": "run-s clean build release:npm ",
     "release:npm": "lerna publish"

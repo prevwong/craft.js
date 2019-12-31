@@ -176,7 +176,7 @@ const App = () => {
 ```
 
 ## Additional Packages :tada:
-- **[@craftjs/layers](https://github.com/prevwong/craft.js/tree/master/packages/layers)** Display Photoshop-like layers editor
+- **[@craftjs/layers](https://github.com/prevwong/craft.js/tree/master/packages/layers)** A Photoshop-like layers editor
 
 ## Acknowledgements :raised_hands:
 
