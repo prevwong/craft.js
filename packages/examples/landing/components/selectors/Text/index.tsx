@@ -39,6 +39,7 @@ export const Text = ({ fontSize , textAlign, fontWeight, color, shadow, text, ma
 }
 
 Text.craft = {
+  name: "Text",
   defaultProps: {
     fontSize: "15",
     textAlign: "left", 

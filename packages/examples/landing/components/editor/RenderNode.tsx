@@ -39,8 +39,8 @@ export const RenderNode = ({ render }) => {
     isHover: node.events.hovered,
     dom: node.dom,
     name: node.data.custom.displayName || node.data.displayName,
-    moveable: query.is(node.id).Draggable(),
-    deletable: query.is(node.id).Deletable()
+    moveable: query.node(node.id).isDraggable(),
+    deletable: query.node(node.id).isDeletable()
   }));
 
   const currentRef = useRef<HTMLDivElement>();

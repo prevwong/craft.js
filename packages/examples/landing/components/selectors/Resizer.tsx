@@ -101,7 +101,7 @@ export const Resizer = ({
   const {isRootNode, parentDirection} = useEditor((state, query) => {
     return {
       parentDirection: parent && state.nodes[parent] && state.nodes[parent].data.props.flexDirection,
-      isRootNode: query.is(id).Root()
+      isRootNode: query.node(id).isRoot()
     }
   });
 

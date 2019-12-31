@@ -37,8 +37,9 @@ export const Video = (props: any) => {
 }
 
 Video.craft = {
+    name: "Video",
     defaultProps: {
-        videoId: "2g811Eo7K8U",
+        videoId: "IwzUs1IMdyQ",
     },
     related: {
         toolbar: VideoSettings

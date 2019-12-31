@@ -1,5 +1,8 @@
+/* purgecss start ignore */
 @tailwind base;
 @tailwind components;
+/* purgecss end ignore */
+
 @tailwind utilities;
 @import url("https://use.typekit.net/mpa1wkh.css");
 

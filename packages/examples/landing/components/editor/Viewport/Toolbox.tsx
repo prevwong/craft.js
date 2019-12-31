@@ -43,7 +43,7 @@ export const Toolbox = () => {
         <div ref={ref => create(ref, <Button />)}>
           <Item className='m-2 pb-2 cursor-pointer block'><ButtonSvg /></Item>
         </div> 
-        <div ref={ref => create(ref, <Video videoId="jQctQKwMyl8" />)}>
+        <div ref={ref => create(ref, <Video />)}>
           <Item className='m-2 pb-2 cursor-pointer block'><YoutubeSvg /></Item>
         </div> 
       </div>

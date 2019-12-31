@@ -17,6 +17,7 @@
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-typescript": "^1.1.1",
     "classnames": "^2.2.6",
+    "cssnano": "^4.1.10",
     "debounce": "^1.2.0",
     "lzutf8": "^0.5.5",
     "next": "9.1.2",

@@ -33,7 +33,7 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer <S> 
   }) : useLayerManager();
 
   const { enabled, children } = useEditor((state, query) => ({
-    children: state.nodes[id] && query.getDeepNodes(id, false),
+    children: state.nodes[id] && query.node(id).decendants(),
     enabled: state.options.enabled
   }));
 

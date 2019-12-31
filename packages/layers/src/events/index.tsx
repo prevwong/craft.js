@@ -113,7 +113,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
                 if (currentCanvasHovered && indicator && currentCanvasHovered.data.nodes ) {
                     const heading = layers[currentCanvasHovered.id].headingDom.getBoundingClientRect();
                     if ( e.clientY > heading.top + 10 && e.clientY < heading.bottom - 10) {
-                        indicator.placement.currentNode = query.getNode(currentCanvasHovered.data.nodes[currentCanvasHovered.data.nodes.length - 1]);
+                        indicator.placement.currentNode = query.node(currentCanvasHovered.data.nodes[currentCanvasHovered.data.nodes.length - 1]).get();
                         indicator.placement.index = currentCanvasHovered.data.nodes.length
                         indicator.placement.where = "after";
                         indicator.placement.parent = currentCanvasHovered;
@@ -153,10 +153,10 @@ export const EventManager: React.FC<any> = ({ children }) => {
                     const parentHeadingInfo = layers[parent.id].headingDom.getBoundingClientRect();
 
                     mutable.current.currentCanvasHovered = null;
-                    if ( query.is(parent.id).Canvas() ) {
+                    if ( query.node(parent.id).isCanvas() ) {
                         if (parent.data.parent) {
-                            const grandparent = query.getNode(parent.data.parent);
-                            if (query.is(grandparent.id).Canvas())  {
+                            const grandparent = query.node(parent.data.parent).get();
+                            if (query.node(grandparent.id).isCanvas())  {
                                 mutable.current.currentCanvasHovered = parent;
                                 if ( 
                                     (e.clientY > parentHeadingInfo.bottom - 10 && !layers[parent.id].expanded) || 

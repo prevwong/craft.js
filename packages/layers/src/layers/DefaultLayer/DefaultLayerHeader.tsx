@@ -102,7 +102,7 @@ export const DefaultLayerHeader: React.FC = () => {
   const { hidden, actions, selected, topLevel } = useEditor((state, query) => ({
     hidden: state.nodes[id] && state.nodes[id].data.hidden,
     selected:  state.events.selected == id,
-    topLevel: query.is(id).TopLevelCanvas()
+    topLevel: query.node(id).isTopLevelCanvas()
   }));  
   
 
