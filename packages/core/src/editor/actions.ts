@@ -31,7 +31,7 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
     replaceNodes(nodes: Nodes) {
       state.nodes = nodes;
     },
-    add(nodes: Node[] | Node, parentId?: NodeId ) {
+    add(nodes: Node[] | Node, parentId?: NodeId, onError?: (err) => void) {
       const isCanvas = (node: Node | NodeId) => node && (typeof node == 'string' ? node.startsWith("canvas-") : node.data.isCanvas)
 
       if (!Array.isArray(nodes)) nodes = [nodes];
@@ -57,7 +57,6 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
 
             if ( parentNode.data.props.children ) delete parentNode.data.props["children"];
             
-            // if (parentId && !state.nodes[parentId].data.nodes) state.nodes[parentId].data.nodes = [];
             if (!parentNode.data.nodes) parentNode.data.nodes = [];
             const currentNodes = parentNode.data.nodes;
             currentNodes.splice((node.data.index !== undefined) ? node.data.index : currentNodes.length, 0, node.id);

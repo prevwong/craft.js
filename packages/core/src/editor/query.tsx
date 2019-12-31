@@ -177,11 +177,11 @@ export function QueryMethods(Editor: EditorState) {
         Editor.nodes[node.id].dom
     ) => {
       if (source === target) return;
-      const targetNode = Editor.nodes[target],
+      const sourceNode = Editor.nodes[source],
+        targetNode = Editor.nodes[target],
         isTargetCanvas = _("is")(targetNode.id).Canvas();
 
-      
-
+    
       const targetParent =
           (isTargetCanvas) ? targetNode
             : Editor.nodes[targetNode.data.parent];
@@ -225,8 +225,11 @@ export function QueryMethods(Editor: EditorState) {
       };
 
 
-      _("is")(source).Draggable((err) => output.error = err);
-      _("is")(targetParent.id).Droppable(source, (err) => output.error = err);
+      if ( sourceNode ) {
+        _("is")(source).Draggable((err) => output.error = err);
+        _("is")(targetParent.id).Droppable(source, (err) => output.error = err);
+      } 
+     
 
       return output;
     },
