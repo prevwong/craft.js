@@ -2,9 +2,8 @@
 <div align="center" style={{d}}>
 <h1>@craftjs/layers</h1>
 
-<img alt="npm" src="https://img.shields.io/npm/v/drooltip.js?color=%23000&style=for-the-badge">
-<img alt="NPM" src="https://img.shields.io/npm/l/drooltip.js?color=%23000&style=for-the-badge">
-
+<img alt="npm" src="https://img.shields.io/npm/v/@craftjs/layers?color=%23000&style=for-the-badge">
+<img alt="NPM" src="https://img.shields.io/npm/l/@craftjs/layers?color=%23000&style=for-the-badge">
 </div>
 
 <div align="center" style={{d}}>

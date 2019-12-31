@@ -28,10 +28,10 @@ html, body {
 .viewport .header { top:-100%; }
 .viewport .toolbox { left:-100%; position:relative; }
 .viewport .sidebar { right:-100%; position:relative; }
-.viewport .craftjs-renderer { opacity: 0; transition-delay: 0.5s; } 
+.viewport .craftjs-renderer { opacity: 0;  } 
 
 .viewport.loaded { pointer-events: all; }
 .viewport.loaded .header { top: 0; }
 .viewport.loaded .toolbox { left: 0; }
 .viewport.loaded .sidebar { right: 0; }
-.viewport.loaded .craftjs-renderer { opacity: 1; }
+.viewport.loaded .craftjs-renderer { opacity: 1; transition-delay: 0.5s; }
