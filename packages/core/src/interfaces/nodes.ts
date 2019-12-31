@@ -2,15 +2,15 @@ import React from "react";
 import { QueryMethods } from "../editor/query";
 import { QueryCallbacksFor } from "@craftjs/utils";
 
-type CraftComponentConfig<T> = {
+type UserComponentConfig<T> = {
   name: string;
   rules: Partial<NodeRules>;
   related: Partial<NodeRelated>;
   defaultProps: Partial<T>
 }
 
-export type CraftComponent<T = any> = React.ComponentType<T> & {
-  craft?: Partial<CraftComponentConfig<T>>
+export type UserComponent<T = any> = React.ComponentType<T> & {
+  craft?: Partial<UserComponentConfig<T>>
 }
 
 export type NodeId = string;
