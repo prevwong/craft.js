@@ -32,8 +32,8 @@ Craft.js solves this problem by providing the building blocks of a page editor. 
 - [Basic](https://prewong.github.io/craft.js/examples/basic)
 
 
-## Features 
-### It's just React :tada:
+## Features :sparkles:
+### It's just React 
 No need for complicated plugin systems. Design your editor from top to bottom the same way as you would design any other frontend application in React.
 
 A simple user component can easily be defined as such:
@@ -71,7 +71,7 @@ const App = () => {
 }
 ```
 
-### Control how your components are edited :mag:
+### Control how your components are edited
 An obvious requirement for page editors is that they need to allow users to edit components. With Craft.js, you control the process of which these components should be edited. 
 
 In the following example, when the user clicks on a component, we'll display a modal that requires the user to input a value for the `text` prop. As the input value changes, the component will be re-rendered with updated prop. 
@@ -106,7 +106,7 @@ const TextComponent = ({text}) => {
 ```
 With this, you could easily implement content editable text or drag-to-resize components, just as any modern page editor would have.
 
-### User components with droppable regions :inbox_tray:
+### User components with droppable regions
 Let's say we need a "Container" component which users can drop into the editor. Additionally, we would also like them to be able to drag and drop other components into the Container. 
 
 In Craft.js, it's as simple as calling the `<Canvas />`
@@ -127,7 +127,7 @@ const Container = () => {
 }
 ```
 
-### Extensible :hammer:
+### Extensible
 Craft.js provides an expressive API which allows you to easily read and manipulate the editor state. Let's say you would like to implement a copy function for a component:
 ```jsx
 import {useEditor, useNode} from "@craftjs/core";
@@ -175,7 +175,7 @@ const App = () => {
 }
 ```
 
-## Additional Packages
+## Additional Packages :tada:
 - **[@craftjs/layers](https://github.com/prevwong/craft.js/tree/master/packages/layers)** Display Photoshop-like layers editor
 
 ## Acknowledgements :raised_hands:
