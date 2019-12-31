@@ -43,7 +43,6 @@ const { connectors, setProp, ...collected } = useNode(collector);
 ]} /> 
 
 ## Examples
-`useNode` is crucial for writing [User Components](../concepts/user-components).
 
 ### Collecting state information
 ```tsx

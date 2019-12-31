@@ -7,7 +7,7 @@
     "build": "lerna run build --stream",
     "build-site": "./scripts/build-site.sh",
     "deploy": "./scripts/deploy.sh",
-    "release": "run-s deploy clean release:npm ",
+    "release": "run-s clean build release:npm ",
     "release:npm": "lerna publish"
   },
   "devDependencies": {

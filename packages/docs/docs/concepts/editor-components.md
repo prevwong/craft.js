@@ -110,7 +110,7 @@ const ShowMeMyDescendants = () => {
     const selectedNodeId = state.events.selected;
     let allDescendants = false;
 
-    if (selectedNodeId)  allDescendants = query.getDeepNodes(selectedNodeId, true);  
+    if (selectedNodeId)  allDescendants = query.node(selectedNodeId).decendants();  
 
     return { allDescendants }
   }); 

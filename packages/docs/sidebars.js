@@ -23,12 +23,13 @@ module.exports = {
     "API Reference" : [
       "api/editor-state",
       "api/node",
+      "api/user-component",
       "api/editor",
       "api/frame",
       "api/canvas",
       "api/useEditor",
       "api/useNode",
-      "api/utilities"
+      "api/helpers"
 
     ],
     "Additional Packages" : [

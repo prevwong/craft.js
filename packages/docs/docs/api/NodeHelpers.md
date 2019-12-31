@@ -1,29 +1,87 @@
 ---
-id: utilities
-title: Helpers
-sidebar_label: Helpers
+id: helpers
+title: NodeHelpers
+sidebar_label: NodeHelpers
 ---
 
 import {API, Badge} from "./API";
 
-Methods that helps describe a `Node`. 
+Methods that helps describe a specified `Node`. 
 
 ## Usage
-These methods are accessible via the `is` query in the `useEditor` hook:
+### `useEditor`
 ```jsx
 import {useEditor} from "@craftjs/core";
 
 const TextComponent = () => {
   const { id } = useNode();
   const { query: {is} } = useEditor();
-  const isRoot = is(id).Root(),
-        isDraggable = is(id).Draggable();
+  const isRoot = node(id).Root(),
+        isDraggable = node(id).Draggable();
   ...
+}
+```
+### User Component rules
+```jsx
+const MyComp = () => {
+
+}
+MyComp.craft = { 
+  rules: {
+    canDrag: (node: Node, helper: NodeHelpers) => {
+      helper(node.id).ancestors();
+      ...
+    },
+    canMoveIn : (incoming: Node, self: Node, helper: NodeHelpers) => {
+      helper(node.id).ancestors();
+      ...
+    }
+    canMoveOut: (outgoing: Node, self: Node, helper: NodeHelpers) => {
+      helper(node.id).ancestors();
+      ...
+    }
+  }
 }
 ```
 
 ## Methods
-### Root
+
+### get
+<Badge type="function" />
+
+Get `Node` object from id
+
+#### Returns
+<API items={[
+  ["Node"]
+]} /> 
+
+
+
+### decendants
+<Badge type="function" />
+
+Returns an array of Node ids of all decendants
+
+#### Returns
+<API items={[
+  ["NodeId[]"]
+]} /> 
+
+
+
+### ancestors
+<Badge type="function" />
+
+Returns an array of Node ids of all ancestors
+
+#### Returns
+<API items={[
+  ["NodeId[]"]
+]} /> 
+
+
+### isRoot
 <Badge type="function" />
 
 Returns `true` if a given Node is the Root Node
@@ -51,7 +109,7 @@ const App  = () => {
 }
 ```
 
-### Canvas
+### isCanvas
 <Badge type="function" noMargin={true} />
 
 Check if a given Node is a Canvas
@@ -79,7 +137,7 @@ const App  = () => {
 }
 ```
 
-### Deletable
+### isDeletable
 <Badge type="function" noMargin={true} />
 
 A Node may be deleted as long as it is **not** one of the following:
@@ -126,7 +184,7 @@ const Container = () => {
 ```
 
 
-### TopLevelCanvas
+### isTopLevelCanvas
 <Badge type="function" noMargin={true} />
 
 A Canvas Node is considered top-level if it is defined inside a User Component and it is not rendered as an immediate child of another Node.
@@ -180,7 +238,7 @@ const Container = () => {
 ```
 
 
-### ParentOfTopLevelCanvas
+### isParentOfTopLevelCanvas
 <Badge type="function" noMargin={true} />
 
 This returns `true` if a Node's User Component defines a `<Canvas />` in its render method.
@@ -233,7 +291,7 @@ const Container = () => {
 
 
 
-### Draggable
+### isDraggable
 <Badge type="function" noMargin={true} />
 
 A Node may be dragged and moved if it satisfies both of the following conditions:
@@ -255,7 +313,7 @@ A Node may be dragged and moved if it satisfies both of the following conditions
 
 
 
-### Droppable
+### isDroppable
 <Badge type="function" noMargin={true} />
 
 
@@ -279,7 +337,8 @@ In the following example, we're checking if our `MyCanvas` component would be ab
 const MyCanvas = () => {
   const { id } = useNode();
   const { canWeAcceptTheSelectedNode } = useEditor((state, query) => ({
-    canWeAcceptTheSelectedNode: state.events.selected && query.is(id).Droppable(state.events.selected)
+    canWeAcceptTheSelectedNode: state.events.selected && query.node(id).Droppable(state.events.selected)
   }));
 }
 ```
+

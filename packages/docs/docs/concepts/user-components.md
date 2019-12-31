@@ -3,6 +3,8 @@ id: user-components
 title: User components
 ---
 
+import {API} from "../api/API";
+
 User Components are intended to be written just like any other React Component. 
 
 Let's start with a simple Hero component:
@@ -141,12 +143,7 @@ Hero.craft = {
 ```
 
 ## Specify drag/drop rules
-You may want to restrict how your components are dragged or what goes in and out of your component. These rules can be specified in the static `craft.rules`:
-
-- `canDrag(currentNode)` : Specifies if a component can be dragged. Applicable only to components whose corresponding `Node` is a direct child of a `Canvas`.
-- `canMoveIn(incomingNode, currentNode)`: Decides if an incoming Node can be dropped into the current component. Applicable only to components whose corresponding `Node` is a `Canvas`.
-- `canMoveOut(outgoingNode, currentNode)` : Decides if a child Node can be dragged out of the current component. Applicable only to components whose corresponding `Node` is a `Canvas`.
-
+You may want to restrict how your components are dragged or what goes in and out of your component. These rules can be specified in the static `craft.rules`.
 
 Let us write a (pretty strange) rule for our Hero component which users can only drag if they change the `text` prop to "Drag": 
 ```jsx
