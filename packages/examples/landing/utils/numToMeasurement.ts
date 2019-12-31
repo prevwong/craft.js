@@ -9,7 +9,7 @@ export const pxToPercent = (value: any, comparativeValue: number) => {
   // if ( typeof value == 'number' ) return;
   const val = (Math.abs(value) / comparativeValue * 100)
   if ( value < 0) return -1 * val 
-  else return val;
+  else return Math.round(val);
 }
 export const getElementDimensions = (element: HTMLElement) => {
   const computedStyle = getComputedStyle(element);
