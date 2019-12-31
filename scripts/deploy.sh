@@ -13,5 +13,5 @@ mkdir site/examples
 cp -r ./packages/examples/basic/out/ site/examples/basic
 
 touch site/.nojekyll
-# touch site/CNAME
-# echo "craft.js.org" >> site/CNAME
+touch site/CNAME
+echo "craft.js.org" >> site/CNAME
