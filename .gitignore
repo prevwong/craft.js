@@ -1,7 +1,7 @@
-*node_modules/
-*lib/
-*dist/
-*.cache/
-*.log
-*out/
-/site
+node_modules
+.cache
+site
+out
+dist
+lib
+*-*.log
