@@ -17,5 +17,5 @@ if ( process.env.NODE_ENV != "production" ) {
 }
 
 module.exports = withPlugins(plugins, {
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/craft.js' : ''
+  assetPrefix: ''
 });
