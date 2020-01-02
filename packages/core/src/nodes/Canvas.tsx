@@ -33,17 +33,20 @@ export function Canvas<T extends React.ElementType>({
     query,
     inContext
   } = useInternalEditor();
-  const { node, nodeId, inNodeContext } = useInternalNode(node => ({
-    node: node.data,
-    nodeId: node.id
+  const { node, inNodeContext } = useInternalNode(node => ({
+    node: {
+      id: node.id,
+      data: node.data
+    }
   }));
   const [internalId, setInternalId] = useState<NodeId | null>(null);
   const [initialised, setInitialised] = useState(false);
   useEffect(() => {
+    const { id: nodeId, data } = node;
     if (inContext && inNodeContext) {
-      if (node.isCanvas) {
+      if (data.isCanvas) {
         invariant(passThrough, ERROR_INFINITE_CANVAS);
-        if (!node.nodes) {
+        if (!data.nodes) {
           const childNodes = mapChildrenToNodes(children, jsx => {
             const node = query.createNode(jsx);
             return node;
@@ -56,11 +59,10 @@ export function Canvas<T extends React.ElementType>({
 
         let internalId;
 
-        // if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
         const existingNode =
-          node._childCanvas &&
-          node._childCanvas[id] &&
-          query.node(node._childCanvas[id]).get();
+          data._childCanvas &&
+          data._childCanvas[id] &&
+          query.node(data._childCanvas[id]).get();
 
         let newProps = { is, ...props };
 
@@ -84,42 +86,36 @@ export function Canvas<T extends React.ElementType>({
         internalId = rootNode.id;
         add(rootNode, nodeId);
 
-        // } else {
-        // internalId = node._childCanvas[id];
-        // }
         setInternalId(internalId);
       }
     }
 
     setInitialised(true);
   }, [
-    add,
-    children,
     id,
-    inContext,
-    inNodeContext,
     is,
-    node._childCanvas,
-    node.isCanvas,
-    node.nodes,
-    nodeId,
     passThrough,
     props,
-    query
+    children,
+    inContext,
+    inNodeContext,
+    node,
+    query,
+    add
   ]);
 
   return (
     <React.Fragment>
       {initialised ? (
         inContext && inNodeContext ? (
-          node.isCanvas && node.nodes ? (
+          node.data.isCanvas && node.data.nodes ? (
             <SimpleElement
               render={React.createElement(
-                node.type,
+                node.data.type,
                 props,
                 <React.Fragment>
-                  {node.nodes &&
-                    node.nodes.map((id: NodeId) => (
+                  {node.data.nodes &&
+                    node.data.nodes.map((id: NodeId) => (
                       <NodeElement id={id} key={id} />
                     ))}
                 </React.Fragment>

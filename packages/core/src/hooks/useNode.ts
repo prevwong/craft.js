@@ -27,12 +27,16 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
     inNodeContext,
     ...collected
   } = useInternalNode(collect);
-  const { isRoot, handlers: editorConnectors, enabled } = useInternalEditor(
-    (state, query) => ({
-      enabled: state.options.enabled,
-      isRoot: query.node(id).isRoot()
-    })
-  );
+  const {
+    dom,
+    isRoot,
+    handlers: editorConnectors,
+    enabled
+  } = useInternalEditor((state, query) => ({
+    enabled: state.options.enabled,
+    isRoot: state.nodes[id] && query.node(id).isRoot(),
+    dom: state.nodes[id] && state.nodes[id].dom
+  }));
 
   const connectors = useConnectorHooks(
     {
@@ -56,7 +60,7 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
         }
       }
     },
-    enabled
+    enabled && !!dom // Force connector reload when DOM change/removed
   );
 
   return {

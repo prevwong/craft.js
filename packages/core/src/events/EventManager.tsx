@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useMemo } from "react";
 import { Node, NodeId, EditorEvents } from "../interfaces";
 import movePlaceholder from "./movePlaceholder";
 import { getDOMInfo, useConnectorHooks, RenderIndicator } from "@craftjs/utils";
@@ -24,17 +24,13 @@ const createShadow = (e: DragEvent) => {
 };
 
 export const EventManager: React.FC = ({ children }) => {
-  const {
-    enabled,
-    events,
-    query,
-    indicator,
-    actions: { add, setNodeEvent, setIndicator, move }
-  } = useInternalEditor(state => ({
-    events: state.events,
-    enabled: state.options.enabled,
-    indicator: state.options.indicator
-  }));
+  const { enabled, events, query, indicator, actions } = useInternalEditor(
+    state => ({
+      events: state.events,
+      enabled: state.options.enabled,
+      indicator: state.options.indicator
+    })
+  );
 
   const mutable = useRef<EditorEvents>(events);
   const draggedNode = useRef<Node | NodeId | null>(null);
@@ -42,8 +38,10 @@ export const EventManager: React.FC = ({ children }) => {
 
   mutable.current = events;
 
-  const handlers = useHandlerGuard(
-    {
+  const innerHandlers = useMemo(() => {
+    const { add, setNodeEvent, setIndicator, move } = actions;
+
+    return {
       selectNode: [
         "mousedown",
         debounce((e: MouseEvent, id: NodeId) => {
@@ -148,33 +146,37 @@ export const EventManager: React.FC = ({ children }) => {
           setNodeEvent("dragged", null);
         }
       ]
-    },
-    enabled
-  );
+    };
+  }, [actions, query]);
 
-  const connectors = useConnectorHooks(
-    {
-      select: [handlers.selectNode, () => setNodeEvent("selected", null)],
+  const handlers = useHandlerGuard(innerHandlers as any, enabled);
+
+  const hooks = useMemo(() => {
+    return {
+      select: [
+        handlers.selectNode,
+        () => actions.setNodeEvent("selected", null)
+      ],
       drag: [
         (node, id) => {
           node.setAttribute("draggable", "true");
           handlers.dragNode(node, id);
           handlers.dragNodeEnd(node);
         },
-        (node, id) => {
-          setNodeEvent("dragged", null);
+        node => {
+          actions.setNodeEvent("dragged", null);
           node.removeAttribute("draggable");
         }
       ],
-      hover: [handlers.hoverNode, () => setNodeEvent("hovered", null)],
+      hover: [handlers.hoverNode, () => actions.setNodeEvent("hovered", null)],
       create: [
         (node, el) => {
           node.setAttribute("draggable", "true");
           handlers.dragCreateNode(node, el);
           handlers.dragNodeEnd(node);
         },
-        (node, id) => {
-          setNodeEvent("dragged", null);
+        node => {
+          actions.setNodeEvent("dragged", null);
           node.removeAttribute("draggable");
         }
       ],
@@ -182,9 +184,10 @@ export const EventManager: React.FC = ({ children }) => {
         handlers.dragNodeOver(node, id);
         handlers.dragNodeEnter(node, id);
       }
-    },
-    enabled
-  );
+    };
+  }, [actions, handlers]);
+
+  const connectors = useConnectorHooks(hooks as any, enabled);
 
   return (
     <EventContext.Provider value={connectors}>
