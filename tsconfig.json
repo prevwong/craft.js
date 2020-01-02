@@ -3,6 +3,8 @@
   "compilerOptions": {
    "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "esModuleInterop": true,
     "paths": {
       "@craftjs/core": [
         "packages/core/src/index"
