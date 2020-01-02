@@ -2,10 +2,9 @@ import { isValidElement, ReactElement } from "react";
 import { cloneElement } from "react";
 import invariant from "tiny-invariant";
 import { useMemo } from "react";
+import { useRef } from "react";
 
-/**
- * Thank you react-dnd!
- */
+// Thank you React DND
 function setRef(ref: any, node: any) {
   if (node) {
     if (typeof ref === "function") {
@@ -96,7 +95,9 @@ export function useConnectorHooks<T extends string>(
   hooks: Record<T, ConnectorMethod | [ConnectorMethod, ConnectorMethod]>,
   active: boolean = true
 ): useConnectorHooks<T> {
+  const stableHooks = useRef(hooks);
   return useMemo(() => {
+    const hooks = stableHooks.current;
     return Object.keys(hooks).reduce((accum, key: any) => {
       let hook, cleanupHook;
 
