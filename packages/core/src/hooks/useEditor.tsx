@@ -18,6 +18,10 @@ export type useEditor<S = null> =
   }
 }
 
+/**
+ * A Hook that that provides methods and information related to the entire editor state.
+ * @param collector Collector function to consume values from the editor's state
+ */
 export function useEditor(): useEditor;
 export function useEditor<S>(collect: EditorCollector<S>): useEditor<S>;
 

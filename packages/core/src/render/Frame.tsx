@@ -10,6 +10,9 @@ export type Frame = {
   json?: String
 } 
 
+/**
+ * A React Component that defines the editable area
+ */
 export const Frame: React.FC<Frame> = ({
   children,
   json

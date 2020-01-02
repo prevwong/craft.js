@@ -8,6 +8,9 @@ import invariant from "tiny-invariant";
 import { SimpleElement } from "../render/SimpleElement";
 import { NodeElement } from "./NodeElement";
 
+/**
+ * A React Component which defines a droppable region and draggable immediate children
+ */
 export type Canvas<T extends React.ElementType> = {
   id?: NodeId,
   style?: any,
