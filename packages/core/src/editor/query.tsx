@@ -1,8 +1,6 @@
 import React from "react";
 import {
-  Nodes,
   NodeId,
-  SerializedNodeData,
   EditorState,
   Indicator,
   Node,
@@ -10,7 +8,6 @@ import {
   NodeInfo
 } from "../interfaces";
 import { serializeNode } from "../utils/serializeNode";
-import { deserializeNode } from "../utils/deserializeNode";
 import { resolveComponent } from "../utils/resolveComponent";
 import invariant from "tiny-invariant";
 import {
@@ -78,40 +75,10 @@ export function QueryMethods(Editor: EditorState) {
         },
         {}
       );
+
       const json = JSON.stringify(simplifiedNodes);
 
       return json;
-    },
-    /**
-     * Recreate the Nodes from its JSON representation
-     * @param json
-     */
-    deserialize(json: string): Nodes {
-      const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
-      return Object.keys(reducedNodes).reduce((accum: Nodes, id) => {
-        const {
-          type: Comp,
-          props,
-          parent,
-          nodes,
-          _childCanvas,
-          isCanvas,
-          custom
-        } = deserializeNode(reducedNodes[id], options.resolver);
-        if (!Comp) return accum;
-
-        accum[id] = _().createNode(<Comp {...props} />, {
-          id,
-          data: {
-            ...(isCanvas && { isCanvas }),
-            parent,
-            ...(isCanvas && { nodes }),
-            ...(_childCanvas && { _childCanvas }),
-            custom
-          }
-        });
-        return accum;
-      }, {});
     },
     /**
      * Determine the best possible location to drop the source Node relative to the target Node

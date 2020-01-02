@@ -1,4 +1,11 @@
-import { NodeId, Node, Nodes, Options, NodeEvents } from "../interfaces";
+import {
+  NodeId,
+  Node,
+  Nodes,
+  Options,
+  NodeEvents,
+  SerializedNodeData
+} from "../interfaces";
 import { EditorState, Indicator } from "../interfaces";
 import {
   ERROR_INVALID_NODEID,
@@ -11,6 +18,8 @@ import {
 import { QueryMethods } from "./query";
 import { updateEventsNode } from "../utils/updateEventsNode";
 import invariant from "tiny-invariant";
+import { deserializeNode } from "../utils/deserializeNode";
+import { createElement } from "react";
 
 export const Actions = (
   state: EditorState,
@@ -195,6 +204,45 @@ export const Actions = (
       cb: (data: EditorState["nodes"][T]["data"]["custom"]) => void
     ) {
       cb(state.nodes[id].data.custom);
+    },
+    deserialize(json: string) {
+      const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
+      const rehydratedNodes = Object.keys(reducedNodes).reduce(
+        (accum: Nodes, id) => {
+          const {
+            type: Comp,
+            props,
+            parent,
+            nodes,
+            _childCanvas,
+            isCanvas,
+            custom
+          } = deserializeNode(reducedNodes[id], state.options.resolver);
+
+          if (!Comp) return accum;
+
+          accum[id] = query.createNode(createElement(Comp, props), {
+            id,
+            data: {
+              ...(isCanvas && { isCanvas }),
+              parent,
+              ...(isCanvas && { nodes }),
+              ...(_childCanvas && { _childCanvas }),
+              custom
+            }
+          });
+          return accum;
+        },
+        {}
+      );
+
+      state.events = {
+        dragged: null,
+        selected: null,
+        hovered: null,
+        indicator: null
+      };
+      state.nodes = rehydratedNodes;
     }
   };
 };
