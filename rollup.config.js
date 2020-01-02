@@ -50,7 +50,7 @@ export default {
     shouldMinify &&
       terser({
         sourcemap: true,
-        output: { comments: false },
+        output: { comments: "some" },
         compress: {
           keep_infinity: true,
           pure_getters: true,
