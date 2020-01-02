@@ -18,7 +18,9 @@ export const createEditorStoreOptions = (options: Partial<Options> = {}) => {
   };
 }
 
-
+/**
+ * A React Component that provides the Editor context
+ */
 export const Editor: React.FC<Partial<Options>> = ({ children, ...options }) => {
  
   const context = useEditorStore(createEditorStoreOptions(options));

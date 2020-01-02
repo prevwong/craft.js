@@ -23,7 +23,6 @@ import {
   ERROR_MOVE_TO_DESCENDANT,
   ERROR_MOVE_NONCANVAS_CHILD,
   ERROR_DUPLICATE_NODEID,
-  ERROR_NOPARENT,
   getDOMInfo,
   ERROR_CANNOT_DRAG,
   ERROR_MOVE_TOP_LEVEL_CANVAS,
@@ -33,11 +32,6 @@ import findPosition from "../events/findPosition";
 import { getDeepNodes } from "../utils/getDeepNodes";
 import { transformJSXToNode } from "../utils/transformJSX";
 
-/**
- * Editor methods used to query nodes
- * @param nodes
- */
-
 const getNodeFromIdOrNode = (node: NodeId | Node, cb: (id: NodeId) => Node) => typeof node === "string" ? cb(node) : node;
 
 export function QueryMethods(Editor: EditorState) {
@@ -46,9 +40,17 @@ export function QueryMethods(Editor: EditorState) {
   const _: () => QueryCallbacksFor<typeof QueryMethods> = () => QueryMethods(Editor);
 
   return {
+    /**
+     * Get the current Editor options
+     */
     getOptions(): Options {
       return options;
     },
+    /**
+     * Get a Node representing the specified React Element
+     * @param child 
+     * @param extras 
+     */
     createNode(child: React.ReactElement | string, extras?: any) {
       const node = transformJSXToNode(child, extras);
       const name = resolveComponent(
@@ -61,6 +63,9 @@ export function QueryMethods(Editor: EditorState) {
       node.data.name = name;
       return node;
     },
+    /**
+     * Retrieve the JSON representation of the editor's Nodes
+     */
     serialize(): string {
       const simplifiedNodes = Object.keys(Editor.nodes).reduce((result: any, id: NodeId) => {
         const {
@@ -73,6 +78,10 @@ export function QueryMethods(Editor: EditorState) {
       
       return json;
     },
+    /**
+     * Recreate the Nodes from its JSON representation
+     * @param json 
+     */
     deserialize(json: string): Nodes {
       const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
       return Object.keys(reducedNodes).reduce((accum: Nodes, id) => {
@@ -100,6 +109,9 @@ export function QueryMethods(Editor: EditorState) {
         return accum;
       }, {});
     },
+    /**
+     * Determine the best possible location to drop the source Node relative to the target Node
+     */
     getDropPlaceholder: (
       source: NodeId,
       target: NodeId,
@@ -161,9 +173,12 @@ export function QueryMethods(Editor: EditorState) {
         _().node(targetParent.id).isDroppable(source, (err) => output.error = err);
       } 
      
-
       return output;
     },
+    /**
+     * Helper methods to describe the specified Node
+     * @param id 
+     */
     node(id: NodeId)  {
       const node = Editor.nodes[id];
       const nodeQuery = _().node;

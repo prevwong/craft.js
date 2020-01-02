@@ -11,10 +11,6 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
     setOptions(cb: (options: Partial<Options>) => void) {
       cb(state.options);
     },
-    setIndicator(indicator: Indicator | null) {
-      if (indicator && (!indicator.placement.parent.dom || (indicator.placement.currentNode && !indicator.placement.currentNode.dom))) return;
-      state.events.indicator = indicator;
-    },
     setNodeEvent(eventType: NodeEvents, id: NodeId | null) {
       const current = state.events[eventType];
       if (current && id != current) {
@@ -31,6 +27,29 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
     replaceNodes(nodes: Nodes) {
       state.nodes = nodes;
     },
+    reset() {
+      state.nodes = {}
+      state.events = {
+          dragged: null,
+          selected: null,
+          hovered: null,
+          indicator: null
+        }
+    },
+    setDOM(id: NodeId, dom: HTMLElement) {
+      invariant(state.nodes[id], ERROR_INVALID_NODEID)
+      state.nodes[id].dom = dom;
+    },
+    setIndicator(indicator: Indicator | null) {
+      if (indicator && (!indicator.placement.parent.dom || (indicator.placement.currentNode && !indicator.placement.currentNode.dom))) return;
+      state.events.indicator = indicator;
+    },
+    /**
+     * Add a new Node(s) to the editor
+     * @param nodes 
+     * @param parentId 
+     * @param onError 
+     */
     add(nodes: Node[] | Node, parentId?: NodeId, onError?: (err) => void) {
       const isCanvas = (node: Node | NodeId) => node && (typeof node == 'string' ? node.startsWith("canvas-") : node.data.isCanvas)
 
@@ -65,18 +84,13 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
         }        
         state.nodes[node.id] = node;
       });
-
-     
     },
-    reset() {
-      state.nodes = {}
-      state.events = {
-          dragged: null,
-          selected: null,
-          hovered: null,
-          indicator: null
-        }
-    },
+    /**
+     * Move a target Node to a new Parent at a given index
+     * @param targetId 
+     * @param newParentId 
+     * @param index 
+     */
     move(targetId: NodeId, newParentId: NodeId, index: number) {
       const targetNode = state.nodes[targetId],
         currentParentId = targetNode.data.parent!,
@@ -100,10 +114,11 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
       state.nodes[targetId].data.parent = newParentId;
       state.nodes[targetId].data.index = index;
       currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
-
-      // updateEventsNode(state, targetId);
-
     },
+    /**
+     * Delete a Node
+     * @param id 
+     */
     delete(id: NodeId) {
       invariant(id != ROOT_NODE, "Cannot delete Root node");
       const targetNode = state.nodes[id];
@@ -123,19 +138,28 @@ export const Actions = (state: EditorState, query: QueryCallbacksFor<typeof Quer
       updateEventsNode(state, id, true);
       delete state.nodes[id];
     },
+    /**
+     * Update the props of a Node
+     * @param id 
+     * @param cb 
+     */
     setProp(id: NodeId, cb: (props: any) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID);
       cb(state.nodes[id].data.props);
-      // updateEventsNode(state, id);
     },
-    setDOM(id: NodeId, dom: HTMLElement) {
-      invariant(state.nodes[id], ERROR_INVALID_NODEID)
-      state.nodes[id].dom = dom;
-      // updateEventsNode(state, id);
-    },
+    /**
+     * Hide a Node
+     * @param id 
+     * @param bool 
+     */
     setHidden(id: NodeId, bool: boolean) {
       state.nodes[id].data.hidden = bool;
     },
+    /**
+     * Set custom values to a Node
+     * @param id 
+     * @param cb 
+     */
     setCustom<T extends NodeId>(id: T, cb: (data: EditorState['nodes'][T]['data']['custom']) => void) {
       cb(state.nodes[id].data.custom);
     }
