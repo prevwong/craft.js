@@ -8,11 +8,15 @@ import { Header } from "./Header";
 export const Viewport: React.FC = ({children}) => {
   const { enabled, connectors } = useEditor(state => ({ enabled: state.options.enabled }));
   const [loaded, setLoaded] = useState(false);
+  const [mouseEnabled, setMouseEnabled] = useState(false);
 
   let unmounted = false;
   useEffect(() => {
     setTimeout(() => {
       if ( !unmounted ) setLoaded(true);
+      setTimeout(() => {
+        setMouseEnabled(true);
+      }, 400);
     }, 1000)
 
     return (() => {
@@ -22,7 +26,8 @@ export const Viewport: React.FC = ({children}) => {
  
   return (
     <div className={cx(["viewport"], {
-      "loaded" : loaded
+      "loaded" : loaded,
+      "mouse-enabled" : mouseEnabled
     })}>
      
       <Header  />

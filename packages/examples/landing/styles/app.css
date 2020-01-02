@@ -24,13 +24,13 @@ html, body {
   transition:0.4s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.viewport { pointer-events:none; }
+.viewport{ pointer-events:none; }
 .viewport .header { top:-100%; }
 .viewport .toolbox { left:-100%; position:relative; }
 .viewport .sidebar { right:-100%; position:relative; }
 .viewport .craftjs-renderer { opacity: 0;  } 
 
-.viewport.loaded { pointer-events: all; }
+.viewport.mouse-enabled{ pointer-events: all; }
 .viewport.loaded .header { top: 0; }
 .viewport.loaded .toolbox { left: 0; }
 .viewport.loaded .sidebar { right: 0; }

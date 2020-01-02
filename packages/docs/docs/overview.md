@@ -13,7 +13,7 @@ Craft.js solves this problem by providing the building blocks of a page editor. 
 
 
 ## Features
-### It's just React
+### It's just React 
 No need for complicated plugin systems. Design your editor from top to bottom the same way as you would design any other frontend application in React.
 
 A simple user component can easily be defined as such:
@@ -40,9 +40,10 @@ const App = () => {
     <div>
       <header>Some fancy header or whatever</header>
       <Editor>
+        // Editable area starts here
         <Frame resolver={TextComponent, Container}>  
           <Canvas>
-            <TextComponent text="I am already rendered here" />
+            <TextComponent text="I'm already rendered here" />
           </Canvas>
         </Frame>
       </Editor>
@@ -132,19 +133,19 @@ const Container = () => {
 ```
 
 ### Serializable state
-The editor's state can be serialized into a simple JSON format for storage. 
+The editor's state can be serialized into JSON which you can then apply a compression technique of your choice for storage.
 
 ```jsx
 const SaveButton = () => {
   const { query } = useManager();
-  return <a onClick={() => console.log(query.serialize()) }>Save</a>
+  return <a onClick={() => console.log(query.serialize()) }>Get JSON</a>
 }
 ```
 
 Of course, Craft.js will also able to recreate the entire state from the JSON string.
 ```jsx
 const App = () => {
-  const jsonString = /* get JSON from server */
+  const jsonString = /* retrieve JSON from server */
   return (
     <Editor>
       <Frame json={jsonString}>

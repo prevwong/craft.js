@@ -8,7 +8,7 @@
 </div>
 
 <div align="center" style={{d}}>
-  <img alt="styled-components" src="https://raw.githubusercontent.com/prevwong/craft.js/master/assets/readme-demo.gif"/>
+  <img src="https://craft.js.org/screenshots/readme-core-demo.gif"/>
 </div>
 
 <p align="center">
@@ -19,20 +19,21 @@
 
 Page editors are a great way to provide an excellent user experience. However, to build one is often a pretty dreadful task.
 
-There're existing libraries that come with a fully working page editor out of the box with a user interface and editable components. However, if you wish to make customisations such as tweaking the user interface, it will most definitely involve modifying the library itself.
+There're existing libraries that come with a fully working page editor out of the box with a user interface and editable components. However, if you wish to make customisations such as tweaking the user interface, it will most definitely involve modifying the library itself. 
 
-Craft.js solves this problem by providing the building blocks of a page editor. It provides a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things. With this, you'll be able to focus on building the page editor according to your own specifications and needs.
+Craft.js solves this problem by providing the building blocks of a page editor. It ships with a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things. With this, you'll be able to focus on building the page editor according to your own specifications and needs.
 
 ## Docs
-- [Core concepts](https://prewong.github.io/craft.js/r/docs/concepts/nodes)
-- [Tutorial](https://prewong.github.io/craft.js/r/docs/basic-tutorial)
-- [API Reference](https://prewong.github.io/craft.js/r/docs/api/editor-state)
+- [Core concepts](https://prevwong.github.io/craft.js/r/docs/concepts/nodes)
+- [Tutorial](https://prevwong.github.io/craft.js/r/docs/guides/basic-tutorial)
+- [API Reference](https://prevwong.github.io/craft.js/r/docs/api/editor-state)
 
 ## Examples
-- [Basic](https://prewong.github.io/craft.js/examples/basic)
+- [Landing](https://prevwong.github.io/craft.js)
+- [Basic](https://prevwong.github.io/craft.js/examples/basic)
 
 
-## Features :sparkles:
+## Features
 ### It's just React 
 No need for complicated plugin systems. Design your editor from top to bottom the same way as you would design any other frontend application in React.
 
@@ -60,9 +61,10 @@ const App = () => {
     <div>
       <header>Some fancy header or whatever</header>
       <Editor>
+        // Editable area starts here
         <Frame resolver={TextComponent, Container}>  
           <Canvas>
-            <TextComponent text="I am already rendered here" />
+            <TextComponent text="I'm already rendered here" />
           </Canvas>
         </Frame>
       </Editor>
@@ -152,19 +154,19 @@ const Container = () => {
 ```
 
 ### Serializable state
-The editor's state can be serialized into a simple JSON format for storage. 
+The editor's state can be serialized into JSON which you can then apply a compression technique of your choice for storage.
 
 ```jsx
 const SaveButton = () => {
   const { query } = useManager();
-  return <a onClick={() => console.log(query.serialize()) }>Save</a>
+  return <a onClick={() => console.log(query.serialize()) }>Get JSON</a>
 }
 ```
 
 Of course, Craft.js will also able to recreate the entire state from the JSON string.
 ```jsx
 const App = () => {
-  const jsonString = /* get JSON from server */
+  const jsonString = /* retrieve JSON from server */
   return (
     <Editor>
       <Frame json={jsonString}>

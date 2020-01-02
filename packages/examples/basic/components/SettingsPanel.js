@@ -2,7 +2,7 @@ import { Box, Chip, Grid, Typography, Button as MaterialButton } from "@material
 import { useEditor } from "@craftjs/core";
 
 export const SettingsPanel = () => {
-  const { actions, selected } = useEditor((state) => {
+  const { actions, selected } = useEditor((state, query) => {
     const currentNodeId = state.events.selected;
     let selected;
 
@@ -10,7 +10,8 @@ export const SettingsPanel = () => {
       selected = {
         id: currentNodeId,
         name: state.nodes[currentNodeId].data.name,
-        settings: state.nodes[currentNodeId].related && state.nodes[currentNodeId].related.settings
+        settings: state.nodes[currentNodeId].related && state.nodes[currentNodeId].related.settings,
+        isDeletable: query.node(currentNodeId).isDeletable()
       };
     }
 
@@ -33,15 +34,19 @@ export const SettingsPanel = () => {
         { 
           selected.settings && React.createElement(selected.settings)
         }
-        <MaterialButton
-          variant="contained"
-          color="default"
-          onClick={() => {
-            actions.delete(selected.id);
-          }}
-        >
-          Delete
-        </MaterialButton>
+        {
+          selected.isDeletable ? (
+            <MaterialButton
+              variant="contained"
+              color="default"
+              onClick={() => {
+                actions.delete(selected.id);
+              }}
+            >
+              Delete
+            </MaterialButton>
+          ) : null
+        }
       </Grid>
     </Box>
   ) : null

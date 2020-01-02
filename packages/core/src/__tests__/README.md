@@ -1,3 +1,7 @@
 # Tests (WIP)
 
-Tests are currently being rewritten for the updated core. 🐵 🐒
+Currently being rewritten for the updated core. 🐵 🐒
+
+Tooling
+- `jest`
+- `react-testing-library`

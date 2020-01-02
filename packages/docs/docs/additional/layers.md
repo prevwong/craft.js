@@ -5,8 +5,7 @@ title: Layers
 
 import {API} from "../api/API";
 
-Display Photoshop-like layer representation of the editor's Nodes.
-
+A Photoshop-like layers editor.
 
 
 ## Usage
@@ -52,8 +51,8 @@ export default function App() {
 ### `<Layers />`
 #### Props
 <API items={[
-  ["expandRootOnLoad", "boolean", "If enabled, the Root Node will be expanded by default"],
-  ["renderLayer", "React.ReactElement", "Specify how to render each layer"],
+  ["expandRootOnLoad?", "boolean", "Optional. If enabled, the Root Node will be expanded by default"],
+  ["renderLayer?", "React.ReactElement", "Optional. Specify the component to render each layer"],
 ]} /> 
 
 ### `useLayer`
@@ -84,5 +83,28 @@ These following components are available for you to extend upon if you wish to d
 
 - `<DefaultLayer />` 
   - `<DefaultLayerHeader />` 
-  - `<EditableLayerName>`
-    - This component enables the end users to edit the layer names. The values are saved into the respective Node's `custom.displayName` prop.
+    - `<EditableLayerName>` This component enables the end user to edit the layer names. The values are saved into the respective Node's `custom.displayName` prop.
+
+```jsx
+
+const Layer = () => {
+  return (
+    <div>
+      <DefaultLayerHeader />
+    </div>
+  )
+}
+
+const App = () => {
+  return (
+    <Editor>
+      <Frame>
+        ...
+      </Frame>
+      <Layers 
+        renderLayer={Layer}
+      />
+    </Editor>
+  )
+}
+```

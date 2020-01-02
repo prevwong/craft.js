@@ -955,7 +955,7 @@ export const SettingsPanel = () => {
 ```
 Now, we have to make our Delete button work. We can achieve this by using the `delete` action available from the `useEditor` hook.
 
-Also, it's important to note that not all nodes are deletable - if we try to delete an undeletable Node, it'll result in an error. Hence, it's good to make use of the [helper](/craft.js/docs/utilities) methods which helps describe a Node. In our case, we would like to know if the currently selected Node is deletable before actually displaying the "Delete" button. These methods can be accessed via the `is` query in the `useEditor` hook.
+Also, it's important to note that not all nodes are deletable - if we try to delete an undeletable Node, it'll result in an error. Hence, it's good to make use of the [helper](/craft.js/docs/api/helpers) methods which helps describe a Node. In our case, we would like to know if the currently selected Node is deletable before actually displaying the "Delete" button. We can access the helper methods via the `is` query in the `useEditor` hook.
 
 ```jsx {13,27-37}
 // components/SettingsPanel.js

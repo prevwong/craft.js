@@ -22,7 +22,7 @@ CardTop.craft = {
 export const CardBottom = ({children}) => {
   const { connectors: {connect} } = useNode();
   return (
-    <div ref={connect}>
+    <div style={{padding:"10px 0"}} ref={connect}>
       {children}
     </div>
   )

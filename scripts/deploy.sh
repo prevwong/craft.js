@@ -11,8 +11,7 @@ cp -r ./packages/examples/landing/out/* site/
 cp -r ./packages/docs/build site/r
 mkdir site/examples
 cp -r ./packages/examples/basic/out/ site/examples/basic
-
-cp -r ./assets site/assets
+cp -r ./screenshots site/screenshots
 
 touch site/.nojekyll
 touch site/CNAME

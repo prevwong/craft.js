@@ -10,7 +10,12 @@ import {Redirect} from '@docusaurus/router';
 
 
 function Home() {
-  return  <Redirect to="docs/overview" />;
+  if (typeof window !== 'undefined') {
+    window.location.href="https://prevwong.github.io/craft.js";
+    return <p style={{padding: "10px", textAlign:"center"}}>Redirecting...</p>
+  } else {
+    return  <Redirect to="docs/overview" />;
+  }
 }
 
 export default Home;
