@@ -1,31 +1,45 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Unsubscribe } from "redux";
-import { CallbacksFor, Methods, StateFor, QueryCallbacksFor, QueryMethods, SubscriberAndCallbacksFor } from "./useReduxMethods";
+import {
+  CallbacksFor,
+  Methods,
+  StateFor,
+  QueryCallbacksFor,
+  QueryMethods,
+  SubscriberAndCallbacksFor
+} from "./useReduxMethods";
 import isEqualWith from "lodash.isequalwith";
 
 type Actions<M extends Methods, Q extends QueryMethods> = {
-  actions: CallbacksFor<M>,
-  query: QueryCallbacksFor<Q>
+  actions: CallbacksFor<M>;
+  query: QueryCallbacksFor<Q>;
 };
 
-export type useCollector<M extends Methods, Q extends QueryMethods | null, C = null> = C extends null ? Actions<M, Q> : C & Actions<M, Q>;
+export type useCollector<
+  M extends Methods,
+  Q extends QueryMethods | null,
+  C = null
+> = C extends null ? Actions<M, Q> : C & Actions<M, Q>;
 
 export function useCollector<M extends Methods, Q extends QueryMethods | null>(
   store: SubscriberAndCallbacksFor<M, Q>
 ): useCollector<M, Q>;
 
-export function useCollector<M extends Methods, Q extends QueryMethods | null, C>(
+export function useCollector<
+  M extends Methods,
+  Q extends QueryMethods | null,
+  C
+>(
   store: SubscriberAndCallbacksFor<M, Q>,
-  collector: (state: StateFor<M>, query: Q) => C, 
-): 
-  useCollector<M, Q, C>;
+  collector: (state: StateFor<M>, query: Q) => C
+): useCollector<M, Q, C>;
 
-export function useCollector<M extends Methods, Q extends QueryMethods | null, C>
-  (
-    store: SubscriberAndCallbacksFor<M, Q>,
-    collector?: any
-  ) {
-  const {subscribe, getState, actions, query } = store;
+export function useCollector<
+  M extends Methods,
+  Q extends QueryMethods | null,
+  C
+>(store: SubscriberAndCallbacksFor<M, Q>, collector?: any) {
+  const { subscribe, getState, actions, query } = store;
   const collectorFn = useRef(collector);
   collectorFn.current = collector;
 
@@ -37,11 +51,16 @@ export function useCollector<M extends Methods, Q extends QueryMethods | null, C
     initial.current = false;
   }
 
-  const onCollect = useCallback((collected): useCollector<M, Q, C> => {
-    return { ...collected, actions, query }
-  }, [collected.current]);
+  const onCollect = useCallback(
+    (collected): useCollector<M, Q, C> => {
+      return { ...collected, actions, query };
+    },
+    [actions, query]
+  );
 
-  const [renderCollected, setRenderCollected] = useState(onCollect(collected.current));
+  const [renderCollected, setRenderCollected] = useState(
+    onCollect(collected.current)
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -57,17 +76,16 @@ export function useCollector<M extends Methods, Q extends QueryMethods | null, C
             (window as any).state = current;
             setRenderCollected(onCollect(collected.current));
           }
-        } catch (err){
+        } catch (err) {
           console.warn(err);
         }
       });
     }
-    return (() => {
+    return () => {
       cancelled = true;
       if (unsubscribe) unsubscribe();
-
-    })
-  }, []);
+    };
+  }, [getState, onCollect, query, subscribe]);
 
   return renderCollected;
 }
