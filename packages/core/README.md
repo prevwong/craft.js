@@ -1,10 +1,9 @@
 
 <div align="center" style={{d}}>
 <h1>craft.js</h1>
-
-<img alt="npm" src="https://img.shields.io/npm/v/@craftjs/core?color=%23000&style=for-the-badge">
-<img alt="NPM" src="https://img.shields.io/npm/l/@craftjs/core?color=%23000&style=for-the-badge">
-
+<img src="https://img.shields.io/npm/v/@craftjs/core?color=%232680eb&style=for-the-badge">
+<img src="https://img.shields.io/npm/l/@craftjs/core?color=%23000&style=for-the-badge">
+<img src="https://img.shields.io/github/workflow/status/prevwong/craft.js/deploy-gh?color=%23000&style=for-the-badge">
 </div>
 
 <div align="center" style={{d}}>
@@ -13,7 +12,7 @@
 
 <p align="center">
   <strong>
-    <a aria-label="next.js learn" href="https://prevwong.github.io/craft.js/">Live Demo</a>
+    <a href="https://prevwong.github.io/craft.js/">Live Demo</a>
   </strong>
 </p>
 
@@ -33,7 +32,7 @@ Craft.js solves this problem by providing the building blocks of a page editor. 
 - [Basic](https://prevwong.github.io/craft.js/examples/basic)
 
 
-## Features
+## Features :sparkles:
 ### It's just React 
 No need for complicated plugin systems. Design your editor from top to bottom the same way as you would design any other frontend application in React.
 
