@@ -19,7 +19,7 @@
 
 Page editors are a great way to provide an excellent user experience. However, to build one is often a pretty dreadful task.
 
-There're existing libraries that come with a fully working page editor out of the box with a user interface and editable components. However, if you wish to make customisations such as tweaking the user interface, it will most definitely involve modifying the library itself. 
+There're existing libraries that come with a fully working page editor out of the box with a user interface and editable components. However, if you wish to make customisations such as modifying the user interface and its behavior, it will most definitely involve modifying the library itself. 
 
 Craft.js solves this problem by providing the building blocks of a page editor. It ships with a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things. With this, you'll be able to focus on building the page editor according to your own specifications and needs.
 
@@ -185,5 +185,5 @@ const App = () => {
 - **[react-dnd](https://github.com/react-dnd/react-dnd)** The React drag-n-drop library. 
 Although it is not actually used here, many aspects of Craft.js are written with react-dnd as a reference along with some utilities and functions being borrowed. 
 - **[Grape.js](https://github.com/artf/grapesjs)** The HTML web builder framework. This has served as an inspiration for Craft.js. The element positioning logic used in Craft.js is borrowed from Grape.js
-- **[use-methods](https://github.com/pelotom/use-methods)** A super handy hook when dealing with reducers. Craft.js uses a modified version of use-methods that works with Redux instead of `useReducer`
+- **[use-methods](https://github.com/pelotom/use-methods)** A super handy hook when dealing with reducers. Craft.js uses a modified version of `useMethods` that works with Redux instead of `useReducer`
 
