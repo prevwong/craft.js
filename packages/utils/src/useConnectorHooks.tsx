@@ -88,9 +88,11 @@ export type ConnectorElementWrapper = (elementOrNode: ConnectableElement, option
 
 type ConnectorMethod = (element: HTMLElement, options?: any) => void
 
+export type useConnectorHooks<T extends string> =Record<T, (node: ConnectableElement, options?: any) => void>;
+
 export function useConnectorHooks<
   T extends string
-  >(hooks: Record<T, ConnectorMethod | [ConnectorMethod, ConnectorMethod]>, active: boolean = true): Record<T, (node: ConnectableElement, options?: any) => void> {
+  >(hooks: Record<T, ConnectorMethod | [ConnectorMethod, ConnectorMethod]>, active: boolean = true): useConnectorHooks<T> {
   return useMemo(() => {
     return Object.keys(hooks).reduce((accum, key: any) => {
       let hook,
