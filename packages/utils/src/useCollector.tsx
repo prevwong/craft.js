@@ -39,7 +39,7 @@ export function useCollector<
   Q extends QueryMethods | null,
   C
 >(store: SubscriberAndCallbacksFor<M, Q>, collector?: any) {
-  const { subscribe, getState, actions, query } = store;
+  const { getState, actions, query } = store;
   const collectorFn = useRef(collector);
   collectorFn.current = collector;
 
@@ -63,6 +63,7 @@ export function useCollector<
   );
 
   useEffect(() => {
+    const { subscribe, getState, query } = store;
     let cancelled = false;
     let unsubscribe: Unsubscribe;
     if (collectorFn.current) {
@@ -85,7 +86,7 @@ export function useCollector<
       cancelled = true;
       if (unsubscribe) unsubscribe();
     };
-  }, [getState, onCollect, query, subscribe]);
+  }, [store, onCollect]);
 
   return renderCollected;
 }

@@ -107,83 +107,80 @@ export function useReduxMethods<
     old: initialState,
     present: initialState
   });
-
-  let methods: Methods<S, R>;
-  let patchListener: PatchListener | undefined;
-  if (typeof methodsOrOptions === "function") {
-    methods = methodsOrOptions;
-  } else {
-    // methods = methodsOrOptions.methods;
-    // patchListener = methodsOrOptions.patchListener;
-  }
-
-  const reducer = (state: S, action: ActionUnion<R>) => {
-    return (produce as Function)(
-      state,
-      (draft: S) => {
-        if (methods(draft, queryMethods && queryMethods(state))[action.type]) {
-          return methods(draft, queryMethods && queryMethods(state))[
-            action.type
-          ](...action.payload);
-        }
-      },
-      patchListener
-    );
-  };
-  const methodsFactory = methods;
-
-  const { state, dispatch, subscribe, getState } = createStore(
-    reducer,
-    initialState
-  );
-
-  const query = queryMethods
-    ? (Object.keys(queryMethods()) as Array<
-        keyof QueryCallbacksFor<typeof methods>
-      >).reduce((accum, key) => {
-        return {
-          ...accum,
-          [key]: (...args: any) => {
-            const state = states.current.present;
-            return queryMethods(state)[key](...args);
-          }
-        };
-      }, {} as QueryCallbacksFor<typeof queryMethods>)
-    : null;
-
-  const actions = useMemo(() => {
-    const actionTypes: ActionUnion<R>["type"][] = Object.keys(
-      methodsFactory(state, null)
-    );
-    return actionTypes.reduce((accum, type) => {
-      accum[type] = (...payload) =>
-        dispatch({ type, payload } as ActionUnion<R>);
-      return accum;
-    }, {} as CallbacksFor<typeof methodsFactory>);
-  }, [dispatch, methodsFactory, state]);
-
-  const unsubscribe = useMemo(() => {
-    return subscribe(() => {
-      states.current.present = getState();
-    });
-  }, [getState, subscribe]);
+  let unsubscribe = useRef<Unsubscribe | null>(null);
 
   useEffect(() => {
     return () => {
-      unsubscribe();
+      if ( unsubscribe.current != null ) unsubscribe.current();
     };
-  }, [unsubscribe]);
+  }, []);
 
   return useMemo(
-    () => ({
-      subscribe,
-      getState: () => ({
-        prev: states.current.old,
-        current: states.current.present
-      }),
-      actions,
-      query
-    }),
-    [actions, query, subscribe]
+    () => {
+      let methods: Methods<S, R>;
+      let patchListener: PatchListener | undefined;
+      if (typeof methodsOrOptions === "function") {
+        methods = methodsOrOptions;
+      } else {
+        // methods = methodsOrOptions.methods;
+        // patchListener = methodsOrOptions.patchListener;
+      }
+      const reducer = (state: S, action: ActionUnion<R>) => {
+        return (produce as Function)(
+          state,
+          (draft: S) => {
+            if (methods(draft, queryMethods && queryMethods(state))[action.type]) {
+              return methods(draft, queryMethods && queryMethods(state))[
+                action.type
+              ](...action.payload);
+            }
+          },
+          patchListener
+        );
+      };
+      const methodsFactory = methods;
+    
+      const { state, dispatch, subscribe, getState } = createStore(
+        reducer,
+        initialState
+      );
+
+      unsubscribe.current = subscribe(() => {
+        states.current.present = getState();
+      });
+    
+      const query = queryMethods
+        ? (Object.keys(queryMethods()) as Array<
+            keyof QueryCallbacksFor<typeof methods>
+          >).reduce((accum, key) => {
+            return {
+              ...accum,
+              [key]: (...args: any) => {
+                const state = states.current.present;
+                return queryMethods(state)[key](...args);
+              }
+            };
+          }, {} as QueryCallbacksFor<typeof queryMethods>)
+        : null;
+    
+      const actionTypes: ActionUnion<R>["type"][] = Object.keys(
+        methodsFactory(state, null)
+      );
+      const actions = actionTypes.reduce((accum, type) => {
+        accum[type] = (...payload) => dispatch({ type, payload } as ActionUnion<R>);
+        return accum;
+      }, {} as CallbacksFor<typeof methodsFactory>);
+    
+      return {
+        subscribe,
+        getState: () => ({
+          prev: states.current.old,
+          current: states.current.present
+        }),
+        actions,
+        query
+      }
+    },
+    []
   );
 }

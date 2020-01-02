@@ -113,5 +113,5 @@ export function useConnectorHooks<T extends string>(
           : cleanupHook && wrapHookToRecognizeElement(cleanupHook);
       return accum;
     }, {});
-  }, [active, hooks]) as any;
+  }, [active]) as any;
 }
