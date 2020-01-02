@@ -7,7 +7,7 @@ import { useCallback } from "react";
 import invariant from "tiny-invariant";
 
 export type Frame = {
-  json: String
+  json?: String
 } 
 
 export const Frame: React.FC<Frame> = ({
