@@ -80,7 +80,7 @@ export const Topbar = ({ onLoadState }) => {
                 fullWidth
                 placeholder='Paste the contents that was copied from the "Copy Current State" button'
                 size="small"
-                value={stateToLoad}
+                value={stateToLoad || ""}
                 onChange={e => setStateToLoad(e.target.value)}
               />
             </DialogContent>
@@ -95,7 +95,7 @@ export const Topbar = ({ onLoadState }) => {
                 onClick={() => {
                   setDialogOpen(false);
                   const json = lz.decompress(lz.decodeBase64(stateToLoad));
-                  onLoadState(json);
+                  actions.deserialize(json);
                   setSnackbarMessage("State loaded");
                 }}
                 color="primary"
