@@ -28,7 +28,7 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer<S> {
   const eventConnectors = useContext(EventContext);
 
   const { actions: managerActions, ...collected } = useLayerManager(state => {
-    return id && state.layers[id] && collect(state.layers[id]);
+    return id && state.layers[id] && collect && collect(state.layers[id]);
   });
 
   const { enabled, children } = useEditor((state, query) => ({
@@ -49,7 +49,7 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer<S> {
     return {
       toggleLayer: () => managerActions.toggleLayer(id)
     };
-  }, [id, managerActions]);
+  }, [managerActions, id]);
 
   return {
     id,

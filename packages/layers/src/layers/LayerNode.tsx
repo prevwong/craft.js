@@ -28,6 +28,10 @@ export const LayerNode: React.FC = () => {
   const expandedRef = useRef<boolean>(expanded);
   expandedRef.current = expanded;
 
+  const shouldBeExpandedOnLoad = useRef<boolean>(
+    expandRootOnLoad && id === ROOT_NODE
+  );
+
   useEffect(() => {
     if (!expandedRef.current && shouldBeExpanded) {
       actions.toggleLayer(id);
@@ -35,12 +39,13 @@ export const LayerNode: React.FC = () => {
   }, [actions, id, shouldBeExpanded]);
 
   useEffect(() => {
-    if (expandRootOnLoad && id === ROOT_NODE) {
+    if (shouldBeExpandedOnLoad.current) {
       actions.toggleLayer(id);
     }
-  }, [actions, expandRootOnLoad, id]);
+  }, [actions, id]);
 
   const initRef = useRef<boolean>(false);
+
   if (!initRef.current) {
     actions.registerLayer(id);
     initRef.current = true;
