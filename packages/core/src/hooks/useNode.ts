@@ -18,7 +18,7 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S>
 
 /**
  * A Hook to that provides methods and state information related to the corresponding Node that manages the current component.
- * @param {function(Node): Collected} [collector] - Transform values from the corresponding Node's state
+ * @param collector Collector function to consume values from the corresponding Node's state
  */
 export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
   const { id, related, actions: { setDOM, setProp }, inNodeContext, ...collected } = useInternalNode(collect);

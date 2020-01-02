@@ -5,10 +5,10 @@ import { useInternalEditor } from "../editor/useInternalEditor";
 
 
 type internalActions = NodeProvider & {
-  inNodeContext: boolean,
+  inNodeContext: boolean
   actions : {
-    setProp: (cb: any) => void,
-    setDOM: (dom: HTMLElement) => void,
+    setProp: (cb: any) => void
+    setDOM: (dom: HTMLElement) => void
     setNodeEvent: Function
   }
 }

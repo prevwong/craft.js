@@ -4,7 +4,7 @@ import { NodeId } from "../interfaces";
 export const NodeContext = React.createContext<any>(null);
 
 export type NodeProvider = {
-  id: NodeId;
+  id: NodeId
   related?: boolean
 }
 
