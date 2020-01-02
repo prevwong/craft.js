@@ -1,6 +1,5 @@
 import React, { Children } from "react";
 import { NodeData, ReducedComp, SerializedNodeData } from "../interfaces";
-import { Canvas } from "../nodes/Canvas";
 import { Resolver } from "../interfaces";
 import { resolveComponent } from "./resolveComponent";
 
@@ -16,8 +15,7 @@ export const serializeComp = (
   let { type, isCanvas, props } = data;
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
-    if (type === Canvas && key === "children") return result;
-    else if (!isCanvas && key === "children" && typeof prop !== "string") {
+    if (key === "children" && typeof prop !== "string") {
       result[key] = Children.map(prop, child => {
         if (typeof child === "string") return child;
         return serializeComp(child, resolver);

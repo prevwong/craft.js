@@ -36,7 +36,7 @@ export const deserializeComp = (
     const prop = props[key];
     if (typeof prop === "object" && prop.resolvedName) {
       result[key] = deserializeComp(prop, resolver);
-    } else if (key === "children" && typeof prop !== "string") {
+    } else if (key === "children" && Array.isArray(prop)) {
       result[key] = prop.map(child => {
         if (typeof child === "string") return child;
         return deserializeComp(child, resolver);
