@@ -1,7 +1,10 @@
 import { Node } from "../interfaces";
 import React, { ReactNode } from "react";
 
-export function mapChildrenToNodes(children: ReactNode, cb: (JSX: React.ReactElement | string) => Node): Node[] {
+export function mapChildrenToNodes(
+  children: ReactNode,
+  cb: (JSX: React.ReactElement | string) => Node
+): Node[] {
   return React.Children.toArray(children).reduce(
     (result: Node[], child: any) => {
       const node = cb(child);
@@ -9,5 +12,5 @@ export function mapChildrenToNodes(children: ReactNode, cb: (JSX: React.ReactEle
       return result;
     },
     []
-  ) as Node[]
-};
+  ) as Node[];
+}

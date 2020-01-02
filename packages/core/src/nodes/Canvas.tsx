@@ -12,97 +12,126 @@ import { NodeElement } from "./NodeElement";
  * A React Component which defines a droppable region and draggable immediate children
  */
 export type Canvas<T extends React.ElementType> = {
-  id?: NodeId,
-  style?: any,
-  className?: any,
+  id?: NodeId;
+  style?: any;
+  className?: any;
   is?: T;
   children?: React.ReactNode;
   passThrough?: boolean;
-} & Partial<Pick<NodeRules, 'canMoveIn' | 'canMoveOut'>> & React.ComponentProps<T>;
+} & Partial<Pick<NodeRules, "canMoveIn" | "canMoveOut">> &
+  React.ComponentProps<T>;
 
-export function Canvas<T extends React.ElementType>({ is, children, passThrough, ...props }: Canvas<T>) {
+export function Canvas<T extends React.ElementType>({
+  is,
+  children,
+  passThrough,
+  ...props
+}: Canvas<T>) {
   const id = props.id;
-  const { actions: { add }, query, inContext } = useInternalEditor();
-  const { node, nodeId, inNodeContext } = useInternalNode((node) => ({ node: node.data, nodeId: node.id }));
+  const {
+    actions: { add },
+    query,
+    inContext
+  } = useInternalEditor();
+  const { node, nodeId, inNodeContext } = useInternalNode(node => ({
+    node: node.data,
+    nodeId: node.id
+  }));
   const [internalId, setInternalId] = useState<NodeId | null>(null);
   const [initialised, setInitialised] = useState(false);
   useEffect(() => {
     if (inContext && inNodeContext) {
-      if (node.isCanvas ) {
-        invariant(passThrough, ERROR_INFINITE_CANVAS)
-        if ( !node.nodes ) {
-          const childNodes = mapChildrenToNodes(children, (jsx) => {
-            const node = query.createNode(jsx)
+      if (node.isCanvas) {
+        invariant(passThrough, ERROR_INFINITE_CANVAS);
+        if (!node.nodes) {
+          const childNodes = mapChildrenToNodes(children, jsx => {
+            const node = query.createNode(jsx);
             return node;
           });
 
           add(childNodes, nodeId);
         }
       } else {
-          invariant(id, ERROR_ROOT_CANVAS_NO_ID);
+        invariant(id, ERROR_ROOT_CANVAS_NO_ID);
 
-          let internalId;
+        let internalId;
 
-          // if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
-          const existingNode = node._childCanvas && node._childCanvas[id] && query.node(node._childCanvas[id]).get();
+        // if (!node._childCanvas || (node._childCanvas && !node._childCanvas[id])) {
+        const existingNode =
+          node._childCanvas &&
+          node._childCanvas[id] &&
+          query.node(node._childCanvas[id]).get();
 
-          let newProps = { is, ...props };
+        let newProps = { is, ...props };
 
-          if ( existingNode ) {
-            if ( existingNode.data.type == is && typeof is != "string" ) {
-              newProps = {
-                ...newProps, 
-                ...existingNode.data.props
-              }
-            }
+        if (existingNode) {
+          if (existingNode.data.type === is && typeof is !== "string") {
+            newProps = {
+              ...newProps,
+              ...existingNode.data.props
+            };
           }
+        }
 
-          const rootNode = query.createNode(
-            React.createElement(Canvas, newProps, children),
-            existingNode && { 
-              id: existingNode.id,
-              data: existingNode.data
-            }
-          );
+        const rootNode = query.createNode(
+          React.createElement(Canvas, newProps, children),
+          existingNode && {
+            id: existingNode.id,
+            data: existingNode.data
+          }
+        );
 
-          internalId = rootNode.id;
-          add(rootNode, nodeId);
+        internalId = rootNode.id;
+        add(rootNode, nodeId);
 
-          // } else {
-            // internalId = node._childCanvas[id];
-          // }
-          setInternalId(internalId);
+        // } else {
+        // internalId = node._childCanvas[id];
+        // }
+        setInternalId(internalId);
       }
     }
 
     setInitialised(true);
-  }, []);
+  }, [
+    add,
+    children,
+    id,
+    inContext,
+    inNodeContext,
+    is,
+    node._childCanvas,
+    node.isCanvas,
+    node.nodes,
+    nodeId,
+    passThrough,
+    props,
+    query
+  ]);
 
   return (
     <React.Fragment>
-      {
-        initialised ? (
-          (inContext && inNodeContext) ?
-            (
-              node.isCanvas && node.nodes ? (
-              <SimpleElement render={React.createElement(node.type, props, (
+      {initialised ? (
+        inContext && inNodeContext ? (
+          node.isCanvas && node.nodes ? (
+            <SimpleElement
+              render={React.createElement(
+                node.type,
+                props,
                 <React.Fragment>
-                  {
-                    node.nodes && node.nodes.map(((id: NodeId) => (
+                  {node.nodes &&
+                    node.nodes.map((id: NodeId) => (
                       <NodeElement id={id} key={id} />
-                    )))
-                  }
+                    ))}
                 </React.Fragment>
-              ))
-              } />
-            ) : (
-                (internalId) ? (
-                  <NodeElement id={internalId} />
-                ) : null
-              )
-            ) : React.createElement(is as any, props, children)
-        ) : null
-      }
+              )}
+            />
+          ) : internalId ? (
+            <NodeElement id={internalId} />
+          ) : null
+        ) : (
+          React.createElement(is as any, props, children)
+        )
+      ) : null}
     </React.Fragment>
   );
 }

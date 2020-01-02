@@ -1,4 +1,4 @@
-import {  Node, NodeInfo, DropAction } from "../interfaces";
+import { Node, NodeInfo, DropAction } from "../interfaces";
 
 export default function findPosition(
   parent: Node,
@@ -29,9 +29,9 @@ export default function findPosition(
     // Bottom position of the element. Top + Height
     dimDown = dim.top + dim.outerHeight;
     // X center position of the element. Left + (Width / 2)
-    xCenter = dim.left +   dim.outerWidth / 2;
+    xCenter = dim.left + dim.outerWidth / 2;
     // Y center position of the element. Top + (Height / 2)
-    yCenter = dim.top +  dim.outerHeight / 2;
+    yCenter = dim.top + dim.outerHeight / 2;
     // Skip if over the limits
     if (
       (xLimit && dim.left > xLimit) ||
