@@ -12,6 +12,8 @@ cp -r ./packages/docs/build site/r
 mkdir site/examples
 cp -r ./packages/examples/basic/out/ site/examples/basic
 
+cp -r ./assets site/assets
+
 touch site/.nojekyll
 touch site/CNAME
 echo "craft.js.org" >> site/CNAME
