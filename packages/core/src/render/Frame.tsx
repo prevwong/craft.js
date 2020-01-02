@@ -1,74 +1,50 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { NodeElement } from "../nodes/NodeElement";
 import { Canvas } from "../nodes/Canvas";
 import { ROOT_NODE } from "@craftjs/utils";
 import { useInternalEditor } from "../editor/useInternalEditor";
-import { useCallback } from "react";
 import invariant from "tiny-invariant";
 
 export type Frame = {
-  json?: String;
+  json?: string;
 };
 
 /**
  * A React Component that defines the editable area
  */
 export const Frame: React.FC<Frame> = ({ children, json }) => {
-  const {
-    actions: { reset, replaceNodes },
-    query: { createNode, deserialize }
-  } = useInternalEditor();
-
-  const memoizedChildren = useMemo(() => {
-    return children;
-  }, [children]);
+  const { actions, query } = useInternalEditor();
 
   const [render, setRender] = useState<React.ReactElement | null>(null);
-  const rerender = useRef(false);
 
-  const guard = useCallback(
-    json => {
-      if (!json) {
-        const rootCanvas = React.Children.only(
-          memoizedChildren
-        ) as React.ReactElement;
-        invariant(
-          rootCanvas.type && rootCanvas.type === Canvas,
-          "The immediate child of <Frame /> has to be a Canvas"
-        );
-        let node = createNode(rootCanvas, {
-          id: ROOT_NODE
-        });
-        reset();
-        replaceNodes({
-          [ROOT_NODE]: node
-        });
-      } else {
-        const rehydratedNodes = deserialize(json);
-        replaceNodes(rehydratedNodes);
-      }
-      // setTimeout(() => {
-      setRender(<NodeElement id={ROOT_NODE} />);
-      // }, 2000)
-    },
-    [createNode, deserialize, memoizedChildren, replaceNodes, reset]
-  );
-
-  useMemo(() => {
-    if (render) {
-      rerender.current = true;
-      setRender(null);
-    } else {
-      guard(json);
-    }
-  }, [guard, json, render]);
+  const initial = useRef({
+    initialChildren: children,
+    initialJson: json
+  });
 
   useEffect(() => {
-    if (rerender.current) {
-      rerender.current = false;
-      guard(json);
+    const { replaceNodes, deserialize } = actions;
+    const { createNode } = query;
+
+    const { initialChildren: children, initialJson: json } = initial.current;
+    if (!json) {
+      const rootCanvas = React.Children.only(children) as React.ReactElement;
+      invariant(
+        rootCanvas.type && rootCanvas.type === Canvas,
+        "The immediate child of <Frame /> has to be a Canvas"
+      );
+      let node = createNode(rootCanvas, {
+        id: ROOT_NODE
+      });
+      replaceNodes({
+        [ROOT_NODE]: node
+      });
+    } else {
+      deserialize(json);
     }
-  }, [guard, json]);
+
+    setRender(<NodeElement id={ROOT_NODE} />);
+  }, [actions, query]);
 
   return render;
 };
