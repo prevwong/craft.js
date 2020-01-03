@@ -7,7 +7,7 @@
 </div>
 
 <div align="center" style={{d}}>
-  <img src="https://craft.js.org/screenshots/readme-core-demo.gif"/>
+  <img src="https://user-images.githubusercontent.com/16416929/71734437-f2aada00-2e86-11ea-95d6-f63236b021f4.gif"/>
 </div>
 
 <p align="center">
