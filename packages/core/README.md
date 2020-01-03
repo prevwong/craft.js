@@ -32,7 +32,7 @@ Craft.js solves this problem by providing the building blocks of a page editor. 
 - [Basic](https://prevwong.github.io/craft.js/examples/basic)
 
 
-## Features :sparkles:
+## Features :fire:
 ### It's just React 
 No need for complicated plugin systems. Design your editor from top to bottom the same way as you would design any other frontend application in React.
 
@@ -133,13 +133,13 @@ Craft.js provides an expressive API which allows you to easily read and manipula
 ```jsx
 import {useEditor, useNode} from "@craftjs/core";
 const Container = () => {
-  const { actions: {add}, query: { createNode, getNode } } = useEditor();
+  const { actions: {add}, query: { createNode, node } } = useEditor();
   const { id, connectors: {drag, connect}} = useNode();
   return (
     <div ref={connect(drag)}>
       ...
       <a onClick={() => {
-        const { data: {type, props}} = getNode(id);
+        const { data: {type, props}} = node(id).get();
         add(
           createNode(React.createElement(type, props));
         );
@@ -184,12 +184,12 @@ const App = () => {
 - **[react-dnd](https://github.com/react-dnd/react-dnd)** The React drag-n-drop library. 
 Although it is not actually used here, many aspects of Craft.js are written with react-dnd as a reference along with some utilities and functions being borrowed. 
 - **[Grape.js](https://github.com/artf/grapesjs)** The HTML web builder framework. This has served as an inspiration for Craft.js. The element positioning logic used in Craft.js is borrowed from Grape.js
-- **[use-methods](https://github.com/pelotom/use-methods)** A super handy hook when dealing with reducers. Craft.js uses a modified version of `useMethods` that works with Redux instead of `useReducer`
+- **[use-methods](https://github.com/pelotom/use-methods)** A super handy hook when dealing with reducers. Craft.js uses a slightly modified version of `use-methods` to better fit our API.
 
 
 ## Contributors ✨
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Craft.js is made by :heart: by these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -205,4 +205,4 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome! 

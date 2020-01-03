@@ -113,13 +113,13 @@ Craft.js provides an expressive API which allows you to easily read and manipula
 ```jsx
 import {useEditor, useNode} from "@craftjs/core";
 const Container = () => {
-  const { actions: {add}, query: { createNode, getNode } } = useEditor();
+  const { actions: {add}, query: { createNode, node } } = useEditor();
   const { id, connectors: {drag, connect}} = useNode();
   return (
     <div ref={connect(drag)}>
       ...
       <a onClick={() => {
-        const { data: {type, props}} = getNode(id);
+        const { data: {type, props}} = node(id).get();
         add(
           createNode(React.createElement(type, props));
         );

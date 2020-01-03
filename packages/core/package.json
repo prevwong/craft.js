@@ -1,7 +1,7 @@
 {
   "name": "@craftjs/core",
   "version": "0.1.0-alpha.1",
-  "description": "A React Framework for building drag-n-drop page editors",
+  "description": "A React Framework for building extensible drag and drop page editors",
   "keywords": [
     "react",
     "drag-and-drop",
