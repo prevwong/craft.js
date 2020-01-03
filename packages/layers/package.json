@@ -1,6 +1,16 @@
 {
   "name": "@craftjs/layers",
   "description": "A Photoshop-like layers panel for your page editor",
+  "keywords": [
+    "wysiwyg",
+    "html",
+    "layers",
+    "photoshop",
+    "craftjs",
+    "page-editor",
+    "web-builder",
+    "react"
+  ],
   "version": "0.1.0-alpha.2",
   "author": "Prev Wong <prevwong@gmail.com>",
   "main": "./dist/cjs/index.js",

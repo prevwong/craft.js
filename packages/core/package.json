@@ -7,10 +7,13 @@
     "drag-and-drop",
     "page-editor",
     "web-builder",
+    "html-builder",
     "builder",
     "editor",
     "draft-js",
-    "framework"
+    "framework",
+    "wysiwyg",
+    "html"
   ],
   "author": "Prev Wong <prevwong@gmail.com>",
   "homepage": "https://github.com/prevwong/craft.js/",
