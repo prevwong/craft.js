@@ -186,3 +186,23 @@ Although it is not actually used here, many aspects of Craft.js are written with
 - **[Grape.js](https://github.com/artf/grapesjs)** The HTML web builder framework. This has served as an inspiration for Craft.js. The element positioning logic used in Craft.js is borrowed from Grape.js
 - **[use-methods](https://github.com/pelotom/use-methods)** A super handy hook when dealing with reducers. Craft.js uses a modified version of `useMethods` that works with Redux instead of `useReducer`
 
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/prevwong"><img src="https://avatars3.githubusercontent.com/u/16416929?v=4" width="100px;" alt=""/><br /><sub><b>Prev Wong</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=prevwong" title="Code">💻</a> <a href="#design-prevwong" title="Design">🎨</a> <a href="https://github.com/prevwong/craft.js/commits?author=prevwong" title="Documentation">📖</a> <a href="#ideas-prevwong" title="Ideas, Planning, & Feedback">🤔</a> <a href="#example-prevwong" title="Examples">💡</a></td>
+    <td align="center"><a href="https://github.com/azreenashah"><img src="https://avatars0.githubusercontent.com/u/26489181?v=4" width="100px;" alt=""/><br /><sub><b>azreenashah</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=azreenashah" title="Documentation">📖</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
