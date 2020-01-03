@@ -2,8 +2,9 @@
 <div align="center" style={{d}}>
 <h1>@craftjs/layers</h1>
 
-<img alt="npm" src="https://img.shields.io/npm/v/@craftjs/layers?color=%23000&style=for-the-badge">
-<img alt="NPM" src="https://img.shields.io/npm/l/@craftjs/layers?color=%23000&style=for-the-badge">
+<a href="https://www.npmjs.com/package/@craftjs/layers">
+  <img src="https://img.shields.io/npm/v/@craftjs/layers?color=%232680eb&label=NPM&logo=npm&logoColor=%232680eb&style=for-the-badge">
+</a><img alt="NPM" src="https://img.shields.io/npm/l/@craftjs/layers?color=%23000&style=for-the-badge">
 </div>
 
 <div align="center" style={{d}}>
