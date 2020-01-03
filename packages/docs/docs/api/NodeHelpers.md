@@ -29,15 +29,15 @@ const MyComp = () => {
 MyComp.craft = { 
   rules: {
     canDrag: (node: Node, helper: NodeHelpers) => {
-      helper(node.id).ancestors();
+      const ancestors = helper(node.id).ancestors();
       ...
     },
     canMoveIn : (incoming: Node, self: Node, helper: NodeHelpers) => {
-      helper(node.id).ancestors();
+      const isRoot = helper(node.id).isRoot();
       ...
     }
     canMoveOut: (outgoing: Node, self: Node, helper: NodeHelpers) => {
-      helper(node.id).ancestors();
+      const isDeletable = helper(node.id).isDeletable();
       ...
     }
   }

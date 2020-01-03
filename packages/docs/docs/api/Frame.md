@@ -18,15 +18,18 @@ const { connectors, setProp, ...collected } = useNode(collector);
 
 ## Reference
 ### Props
+Both props specifies the initial screen to render. You must design the default screen with React Elements first (via the `children` prop), and only load from `json` if it's available. 
+
 <API items={[
-  ["json?", "String", "The serialised Nodes"],
-  ["children", "React.ReactElement<Canvas>", "This would define how the editor state would look like by default when there is nothing passed to the `json` prop. Must begin with a &lt;Canvas /&gt; which creates the Root Node."]
+  ["children", "React.ReactElement<Canvas>", "Creates the initial screen using React Elements. Must begin with a &lt;Canvas /&gt; which creates the Root Node."],
+  ["json?", "String", "Loads the initial screen from the serialised JSON Nodes"]
 ]} /> 
 
+> These props are memoized - after the initial render, changes to these props will have no effect. If for example, you wish to load a different set of serialised JSON nodes after the initial render, you may use the `deserialize` method via the [`useEditor`](/r/docs/api/useEditor) hook.
 
 ## Examples
 
-### The default screen
+### Designing the default screen
 ```tsx {9,10,16,17}
 import {Editor, Frame, Canvas} from "cradt";
 

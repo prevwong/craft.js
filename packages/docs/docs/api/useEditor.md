@@ -37,6 +37,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
     ["actions", "Object", [
       ["add", "(nodes: Node | Node[], parentId?: NodeId) => void", "Add Node(s) to the given parent node ID. By default the parentId is the ROOT_ID"],
       ["delete", "(nodeID: NodeId) => void", "Delete the specified Node"],
+      ["deserialize", "() => String", "Recreate Nodes from JSON. This will clear all the current Nodes in the editor state with the recreated Nodes"],
       ["move", "(nodeId: NodeId, targetParentId: NodeId, index: number) => void", "Move a Node to the specified parent Node at the given index."],
       ["setProp", "(nodeId: NodeId, props: Object) => void", "Manipulate the props of the given Node"],
       ["setHidden", "(nodeId: NodeId, bool: boolean) => void", "When set to true, the User Component of the specified Node will be hidden, but not removed"],
@@ -46,7 +47,6 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
     ["query", "Query", [
       ["createNode", "(child: React.ReactElement) => Node", "Create a Node from a React element"],
       ["serialize", "() => String", "Return the current Nodes in JSON"],
-      ["deserialize", "() => String", "Recreate Nodes from JSON"],
       ["getOptions", "() => Object", "Get the options specified in the &lt;Editor /&gt; component"],
       ["getDropPlaceholder", 
         "(sourceNodeId: NodeId, targetNodeId: NodeId, pos: {x: number, y: number}, nodesToDOM?: (node: Node) => HTMLElement = node => node.dom)",

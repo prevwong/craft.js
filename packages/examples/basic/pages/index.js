@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../styles/main.css";
 import { Typography, Paper, Grid, makeStyles } from "@material-ui/core";
 import { Toolbox } from "../components/Toolbox";
@@ -18,7 +18,6 @@ const useStyles = makeStyles(theme => ({
 }));
 export default function App() {
   const classes = useStyles();
-  const [json, setJson] = useState(null);
 
   return (
     <div style={{ margin: "0 auto", width: "800px" }}>
@@ -26,7 +25,7 @@ export default function App() {
         Basic Page Editor
       </Typography>
       <Editor resolver={{ Card, Button, Text, Container, CardTop, CardBottom }}>
-        <Topbar onLoadState={json => setJson(json)} />
+        <Topbar />
         <Grid container spacing={5} style={{ paddingTop: "10px" }}>
           <Grid item xs>
             <Frame>
