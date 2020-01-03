@@ -1,5 +1,6 @@
 export const ROOT_NODE = "canvas-ROOT";
 
+// TODO: Use a better way to store/display error messages
 export const ERROR_NOPARENT = "Parent id cannot be ommited";
 export const ERROR_DUPLICATE_NODEID =
   "Attempting to add a node with duplicated id";
@@ -27,3 +28,6 @@ export const ERROR_INFINITE_CANVAS =
   "The component specified in the <Canvas> `is` prop has additional Canvas specified in it's render template.";
 export const ERROR_CANNOT_DRAG =
   "The node has specified a canDrag() rule that prevents it from being dragged";
+export const ERROR_INVALID_NODE_ID = "Invalid parameter Node Id specified";
+export const ERROR_FRAME_IMMEDIATE_NON_CANVAS =
+  "The immediate child of <Frame /> has to be a Canvas";

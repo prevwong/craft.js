@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { NodeElement } from "../nodes/NodeElement";
 import { Canvas } from "../nodes/Canvas";
-import { ROOT_NODE } from "@craftjs/utils";
+import { ROOT_NODE, ERROR_FRAME_IMMEDIATE_NON_CANVAS } from "@craftjs/utils";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import invariant from "tiny-invariant";
 
@@ -31,7 +31,7 @@ export const Frame: React.FC<Frame> = ({ children, json }) => {
       const rootCanvas = React.Children.only(children) as React.ReactElement;
       invariant(
         rootCanvas.type && rootCanvas.type === Canvas,
-        "The immediate child of <Frame /> has to be a Canvas"
+        ERROR_FRAME_IMMEDIATE_NON_CANVAS
       );
       let node = createNode(rootCanvas, {
         id: ROOT_NODE

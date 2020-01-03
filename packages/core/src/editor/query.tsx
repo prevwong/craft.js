@@ -23,7 +23,8 @@ import {
   getDOMInfo,
   ERROR_CANNOT_DRAG,
   ERROR_MOVE_TOP_LEVEL_CANVAS,
-  ERROR_MOVE_ROOT_NODE
+  ERROR_MOVE_ROOT_NODE,
+  ERROR_INVALID_NODE_ID
 } from "@craftjs/utils";
 import findPosition from "../events/findPosition";
 import { getDeepNodes } from "../utils/getDeepNodes";
@@ -154,6 +155,8 @@ export function QueryMethods(Editor: EditorState) {
      * @param id
      */
     node(id: NodeId) {
+      invariant(typeof id == "string", ERROR_INVALID_NODE_ID);
+
       const node = Editor.nodes[id];
       const nodeQuery = _().node;
 
