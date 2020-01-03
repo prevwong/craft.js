@@ -1,6 +1,6 @@
 {
   "name": "@craftjs/layers",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
   "author": "Prev Wong <prevwong@gmail.com>",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/prevwong/craft.js/",
   "dependencies": {
-    "@craftjs/core": "^0.1.0-alpha.0",
+    "@craftjs/core": "^0.1.0-alpha.1",
     "immer": "^3.1.3",
     "lodash.isequalwith": "^4.4.0",
     "redux": "^4.0.4",
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
-    "@craftjs/utils": "^0.1.0-alpha.0",
+    "@craftjs/utils": "^0.1.0-alpha.1",
     "@svgr/rollup": "^4.3.3"
   },
   "peerDependencies": {

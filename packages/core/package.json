@@ -1,6 +1,6 @@
 {
   "name": "@craftjs/core",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
   "description": "A React Framework for building drag-n-drop page editors",
   "keywords": [
     "react",
@@ -38,7 +38,7 @@
     "tiny-invariant": "^1.0.6"
   },
   "devDependencies": {
-    "@craftjs/utils": "^0.1.0-alpha.0",
+    "@craftjs/utils": "^0.1.0-alpha.1",
     "@types/react": "^16.9.11",
     "react": "^16.8.0"
   },
