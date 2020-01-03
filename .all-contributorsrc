@@ -1,9 +1,14 @@
 {
-  "files": ["packages/core/README.md"],
+  "projectName": "craft.js",
+  "projectOwner": "prevwong",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "packages/core/README.md"
+  ],
   "imageSize": 100,
-  "contributorsPerLine": 7,
-  "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat-square)](#contributors)",
-  "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><img src=\"<%= contributor.avatar_url %>\" width=\"<%= options.imageSize %>px;\" alt=\"\"/><br /><sub><b><%= contributor.name %></b></sub></a>",
+  "commit": true,
+  "commitConvention": "none",
   "types": {
     "proofread": {
       "symbol": "🧐",
@@ -11,6 +16,20 @@
       "link": "[<%= symbol %>](<%= url %> \"<%= description %>\"),"
     }
   },
-  "skipCi": "true",
-  "contributors": []
+  "contributors": [
+    {
+      "login": "prevwong",
+      "name": "Prev Wong",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16416929?v=4",
+      "profile": "https://github.com/prevwong",
+      "contributions": [
+        "code",
+        "design",
+        "doc",
+        "ideas",
+        "example"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
 }
