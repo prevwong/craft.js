@@ -7,7 +7,7 @@
     "clean": "lerna run clean --stream",
     "build": "lerna run build --stream",
     "deploy": "./scripts/deploy.sh",
-    "release": "run-s clean test lint build release:npm",
+    "release": "run-s lint clean build test release:npm",
     "release:npm": "lerna publish",
     "test:watch": "jest --watch",
     "test": "jest",
