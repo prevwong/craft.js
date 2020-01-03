@@ -1,14 +1,11 @@
 import produce, { PatchListener } from "immer";
-import { createStore, Unsubscribe } from "redux";
-import { useMemo, useEffect, useRef } from "react";
-
-type Subscriber = (listener: () => void) => Unsubscribe;
+import { useMemo, useEffect, useRef, useReducer } from "react";
 
 export type SubscriberAndCallbacksFor<
   M extends MethodsOrOptions,
   Q extends QueryMethods = any
 > = {
-  subscribe: Subscriber;
+  subscribe: (listener: () => void) => void;
   getState: () => { prev: StateFor<M>; current: StateFor<M> };
   actions: CallbacksFor<M>;
   query: QueryCallbacksFor<Q>;
@@ -79,12 +76,12 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<
     }
   : never;
 
-export function useReduxMethods<S, R extends MethodRecordBase<S>>(
+export function useMethods<S, R extends MethodRecordBase<S>>(
   methodsOrOptions: Methods<S, R>,
   initialState: any
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>>;
 
-export function useReduxMethods<
+export function useMethods<
   S,
   R extends MethodRecordBase<S>,
   Q extends QueryMethods
@@ -94,93 +91,108 @@ export function useReduxMethods<
   queryMethods: Q
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q>;
 
-export function useReduxMethods<
+export function useMethods<
   S,
   R extends MethodRecordBase<S>,
   Q extends QueryMethods = null
 >(
-  methodsOrOptions: any, // methods to manipulate the state
+  methodsOrOptions: MethodsOrOptions<S, R>,
   initialState: any,
-  queryMethods?: Q // methods to perform some queries/transformation on the current state
+  queryMethods?: Q
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q> {
-  let states = useRef({
-    old: initialState,
-    present: initialState
-  });
-  let unsubscribe = useRef<Unsubscribe | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (unsubscribe.current != null) unsubscribe.current();
-    };
-  }, []);
-
-  return useMemo(() => {
+  const [reducer, methodsFactory] = useMemo(() => {
     let methods: Methods<S, R>;
     let patchListener: PatchListener | undefined;
     if (typeof methodsOrOptions === "function") {
       methods = methodsOrOptions;
     } else {
-      // methods = methodsOrOptions.methods;
-      // patchListener = methodsOrOptions.patchListener;
+      methods = methodsOrOptions.methods;
+      patchListener = methodsOrOptions.patchListener;
     }
-    const reducer = (state: S, action: ActionUnion<R>) => {
-      return (produce as Function)(
-        state,
-        (draft: S) => {
-          if (
-            methods(draft, queryMethods && queryMethods(state))[action.type]
-          ) {
-            return methods(draft, queryMethods && queryMethods(state))[
-              action.type
-            ](...action.payload);
-          }
-        },
-        patchListener
-      );
-    };
-    const methodsFactory = methods;
+    return [
+      (state: S, action: ActionUnion<R>) => {
+        const query = queryMethods && createQuery(queryMethods, () => state);
+        return (produce as any)(
+          state,
+          (draft: S) => methods(draft, query)[action.type](...action.payload),
+          patchListener
+        );
+      },
+      methods
+    ];
+  }, [methodsOrOptions, queryMethods]);
 
-    const { state, dispatch, subscribe, getState } = createStore(
-      reducer,
-      initialState
-    );
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-    unsubscribe.current = subscribe(() => {
-      states.current.present = getState();
-    });
+  // Create ref for state, so we can use it inside memoized functions without having to add it as a dependency
+  const currState = useRef();
+  currState.current = state;
 
-    const query = queryMethods
-      ? (Object.keys(queryMethods()) as Array<
-          keyof QueryCallbacksFor<typeof methods>
-        >).reduce((accum, key) => {
-          return {
-            ...accum,
-            [key]: (...args: any) => {
-              const state = states.current.present;
-              return queryMethods(state)[key](...args);
-            }
-          };
-        }, {} as QueryCallbacksFor<typeof queryMethods>)
-      : null;
+  const query = useMemo(
+    () =>
+      !queryMethods ? [] : createQuery(queryMethods, () => currState.current),
+    [queryMethods]
+  );
 
+  const actions = useMemo(() => {
     const actionTypes: ActionUnion<R>["type"][] = Object.keys(
-      methodsFactory(state, null)
+      methodsFactory(null, null)
     );
-    const actions = actionTypes.reduce((accum, type) => {
+    return actionTypes.reduce((accum, type) => {
       accum[type] = (...payload) =>
         dispatch({ type, payload } as ActionUnion<R>);
       return accum;
     }, {} as CallbacksFor<typeof methodsFactory>);
+  }, [methodsFactory]);
 
-    return {
-      subscribe,
-      getState: () => ({
-        prev: states.current.old,
-        current: states.current.present
-      }),
+  const watcher = useMemo(() => {
+    return new Watcher();
+  }, []);
+
+  useEffect(() => {
+    currState.current = state;
+    watcher.notify();
+  }, [state, watcher]);
+
+  return useMemo(
+    () => ({
+      getState: () => currState.current,
+      subscribe: cb => {
+        return watcher.subscribe(cb);
+      },
       actions,
       query
+    }),
+    [actions, query, watcher]
+  ) as any;
+}
+
+export function createQuery<Q extends QueryMethods>(queryMethods: Q, getState) {
+  return Object.keys(queryMethods()).reduce((accum, key) => {
+    return {
+      ...accum,
+      [key]: (...args: any) => {
+        return queryMethods(getState())[key](...args);
+      }
     };
-  }, [initialState, methodsOrOptions, queryMethods]);
+  }, {} as QueryCallbacksFor<typeof queryMethods>);
+}
+
+class Watcher {
+  subscribers = [];
+  subscribe(subscriber: any) {
+    this.subscribers.push(subscriber);
+    return this.unsubscribe.bind(this);
+  }
+  unsubscribe(subscriber) {
+    if (this.subscribers.length) {
+      const index = this.subscribers.indexOf(subscriber);
+      if (index > -1) return this.subscribers.splice(index, 1);
+    }
+  }
+  notify() {
+    for (let i = 0; i < this.subscribers.length; i++) {
+      this.subscribers[i]();
+    }
+  }
 }

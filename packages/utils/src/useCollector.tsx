@@ -1,5 +1,4 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { Unsubscribe } from "redux";
 import {
   CallbacksFor,
   Methods,
@@ -7,7 +6,7 @@ import {
   QueryCallbacksFor,
   QueryMethods,
   SubscriberAndCallbacksFor
-} from "./useReduxMethods";
+} from "./useMethods";
 import isEqualWith from "lodash.isequalwith";
 
 type Actions<M extends Methods, Q extends QueryMethods> = {
@@ -39,17 +38,10 @@ export function useCollector<
   Q extends QueryMethods | null,
   C
 >(store: SubscriberAndCallbacksFor<M, Q>, collector?: any) {
-  const { getState, actions, query } = store;
-  const collectorFn = useRef(collector);
-  collectorFn.current = collector;
+  const { subscribe, getState, actions, query } = store;
 
   const initial = useRef(true);
   const collected = useRef<C | null>(null);
-
-  if (initial.current && collectorFn.current) {
-    collected.current = collectorFn.current(getState().current, query);
-    initial.current = false;
-  }
 
   const onCollect = useCallback(
     (collected): useCollector<M, Q, C> => {
@@ -58,20 +50,26 @@ export function useCollector<
     [actions, query]
   );
 
+  // Collect states for initial render
+  if (initial.current && collector) {
+    collected.current = collector(getState(), query);
+    initial.current = false;
+  }
+
   const [renderCollected, setRenderCollected] = useState(
     onCollect(collected.current)
   );
 
+  // Collect states on state change
   useEffect(() => {
-    const { subscribe, getState, query } = store;
     let cancelled = false;
-    let unsubscribe: Unsubscribe;
-    if (collectorFn.current) {
+    let unsubscribe;
+    if (collector) {
       unsubscribe = subscribe(() => {
         try {
           if (cancelled) return;
-          const { current } = getState();
-          const recollect = collectorFn.current(current, query);
+          const current = getState();
+          const recollect = collector(current, query);
           if (!isEqualWith(recollect, collected.current)) {
             collected.current = recollect;
             (window as any).state = current;
@@ -86,7 +84,7 @@ export function useCollector<
       cancelled = true;
       if (unsubscribe) unsubscribe();
     };
-  }, [store, onCollect]);
+  }, [collector, getState, onCollect, query, subscribe]);
 
   return renderCollected;
 }

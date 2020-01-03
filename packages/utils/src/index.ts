@@ -1,5 +1,5 @@
 export * from "./constants";
-export * from "./useReduxMethods";
+export * from "./useMethods";
 export * from "./getDOMInfo";
 export * from "./useCollector";
 export * from "./useHandlerGuard";
