@@ -3,7 +3,7 @@
 set -e 
 rm -rf site/
 yarn clean 
-yarn build
+yarn build:all
 
 lerna run export --stream
 mkdir site

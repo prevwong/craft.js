@@ -11,4 +11,4 @@ wait
 npx tsc --p packages/core --skipLibCheck --emitDeclarationOnly
 wait
 
-npx lerna run start --parallel
+npx lerna run start --parallel --ignore docs
