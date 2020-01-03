@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "azreenawong",
+      "name": "azreenawong",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/26489181?v=4",
+      "profile": "https://github.com/azreenawong",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "craft.js",
+  "projectOwner": "prevwong",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
