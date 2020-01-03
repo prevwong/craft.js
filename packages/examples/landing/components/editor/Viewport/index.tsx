@@ -15,7 +15,7 @@ export const Viewport: React.FC = ({children}) => {
     setTimeout(() => {
       if ( !unmounted ) setLoaded(true);
       setTimeout(() => {
-        setMouseEnabled(true);
+        if ( !unmounted ) setMouseEnabled(true);
       }, 400);
     }, 1000)
 

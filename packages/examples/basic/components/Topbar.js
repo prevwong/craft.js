@@ -1,11 +1,23 @@
 import React, { useState } from "react";
-import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Snackbar } from "@material-ui/core";
+import {
+  Box,
+  FormControlLabel,
+  Switch,
+  Grid,
+  Button as MaterialButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Snackbar
+} from "@material-ui/core";
 import { useEditor } from "@craftjs/core";
 import lz from "lzutf8";
-import copy from 'copy-to-clipboard';
+import copy from "copy-to-clipboard";
 
-export const Topbar = ({onLoadState}) => {
-  const { actions, query, enabled } = useEditor((state) => ({
+export const Topbar = ({ onLoadState }) => {
+  const { actions, query, enabled } = useEditor(state => ({
     enabled: state.options.enabled
   }));
 
@@ -20,33 +32,40 @@ export const Topbar = ({onLoadState}) => {
         <Grid item xs>
           <FormControlLabel
             className="enable-disable-toggle"
-            control={<Switch checked={enabled} onChange={(_, value) => actions.setOptions(options => options.enabled = value)} />}
+            control={
+              <Switch
+                checked={enabled}
+                onChange={(_, value) =>
+                  actions.setOptions(options => (options.enabled = value))
+                }
+              />
+            }
             label="Enable"
           />
         </Grid>
         <Grid item>
-        <MaterialButton 
+          <MaterialButton
             className="copy-state-btn"
-            size="small" 
-            variant="outlined" 
+            size="small"
+            variant="outlined"
             color="secondary"
             onClick={() => {
               const json = query.serialize();
               copy(lz.encodeBase64(lz.compress(json)));
-              setSnackbarMessage("State copied to clipboard")
+              setSnackbarMessage("State copied to clipboard");
             }}
-            style={{marginRight: "10px"}}
+            style={{ marginRight: "10px" }}
           >
-              Copy current state
+            Copy current state
           </MaterialButton>
-          <MaterialButton 
+          <MaterialButton
             className="load-state-btn"
-            size="small" 
-            variant="outlined" 
+            size="small"
+            variant="outlined"
             color="secondary"
             onClick={() => setDialogOpen(true)}
           >
-              Load
+            Load
           </MaterialButton>
           <Dialog
             open={dialogOpen}
@@ -56,27 +75,30 @@ export const Topbar = ({onLoadState}) => {
           >
             <DialogTitle id="alert-dialog-title">Load state</DialogTitle>
             <DialogContent>
-              <TextField 
-                multiline 
+              <TextField
+                multiline
                 fullWidth
                 placeholder='Paste the contents that was copied from the "Copy Current State" button'
                 size="small"
-                value={stateToLoad}
+                value={stateToLoad || ""}
                 onChange={e => setStateToLoad(e.target.value)}
               />
             </DialogContent>
             <DialogActions>
-              <MaterialButton onClick={() => setDialogOpen(false)} color="primary">
+              <MaterialButton
+                onClick={() => setDialogOpen(false)}
+                color="primary"
+              >
                 Cancel
               </MaterialButton>
-              <MaterialButton 
+              <MaterialButton
                 onClick={() => {
                   setDialogOpen(false);
                   const json = lz.decompress(lz.decodeBase64(stateToLoad));
-                  onLoadState(json);
-                  setSnackbarMessage("State loaded")
-                }} 
-                color="primary" 
+                  actions.deserialize(json);
+                  setSnackbarMessage("State loaded");
+                }}
+                color="primary"
                 autoFocus
               >
                 Load
@@ -93,5 +115,5 @@ export const Topbar = ({onLoadState}) => {
         </Grid>
       </Grid>
     </Box>
-  )
+  );
 };

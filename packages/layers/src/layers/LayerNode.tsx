@@ -6,16 +6,21 @@ import { LayerContextProvider } from "./LayerContextProvider";
 import { ROOT_NODE } from "@craftjs/utils";
 
 export const LayerNode: React.FC = () => {
-  const { id, depth, children, expanded  } = useLayer((layer) => ({
+  const { id, depth, children, expanded } = useLayer(layer => ({
     expanded: layer.expanded
   }));
 
   const { data, shouldBeExpanded } = useEditor((state, query) => ({
     data: state.nodes[id] && state.nodes[id].data,
-    shouldBeExpanded: state.events.selected && query.node(state.events.selected).ancestors().includes(id)
+    shouldBeExpanded:
+      state.events.selected &&
+      query
+        .node(state.events.selected)
+        .ancestors()
+        .includes(id)
   }));
 
-  const { actions, renderLayer, expandRootOnLoad } = useLayerManager((state) => ({
+  const { actions, renderLayer, expandRootOnLoad } = useLayerManager(state => ({
     renderLayer: state.options.renderLayer,
     expandRootOnLoad: state.options.expandRootOnLoad
   }));
@@ -23,36 +28,39 @@ export const LayerNode: React.FC = () => {
   const expandedRef = useRef<boolean>(expanded);
   expandedRef.current = expanded;
 
-  useEffect(() => {
-    if (!expandedRef.current && shouldBeExpanded ) {
-      actions.toggleLayer(id);
-    }
-  }, [shouldBeExpanded])
+  const shouldBeExpandedOnLoad = useRef<boolean>(
+    expandRootOnLoad && id === ROOT_NODE
+  );
 
   useEffect(() => {
-    if ( expandRootOnLoad  && id == ROOT_NODE ) {
+    if (!expandedRef.current && shouldBeExpanded) {
       actions.toggleLayer(id);
     }
-  }, []);
-  
+  }, [actions, id, shouldBeExpanded]);
+
+  useEffect(() => {
+    if (shouldBeExpandedOnLoad.current) {
+      actions.toggleLayer(id);
+    }
+  }, [actions, id]);
 
   const initRef = useRef<boolean>(false);
-  if ( !initRef.current ) {
+
+  if (!initRef.current) {
     actions.registerLayer(id);
     initRef.current = true;
   }
-  return (
-    data ? ( 
-      <div className={`craft-layer-node ${id}`}>
-        {
-          React.createElement(renderLayer, {}, 
-            (children && expanded) ?
-              children.map(id =>
-                <LayerContextProvider key={id} id={id} depth={depth + 1} />
-              ) : null   
-          )
-        }
-      </div>
-    ): null
-  );
-}
+  return data ? (
+    <div className={`craft-layer-node ${id}`}>
+      {React.createElement(
+        renderLayer,
+        {},
+        children && expanded
+          ? children.map(id => (
+              <LayerContextProvider key={id} id={id} depth={depth + 1} />
+            ))
+          : null
+      )}
+    </div>
+  ) : null;
+};

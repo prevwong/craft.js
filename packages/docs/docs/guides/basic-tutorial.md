@@ -324,7 +324,7 @@ Every element that is rendered in `<Frame />` is managed by an object in the edi
 - If the `Node` is an immediate child of a Canvas, then it's draggable.
 
 ```jsx
-// Previously, on Craft.js
+// Explanation
 <Frame>
   <Canvas is={Container} padding={5} background="#eee"> // Canvas Node of type Container, droppable
     <Card /> // Node of type Card
