@@ -1,7 +1,7 @@
 {
   "name": "@craftjs/utils",
   "private": true,
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "description": "Shared utilities used across the craft.js monorepo",
   "author": "Prev Wong <prevwong@gmail.com>",
   "main": "./dist/cjs/index.js",
