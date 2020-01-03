@@ -177,7 +177,7 @@ const App = () => {
 ```
 
 ## Additional Packages :tada:
-- **[@craftjs/layers](https://github.com/prevwong/craft.js/tree/master/packages/layers)** A Photoshop-like layers editor
+- **[@craftjs/layers](https://github.com/prevwong/craft.js/tree/master/packages/layers)** A Photoshop-like layers panel
 
 ## Acknowledgements :raised_hands:
 
@@ -189,7 +189,7 @@ Although it is not actually used here, many aspects of Craft.js are written with
 
 ## Contributors ✨
 
-Craft.js is made by :heart: by these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Craft.js is made with :heart: by these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->

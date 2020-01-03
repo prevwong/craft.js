@@ -5,7 +5,7 @@ title: Layers
 
 import {API} from "../api/API";
 
-A Photoshop-like layers editor.
+A Photoshop-like layers panel for your page editor.
 
 
 ## Usage
@@ -15,6 +15,8 @@ yarn add @craftjs/layers
 ```
 
 ```jsx
+import React from "react";
+import {Editor} from "@craftjs/core"
 import {Layers} from "@craftjs/layers"
 
 export default function App() {
