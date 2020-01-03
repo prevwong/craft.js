@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { NodeId, NodeRules } from "../interfaces";
 import { mapChildrenToNodes } from "../utils/mapChildrenToNodes";
 import { useInternalNode } from "./useInternalNode";
 import { useInternalEditor } from "../editor/useInternalEditor";
-import { ERROR_ROOT_CANVAS_NO_ID, ERROR_INFINITE_CANVAS } from "@craftjs/utils";
+import {
+  ERROR_ROOT_CANVAS_NO_ID,
+  ERROR_INFINITE_CANVAS,
+  useEffectOnce
+} from "@craftjs/utils";
 import invariant from "tiny-invariant";
 import { SimpleElement } from "../render/SimpleElement";
 import { NodeElement } from "./NodeElement";
@@ -41,7 +45,9 @@ export function Canvas<T extends React.ElementType>({
   }));
   const [internalId, setInternalId] = useState<NodeId | null>(null);
   const [initialised, setInitialised] = useState(false);
-  useEffect(() => {
+
+  /** Only create/recreate nodes on the initial render. From there on, the re-renders will be handled by Nodes */
+  useEffectOnce(() => {
     const { id: nodeId, data } = node;
     if (inContext && inNodeContext) {
       if (data.isCanvas) {
@@ -91,18 +97,7 @@ export function Canvas<T extends React.ElementType>({
     }
 
     setInitialised(true);
-  }, [
-    id,
-    is,
-    passThrough,
-    props,
-    children,
-    inContext,
-    inNodeContext,
-    node,
-    query,
-    add
-  ]);
+  });
 
   return (
     <React.Fragment>
