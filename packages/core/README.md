@@ -198,6 +198,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://github.com/prevwong"><img src="https://avatars3.githubusercontent.com/u/16416929?v=4" width="100px;" alt=""/><br /><sub><b>Prev Wong</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=prevwong" title="Code">💻</a> <a href="#design-prevwong" title="Design">🎨</a> <a href="https://github.com/prevwong/craft.js/commits?author=prevwong" title="Documentation">📖</a> <a href="#ideas-prevwong" title="Ideas, Planning, & Feedback">🤔</a> <a href="#example-prevwong" title="Examples">💡</a></td>
+    <td align="center"><a href="https://github.com/azreenashah"><img src="https://avatars0.githubusercontent.com/u/26489181?v=4" width="100px;" alt=""/><br /><sub><b>azreenashah</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=azreenashah" title="Documentation">📖</a></td>
   </tr>
 </table>
 
