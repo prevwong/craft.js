@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NodeId, NodeRules } from "../interfaces";
+import { NodeId } from "../interfaces";
 import { mapChildrenToNodes } from "../utils/mapChildrenToNodes";
 import { useInternalNode } from "./useInternalNode";
 import { useInternalEditor } from "../editor/useInternalEditor";
@@ -22,8 +22,7 @@ export type Canvas<T extends React.ElementType> = {
   is?: T;
   children?: React.ReactNode;
   passThrough?: boolean;
-} & Partial<Pick<NodeRules, "canMoveIn" | "canMoveOut">> &
-  React.ComponentProps<T>;
+} & React.ComponentProps<T>;
 
 export function Canvas<T extends React.ElementType>({
   is,
