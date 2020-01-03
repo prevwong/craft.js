@@ -1,10 +1,10 @@
+// https://github.com/react-dnd/react-dnd
 import { isValidElement, ReactElement } from "react";
 import { cloneElement } from "react";
 import invariant from "tiny-invariant";
 import { useMemo } from "react";
 import { useRef } from "react";
 
-// Thank you React DND
 function setRef(ref: any, node: any) {
   if (node) {
     if (typeof ref === "function") {

@@ -5,7 +5,7 @@ import typescript from "rollup-plugin-typescript";
 import babel from "rollup-plugin-babel";
 
 const shouldMinify = process.env.NODE_ENV === "production";
-const bundle = ["@craftjs/utils", "tslib"];
+const bundle = ["tslib"];
 
 export default {
   input: "./src/index.ts",
