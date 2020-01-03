@@ -13,8 +13,8 @@ export const Custom2VideoDrop = ({children}) => {
 }
 Custom2VideoDrop.craft = {
   rules : {
-    canMoveIn: (incoming, self) => {
-      return incoming.data.type == Video && self.data.nodes.length == 0;
+    canMoveIn: (incoming, self, helper) => {
+      return incoming.data.type == Video && helper(self.id).decendants().length == 0
     }
   }
 }
