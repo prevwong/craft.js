@@ -57,7 +57,10 @@ export default {
           passes: 10
         },
         ecma: 5,
-        warnings: true
+        warnings: true,
+        mangle: {
+          reserved: ["Canvas"]
+        }
       })
   ]
 };
