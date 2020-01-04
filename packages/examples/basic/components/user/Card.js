@@ -57,11 +57,11 @@ export const Card = ({ background, padding = 20 }) => {
   return (
     <Container background={background} padding={padding}>
       <Canvas id="text" is={CardTop}>
-        <Text text="Title" fontSize={20} />
-        <Text text="Subtitle" fontSize={15} />
+        <Text text="Only texts" fontSize={20} />
+        <Text text="are allowed up here" fontSize={15} />
       </Canvas>
       <Canvas id="buttons" is={CardBottom}>
-        <Button size="small" text="Learn more" />
+        <Button size="small" text="Only buttons down here" />
       </Canvas>
     </Container>
   );
