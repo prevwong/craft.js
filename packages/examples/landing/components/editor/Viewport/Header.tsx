@@ -75,7 +75,8 @@ export const Header = () => {
           <h2 className="mr-5 text-xl">craft.js</h2>
         </div>
         <div className="flex items-end justify-end">
-          <Link href="https://github.com/prevwong/craft.js">Github</Link>
+        <Link href="https://craft.js.org/examples/basic">Another Example</Link>
+        <Link href="https://github.com/prevwong/craft.js">Github</Link>
           <Link href="https://prevwong.github.io/craft.js/r/docs/overview">Documentation</Link>
         </div>
         <div className="flex">

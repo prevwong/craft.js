@@ -30,6 +30,10 @@ Craft.js solves this problem by providing the building blocks of a page editor. 
 - [API Reference](https://prevwong.github.io/craft.js/r/docs/api/editor-state)
 
 ## Examples
+These examples should give you an idea on the flexibility of Craft.js. 
+
+Both these examples look very different from each other, with very different UI. But they are both built with Craft.js! 🤯
+
 - [Landing](https://prevwong.github.io/craft.js)
 - [Basic](https://prevwong.github.io/craft.js/examples/basic)
 
