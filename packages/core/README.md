@@ -22,7 +22,7 @@ Page editors are a great way to provide an excellent user experience. However, t
 
 There're existing libraries that come with a fully working page editor out of the box with a user interface and editable components. However, if you wish to make customisations such as modifying the user interface and its behavior, it will most definitely involve modifying the library itself. 
 
-Craft.js solves this problem by providing the building blocks of a page editor. It ships with a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things. With this, you'll be able to focus on building the page editor according to your own specifications and needs.
+Craft.js solves this problem by providing the building blocks of a page editor. It ships with a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things. With this, you'll be able to **build your own page editor exactly how you want it to look and behave**.
 
 ## Docs
 - [Core concepts](https://prevwong.github.io/craft.js/r/docs/concepts/nodes)
