@@ -37,7 +37,7 @@ export const TextSettings = () => {
         <ToolbarItem propKey="margin" index={3} type="slider" label="Left" />
       </ToolbarSection>
       <ToolbarSection
-        title="Appearence"
+        title="Appearance"
         props={['color', 'shadow']}
         summary={({ color, shadow}: any) => {
           return (
