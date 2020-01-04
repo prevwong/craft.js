@@ -8,7 +8,7 @@ import LayerIcon from "../../../../public/icons/layers.svg";
 import { useEditor} from "@craftjs/core";
 
 export const SidebarDiv = styled.div<{ enabled: boolean }>`
-width: ${props => props.enabled ? 270 : 0}px;
+width: ${props => props.enabled ? 280 : 0}px;
 opacity: ${props => props.enabled ? 1 : 0};
 background: #fff;
 `;
