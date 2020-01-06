@@ -22,7 +22,7 @@ Page editors are a great way to provide an excellent user experience. However, t
 
 There're existing libraries that come with a fully working page editor out of the box with a user interface and editable components. However, if you wish to make customisations such as modifying the user interface and its behavior, it will most definitely involve modifying the library itself. 
 
-Craft.js solves this problem by providing the building blocks of a page editor. It ships with a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things. With this, you'll be able to build your own page editor exactly how you want it to look and behave.
+Craft.js solves this problem by modularising the building blocks of a page editor. It ships with a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things. With this, you'll be able to build your own page editor exactly how you want it to look and behave.
 
 ## Docs
 - [Core concepts](https://prevwong.github.io/craft.js/r/docs/concepts/nodes)
@@ -60,7 +60,7 @@ const TextComponent = ({text}) => {
 Heck, the entire UI of your page editor is built using just React. 
 ```jsx
 import React from "react";
-import {Craft, Frame, Canvas, Selector} from "@craftjs/core";
+import {Editor, Frame, Canvas, Selector} from "@craftjs/core";
 const App = () => {
   return (
     <div>
@@ -181,6 +181,17 @@ const App = () => {
   )
 }
 ```
+
+## Who is this for ? 🤔
+You should use this if
+- ✅ You want to design your page editor according to your own UI specifications. With Craft.js, you control almost every aspect of the look and feel of your page editor.
+- ✅ You like the React ecosystem. Being a React framework, not only do you get to build your user interface declaratively, but you will also be able to extend upon thousands of existing React components for your page editor.
+- ✅ You're the coolest kid in class 😎
+
+You should not use this if
+- ❌ You need a page editor that works out of the box. Craft.js is an abstraction for which you build your own page editor upon. It does not come with a ready-made user interface, for example.
+  - However, you could still consider using the [examples](https://github.com/prevwong/craft.js/tree/master/packages/examples) as a starting point.
+
 
 ## Additional Packages :tada:
 - **[@craftjs/layers](https://github.com/prevwong/craft.js/tree/master/packages/layers)** A Photoshop-like layers panel
