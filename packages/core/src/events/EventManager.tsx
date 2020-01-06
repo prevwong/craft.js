@@ -108,7 +108,11 @@ export const EventManager: React.FC = ({ children }) => {
                 start.data.index =
                   getPlaceholder.placement.index +
                   (getPlaceholder.placement.where === "after" ? 1 : 0);
-                add(start, getPlaceholder.placement.parent.id);
+                let error;
+                add(start, getPlaceholder.placement.parent.id, err => {
+                  error = err;
+                });
+                if (error) throw new Error(error);
                 draggedNode.current = start.id;
               }
               setIndicator(getPlaceholder);
