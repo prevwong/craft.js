@@ -140,13 +140,12 @@ export const EventManager: React.FC<any> = ({ children }) => {
               e.clientY > heading.top + 10 &&
               e.clientY < heading.bottom - 10
             ) {
-              indicator.placement.currentNode = query
-                .node(
-                  currentCanvasHovered.data.nodes[
-                    currentCanvasHovered.data.nodes.length - 1
-                  ]
-                )
-                .get();
+              const currNode =
+                currentCanvasHovered.data.nodes[
+                  currentCanvasHovered.data.nodes.length - 1
+                ];
+              if (!currNode) return;
+              indicator.placement.currentNode = query.node(currNode).get();
               indicator.placement.index =
                 currentCanvasHovered.data.nodes.length;
               indicator.placement.where = "after";

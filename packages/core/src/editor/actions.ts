@@ -76,7 +76,11 @@ export const Actions = (
      * @param parentId
      * @param onError
      */
-    add(nodes: Node[] | Node, parentId?: NodeId, onError?: (err) => void) {
+    add(
+      nodes: Node[] | Node,
+      parentId?: NodeId,
+      onError?: (err, node) => void
+    ) {
       const isCanvas = (node: Node | NodeId) =>
         node &&
         (typeof node === "string"
@@ -100,10 +104,12 @@ export const Actions = (
           parentNode.data._childCanvas[node.data.props.id] = node.id;
           delete node.data.props.id;
         } else {
+          let error;
           if (parentId) {
             query.node(parentId).isDroppable(node, err => {
-              throw new Error(err);
+              error = err;
             });
+            if (error) return onError && onError(error, node);
 
             if (parentNode.data.props.children)
               delete parentNode.data.props["children"];
