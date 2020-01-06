@@ -3,7 +3,7 @@
 @tailwind components;
 @import url("https://use.typekit.net/mpa1wkh.css");
 html, body {
-  font-family: 'acumin-pro', sans-serif, serif;
+  font-family: 'acumin-pro', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   color: rgb(75,75,75);
   background:#e0e0e0;
 }
