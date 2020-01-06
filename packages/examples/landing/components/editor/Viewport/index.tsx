@@ -42,6 +42,7 @@ export const Viewport: React.FC = ({children}) => {
         fullWidth={true}
         maxWidth="sm"
         onClose={() => setDialog(false)}
+        disableBackdropClick={true}
       >
         <DialogTitle>{"Keep the following in mind"}</DialogTitle>
         <DialogContent>
