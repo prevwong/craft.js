@@ -60,7 +60,7 @@ export const ContainerSettings = () => {
         <ToolbarItem full={true} propKey="shadow" type="slider" label="Shadow" />
       </ToolbarSection>
       <ToolbarSection
-        title="Allignment"
+        title="Alignment"
         >
         <ToolbarItem propKey="flexDirection" type="radio" label="Flex Direction">
           <ToolbarRadio value="row" label="Row" />
