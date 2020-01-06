@@ -113,7 +113,7 @@ For instance, let's say we would like to enable the content editable text from t
 ```jsx
 const Hero = ({title}) => {
   const { connectors: {connect, drag}, setProp, isClicked } = useNode((node) => ({
-    isClicked: node.events.selecteded
+    isClicked: node.events.selected
   }));
 
   return (
@@ -195,8 +195,8 @@ Now, let's say we have a Toolbar component somewhere in our editor. We can easil
 ```jsx
 const Toolbar = () => {
   const { selectededNodeId, toolbarSettings } = useEditor((state) => ({
-    selectededNodeId : state.eventselectedcted,
-    toolbarSettings:  state.nodes[state.events.selecteded].related.toolbar
+    selectededNodeId : state.event.selected,
+    toolbarSettings:  state.nodes[state.events.selected].related.toolbar
   }));
   return (
     <div>

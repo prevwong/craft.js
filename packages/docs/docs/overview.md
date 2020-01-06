@@ -9,7 +9,7 @@ Page editors are a great way to provide an excellent user experience. However, t
 
 There're existing libraries that come with a fully working page editor out of the box with a user interface and editable components. However, if you wish to make customisations such as tweaking the user interface, it will most definitely involve modifying the library itself. 
 
-Craft.js solves this problem by providing the building blocks of a page editor. It provides a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things. With this, you'll be able to focus on building the page editor according to your own specifications and needs.
+Craft.js solves this problem by modularising the building blocks of a page editor. It provides a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things. With this, you'll be able to focus on building the page editor according to your own specifications and needs.
 
 
 ## Features
@@ -34,7 +34,7 @@ const TextComponent = ({text}) => {
 Heck, the entire UI of your page editor is built using just React. 
 ```jsx
 import React from "react";
-import {Craft, Frame, Canvas, Selector} from "@craftjs/core";
+import {Editor, Frame, Canvas, Selector} from "@craftjs/core";
 const App = () => {
   return (
     <div>

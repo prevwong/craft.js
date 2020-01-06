@@ -138,9 +138,13 @@ li.api-item {
   border: none;
   margin-bottom:10px;
 }
+html[data-theme=dark] .badge-type {
+  background:#fff;
+  color:#000;
+}
 .badge.badge-title { top: -20px; }
 .badge.badge-no-margin { top: 0; }
-.badge.badge-component { background : #141890; }
+.badge.badge-component { background : #304dda; }
 .badge.badge-hook { background: #4e31c5; }
 .badge.badge-hoc { background: #9284ca; }
 .badge.badge-function { background: #8870a7; }
@@ -230,4 +234,12 @@ a.btn.btn-text {
   color:#7d56f3;
   box-shadow: none;
 
+}
+
+html[data-theme=dark] .api-type {
+  color: #86f3d5;
+}
+
+html[data-theme=dark] .api-description {
+  color: #ffffffba;
 }
