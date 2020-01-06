@@ -1,16 +1,16 @@
 /* purgecss start ignore */
 @tailwind base;
 @tailwind components;
-/* purgecss end ignore */
-
-@tailwind utilities;
 @import url("https://use.typekit.net/mpa1wkh.css");
-
 html, body {
   font-family: 'acumin-pro', sans-serif, serif;
   color: rgb(75,75,75);
   background:#e0e0e0;
 }
+/* purgecss end ignore */
+
+@tailwind utilities;
+
 
 .component-selected  {
   @apply relative;
