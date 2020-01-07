@@ -182,14 +182,14 @@ const App = () => {
 }
 ```
 
-## Who is this for ? 🤔
-You should use this if
+## Who is this for? 🤔
+You should use this if:
 - ✅ You want to design your page editor according to your own UI specifications. With Craft.js, you control almost every aspect of the look and feel of your page editor.
 - ✅ You like the React ecosystem. Being a React framework, not only do you get to build your user interface declaratively, but you will also be able to extend upon thousands of existing React components for your page editor.
 - ✅ You're the coolest kid in class 😎
 
-You should not use this if
-- ❌ You need a page editor that works out of the box. Craft.js is an abstraction for which you build your own page editor upon. It does not come with a ready-made user interface, for example.
+You should not use this if:
+- ❌ You need a page editor that works out of the box. Craft.js is an abstraction where you implement your own page editor upon. For example, it does not come with a ready-made user interface.
   - However, you could still consider using the [examples](https://github.com/prevwong/craft.js/tree/master/packages/examples) as a starting point.
 
 
