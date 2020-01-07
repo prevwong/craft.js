@@ -407,7 +407,7 @@ export const Container = ({background, padding = 0, children}) => {
 // components/user/Card.js (No changes)
 
 // It's not necessary to add connectors for our Card component since it's a composition of our Container component - which already has connectors applied.
-export const Card = ({background, padding = 0, children}) => {
+export const Card = ({background, padding = 0}) => {
   return (
     <Container background={background} padding={padding}>
       ...
@@ -426,8 +426,7 @@ Of course, our Card component is supposed to have two droppable regions. Remembe
 // components/user/Card.js
 import {useNode, Canvas} from "@craftjs/core";
 
-export const Card = (({bg})) => {
-  const { connectors: {connect, drag}} = useNode();
+export const Card = (({bg, padding})) => {
   return (
     <Container background={background} padding={padding}>
       <Canvas id="text">
@@ -704,7 +703,6 @@ export const Text = ({text, fontSize}) => {
 
 const TextSettings = () => {
   const { setProp, fontSize } = useNode((node) => ({
-    text: node.data.props.text,
     fontSize: node.data.props.fontSize
   }));
 
