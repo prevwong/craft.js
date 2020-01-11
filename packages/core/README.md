@@ -204,6 +204,10 @@ Although it is not actually used here, many aspects of Craft.js are written with
 - **[use-methods](https://github.com/pelotom/use-methods)** A super handy hook when dealing with reducers. Craft.js uses a slightly modified version of `use-methods` to better fit our API.
 
 
+## Getting Help :wave: 
+
+If you have questions or there's something you'd like to discuss (eg: contributing), please head over to our [Discord](https://discord.gg/sPpF7fX) server. 
+
 ## Contributors ✨
 
 Craft.js is made with :heart: by these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):

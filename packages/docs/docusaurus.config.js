@@ -60,6 +60,10 @@ module.exports = {
               href: 'https://github.com/prevwong/craft.js',
             },
             {
+              label: 'Discord',
+              href: 'https://discord.gg/sPpF7fX'
+            },
+            {
               label: 'NPM',
               href: 'https://npmjs.com/package/@craftjs/core',
             },
