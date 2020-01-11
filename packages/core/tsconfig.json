@@ -2,11 +2,14 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "./src",
-    "outDir": "dist",
+    "outDir": "./lib",
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "jsx" : "react",
+    "declaration": true,
+    "declarationDir": "./lib"
   },
   "include": [
-    "src/index.tsx"
+    "./src/index.tsx"
   ]
 }

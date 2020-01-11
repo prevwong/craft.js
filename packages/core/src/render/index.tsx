@@ -1,1 +1,1 @@
-export * from "./Renderer";
+export * from "./Frame";

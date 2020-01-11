@@ -1,16 +1,23 @@
 {
-  "allowSyntheticDefaultImports": true,
-  "esModuleInterop": true,
   "compilerOptions": {
-    "lib" : ["esnext", "dom"],
-    "allowSyntheticDefaultImports": true,
-    "jsx": "react",
+    "skipLibCheck": true,
+    "incremental": true,
+    "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "noImplicitAny": false,
-    "outDir": "dist",
-    "sourceMap": true,
-    "target": "esnext",
-    "declaration": true
-  }
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "strict": false,
+    "experimentalDecorators": true,
+    "noUnusedLocals": false,
+    "jsx": "react",
+    "forceConsistentCasingInFileNames": false,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": [
+    "**/node_modules/**"
+  ]
 }

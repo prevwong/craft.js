@@ -1,40 +1,66 @@
-import babel from 'rollup-plugin-babel'
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
+import path from "path";
+import resolve from "rollup-plugin-node-resolve";
+import { terser } from "rollup-plugin-terser";
+import typescript from "rollup-plugin-typescript";
+import babel from "rollup-plugin-babel";
 
-const isProd = process.env.NODE_ENV === 'production'
-
-const extensions = ['.js', '.jsx', '.ts', '.tsx']
-
-const globals = {
-  react: 'React',
-  'react-dom': 'ReactDOM'
-}
+const shouldMinify = process.env.NODE_ENV === "production";
+const bundle = ["tslib"];
 
 export default {
-  input: './src/index.ts',
-
+  input: "./src/index.ts",
   output: [
     {
-      file: './dist/index.js',
-      format: 'umd',
-      name: 'workingConfig',
-      globals,
-      sourcemap: true
+      dir: "dist/esm",
+      format: "esm",
+      globals: {
+        react: "React",
+        "react-dom": "ReactDOM"
+      }
     },
-    { file: './dist/index.module.js', format: 'es', globals, sourcemap: true }
+    {
+      dir: "dist/cjs",
+      format: "cjs"
+    }
   ],
+  external: id => {
+    return !id.startsWith(".") && !path.isAbsolute(id) && !bundle.includes(id);
+  },
   plugins: [
-    resolve({ extensions }),
-    commonjs({
-      include: '**/node_modules/**',
-      namedExports: {}
-    }),
+    resolve(),
+    typescript(),
     babel({
-      extensions,
-      include: ['src/**/*'],
-      exclude: 'node_modules/**'
-    })
-  ],
-  external: Object.keys(globals)
-}
+      presets: [
+        ["@babel/preset-typescript"],
+        [
+          "@babel/preset-env",
+          {
+            modules: false,
+            targets: {
+              browsers: [">0.25%, not dead"]
+            }
+          }
+        ]
+      ],
+      plugins: [
+        "@babel/proposal-class-properties",
+        "@babel/proposal-object-rest-spread"
+      ]
+    }),
+    shouldMinify &&
+      terser({
+        sourcemap: true,
+        output: { comments: "some" },
+        compress: {
+          keep_infinity: true,
+          pure_getters: true,
+          passes: 10
+        },
+        ecma: 5,
+        warnings: true,
+        mangle: {
+          reserved: ["Canvas"]
+        }
+      })
+  ]
+};

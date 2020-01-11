@@ -1,9 +1,9 @@
-import { DropAction, DOMInfo } from "./interfaces";
+import { DropAction, DOMInfo } from "../interfaces";
 
 export default function movePlaceholder(
   pos: DropAction,
   canvasDOMInfo: DOMInfo, // which canvas is cursor at
-  bestTargetDomInfo: DOMInfo // closest element in canvas (null if canvas is empty)
+  bestTargetDomInfo: DOMInfo | null // closest element in canvas (null if canvas is empty)
 ) {
   let t = 0,
     l = 0,
@@ -11,8 +11,7 @@ export default function movePlaceholder(
     h = 0,
     where = pos.where;
 
-  const elDim = bestTargetDomInfo ? bestTargetDomInfo : null;
-
+  const elDim = bestTargetDomInfo;
 
   if (elDim) {
     // If it's not in flow (like 'float' element)
@@ -20,13 +19,11 @@ export default function movePlaceholder(
       w = 2;
       h = elDim.outerHeight;
       t = elDim.top;
-      l =
-        where == "before" ? elDim.left : elDim.left + elDim.outerWidth;
+      l = where === "before" ? elDim.left : elDim.left + elDim.outerWidth;
     } else {
       w = elDim.outerWidth;
       h = 2;
-      t =
-        where == "before" ? elDim.top : elDim.bottom
+      t = where === "before" ? elDim.top : elDim.bottom;
       l = elDim.left;
     }
   } else {
@@ -37,11 +34,10 @@ export default function movePlaceholder(
       h = 2;
     }
   }
-
   return {
-    top: t,
-    left: l,
-    width: w,
-    height: h
+    top: `${t}px`,
+    left: `${l}px`,
+    width: `${w}px`,
+    height: `${h}px`
   };
 }

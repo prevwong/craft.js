@@ -1,8 +1,8 @@
-/node_modules
-/dist
-/.cache
-*node_modules/
-*.cache/
-*dist/
-*.lock
-*-lock.json
+node_modules
+.cache
+*-cache
+site
+out
+dist
+lib
+*-*.log

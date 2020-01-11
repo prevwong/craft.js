@@ -1,26 +1,25 @@
 import { Resolver } from "../interfaces";
-import { Canvas } from "../nodes";
+import { Canvas } from "../nodes/Canvas";
 
-export const resolveComponent = (resolver: Resolver, comp: React.ElementType | string) => {
-    let Comp;
-    const name = (comp as any).name || (comp as any).displayName;
+export const resolveComponent = (
+  resolver: Resolver,
+  comp: React.ElementType | string
+) => {
+  let Comp: string;
+  const name = (comp as any).name || (comp as any).displayName;
 
-    if (comp === Canvas) return "Canvas";
+  if (comp === Canvas) return "Canvas";
 
-    if (resolver[name]) return name;
+  if (resolver[name]) return name;
 
-    if (!Comp) {
-        for (let i = 0; i < Object.keys(resolver).length; i++) {
-            const name = Object.keys(resolver)[i],
-                fn = resolver[name];
-            if (fn === comp) {
-                Comp = name;
-                break;
-            }
-        }
+  for (let i = 0; i < Object.keys(resolver).length; i++) {
+    const name = Object.keys(resolver)[i],
+      fn = resolver[name];
+    if (fn === comp) {
+      Comp = name;
+      return Comp;
     }
+  }
 
-    if ( !Comp && comp == Canvas) return "Canvas";
-    if ( !Comp && typeof comp === "string" ) return comp;
-    return Comp;
-}
+  if (typeof comp === "string") return comp;
+};

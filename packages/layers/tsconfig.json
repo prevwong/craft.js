@@ -2,10 +2,13 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "./src",
-    "outDir": "dist",
-    "allowSyntheticDefaultImports": true
+    "outDir": "./lib",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "jsx" : "react"
   },
   "include": [
-    "src/index.tsx"
+    "src/index.tsx",
+    "svg.d.ts"
   ]
 }

@@ -1,65 +1,79 @@
-import React from 'react';
-import { NodeData, NodeId, Node, NodeRules } from "../interfaces";
-import produce from "immer";
-import { isCanvas } from "../nodes";
+import React from "react";
+import { NodeData, NodeId, Node } from "../interfaces";
+import { produce } from "immer";
+import { Canvas } from "../nodes/Canvas";
 import { NodeProvider } from "../nodes/NodeContext";
 
-export function createNode(data: Partial<NodeData> & Pick<NodeData, 'type' | 'props'>, id?: NodeId): Node {
- 
-  let actualType = (data.subtype ? data.subtype : data.type) as any;
+export function createNode(
+  data: Partial<NodeData> & Pick<NodeData, "type" | "props">,
+  id: NodeId
+): Node {
+  let actualType = data.type as any;
+  const { canMoveIn, canMoveOut, ...props } = data.props;
+
   let node = produce({}, (node: Node) => {
     node.id = id;
+
     node.data = {
       ...data,
-      parent: data.parent || null,
-      name: null,
-      props: {
-        ...data.props,
-      }
-    };
+      name: (data.type as any).name,
+      displayName: (data.type as any).name,
+      props,
+      custom: data.custom || {}
+    } as NodeData;
 
+    node.related = {};
+
+    node.events = {
+      selected: false,
+      dragged: false,
+      hovered: false
+    };
 
     node.rules = {
       canDrag: () => true,
-      incoming: () => true,
-      outgoing: () => true
-    }
+      canMoveIn: () => true,
+      canMoveOut: () => true,
+      ...((actualType.craft && actualType.craft.rules) || {})
+    };
 
-    node.event = {
-      active: false,
-      dragging: false,
-      hover: false
-    }
-
-    if (isCanvas(node)) {
-      node.data.subtype = data.subtype ? data.subtype : node.data.props.is ? node.data.props.is : 'div';
-      actualType = node.data.subtype;
+    if (node.data.type === Canvas) {
+      node.data.type = node.data.props.is ? node.data.props.is : "div";
+      node.data.isCanvas = true;
+      actualType = node.data.type;
+      delete node.data.props["is"];
     }
 
     node.data.props = {
       ...((actualType.craft && actualType.craft.defaultProps) || {}),
-      ...node.data.props,
-    }
+      ...node.data.props
+    };
 
-    if ( actualType.craft ) {
-      if ( actualType.craft.rules ) {
+    if (actualType.craft) {
+      if (actualType.craft.name) {
+        node.data.displayName = actualType.craft.name;
+      }
+
+      if (actualType.craft.rules) {
         Object.keys(actualType.craft.rules).forEach(key => {
-          if (['canDrag', 'incoming', 'outgoing'].includes(key)) {
+          if (["canDrag", "canMoveIn", "canMoveOut"].includes(key)) {
             node.rules[key] = actualType.craft.rules[key];
-          } 
+          }
         });
-      } 
-      if ( actualType.craft.related ) {
-        node.related = {}
-        Object.keys(actualType.craft.related).forEach((comp) => {
-          node.related[comp] = () => React.createElement(NodeProvider, { id, related: true }, React.createElement(actualType.craft.related[comp]))
+      }
+      if (actualType.craft.related) {
+        node.related = {};
+        Object.keys(actualType.craft.related).forEach(comp => {
+          node.related[comp] = () =>
+            React.createElement(
+              NodeProvider,
+              { id, related: true },
+              React.createElement(actualType.craft.related[comp])
+            );
         });
       }
     }
-
-    node.data.name = name;
   }) as Node;
 
-  console.log("Create", node, actualType.craft)
   return node;
 }

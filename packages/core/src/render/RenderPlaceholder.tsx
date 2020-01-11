@@ -1,36 +1,32 @@
-import React, { useContext } from "react";
-import { PlaceholderInfo } from "../events/interfaces";
-import { useManager } from "../connectors";
+import React from "react";
+import { Indicator } from "../interfaces";
+import { useEditor } from "../hooks";
 
 export type Placeholder = {
-  placeholder: PlaceholderInfo,
-  suggestedStyles: any
-}
+  placeholder: Indicator;
+  suggestedStyles: any;
+};
 
-export const defaultPlaceholder: React.FC<Placeholder> = ({ placeholder: { error }, suggestedStyles}) => {
+export const RenderPlaceholder: React.FC<Placeholder> = ({
+  placeholder,
+  suggestedStyles
+}) => {
+  const { indicator } = useEditor(state => ({
+    indicator: state.options.indicator
+  }));
+
   return (
     <div
       style={{
-        position: 'fixed',
-        display: 'block',
+        position: "fixed",
+        display: "block",
         opacity: 1,
-        background: error ? 'red': 'rgb(98, 196, 98)',
-        borderColor: 'rgb(98, 196, 98)',
-        borderStyle: 'solid',
-        borderWidth: '0px',
+        borderColor: placeholder.error ? indicator.error : indicator.success,
+        borderStyle: "solid",
+        borderWidth: "1px",
         zIndex: "99999",
         ...suggestedStyles
       }}
-    >
-    </div>
-  )
-}
-
-
-export const RenderPlaceholder: React.FC<Placeholder> = ({ placeholder, suggestedStyles }) => {
-  const { query: {getOptions} } = useManager();
-  return React.createElement(getOptions().renderPlaceholder, {
-    placeholder,
-    suggestedStyles,
-  });
-}
+    ></div>
+  );
+};

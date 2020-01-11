@@ -1,0 +1,245 @@
+/**
+ * Copyright (c) 2017-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+@import url('https://fonts.googleapis.com/css?family=Fira+Code&display=swap');
+@import url("https://use.typekit.net/mpa1wkh.css");
+
+:root {
+  --ifm-color-primary: rgb(129, 169, 169);
+  --ifm-color-primary-dark: rgb(33, 175, 144);
+  --ifm-color-primary-darker: rgb(31, 165, 136);
+  --ifm-color-primary-darkest: rgb(26, 136, 112);
+  --ifm-color-primary-light: rgb(70, 203, 174);
+  --ifm-color-primary-lighter: rgb(102, 212, 189);
+  --ifm-color-primary-lightest: rgb(146, 224, 208);
+  --ifm-navbar-background-color: rgb(129, 169, 169);
+  --ifm-navbar-link-color: rgba(255,255,255,0.85);
+  --ifm-font-family-base:  "acumin-pro", "Source Sans Pro", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --ifm-font-family-monospace: "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --ifm-navbar-link-color: rgba(255,255,255,0.6);
+  --ifm-navbar-link-hover-color: #fff;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgb(72, 77, 91);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+
+strong.api-type {
+  margin-left: 5px;
+  color: rgb(50, 61, 199);
+  /* font-style: italic; */
+  font-size:13px;
+  font-weight: 400;
+  font-family: "Fira Code";
+}
+
+.api-description {
+  /* font-style: italic; */
+  margin-left: 3px;
+  color: rgba(0, 0, 0, 0.61);
+  /* margin: 2px 0; */
+  padding: 0px 2px;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+li.api-item {
+  padding: 6px 0 0px 0px;
+}
+
+
+.menu .menu__link.menu__link--sublist:after {
+  height: 20px;
+  width: 20px;
+  background-size: contain;
+}
+
+.footer .footer__links {
+  margin-bottom: 3rem;
+}
+
+.img-wrapper {
+  display:flex;
+  align-items:center;
+  flex-direction: column;
+  margin-bottom:10px;
+  
+  
+}
+
+.img-wrapper > div {
+  border: 1px solid rgb(230, 230, 230);
+  max-width:90%;
+    display: inherit;
+    flex-direction: column;
+    align-items:center;
+    border-radius: 3px;
+    background: rgb(245, 245, 245);
+}
+
+.img-wrapper > div > img { 
+  width:100%;
+  
+  object-fit: contain;
+}
+
+.img-wrapper > div > header { 
+  width:100%;
+  padding: 5px 10px;
+}
+
+.img-wrapper > div > header > div { 
+  width: 10px;
+  height: 10px;
+  display:inline-block;
+  margin-right:5px;
+  background:#333;
+  border-radius:100%;
+  margin-right:5px;
+}
+
+.img-wrapper > div > header > div:nth-child(1) {
+  background : rgb(242, 95, 88);
+}
+.img-wrapper > div > header > div:nth-child(2) {
+  background : rgb(251, 190, 60);
+}
+.img-wrapper > div > header > div:nth-child(3) {
+  background : rgb(88, 203, 66);
+}
+
+.badge-wrapper {
+  display:flex;
+  width:100%;
+}
+.badge {
+  display: inline-block;
+  color: #fff;
+  background: #000;
+  padding: 10px 20px;
+  border-radius: 100px;
+  top: -10px;
+  position: relative;
+  border: none;
+  margin-bottom:10px;
+}
+html[data-theme=dark] .badge-type {
+  background:#fff;
+  color:#000;
+}
+.badge.badge-title { top: -20px; }
+.badge.badge-no-margin { top: 0; }
+.badge.badge-component { background : #304dda; }
+.badge.badge-hook { background: #4e31c5; }
+.badge.badge-hoc { background: #9284ca; }
+.badge.badge-function { background: #8870a7; }
+
+a.navbar__brand.active {
+  font-size: 20px;
+  font-weight: 200;
+  color: #fff;
+}
+
+a.navbar__brand.active  > strong {
+  font-weight: 500;
+}
+
+
+a.big-btn {
+  float: left;
+  width: 100%;
+  padding: 30px 60px;
+  background: #000;
+  color: #fff;
+  margin: 20px 0;
+  position:relative;
+  overflow: hidden;
+
+}  
+a.big-btn .bg {
+  width:0%;
+  height:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  background:#fff;
+  z-index:1;
+  transition: .4s cubic-bezier(.19,1,.22,1);
+}
+
+a.big-btn .content {
+  float:left;
+  width:100%;
+  position:relative;
+  z-index:2;
+}
+  
+a.big-btn i {
+  font-size: 94px;
+  position: absolute;
+  right: -19px;
+  top: 15px;
+  opacity: 0.2;
+  z-index:2;
+  transition: .5s cubic-bezier(.19,1,.22,1);
+  transform: translateY(0%);
+}
+
+a.big-btn:hover {
+  color:#000;
+}
+a.big-btn:hover .bg {
+  width:100%;
+}
+a.big-btn:hover i {
+  color:#000;
+  font-size: 54px;
+  right: 40px;
+  top: 50%;
+  opacity:1;
+  transform: translateY(-50%);
+}
+
+a.btn {
+  background:#7d56f3;
+  padding: 5px 20px;
+  border-radius:100px;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 10px 20px;
+  font-weight: 700;
+  line-height: 3px;
+  box-shadow: 0px 16px 33px -15px #000;
+  color: #fff;
+  margin-right:10px;
+}
+
+a.btn.btn-text {
+  background:transparent;
+  color:#7d56f3;
+  box-shadow: none;
+
+}
+
+html[data-theme=dark] .api-type {
+  color: #86f3d5;
+}
+
+html[data-theme=dark] .api-description {
+  color: #ffffffba;
+}

@@ -1,52 +1,48 @@
 import { useContext, useMemo } from "react";
 import { NodeContext, NodeProvider } from "./NodeContext";
-import { Node, NodeRefEvent } from "../interfaces";
-import { useManager } from "../connectors";
-
+import { Node } from "../interfaces";
+import { useInternalEditor } from "../editor/useInternalEditor";
 
 type internalActions = NodeProvider & {
-  _inNodeContext: boolean,
-  actions : {
-    setProp: (cb: any) => void,
-    setDOM: (dom: HTMLElement) => void,
-    setNodeEvent: Function
-  }
-}
+  inNodeContext: boolean;
+  actions: {
+    setProp: (cb: any) => void;
+    setDOM: (dom: HTMLElement) => void;
+    setNodeEvent: Function;
+  };
+};
 
-type useInternalNode<S = null> = S extends null ? internalActions : S & internalActions;
-export function useInternalNode() : useInternalNode
-export function useInternalNode<S = null>(collect?: (node: Node) => S): useInternalNode<S>
-export function useInternalNode<S = null>(collect?: (node: Node) => S): useInternalNode<S> {
+export type useInternalNode<S = null> = S extends null
+  ? internalActions
+  : S & internalActions;
+export function useInternalNode(): useInternalNode;
+export function useInternalNode<S = null>(
+  collect?: (node: Node) => S
+): useInternalNode<S>;
+export function useInternalNode<S = null>(
+  collect?: (node: Node) => S
+): useInternalNode<S> {
   const context = useContext(NodeContext);
-  if (!context) {
-    return {
-      ...{} as any,
-      id: null,
-      related: false,
-      _inNodeContext: false,
-      actions: {}
-    }
-  }
-  
   const { id, related } = context;
-  
-  const { actions: managerActions, query, ...collected } = collect ? useManager((state) => id && state.nodes[id] && collect(state.nodes[id])) : useManager();
+
+  const { actions: EditorActions, query, ...collected } = useInternalEditor(
+    state => id && state.nodes[id] && collect && collect(state.nodes[id])
+  );
+
   const actions = useMemo(() => {
     return {
-      setProp: (cb: any) => managerActions.setProp(id, cb),
+      setProp: (cb: any) => EditorActions.setProp(id, cb),
       setDOM: (dom: HTMLElement) => {
-        return managerActions.setDOM(id, dom);
-      },
-        setNodeEvent: (action: keyof NodeRefEvent) => managerActions.setNodeEvent(action, id)
-    }
-  }, []);
+        return EditorActions.setDOM(id, dom);
+      }
+    };
+  }, [EditorActions, id]);
 
   return {
     id,
     related,
-    ...collected as any,
-    _inNodeContext: true,
-     actions 
-  }
+    inNodeContext: !!context,
+    actions,
+    ...(collected as any)
+  };
 }
-

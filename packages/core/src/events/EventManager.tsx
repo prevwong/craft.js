@@ -1,106 +1,218 @@
-import React, {  useRef, useMemo } from "react";
-import { Node, ManagerState, NodeId } from "../interfaces";
+import React, { useRef, useMemo } from "react";
+import { Node, NodeId, EditorEvents } from "../interfaces";
 import movePlaceholder from "./movePlaceholder";
-import { getDOMInfo } from "craftjs-utils";
-import { useInternalManager } from "../manager/useInternalManager";
-import {debounce} from "lodash"
+import { getDOMInfo, useConnectorHooks, RenderIndicator } from "@craftjs/utils";
+import { useInternalEditor } from "../editor/useInternalEditor";
+import { debounce } from "debounce";
+import { useHandlerGuard } from "@craftjs/utils";
+import { EventContext } from "./EventContext";
 
-export type EventContext = {
-  internal: Record<'onMouseDown' | 'onMouseOver', (e: MouseEvent, id: NodeId) => void>;
-  dnd: Record<'onDragStart' | 'onDragOver' | 'onDragEnd', Function> ;
-}
-export const EventContext = React.createContext<EventContext>(null);
+// TODO: improve drag preview image
+const createShadow = (e: DragEvent) => {
+  const shadow = (e.target as HTMLElement).cloneNode(true) as HTMLElement;
+  const { width, height } = (e.target as HTMLElement).getBoundingClientRect();
+  shadow.style.width = `${width}px`;
+  shadow.style.height = `${height}px`;
+  shadow.style.position = "fixed";
+  shadow.style.left = "-100%";
+  shadow.style.top = "-100%";
+
+  document.body.appendChild(shadow);
+  e.dataTransfer.setDragImage(shadow, 0, 0);
+
+  return shadow;
+};
 
 export const EventManager: React.FC = ({ children }) => {
-  const { nodes, events, query, actions: {add, setNodeEvent, setPlaceholder, move} } = useInternalManager((state) => state);
-  const {renderPlaceholder} = query.getOptions();
-  const mutable = useRef<ManagerState>({
-    nodes,
-    events
-  });
+  const { enabled, events, query, indicator, actions } = useInternalEditor(
+    state => ({
+      events: state.events,
+      enabled: state.options.enabled,
+      indicator: state.options.indicator
+    })
+  );
 
-  mutable.current = {
-    nodes,
-    events
-  }
+  const mutable = useRef<EditorEvents>(events);
+  const draggedNode = useRef<Node | NodeId | null>(null);
+  const draggedNodeShadow = useRef<HTMLElement | null>(null);
 
-  const draggedNode = useRef<Node | NodeId>(null);
+  mutable.current = events;
 
+  const innerHandlers = useMemo(() => {
+    const { add, setNodeEvent, setIndicator, move } = actions;
 
-  const handlers = useMemo(() => {
     return {
-      internal: {
-        onMouseDown: debounce((e: MouseEvent, id: NodeId) => {
-          setNodeEvent('active', id);
+      selectNode: [
+        "mousedown",
+        debounce((e: MouseEvent, id: NodeId) => {
+          setNodeEvent("selected", id);
         }, 1),
-        onMouseOver: debounce((e: MouseEvent, id: NodeId) => {
-          setNodeEvent('hover', id);
-        })
-      },
-      dnd: {
-        onDragStart: (e: React.MouseEvent, node: Node | NodeId) => {
+        true
+      ],
+      hoverNode: [
+        "mouseover",
+        debounce((e: MouseEvent, id: NodeId) => {
+          setNodeEvent("hovered", id);
+        }, 1),
+        true
+      ],
+      /** TODO: Merge dragCreateNode and dragNode */
+      /** TODO: Fix drag preview image */
+      dragCreateNode: [
+        "dragstart",
+        (e: DragEvent, el: React.ReactElement) => {
           e.stopPropagation();
-          if (typeof node === 'string') setNodeEvent('dragging', node);
+          e.stopImmediatePropagation();
+          const node = query.createNode(el);
+          draggedNodeShadow.current = createShadow(e);
+          if (typeof node === "string") setNodeEvent("dragged", node);
           draggedNode.current = node;
-        },
-        onDragOver: (e: React.MouseEvent, id: NodeId) => {
+        }
+      ],
+      dragNode: [
+        "dragstart",
+        (e: DragEvent, node: Node | NodeId) => {
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          draggedNodeShadow.current = createShadow(e);
+          if (typeof node === "string") setNodeEvent("dragged", node);
+          draggedNode.current = node;
+        }
+      ],
+      dragNodeOver: [
+        "dragover",
+        (e: MouseEvent, id: NodeId) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      ],
+      dragNodeEnter: [
+        "dragenter",
+        (e: MouseEvent, id: NodeId) => {
           e.preventDefault();
           e.stopPropagation();
           const { current: start } = draggedNode;
           if (!start) return;
-          const dragId = typeof start == 'object' ? start.id : start;
+          const dragId = typeof start === "object" ? start.id : start;
 
-          const getPlaceholder = query.getDropPlaceholder(dragId, id, { x: e.clientX, y: e.clientY });
+          const getPlaceholder = query.getDropPlaceholder(dragId, id, {
+            x: e.clientX,
+            y: e.clientY
+          });
 
           if (getPlaceholder) {
-            if (typeof start == 'object' && start.id) {
-              start.data.index = getPlaceholder.placement.index + (getPlaceholder.placement.where == 'after' ? 1 : 0);
-              add(start, getPlaceholder.placement.parent.id);
-              draggedNode.current = start.id;
-            }
-            setPlaceholder(getPlaceholder)
+            // TODO: Refactor creation of new Nodes via connectors.new()
+            // Currently, no Indicator will be displayed if a new Node is dragged to a parent Container that rejects it
+            try {
+              if (typeof start === "object" && start.id) {
+                start.data.index =
+                  getPlaceholder.placement.index +
+                  (getPlaceholder.placement.where === "after" ? 1 : 0);
+                let error;
+                add(start, getPlaceholder.placement.parent.id, err => {
+                  error = err;
+                });
+                if (error) throw new Error(error);
+                draggedNode.current = start.id;
+              }
+              setIndicator(getPlaceholder);
+            } catch (err) {}
           }
-        },
-        onDragEnd: (e: React.MouseEvent) => {
+        }
+      ],
+      dragNodeEnd: [
+        "dragend",
+        (e: MouseEvent) => {
           e.stopPropagation();
+          const events = mutable.current;
 
-          if (mutable.current.events.placeholder && !mutable.current.events.placeholder.error) {
-            const { placement } = mutable.current.events.placeholder;
+          if (events.indicator && !events.indicator.error) {
+            const { placement } = events.indicator;
             const { parent, index, where } = placement;
             const { id: parentId } = parent;
 
-            move(draggedNode.current as NodeId, parentId, index + (where === "after" ? 1 : 0));
+            move(
+              draggedNode.current as NodeId,
+              parentId,
+              index + (where === "after" ? 1 : 0)
+            );
+          }
+
+          if (draggedNodeShadow.current) {
+            draggedNodeShadow.current.parentNode.removeChild(
+              draggedNodeShadow.current
+            );
+            draggedNodeShadow.current = null;
           }
 
           draggedNode.current = null;
-          setPlaceholder(null);
-          setNodeEvent('dragging', null);
+          setIndicator(null);
+          setNodeEvent("dragged", null);
         }
+      ]
+    };
+  }, [actions, query]);
+
+  const handlers = useHandlerGuard(innerHandlers as any, enabled);
+
+  const hooks = useMemo(() => {
+    return {
+      select: [
+        handlers.selectNode,
+        () => actions.setNodeEvent("selected", null)
+      ],
+      drag: [
+        (node, id) => {
+          node.setAttribute("draggable", "true");
+          handlers.dragNode(node, id);
+          handlers.dragNodeEnd(node);
+        },
+        node => {
+          actions.setNodeEvent("dragged", null);
+          node.removeAttribute("draggable");
+        }
+      ],
+      hover: [handlers.hoverNode, () => actions.setNodeEvent("hovered", null)],
+      create: [
+        (node, el) => {
+          node.setAttribute("draggable", "true");
+          handlers.dragCreateNode(node, el);
+          handlers.dragNodeEnd(node);
+        },
+        node => {
+          actions.setNodeEvent("dragged", null);
+          node.removeAttribute("draggable");
+        }
+      ],
+      drop: (node, id) => {
+        handlers.dragNodeOver(node, id);
+        handlers.dragNodeEnter(node, id);
       }
-    }
-  }, []);
- 
+    };
+  }, [actions, handlers]);
+
+  const connectors = useConnectorHooks(hooks as any, enabled);
+
   return (
-    <EventContext.Provider value={handlers}>
-      {
-        events.placeholder ? (
-          React.createElement(renderPlaceholder, {
-            placeholder: events.placeholder,
-            suggestedStyles: {
+    <EventContext.Provider value={connectors}>
+      {events.indicator
+        ? React.createElement(RenderIndicator, {
+            style: {
               ...movePlaceholder(
-                events.placeholder.placement,
-                getDOMInfo(events.placeholder.placement.parent.dom),
-                events.placeholder.placement.currentNode ? getDOMInfo(events.placeholder.placement.currentNode.dom) : null
+                events.indicator.placement,
+                getDOMInfo(events.indicator.placement.parent.dom),
+                events.indicator.placement.currentNode
+                  ? getDOMInfo(events.indicator.placement.currentNode.dom)
+                  : null
               ),
-              transition: '0.2s ease-in'
+              backgroundColor: events.indicator.error
+                ? indicator.error
+                : indicator.success,
+              transition: "0.2s ease-in"
             }
-            
           })
-        ) : null
-      }
-      {
-        children
-      }
+        : null}
+      {children}
     </EventContext.Provider>
-  )
-}
+  );
+};
