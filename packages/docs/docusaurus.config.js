@@ -44,7 +44,7 @@ module.exports = {
             },
             {
               label: 'Tutorial',
-              to: 'docs/basic-tutorial',
+              to: 'docs/guides/basic-tutorial',
             },
             {
               label: 'API Reference',
