@@ -1,16 +1,17 @@
 # Contributing
 Thank you for considering to contribute to Craft.js! 
 
-There are many ways to contribute - from proofreading, writing tutorials or blog posts, improving the documentation, submitting bug reports and feature requests or writing code.
+From proofreading, translating, writing tutorials or blog posts, improving the documentation, submitting bug reports and feature requests, or writing code, there are many ways to contribute. Upon contribution as per the [all-contributors](https://allcontributors.org/) specification, your profile will be recognised in our README's contributors section.
 
 To get started right away, have a look at our [project tracker](https://github.com/prevwong/craft.js/projects) to check out a list of things that we'd like to work on right now. 
 
-If you're interested in proposing a new feature, or found a bug that you'd like to fix - please first file a new [issue](https://github.com/prevwong/craft.js/issues)
+If you are interested in proposing a new feature or have found a bug that you'd like to fix, please file a new [issue](https://github.com/prevwong/craft.js/issues).
+
 
 # Setup
 1. Fork this repository and create your branch from `master`
 ```bash
-git clone https://github.com/your-name/craft.js.git
+git clone https://github.com/your-name/craft.js
 cd craft.js
 ```
 
@@ -26,8 +27,8 @@ cd craft.js
 > yarn build # create production build for all craftjs packages
 > yarn lint # run tests across the monorepo 
 ```
-4. Profit 😁
+4. Submit a [pull request](https://github.com/prevwong/craft.js/compare) to merge the changes from your fork :heart:
 
 # License 
-By contributing, you agree that your contributions will be licensed under its MIT License.
+By contributing, you agree that your contributions will be licensed under MIT License.
 
