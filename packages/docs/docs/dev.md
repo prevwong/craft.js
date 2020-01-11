@@ -5,7 +5,7 @@ title: Craft.js - Build any page editor with React
 
 
 
-You know a web application is fancy when it has a page editor. Without a doubt, a page editor helps boost user experience significantly. If you're a frontend developer and have been tasked to be build one before, then you know precisely the difficulty and challenges of building one.
+You know a web application is fancy when it has a page editor. Without a doubt, a page editor helps boost user experience significantly. If you're a frontend developer and have been tasked to be build one before, then you know precisely the difficulties and challenges of building one.
 
 Existing libraries such as Grape.js or react-page are great for a working out-of-the-box page editor solution. However, as soon as you need to customise the look and feel of the page editor itself, you will find yourself hacking in the library's code.
 
