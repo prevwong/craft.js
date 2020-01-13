@@ -95,7 +95,6 @@ import Container from "./Container";
 export const Card = ({background, padding = 20}) => {
   return (
     <Container background={background} padding={padding}>
-      <Container background={background} padding={padding}>
       <div className="text-only">
         <Text text="Title" fontSize={20} />
         <Text text="Subtitle" fontSize={15} />
@@ -103,7 +102,6 @@ export const Card = ({background, padding = 20}) => {
       <div className="buttons-only">
         <Button size="small" text="Learn more" variant="contained" color="primary" />
       </div>
-    </Container>
     </Container>
   )
 }
@@ -953,7 +951,7 @@ export const SettingsPanel = () => {
 ```
 Now, we have to make our Delete button work. We can achieve this by using the `delete` action available from the `useEditor` hook.
 
-Also, it's important to note that not all nodes are deletable - if we try to delete an undeletable Node, it'll result in an error. Hence, it's good to make use of the [helper](/craft.js/docs/api/helpers) methods which helps describe a Node. In our case, we would like to know if the currently selected Node is deletable before actually displaying the "Delete" button. We can access the helper methods via the `is` query in the `useEditor` hook.
+Also, it's important to note that not all nodes are deletable - if we try to delete an undeletable Node, it'll result in an error. Hence, it's good to make use of the [helper](/craft.js/docs/api/helpers) methods which helps describe a Node. In our case, we would like to know if the currently selected Node is deletable before actually displaying the "Delete" button. We can access the helper methods via the `node` query in the `useEditor` hook.
 
 ```jsx {13,27-37}
 // components/SettingsPanel.js
