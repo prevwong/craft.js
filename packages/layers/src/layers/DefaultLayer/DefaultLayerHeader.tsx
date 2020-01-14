@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { useEditor } from "@craftjs/core";
 import styled from "styled-components";
 import Eye from "./svg/eye.svg";

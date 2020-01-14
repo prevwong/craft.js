@@ -1,5 +1,5 @@
 import { EditorState } from "../../interfaces";
-import React from "react";
+import * as React from "react";
 import { useEditor } from "../useEditor";
 
 export function connectEditor<C>(collect?: (state: EditorState) => C) {

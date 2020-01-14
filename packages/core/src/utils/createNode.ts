@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { NodeData, NodeId, Node } from "../interfaces";
 import { produce } from "immer";
 import { Canvas } from "../nodes/Canvas";

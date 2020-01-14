@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Indicator } from "@craftjs/core";
 import { useEditor } from "@craftjs/core";
 

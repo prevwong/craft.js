@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { UserComponent, useNode } from "@craftjs/core";
 import { Text } from "../Text";
 import { ButtonSettings } from "./ButtonSettings";

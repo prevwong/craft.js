@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { NodeId } from "../interfaces";
 
 export const NodeContext = React.createContext<any>(null);

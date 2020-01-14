@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { LayerContextProvider } from "./layers/LayerContextProvider";
 import { LayerManagerProvider } from "./manager/LayerManagerProvider";
 import { ROOT_NODE } from "@craftjs/utils";

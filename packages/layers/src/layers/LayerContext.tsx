@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { NodeId } from "@craftjs/core";
 
 export type LayerContext = {

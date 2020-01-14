@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { LayerContext } from "./LayerContext";
 import { LayerNode } from "./LayerNode";
 

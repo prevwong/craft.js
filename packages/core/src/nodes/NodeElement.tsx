@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { NodeProvider } from "./NodeContext";
 import { RenderNodeToElement } from "../render/RenderNode";
 import { NodeId } from "../interfaces";

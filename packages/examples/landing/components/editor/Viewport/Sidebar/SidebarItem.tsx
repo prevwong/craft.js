@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import Arrow from "../../../../public/icons/arrow.svg";
 import styled from "styled-components";
 

@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { EventManager } from "../events";
 import { useMethods } from "@craftjs/utils";
 import { LayerMethods } from "./actions";
