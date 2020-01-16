@@ -33,6 +33,19 @@ import { transformJSXToNode } from "../utils/transformJSX";
 const getNodeFromIdOrNode = (node: NodeId | Node, cb: (id: NodeId) => Node) =>
   typeof node === "string" ? cb(node) : node;
 
+function mapToTree(node, nodes) {
+  if (node && node.nodes && node.nodes.length > 0) {
+    if (!node.children) {
+      node.children = [];
+    }
+    node.nodes.forEach(id => {
+      node.children.push(mapToTree(nodes[id], nodes));
+    });
+  }
+
+  return node;
+}
+
 export function QueryMethods(Editor: EditorState) {
   const options = Editor && Editor.options;
 
@@ -64,8 +77,9 @@ export function QueryMethods(Editor: EditorState) {
     },
     /**
      * Retrieve the JSON representation of the editor's Nodes
+     * @param createTree output JSON will be returned as a tree instead of flat object.
      */
-    serialize(): string {
+    serialize(createTree: Boolean): string {
       const simplifiedNodes = Object.keys(Editor.nodes).reduce(
         (result: any, id: NodeId) => {
           const {
@@ -76,10 +90,13 @@ export function QueryMethods(Editor: EditorState) {
         },
         {}
       );
+      if (createTree) {
+        return JSON.stringify(
+          mapToTree(simplifiedNodes[ROOT_NODE], simplifiedNodes)
+        );
+      }
 
-      const json = JSON.stringify(simplifiedNodes);
-
-      return json;
+      return JSON.stringify(simplifiedNodes);
     },
     /**
      * Determine the best possible location to drop the source Node relative to the target Node

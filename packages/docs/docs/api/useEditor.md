@@ -46,7 +46,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
     ]],
     ["query", "Query", [
       ["createNode", "(child: React.ReactElement) => Node", "Create a Node from a React element"],
-      ["serialize", "() => String", "Return the current Nodes in JSON"],
+      ["serialize", "(createTree: boolean) => String", "Return the current Nodes in JSON, When set to true, JSON will be returned as a nested tree instead of flat object."],
       ["getOptions", "() => Object", "Get the options specified in the &lt;Editor /&gt; component"],
       ["getDropPlaceholder", 
         "(sourceNodeId: NodeId, targetNodeId: NodeId, pos: {x: number, y: number}, nodesToDOM?: (node: Node) => HTMLElement = node => node.dom)",
