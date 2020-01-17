@@ -39,7 +39,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["delete", "(nodeID: NodeId) => void", "Delete the specified Node"],
       ["deserialize", "() => String", "Recreate Nodes from JSON. This will clear all the current Nodes in the editor state with the recreated Nodes"],
       ["move", "(nodeId: NodeId, targetParentId: NodeId, index: number) => void", "Move a Node to the specified parent Node at the given index."],
-      ["setProp", "(nodeId: NodeId, props: Object) => void", "Manipulate the props of the given Node"],
+      ["setProp", "(nodeId: NodeId, update: (props: Object) => void) => void", "Manipulate the props of the given Node"],
       ["setHidden", "(nodeId: NodeId, bool: boolean) => void", "When set to true, the User Component of the specified Node will be hidden, but not removed"],
       ["setCustom", "(nodeId: NodeId, custom: (custom: Object) => void", "Update the given Node's custom properties"],
       ["setOptions", "(options: Object) => void", "Update the editor's options. The options object passed is the same as the &lt;Editor /&gt; props."]
@@ -75,6 +75,29 @@ const Example = () => {
     <div>
       The ID of the node currently being hovered is: {hoveredNodeId}
     </div>
+  )
+}
+```
+
+### Updating props
+```tsx
+import {useEditor} from "@craftjs/core";
+
+const Example = () => {
+  const { selectedNodeId, actions: {setProp} } = useEditor((state) => ({
+    selectedNodeId: state.events.selected
+  }));
+
+  return (
+    <a
+      onClick={_ => {
+        setProp(selectedNodeId, props => {
+          props.text = "new value";
+        });
+      }}
+    >
+      Update
+    </a>
   )
 }
 ```
