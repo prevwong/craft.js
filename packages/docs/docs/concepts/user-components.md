@@ -50,7 +50,7 @@ The first thing we would want to do is to actually let Craft.js to manage the DO
 const Hero = ({title, children}) => {
   const { connectors: {connect, drag} } = useNode();
   return (
-    <div ref={connect(drag)}>
+    <div ref={dom => connect(drag(dom))}>
       <h2>{title}</h2>
       <div>
         {children}
@@ -91,10 +91,10 @@ const Hero = ({title}) => {
   const { connectors: {connect, drag}, setProp } = useNode();
 
   return (
-    <div ref={connect(drag)}>
+    <div ref={dom => connect(drag(dom))}>
       <h2 contentEditable={true} onKeyUp={(e) => {
         setProp(props => {
-          props.text = e.target.innerText;
+          props.title = e.target.innerText;
         })
       }}>{title}</h2>
     </div>
@@ -102,7 +102,7 @@ const Hero = ({title}) => {
 }
 ```
 
-In the above example, we have updated our `h2` element to be content editable and added an event handler to update the `text` prop as the user visually enters in a new value.
+In the above example, we have updated our `h2` element to be content editable and added an event handler to update the `title` prop as the user visually enters in a new value.
 
 ## Collecting Node's state
 The information stored in a corresponding `Node` could be useful in helping you build more usable components. We can retrieve information from a `Node` by passing a collector function to the `useNode` hook. Every time the values we retrieved via the collector function changes, our component will re-render. This is very much similar to Redux's `connect` pattern.
@@ -117,10 +117,10 @@ const Hero = ({title}) => {
   }));
 
   return (
-    <div ref={connect(drag)}>
+    <div ref={dom => connect(drag(dom))}>
       <h2 contentEditable={isClicked} onKeyUp={(e) => {
         setProp(props => {
-          props.text = e.target.innerText;
+          props.title = e.target.innerText;
         })
       }}>{title}</h2>
     </div>
