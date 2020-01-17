@@ -94,7 +94,7 @@ const TextComponent = ({text}) => {
   );
 
   return (
-    <div ref={connect(drag)}>
+    <div ref={dom => connect(drag(dom))}>
       <h2>{text}</h2>
       {
         isClicked ? (
@@ -142,7 +142,7 @@ const Container = () => {
   const { actions: {add}, query: { createNode, node } } = useEditor();
   const { id, connectors: {drag, connect}} = useNode();
   return (
-    <div ref={connect(drag)}>
+    <div ref={dom => connect(drag(dom))}>
       ...
       <a onClick={() => {
         const { data: {type, props}} = node(id).get();
