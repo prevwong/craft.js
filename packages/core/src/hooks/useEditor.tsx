@@ -3,6 +3,8 @@ import {
   EditorCollector
 } from "../editor/useInternalEditor";
 import { ConnectorElementWrapper } from "@craftjs/utils";
+import { useMemo } from "react";
+import { NodeId } from "interfaces";
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 type Delete<T, U> = Pick<T, Exclude<keyof T, U>>;
@@ -13,7 +15,12 @@ export type useEditor<S = null> = Overwrite<
     actions: Delete<
       useInternalEditor<S>["actions"],
       "setNodeEvent" | "setDOM" | "replaceNodes" | "reset"
-    >;
+    > & {
+      selectNode: (nodeId: NodeId) => void;
+      clearNodeSelection: () => void;
+      hoverNode: (nodeId: NodeId) => void;
+      clearHoveredNode: () => void;
+    };
     query: Delete<useInternalEditor<S>["query"], "deserialize">;
   }
 > & {
@@ -35,10 +42,28 @@ export function useEditor<S>(collect: EditorCollector<S>): useEditor<S>;
 export function useEditor<S>(collect?: any): useEditor<S> {
   const {
     handlers,
-    actions: { setDOM, setNodeEvent, replaceNodes, reset, ...actions },
+    actions: { setDOM, setNodeEvent, replaceNodes, reset, ...EditorActions },
     query: { deserialize, ...query },
     ...collected
   } = useInternalEditor(collect);
+
+  const actions = useMemo(() => {
+    return {
+      ...EditorActions,
+      selectNode: (nodeId: NodeId) => {
+        setNodeEvent("selected", nodeId);
+      },
+      clearNodeSelection: () => {
+        setNodeEvent("selected", null);
+      },
+      hoverNode: (nodeId: NodeId) => {
+        setNodeEvent("hovered", nodeId);
+      },
+      clearHoveredNode: () => {
+        setNodeEvent("hovered", null);
+      }
+    };
+  }, [EditorActions]);
 
   return {
     connectors: handlers,

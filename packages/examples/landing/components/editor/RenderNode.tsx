@@ -5,6 +5,7 @@ import ArrowUp from "../../public/icons/arrow-up.svg";
 import Move from "../../public/icons/move.svg";
 import Delete from "../../public/icons/delete.svg";
 import ReactDOM from "react-dom";
+import { ROOT_NODE } from "@craftjs/utils";
 
 const IndicatorDiv = styled.div`
   height: 30px;
@@ -97,43 +98,46 @@ export const RenderNode = ({ render }) => {
     <>
       {isHover || isActive
         ? ReactDOM.createPortal(
-            <IndicatorDiv
-              ref={currentRef}
-              className="px-2 py-2 text-white bg-primary fixed flex items-center"
-              style={{
-                left: getPos(dom).left,
-                top: getPos(dom).top,
-                zIndex: 9999
+          <IndicatorDiv
+            ref={currentRef}
+            className="px-2 py-2 text-white bg-primary fixed flex items-center"
+            style={{
+              left: getPos(dom).left,
+              top: getPos(dom).top,
+              zIndex: 9999
+            }}
+          >
+            <h2 className="flex-1 mr-4">{name}</h2>
+            {moveable ? (
+              <Btn className="mr-2 cursor-move" ref={drag}>
+                <Move />
+              </Btn>
+            ) : null}
+            {id !== ROOT_NODE && (<Btn
+              className="mr-2 cursor-pointer"
+              onClick={() => {
+                actions.selectNode(parent)
+                // the old node is still being hovered
+                // we clear the hovered state which then closes the tooltip 
+                actions.clearHoveredNode()
               }}
             >
-              <h2 className="flex-1 mr-4">{name}</h2>
-              {moveable ? (
-                <Btn className="mr-2 cursor-move" ref={drag}>
-                  <Move />
-                </Btn>
-              ) : null}
+              <ArrowUp />
+            </Btn>)}
+            {deletable ? (
               <Btn
-                className="mr-2 cursor-pointer"
-                onClick={() => {
-                  actions.setNodeSelection(parent, true);
+                className="cursor-pointer"
+                onMouseDown={(e: React.MouseEvent) => {
+                  e.stopPropagation();
+                  actions.delete(id);
                 }}
               >
-                <ArrowUp />
+                <Delete />
               </Btn>
-              {deletable ? (
-                <Btn
-                  className="cursor-pointer"
-                  onMouseDown={(e: React.MouseEvent) => {
-                    e.stopPropagation();
-                    actions.delete(id);
-                  }}
-                >
-                  <Delete />
-                </Btn>
-              ) : null}
-            </IndicatorDiv>,
-            document.body
-          )
+            ) : null}
+          </IndicatorDiv>,
+          document.body
+        )
         : null}
       {render}
     </>
