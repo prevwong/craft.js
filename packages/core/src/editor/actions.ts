@@ -27,22 +27,28 @@ export const Actions = (
 ) => {
   const _ = <T extends keyof CallbacksFor<typeof Actions>>(name: T) =>
     Actions(state, query)[name];
+
+  const setNodeEvent = (eventType: NodeEvents, id: NodeId | null) => {
+    const current = state.events[eventType];
+    if (current && id !== current) {
+      state.nodes[current].events[eventType] = false;
+    }
+
+    if (id) {
+      state.nodes[id].events[eventType] = true;
+      state.events[eventType] = id;
+    } else {
+      state.events[eventType] = null;
+    }
+  };
+
   return {
     setOptions(cb: (options: Partial<Options>) => void) {
       cb(state.options);
     },
-    setNodeEvent(eventType: NodeEvents, id: NodeId | null) {
-      const current = state.events[eventType];
-      if (current && id !== current) {
-        state.nodes[current].events[eventType] = false;
-      }
-
-      if (id) {
-        state.nodes[id].events[eventType] = true;
-        state.events[eventType] = id;
-      } else {
-        state.events[eventType] = null;
-      }
+    setNodeEvent,
+    setNodeSelection(id: NodeId, isSelected: boolean) {
+      setNodeEvent("selected", isSelected ? id : null);
     },
     replaceNodes(nodes: Nodes) {
       state.nodes = nodes;
