@@ -21,12 +21,55 @@ import invariant from "tiny-invariant";
 import { deserializeNode } from "../utils/deserializeNode";
 import { createElement } from "react";
 
+const undoStack: string[] = [];
+
 export const Actions = (
   state: EditorState,
   query: QueryCallbacksFor<typeof QueryMethods>
 ) => {
   const _ = <T extends keyof CallbacksFor<typeof Actions>>(name: T) =>
     Actions(state, query)[name];
+
+  const deserialize = (json: string) => {
+    const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
+    const rehydratedNodes = Object.keys(reducedNodes).reduce(
+      (accum: Nodes, id) => {
+        const {
+          type: Comp,
+          props,
+          parent,
+          nodes,
+          _childCanvas,
+          isCanvas,
+          custom
+        } = deserializeNode(reducedNodes[id], state.options.resolver);
+
+        if (!Comp) return accum;
+
+        accum[id] = query.createNode(createElement(Comp, props), {
+          id,
+          data: {
+            ...(isCanvas && { isCanvas }),
+            parent,
+            ...(isCanvas && { nodes }),
+            ...(_childCanvas && { _childCanvas }),
+            custom
+          }
+        });
+        return accum;
+      },
+      {}
+    );
+
+    state.events = {
+      dragged: null,
+      selected: null,
+      hovered: null,
+      indicator: null
+    };
+    state.nodes = rehydratedNodes;
+  };
+
   return {
     setOptions(cb: (options: Partial<Options>) => void) {
       cb(state.options);
@@ -46,6 +89,12 @@ export const Actions = (
     },
     replaceNodes(nodes: Nodes) {
       state.nodes = nodes;
+    },
+    undo() {
+      const undoState = undoStack.pop();
+      if (undoState) {
+        deserialize(undoState);
+      }
     },
     reset() {
       state.nodes = {};
@@ -136,6 +185,8 @@ export const Actions = (
      * @param index
      */
     move(targetId: NodeId, newParentId: NodeId, index: number) {
+      undoStack.push(query.serialize());
+
       const targetNode = state.nodes[targetId],
         currentParentId = targetNode.data.parent!,
         newParent = state.nodes[newParentId],
@@ -163,6 +214,8 @@ export const Actions = (
      */
     delete(id: NodeId) {
       invariant(id !== ROOT_NODE, "Cannot delete Root node");
+      undoStack.push(query.serialize());
+
       const targetNode = state.nodes[id];
       if (query.node(targetNode.id).isCanvas()) {
         invariant(
@@ -190,6 +243,7 @@ export const Actions = (
      */
     setProp(id: NodeId, cb: (props: any) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID);
+      undoStack.push(query.serialize());
       cb(state.nodes[id].data.props);
     },
     /**
@@ -211,44 +265,6 @@ export const Actions = (
     ) {
       cb(state.nodes[id].data.custom);
     },
-    deserialize(json: string) {
-      const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
-      const rehydratedNodes = Object.keys(reducedNodes).reduce(
-        (accum: Nodes, id) => {
-          const {
-            type: Comp,
-            props,
-            parent,
-            nodes,
-            _childCanvas,
-            isCanvas,
-            custom
-          } = deserializeNode(reducedNodes[id], state.options.resolver);
-
-          if (!Comp) return accum;
-
-          accum[id] = query.createNode(createElement(Comp, props), {
-            id,
-            data: {
-              ...(isCanvas && { isCanvas }),
-              parent,
-              ...(isCanvas && { nodes }),
-              ...(_childCanvas && { _childCanvas }),
-              custom
-            }
-          });
-          return accum;
-        },
-        {}
-      );
-
-      state.events = {
-        dragged: null,
-        selected: null,
-        hovered: null,
-        indicator: null
-      };
-      state.nodes = rehydratedNodes;
-    }
+    deserialize
   };
 };
