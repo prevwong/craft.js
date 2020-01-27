@@ -1,9 +1,10 @@
 {
   "name": "example-landing",
   "version": "0.1.0-beta.1",
+  "description": "Complex example application with Layers panel",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=development && next dev -p 3001",
+    "start": "cross-env NODE_ENV=development next dev -p 3001",
     "build": "cross-env NODE_ENV=production next build",
     "export": "next export",
     "clean": "rimraf lib .next out dist"

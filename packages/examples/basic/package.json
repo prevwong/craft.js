@@ -1,7 +1,14 @@
 {
   "name": "example-basic",
   "version": "0.1.0-beta.1",
+  "description": "Basic Page Editor example",
   "private": true,
+  "scripts": {
+    "start": "cross-env NODE_ENV=development next dev -p 3002",
+    "build": "cross-env NODE_ENV=production next build",
+    "export": "next export",
+    "clean": "rimraf lib .next out dist"
+  },
   "dependencies": {
     "@craftjs/core": "^0.1.0-beta.1",
     "@material-ui/core": "latest",
@@ -15,12 +22,6 @@
     "react": "16.11.0",
     "react-contenteditable": "^3.3.3",
     "react-dom": "16.11.0"
-  },
-  "scripts": {
-    "start": "cross-env NODE_ENV=development && next dev -p 3002",
-    "build": "next build",
-    "export": "next export",
-    "clean": "rimraf lib .next out dist"
   },
   "devDependencies": {
     "@zeit/next-css": "^1.0.1",
