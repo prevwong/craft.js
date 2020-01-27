@@ -10,8 +10,8 @@
     "clean": "rimraf lib .next out dist"
   },
   "dependencies": {
-    "@craftjs/core": "^0.1.0-beta.1",
-    "@craftjs/layers": "^0.1.0-beta.1",
+    "@craftjs/core": "file:../../core",
+    "@craftjs/layers": "file:../../layers",
     "@material-ui/core": "^4.5.2",
     "@material-ui/icons": "^4.5.1",
     "@material-ui/styles": "^4.5.2",

@@ -1,5 +1,4 @@
 {
-  "npmClient": "yarn",
   "private": true,
   "author": "Prev Wong <prevwong@gmail.com>",
   "scripts": {
@@ -7,7 +6,7 @@
     "dev:docs" : "lerna run start --scope docs",
     "dev:all": "run-p dev dev:docs",
     "clean": "lerna run clean --stream",
-    "build": "lerna run build --stream --ignore docs --ignore example-*",
+    "build": "lerna run build --stream --ignore docs --ignore examples",
     "build:all" : "lerna run build --stream",
     "deploy": "./scripts/deploy.sh",
     "release": "run-s lint clean build test release:npm",
@@ -53,12 +52,10 @@
     "ts-jest": "^24.2.0",
     "typescript": "^3.5.1"
   },
-  "workspaces": {
-    "packages": [
-      "packages/*",
-      "packages/examples/*"
-    ]
-  },
+  "workspaces": [
+    "packages/*",
+    "packages/examples/*"
+  ],
   "dependencies": {
     "@babel/preset-typescript": "^7.7.7",
     "all-contributors-cli": "^6.11.2",
