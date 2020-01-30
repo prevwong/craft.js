@@ -50,16 +50,8 @@ export function useEditor<S>(collect?: any): useEditor<S> {
   const actions = useMemo(() => {
     return {
       ...EditorActions,
-      selectNode: (nodeId: NodeId) => {
+      selectNode: (nodeId: NodeId | null) => {
         setNodeEvent("selected", nodeId);
-      },
-      clearNodeSelection: () => {
-        setNodeEvent("selected", null);
-      },
-      hoverNode: (nodeId: NodeId) => {
-        setNodeEvent("hovered", nodeId);
-      },
-      clearHoveredNode: () => {
         setNodeEvent("hovered", null);
       }
     };

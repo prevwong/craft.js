@@ -43,10 +43,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["setCustom", "(nodeId: NodeId, update: (custom: Object) => void) => void", "Manipulate the custom values of the given Node"],
       ["setHidden", "(nodeId: NodeId, bool: boolean) => void", "When set to true, the User Component of the specified Node will be hidden, but not removed"],
       ["setOptions", "(options: Object) => void", "Update the editor's options. The options object passed is the same as the &lt;Editor /&gt; props."],
-      ["selectNode", "(nodeId: NodeId) => void", "Select the specified node"],
-      ["clearNodeSelection", "() => void", "Clears the selection of the currently selected node"],
-      ["hoverNode", "(nodeId: NodeId) => void", "Hover the specified node"],
-      ["clearHoveredNode", "() => void", "Clears the hovered state of the currently hovered node"]
+      ["selectNode", "(nodeId: NodeId | null) => void", "Select the specified node. You can clear the selection by passing `null`"],
     ]],
     ["query", "Query", [
       ["createNode", "(child: React.ReactElement) => Node", "Create a Node from a React element"],
