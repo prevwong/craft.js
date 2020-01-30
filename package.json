@@ -4,11 +4,11 @@
   "author": "Prev Wong <prevwong@gmail.com>",
   "scripts": {
     "dev": "./scripts/dev.sh",
-    "dev:docs": "lerna run start --scope docs",
+    "dev:docs" : "lerna run start --scope docs",
     "dev:all": "run-p dev dev:docs",
     "clean": "lerna run clean --stream",
     "build": "lerna run build --stream --ignore docs --ignore example-*",
-    "build:all": "lerna run build --stream",
+    "build:all" : "lerna run build --stream",
     "deploy": "./scripts/deploy.sh",
     "release": "run-s lint clean build test release:npm",
     "release:npm": "lerna publish",
