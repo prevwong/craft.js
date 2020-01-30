@@ -16,10 +16,7 @@ export type useEditor<S = null> = Overwrite<
       useInternalEditor<S>["actions"],
       "setNodeEvent" | "setDOM" | "replaceNodes" | "reset"
     > & {
-      selectNode: (nodeId: NodeId) => void;
-      clearNodeSelection: () => void;
-      hoverNode: (nodeId: NodeId) => void;
-      clearHoveredNode: () => void;
+      selectNode: (nodeId: NodeId | null) => void;
     };
     query: Delete<useInternalEditor<S>["query"], "deserialize">;
   }
