@@ -27,7 +27,6 @@ export const Actions = (
 ) => {
   const _ = <T extends keyof CallbacksFor<typeof Actions>>(name: T) =>
     Actions(state, query)[name];
-
   return {
     setOptions(cb: (options: Partial<Options>) => void) {
       cb(state.options);
