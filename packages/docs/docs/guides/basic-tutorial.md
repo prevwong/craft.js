@@ -32,7 +32,7 @@ With Craft.js you decide how your editor should look and function. So, let's bui
 
 To make our lives easier, we'll use some external packages for designing our user interfaces.
 ```bash
-yarn add material-ui react-contenteditable material-ui-color-picker
+yarn add @material-ui/core react-contenteditable material-ui-color-picker
 ```
 
 ### User Components
@@ -42,7 +42,6 @@ Let's first create the User Components - the components that our end users will 
 ```jsx
 // components/user/Text.js
 import React from "react";
-import { Typography } from "@material-ui/core";
 
 export const Text = ({text, fontSize}) => {
   return (
@@ -59,9 +58,9 @@ export const Text = ({text, fontSize}) => {
 import React  from "react";
 import {Button as MaterialButton} from "@material-ui/core";
 
-export const Button = ({size, variant, primary, children}) => {
+export const Button = ({size, variant, color, children}) => {
   return (
-    <MaterialButton size={size} variant={variant} color={primary}>
+    <MaterialButton size={size} variant={variant} color={color}>
       {children}
     </MaterialButton>
   )
@@ -73,6 +72,9 @@ We will also create a Container component which would allow our users to change 
 
 ```jsx
 // components/user/Container.js
+import React from "react";
+import { Paper } from "@material-ui/core";
+
 export const Container = ({background, padding = 0, children}) => {
   return (
     <Paper style={{margin: "5px 0", background, padding: `${padding}px`}}>
@@ -88,9 +90,9 @@ Now, let's create another user component that will be more advanced. It will be 
 ```jsx
 // components/user/Card.js
 import React  from "react";
-import Text from "./Text";
-import Button from "./Button";
-import Container from "./Container";
+import { Text } from "./Text";
+import { Button } from "./Button";
+import { Container } from "./Container";
 
 export const Card = ({background, padding = 20}) => {
   return (
@@ -149,6 +151,7 @@ For now, let's just put in some dummy text fields. We'll revisit this in the lat
 
 ```jsx
 // components/SettingsPanel.js
+import React from 'react';
 import { Box, Chip, Grid, Typography, Button as MaterialButton, FormControl, FormLabel, Slider } from "@material-ui/core";
 
 export const SettingsPanel = () => {  
