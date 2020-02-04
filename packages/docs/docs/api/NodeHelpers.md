@@ -15,7 +15,7 @@ import {useEditor} from "@craftjs/core";
 
 const TextComponent = () => {
   const { id } = useNode();
-  const { query: {is} } = useEditor();
+  const { query: {node} } = useEditor();
   const isRoot = node(id).Root(),
         isDraggable = node(id).Draggable();
   ...

@@ -8,6 +8,6 @@ Check out the live demo [here](https://craft.js.org/examples/basic/)
 ```bash
 > git clone https://github.com/prevwong/craft.js/
 > cd craft.js/packages/examples/basic
-> yarn install
-> yarn dev
+> npm install
+> npm dev
 ```
