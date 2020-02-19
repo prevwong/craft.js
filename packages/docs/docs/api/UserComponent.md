@@ -22,7 +22,7 @@ A wrapper of `React.ComponentType<Props>`. Accepts a static `craft` property for
       ["rules?", [
           ["canDrag", "(currentNode: Node, helpers: NodeHelpers) => boolean", "Specifies if a component can be dragged. Applicable only to components whose corresponding `Node` is a direct child of a `Canvas`."],
           ["canMoveIn", "(incomingNode: Node, currentNode: Node, helpers: NodeHelpers) => boolean", "Decides if an incoming Node can be dropped into the current component. Applicable only to components whose corresponding `Node` is a `Canvas`."],
-          ["canMoveout", "(outgoingNode: Node, currentNode: Node, helpers: NodeHelpers) => boolean", "Decides if a child Node can be dragged out of the current component. Applicable only to components whose corresponding `Node` is a `Canvas`."],
+          ["canMoveOut", "(outgoingNode: Node, currentNode: Node, helpers: NodeHelpers) => boolean", "Decides if a child Node can be dragged out of the current component. Applicable only to components whose corresponding `Node` is a `Canvas`."],
       ]],
       
     ]]
