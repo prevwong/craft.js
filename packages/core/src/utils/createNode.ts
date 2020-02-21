@@ -33,6 +33,7 @@ export function createNode(
     node.rules = {
       canDrag: () => true,
       canMoveIn: () => true,
+      canDrop: () => true,
       canMoveOut: () => true,
       ...((actualType.craft && actualType.craft.rules) || {})
     };
@@ -56,7 +57,7 @@ export function createNode(
 
       if (actualType.craft.rules) {
         Object.keys(actualType.craft.rules).forEach(key => {
-          if (["canDrag", "canMoveIn", "canMoveOut"].includes(key)) {
+          if (["canDrag", "canDrop", "canMoveIn", "canMoveOut"].includes(key)) {
             node.rules[key] = actualType.craft.rules[key];
           }
         });

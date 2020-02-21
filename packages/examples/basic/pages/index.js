@@ -3,6 +3,8 @@ import "../styles/main.css";
 import { Typography, Paper, Grid, makeStyles } from "@material-ui/core";
 import { Toolbox } from "../components/Toolbox";
 import { Container } from "../components/user/Container";
+import { ColumnLayout } from "../components/user/ColumnLayout";
+import { Column } from "../components/user/Column";
 import { Button } from "../components/user/Button";
 import { Card, CardBottom, CardTop } from "../components/user/Card";
 import { Text } from "../components/user/Text";
@@ -24,7 +26,18 @@ export default function App() {
       <Typography style={{ margin: "20px 0" }} variant="h5" align="center">
         Basic Page Editor
       </Typography>
-      <Editor resolver={{ Card, Button, Text, Container, CardTop, CardBottom }}>
+      <Editor
+        resolver={{
+          Card,
+          Button,
+          Text,
+          Container,
+          CardTop,
+          CardBottom,
+          ColumnLayout,
+          Column
+        }}
+      >
         <Topbar />
         <Grid container spacing={5} style={{ paddingTop: "10px" }}>
           <Grid item xs>

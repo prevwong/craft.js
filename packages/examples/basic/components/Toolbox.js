@@ -10,6 +10,8 @@ import { Container } from "./user/Container";
 import { Card } from "./user/Card";
 import { Button } from "./user/Button";
 import { Text } from "./user/Text";
+import { ColumnLayout } from "./user/ColumnLayout";
+import { Column } from "./user/Column";
 
 export const Toolbox = () => {
   const { connectors } = useEditor();
@@ -52,6 +54,26 @@ export const Toolbox = () => {
             variant="contained"
           >
             Container
+          </MaterialButton>
+        </Grid>
+        <Grid container direction="column" item>
+          <MaterialButton
+            ref={ref =>
+              connectors.create(ref, <Canvas is={ColumnLayout} padding={20} />)
+            }
+            variant="contained"
+          >
+            ColumnLayout
+          </MaterialButton>
+        </Grid>
+        <Grid container direction="column" item>
+          <MaterialButton
+            ref={ref =>
+              connectors.create(ref, <Canvas is={Column} padding={20} />)
+            }
+            variant="contained"
+          >
+            Column
           </MaterialButton>
         </Grid>
         <Grid container direction="column" item>

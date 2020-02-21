@@ -10,6 +10,8 @@ export const ERROR_ROOT_CANVAS_NO_ID =
   'A <Canvas /> that is a child of a non Canvas node must specify an `id` prop, eg: <Canvas id="MyCanvas">...</Canvas> ';
 export const ERROR_MISSING_PLACEHOLDER_PLACEMENT =
   "Placeholder required placement info (parent, index, or where) is missing";
+export const ERROR_MOVE_CANNOT_DROP =
+  "Node cannot be dropped into target parent";
 export const ERROR_MOVE_INCOMING_PARENT = "Target parent rejects incoming node";
 export const ERROR_MOVE_OUTGOING_PARENT =
   "Current parent rejects outgoing node";

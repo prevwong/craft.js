@@ -98,6 +98,9 @@ Container.craft = {
     // This is only applied when the Container is being managed by a Node that is a child of a Canvas Node
     canDrag: (node) => node.data.props.children.length >= 2,
 
+    // If uncommented Containers could only be dropped into other Containers
+    // canDrop: (targetNode, self) => node.data.type === Container,
+
     // Only allow the incoming Node to be dropped in the Container if its a "h1" or a "Container" user element
     // This is only applied when the Container is being managed by a Canvas Node
     canMoveIn: (incomingChildNode, node) => ["h1", Container].includes(incomingChildNode.data.type),
@@ -105,6 +108,7 @@ Container.craft = {
     // Don't allow child Nodes that are "h1" to be dragged out of the Container
     // This is only applied when the Container is being managed by a Canvas Node
     canMoveOut: (incomingChildNode, node) => incomingChildNode.data.type != "h1"
+
   }
 }
 

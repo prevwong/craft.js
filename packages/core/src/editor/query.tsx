@@ -15,6 +15,7 @@ import {
   ROOT_NODE,
   ERRROR_NOT_IN_RESOLVER,
   ERROR_MOVE_TO_NONCANVAS_PARENT,
+  ERROR_MOVE_CANNOT_DROP,
   ERROR_MOVE_OUTGOING_PARENT,
   ERROR_MOVE_INCOMING_PARENT,
   ERROR_MOVE_TO_DESCENDANT,
@@ -233,6 +234,11 @@ export function QueryMethods(Editor: EditorState) {
                 _().node
               ),
               ERROR_MOVE_INCOMING_PARENT
+            );
+
+            invariant(
+              targetNode.rules.canDrop(newParentNode, targetNode, _().node),
+              ERROR_MOVE_CANNOT_DROP
             );
 
             if (currentParentNode) {

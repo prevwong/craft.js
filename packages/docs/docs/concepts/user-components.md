@@ -30,6 +30,7 @@ const Hero = () => {...}
 Hero.craft = {
   defaultProps: {},
   rules: {
+    canDrop: () => true,
     canDrag: () => true,
     canMoveIn: () => true,
     canMoveOut: () => true
