@@ -78,7 +78,7 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<
   : never;
 
 export function useMethods<S, R extends MethodRecordBase<S>>(
-  methodsOrOptions: Methods<S, R>,
+  methodsOrOptions: MethodsOrOptions<S, R>,
   initialState: any
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>>;
 
@@ -87,7 +87,7 @@ export function useMethods<
   R extends MethodRecordBase<S>,
   Q extends QueryMethods
 >(
-  methodsOrOptions: Methods<S, R, QueryCallbacksFor<Q>>, // methods to manipulate the state
+  methodsOrOptions: MethodsOrOptions<S, R, QueryCallbacksFor<Q>>, // methods to manipulate the state
   initialState: any,
   queryMethods: Q
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q>;

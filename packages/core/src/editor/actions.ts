@@ -20,8 +20,11 @@ import { updateEventsNode } from "../utils/updateEventsNode";
 import invariant from "tiny-invariant";
 import { deserializeNode } from "../utils/deserializeNode";
 import { createElement } from "react";
+import produce, { Patch, applyPatches } from "immer";
 
-const undoStack: string[] = [];
+const redoStack: Patch[][] = [];
+const undoStack: Patch[][] = [];
+let isRecordingChanges: boolean = true;
 
 export const Actions = (
   state: EditorState,
@@ -30,47 +33,93 @@ export const Actions = (
   const _ = <T extends keyof CallbacksFor<typeof Actions>>(name: T) =>
     Actions(state, query)[name];
 
+  const withPatches = (
+    state: EditorState,
+    fn: (draftState: EditorState) => void
+  ) => {
+    produce(state, fn, (patches: Patch[], inversePatches: Patch[]) => {
+      applyPatches(state, patches);
+      if (isRecordingChanges) {
+        redoStack.push(patches);
+        undoStack.push(inversePatches);
+      }
+      console.log({ undoStack });
+    });
+  };
+
+  const undo = () => {
+    console.log(undoStack);
+    const patch = undoStack.pop();
+    if (patch) {
+      applyPatches(state, patch);
+    }
+  };
+
+  const redo = () => {
+    const patch = redoStack.pop();
+    if (patch) {
+      applyPatches(state, patch);
+    }
+  };
+
+  const withoutUndo = (fn: Function) => {
+    isRecordingChanges = false;
+    fn();
+    isRecordingChanges = true;
+  };
+
+  const canUndo = () => undoStack.length > 0;
+  const canRedo = () => redoStack.length > 0;
+
   const deserialize = (json: string) => {
-    const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
-    const rehydratedNodes = Object.keys(reducedNodes).reduce(
-      (accum: Nodes, id) => {
-        const {
-          type: Comp,
-          props,
-          parent,
-          nodes,
-          _childCanvas,
-          isCanvas,
-          custom
-        } = deserializeNode(reducedNodes[id], state.options.resolver);
-
-        if (!Comp) return accum;
-
-        accum[id] = query.createNode(createElement(Comp, props), {
-          id,
-          data: {
-            ...(isCanvas && { isCanvas }),
+    withoutUndo(() => {
+      const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
+      const rehydratedNodes = Object.keys(reducedNodes).reduce(
+        (accum: Nodes, id) => {
+          const {
+            type: Comp,
+            props,
             parent,
-            ...(isCanvas && { nodes }),
-            ...(_childCanvas && { _childCanvas }),
+            nodes,
+            _childCanvas,
+            isCanvas,
             custom
-          }
-        });
-        return accum;
-      },
-      {}
-    );
+          } = deserializeNode(reducedNodes[id], state.options.resolver);
 
-    state.events = {
-      dragged: null,
-      selected: null,
-      hovered: null,
-      indicator: null
-    };
-    state.nodes = rehydratedNodes;
+          if (!Comp) return accum;
+
+          accum[id] = query.createNode(createElement(Comp, props), {
+            id,
+            data: {
+              ...(isCanvas && { isCanvas }),
+              parent,
+              ...(isCanvas && { nodes }),
+              ...(_childCanvas && { _childCanvas }),
+              custom
+            }
+          });
+          return accum;
+        },
+        {}
+      );
+
+      state.events = {
+        dragged: null,
+        selected: null,
+        hovered: null,
+        indicator: null
+      };
+      state.nodes = rehydratedNodes;
+    });
   };
 
   return {
+    canRedo,
+    canUndo,
+    redo,
+    undo,
+    withoutUndo,
+
     setOptions(cb: (options: Partial<Options>) => void) {
       cb(state.options);
     },
@@ -88,13 +137,9 @@ export const Actions = (
       }
     },
     replaceNodes(nodes: Nodes) {
-      state.nodes = nodes;
-    },
-    undo() {
-      const undoState = undoStack.pop();
-      if (undoState) {
-        deserialize(undoState);
-      }
+      withPatches(state, draft => {
+        draft.nodes = nodes;
+      });
     },
     reset() {
       state.nodes = {};
@@ -130,52 +175,57 @@ export const Actions = (
       parentId?: NodeId,
       onError?: (err, node) => void
     ) {
-      const isCanvas = (node: Node | NodeId) =>
-        node &&
-        (typeof node === "string"
-          ? node.startsWith("canvas-")
-          : node.data.isCanvas);
+      console.log("ADD", nodes);
 
-      if (!Array.isArray(nodes)) nodes = [nodes];
-      if (parentId && !state.nodes[parentId].data.nodes && isCanvas(parentId))
-        state.nodes[parentId].data.nodes = [];
+      withPatches(state, draft => {
+        const isCanvas = (node: Node | NodeId) =>
+          node &&
+          (typeof node === "string"
+            ? node.startsWith("canvas-")
+            : node.data.isCanvas);
 
-      (nodes as Node[]).forEach(node => {
-        const parent = parentId ? parentId : node.data.parent;
-        invariant(parent !== null, ERROR_NOPARENT);
+        if (!Array.isArray(nodes)) nodes = [nodes];
+        if (parentId && !state.nodes[parentId].data.nodes && isCanvas(parentId))
+          state.nodes[parentId].data.nodes = [];
 
-        const parentNode = state.nodes[parent!];
+        (nodes as Node[]).forEach(node => {
+          const parent = parentId ? parentId : node.data.parent;
+          invariant(parent !== null, ERROR_NOPARENT);
 
-        if (parentNode && isCanvas(node) && !isCanvas(parentNode)) {
-          invariant(node.data.props.id, ERROR_ROOT_CANVAS_NO_ID);
-          if (!parentNode.data._childCanvas) parentNode.data._childCanvas = {};
-          node.data.parent = parentNode.id;
-          parentNode.data._childCanvas[node.data.props.id] = node.id;
-          delete node.data.props.id;
-        } else {
-          let error;
-          if (parentId) {
-            query.node(parentId).isDroppable(node, err => {
-              error = err;
-            });
-            if (error) return onError && onError(error, node);
+          const parentNode = draft.nodes[parent!];
 
-            if (parentNode.data.props.children)
-              delete parentNode.data.props["children"];
+          if (parentNode && isCanvas(node) && !isCanvas(parentNode)) {
+            invariant(node.data.props.id, ERROR_ROOT_CANVAS_NO_ID);
+            if (!parentNode.data._childCanvas)
+              parentNode.data._childCanvas = {};
+            node.data.parent = parentNode.id;
+            parentNode.data._childCanvas[node.data.props.id] = node.id;
+            delete node.data.props.id;
+          } else {
+            let error;
+            if (parentId) {
+              query.node(parentId).isDroppable(node, err => {
+                error = err;
+              });
+              if (error) return onError && onError(error, node);
 
-            if (!parentNode.data.nodes) parentNode.data.nodes = [];
-            const currentNodes = parentNode.data.nodes;
-            currentNodes.splice(
-              node.data.index !== undefined
-                ? node.data.index
-                : currentNodes.length,
-              0,
-              node.id
-            );
-            node.data.parent = parent;
+              if (parentNode.data.props.children)
+                delete parentNode.data.props["children"];
+
+              if (!parentNode.data.nodes) parentNode.data.nodes = [];
+              const currentNodes = parentNode.data.nodes;
+              currentNodes.splice(
+                node.data.index !== undefined
+                  ? node.data.index
+                  : currentNodes.length,
+                0,
+                node.id
+              );
+              node.data.parent = parent;
+            }
           }
-        }
-        state.nodes[node.id] = node;
+          draft.nodes[node.id] = node;
+        });
       });
     },
     /**
@@ -185,28 +235,28 @@ export const Actions = (
      * @param index
      */
     move(targetId: NodeId, newParentId: NodeId, index: number) {
-      undoStack.push(query.serialize());
+      withPatches(state, (draft: EditorState) => {
+        const targetNode = draft.nodes[targetId],
+          currentParentId = targetNode.data.parent!,
+          newParent = draft.nodes[newParentId],
+          newParentNodes = newParent.data.nodes;
 
-      const targetNode = state.nodes[targetId],
-        currentParentId = targetNode.data.parent!,
-        newParent = state.nodes[newParentId],
-        newParentNodes = newParent.data.nodes;
+        query.node(newParentId).isDroppable(targetNode, err => {
+          throw new Error(err);
+        });
 
-      query.node(newParentId).isDroppable(targetNode, err => {
-        throw new Error(err);
+        const currentParent = draft.nodes[currentParentId],
+          currentParentNodes = currentParent.data.nodes!;
+
+        currentParentNodes[currentParentNodes.indexOf(targetId)] = "marked";
+
+        if (newParentNodes) newParentNodes.splice(index, 0, targetId);
+        else newParent.data.nodes = [targetId];
+
+        draft.nodes[targetId].data.parent = newParentId;
+        draft.nodes[targetId].data.index = index;
+        currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
       });
-
-      const currentParent = state.nodes[currentParentId],
-        currentParentNodes = currentParent.data.nodes!;
-
-      currentParentNodes[currentParentNodes.indexOf(targetId)] = "marked";
-
-      if (newParentNodes) newParentNodes.splice(index, 0, targetId);
-      else newParent.data.nodes = [targetId];
-
-      state.nodes[targetId].data.parent = newParentId;
-      state.nodes[targetId].data.index = index;
-      currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
     },
     /**
      * Delete a Node
@@ -214,27 +264,28 @@ export const Actions = (
      */
     delete(id: NodeId) {
       invariant(id !== ROOT_NODE, "Cannot delete Root node");
-      undoStack.push(query.serialize());
 
-      const targetNode = state.nodes[id];
-      if (query.node(targetNode.id).isCanvas()) {
-        invariant(
-          !query.node(targetNode.id).isTopLevelCanvas(),
-          "Cannot delete a Canvas that is not a direct child of another Canvas"
-        );
-        targetNode.data.nodes!.forEach(childId => {
-          _("delete")(childId);
-        });
-      }
+      withPatches(state, (draft: EditorState) => {
+        const targetNode = draft.nodes[id];
+        if (query.node(targetNode.id).isCanvas()) {
+          invariant(
+            !query.node(targetNode.id).isTopLevelCanvas(),
+            "Cannot delete a Canvas that is not a direct child of another Canvas"
+          );
+          targetNode.data.nodes!.forEach(childId => {
+            _("delete")(childId);
+          });
+        }
 
-      const parentNode = state.nodes[targetNode.data.parent],
-        parentChildNodesId = parentNode.data.nodes!;
+        const parentNode = draft.nodes[targetNode.data.parent],
+          parentChildNodesId = parentNode.data.nodes!;
 
-      if (parentNode && parentChildNodesId.indexOf(id) > -1) {
-        parentChildNodesId.splice(parentChildNodesId.indexOf(id), 1);
-      }
-      updateEventsNode(state, id, true);
-      delete state.nodes[id];
+        if (parentNode && parentChildNodesId.indexOf(id) > -1) {
+          parentChildNodesId.splice(parentChildNodesId.indexOf(id), 1);
+        }
+        updateEventsNode(draft, id, true);
+        delete draft.nodes[id];
+      });
     },
     /**
      * Update the props of a Node
@@ -243,8 +294,10 @@ export const Actions = (
      */
     setProp(id: NodeId, cb: (props: any) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID);
-      undoStack.push(query.serialize());
-      cb(state.nodes[id].data.props);
+
+      withPatches(state, (draft: EditorState) => {
+        cb(draft.nodes[id].data.props);
+      });
     },
     /**
      * Hide a Node
@@ -252,7 +305,9 @@ export const Actions = (
      * @param bool
      */
     setHidden(id: NodeId, bool: boolean) {
-      state.nodes[id].data.hidden = bool;
+      withPatches(state, draft => {
+        draft.nodes[id].data.hidden = bool;
+      });
     },
     /**
      * Set custom values to a Node
