@@ -4,7 +4,7 @@ import {
 } from "../editor/useInternalEditor";
 import { ConnectorElementWrapper } from "@craftjs/utils";
 import { useMemo } from "react";
-import { NodeId } from "interfaces";
+import { NodeId } from "../interfaces";
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 type Delete<T, U> = Pick<T, Exclude<keyof T, U>>;
