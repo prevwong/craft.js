@@ -25,7 +25,7 @@ export type Node = {
 };
 
 export type NodeHelpers = QueryCallbacksFor<typeof QueryMethods>["node"];
-export type NodeEvents = "selected" | "dragged" | "hovered";
+export type NodeEvents = "selected" | "dragged" | "hovered" | "draggedOver";
 export type InternalNode = Pick<Node, "id"> & NodeData;
 export type NodeRefEvent = Record<NodeEvents, boolean>;
 export type NodeRules = {

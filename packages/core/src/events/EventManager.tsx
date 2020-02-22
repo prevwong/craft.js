@@ -100,6 +100,12 @@ export const EventManager: React.FC = ({ children }) => {
             y: e.clientY
           });
 
+          if (query.node(id).isCanvas()) {
+            setNodeEvent("draggedOver", id);
+          } else {
+            setNodeEvent("draggedOver", query.node(id).get().data.parent);
+          }
+
           if (getPlaceholder) {
             // TODO: Refactor creation of new Nodes via connectors.new()
             // Currently, no Indicator will be displayed if a new Node is dragged to a parent Container that rejects it
@@ -118,6 +124,14 @@ export const EventManager: React.FC = ({ children }) => {
               setIndicator(getPlaceholder);
             } catch (err) {}
           }
+        }
+      ],
+      dragNodeLeave: [
+        "dragleave",
+        (event: MouseEvent, id: NodeId) => {
+          event.preventDefault();
+          event.stopPropagation();
+          setNodeEvent("draggedOver", null);
         }
       ],
       dragNodeEnd: [
@@ -148,6 +162,7 @@ export const EventManager: React.FC = ({ children }) => {
           draggedNode.current = null;
           setIndicator(null);
           setNodeEvent("dragged", null);
+          setNodeEvent("draggedOver", null);
         }
       ]
     };

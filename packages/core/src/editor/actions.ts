@@ -53,7 +53,8 @@ export const Actions = (
         dragged: null,
         selected: null,
         hovered: null,
-        indicator: null
+        indicator: null,
+        draggedOver: null
       };
     },
     setDOM(id: NodeId, dom: HTMLElement) {
@@ -246,7 +247,8 @@ export const Actions = (
         dragged: null,
         selected: null,
         hovered: null,
-        indicator: null
+        indicator: null,
+        draggedOver: null
       };
       state.nodes = rehydratedNodes;
     }
