@@ -7,3 +7,4 @@ dist
 lib
 *-*.log
 .now
+.vscode
