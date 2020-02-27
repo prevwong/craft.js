@@ -3,8 +3,8 @@
   "version": "0.1.0-beta.1",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=development && next dev -p 3001",
-    "build": "cross-env NODE_ENV=production next build",
+    "start": "next dev -p 3001",
+    "build": "next build",
     "export": "next export",
     "clean": "rimraf lib .next out dist"
   },
