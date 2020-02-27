@@ -7,11 +7,11 @@
 
 import React from "react";
 import {Redirect} from '@docusaurus/router';
-
+import config from "../../../../config";
 
 function Home() {
-  if (typeof window !== 'undefined') {
-    window.location.href="https://prevwong.github.io/craft.js";
+  if (typeof window !== 'undefined' && process.env.NODE_ENV != "development") {
+    window.location.href=config.url["LANDING"];
     return <p style={{padding: "10px", textAlign:"center"}}>Redirecting...</p>
   } else {
     return  <Redirect to="docs/overview" />;

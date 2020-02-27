@@ -6,3 +6,5 @@ out
 dist
 lib
 *-*.log
+.now
+.vscode
