@@ -222,6 +222,7 @@ export const Actions = (
             nodes,
             _childCanvas,
             isCanvas,
+            hidden,
             custom
           } = deserializeNode(reducedNodes[id], state.options.resolver);
 
@@ -231,6 +232,7 @@ export const Actions = (
             id,
             data: {
               ...(isCanvas && { isCanvas }),
+              ...(hidden && { hidden }),
               parent,
               ...(isCanvas && { nodes }),
               ...(_childCanvas && { _childCanvas }),
