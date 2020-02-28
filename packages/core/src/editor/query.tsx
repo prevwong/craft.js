@@ -147,7 +147,7 @@ export function QueryMethods(Editor: EditorState) {
           .isDraggable(err => (output.error = err));
       }
 
-      // CHeck if source Node is droppable in target
+      // Check if source Node is droppable in target
       _()
         .node(targetParent.id)
         .isDroppable(source, err => (output.error = err));
