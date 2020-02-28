@@ -1,10 +1,14 @@
 import React, { useRef, useMemo } from "react";
 import { Node, NodeId, EditorEvents } from "../interfaces";
 import movePlaceholder from "./movePlaceholder";
-import { getDOMInfo, useConnectorHooks, RenderIndicator } from "@craftjs/utils";
+import {
+  getDOMInfo,
+  useConnectorHooks,
+  RenderIndicator,
+  useHandlerGuard
+} from "@craftjs/utils";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import { debounce } from "debounce";
-import { useHandlerGuard } from "@craftjs/utils";
 import { EventContext } from "./EventContext";
 
 // TODO: improve drag preview image
@@ -91,32 +95,19 @@ export const EventManager: React.FC = ({ children }) => {
         (e: MouseEvent, id: NodeId) => {
           e.preventDefault();
           e.stopPropagation();
-          const { current: start } = draggedNode;
-          if (!start) return;
-          const dragId = typeof start === "object" ? start.id : start;
+          if (!draggedNode.current) return;
 
-          const getPlaceholder = query.getDropPlaceholder(dragId, id, {
-            x: e.clientX,
-            y: e.clientY
-          });
+          const getPlaceholder = query.getDropPlaceholder(
+            draggedNode.current,
+            id,
+            {
+              x: e.clientX,
+              y: e.clientY
+            }
+          );
 
           if (getPlaceholder) {
-            // TODO: Refactor creation of new Nodes via connectors.new()
-            // Currently, no Indicator will be displayed if a new Node is dragged to a parent Container that rejects it
-            try {
-              if (typeof start === "object" && start.id) {
-                start.data.index =
-                  getPlaceholder.placement.index +
-                  (getPlaceholder.placement.where === "after" ? 1 : 0);
-                let error;
-                add(start, getPlaceholder.placement.parent.id, err => {
-                  error = err;
-                });
-                if (error) throw new Error(error);
-                draggedNode.current = start.id;
-              }
-              setIndicator(getPlaceholder);
-            } catch (err) {}
+            setIndicator(getPlaceholder);
           }
         }
       ],
@@ -131,11 +122,20 @@ export const EventManager: React.FC = ({ children }) => {
             const { parent, index, where } = placement;
             const { id: parentId } = parent;
 
-            move(
-              draggedNode.current as NodeId,
-              parentId,
-              index + (where === "after" ? 1 : 0)
-            );
+            if (
+              typeof draggedNode.current === "object" &&
+              draggedNode.current.id
+            ) {
+              draggedNode.current.data.index =
+                index + (where === "after" ? 1 : 0);
+              add(draggedNode.current, parentId);
+            } else {
+              move(
+                draggedNode.current as NodeId,
+                parentId,
+                index + (where === "after" ? 1 : 0)
+              );
+            }
           }
 
           if (draggedNodeShadow.current) {

@@ -30,14 +30,14 @@ import findPosition from "../events/findPosition";
 import { getDeepNodes } from "../utils/getDeepNodes";
 import { transformJSXToNode } from "../utils/transformJSX";
 
-const getNodeFromIdOrNode = (node: NodeId | Node, cb: (id: NodeId) => Node) =>
-  typeof node === "string" ? cb(node) : node;
-
 export function QueryMethods(Editor: EditorState) {
   const options = Editor && Editor.options;
 
   const _: () => QueryCallbacksFor<typeof QueryMethods> = () =>
     QueryMethods(Editor);
+
+  const getNodeFromIdOrNode = (node: NodeId | Node) =>
+    typeof node === "string" ? Editor.nodes[node] : node;
 
   return {
     /**
@@ -85,14 +85,15 @@ export function QueryMethods(Editor: EditorState) {
      * Determine the best possible location to drop the source Node relative to the target Node
      */
     getDropPlaceholder: (
-      source: NodeId,
+      source: NodeId | Node,
       target: NodeId,
       pos: { x: number; y: number },
       nodesToDOM: (node: Node) => HTMLElement = node =>
         Editor.nodes[node.id].dom
     ) => {
       if (source === target) return;
-      const sourceNode = Editor.nodes[source],
+      const sourceNodeFromId =
+          typeof source == "string" && Editor.nodes[source],
         targetNode = Editor.nodes[target],
         isTargetCanvas = _()
           .node(targetNode.id)
@@ -139,14 +140,17 @@ export function QueryMethods(Editor: EditorState) {
         error: false
       };
 
-      if (sourceNode) {
+      // If source Node is already in the editor, check if it's draggable
+      if (sourceNodeFromId) {
         _()
-          .node(source)
+          .node(sourceNodeFromId.id)
           .isDraggable(err => (output.error = err));
-        _()
-          .node(targetParent.id)
-          .isDroppable(source, err => (output.error = err));
       }
+
+      // CHeck if source Node is droppable in target
+      _()
+        .node(targetParent.id)
+        .isDroppable(source, err => (output.error = err));
 
       return output;
     },
@@ -207,10 +211,7 @@ export function QueryMethods(Editor: EditorState) {
           onError?: (err: string) => void
         ) => {
           try {
-            const targetNode = getNodeFromIdOrNode(
-              target,
-              id => Editor.nodes[id]
-            );
+            const targetNode = getNodeFromIdOrNode(target);
 
             const currentParentNode =
                 targetNode.data.parent && Editor.nodes[targetNode.data.parent],
