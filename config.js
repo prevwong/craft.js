@@ -15,5 +15,5 @@ module.exports = {
       DOCUMENTATION: "http://localhost:3000/r/docs/overview/",
       BASIC_EXAMPLE: "http://localhost:3002/"
     }
-  }[process.env.ENV || 'staging']
+  }[process.env.ENV || 'development']
 }
