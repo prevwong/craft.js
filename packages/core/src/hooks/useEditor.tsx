@@ -52,7 +52,7 @@ export function useEditor<S>(collect?: any): useEditor<S> {
         setNodeEvent("hovered", null);
       }
     };
-  }, [EditorActions]);
+  }, [EditorActions, setNodeEvent]);
 
   return {
     connectors: handlers,
