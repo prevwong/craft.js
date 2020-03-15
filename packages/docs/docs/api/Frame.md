@@ -56,7 +56,7 @@ const App = () => {
 
 ### Loading from serialised Nodes
 ```tsx {10}
-import {Editor, Frame, Canvas} from "craft";
+import {Editor, Frame, Canvas} from "@craftjs/core";
 
 const App = () => {
   return (
