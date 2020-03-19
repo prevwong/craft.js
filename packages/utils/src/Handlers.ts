@@ -27,7 +27,7 @@ class WatchHandler {
       });
   }
 
-  private remove() {
+  remove() {
     if (this.cleanDOM) {
       this.cleanDOM();
       this.cleanDOM = null;
@@ -47,7 +47,8 @@ class WatchHandler {
     this.unsubscribe = store.subscribe(() => {
       const { enabled } = store.query.getOptions();
       if (!document.body.contains(el)) {
-        return this.cleanup();
+        this.remove();
+        return this.unsubscribe();
       }
 
       if (this.enabled != enabled) {
@@ -59,11 +60,6 @@ class WatchHandler {
         }
       }
     });
-  }
-
-  cleanup() {
-    this.remove();
-    this.unsubscribe();
   }
 }
 
@@ -105,9 +101,8 @@ export abstract class Handlers {
 
         const domHandler = Handlers.wm.get(el);
         if (domHandler && domHandler[key]) {
-          if (domHandler[key].opts == opts && domHandler[key].el == el) return;
-
-          domHandler[key].cleanup();
+          if (domHandler[key].opts == opts) return;
+          domHandler[key].remove();
         }
 
         Handlers.wm.set(el, {
