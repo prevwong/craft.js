@@ -183,12 +183,14 @@ class Watcher {
   subscribers = [];
   subscribe(subscriber: any) {
     this.subscribers.push(subscriber);
-    return this.unsubscribe.bind(this);
+    return () => this.unsubscribe.call(this, subscriber);
   }
   unsubscribe(subscriber) {
     if (this.subscribers.length) {
       const index = this.subscribers.indexOf(subscriber);
-      if (index > -1) return this.subscribers.splice(index, 1);
+      if (index > -1) {
+        return this.subscribers.splice(index, 1);
+      }
     }
   }
   notify() {
