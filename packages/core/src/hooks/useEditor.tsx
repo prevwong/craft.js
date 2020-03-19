@@ -38,9 +38,10 @@ export function useEditor<S>(collect: EditorCollector<S>): useEditor<S>;
 
 export function useEditor<S>(collect?: any): useEditor<S> {
   const {
-    handlers,
+    connectors,
     actions: { setDOM, setNodeEvent, replaceNodes, reset, ...EditorActions },
     query: { deserialize, ...query },
+    store,
     ...collected
   } = useInternalEditor(collect);
 
@@ -55,7 +56,7 @@ export function useEditor<S>(collect?: any): useEditor<S> {
   }, [EditorActions, setNodeEvent]);
 
   return {
-    connectors: handlers,
+    connectors: connectors,
     actions,
     query,
     ...(collected as any)

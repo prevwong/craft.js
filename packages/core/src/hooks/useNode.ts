@@ -1,7 +1,14 @@
 import { Node } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
 import { useInternalEditor } from "../editor/useInternalEditor";
-import { useConnectorHooks, ConnectorElementWrapper } from "@craftjs/utils";
+import {
+  useConnectorHooks,
+  useConnectorHooks2,
+  ConnectorElementWrapper,
+  useEffectOnce
+} from "@craftjs/utils";
+import { NodeHandlers } from "./NodeHandlers";
+import { useMemo } from "react";
 
 export type useNode<S = null> = Omit<useInternalNode<S>, "actions"> &
   Pick<useInternalNode<S>["actions"], "setProp"> & {
@@ -23,50 +30,16 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
   const {
     id,
     related,
-    actions: { setDOM, setProp },
+    actions: { setProp },
     inNodeContext,
+    connectors,
     ...collected
   } = useInternalNode(collect);
-  const {
-    dom,
-    isRoot,
-    handlers: editorConnectors,
-    enabled
-  } = useInternalEditor((state, query) => ({
-    enabled: state.options.enabled,
-    isRoot: state.nodes[id] && query.node(id).isRoot(),
-    dom: state.nodes[id] && state.nodes[id].dom
-  }));
-
-  const connectors = useConnectorHooks(
-    {
-      drag: [
-        node => {
-          if (inNodeContext && !isRoot) {
-            node.setAttribute("draggable", "true");
-            editorConnectors.drag(node, id);
-          }
-        },
-        node => {
-          node.removeAttribute("draggable");
-        }
-      ],
-      connect: node => {
-        if (inNodeContext) {
-          editorConnectors.select(node, id);
-          editorConnectors.hover(node, id);
-          editorConnectors.drop(node, id);
-          setDOM(node);
-        }
-      }
-    },
-    enabled && !!dom // Force connector reload when DOM change/removed
-  );
 
   return {
+    ...(collected as any),
     id,
     related,
-    ...(collected as any),
     setProp,
     inNodeContext,
     connectors

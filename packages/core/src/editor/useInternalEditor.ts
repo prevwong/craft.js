@@ -15,7 +15,8 @@ export type useInternalEditor<C = null> = (C extends null
   ? useCollector<typeof Actions, typeof QueryMethods>
   : useCollector<typeof Actions, typeof QueryMethods, C>) & {
   inContext: boolean;
-  handlers: EventContext;
+  store: EditorContext;
+  connectors: EventContext;
 };
 
 export function useInternalEditor(): useInternalEditor;
@@ -23,13 +24,14 @@ export function useInternalEditor<C>(
   collector: EditorCollector<C>
 ): useInternalEditor<C>;
 export function useInternalEditor<C>(collector?: any): useInternalEditor<C> {
-  const handlers = useContext(EventContext);
-  const Editor = useContext<EditorContext>(EditorContext);
-  const collected = useCollector(Editor, collector);
+  const connectors = useContext(EventContext);
+  const store = useContext<EditorContext>(EditorContext);
+  const collected = useCollector(store, collector);
 
   return {
     ...(collected as any),
-    handlers: handlers || {},
-    inContext: !!Editor
+    connectors: connectors || {},
+    inContext: !!store,
+    store
   };
 }
