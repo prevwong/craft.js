@@ -24,7 +24,7 @@ Creates the context that stores the editor state.
 
 ### The default screen
 ```tsx {9,10,16,17}
-import {Editor, Frame, Canvas} from "craft";
+import {Editor, Frame, Canvas} from "@craftjs/core";
 
 const App = () => {
   return (
