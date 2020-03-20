@@ -14,6 +14,11 @@ module.exports = {
   organizationName: 'prevwong', // Usually your GitHub org/user name.
   projectName: 'craft.js', // Usually your repo name.
   themeConfig: {
+    algolia: {
+      apiKey: 'e641d82b10af84aa818e883b1035c3b4',
+      indexName: 'craft-js',
+      algoliaOptions: {}, // Optional, if provided by Algolia
+    },
     prism: {
       theme: require('prism-react-renderer/themes/shadesOfPurple'),
     },
