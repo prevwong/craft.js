@@ -1,12 +1,13 @@
 // https://github.com/pelotom/use-methods
 import produce, { PatchListener } from "immer";
-import { useMemo, useEffect, useRef, useReducer } from "react";
+import { useMemo, useEffect, useRef, useReducer, useCallback } from "react";
+import isEqualWith from "lodash.isequalwith";
 
 export type SubscriberAndCallbacksFor<
   M extends MethodsOrOptions,
   Q extends QueryMethods = any
 > = {
-  subscribe: (listener: () => void) => void;
+  subscribe: any;
   getState: () => { prev: StateFor<M>; current: StateFor<M> };
   actions: CallbacksFor<M>;
   query: QueryCallbacksFor<Q>;
@@ -146,9 +147,8 @@ export function useMethods<
     }, {} as CallbacksFor<typeof methodsFactory>);
   }, [methodsFactory]);
 
-  const watcher = useMemo(() => {
-    return new Watcher();
-  }, []);
+  const getState = useCallback(() => currState.current, []);
+  const watcher = useMemo(() => new Watcher(getState), [getState]);
 
   useEffect(() => {
     currState.current = state;
@@ -157,14 +157,12 @@ export function useMethods<
 
   return useMemo(
     () => ({
-      getState: () => currState.current,
-      subscribe: cb => {
-        return watcher.subscribe(cb);
-      },
+      getState,
+      subscribe: (collector, cb) => watcher.subscribe(collector, cb),
       actions,
       query
     }),
-    [actions, query, watcher]
+    [actions, query, watcher, getState]
   ) as any;
 }
 
@@ -180,22 +178,56 @@ export function createQuery<Q extends QueryMethods>(queryMethods: Q, getState) {
 }
 
 class Watcher {
-  subscribers = [];
-  subscribe(subscriber: any) {
-    this.subscribers.push(subscriber);
-    return () => this.unsubscribe.call(this, subscriber);
+  getState;
+  subscribers: Subscriber[] = [];
+
+  constructor(getState) {
+    this.getState = getState;
   }
+
+  subscribe(collector, cb: any) {
+    const subscriber = new Subscriber(() => collector(this.getState()), cb);
+    this.subscribers.push(subscriber);
+    return this.unsubscribe.bind(this, subscriber);
+  }
+
   unsubscribe(subscriber) {
     if (this.subscribers.length) {
       const index = this.subscribers.indexOf(subscriber);
-      if (index > -1) {
-        return this.subscribers.splice(index, 1);
-      }
+      if (index > -1) return this.subscribers.splice(index, 1);
     }
   }
+
   notify() {
-    for (let i = 0; i < this.subscribers.length; i++) {
-      this.subscribers[i]();
+    // Give unsubscribing the priority. Any better way?
+    setTimeout(() => {
+      for (let i = 0; i < this.subscribers.length; i++) {
+        this.subscribers[i].collect();
+      }
+    });
+  }
+}
+
+class Subscriber {
+  collected;
+  collector;
+  onChange;
+  id;
+
+  constructor(collector, onChange) {
+    this.collector = collector;
+    this.onChange = onChange;
+  }
+
+  collect() {
+    try {
+      const recollect = this.collector();
+      if (!isEqualWith(recollect, this.collected)) {
+        this.collected = recollect;
+        if (this.onChange) this.onChange(this.collected);
+      }
+    } catch (err) {
+      console.warn(err);
     }
   }
 }

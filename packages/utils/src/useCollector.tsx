@@ -42,6 +42,8 @@ export function useCollector<
 
   const initial = useRef(true);
   const collected = useRef<C | null>(null);
+  const collectorRef = useRef(collector);
+  collectorRef.current = collector;
 
   const onCollect = useCallback(
     (collected): useCollector<M, Q, C> => {
@@ -62,29 +64,19 @@ export function useCollector<
 
   // Collect states on state change
   useEffect(() => {
-    let cancelled = false;
     let unsubscribe;
-    if (collector) {
-      unsubscribe = subscribe(() => {
-        try {
-          if (cancelled) return;
-          const current = getState();
-          const recollect = collector(current, query);
-          if (!isEqualWith(recollect, collected.current)) {
-            collected.current = recollect;
-            (window as any).state = current;
-            setRenderCollected(onCollect(collected.current));
-          }
-        } catch (err) {
-          console.warn(err);
+    if (collectorRef.current) {
+      unsubscribe = subscribe(
+        current => collectorRef.current(current, query),
+        collected => {
+          setRenderCollected(onCollect(collected));
         }
-      });
+      );
     }
     return () => {
-      cancelled = true;
       if (unsubscribe) unsubscribe();
     };
-  }, [collector, getState, onCollect, query, subscribe]);
+  }, [onCollect, query, subscribe]);
 
   return renderCollected;
 }

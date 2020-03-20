@@ -1,14 +1,6 @@
 import { Node } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
-import { useInternalEditor } from "../editor/useInternalEditor";
-import {
-  useConnectorHooks,
-  useConnectorHooks2,
-  ConnectorElementWrapper,
-  useEffectOnce
-} from "@craftjs/utils";
-import { NodeHandlers } from "./NodeHandlers";
-import { useMemo } from "react";
+import { ConnectorElementWrapper } from "@craftjs/utils";
 
 export type useNode<S = null> = Omit<useInternalNode<S>, "actions"> &
   Pick<useInternalNode<S>["actions"], "setProp"> & {

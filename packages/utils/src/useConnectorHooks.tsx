@@ -54,7 +54,9 @@ function throwIfCompositeComponentElement(element: React.ReactElement<any>) {
   throw new Error();
 }
 
-function wrapHookToRecognizeElement(hook: (node: any, opts: any) => void) {
+export function wrapHookToRecognizeElement(
+  hook: (node: any, opts: any) => void
+) {
   return (elementOrNode = null, opts: any) => {
     // When passed a node, call the hook straight away.
     if (!isValidElement(elementOrNode)) {
@@ -84,11 +86,14 @@ export type ConnectorElementWrapper = (
   options?: any
 ) => React.ReactElement | null;
 
-type ConnectorMethod = (element: HTMLElement, options?: any) => void;
+type ConnectorMethod = (
+  element: HTMLElement,
+  options?: any
+) => ConnectableElement;
 
 export type useConnectorHooks<T extends string> = Record<
   T,
-  (node: ConnectableElement, options?: any) => void
+  (node: ConnectableElement, options?: any) => ConnectableElement
 >;
 
 export function useConnectorHooks<T extends string>(
