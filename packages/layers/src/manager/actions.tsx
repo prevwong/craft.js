@@ -42,5 +42,8 @@ export const LayerMethods = (state: LayerState) => ({
   },
   toggleLayer: (id: string) => {
     state.layers[id].expanded = !state.layers[id].expanded;
+  },
+  setIndicator: indicator => {
+    state.events.indicator = indicator;
   }
 });
