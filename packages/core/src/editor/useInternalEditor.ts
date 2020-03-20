@@ -1,9 +1,9 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { EditorState } from "../interfaces";
 import { QueryMethods } from "./query";
 import { useCollector, QueryCallbacksFor } from "@craftjs/utils";
 import { Actions } from "./actions";
-import { EventContext } from "../events/EventContext";
+import { useEventHandler } from "../events";
 import { EditorContext } from "./EditorContext";
 
 export type EditorCollector<C> = (
@@ -16,7 +16,7 @@ export type useInternalEditor<C = null> = (C extends null
   : useCollector<typeof Actions, typeof QueryMethods, C>) & {
   inContext: boolean;
   store: EditorContext;
-  connectors: EventContext;
+  connectors: any;
 };
 
 export function useInternalEditor(): useInternalEditor;
@@ -24,9 +24,13 @@ export function useInternalEditor<C>(
   collector: EditorCollector<C>
 ): useInternalEditor<C>;
 export function useInternalEditor<C>(collector?: any): useInternalEditor<C> {
-  const connectors = useContext(EventContext);
+  const handlers = useEventHandler();
   const store = useContext<EditorContext>(EditorContext);
   const collected = useCollector(store, collector);
+
+  const connectors = useMemo(() => handlers && handlers.connectors(), [
+    handlers
+  ]);
 
   return {
     ...(collected as any),

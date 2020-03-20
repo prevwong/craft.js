@@ -1,21 +1,21 @@
 import React, { useMemo } from "react";
+import { useInternalEditor } from "../editor/useInternalEditor";
+import { RenderIndicator, getDOMInfo } from "@craftjs/utils";
 import movePlaceholder from "./movePlaceholder";
 import { EditorHandlers } from "./EditorHandlers";
+import { EventHandlerContext } from "./EventContext";
+export { useEventHandler } from "./EventContext";
 
-import { getDOMInfo, RenderIndicator } from "@craftjs/utils";
-import { useInternalEditor } from "../editor/useInternalEditor";
-import { EventContext } from "./EventContext";
-
-export const EventManager: React.FC = ({ children }) => {
+export const Events: React.FC = ({ children }) => {
   const { events, indicator, store } = useInternalEditor(state => ({
     events: state.events,
     indicator: state.options.indicator
   }));
 
-  const connectors = useMemo(() => EditorHandlers.create(store), [store]);
+  const handler = useMemo(() => new EditorHandlers(store), [store]);
 
   return (
-    <EventContext.Provider value={connectors}>
+    <EventHandlerContext.Provider value={handler}>
       {events.indicator
         ? React.createElement(RenderIndicator, {
             style: {
@@ -34,6 +34,6 @@ export const EventManager: React.FC = ({ children }) => {
           })
         : null}
       {children}
-    </EventContext.Provider>
+    </EventHandlerContext.Provider>
   );
 };
