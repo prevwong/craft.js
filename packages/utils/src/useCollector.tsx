@@ -7,7 +7,6 @@ import {
   QueryMethods,
   SubscriberAndCallbacksFor
 } from "./useMethods";
-import isEqualWith from "lodash.isequalwith";
 
 type Actions<M extends Methods, Q extends QueryMethods> = {
   actions: CallbacksFor<M>;

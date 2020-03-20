@@ -23,7 +23,7 @@ export const LayerNode: React.FC = () => {
   const { actions, renderLayer, expandRootOnLoad } = useLayerManager(state => ({
     renderLayer: state.options.renderLayer,
     expandRootOnLoad: state.options.expandRootOnLoad
-  }));
+  })) as any;
 
   const expandedRef = useRef<boolean>(expanded);
   expandedRef.current = expanded;
@@ -50,6 +50,7 @@ export const LayerNode: React.FC = () => {
     actions.registerLayer(id);
     initRef.current = true;
   }
+
   return data ? (
     <div className={`craft-layer-node ${id}`}>
       {React.createElement(
