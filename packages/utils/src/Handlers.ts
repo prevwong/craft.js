@@ -44,30 +44,33 @@ class WatchHandler {
     this.opts = opts;
     this.handler = handler;
 
-    this.unsubscribe = store.subscribe(() => {
-      const { enabled } = store.query.getOptions();
-      if (!document.body.contains(el)) {
-        this.remove();
-        return this.unsubscribe();
-      }
+    this.unsubscribe = store.subscribe(
+      state => ({ enabled: state.options.enabled }),
+      ({ enabled }) => {
+        if (!document.body.contains(el)) {
+          this.remove();
+          return this.unsubscribe();
+        }
 
-      if (this.enabled != enabled) {
-        this.enabled = enabled;
+        // if (this.enabled != enabled) {
+        // this.enabled = enabled;
         if (enabled) {
           this.add();
         } else {
           this.remove();
         }
+        // }
       }
-    });
+    );
   }
 }
 
 export abstract class Handlers {
   static wm = new WeakMap();
   editor;
-  isEnabled;
+  name;
   cleanup = [];
+  parent?: Handlers;
 
   abstract handlers();
 
@@ -75,20 +78,12 @@ export abstract class Handlers {
     this.editor = store;
   }
 
-  get enabled() {
-    return this.isEnabled;
-  }
-
-  set enabled(value) {
-    this.cleanup.forEach(c => c());
-    this.isEnabled = value;
-  }
-
   connectors() {
     const initialHandlers = this.handlers() || {};
 
     return Object.keys(initialHandlers).reduce((accum, key) => {
       const { init, events } = initialHandlers[key];
+
       if (!init && !events) {
         accum[key] = () => {};
         return accum;
@@ -114,6 +109,12 @@ export abstract class Handlers {
       accum[key] = wrapHookToRecognizeElement(connector);
       return accum;
     }, {});
+  }
+
+  derive(handler: Handlers, ...args): Handlers {
+    const derivedHandler: Handlers = new (handler as any)(this.editor, ...args);
+    derivedHandler.parent = this;
+    return derivedHandler;
   }
 
   static create(...args) {
