@@ -5,16 +5,14 @@ import { Handlers } from "@craftjs/utils";
  */
 export class NodeHandlers extends Handlers {
   id;
-  editorConnectors;
 
-  constructor(store, nodeId, editorConnectors) {
+  constructor(store, nodeId) {
     super(store);
-    this.editorConnectors = editorConnectors;
     this.id = nodeId;
   }
 
   handlers() {
-    const parentConnectors = this.editorConnectors;
+    const parentConnectors = this.parent.connectors();
     return {
       connect: {
         init: el => {
