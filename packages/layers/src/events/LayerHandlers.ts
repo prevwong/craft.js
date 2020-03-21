@@ -7,7 +7,7 @@ export class LayerHandlers extends DerivedEventHandlers<
 > {
   private id;
   private layerStore;
-  static draggedNode;
+  static draggedElement;
   static events: {
     indicator: LayerIndicator;
     currentCanvasHovered: Node;
@@ -100,7 +100,7 @@ export class LayerHandlers extends DerivedEventHandlers<
               e.preventDefault();
               e.stopPropagation();
 
-              const dragId = LayerHandlers.draggedNode;
+              const dragId = LayerHandlers.draggedElement;
 
               if (!dragId) return;
 
@@ -178,13 +178,13 @@ export class LayerHandlers extends DerivedEventHandlers<
                 const { id: parentId } = parent;
 
                 this.store.actions.move(
-                  LayerHandlers.draggedNode as NodeId,
+                  LayerHandlers.draggedElement as NodeId,
                   parentId,
                   index + (where === "after" ? 1 : 0)
                 );
               }
 
-              LayerHandlers.draggedNode = null;
+              LayerHandlers.draggedElement = null;
               this.layerStore.actions.setIndicator(null);
             }
           ]
@@ -211,7 +211,7 @@ export class LayerHandlers extends DerivedEventHandlers<
             (e: MouseEvent) => {
               e.stopPropagation();
 
-              LayerHandlers.draggedNode = this.id;
+              LayerHandlers.draggedElement = this.id;
             }
           ]
         ]
