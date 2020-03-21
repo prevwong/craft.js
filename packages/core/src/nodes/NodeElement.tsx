@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useContext } from "react";
+import React, { useMemo } from "react";
 import { NodeProvider } from "./NodeContext";
 import { RenderNodeToElement } from "../render/RenderNode";
 import { NodeId } from "../interfaces";
-import { NodeHandlers } from "../hooks/NodeHandlers";
-import { useInternalEditor } from "../editor/useInternalEditor";
+import { NodeHandlers } from "./NodeHandlers";
 import { useEventHandler } from "../events";
 
 export type NodeElement = {

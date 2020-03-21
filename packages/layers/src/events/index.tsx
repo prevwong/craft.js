@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
 import { useEditor } from "@craftjs/core";
 import { useLayerManager } from "../manager/useLayerManager";
-import { RenderIndicator, ConnectorElementWrapper } from "@craftjs/utils";
+import { RenderIndicator, Connector } from "@craftjs/utils";
 
 export type EventContext = {
-  layer: ConnectorElementWrapper;
-  layerHeader: ConnectorElementWrapper;
-  drag: ConnectorElementWrapper;
+  layer: Connector;
+  layerHeader: Connector;
+  drag: Connector;
 };
 
 export const EventContext = React.createContext<EventContext>(

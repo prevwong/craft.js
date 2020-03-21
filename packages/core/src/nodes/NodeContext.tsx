@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NodeId } from "../interfaces";
+import { NodeConnectors } from "./NodeHandlers";
 
 export const NodeContext = React.createContext<any>(null);
 
 export type NodeProvider = {
   id: NodeId;
   related?: boolean;
-  connectors?: any;
+  connectors?: NodeConnectors;
 };
 
 export const NodeProvider: React.FC<NodeProvider> = ({

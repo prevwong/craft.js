@@ -1,14 +1,8 @@
 import { Node } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
-import { ConnectorElementWrapper } from "@craftjs/utils";
 
 export type useNode<S = null> = Omit<useInternalNode<S>, "actions"> &
-  Pick<useInternalNode<S>["actions"], "setProp"> & {
-    connectors: {
-      connect: ConnectorElementWrapper;
-      drag: ConnectorElementWrapper;
-    };
-  };
+  Pick<useInternalNode<S>["actions"], "setProp">;
 
 export function useNode(): useNode;
 

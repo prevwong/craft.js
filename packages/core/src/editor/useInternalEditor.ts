@@ -5,6 +5,7 @@ import { useCollector, QueryCallbacksFor } from "@craftjs/utils";
 import { Actions } from "./actions";
 import { useEventHandler } from "../events";
 import { EditorContext } from "./EditorContext";
+import { EventConnectors } from "../events/EventHandlers";
 
 export type EditorCollector<C> = (
   state: EditorState,
@@ -16,7 +17,7 @@ export type useInternalEditor<C = null> = (C extends null
   : useCollector<typeof Actions, typeof QueryMethods, C>) & {
   inContext: boolean;
   store: EditorContext;
-  connectors: any;
+  connectors: EventConnectors;
 };
 
 export function useInternalEditor(): useInternalEditor;

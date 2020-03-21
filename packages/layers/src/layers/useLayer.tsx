@@ -1,17 +1,11 @@
 import { useContext, useMemo } from "react";
 import { LayerContext } from "./LayerContext";
-import { ConnectorElementWrapper } from "@craftjs/utils";
 import { useLayerManager } from "../manager";
 import { useEditor } from "@craftjs/core";
 import { Layer } from "../interfaces";
 
 type internalActions = LayerContext & {
   children: string[];
-  connectors: {
-    drag: ConnectorElementWrapper;
-    layer: ConnectorElementWrapper;
-    layerHeader: ConnectorElementWrapper;
-  };
   actions: {
     toggleLayer: () => void;
   };
