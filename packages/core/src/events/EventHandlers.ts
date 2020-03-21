@@ -5,7 +5,9 @@ import debounce from "lodash.debounce";
 /**
  * Creates connectors
  */
-export class EditorHandlers extends Handlers {
+export class EventHandlers extends Handlers<
+  "select" | "hover" | "drag" | "drop" | "create"
+> {
   static draggedNodeShadow;
   static draggedNode: any;
   static events: any = {};
@@ -13,7 +15,7 @@ export class EditorHandlers extends Handlers {
   handlers() {
     const { editor } = this;
 
-    const handlers = {
+    let handlers = {
       select: {
         init: () => {
           return () => {
@@ -61,10 +63,10 @@ export class EditorHandlers extends Handlers {
               e.preventDefault();
               e.stopPropagation();
 
-              if (!EditorHandlers.draggedNode) return;
+              if (!EventHandlers.draggedNode) return;
 
               const getPlaceholder = this.editor.query.getDropPlaceholder(
-                EditorHandlers.draggedNode,
+                EventHandlers.draggedNode,
                 id,
                 {
                   x: e.clientX,
@@ -74,7 +76,7 @@ export class EditorHandlers extends Handlers {
 
               if (getPlaceholder) {
                 this.editor.actions.setIndicator(getPlaceholder);
-                EditorHandlers.events = {
+                EventHandlers.events = {
                   indicator: getPlaceholder
                 };
               }
@@ -101,20 +103,20 @@ export class EditorHandlers extends Handlers {
                 node = editor.query.createNode(node);
               }
 
-              EditorHandlers.draggedNodeShadow = createShadow(e);
+              EventHandlers.draggedNodeShadow = createShadow(e);
               if (typeof node === "string")
                 editor.actions.setNodeEvent("dragged", node);
-              EditorHandlers.draggedNode = node;
+              EventHandlers.draggedNode = node;
             }
           ],
           [
             "dragend",
             (e: DragEvent) => {
               e.stopPropagation();
-              const events = EditorHandlers.events;
+              const events = EventHandlers.events;
 
               if (
-                EditorHandlers.draggedNode &&
+                EventHandlers.draggedNode &&
                 events.indicator &&
                 !events.indicator.error
               ) {
@@ -123,35 +125,36 @@ export class EditorHandlers extends Handlers {
                 const { id: parentId } = parent;
 
                 if (
-                  typeof EditorHandlers.draggedNode === "object" &&
-                  EditorHandlers.draggedNode.id
+                  typeof EventHandlers.draggedNode === "object" &&
+                  EventHandlers.draggedNode.id
                 ) {
-                  EditorHandlers.draggedNode.data.index =
+                  EventHandlers.draggedNode.data.index =
                     index + (where === "after" ? 1 : 0);
-                  this.editor.actions.add(EditorHandlers.draggedNode, parentId);
+                  this.editor.actions.add(EventHandlers.draggedNode, parentId);
                 } else {
                   this.editor.actions.move(
-                    EditorHandlers.draggedNode as NodeId,
+                    EventHandlers.draggedNode as NodeId,
                     parentId,
                     index + (where === "after" ? 1 : 0)
                   );
                 }
               }
 
-              if (EditorHandlers.draggedNodeShadow) {
-                EditorHandlers.draggedNodeShadow.parentNode.removeChild(
-                  EditorHandlers.draggedNodeShadow
+              if (EventHandlers.draggedNodeShadow) {
+                EventHandlers.draggedNodeShadow.parentNode.removeChild(
+                  EventHandlers.draggedNodeShadow
                 );
-                EditorHandlers.draggedNodeShadow = null;
+                EventHandlers.draggedNodeShadow = null;
               }
 
-              EditorHandlers.draggedNode = null;
+              EventHandlers.draggedNode = null;
               this.editor.actions.setIndicator(null);
               this.editor.actions.setNodeEvent("dragged", null);
             }
           ]
         ]
-      }
+      },
+      create: {}
     };
 
     handlers["create"] = handlers["drag"];

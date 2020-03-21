@@ -1,9 +1,10 @@
 import { Handlers } from "@craftjs/utils";
+import { EventHandlers } from "events/EventHandlers";
 
 /**
  * Creates Node-specific connectors
  */
-export class NodeHandlers extends Handlers {
+export class NodeHandlers extends Handlers<"connect" | "drag", EventHandlers> {
   id;
 
   constructor(store, nodeId) {

@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
-import { EditorHandlers } from "./EditorHandlers";
+import { EventHandlers } from "./EventHandlers";
 
-export type EventHandlerContext = EditorHandlers;
+export type EventHandlerContext = EventHandlers;
 export const EventHandlerContext = createContext<EventHandlerContext>(null);
 
 export const useEventHandler = () => {

@@ -11,7 +11,6 @@ export type NodeElement = {
 };
 
 export const NodeElement: React.FC<NodeElement> = React.memo(({ id }) => {
-  const { store, connectors: editorConnectors } = useInternalEditor();
   const handlers = useEventHandler();
 
   const connectors = useMemo(
