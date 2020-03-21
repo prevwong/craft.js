@@ -1,6 +1,5 @@
 import React from "react";
 import { NodeId } from "@craftjs/core";
-import { LayerEvents } from "interfaces";
 import { LayerConnectors } from "events/LayerHandlers";
 
 export type LayerContext = {

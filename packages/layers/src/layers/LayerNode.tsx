@@ -23,7 +23,7 @@ export const LayerNode: React.FC = () => {
   const { actions, renderLayer, expandRootOnLoad } = useLayerManager(state => ({
     renderLayer: state.options.renderLayer,
     expandRootOnLoad: state.options.expandRootOnLoad
-  })) as any;
+  }));
 
   const expandedRef = useRef<boolean>(expanded);
   expandedRef.current = expanded;

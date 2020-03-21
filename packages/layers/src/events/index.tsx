@@ -1,17 +1,7 @@
 import React, { useMemo } from "react";
 import { useEditor } from "@craftjs/core";
 import { useLayerManager } from "../manager/useLayerManager";
-import { RenderIndicator, Connector } from "@craftjs/utils";
-
-export type EventContext = {
-  layer: Connector;
-  layerHeader: Connector;
-  drag: Connector;
-};
-
-export const EventContext = React.createContext<EventContext>(
-  {} as EventContext
-);
+import { RenderIndicator } from "@craftjs/utils";
 
 export const EventManager: React.FC<any> = ({ children }) => {
   const { layers, events } = useLayerManager(state => state);
@@ -69,15 +59,13 @@ export const EventManager: React.FC<any> = ({ children }) => {
   }, [events, indicatorStyles.error, indicatorStyles.success, layers]);
 
   return (
-    <EventContext.Provider value={{} as any}>
-      <div>
-        {events.indicator
-          ? React.createElement(RenderIndicator, {
-              style: indicatorPosition
-            })
-          : null}
-        {children}
-      </div>
-    </EventContext.Provider>
+    <div>
+      {events.indicator
+        ? React.createElement(RenderIndicator, {
+            style: indicatorPosition
+          })
+        : null}
+      {children}
+    </div>
   );
 };

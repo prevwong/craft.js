@@ -3,7 +3,7 @@ import { EditorState } from "../interfaces";
 import { QueryMethods } from "./query";
 import { useCollector, QueryCallbacksFor } from "@craftjs/utils";
 import { Actions } from "./actions";
-import { useEventHandler } from "../events";
+import { useEventHandler } from "../events/EventContext";
 import { EditorContext } from "./EditorContext";
 import { EventConnectors } from "../events/EventHandlers";
 

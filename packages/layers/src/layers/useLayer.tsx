@@ -24,8 +24,7 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer<S> {
   });
 
   const { children } = useEditor((state, query) => ({
-    children: state.nodes[id] && query.node(id).decendants(),
-    enabled: state.options.enabled
+    children: state.nodes[id] && query.node(id).decendants()
   }));
 
   const actions = useMemo(() => {
