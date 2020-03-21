@@ -50,6 +50,7 @@ export const LayerNode: React.FC = () => {
     actions.registerLayer(id);
     initRef.current = true;
   }
+
   return data ? (
     <div className={`craft-layer-node ${id}`}>
       {React.createElement(

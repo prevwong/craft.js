@@ -1,4 +1,4 @@
-import { NodeId } from "@craftjs/core";
+import { NodeId, Indicator } from "@craftjs/core";
 
 export type Layer = {
   id: NodeId;
@@ -17,8 +17,15 @@ export type LayerOptions = {
   renderLayer: React.ElementType;
 };
 
+export type LayerIndicator = Indicator & {
+  onCanvas: boolean;
+};
+
 export type LayerState = {
   layers: Record<NodeId, Layer>;
-  events: Record<LayerEvents, NodeId | null>;
+  events: Record<LayerEvents, NodeId | null> & {
+    indicator: LayerIndicator;
+  };
+
   options: LayerOptions;
 };
