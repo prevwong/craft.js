@@ -3,4 +3,4 @@ export * from "./render";
 export * from "./interfaces";
 export * from "./hooks";
 export * from "./editor";
-export { useEventHandler } from "./events";
+export * from "./events";

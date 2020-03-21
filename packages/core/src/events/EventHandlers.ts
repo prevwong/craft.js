@@ -1,9 +1,10 @@
 import { NodeId } from "../interfaces";
-import { Handlers } from "@craftjs/utils";
-import debounce from "lodash.debounce";
+import { Handlers, ConnectorsForHandlers } from "@craftjs/utils";
+import { debounce } from "debounce";
+import { EditorStore } from "../editor/store";
 
 /**
- * Creates connectors
+ * Specifies Editor-wide event handlers and connectors
  */
 export class EventHandlers extends Handlers<
   "select" | "hover" | "drag" | "drop" | "create"
@@ -13,20 +14,20 @@ export class EventHandlers extends Handlers<
   static events: any = {};
 
   handlers() {
-    const { editor } = this;
+    const { store } = this;
 
     let handlers = {
       select: {
         init: () => {
           return () => {
-            editor.actions.setNodeEvent("selected", null);
+            store.actions.setNodeEvent("selected", null);
           };
         },
         events: [
           [
             "mousedown",
             debounce((_, id: NodeId) => {
-              editor.actions.setNodeEvent("selected", id);
+              store.actions.setNodeEvent("selected", id);
             }, 1),
             true
           ]
@@ -35,14 +36,14 @@ export class EventHandlers extends Handlers<
       hover: {
         init: () => {
           return () => {
-            editor.actions.setNodeEvent("hovered", null);
+            store.actions.setNodeEvent("hovered", null);
           };
         },
         events: [
           [
             "mouseover",
             debounce((_, id: NodeId) => {
-              editor.actions.setNodeEvent("hovered", id);
+              store.actions.setNodeEvent("hovered", id);
             }, 1),
             true
           ]
@@ -65,7 +66,7 @@ export class EventHandlers extends Handlers<
 
               if (!EventHandlers.draggedNode) return;
 
-              const getPlaceholder = this.editor.query.getDropPlaceholder(
+              const getPlaceholder = this.store.query.getDropPlaceholder(
                 EventHandlers.draggedNode,
                 id,
                 {
@@ -75,7 +76,7 @@ export class EventHandlers extends Handlers<
               );
 
               if (getPlaceholder) {
-                this.editor.actions.setIndicator(getPlaceholder);
+                this.store.actions.setIndicator(getPlaceholder);
                 EventHandlers.events = {
                   indicator: getPlaceholder
                 };
@@ -100,12 +101,12 @@ export class EventHandlers extends Handlers<
 
               let node = nodeOrEl;
               if (typeof nodeOrEl != "string") {
-                node = editor.query.createNode(node);
+                node = store.query.createNode(node);
               }
 
               EventHandlers.draggedNodeShadow = createShadow(e);
               if (typeof node === "string")
-                editor.actions.setNodeEvent("dragged", node);
+                store.actions.setNodeEvent("dragged", node);
               EventHandlers.draggedNode = node;
             }
           ],
@@ -130,9 +131,9 @@ export class EventHandlers extends Handlers<
                 ) {
                   EventHandlers.draggedNode.data.index =
                     index + (where === "after" ? 1 : 0);
-                  this.editor.actions.add(EventHandlers.draggedNode, parentId);
+                  this.store.actions.add(EventHandlers.draggedNode, parentId);
                 } else {
-                  this.editor.actions.move(
+                  this.store.actions.move(
                     EventHandlers.draggedNode as NodeId,
                     parentId,
                     index + (where === "after" ? 1 : 0)
@@ -148,8 +149,8 @@ export class EventHandlers extends Handlers<
               }
 
               EventHandlers.draggedNode = null;
-              this.editor.actions.setIndicator(null);
-              this.editor.actions.setNodeEvent("dragged", null);
+              this.store.actions.setIndicator(null);
+              this.store.actions.setNodeEvent("dragged", null);
             }
           ]
         ]
@@ -160,6 +161,14 @@ export class EventHandlers extends Handlers<
     handlers["create"] = handlers["drag"];
 
     return handlers;
+  }
+
+  derive<T extends DerivedEventHandlers<any>, U extends any[]>(
+    type: { new (store: EditorStore, derived: EventHandlers, ...args: U): T },
+    ...args: U
+  ): T {
+    const derivedHandler = new type(this.store, this, ...args);
+    return derivedHandler;
   }
 }
 
@@ -177,3 +186,15 @@ const createShadow = (e: DragEvent) => {
 
   return shadow;
 };
+
+export abstract class DerivedEventHandlers<T extends string> extends Handlers<
+  T
+> {
+  derived: EventHandlers;
+  constructor(store: EditorStore, derived: EventHandlers) {
+    super(store);
+    this.derived = derived;
+  }
+}
+
+export type EventConnectors = ConnectorsForHandlers<EventHandlers>;

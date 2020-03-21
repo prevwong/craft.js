@@ -1,12 +1,12 @@
-import { Handlers } from "@craftjs/utils";
-import { NodeId, Node } from "@craftjs/core";
+import { NodeId, Node, DerivedEventHandlers } from "@craftjs/core";
 import { LayerIndicator } from "interfaces";
+import { ConnectorsForHandlers } from "@craftjs/utils";
 
-export class LayerHandlers extends Handlers {
-  name = "layer";
-  id;
-  layerStore;
-
+export class LayerHandlers extends DerivedEventHandlers<
+  "layer" | "layerHeader" | "drag"
+> {
+  private id;
+  private layerStore;
   static draggedNode;
   static events: {
     indicator: LayerIndicator;
@@ -17,8 +17,8 @@ export class LayerHandlers extends Handlers {
   };
   static currentCanvasHovered;
 
-  constructor(store, layerStore, layerId) {
-    super(store);
+  constructor(store, derived, layerStore, layerId) {
+    super(store, derived);
     this.id = layerId;
     this.layerStore = layerStore;
   }
@@ -28,7 +28,7 @@ export class LayerHandlers extends Handlers {
   }
 
   handlers() {
-    const parentConnectors = this.parent.connectors();
+    const parentConnectors = this.derived.connectors();
     return {
       layer: {
         init: el => {
@@ -74,7 +74,7 @@ export class LayerHandlers extends Handlers {
                       currentCanvasHovered.data.nodes.length - 1
                     ];
                   if (!currNode) return;
-                  indicator.placement.currentNode = this.editor.query
+                  indicator.placement.currentNode = this.store.query
                     .node(currNode)
                     .get();
                   indicator.placement.index =
@@ -106,7 +106,7 @@ export class LayerHandlers extends Handlers {
 
               let target = this.id;
 
-              const indicatorInfo = this.editor.query.getDropPlaceholder(
+              const indicatorInfo = this.store.query.getDropPlaceholder(
                 dragId,
                 target,
                 { x: e.clientX, y: e.clientY },
@@ -125,12 +125,12 @@ export class LayerHandlers extends Handlers {
                 ).headingDom.getBoundingClientRect();
 
                 LayerHandlers.events.currentCanvasHovered = null;
-                if (this.editor.query.node(parent.id).isCanvas()) {
+                if (this.store.query.node(parent.id).isCanvas()) {
                   if (parent.data.parent) {
-                    const grandparent = this.editor.query
+                    const grandparent = this.store.query
                       .node(parent.data.parent)
                       .get();
-                    if (this.editor.query.node(grandparent.id).isCanvas()) {
+                    if (this.store.query.node(grandparent.id).isCanvas()) {
                       LayerHandlers.events.currentCanvasHovered = parent;
                       if (
                         (e.clientY > parentHeadingInfo.bottom - 10 &&
@@ -177,7 +177,7 @@ export class LayerHandlers extends Handlers {
                 const { parent, index, where } = placement;
                 const { id: parentId } = parent;
 
-                this.editor.actions.move(
+                this.store.actions.move(
                   LayerHandlers.draggedNode as NodeId,
                   parentId,
                   index + (where === "after" ? 1 : 0)
@@ -219,3 +219,5 @@ export class LayerHandlers extends Handlers {
     };
   }
 }
+
+export type LayerConnectors = ConnectorsForHandlers<LayerHandlers>;
