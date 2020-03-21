@@ -5,6 +5,7 @@ import movePlaceholder from "./movePlaceholder";
 import { EventHandlers } from "./EventHandlers";
 import { EventHandlerContext } from "./EventContext";
 export { useEventHandler } from "./EventContext";
+export { DerivedEventHandlers } from "./EventHandlers";
 
 export const Events: React.FC = ({ children }) => {
   const { events, indicator, store } = useInternalEditor(state => ({
