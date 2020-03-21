@@ -1,20 +1,33 @@
-import { wrapHookToRecognizeElement } from "./useConnectorHooks";
+import {
+  wrapHookToRecognizeElement,
+  ConnectorElementWrapper
+} from "./useConnectorHooks";
 
+export type HandlersMap<T extends string> = Record<T, Handler>;
+
+export type Handler = {
+  init: (el: HTMLElement, opts: any) => any;
+  events: readonly [string, (e: HTMLElement, opts: any) => void, boolean?][];
+};
+
+/**
+ * Reactively adding/remove a Handler to a DOM element
+ * according to the enabled state in the editor
+ */
 class WatchHandler {
-  el;
-  opts;
+  el: HTMLElement;
+  opts: any;
 
-  private handler;
-  private enabled;
-  private unsubscribe;
-  private cleanDOM;
-  private removeListeners;
+  private handler: Handler;
+  private unsubscribe: () => void;
+  private cleanDOM: void | (() => void);
+  private listenersToRemove: (() => void)[];
 
   private add() {
     const { init, events } = this.handler;
 
     this.cleanDOM = init && init(this.el, this.opts);
-    this.removeListeners =
+    this.listenersToRemove =
       events &&
       events.map(([event, listener, capture]) => {
         const bindedListener = e => {
@@ -33,13 +46,13 @@ class WatchHandler {
       this.cleanDOM = null;
     }
 
-    if (this.removeListeners) {
-      this.removeListeners.forEach(l => l());
-      this.removeListeners = null;
+    if (this.listenersToRemove) {
+      this.listenersToRemove.forEach(l => l());
+      this.listenersToRemove = null;
     }
   }
 
-  constructor(store, el, opts, handler) {
+  constructor(store, el: HTMLElement, opts: any, handler: Handler) {
     this.el = el;
     this.opts = opts;
     this.handler = handler;
@@ -52,33 +65,40 @@ class WatchHandler {
           return this.unsubscribe();
         }
 
-        // if (this.enabled != enabled) {
-        // this.enabled = enabled;
         if (enabled) {
           this.add();
         } else {
           this.remove();
         }
-        // }
       }
     );
   }
 }
 
-export abstract class Handlers {
+/**
+ * Creates Event Handlers
+ */
+export abstract class Handlers<
+  T extends string = null,
+  D extends Handlers<any> = null
+> {
   static wm = new WeakMap();
   editor;
-  name;
-  cleanup = [];
-  parent?: Handlers;
-
-  abstract handlers();
+  name: string;
+  parent?: D;
 
   constructor(store) {
     this.editor = store;
   }
 
-  connectors() {
+  // (Hacky) Events is replaced with any. Otherwise for some odd reason, TSC will throw an error
+  abstract handlers(): Record<
+    T,
+    Partial<Omit<Handler, "events"> & { events: any }>
+  >;
+
+  // Returns ref connectors for handlers
+  connectors(): Record<T, ConnectorElementWrapper> {
     const initialHandlers = this.handlers() || {};
 
     return Object.keys(initialHandlers).reduce((accum, key) => {
@@ -108,17 +128,23 @@ export abstract class Handlers {
 
       accum[key] = wrapHookToRecognizeElement(connector);
       return accum;
-    }, {});
+    }, {}) as any;
   }
 
-  derive(handler: Handlers, ...args): Handlers {
-    const derivedHandler: Handlers = new (handler as any)(this.editor, ...args);
-    derivedHandler.parent = this;
+  derive<T extends any, U extends any[]>(
+    type: { new (store, ...args: U): T },
+    ...args: U
+  ): T {
+    const derivedHandler = new type(this.editor, ...args);
+    (derivedHandler as any).parent = this;
     return derivedHandler;
   }
 
-  static create(...args) {
-    const inst = new (this as any)(...args);
-    return inst.connectors();
+  static getConnectors<T extends Handlers, U extends any[]>(
+    this: { new (...args: U): T },
+    ...args: U
+  ): ReturnType<T["connectors"]> {
+    const that = new this(...args);
+    return that.connectors() as any;
   }
 }
