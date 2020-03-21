@@ -35,9 +35,9 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["create", "(dom: HTMLElement, userElement: React.ReactElement) => HTMLElement", "Specifies the DOM that when dragged will create a new instance of the specified User Element at the drop location."]
     ]],
     ["actions", "Object", [
-      ["add", "(nodes: Node | Node[], parentId?: NodeId) => void", "Add Node(s) to the given parent node ID. By default the parentId is the ROOT_ID"],
+      ["add", "(nodes: Node | Node[], parentId?: NodeId) => void", "Add Node(s) to the given parent node ID. By default the parentId is the id of the Root Node"],
       ["delete", "(nodeID: NodeId) => void", "Delete the specified Node"],
-      ["deserialize", "() => String", "Recreate Nodes from JSON. This will clear all the current Nodes in the editor state with the recreated Nodes"],
+      ["deserialize", "(json: String) => void", "Recreate Nodes from JSON. This will clear all the current Nodes in the editor state with the recreated Nodes"],
       ["move", "(nodeId: NodeId, targetParentId: NodeId, index: number) => void", "Move a Node to the specified parent Node at the given index."],
       ["setProp", "(nodeId: NodeId, update: (props: Object) => void) => void", "Manipulate the props of the given Node"],
       ["setCustom", "(nodeId: NodeId, update: (custom: Object) => void) => void", "Manipulate the custom values of the given Node"],

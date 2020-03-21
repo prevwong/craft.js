@@ -25,7 +25,7 @@ In a nutshell:
 
 
 ## How Nodes are created
-We know what Nodes are and that every User Component must be represented by a `Node`, but how do we actually represent our React elements as Nodes ? 
+We know what Nodes are and that every User Component must be represented by a `Node`, but how do we actually represent our React elements as Nodes? 
 
 `<Canvas />` is a React component provided by Craft.js which automatically creates a Canvas node and a Node for each of its immediate child. 
 
