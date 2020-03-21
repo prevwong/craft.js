@@ -2,8 +2,6 @@
 import { isValidElement, ReactElement } from "react";
 import { cloneElement } from "react";
 import invariant from "tiny-invariant";
-import { useMemo } from "react";
-import { useRef } from "react";
 
 function setRef(ref: any, node: any) {
   if (node) {
@@ -81,43 +79,7 @@ export type ConnectableElement =
   | Element
   | null;
 
-export type ConnectorElementWrapper = (
+export type Connector = (
   elementOrNode: ConnectableElement,
   options?: any
 ) => React.ReactElement | null;
-
-type ConnectorMethod = (
-  element: HTMLElement,
-  options?: any
-) => ConnectableElement;
-
-export type useConnectorHooks<T extends string> = Record<
-  T,
-  (node: ConnectableElement, options?: any) => ConnectableElement
->;
-
-export function useConnectorHooks<T extends string>(
-  hooks: Record<T, ConnectorMethod | [ConnectorMethod, ConnectorMethod]>,
-  active: boolean = true
-): useConnectorHooks<T> {
-  const stableHooks = useRef(hooks);
-  return useMemo(() => {
-    const hooks = stableHooks.current;
-    return Object.keys(hooks).reduce((accum, key: any) => {
-      let hook, cleanupHook;
-
-      if (hooks[key] instanceof Array) {
-        hook = hooks[key][0];
-        cleanupHook = hooks[key][1];
-      } else {
-        hook = hooks[key];
-      }
-
-      accum[key] =
-        active || (!active && !cleanupHook)
-          ? hook && wrapHookToRecognizeElement(hook)
-          : cleanupHook && wrapHookToRecognizeElement(cleanupHook);
-      return accum;
-    }, {});
-  }, [active]) as any;
-}

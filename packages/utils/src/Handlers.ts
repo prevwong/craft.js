@@ -1,7 +1,4 @@
-import {
-  wrapHookToRecognizeElement,
-  ConnectorElementWrapper
-} from "./useConnectorHooks";
+import { wrapHookToRecognizeElement, Connector } from "./wrapConnectorHooks";
 
 export type HandlersMap<T extends string> = Record<T, Handler>;
 
@@ -9,6 +6,10 @@ export type Handler = {
   init: (el: HTMLElement, opts: any) => any;
   events: readonly [string, (e: HTMLElement, opts: any) => void, boolean?][];
 };
+
+export type ConnectorsForHandlers<T extends Handlers> = ReturnType<
+  T["connectors"]
+>;
 
 /**
  * Reactively adding/remove a Handler to a DOM element
@@ -78,17 +79,12 @@ class WatchHandler {
 /**
  * Creates Event Handlers
  */
-export abstract class Handlers<
-  T extends string = null,
-  D extends Handlers<any> = null
-> {
-  static wm = new WeakMap();
-  editor;
-  name: string;
-  parent?: D;
+export abstract class Handlers<T extends string = null> {
+  private static wm = new WeakMap();
+  protected store;
 
   constructor(store) {
-    this.editor = store;
+    this.store = store;
   }
 
   // (Hacky) Events is replaced with any. Otherwise for some odd reason, TSC will throw an error
@@ -98,7 +94,7 @@ export abstract class Handlers<
   >;
 
   // Returns ref connectors for handlers
-  connectors(): Record<T, ConnectorElementWrapper> {
+  connectors(): Record<T, Connector> {
     const initialHandlers = this.handlers() || {};
 
     return Object.keys(initialHandlers).reduce((accum, key) => {
@@ -122,22 +118,13 @@ export abstract class Handlers<
 
         Handlers.wm.set(el, {
           ...domHandler,
-          [key]: new WatchHandler(this.editor, el, opts, { init, events })
+          [key]: new WatchHandler(this.store, el, opts, { init, events })
         });
       };
 
       accum[key] = wrapHookToRecognizeElement(connector);
       return accum;
     }, {}) as any;
-  }
-
-  derive<T extends any, U extends any[]>(
-    type: { new (store, ...args: U): T },
-    ...args: U
-  ): T {
-    const derivedHandler = new type(this.editor, ...args);
-    (derivedHandler as any).parent = this;
-    return derivedHandler;
   }
 
   static getConnectors<T extends Handlers, U extends any[]>(
