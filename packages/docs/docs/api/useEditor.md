@@ -15,9 +15,6 @@ A Hook that provides methods and state information associated with the entire ed
 const { connectors, actions, query, ...collected } = useEditor(collector);
 ```
 
-> Note: This hook can only be used within a User Component. 
-
-
 ## Reference
 ### Parameters
 <API items={[
