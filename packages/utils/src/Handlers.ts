@@ -3,7 +3,15 @@ import { wrapHookToRecognizeElement, Connector } from "./wrapConnectorHooks";
 export type HandlersMap<T extends string> = Record<T, Handler>;
 
 export type Handler = {
+  /**
+   * The DOM manipulations to perform on the attached DOM element
+   * @returns function that reverts the DOM manipulations performed
+   */
   init: (el: HTMLElement, opts: any) => any;
+
+  /**
+   * List of Event Listeners to add to the attached DOM element
+   */
   events: readonly [string, (e: HTMLElement, opts: any) => void, boolean?][];
 };
 
@@ -12,8 +20,8 @@ export type ConnectorsForHandlers<T extends Handlers> = ReturnType<
 >;
 
 /**
- * Reactively adding/remove a Handler to a DOM element
- * according to the enabled state in the editor
+ * Attaches/detaches a Handler to a DOM element
+ * The handler is attached/detached depending on the enabled state from the `store`
  */
 class WatchHandler {
   el: HTMLElement;
@@ -23,6 +31,28 @@ class WatchHandler {
   private unsubscribe: () => void;
   private cleanDOM: void | (() => void);
   private listenersToRemove: (() => void)[];
+
+  constructor(store, el: HTMLElement, opts: any, handler: Handler) {
+    this.el = el;
+    this.opts = opts;
+    this.handler = handler;
+
+    this.unsubscribe = store.subscribe(
+      state => ({ enabled: state.options.enabled }),
+      ({ enabled }) => {
+        if (!document.body.contains(el)) {
+          this.remove();
+          return this.unsubscribe();
+        }
+
+        if (enabled) {
+          this.add();
+        } else {
+          this.remove();
+        }
+      }
+    );
+  }
 
   private add() {
     const { init, events } = this.handler;
@@ -52,45 +82,24 @@ class WatchHandler {
       this.listenersToRemove = null;
     }
   }
-
-  constructor(store, el: HTMLElement, opts: any, handler: Handler) {
-    this.el = el;
-    this.opts = opts;
-    this.handler = handler;
-
-    this.unsubscribe = store.subscribe(
-      state => ({ enabled: state.options.enabled }),
-      ({ enabled }) => {
-        if (!document.body.contains(el)) {
-          this.remove();
-          return this.unsubscribe();
-        }
-
-        if (enabled) {
-          this.add();
-        } else {
-          this.remove();
-        }
-      }
-    );
-  }
 }
 
 /**
  * Creates Event Handlers
  */
 export abstract class Handlers<T extends string = null> {
-  private static wm = new WeakMap();
+  // Stores a map of DOM elements to their attached connector's WatchHandler
+  private static wm = new WeakMap<HTMLElement, Record<string, WatchHandler>>();
+  // Data store to infer the enabled state from
   protected store;
 
   constructor(store) {
     this.store = store;
   }
 
-  // (Hacky) Events is replaced with any. Otherwise for some odd reason, TSC will throw an error
   abstract handlers(): Record<
     T,
-    Partial<Omit<Handler, "events"> & { events: any }>
+    Partial<Omit<Handler, "events"> & { events: any }> // (Hacky) without any, tsc throws an error
   >;
 
   // Returns ref connectors for handlers

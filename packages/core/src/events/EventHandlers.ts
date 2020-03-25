@@ -3,11 +3,11 @@ import { Handlers, ConnectorsForHandlers } from "@craftjs/utils";
 import { debounce } from "debounce";
 import { EditorStore } from "../editor/store";
 
+type DraggedElement = NodeId | Node;
+
 /**
  * Specifies Editor-wide event handlers and connectors
  */
-
-type DraggedElement = NodeId | Node;
 export class EventHandlers extends Handlers<
   "select" | "hover" | "drag" | "drop" | "create"
 > {
@@ -16,20 +16,18 @@ export class EventHandlers extends Handlers<
   static events: { indicator: Indicator };
 
   handlers() {
-    const { store } = this;
-
     let handlers = {
       select: {
         init: () => {
           return () => {
-            store.actions.setNodeEvent("selected", null);
+            this.store.actions.setNodeEvent("selected", null);
           };
         },
         events: [
           [
             "mousedown",
             debounce((_, id: NodeId) => {
-              store.actions.setNodeEvent("selected", id);
+              this.store.actions.setNodeEvent("selected", id);
             }, 1),
             true
           ]
@@ -38,14 +36,14 @@ export class EventHandlers extends Handlers<
       hover: {
         init: () => {
           return () => {
-            store.actions.setNodeEvent("hovered", null);
+            this.store.actions.setNodeEvent("hovered", null);
           };
         },
         events: [
           [
             "mouseover",
             debounce((_, id: NodeId) => {
-              store.actions.setNodeEvent("hovered", id);
+              this.store.actions.setNodeEvent("hovered", id);
             }, 1),
             true
           ]
@@ -133,7 +131,7 @@ export class EventHandlers extends Handlers<
             (e: DragEvent, userElement: React.ElementType) => {
               e.stopPropagation();
               e.stopImmediatePropagation();
-              const node = store.query.createNode(userElement);
+              const node = this.store.query.createNode(userElement);
               EventHandlers.createShadow(e, node);
             }
           ],
@@ -183,14 +181,6 @@ export class EventHandlers extends Handlers<
     this.store.actions.setNodeEvent("dragged", null);
   }
 
-  derive<T extends DerivedEventHandlers<any>, U extends any[]>(
-    type: { new (store: EditorStore, derived: EventHandlers, ...args: U): T },
-    ...args: U
-  ): T {
-    const derivedHandler = new type(this.store, this, ...args);
-    return derivedHandler;
-  }
-
   static createShadow(e: DragEvent, node?: DraggedElement) {
     const shadow = (e.target as HTMLElement).cloneNode(true) as HTMLElement;
     const { width, height } = (e.target as HTMLElement).getBoundingClientRect();
@@ -206,8 +196,24 @@ export class EventHandlers extends Handlers<
     EventHandlers.draggedElementShadow = shadow;
     EventHandlers.draggedElement = node;
   }
+
+  /**
+   * Create a new instance of Handlers with reference to the current EventHandlers
+   * @param type A class that extends DerivedEventHandlers
+   * @param args Additional arguements to pass to the constructor
+   */
+  derive<T extends DerivedEventHandlers<any>, U extends any[]>(
+    type: { new (store: EditorStore, derived: EventHandlers, ...args: U): T },
+    ...args: U
+  ): T {
+    const derivedHandler = new type(this.store, this, ...args);
+    return derivedHandler;
+  }
 }
 
+/**
+ *  Allows for external packages to easily extend EventHandlers
+ */
 export abstract class DerivedEventHandlers<T extends string> extends Handlers<
   T
 > {
