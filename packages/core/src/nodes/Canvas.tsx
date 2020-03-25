@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NodeId } from "../interfaces";
 import { mapChildrenToNodes } from "../utils/mapChildrenToNodes";
 import { useInternalNode } from "./useInternalNode";
@@ -32,7 +32,7 @@ export function Canvas<T extends React.ElementType>({
 }: Canvas<T>) {
   const id = props.id;
   const {
-    actions: { add },
+    actions: { add, setProp },
     query,
     inContext
   } = useInternalEditor();
@@ -97,6 +97,22 @@ export function Canvas<T extends React.ElementType>({
 
     setInitialised(true);
   });
+
+  /**
+   *
+   * (https://github.com/prevwong/craft.js/issues/31)
+   * When non-children props on Canvases in User Components are updated, we need to update the prop values in their corresponding Nodes
+   * in order to trigger a re-render
+   */
+  useEffect(() => {
+    if (internalId) {
+      setProp(internalId, nodeProps => {
+        Object.entries(props).forEach(([key, value]) => {
+          nodeProps[key] = value;
+        });
+      });
+    }
+  }, [internalId, props, setProp]);
 
   return (
     <React.Fragment>

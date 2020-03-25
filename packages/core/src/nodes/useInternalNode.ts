@@ -7,8 +7,6 @@ type internalActions = NodeProvider & {
   inNodeContext: boolean;
   actions: {
     setProp: (cb: any) => void;
-    setDOM: (dom: HTMLElement) => void;
-    setNodeEvent: Function;
   };
 };
 
@@ -23,7 +21,7 @@ export function useInternalNode<S = null>(
   collect?: (node: Node) => S
 ): useInternalNode<S> {
   const context = useContext(NodeContext);
-  const { id, related } = context;
+  const { id, related, connectors } = context;
 
   const { actions: EditorActions, query, ...collected } = useInternalEditor(
     state => id && state.nodes[id] && collect && collect(state.nodes[id])
@@ -31,18 +29,16 @@ export function useInternalNode<S = null>(
 
   const actions = useMemo(() => {
     return {
-      setProp: (cb: any) => EditorActions.setProp(id, cb),
-      setDOM: (dom: HTMLElement) => {
-        return EditorActions.setDOM(id, dom);
-      }
+      setProp: (cb: any) => EditorActions.setProp(id, cb)
     };
   }, [EditorActions, id]);
 
   return {
+    ...(collected as any),
     id,
     related,
     inNodeContext: !!context,
     actions,
-    ...(collected as any)
+    connectors
   };
 }

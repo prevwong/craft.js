@@ -2,7 +2,6 @@ import {
   useInternalEditor,
   EditorCollector
 } from "../editor/useInternalEditor";
-import { ConnectorElementWrapper } from "@craftjs/utils";
 import { useMemo } from "react";
 import { NodeId } from "../interfaces";
 
@@ -20,14 +19,7 @@ export type useEditor<S = null> = Overwrite<
     };
     query: Delete<useInternalEditor<S>["query"], "deserialize">;
   }
-> & {
-  connectors: {
-    select: ConnectorElementWrapper;
-    drag: ConnectorElementWrapper;
-    hover: ConnectorElementWrapper;
-    create: ConnectorElementWrapper;
-  };
-};
+>;
 
 /**
  * A Hook that that provides methods and information related to the entire editor state.
@@ -38,9 +30,10 @@ export function useEditor<S>(collect: EditorCollector<S>): useEditor<S>;
 
 export function useEditor<S>(collect?: any): useEditor<S> {
   const {
-    handlers,
+    connectors,
     actions: { setDOM, setNodeEvent, replaceNodes, reset, ...EditorActions },
     query: { deserialize, ...query },
+    store,
     ...collected
   } = useInternalEditor(collect);
 
@@ -55,7 +48,7 @@ export function useEditor<S>(collect?: any): useEditor<S> {
   }, [EditorActions, setNodeEvent]);
 
   return {
-    connectors: handlers,
+    connectors: connectors,
     actions,
     query,
     ...(collected as any)

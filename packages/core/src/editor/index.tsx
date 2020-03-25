@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Options } from "../interfaces";
 import { useEditorStore } from "../editor/store";
 import { EditorContext } from "./EditorContext";
-import { EventManager } from "../events/EventManager";
+import { Events } from "../events";
 
 export const createEditorStoreOptions = (options: Partial<Options> = {}) => {
   return {
@@ -36,7 +36,7 @@ export const Editor: React.FC<Partial<Options>> = ({
 
   return context ? (
     <EditorContext.Provider value={context}>
-      <EventManager>{children}</EventManager>
+      <Events>{children}</Events>
     </EditorContext.Provider>
   ) : null;
 };
