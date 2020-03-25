@@ -97,19 +97,14 @@
   },
   "lint-staged": {
     "packages/**/*.{js,jsx,ts,tsx}": [
-      "lint",
+      "npm run lint",
       "git add"
-    ]
-  },
-  "test-staged": {
-    "packages/**/*.{js,jsx,ts,tsx}": [
-      "test"
     ]
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "test-staged"
+      "pre-push": "jest"
     }
   }
 }
