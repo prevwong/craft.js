@@ -17,9 +17,9 @@ export const Frame: React.FC<Frame> = ({ children, json }) => {
 
   const [render, setRender] = useState<React.ReactElement | null>(null);
 
-  const initialState = useRef({
+  const initialProps = useRef({
     initialChildren: children,
-    initialJson: json
+    initialJson: json,
   });
 
   useEffect(() => {
@@ -28,8 +28,8 @@ export const Frame: React.FC<Frame> = ({ children, json }) => {
 
     const {
       initialChildren: children,
-      initialJson: json
-    } = initialState.current;
+      initialJson: json,
+    } = initialProps.current;
     if (!json) {
       const rootCanvas = React.Children.only(children) as React.ReactElement;
       invariant(

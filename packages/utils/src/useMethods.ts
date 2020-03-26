@@ -120,7 +120,7 @@ export function useMethods<
           patchListener
         );
       },
-      methods
+      methods,
     ];
   }, [methodsOrOptions, queryMethods]);
 
@@ -160,7 +160,7 @@ export function useMethods<
       getState,
       subscribe: (collector, cb) => watcher.subscribe(collector, cb),
       actions,
-      query
+      query,
     }),
     [actions, query, watcher, getState]
   ) as any;
@@ -172,7 +172,7 @@ export function createQuery<Q extends QueryMethods>(queryMethods: Q, getState) {
       ...accum,
       [key]: (...args: any) => {
         return queryMethods(getState())[key](...args);
-      }
+      },
     };
   }, {} as QueryCallbacksFor<typeof queryMethods>);
 }

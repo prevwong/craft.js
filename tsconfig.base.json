@@ -5,10 +5,7 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": [
-      "esnext",
-      "dom"
-    ],
+    "lib": ["esnext", "dom"],
     "strict": false,
     "experimentalDecorators": true,
     "noUnusedLocals": false,
@@ -17,7 +14,5 @@
     "declaration": true,
     "allowSyntheticDefaultImports": true
   },
-  "exclude": [
-    "**/node_modules/**"
-  ]
+  "exclude": ["**/node_modules/**"]
 }

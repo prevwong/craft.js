@@ -5,7 +5,7 @@ import {
   StateFor,
   QueryCallbacksFor,
   QueryMethods,
-  SubscriberAndCallbacksFor
+  SubscriberAndCallbacksFor,
 } from "./useMethods";
 
 type Actions<M extends Methods, Q extends QueryMethods> = {
@@ -66,8 +66,8 @@ export function useCollector<
     let unsubscribe;
     if (collectorRef.current) {
       unsubscribe = subscribe(
-        current => collectorRef.current(current, query),
-        collected => {
+        (current) => collectorRef.current(current, query),
+        (collected) => {
           setRenderCollected(onCollect(collected));
         }
       );

@@ -19,9 +19,9 @@ describe("Canvas", () => {
   };
 
   it("Converts nodes", async () => {
-    const nodes = await new Promise(resolve => {
+    const nodes = await new Promise((resolve) => {
       const Collector = () => {
-        const { nodes } = useEditor(state => ({ nodes: state.nodes }));
+        const { nodes } = useEditor((state) => ({ nodes: state.nodes }));
         useEffect(() => {
           resolve(nodes);
         }, [nodes]);
