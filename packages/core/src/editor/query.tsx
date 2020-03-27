@@ -63,9 +63,9 @@ export function QueryMethods(Editor: EditorState) {
       return node;
     },
     /**
-     * Retrieve the JSON representation of the editor's Nodes
+     * Get simplified editor's Nodes
      */
-    serialize(): string {
+    getState(): any {
       const simplifiedNodes = Object.keys(Editor.nodes).reduce(
         (result: any, id: NodeId) => {
           const {
@@ -76,6 +76,14 @@ export function QueryMethods(Editor: EditorState) {
         },
         {}
       );
+
+      return simplifiedNodes;
+    },
+    /**
+     * Retrieve the JSON representation of the editor's Nodes
+     */
+    serialize(): string {
+      const simplifiedNodes = this.getState();
 
       const json = JSON.stringify(simplifiedNodes);
 

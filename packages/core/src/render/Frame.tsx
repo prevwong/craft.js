@@ -7,30 +7,37 @@ import invariant from "tiny-invariant";
 
 export type Frame = {
   json?: string;
+  // TODO(mat) this can be typed in nicer way
+  data?: any;
 };
 
 /**
  * A React Component that defines the editable area
  */
-export const Frame: React.FC<Frame> = ({ children, json }) => {
+export const Frame: React.FC<Frame> = ({ children, json, data }) => {
   const { actions, query } = useInternalEditor();
 
   const [render, setRender] = useState<React.ReactElement | null>(null);
 
   const initialState = useRef({
     initialChildren: children,
-    initialJson: json
+    initialJson: json,
+    initialData: data
   });
 
   useEffect(() => {
-    const { replaceNodes, deserialize } = actions;
+    const { replaceNodes, deserialize, setState } = actions;
     const { createNode } = query;
 
     const {
       initialChildren: children,
       initialJson: json
     } = initialState.current;
-    if (!json) {
+    if (!!json) {
+      deserialize(json);
+    } else if (!!data) {
+      setState(data);
+    } else {
       const rootCanvas = React.Children.only(children) as React.ReactElement;
       invariant(
         rootCanvas.type && rootCanvas.type === Canvas,
@@ -38,8 +45,6 @@ export const Frame: React.FC<Frame> = ({ children, json }) => {
       );
       const node = createNode(rootCanvas, { id: ROOT_NODE });
       replaceNodes({ [ROOT_NODE]: node });
-    } else {
-      deserialize(json);
     }
 
     setRender(<NodeElement id={ROOT_NODE} />);
