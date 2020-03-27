@@ -29,16 +29,15 @@ export const Frame: React.FC<Frame> = ({ children, json, data }) => {
     const { replaceNodes, deserialize, setState } = actions;
     const { createNode } = query;
 
-    const {
-      initialChildren: children,
-      initialJson: json
-    } = initialState.current;
-    if (!!json) {
-      deserialize(json);
-    } else if (!!data) {
-      setState(data);
+    const { initialChildren, initialJson, initialData } = initialState.current;
+    if (!!initialJson) {
+      deserialize(initialJson);
+    } else if (!!initialData) {
+      setState(initialData);
     } else {
-      const rootCanvas = React.Children.only(children) as React.ReactElement;
+      const rootCanvas = React.Children.only(
+        initialChildren
+      ) as React.ReactElement;
       invariant(
         rootCanvas.type && rootCanvas.type === Canvas,
         ERROR_FRAME_IMMEDIATE_NON_CANVAS
