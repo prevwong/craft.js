@@ -211,10 +211,10 @@ export const Actions = (
     ) {
       cb(state.nodes[id].data.custom);
     },
-    deserialize(json: string) {
-      const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
-      const rehydratedNodes = Object.keys(reducedNodes).reduce(
-        (accum: Nodes, id) => {
+    deserialize(nodes: object) {
+      const dehydratedNodes = nodes as Record<NodeId, SerializedNodeData>;
+      const rehydratedNodes = Object.keys(dehydratedNodes).reduce(
+        (accum: Nodes, id: string) => {
           const {
             type: Comp,
             props,
@@ -224,9 +224,11 @@ export const Actions = (
             isCanvas,
             hidden,
             custom
-          } = deserializeNode(reducedNodes[id], state.options.resolver);
+          } = deserializeNode(dehydratedNodes[id], state.options.resolver);
 
-          if (!Comp) return accum;
+          if (!Comp) {
+            return accum;
+          }
 
           accum[id] = query.createNode(createElement(Comp, props), {
             id,

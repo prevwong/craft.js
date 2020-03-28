@@ -62,24 +62,22 @@ export function QueryMethods(Editor: EditorState) {
       node.data.name = name;
       return node;
     },
+
+    getSerializedNodes(): object {
+      return Object.keys(Editor.nodes).reduce((result: any, id: NodeId) => {
+        const {
+          data: { ...data }
+        } = Editor.nodes[id];
+        result[id] = serializeNode({ ...data }, options.resolver);
+        return result;
+      }, {});
+    },
+
     /**
      * Retrieve the JSON representation of the editor's Nodes
      */
     serialize(): string {
-      const simplifiedNodes = Object.keys(Editor.nodes).reduce(
-        (result: any, id: NodeId) => {
-          const {
-            data: { ...data }
-          } = Editor.nodes[id];
-          result[id] = serializeNode({ ...data }, options.resolver);
-          return result;
-        },
-        {}
-      );
-
-      const json = JSON.stringify(simplifiedNodes);
-
-      return json;
+      return JSON.stringify(_().getSerializedNodes());
     },
     /**
      * Determine the best possible location to drop the source Node relative to the target Node

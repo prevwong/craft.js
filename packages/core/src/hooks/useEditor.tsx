@@ -48,7 +48,7 @@ export function useEditor<S>(collect?: any): useEditor<S> {
   }, [EditorActions, setNodeEvent]);
 
   return {
-    connectors: connectors,
+    connectors,
     actions,
     query,
     ...(collected as any)
