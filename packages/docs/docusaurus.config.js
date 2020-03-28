@@ -70,7 +70,7 @@ module.exports = {
             },
             {
               label: 'NPM',
-              href: 'https://npmjs.com/package/@craftjs/core',
+              href: 'https://npmjs.com/package/@candulabs/craft-core',
             },
           ],
         },

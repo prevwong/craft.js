@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import cx from "classnames";
-import { useEditor } from "@craftjs/core";
+import { useEditor } from "@candulabs/craft-core";
 import { Toolbox } from "./Toolbox";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";

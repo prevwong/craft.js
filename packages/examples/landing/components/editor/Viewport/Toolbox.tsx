@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Canvas, useEditor} from "@craftjs/core";
+import {  Canvas, useEditor} from "@candulabs/craft-core";
 import { Container } from '../../selectors/Container';
 import { Text } from "../../selectors/Text";
 import { Video } from '../../selectors/Video';

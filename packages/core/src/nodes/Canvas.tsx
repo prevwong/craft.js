@@ -7,7 +7,7 @@ import {
   ERROR_ROOT_CANVAS_NO_ID,
   ERROR_INFINITE_CANVAS,
   useEffectOnce
-} from "@craftjs/utils";
+} from "@candulabs/craft-utils";
 import invariant from "tiny-invariant";
 import { SimpleElement } from "../render/SimpleElement";
 import { NodeElement } from "./NodeElement";

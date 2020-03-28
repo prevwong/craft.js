@@ -1,6 +1,6 @@
 import React from "react";
 import { QueryMethods } from "../editor/query";
-import { QueryCallbacksFor } from "@craftjs/utils";
+import { QueryCallbacksFor } from "@candulabs/craft-utils";
 
 type UserComponentConfig<T> = {
   name: string;

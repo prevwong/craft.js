@@ -5,7 +5,8 @@ import {
   Indicator,
   Node,
   Options,
-  NodeInfo
+  NodeInfo,
+  SerializedNodeData
 } from "../interfaces";
 import { serializeNode } from "../utils/serializeNode";
 import { resolveComponent } from "../utils/resolveComponent";
@@ -25,7 +26,7 @@ import {
   ERROR_MOVE_TOP_LEVEL_CANVAS,
   ERROR_MOVE_ROOT_NODE,
   ERROR_INVALID_NODE_ID
-} from "@craftjs/utils";
+} from "@candulabs/craft-utils";
 import findPosition from "../events/findPosition";
 import { getDeepNodes } from "../utils/getDeepNodes";
 import { transformJSXToNode } from "../utils/transformJSX";
@@ -63,7 +64,7 @@ export function QueryMethods(Editor: EditorState) {
       return node;
     },
 
-    getSerializedNodes(): object {
+    getState(): Record<NodeId, SerializedNodeData> {
       return Object.keys(Editor.nodes).reduce((result: any, id: NodeId) => {
         const {
           data: { ...data }
@@ -72,12 +73,11 @@ export function QueryMethods(Editor: EditorState) {
         return result;
       }, {});
     },
-
     /**
      * Retrieve the JSON representation of the editor's Nodes
      */
     serialize(): string {
-      return JSON.stringify(_().getSerializedNodes());
+      return JSON.stringify(this.getState());
     },
     /**
      * Determine the best possible location to drop the source Node relative to the target Node

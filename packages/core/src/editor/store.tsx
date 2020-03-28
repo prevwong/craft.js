@@ -1,4 +1,4 @@
-import { useMethods, SubscriberAndCallbacksFor } from "@craftjs/utils";
+import { useMethods, SubscriberAndCallbacksFor } from "@candulabs/craft-utils";
 import { Actions } from "./actions";
 import { QueryMethods } from "./query";
 

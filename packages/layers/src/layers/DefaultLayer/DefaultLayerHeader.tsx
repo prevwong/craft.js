@@ -1,5 +1,5 @@
 import React from "react";
-import { useEditor } from "@craftjs/core";
+import { useEditor } from "@candulabs/craft-core";
 import styled from "styled-components";
 import Eye from "./svg/eye.svg";
 import Arrow from "./svg/arrow.svg";

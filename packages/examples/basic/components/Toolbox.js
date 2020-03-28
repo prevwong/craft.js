@@ -5,7 +5,7 @@ import {
   Grid,
   Button as MaterialButton
 } from "@material-ui/core";
-import { useEditor, Canvas } from "@craftjs/core";
+import { useEditor, Canvas } from "@candulabs/craft-core";
 import { Container } from "./user/Container";
 import { Card } from "./user/Card";
 import { Button } from "./user/Button";

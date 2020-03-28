@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNode, useEditor} from "@craftjs/core";
+import { useNode, useEditor} from "@candulabs/craft-core";
 import { TextSettings } from "./TextSettings";
 import ContentEditable from "react-contenteditable";
 

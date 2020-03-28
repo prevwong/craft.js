@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useCallback } from "react";
-import { useNode, useEditor } from "@craftjs/core";
+import { useNode, useEditor } from "@candulabs/craft-core";
 import styled from "styled-components";
 import ArrowUp from "../../public/icons/arrow-up.svg";
 import Move from "../../public/icons/move.svg";
 import Delete from "../../public/icons/delete.svg";
 import ReactDOM from "react-dom";
-import { ROOT_NODE } from "@craftjs/utils";
+import { ROOT_NODE } from "@candulabs/craft-utils";
 
 const IndicatorDiv = styled.div`
   height: 30px;

@@ -57,7 +57,7 @@ const Container = () => {
 
 ### Basics
 ```jsx 
-import {Craft, Frame, Canvas} from "@craftjs/core";
+import {Craft, Frame, Canvas} from "@candulabs/craft-core";
 
 const App = () => {
   return (

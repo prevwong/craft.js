@@ -6,7 +6,7 @@ import {
 } from "./Container";
 import { Text } from "./Text";
 import { Button } from "./Button";
-import { Canvas, useNode } from "@craftjs/core";
+import { Canvas, useNode } from "@candulabs/craft-core";
 
 export const CardTop = ({ children }) => {
   const {

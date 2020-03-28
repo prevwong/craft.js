@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useLayer } from "../useLayer";
 import { DefaultLayerHeader } from "./DefaultLayerHeader";
-import { useEditor } from "@craftjs/core";
+import { useEditor } from "@candulabs/craft-core";
 
 const LayerNodeDiv = styled.div<{
   expanded: boolean;

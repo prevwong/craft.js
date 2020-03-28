@@ -24,7 +24,7 @@ We'll use `lzutf8` to compress our serialised JSON Nodes, and additionally trans
 ```jsx {24-36}
 import React, { useState } from "react";
 import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Snackbar } from "@material-ui/core";
-import { useEditor } from "@craftjs/core";
+import { useEditor } from "@candulabs/craft-core";
 import lz from "lzutf8";
 import copy from 'copy-to-clipboard';
 
@@ -82,7 +82,7 @@ Then, we would need to work in reverse to obtain the original JSON provided by o
 ```jsx {12-14,40-83}
 import React, { useState } from "react";
 import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Snackbar } from "@material-ui/core";
-import { useEditor } from "@craftjs/core";
+import { useEditor } from "@candulabs/craft-core";
 import lz from "lzutf8";
 import copy from 'copy-to-clipboard';
 
@@ -193,7 +193,7 @@ import {Button} from '../components/user/Button';
 import {Card, CardBottom, CardTop} from '../components/user/Card';
 import {Text} from '../components/user/Text';
 import {SettingsPanel} from '../components/SettingsPanel';
-import {Editor, Frame, Canvas} from "@craftjs/core";
+import {Editor, Frame, Canvas} from "@candulabs/craft-core";
 import { Topbar } from '../components/Topbar';
 
 

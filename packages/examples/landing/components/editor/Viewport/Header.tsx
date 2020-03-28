@@ -1,5 +1,5 @@
 import React  from "react";
-import { useEditor } from "@craftjs/core";
+import { useEditor } from "@candulabs/craft-core";
 import styled from "styled-components";
 import Checkmark from "../../../public/icons/check.svg";
 import Customize from "../../../public/icons/customize.svg";

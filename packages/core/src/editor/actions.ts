@@ -14,7 +14,7 @@ import {
   CallbacksFor,
   QueryCallbacksFor,
   ERROR_NOPARENT
-} from "@craftjs/utils";
+} from "@candulabs/craft-utils";
 import { QueryMethods } from "./query";
 import { updateEventsNode } from "../utils/updateEventsNode";
 import invariant from "tiny-invariant";
@@ -211,8 +211,11 @@ export const Actions = (
     ) {
       cb(state.nodes[id].data.custom);
     },
-    deserialize(nodes: object) {
-      const dehydratedNodes = nodes as Record<NodeId, SerializedNodeData>;
+    deserialize(json: string) {
+      const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
+      this.setState(reducedNodes);
+    },
+    setState(dehydratedNodes: Record<NodeId, SerializedNodeData>) {
       const rehydratedNodes = Object.keys(dehydratedNodes).reduce(
         (accum: Nodes, id: string) => {
           const {

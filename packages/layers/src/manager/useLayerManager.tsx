@@ -1,4 +1,4 @@
-import { useCollector } from "@craftjs/utils";
+import { useCollector } from "@candulabs/craft-utils";
 import { useContext } from "react";
 import { LayerManagerContext } from "./context";
 import { LayerState } from "../interfaces";

@@ -6,19 +6,19 @@
     "allowJs": true,
     "esModuleInterop": true,
     "paths": {
-      "@craftjs/core": [
+      "@candulabs/craft-core": [
         "packages/core/src/index"
       ],
-      "@craftjs/*": [
+      "@candulabs/craft-core/*": [
         "packages/core/src/*"
       ],
-      "@craftjs/layers": [
+      "@candulabs/craft-layers": [
         "packages/layers/src/index"
       ],
-      "@craftjs/utils": [
+      "@candulabs/craft-utils": [
         "packages/utils/src/index"
       ],
-      "@craftjs/utils/*": [
+      "@candulabs/craft-utils/*": [
         "packages/utils/src/*"
       ]
     }

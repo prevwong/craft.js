@@ -31,7 +31,7 @@ Both props specifies the initial screen to render. You must design the default s
 
 ### Designing the default screen
 ```tsx {9,10,16,17}
-import {Editor, Frame, Canvas} from "@craftjs/core";
+import {Editor, Frame, Canvas} from "@candulabs/craft-core";
 
 const App = () => {
   return (
@@ -56,7 +56,7 @@ const App = () => {
 
 ### Loading from serialised Nodes
 ```tsx {10}
-import {Editor, Frame, Canvas} from "@craftjs/core";
+import {Editor, Frame, Canvas} from "@candulabs/craft-core";
 
 const App = () => {
   return (

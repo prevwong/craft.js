@@ -1,5 +1,5 @@
 import React from "react";
-import { UserComponent, useNode } from "@craftjs/core";
+import { UserComponent, useNode } from "@candulabs/craft-core";
 import { Text } from "../Text";
 import { ButtonSettings } from "./ButtonSettings";
 import styled from "styled-components";

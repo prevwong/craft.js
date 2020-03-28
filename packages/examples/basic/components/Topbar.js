@@ -12,7 +12,7 @@ import {
   TextField,
   Snackbar
 } from "@material-ui/core";
-import { useEditor } from "@craftjs/core";
+import { useEditor } from "@candulabs/craft-core";
 import lz from "lzutf8";
 import copy from "copy-to-clipboard";
 

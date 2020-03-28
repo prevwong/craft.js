@@ -1,6 +1,6 @@
-import { NodeId, Node, DerivedEventHandlers } from "@craftjs/core";
+import { NodeId, Node, DerivedEventHandlers } from "@candulabs/craft-core";
 import { LayerIndicator } from "interfaces";
-import { ConnectorsForHandlers } from "@craftjs/utils";
+import { ConnectorsForHandlers } from "@candulabs/craft-utils";
 
 export class LayerHandlers extends DerivedEventHandlers<
   "layer" | "layerHeader" | "drag"

@@ -7,7 +7,7 @@ import { Button } from "../components/user/Button";
 import { Card, CardBottom, CardTop } from "../components/user/Card";
 import { Text } from "../components/user/Text";
 import { SettingsPanel } from "../components/SettingsPanel";
-import { Editor, Frame, Canvas } from "@craftjs/core";
+import { Editor, Frame, Canvas } from "@candulabs/craft-core";
 import { Topbar } from "../components/Topbar";
 
 const useStyles = makeStyles(theme => ({

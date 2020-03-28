@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Slider, RadioGroup } from '@material-ui/core'
-import { useNode } from '@craftjs/core';
+import { useNode } from '@candulabs/craft-core';
 import { ToolbarTextInput } from './ToolbarTextInput'
 import { ToolbarDropdown } from './ToolbarDropdown'
 import { withStyles } from '@material-ui/styles';

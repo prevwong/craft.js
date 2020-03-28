@@ -1,5 +1,5 @@
 import React from "react";
-import { useNode, useEditor} from "@craftjs/core";
+import { useNode, useEditor} from "@candulabs/craft-core";
 import { VideoSettings } from "./VideoSettings";
 import styled from "styled-components";
 import YouTube from 'react-youtube';

@@ -1,10 +1,10 @@
 
 <div align="center" style={{d}}>
-<h1>@craftjs/layers</h1>
+<h1>@candulabs/craft-layers</h1>
 
-<a href="https://www.npmjs.com/package/@craftjs/layers">
-  <img src="https://img.shields.io/npm/v/@craftjs/layers?color=%232680eb&label=NPM&logo=npm&logoColor=%232680eb&style=for-the-badge">
-</a><img alt="NPM" src="https://img.shields.io/npm/l/@craftjs/layers?color=%23000&style=for-the-badge">
+<a href="https://www.npmjs.com/package/@candulabs/craft-layers">
+  <img src="https://img.shields.io/npm/v/@candulabs/craft-layers?color=%232680eb&label=NPM&logo=npm&logoColor=%232680eb&style=for-the-badge">
+</a><img alt="NPM" src="https://img.shields.io/npm/l/@candulabs/craft-layers?color=%23000&style=for-the-badge">
 </div>
 
 <div align="center" style={{d}}>
@@ -29,13 +29,13 @@
 ## Usage
 
 ```bash
-yarn add @craftjs/layers
+yarn add @candulabs/craft-layers
 ```
 
 ```jsx
 import React from "react";
-import {Editor} from "@craftjs/core"
-import {Layers} from "@craftjs/layers"
+import {Editor} from "@candulabs/craft-core"
+import {Layers} from "@candulabs/craft-layers"
 
 export default function App() {
   return (

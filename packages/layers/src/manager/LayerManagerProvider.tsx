@@ -1,6 +1,6 @@
 import React from "react";
 import { EventManager } from "../events";
-import { useMethods } from "@craftjs/utils";
+import { useMethods } from "@candulabs/craft-utils";
 import { LayerMethods } from "./actions";
 import { LayerOptions } from "../interfaces";
 import { DefaultLayer } from "../layers";

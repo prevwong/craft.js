@@ -1,7 +1,7 @@
 import React from "react";
 import { mount } from "enzyme";
 import invariant from "tiny-invariant";
-import { ERROR_FRAME_IMMEDIATE_NON_CANVAS } from "@craftjs/utils";
+import { ERROR_FRAME_IMMEDIATE_NON_CANVAS } from "@candulabs/craft-utils";
 
 import { Frame } from "../Frame";
 import { useInternalEditor } from "../../editor/useInternalEditor";
@@ -17,13 +17,13 @@ jest.mock("../../nodes/NodeElement", () => ({
 const mockEditor = useInternalEditor as jest.Mock<any>;
 
 describe("<Frame />", () => {
-  const nodes = {};
-  const json = JSON.stringify(nodes);
+  const data = {};
+  const json = JSON.stringify(data);
   let actions;
   let query;
 
   beforeEach(() => {
-    actions = { replaceNodes: jest.fn(), deserialize: jest.fn() };
+    actions = { replaceNodes: jest.fn(), setState: jest.fn() };
     query = { createNode: jest.fn() };
     mockEditor.mockImplementation(() => ({ actions, query }));
   });
@@ -41,17 +41,17 @@ describe("<Frame />", () => {
     beforeEach(() => {
       mount(<Frame json={json} />);
     });
-    it("should deserialize the json", () => {
-      expect(actions.deserialize).toHaveBeenCalledWith(JSON.parse(json));
+    it("should parse json and call setState", () => {
+      expect(actions.setState).toHaveBeenCalledWith(JSON.parse(json));
     });
   });
 
-  describe("When rendering using `nodes`", () => {
+  describe("When rendering using `data`", () => {
     beforeEach(() => {
-      mount(<Frame nodes={nodes} />);
+      mount(<Frame data={data} />);
     });
     it("should deserialize the nodes", () => {
-      expect(actions.deserialize).toHaveBeenCalledWith(nodes);
+      expect(actions.setState).toHaveBeenCalledWith(data);
     });
   });
 });

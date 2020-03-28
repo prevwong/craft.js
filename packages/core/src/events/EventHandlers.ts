@@ -1,5 +1,5 @@
 import { NodeId, Node, Indicator } from "../interfaces";
-import { Handlers, ConnectorsForHandlers } from "@craftjs/utils";
+import { Handlers, ConnectorsForHandlers } from "@candulabs/craft-utils";
 import { debounce } from "debounce";
 import { EditorStore } from "../editor/store";
 

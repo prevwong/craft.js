@@ -1,7 +1,7 @@
 import { useContext, useMemo } from "react";
 import { LayerContext } from "./LayerContext";
 import { useLayerManager } from "../manager";
-import { useEditor } from "@craftjs/core";
+import { useEditor } from "@candulabs/craft-core";
 import { Layer } from "../interfaces";
 
 type internalActions = LayerContext & {

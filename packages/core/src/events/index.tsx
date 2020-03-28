@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useInternalEditor } from "../editor/useInternalEditor";
-import { RenderIndicator, getDOMInfo } from "@craftjs/utils";
+import { RenderIndicator, getDOMInfo } from "@candulabs/craft-utils";
 import movePlaceholder from "./movePlaceholder";
 import { EventHandlers } from "./EventHandlers";
 import { EventHandlerContext } from "./EventContext";

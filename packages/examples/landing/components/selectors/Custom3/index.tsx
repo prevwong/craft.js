@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "../Container";
-import { Canvas, useNode} from "@craftjs/core";
+import { Canvas, useNode} from "@candulabs/craft-core";
 import { Button } from "../Button";
 
 

@@ -7,7 +7,7 @@ import {
   Radio,
   FormControlLabel
 } from "@material-ui/core";
-import { useNode } from "@craftjs/core";
+import { useNode } from "@candulabs/craft-core";
 
 export const Button = ({ size, variant, color, text }) => {
   const {

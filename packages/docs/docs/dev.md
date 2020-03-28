@@ -39,7 +39,7 @@ const Card = ({title}) => {
 First, to integrate it with with Craft.js' drag-and-drop system, we just need to do the following modifications:
 
 ```jsx
-import {useNode} from "@craftjs/core";
+import {useNode} from "@candulabs/craft-core";
 
 const Card = ({title}) => {
   const { connectors: { connect, drag } } = useNode();
@@ -77,7 +77,7 @@ This is where the`<Canvas />` component provided by Craft.js becomes useful. It 
 
 
 ```jsx
-import {useNode, Canvas} from "@craftjs/core";
+import {useNode, Canvas} from "@candulabs/craft-core";
 
 const Card = ({title}) => {
   const { connectors: { connect, drag } } = useNode();
@@ -94,7 +94,7 @@ const Card = ({title}) => {
 Your next question might be about how we control our newly created droppable region. The `<Canvas />` component accepts an `is` prop which can be either a HTML element or a React component (by default, it's a `div`). So, if we supply a React component, we can essentially achieve the same design flexibility as we have with our Card component:
 
 ```jsx
-import {useNode, Canvas} from "@craftjs/core";
+import {useNode, Canvas} from "@candulabs/craft-core";
 
 const Container = ({children}) => {
   const { connectors: {connect} } = useNode();

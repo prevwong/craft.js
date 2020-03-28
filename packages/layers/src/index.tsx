@@ -1,7 +1,7 @@
 import React from "react";
 import { LayerContextProvider } from "./layers/LayerContextProvider";
 import { LayerManagerProvider } from "./manager/LayerManagerProvider";
-import { ROOT_NODE } from "@craftjs/utils";
+import { ROOT_NODE } from "@candulabs/craft-utils";
 import { LayerOptions } from "./interfaces";
 export { useLayer } from "./layers";
 

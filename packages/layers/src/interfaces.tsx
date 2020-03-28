@@ -1,4 +1,4 @@
-import { NodeId, Indicator } from "@craftjs/core";
+import { NodeId, Indicator } from "@candulabs/craft-core";
 
 export type Layer = {
   id: NodeId;

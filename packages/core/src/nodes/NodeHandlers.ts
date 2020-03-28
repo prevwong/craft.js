@@ -1,5 +1,5 @@
 import { DerivedEventHandlers } from "../events";
-import { ConnectorsForHandlers } from "@craftjs/utils";
+import { ConnectorsForHandlers } from "@candulabs/craft-utils";
 
 /**
  * Creates Node-specific event handlers and connectors

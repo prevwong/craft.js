@@ -1,11 +1,11 @@
 import React, {useState} from "react"
-import { Layers } from "@craftjs/layers";
+import { Layers } from "@candulabs/craft-layers";
 import { Toolbar } from '../../Toolbar';
 import {SidebarItem} from "./SidebarItem";
 import styled from "styled-components";
 import CustomizeIcon from "../../../../public/icons/customize.svg";
 import LayerIcon from "../../../../public/icons/layers.svg";
-import { useEditor} from "@craftjs/core";
+import { useEditor} from "@candulabs/craft-core";
 
 export const SidebarDiv = styled.div<{ enabled: boolean }>`
 width: ${props => props.enabled ? 280 : 0}px;
