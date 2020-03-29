@@ -28,14 +28,14 @@ export function cloneWithRef(
   if (!previousRef) {
     // When there is no ref on the element, use the new ref directly
     return cloneElement(element, {
-      ref: newRef
+      ref: newRef,
     });
   } else {
     return cloneElement(element, {
       ref: (node: any) => {
         setRef(previousRef, node);
         setRef(newRef, node);
-      }
+      },
     });
   }
 }

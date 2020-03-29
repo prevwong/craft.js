@@ -17,28 +17,27 @@ export const Frame: React.FC<Frame> = ({ children, json }) => {
 
   const [render, setRender] = useState<React.ReactElement | null>(null);
 
-  const initial = useRef({
+  const initialProps = useRef({
     initialChildren: children,
-    initialJson: json
+    initialJson: json,
   });
 
   useEffect(() => {
     const { replaceNodes, deserialize } = actions;
     const { createNode } = query;
 
-    const { initialChildren: children, initialJson: json } = initial.current;
+    const {
+      initialChildren: children,
+      initialJson: json,
+    } = initialProps.current;
     if (!json) {
       const rootCanvas = React.Children.only(children) as React.ReactElement;
       invariant(
         rootCanvas.type && rootCanvas.type === Canvas,
         ERROR_FRAME_IMMEDIATE_NON_CANVAS
       );
-      let node = createNode(rootCanvas, {
-        id: ROOT_NODE
-      });
-      replaceNodes({
-        [ROOT_NODE]: node
-      });
+      const node = createNode(rootCanvas, { id: ROOT_NODE });
+      replaceNodes({ [ROOT_NODE]: node });
     } else {
       deserialize(json);
     }

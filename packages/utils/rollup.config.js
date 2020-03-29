@@ -2,5 +2,5 @@ import config from "../../rollup.config";
 
 export default {
   ...config,
-  input: "./src/index.ts"
+  input: "./src/index.ts",
 };

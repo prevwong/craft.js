@@ -5,10 +5,7 @@
     "outDir": "./lib",
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "jsx" : "react"
+    "jsx": "react"
   },
-  "include": [
-    "src/index.tsx",
-    "svg.d.ts"
-  ]
+  "include": ["src/index.tsx", "svg.d.ts"]
 }

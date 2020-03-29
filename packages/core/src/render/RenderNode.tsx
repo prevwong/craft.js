@@ -5,15 +5,15 @@ import { useInternalEditor } from "../editor/useInternalEditor";
 import { SimpleElement } from "./SimpleElement";
 
 export const RenderNodeToElement: React.FC<any> = ({ ...injectedProps }) => {
-  const { type, props, isCanvas, hidden } = useNode(node => ({
+  const { type, props, isCanvas, hidden } = useNode((node) => ({
     type: node.data.type,
     props: node.data.props,
     isCanvas: node.data.isCanvas,
-    hidden: node.data.hidden
+    hidden: node.data.hidden,
   }));
 
-  const { onRender } = useInternalEditor(state => ({
-    onRender: state.options.onRender
+  const { onRender } = useInternalEditor((state) => ({
+    onRender: state.options.onRender,
   }));
 
   let Comp = isCanvas ? Canvas : type;

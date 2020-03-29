@@ -5,7 +5,7 @@ import {
   Indicator,
   Node,
   Options,
-  NodeInfo
+  NodeInfo,
 } from "../interfaces";
 import { serializeNode } from "../utils/serializeNode";
 import { resolveComponent } from "../utils/resolveComponent";
@@ -24,7 +24,7 @@ import {
   ERROR_CANNOT_DRAG,
   ERROR_MOVE_TOP_LEVEL_CANVAS,
   ERROR_MOVE_ROOT_NODE,
-  ERROR_INVALID_NODE_ID
+  ERROR_INVALID_NODE_ID,
 } from "@craftjs/utils";
 import findPosition from "../events/findPosition";
 import { getDeepNodes } from "../utils/getDeepNodes";
@@ -69,7 +69,7 @@ export function QueryMethods(Editor: EditorState) {
       const simplifiedNodes = Object.keys(Editor.nodes).reduce(
         (result: any, id: NodeId) => {
           const {
-            data: { ...data }
+            data: { ...data },
           } = Editor.nodes[id];
           result[id] = serializeNode({ ...data }, options.resolver);
           return result;
@@ -88,16 +88,14 @@ export function QueryMethods(Editor: EditorState) {
       source: NodeId | Node,
       target: NodeId,
       pos: { x: number; y: number },
-      nodesToDOM: (node: Node) => HTMLElement = node =>
+      nodesToDOM: (node: Node) => HTMLElement = (node) =>
         Editor.nodes[node.id].dom
     ) => {
       if (source === target) return;
       const sourceNodeFromId =
           typeof source == "string" && Editor.nodes[source],
         targetNode = Editor.nodes[target],
-        isTargetCanvas = _()
-          .node(targetNode.id)
-          .isCanvas();
+        isTargetCanvas = _().node(targetNode.id).isCanvas();
 
       const targetParent = isTargetCanvas
         ? targetNode
@@ -113,7 +111,7 @@ export function QueryMethods(Editor: EditorState) {
             if (dom) {
               const info: NodeInfo = {
                 id,
-                ...getDOMInfo(dom)
+                ...getDOMInfo(dom),
               };
 
               result.push(info);
@@ -135,22 +133,22 @@ export function QueryMethods(Editor: EditorState) {
       const output: Indicator = {
         placement: {
           ...dropAction,
-          currentNode
+          currentNode,
         },
-        error: false
+        error: false,
       };
 
       // If source Node is already in the editor, check if it's draggable
       if (sourceNodeFromId) {
         _()
           .node(sourceNodeFromId.id)
-          .isDraggable(err => (output.error = err));
+          .isDraggable((err) => (output.error = err));
       }
 
       // Check if source Node is droppable in target
       _()
         .node(targetParent.id)
-        .isDroppable(source, err => (output.error = err));
+        .isDroppable(source, (err) => (output.error = err));
 
       return output;
     },
@@ -257,8 +255,8 @@ export function QueryMethods(Editor: EditorState) {
             if (onError) onError(err);
             return false;
           }
-        }
+        },
       };
-    }
+    },
   };
 }

@@ -10,15 +10,15 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  Snackbar
+  Snackbar,
 } from "@material-ui/core";
 import { useEditor } from "@craftjs/core";
 import lz from "lzutf8";
 import copy from "copy-to-clipboard";
 
 export const Topbar = ({ onLoadState }) => {
-  const { actions, query, enabled } = useEditor(state => ({
-    enabled: state.options.enabled
+  const { actions, query, enabled } = useEditor((state) => ({
+    enabled: state.options.enabled,
   }));
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -36,7 +36,7 @@ export const Topbar = ({ onLoadState }) => {
               <Switch
                 checked={enabled}
                 onChange={(_, value) =>
-                  actions.setOptions(options => (options.enabled = value))
+                  actions.setOptions((options) => (options.enabled = value))
                 }
               />
             }
@@ -81,7 +81,7 @@ export const Topbar = ({ onLoadState }) => {
                 placeholder='Paste the contents that was copied from the "Copy Current State" button'
                 size="small"
                 value={stateToLoad || ""}
-                onChange={e => setStateToLoad(e.target.value)}
+                onChange={(e) => setStateToLoad(e.target.value)}
               />
             </DialogContent>
             <DialogActions>

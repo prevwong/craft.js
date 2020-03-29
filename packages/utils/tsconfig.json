@@ -5,11 +5,9 @@
     "outDir": "./lib",
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "jsx" : "react",
+    "jsx": "react",
     "declaration": true,
-    "declarationDir": "./lib",
+    "declarationDir": "./lib"
   },
-  "include": [
-    "./src/index.ts"
-  ]
+  "include": ["./src/index.ts"]
 }

@@ -13,9 +13,9 @@ export const useEditorStore = (options): EditorStore => {
         selected: null,
         dragged: null,
         hovered: null,
-        indicator: null
+        indicator: null,
       },
-      options
+      options,
     },
     QueryMethods
   );

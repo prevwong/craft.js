@@ -24,12 +24,12 @@ export function useInternalNode<S = null>(
   const { id, related, connectors } = context;
 
   const { actions: EditorActions, query, ...collected } = useInternalEditor(
-    state => id && state.nodes[id] && collect && collect(state.nodes[id])
+    (state) => id && state.nodes[id] && collect && collect(state.nodes[id])
   );
 
   const actions = useMemo(() => {
     return {
-      setProp: (cb: any) => EditorActions.setProp(id, cb)
+      setProp: (cb: any) => EditorActions.setProp(id, cb),
     };
   }, [EditorActions, id]);
 
@@ -39,6 +39,6 @@ export function useInternalNode<S = null>(
     related,
     inNodeContext: !!context,
     actions,
-    connectors
+    connectors,
   };
 }
