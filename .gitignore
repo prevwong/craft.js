@@ -8,3 +8,4 @@ lib
 *-*.log
 .now
 .vscode
+.idea

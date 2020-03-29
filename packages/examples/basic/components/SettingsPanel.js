@@ -4,7 +4,7 @@ import {
   Chip,
   Grid,
   Typography,
-  Button as MaterialButton
+  Button as MaterialButton,
 } from "@material-ui/core";
 import { useEditor } from "@craftjs/core";
 
@@ -20,12 +20,12 @@ export const SettingsPanel = () => {
         settings:
           state.nodes[currentNodeId].related &&
           state.nodes[currentNodeId].related.settings,
-        isDeletable: query.node(currentNodeId).isDeletable()
+        isDeletable: query.node(currentNodeId).isDeletable(),
       };
     }
 
     return {
-      selected
+      selected,
     };
   });
 

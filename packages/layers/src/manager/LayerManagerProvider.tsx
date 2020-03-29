@@ -14,12 +14,12 @@ export const LayerManagerProvider: React.FC<{
     events: {
       selected: null,
       dragged: null,
-      hovered: null
+      hovered: null,
     },
     options: {
       renderLayer: DefaultLayer,
-      ...options
-    }
+      ...options,
+    },
   });
 
   return (

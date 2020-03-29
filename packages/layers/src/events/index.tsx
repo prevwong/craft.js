@@ -4,8 +4,8 @@ import { useLayerManager } from "../manager/useLayerManager";
 import { RenderIndicator } from "@craftjs/utils";
 
 export const EventManager: React.FC<any> = ({ children }) => {
-  const { layers, events } = useLayerManager(state => state);
-  const { query } = useEditor(state => ({ enabled: state.options.enabled }));
+  const { layers, events } = useLayerManager((state) => state);
+  const { query } = useEditor((state) => ({ enabled: state.options.enabled }));
   const { indicator: indicatorStyles } = query.getOptions();
 
   const indicatorPosition = useMemo(() => {
@@ -14,7 +14,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
     if (indicator) {
       const {
         placement: { where, parent, currentNode },
-        error
+        error,
       } = indicator;
       const layerId = currentNode ? currentNode.id : parent.id;
 
@@ -33,7 +33,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
           height: parentHeadingPos.height,
           background: "transparent",
           borderWidth: "1px",
-          borderColor: color
+          borderColor: color,
         };
       } else {
         if (!layers[layerId]) return;
@@ -52,7 +52,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
           width: pos.width,
           height: 2,
           borderWidth: 0,
-          background: color
+          background: color,
         };
       }
     }
@@ -62,7 +62,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
     <div>
       {events.indicator
         ? React.createElement(RenderIndicator, {
-            style: indicatorPosition
+            style: indicatorPosition,
           })
         : null}
       {children}

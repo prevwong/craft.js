@@ -16,7 +16,7 @@ export const serializeComp = (
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
     if (key === "children" && typeof prop !== "string") {
-      result[key] = Children.map(prop, child => {
+      result[key] = Children.map(prop, (child) => {
         if (typeof child === "string") return child;
         return serializeComp(child, resolver);
       });
@@ -31,7 +31,7 @@ export const serializeComp = (
   return {
     type: reduceType(type, resolver),
     ...(isCanvas && { isCanvas }),
-    props
+    props,
   };
 };
 
@@ -45,6 +45,6 @@ export const serializeNode = (
 
   return {
     ...reducedComp,
-    ...nodeData
+    ...nodeData,
   };
 };

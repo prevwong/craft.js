@@ -3,7 +3,7 @@ import {
   NodeData,
   SerializedNodeData,
   ReducedComp,
-  ReduceCompType
+  ReduceCompType,
 } from "../interfaces";
 import { Canvas } from "../nodes/Canvas";
 import { Resolver } from "../interfaces";
@@ -37,7 +37,7 @@ export const deserializeComp = (
     if (typeof prop === "object" && prop.resolvedName) {
       result[key] = deserializeComp(prop, resolver);
     } else if (key === "children" && Array.isArray(prop)) {
-      result[key] = prop.map(child => {
+      result[key] = prop.map((child) => {
         if (typeof child === "string") return child;
         return deserializeComp(child, resolver);
       });
@@ -49,13 +49,13 @@ export const deserializeComp = (
 
   const jsx = {
     ...React.createElement(main, {
-      ...props
-    })
+      ...props,
+    }),
   };
 
   return {
     ...jsx,
-    name: resolveComponent(resolver, jsx.type)
+    name: resolveComponent(resolver, jsx.type),
   };
 };
 
@@ -71,6 +71,6 @@ export const deserializeNode = (
 
   return {
     ...reducedComp,
-    ...nodeData
+    ...nodeData,
   };
 };

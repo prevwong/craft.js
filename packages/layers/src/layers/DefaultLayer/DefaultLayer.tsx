@@ -9,18 +9,18 @@ const LayerNodeDiv = styled.div<{
   hasCanvases: boolean;
   hovered: boolean;
 }>`
-  background: ${props => (props.hovered ? "#f1f1f1" : "transparent")};
+  background: ${(props) => (props.hovered ? "#f1f1f1" : "transparent")};
   display: block;
-  padding-bottom: ${props => (props.hasCanvases && props.expanded ? 5 : 0)}px;
+  padding-bottom: ${(props) => (props.hasCanvases && props.expanded ? 5 : 0)}px;
 `;
 
 const LayerChildren = styled.div<{ hasCanvases: boolean }>`
-  margin: 0 0 0 ${props => (props.hasCanvases ? 35 : 0)}px;
-  background: ${props =>
+  margin: 0 0 0 ${(props) => (props.hasCanvases ? 35 : 0)}px;
+  background: ${(props) =>
     props.hasCanvases ? "rgba(255, 255, 255, 0.02)" : "transparent"};
   position: relative;
 
-  ${props =>
+  ${(props) =>
     props.hasCanvases
       ? `
   
@@ -47,14 +47,14 @@ export const DefaultLayer: React.FC = ({ children }) => {
     id,
     expanded,
     hovered,
-    connectors: { layer }
-  } = useLayer(layer => ({
+    connectors: { layer },
+  } = useLayer((layer) => ({
     hovered: layer.event.hovered,
-    expanded: layer.expanded
+    expanded: layer.expanded,
   }));
   const { hasChildCanvases } = useEditor((state, query) => {
     return {
-      hasChildCanvases: query.node(id).isParentOfTopLevelCanvas()
+      hasChildCanvases: query.node(id).isParentOfTopLevelCanvas(),
     };
   });
 

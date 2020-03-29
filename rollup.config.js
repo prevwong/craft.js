@@ -15,15 +15,15 @@ export default {
       format: "esm",
       globals: {
         react: "React",
-        "react-dom": "ReactDOM"
-      }
+        "react-dom": "ReactDOM",
+      },
     },
     {
       dir: "dist/cjs",
-      format: "cjs"
-    }
+      format: "cjs",
+    },
   ],
-  external: id => {
+  external: (id) => {
     return !id.startsWith(".") && !path.isAbsolute(id) && !bundle.includes(id);
   },
   plugins: [
@@ -37,15 +37,15 @@ export default {
           {
             modules: false,
             targets: {
-              browsers: [">0.25%, not dead"]
-            }
-          }
-        ]
+              browsers: [">0.25%, not dead"],
+            },
+          },
+        ],
       ],
       plugins: [
         "@babel/proposal-class-properties",
-        "@babel/proposal-object-rest-spread"
-      ]
+        "@babel/proposal-object-rest-spread",
+      ],
     }),
     shouldMinify &&
       terser({
@@ -54,13 +54,13 @@ export default {
         compress: {
           keep_infinity: true,
           pure_getters: true,
-          passes: 10
+          passes: 10,
         },
         ecma: 5,
         warnings: true,
         mangle: {
-          reserved: ["Canvas"]
-        }
-      })
-  ]
+          reserved: ["Canvas"],
+        },
+      }),
+  ],
 };

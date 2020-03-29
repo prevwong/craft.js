@@ -5,17 +5,17 @@ import {
   FormLabel,
   RadioGroup,
   Radio,
-  FormControlLabel
+  FormControlLabel,
 } from "@material-ui/core";
 import { useNode } from "@craftjs/core";
 
 export const Button = ({ size, variant, color, text }) => {
   const {
-    connectors: { connect, drag }
+    connectors: { connect, drag },
   } = useNode();
   return (
     <MaterialButton
-      ref={ref => connect(drag(ref))}
+      ref={(ref) => connect(drag(ref))}
       style={{ margin: "5px" }}
       size={size}
       variant={variant}
@@ -27,8 +27,8 @@ export const Button = ({ size, variant, color, text }) => {
 };
 
 export const ButtonSettings = () => {
-  const { setProp, props } = useNode(node => ({
-    props: node.data.props
+  const { setProp, props } = useNode((node) => ({
+    props: node.data.props,
   }));
 
   return (
@@ -37,7 +37,7 @@ export const ButtonSettings = () => {
         <FormLabel component="legend">Size</FormLabel>
         <RadioGroup
           defaultValue={props.size}
-          onChange={e => setProp(props => (props.size = e.target.value))}
+          onChange={(e) => setProp((props) => (props.size = e.target.value))}
         >
           <FormControlLabel
             label="Small"
@@ -60,7 +60,7 @@ export const ButtonSettings = () => {
         <FormLabel component="legend">Variant</FormLabel>
         <RadioGroup
           defaultValue={props.variant}
-          onChange={e => setProp(props => (props.variant = e.target.value))}
+          onChange={(e) => setProp((props) => (props.variant = e.target.value))}
         >
           <FormControlLabel
             label="Text"
@@ -83,7 +83,7 @@ export const ButtonSettings = () => {
         <FormLabel component="legend">Color</FormLabel>
         <RadioGroup
           defaultValue={props.color}
-          onChange={e => setProp(props => (props.color = e.target.value))}
+          onChange={(e) => setProp((props) => (props.color = e.target.value))}
         >
           <FormControlLabel
             label="Default"
@@ -110,12 +110,12 @@ export const ButtonDefaultProps = {
   size: "small",
   variant: "contained",
   color: "primary",
-  text: "Click me"
+  text: "Click me",
 };
 
 Button.craft = {
   defaultProps: ButtonDefaultProps,
   related: {
-    settings: ButtonSettings
-  }
+    settings: ButtonSettings,
+  },
 };

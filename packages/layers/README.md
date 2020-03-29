@@ -1,4 +1,3 @@
-
 <div align="center" style={{d}}>
 <h1>@craftjs/layers</h1>
 
@@ -25,7 +24,6 @@
   </strong>
 </p>
 
-
 ## Usage
 
 ```bash
@@ -46,5 +44,5 @@ export default function App() {
       </Editor>
     </div>
   );
-} 
+}
 ```
