@@ -27,7 +27,8 @@ cd craft.js
 > yarn build # create production build for all craftjs packages
 > yarn lint # run tests across the monorepo 
 ```
-4. Submit a [pull request](https://github.com/prevwong/craft.js/compare) to merge the changes from your fork :heart:
+4. Do your magic. :fireworks: Be sure that the package(s) that you're working on can still be successfully built after you've applied your changes.
+5. Submit a [pull request](https://github.com/prevwong/craft.js/compare) to merge the changes from your fork :heart: **(If your PR is not linked to an existing issue, then be sure to explain what your PR aims to accomplish)**
 
 # URL
 - Production (master branch): https://craft.js.org/
