@@ -44,7 +44,7 @@ describe("Canvas", () => {
     expect(nodes).not.toBeNull();
   });
 
-  it("Throw error when id is ommited in Top-level Canvas", async () => {
+  xit("Throw error when id is ommited in Top-level Canvas", async () => {
     expect(() =>
       render(
         <Editor resolver={{ TestComponent }}>
