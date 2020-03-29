@@ -19,17 +19,17 @@ export function useLayer<S = null>(collect?: (node: Layer) => S): useLayer<S>;
 export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer<S> {
   const { id, depth, connectors } = useContext(LayerContext);
 
-  const { actions: managerActions, ...collected } = useLayerManager(state => {
+  const { actions: managerActions, ...collected } = useLayerManager((state) => {
     return id && state.layers[id] && collect && collect(state.layers[id]);
   });
 
   const { children } = useEditor((state, query) => ({
-    children: state.nodes[id] && query.node(id).decendants()
+    children: state.nodes[id] && query.node(id).decendants(),
   }));
 
   const actions = useMemo(() => {
     return {
-      toggleLayer: () => managerActions.toggleLayer(id)
+      toggleLayer: () => managerActions.toggleLayer(id),
     };
   }, [managerActions, id]);
 
@@ -39,6 +39,6 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer<S> {
     children,
     actions,
     connectors,
-    ...(collected as any)
+    ...(collected as any),
   };
 }

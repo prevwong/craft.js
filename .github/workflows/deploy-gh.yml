@@ -2,25 +2,25 @@ name: Deploy to gh-pages
 on:
   push:
     branches:
-    - master
+      - master
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@master
-    - name: Use Node.js 10.x
-      uses: actions/setup-node@v1
-      with:
-        node-version: 10.x
-    
-    - run: yarn install
-    - run: yarn deploy
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Use Node.js 10.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
 
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v2
-      env:
-        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        PUBLISH_BRANCH: gh-pages
-        PUBLISH_DIR: ./site
+      - run: yarn install
+      - run: yarn deploy
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v2
+        env:
+          ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: ./site

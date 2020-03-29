@@ -18,14 +18,14 @@ export function transformJSXToNode(
 
   const mergedProps = {
     ...props,
-    ...(extras && extras.data && extras.data.props ? extras.data.props : {})
+    ...(extras && extras.data && extras.data.props ? extras.data.props : {}),
   };
 
   return createNode(
     {
       ...extras.data,
       type: type,
-      props: mergedProps
+      props: mergedProps,
     },
     id
   );

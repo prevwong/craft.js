@@ -3,7 +3,7 @@ export const getDOMPadding = (dom: HTMLElement) => {
     left: parseInt(window.getComputedStyle(dom).paddingLeft),
     right: parseInt(window.getComputedStyle(dom).paddingRight),
     bottom: parseInt(window.getComputedStyle(dom).paddingTop),
-    top: parseInt(window.getComputedStyle(dom).paddingBottom)
+    top: parseInt(window.getComputedStyle(dom).paddingBottom),
   };
 };
 export const getDOMMargin = (dom: HTMLElement) => {
@@ -11,7 +11,7 @@ export const getDOMMargin = (dom: HTMLElement) => {
     left: parseInt(window.getComputedStyle(dom).marginLeft),
     right: parseInt(window.getComputedStyle(dom).marginRight),
     bottom: parseInt(window.getComputedStyle(dom).marginTop),
-    top: parseInt(window.getComputedStyle(dom).marginBottom)
+    top: parseInt(window.getComputedStyle(dom).marginBottom),
   };
 };
 export const getDOMInfo = (dom: HTMLElement) => {
@@ -23,7 +23,7 @@ export const getDOMInfo = (dom: HTMLElement) => {
     bottom,
     right,
     width,
-    height
+    height,
   } = dom.getBoundingClientRect() as DOMRect;
   const margin = getDOMMargin(dom),
     padding = getDOMPadding(dom);
@@ -41,7 +41,7 @@ export const getDOMInfo = (dom: HTMLElement) => {
     outerHeight: Math.round(height + margin.top + margin.bottom),
     margin,
     padding,
-    inFlow: dom && dom.parentElement && !!styleInFlow(dom, dom.parentElement)
+    inFlow: dom && dom.parentElement && !!styleInFlow(dom, dom.parentElement),
   };
 };
 

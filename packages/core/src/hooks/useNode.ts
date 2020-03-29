@@ -28,6 +28,6 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
     related,
     setProp,
     inNodeContext,
-    connectors
+    connectors,
   };
 }

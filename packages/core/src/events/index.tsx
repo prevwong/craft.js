@@ -8,9 +8,9 @@ export { useEventHandler } from "./EventContext";
 export { DerivedEventHandlers } from "./EventHandlers";
 
 export const Events: React.FC = ({ children }) => {
-  const { events, indicator, store } = useInternalEditor(state => ({
+  const { events, indicator, store } = useInternalEditor((state) => ({
     events: state.events,
-    indicator: state.options.indicator
+    indicator: state.options.indicator,
   }));
 
   const handler = useMemo(() => new EventHandlers(store), [store]);
@@ -30,8 +30,8 @@ export const Events: React.FC = ({ children }) => {
               backgroundColor: events.indicator.error
                 ? indicator.error
                 : indicator.success,
-              transition: "0.2s ease-in"
-            }
+              transition: "0.2s ease-in",
+            },
           })
         : null}
       {children}

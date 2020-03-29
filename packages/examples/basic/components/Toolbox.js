@@ -3,7 +3,7 @@ import {
   Box,
   Typography,
   Grid,
-  Button as MaterialButton
+  Button as MaterialButton,
 } from "@material-ui/core";
 import { useEditor, Canvas } from "@craftjs/core";
 import { Container } from "./user/Container";
@@ -28,7 +28,7 @@ export const Toolbox = () => {
         </Box>
         <Grid container direction="column" item>
           <MaterialButton
-            ref={ref =>
+            ref={(ref) =>
               connectors.create(ref, <Button text="Click me" size="small" />)
             }
             variant="contained"
@@ -38,7 +38,7 @@ export const Toolbox = () => {
         </Grid>
         <Grid container direction="column" item>
           <MaterialButton
-            ref={ref => connectors.create(ref, <Text text="Hi world" />)}
+            ref={(ref) => connectors.create(ref, <Text text="Hi world" />)}
             variant="contained"
           >
             Text
@@ -46,7 +46,7 @@ export const Toolbox = () => {
         </Grid>
         <Grid container direction="column" item>
           <MaterialButton
-            ref={ref =>
+            ref={(ref) =>
               connectors.create(ref, <Canvas is={Container} padding={20} />)
             }
             variant="contained"
@@ -56,7 +56,7 @@ export const Toolbox = () => {
         </Grid>
         <Grid container direction="column" item>
           <MaterialButton
-            ref={ref => connectors.create(ref, <Card />)}
+            ref={(ref) => connectors.create(ref, <Card />)}
             variant="contained"
           >
             Card

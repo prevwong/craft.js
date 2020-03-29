@@ -1,6 +1,6 @@
 import {
   useInternalEditor,
-  EditorCollector
+  EditorCollector,
 } from "../editor/useInternalEditor";
 import { useMemo } from "react";
 import { NodeId } from "../interfaces";
@@ -43,7 +43,7 @@ export function useEditor<S>(collect?: any): useEditor<S> {
       selectNode: (nodeId: NodeId | null) => {
         setNodeEvent("selected", nodeId);
         setNodeEvent("hovered", null);
-      }
+      },
     };
   }, [EditorActions, setNodeEvent]);
 
@@ -51,6 +51,6 @@ export function useEditor<S>(collect?: any): useEditor<S> {
     connectors: connectors,
     actions,
     query,
-    ...(collected as any)
+    ...(collected as any),
   };
 }

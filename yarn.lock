@@ -3221,7 +3221,7 @@
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.4.tgz#38fd73ddfd9b55abb1e1b2ed578cb55bd7b7d339"
   integrity sha512-8+KAKzEvSUdeo+kmqnKrqgeE+LcA0tjYWFY7RPProVYwnqDjukzO+3b6dLD56rYX5TdWejnEOLJYOIeh4CXKuA==
 
-"@types/minimatch@*":
+"@types/minimatch@*", "@types/minimatch@^3.0.3":
   version "3.0.3"
   resolved "https://registry.npmjs.org/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
@@ -3940,6 +3940,11 @@ array-differ@^2.0.3:
   resolved "https://registry.npmjs.org/array-differ/-/array-differ-2.1.0.tgz#4b9c1c3f14b906757082925769e8ab904f4801b1"
   integrity sha512-KbUpJgx909ZscOc/7CLATBFam7P1Z1QRQInvgT0UztM9Q72aGKCunKASAl7WNW0tnPmPyEMeMhdsfWhfmW037w==
 
+array-differ@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/array-differ/-/array-differ-3.0.0.tgz#3cbb3d0f316810eafcc47624734237d6aee4ae6b"
+  integrity sha512-THtfYS6KtME/yIAhKjZ2ul7XI96lQGHRputJQHO80LAWQnuGP4iCIN8vdMRboGbIEYBwU33q8Tch1os2+X0kMg==
+
 array-equal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/array-equal/-/array-equal-1.0.0.tgz#8c2a5ef2472fd9ea742b04c77a75093ba2757c93"
@@ -4008,6 +4013,11 @@ arrify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
   integrity sha1-iYUI2iIm84DfkEcoRWhJwVAaSw0=
+
+arrify@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/arrify/-/arrify-2.0.1.tgz#c9655e9331e0abcd588d2a7cad7e9956f66701fa"
+  integrity sha512-3duEwti880xqi4eAMN8AyR4a0ByT90zoYdLlevfrvU43vb0YZwZVfxOgxWrLXXXpyugL0hNZc9G6BiB5B3nUug==
 
 asap@^2.0.0, asap@~2.0.3:
   version "2.0.6"
@@ -6712,10 +6722,10 @@ escodegen@^1.9.1:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-config-prettier@^6.9.0:
-  version "6.9.0"
-  resolved "https://registry.npmjs.org/eslint-config-prettier/-/eslint-config-prettier-6.9.0.tgz#430d24822e82f7deb1e22a435bfa3999fae4ad64"
-  integrity sha512-k4E14HBtcLv0uqThaI6I/n1LEqROp8XaPu6SO9Z32u5NlGRC07Enu1Bh2KEFw4FNHbekH8yzbIU9kUGxbiGmCA==
+eslint-config-prettier@^6.10.1:
+  version "6.10.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-6.10.1.tgz#129ef9ec575d5ddc0e269667bf09defcd898642a"
+  integrity sha512-svTy6zh1ecQojvpbJSgH3aei/Rt7C6i090l5f2WQ4aB05lYHeZIR1qL4wZyyILTbtmnbHP5Yn8MrsOJMGa8RkQ==
   dependencies:
     get-stdin "^6.0.0"
 
@@ -7004,7 +7014,7 @@ execa@^1.0.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
-execa@^2.0.3:
+execa@^2.0.3, execa@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/execa/-/execa-2.1.0.tgz#e5d3ecd837d2a60ec50f3da78fd39767747bbe99"
   integrity sha512-Y/URAVapfbYy2Xp/gb6A0E7iR8xeqOCXsuuaoMn7A5PzrXUK84E1gyiEfq0wQd/GHA6GsoHWwhNq8anb0mleIw==
@@ -8473,7 +8483,7 @@ ignore@^4.0.3, ignore@^4.0.6:
   resolved "https://registry.npmjs.org/ignore/-/ignore-4.0.6.tgz#750e3db5862087b4737ebac8207ffd1ef27b25fc"
   integrity sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==
 
-ignore@^5.1.1:
+ignore@^5.1.1, ignore@^5.1.4:
   version "5.1.4"
   resolved "https://registry.npmjs.org/ignore/-/ignore-5.1.4.tgz#84b7b3dbe64552b6ef0eca99f6743dbec6d97adf"
   integrity sha512-MzbUSahkTW1u7JpKKjY7LCARd1fU5W2rLdxlM4kdkayuCwZImjkpluF9CM1aLewYJguPDqewLam18Y6AU69A8A==
@@ -10924,6 +10934,11 @@ move-concurrently@^1.0.1:
     rimraf "^2.5.4"
     run-queue "^1.0.3"
 
+mri@^1.1.4:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/mri/-/mri-1.1.5.tgz#ce21dba2c69f74a9b7cf8a1ec62307e089e223e0"
+  integrity sha512-d2RKzMD4JNyHMbnbWnznPaa8vbdlq/4pNZ3IgdaGrVbBhebBsGUUE/6qorTMYNS6TwuH3ilfOlD2bf4Igh8CKg==
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -10960,6 +10975,17 @@ multimatch@^3.0.0:
     array-differ "^2.0.3"
     array-union "^1.0.2"
     arrify "^1.0.1"
+    minimatch "^3.0.4"
+
+multimatch@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/multimatch/-/multimatch-4.0.0.tgz#8c3c0f6e3e8449ada0af3dd29efb491a375191b3"
+  integrity sha512-lDmx79y1z6i7RNx0ZGCPq1bzJ6ZoDDKbvh7jxr9SJcWLkShMzXrHbYVpTdnhNM5MXpDUxCQ4DgqVttVXlBgiBQ==
+  dependencies:
+    "@types/minimatch" "^3.0.3"
+    array-differ "^3.0.0"
+    array-union "^2.1.0"
+    arrify "^2.0.1"
     minimatch "^3.0.4"
 
 mute-stream@0.0.7:
@@ -12969,10 +12995,10 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^1.19.1:
-  version "1.19.1"
-  resolved "https://registry.npmjs.org/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
-  integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
+prettier@^2.0.1:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.0.2.tgz#1ba8f3eb92231e769b7fcd7cb73ae1b6b74ade08"
+  integrity sha512-5xJQIPT8BraI7ZnaDwSbu5zLrB6vvi8hVV58yHQ+QK64qrY40dULy0HSRlQ2/2IdzeBpjhDkqdcFBnFeDEMVdg==
 
 pretty-error@^2.1.1:
   version "2.1.1"
@@ -12996,6 +13022,18 @@ pretty-hrtime@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/pretty-hrtime/-/pretty-hrtime-1.0.3.tgz#b7e3ea42435a4c9b2759d99e0f201eb195802ee1"
   integrity sha1-t+PqQkNaTJsnWdmeDyAesZWALuE=
+
+pretty-quick@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/pretty-quick/-/pretty-quick-2.0.1.tgz#417ee605ade98ecc686e72f63b5d28a2c35b43e9"
+  integrity sha512-y7bJt77XadjUr+P1uKqZxFWLddvj3SKY6EU4BuQtMxmmEFSMpbN132pUWdSG1g1mtUfO0noBvn7wBf0BVeomHg==
+  dependencies:
+    chalk "^2.4.2"
+    execa "^2.1.0"
+    find-up "^4.1.0"
+    ignore "^5.1.4"
+    mri "^1.1.4"
+    multimatch "^4.0.0"
 
 pretty-time@^1.1.0:
   version "1.1.0"
@@ -15789,6 +15827,11 @@ typescript@^3.5.1:
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.4.tgz#b18752bb3792bc1a0281335f7f6ebf1bbfc5b91d"
   integrity sha512-unoCll1+l+YK4i4F8f22TaNVPRHcD9PA3yCuZ8g5e0qGqlVlJ/8FSateOLLSagn+Yg5+ZwuPkL8LFUc0Jcvksg==
+
+typescript@^3.7.5:
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
+  integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
 
 ua-parser-js@^0.7.18:
   version "0.7.21"

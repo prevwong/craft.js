@@ -9,14 +9,14 @@ export const getDeepNodes = (
     const node = nodes[id];
     if (deep || (!deep && depth === 0)) {
       if (node.data._childCanvas) {
-        Object.keys(node.data._childCanvas).forEach(canvasName => {
+        Object.keys(node.data._childCanvas).forEach((canvasName) => {
           const virtualId = node.data._childCanvas![canvasName];
           result.push(virtualId);
           result = recursive(virtualId, result, depth + 1);
         });
       } else if (node.data.nodes) {
         const childNodes = node.data.nodes; // ['t1c1', 't1c2']
-        childNodes.forEach(nodeId => {
+        childNodes.forEach((nodeId) => {
           result.push(nodeId);
           result = recursive(nodeId, result, depth + 1);
         });
