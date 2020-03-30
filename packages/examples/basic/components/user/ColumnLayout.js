@@ -6,7 +6,7 @@ import ColorPicker from "material-ui-color-picker";
 
 export const ColumnLayout = ({ background, padding, spacing, children }) => {
   const {
-    connectors: { connect, drag }
+    connectors: { connect, drag },
   } = useNode();
 
   let isEmpty = false;
@@ -22,13 +22,13 @@ export const ColumnLayout = ({ background, padding, spacing, children }) => {
   return (
     <Grid
       container
-      ref={ref => connect(drag(ref))}
+      ref={(ref) => connect(drag(ref))}
       spacing={spacing}
       style={{
         margin: "5px 0",
         background,
         padding: `${padding}px`,
-        border: isEmpty ? "1px dashed #000" : "none"
+        border: isEmpty ? "1px dashed #000" : "none",
       }}
     >
       {isEmpty ? "Only columns are allowed to be dropped here" : children}
@@ -37,10 +37,10 @@ export const ColumnLayout = ({ background, padding, spacing, children }) => {
 };
 
 export const ColumnLayoutSettings = () => {
-  const { background, padding, spacing, setProp } = useNode(node => ({
+  const { background, padding, spacing, setProp } = useNode((node) => ({
     background: node.data.props.background,
     padding: node.data.props.padding,
-    spacing: node.data.props.spacing
+    spacing: node.data.props.spacing,
   }));
 
   return (
@@ -49,8 +49,8 @@ export const ColumnLayoutSettings = () => {
         <FormLabel component="legend">Background</FormLabel>
         <ColorPicker
           value={background}
-          onChange={color => {
-            setProp(props => (props.background = color));
+          onChange={(color) => {
+            setProp((props) => (props.background = color));
           }}
         />
       </FormControl>
@@ -58,7 +58,7 @@ export const ColumnLayoutSettings = () => {
         <FormLabel component="legend">Padding</FormLabel>
         <Slider
           defaultValue={padding}
-          onChange={(_, value) => setProp(props => (props.padding = value))}
+          onChange={(_, value) => setProp((props) => (props.padding = value))}
         />
       </FormControl>
       <FormControl fullWidth={true} margin="normal" component="fieldset">
@@ -67,7 +67,7 @@ export const ColumnLayoutSettings = () => {
           min={0}
           max={10}
           defaultValue={spacing}
-          onChange={(_, value) => setProp(props => (props.spacing = value))}
+          onChange={(_, value) => setProp((props) => (props.spacing = value))}
         />
       </FormControl>
     </div>
@@ -77,15 +77,15 @@ export const ColumnLayoutSettings = () => {
 export const ColumnLayoutDefaultProps = {
   background: "transparent",
   padding: 0,
-  spacing: 2
+  spacing: 2,
 };
 
 ColumnLayout.craft = {
   defaultProps: ColumnLayoutDefaultProps,
   rules: {
-    canMoveIn: draggedNode => draggedNode.data.name === "Column"
+    canMoveIn: (draggedNode) => draggedNode.data.name === "Column",
   },
   related: {
-    settings: ColumnLayoutSettings
-  }
+    settings: ColumnLayoutSettings,
+  },
 };

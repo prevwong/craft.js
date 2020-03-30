@@ -6,11 +6,11 @@ import ColorPicker from "material-ui-color-picker";
 
 export const Container = ({ background, padding, children }) => {
   const {
-    connectors: { connect, drag }
+    connectors: { connect, drag },
   } = useNode();
   return (
     <Paper
-      ref={ref => connect(drag(ref))}
+      ref={(ref) => connect(drag(ref))}
       style={{ margin: "5px 0", background, padding: `${padding}px` }}
     >
       {children}
@@ -19,9 +19,9 @@ export const Container = ({ background, padding, children }) => {
 };
 
 export const ContainerSettings = () => {
-  const { background, padding, setProp } = useNode(node => ({
+  const { background, padding, setProp } = useNode((node) => ({
     background: node.data.props.background,
-    padding: node.data.props.padding
+    padding: node.data.props.padding,
   }));
 
   return (
@@ -30,8 +30,8 @@ export const ContainerSettings = () => {
         <FormLabel component="legend">Background</FormLabel>
         <ColorPicker
           value={background}
-          onChange={color => {
-            setProp(props => (props.background = color));
+          onChange={(color) => {
+            setProp((props) => (props.background = color));
           }}
         />
       </FormControl>
@@ -39,7 +39,7 @@ export const ContainerSettings = () => {
         <FormLabel component="legend">Padding</FormLabel>
         <Slider
           defaultValue={padding}
-          onChange={(_, value) => setProp(props => (props.padding = value))}
+          onChange={(_, value) => setProp((props) => (props.padding = value))}
         />
       </FormControl>
     </div>
@@ -48,12 +48,12 @@ export const ContainerSettings = () => {
 
 export const ContainerDefaultProps = {
   background: "#ffffff",
-  padding: 3
+  padding: 3,
 };
 
 Container.craft = {
   defaultProps: ContainerDefaultProps,
   related: {
-    settings: ContainerSettings
-  }
+    settings: ContainerSettings,
+  },
 };

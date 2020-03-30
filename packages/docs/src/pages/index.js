@@ -6,15 +6,16 @@
  */
 
 import React from "react";
-import {Redirect} from '@docusaurus/router';
-
+import { Redirect } from "@docusaurus/router";
 
 function Home() {
-  if (typeof window !== 'undefined') {
-    window.location.href="https://prevwong.github.io/craft.js";
-    return <p style={{padding: "10px", textAlign:"center"}}>Redirecting...</p>
+  if (typeof window !== "undefined" && process.env.NODE_ENV != "development") {
+    window.location.href = "https://craft.js.org/";
+    return (
+      <p style={{ padding: "10px", textAlign: "center" }}>Redirecting...</p>
+    );
   } else {
-    return  <Redirect to="docs/overview" />;
+    return <Redirect to="docs/overview" />;
   }
 }
 

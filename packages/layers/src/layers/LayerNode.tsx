@@ -6,24 +6,23 @@ import { LayerContextProvider } from "./LayerContextProvider";
 import { ROOT_NODE } from "@craftjs/utils";
 
 export const LayerNode: React.FC = () => {
-  const { id, depth, children, expanded } = useLayer(layer => ({
-    expanded: layer.expanded
+  const { id, depth, children, expanded } = useLayer((layer) => ({
+    expanded: layer.expanded,
   }));
 
   const { data, shouldBeExpanded } = useEditor((state, query) => ({
     data: state.nodes[id] && state.nodes[id].data,
     shouldBeExpanded:
       state.events.selected &&
-      query
-        .node(state.events.selected)
-        .ancestors()
-        .includes(id)
+      query.node(state.events.selected).ancestors().includes(id),
   }));
 
-  const { actions, renderLayer, expandRootOnLoad } = useLayerManager(state => ({
-    renderLayer: state.options.renderLayer,
-    expandRootOnLoad: state.options.expandRootOnLoad
-  }));
+  const { actions, renderLayer, expandRootOnLoad } = useLayerManager(
+    (state) => ({
+      renderLayer: state.options.renderLayer,
+      expandRootOnLoad: state.options.expandRootOnLoad,
+    })
+  );
 
   const expandedRef = useRef<boolean>(expanded);
   expandedRef.current = expanded;
@@ -50,13 +49,14 @@ export const LayerNode: React.FC = () => {
     actions.registerLayer(id);
     initRef.current = true;
   }
+
   return data ? (
     <div className={`craft-layer-node ${id}`}>
       {React.createElement(
         renderLayer,
         {},
         children && expanded
-          ? children.map(id => (
+          ? children.map((id) => (
               <LayerContextProvider key={id} id={id} depth={depth + 1} />
             ))
           : null

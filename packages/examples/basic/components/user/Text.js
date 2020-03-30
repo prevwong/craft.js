@@ -7,10 +7,10 @@ export const Text = ({ text, fontSize, textAlign }) => {
   const {
     connectors: { connect, drag },
     selected,
-    setProp
-  } = useNode(state => ({
+    setProp,
+  } = useNode((state) => ({
     selected: state.events.selected,
-    dragged: state.events.dragged
+    dragged: state.events.dragged,
   }));
 
   const [editable, setEditable] = useState(false);
@@ -21,15 +21,15 @@ export const Text = ({ text, fontSize, textAlign }) => {
 
   return (
     <div
-      ref={ref => connect(drag(ref))}
-      onClick={e => selected && setEditable(true)}
+      ref={(ref) => connect(drag(ref))}
+      onClick={(e) => selected && setEditable(true)}
     >
       <ContentEditable
         html={text}
         disabled={!editable}
-        onChange={e =>
+        onChange={(e) =>
           setProp(
-            props =>
+            (props) =>
               (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, ""))
           )
         }
@@ -41,9 +41,9 @@ export const Text = ({ text, fontSize, textAlign }) => {
 };
 
 const TextSettings = () => {
-  const { setProp, fontSize } = useNode(node => ({
+  const { setProp, fontSize } = useNode((node) => ({
     text: node.data.props.text,
-    fontSize: node.data.props.fontSize
+    fontSize: node.data.props.fontSize,
   }));
 
   return (
@@ -56,7 +56,7 @@ const TextSettings = () => {
           min={1}
           max={50}
           onChange={(_, value) => {
-            setProp(props => (props.fontSize = value));
+            setProp((props) => (props.fontSize = value));
           }}
         />
       </FormControl>
@@ -66,12 +66,12 @@ const TextSettings = () => {
 
 export const TextDefaultProps = {
   text: "Hi",
-  fontSize: 20
+  fontSize: 20,
 };
 
 Text.craft = {
   defaultProps: TextDefaultProps,
   related: {
-    settings: TextSettings
-  }
+    settings: TextSettings,
+  },
 };

@@ -15,9 +15,6 @@ A Hook that provides methods and state information associated with the entire ed
 const { connectors, actions, query, ...collected } = useEditor(collector);
 ```
 
-> Note: This hook can only be used within a User Component. 
-
-
 ## Reference
 ### Parameters
 <API items={[
@@ -35,14 +32,15 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["create", "(dom: HTMLElement, userElement: React.ReactElement) => HTMLElement", "Specifies the DOM that when dragged will create a new instance of the specified User Element at the drop location."]
     ]],
     ["actions", "Object", [
-      ["add", "(nodes: Node | Node[], parentId?: NodeId) => void", "Add Node(s) to the given parent node ID. By default the parentId is the ROOT_ID"],
+      ["add", "(nodes: Node | Node[], parentId?: NodeId) => void", "Add Node(s) to the given parent node ID. By default the parentId is the id of the Root Node"],
       ["delete", "(nodeID: NodeId) => void", "Delete the specified Node"],
-      ["deserialize", "() => String", "Recreate Nodes from JSON. This will clear all the current Nodes in the editor state with the recreated Nodes"],
+      ["deserialize", "(json: String) => void", "Recreate Nodes from JSON. This will clear all the current Nodes in the editor state with the recreated Nodes"],
       ["move", "(nodeId: NodeId, targetParentId: NodeId, index: number) => void", "Move a Node to the specified parent Node at the given index."],
       ["setProp", "(nodeId: NodeId, update: (props: Object) => void) => void", "Manipulate the props of the given Node"],
       ["setCustom", "(nodeId: NodeId, update: (custom: Object) => void) => void", "Manipulate the custom values of the given Node"],
       ["setHidden", "(nodeId: NodeId, bool: boolean) => void", "When set to true, the User Component of the specified Node will be hidden, but not removed"],
-      ["setOptions", "(options: Object) => void", "Update the editor's options. The options object passed is the same as the &lt;Editor /&gt; props."]
+      ["setOptions", "(options: Object) => void", "Update the editor's options. The options object passed is the same as the &lt;Editor /&gt; props."],
+      ["selectNode", "(nodeId: NodeId | null) => void", "Select the specified node. You can clear the selection by passing `null`"],
     ]],
     ["query", "Query", [
       ["createNode", "(child: React.ReactElement) => Node", "Create a Node from a React element"],

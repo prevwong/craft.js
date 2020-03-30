@@ -12,11 +12,11 @@ import { SettingsPanel } from "../components/SettingsPanel";
 import { Editor, Frame, Canvas } from "@craftjs/core";
 import { Topbar } from "../components/Topbar";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     padding: 0,
-    background: "rgb(252, 253, 253)"
-  }
+    background: "rgb(252, 253, 253)",
+  },
 }));
 export default function App() {
   const classes = useStyles();
@@ -35,7 +35,7 @@ export default function App() {
           CardTop,
           CardBottom,
           ColumnLayout,
-          Column
+          Column,
         }}
       >
         <Topbar />

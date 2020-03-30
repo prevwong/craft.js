@@ -1,9 +1,9 @@
 {
   "name": "example-basic",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0-beta.4",
   "private": true,
   "dependencies": {
-    "@craftjs/core": "^0.1.0-beta.1",
+    "@craftjs/core": "^0.1.0-beta.4",
     "@material-ui/core": "latest",
     "clsx": "latest",
     "copy-to-clipboard": "^3.2.0",
@@ -17,12 +17,14 @@
     "react-dom": "16.11.0"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development && next dev -p 3002",
+    "start": "next dev -p 3002",
     "build": "next build",
     "export": "next export",
     "clean": "rimraf lib .next out dist"
   },
   "devDependencies": {
-    "@zeit/next-css": "^1.0.1"
+    "@zeit/next-css": "^1.0.1",
+    "cross-env": "^6.0.3",
+    "next-compose-plugins": "^2.2.0"
   }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import {
   Container,
   ContainerSettings,
-  ContainerDefaultProps
+  ContainerDefaultProps,
 } from "./Container";
 import { Text } from "./Text";
 import { Button } from "./Button";
@@ -10,7 +10,7 @@ import { Canvas, useNode } from "@craftjs/core";
 
 export const CardTop = ({ children }) => {
   const {
-    connectors: { connect }
+    connectors: { connect },
   } = useNode();
   return (
     <div
@@ -22,7 +22,7 @@ export const CardTop = ({ children }) => {
         borderBottom: "1px solid #eee",
         display: "flex",
         flexDirection: "column",
-        alignItems: "flex-start"
+        alignItems: "flex-start",
       }}
     >
       {children}
@@ -32,13 +32,13 @@ export const CardTop = ({ children }) => {
 
 CardTop.craft = {
   rules: {
-    canMoveIn: incomingNode => incomingNode.data.type === Text
-  }
+    canMoveIn: (incomingNode) => incomingNode.data.type === Text,
+  },
 };
 
 export const CardBottom = ({ children }) => {
   const {
-    connectors: { connect }
+    connectors: { connect },
   } = useNode();
   return (
     <div style={{ padding: "10px 0" }} ref={connect}>
@@ -49,8 +49,8 @@ export const CardBottom = ({ children }) => {
 
 CardBottom.craft = {
   rules: {
-    canMoveIn: incomingNode => incomingNode.data.type === Button
-  }
+    canMoveIn: (incomingNode) => incomingNode.data.type === Button,
+  },
 };
 
 export const Card = ({ background, padding = 20 }) => {
@@ -70,6 +70,6 @@ export const Card = ({ background, padding = 20 }) => {
 Card.craft = {
   defaultProps: ContainerDefaultProps,
   related: {
-    settings: ContainerSettings
-  }
+    settings: ContainerSettings,
+  },
 };

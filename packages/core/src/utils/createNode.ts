@@ -19,7 +19,7 @@ export function createNode(
       name: (data.type as any).name,
       displayName: (data.type as any).name,
       props,
-      custom: data.custom || {}
+      custom: data.custom || {},
     } as NodeData;
 
     node.related = {};
@@ -27,7 +27,7 @@ export function createNode(
     node.events = {
       selected: false,
       dragged: false,
-      hovered: false
+      hovered: false,
     };
 
     node.rules = {
@@ -35,7 +35,7 @@ export function createNode(
       canMoveIn: () => true,
       canDrop: () => true,
       canMoveOut: () => true,
-      ...((actualType.craft && actualType.craft.rules) || {})
+      ...((actualType.craft && actualType.craft.rules) || {}),
     };
 
     if (node.data.type === Canvas) {
@@ -47,7 +47,7 @@ export function createNode(
 
     node.data.props = {
       ...((actualType.craft && actualType.craft.defaultProps) || {}),
-      ...node.data.props
+      ...node.data.props,
     };
 
     if (actualType.craft) {
@@ -56,7 +56,7 @@ export function createNode(
       }
 
       if (actualType.craft.rules) {
-        Object.keys(actualType.craft.rules).forEach(key => {
+        Object.keys(actualType.craft.rules).forEach((key) => {
           if (["canDrag", "canDrop", "canMoveIn", "canMoveOut"].includes(key)) {
             node.rules[key] = actualType.craft.rules[key];
           }
@@ -64,7 +64,7 @@ export function createNode(
       }
       if (actualType.craft.related) {
         node.related = {};
-        Object.keys(actualType.craft.related).forEach(comp => {
+        Object.keys(actualType.craft.related).forEach((comp) => {
           node.related[comp] = () =>
             React.createElement(
               NodeProvider,

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Options } from "../interfaces";
 import { useEditorStore } from "../editor/store";
 import { EditorContext } from "./EditorContext";
-import { EventManager } from "../events/EventManager";
+import { Events } from "../events";
 
 export const createEditorStoreOptions = (options: Partial<Options> = {}) => {
   return {
@@ -12,9 +12,9 @@ export const createEditorStoreOptions = (options: Partial<Options> = {}) => {
     enabled: true,
     indicator: {
       error: "red",
-      success: "rgb(98, 196, 98)"
+      success: "rgb(98, 196, 98)",
     },
-    ...options
+    ...options,
   };
 };
 
@@ -29,14 +29,14 @@ export const Editor: React.FC<Partial<Options>> = ({
 
   useEffect(() => {
     if (context && options)
-      context.actions.setOptions(editorOptions => {
+      context.actions.setOptions((editorOptions) => {
         editorOptions = options;
       });
   }, [context, options]);
 
   return context ? (
     <EditorContext.Provider value={context}>
-      <EventManager>{children}</EventManager>
+      <Events>{children}</Events>
     </EditorContext.Provider>
   ) : null;
 };

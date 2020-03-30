@@ -7,10 +7,10 @@ import { ColumnLayout } from "./ColumnLayout";
 
 export const Column = ({ background, padding, children }) => {
   const {
-    connectors: { connect, drag }
+    connectors: { connect, drag },
   } = useNode();
   return (
-    <Grid item xs ref={ref => connect(drag(ref))}>
+    <Grid item xs ref={(ref) => connect(drag(ref))}>
       <Paper style={{ margin: "5px 0", background, padding: `${padding}px` }}>
         {children}
       </Paper>
@@ -19,9 +19,9 @@ export const Column = ({ background, padding, children }) => {
 };
 
 export const ColumnSettings = () => {
-  const { background, padding, setProp } = useNode(node => ({
+  const { background, padding, setProp } = useNode((node) => ({
     background: node.data.props.background,
-    padding: node.data.props.padding
+    padding: node.data.props.padding,
   }));
 
   return (
@@ -30,8 +30,8 @@ export const ColumnSettings = () => {
         <FormLabel component="legend">Background</FormLabel>
         <ColorPicker
           value={background}
-          onChange={color => {
-            setProp(props => (props.background = color));
+          onChange={(color) => {
+            setProp((props) => (props.background = color));
           }}
         />
       </FormControl>
@@ -39,7 +39,7 @@ export const ColumnSettings = () => {
         <FormLabel component="legend">Padding</FormLabel>
         <Slider
           defaultValue={padding}
-          onChange={(_, value) => setProp(props => (props.padding = value))}
+          onChange={(_, value) => setProp((props) => (props.padding = value))}
         />
       </FormControl>
     </div>
@@ -48,15 +48,15 @@ export const ColumnSettings = () => {
 
 export const ColumnDefaultProps = {
   background: "#ffffff",
-  padding: 3
+  padding: 3,
 };
 
 Column.craft = {
   defaultProps: ColumnDefaultProps,
   rules: {
-    canDrop: dropTarget => dropTarget.data.type === ColumnLayout
+    canDrop: (dropTarget) => dropTarget.data.type === ColumnLayout,
   },
   related: {
-    settings: ColumnSettings
-  }
+    settings: ColumnSettings,
+  },
 };

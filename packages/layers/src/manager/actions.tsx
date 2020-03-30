@@ -23,8 +23,8 @@ export const LayerMethods = (state: LayerState) => ({
         id,
         event: {
           selected: false,
-          hovered: false
-        }
+          hovered: false,
+        },
       } as Layer;
     }
   },
@@ -37,10 +37,13 @@ export const LayerMethods = (state: LayerState) => ({
       ...(domCollection.dom ? { dom: domCollection.dom } : {}),
       ...(domCollection.headingDom
         ? { headingDom: domCollection.headingDom }
-        : {})
+        : {}),
     };
   },
   toggleLayer: (id: string) => {
     state.layers[id].expanded = !state.layers[id].expanded;
-  }
+  },
+  setIndicator: (indicator) => {
+    state.events.indicator = indicator;
+  },
 });

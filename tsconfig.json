@@ -1,29 +1,17 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-   "baseUrl": ".",
+    "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "esModuleInterop": true,
     "paths": {
-      "@craftjs/core": [
-        "packages/core/src/index"
-      ],
-      "@craftjs/*": [
-        "packages/core/src/*"
-      ],
-      "@craftjs/layers": [
-        "packages/layers/src/index"
-      ],
-      "@craftjs/utils": [
-        "packages/utils/src/index"
-      ],
-      "@craftjs/utils/*": [
-        "packages/utils/src/*"
-      ]
+      "@craftjs/core": ["packages/core/src/index"],
+      "@craftjs/*": ["packages/core/src/*"],
+      "@craftjs/layers": ["packages/layers/src/index"],
+      "@craftjs/utils": ["packages/utils/src/index"],
+      "@craftjs/utils/*": ["packages/utils/src/*"]
     }
   },
-  "exclude": [
-    "**/node_modules/**"
-  ]
+  "exclude": ["**/node_modules/**"]
 }

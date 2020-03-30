@@ -1,16 +1,16 @@
 {
   "name": "example-landing",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0-beta.4",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=development && next dev -p 3001",
-    "build": "cross-env NODE_ENV=production next build",
+    "start": "next dev -p 3001",
+    "build": "next build",
     "export": "next export",
     "clean": "rimraf lib .next out dist"
   },
   "dependencies": {
-    "@craftjs/core": "^0.1.0-beta.1",
-    "@craftjs/layers": "^0.1.0-beta.1",
+    "@craftjs/core": "^0.1.0-beta.4",
+    "@craftjs/layers": "^0.1.0-beta.4",
     "@material-ui/core": "^4.5.2",
     "@material-ui/icons": "^4.5.1",
     "@material-ui/styles": "^4.5.2",
@@ -45,6 +45,7 @@
     "next-compose-plugins": "^2.2.0",
     "postcss-import": "^12.0.1",
     "postcss-preset-env": "^6.7.0",
-    "tailwindcss": "^1.1.3"
+    "tailwindcss": "^1.1.3",
+    "typescript": "^3.7.5"
   }
 }

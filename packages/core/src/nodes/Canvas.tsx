@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NodeId } from "../interfaces";
 import { mapChildrenToNodes } from "../utils/mapChildrenToNodes";
 import { useInternalNode } from "./useInternalNode";
@@ -6,7 +6,7 @@ import { useInternalEditor } from "../editor/useInternalEditor";
 import {
   ERROR_ROOT_CANVAS_NO_ID,
   ERROR_INFINITE_CANVAS,
-  useEffectOnce
+  useEffectOnce,
 } from "@craftjs/utils";
 import invariant from "tiny-invariant";
 import { SimpleElement } from "../render/SimpleElement";
@@ -32,15 +32,15 @@ export function Canvas<T extends React.ElementType>({
 }: Canvas<T>) {
   const id = props.id;
   const {
-    actions: { add },
+    actions: { add, setProp },
     query,
-    inContext
+    inContext,
   } = useInternalEditor();
-  const { node, inNodeContext } = useInternalNode(node => ({
+  const { node, inNodeContext } = useInternalNode((node) => ({
     node: {
       id: node.id,
-      data: node.data
-    }
+      data: node.data,
+    },
   }));
   const [internalId, setInternalId] = useState<NodeId | null>(null);
   const [initialised, setInitialised] = useState(false);
@@ -52,7 +52,7 @@ export function Canvas<T extends React.ElementType>({
       if (data.isCanvas) {
         invariant(passThrough, ERROR_INFINITE_CANVAS);
         if (!data.nodes) {
-          const childNodes = mapChildrenToNodes(children, jsx => {
+          const childNodes = mapChildrenToNodes(children, (jsx) => {
             const node = query.createNode(jsx);
             return node;
           });
@@ -75,7 +75,7 @@ export function Canvas<T extends React.ElementType>({
           if (existingNode.data.type === is && typeof is !== "string") {
             newProps = {
               ...newProps,
-              ...existingNode.data.props
+              ...existingNode.data.props,
             };
           }
         }
@@ -84,7 +84,7 @@ export function Canvas<T extends React.ElementType>({
           React.createElement(Canvas, newProps, children),
           existingNode && {
             id: existingNode.id,
-            data: existingNode.data
+            data: existingNode.data,
           }
         );
 
@@ -97,6 +97,22 @@ export function Canvas<T extends React.ElementType>({
 
     setInitialised(true);
   });
+
+  /**
+   *
+   * (https://github.com/prevwong/craft.js/issues/31)
+   * When non-children props on Canvases in User Components are updated, we need to update the prop values in their corresponding Nodes
+   * in order to trigger a re-render
+   */
+  useEffect(() => {
+    if (internalId) {
+      setProp(internalId, (nodeProps) => {
+        Object.entries(props).forEach(([key, value]) => {
+          nodeProps[key] = value;
+        });
+      });
+    }
+  }, [internalId, props, setProp]);
 
   return (
     <React.Fragment>
