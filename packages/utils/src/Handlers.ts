@@ -50,7 +50,8 @@ class WatchHandler {
         } else {
           this.remove();
         }
-      }
+      },
+      true
     );
   }
 

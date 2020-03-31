@@ -214,9 +214,12 @@ class Subscriber {
   onChange;
   id;
 
-  constructor(collector, onChange) {
+  constructor(collector, onChange, collectOnCreate = false) {
     this.collector = collector;
     this.onChange = onChange;
+
+    // Collect and run onChange callback when Subscriber is created
+    if (collectOnCreate) this.collect();
   }
 
   collect() {
