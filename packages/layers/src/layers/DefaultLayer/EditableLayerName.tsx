@@ -6,12 +6,12 @@ import { useLayer } from "../useLayer";
 export const EditableLayerName = () => {
   const { id } = useLayer();
 
-  const { displayName, actions } = useEditor(state => ({
+  const { displayName, actions } = useEditor((state) => ({
     displayName:
       state.nodes[id] && state.nodes[id].data.custom.displayName
         ? state.nodes[id].data.custom.displayName
         : state.nodes[id].data.displayName,
-    hidden: state.nodes[id] && state.nodes[id].data.hidden
+    hidden: state.nodes[id] && state.nodes[id].data.hidden,
   }));
 
   const [editingName, setEditingName] = useState(false);
@@ -20,7 +20,7 @@ export const EditableLayerName = () => {
   );
   const nameDOM = useRef<HTMLElement | null>(null);
 
-  const clickOutside = useCallback(e => {
+  const clickOutside = useCallback((e) => {
     if (nameDOM.current && !nameDOM.current.contains(e.target)) {
       setEditingName(false);
     }
@@ -36,7 +36,7 @@ export const EditableLayerName = () => {
     if (internalDisplayName !== "")
       actions.setCustom(
         id,
-        custom => (custom.displayName = internalDisplayName)
+        (custom) => (custom.displayName = internalDisplayName)
       );
   }, [actions, id, internalDisplayName]);
 
@@ -56,7 +56,7 @@ export const EditableLayerName = () => {
           window.addEventListener("click", clickOutside);
         }
       }}
-      onChange={e => {
+      onChange={(e) => {
         setInternalDisplayName(e.target.value);
       }} // use true to disable editing
       tagName="h2" // Use a custom HTML tag (uses a div by default)

@@ -4,7 +4,7 @@ import {
   Nodes,
   Options,
   NodeEvents,
-  SerializedNodeData
+  SerializedNodeData,
 } from "../interfaces";
 import { EditorState, Indicator } from "../interfaces";
 import {
@@ -13,7 +13,7 @@ import {
   ROOT_NODE,
   CallbacksFor,
   QueryCallbacksFor,
-  ERROR_NOPARENT
+  ERROR_NOPARENT,
 } from "@candulabs/craft-utils";
 import { QueryMethods } from "./query";
 import { updateEventsNode } from "../utils/updateEventsNode";
@@ -53,7 +53,7 @@ export const Actions = (
         dragged: null,
         selected: null,
         hovered: null,
-        indicator: null
+        indicator: null,
       };
     },
     setDOM(id: NodeId, dom: HTMLElement) {
@@ -91,7 +91,7 @@ export const Actions = (
       if (parentId && !state.nodes[parentId].data.nodes && isCanvas(parentId))
         state.nodes[parentId].data.nodes = [];
 
-      (nodes as Node[]).forEach(node => {
+      (nodes as Node[]).forEach((node) => {
         const parent = parentId ? parentId : node.data.parent;
         invariant(parent !== null, ERROR_NOPARENT);
 
@@ -106,7 +106,7 @@ export const Actions = (
         } else {
           let error;
           if (parentId) {
-            query.node(parentId).isDroppable(node, err => {
+            query.node(parentId).isDroppable(node, (err) => {
               error = err;
             });
             if (error) return onError && onError(error, node);
@@ -141,7 +141,7 @@ export const Actions = (
         newParent = state.nodes[newParentId],
         newParentNodes = newParent.data.nodes;
 
-      query.node(newParentId).isDroppable(targetNode, err => {
+      query.node(newParentId).isDroppable(targetNode, (err) => {
         throw new Error(err);
       });
 
@@ -169,7 +169,7 @@ export const Actions = (
           !query.node(targetNode.id).isTopLevelCanvas(),
           "Cannot delete a Canvas that is not a direct child of another Canvas"
         );
-        targetNode.data.nodes!.forEach(childId => {
+        targetNode.data.nodes!.forEach((childId) => {
           _("delete")(childId);
         });
       }
@@ -226,7 +226,7 @@ export const Actions = (
             _childCanvas,
             isCanvas,
             hidden,
-            custom
+            custom,
           } = deserializeNode(dehydratedNodes[id], state.options.resolver);
 
           if (!Comp) {
@@ -241,8 +241,8 @@ export const Actions = (
               parent,
               ...(isCanvas && { nodes }),
               ...(_childCanvas && { _childCanvas }),
-              custom
-            }
+              custom,
+            },
           });
           return accum;
         },
@@ -253,9 +253,9 @@ export const Actions = (
         dragged: null,
         selected: null,
         hovered: null,
-        indicator: null
+        indicator: null,
       };
       state.nodes = rehydratedNodes;
-    }
+    },
   };
 };

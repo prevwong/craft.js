@@ -29,9 +29,9 @@ export class EventHandlers extends Handlers<
             debounce((_, id: NodeId) => {
               this.store.actions.setNodeEvent("selected", id);
             }, 1),
-            true
-          ]
-        ]
+            true,
+          ],
+        ],
       },
       hover: {
         init: () => {
@@ -45,9 +45,9 @@ export class EventHandlers extends Handlers<
             debounce((_, id: NodeId) => {
               this.store.actions.setNodeEvent("hovered", id);
             }, 1),
-            true
-          ]
-        ]
+            true,
+          ],
+        ],
       },
       drop: {
         events: [
@@ -56,7 +56,7 @@ export class EventHandlers extends Handlers<
             (e: MouseEvent, id: NodeId) => {
               e.preventDefault();
               e.stopPropagation();
-            }
+            },
           ],
           [
             "dragenter",
@@ -71,23 +71,23 @@ export class EventHandlers extends Handlers<
                 id,
                 {
                   x: e.clientX,
-                  y: e.clientY
+                  y: e.clientY,
                 }
               );
 
               if (getPlaceholder) {
                 this.store.actions.setIndicator(getPlaceholder);
                 EventHandlers.events = {
-                  indicator: getPlaceholder
+                  indicator: getPlaceholder,
                 };
               }
-            }
-          ]
-        ]
+            },
+          ],
+        ],
       },
 
       drag: {
-        init: node => {
+        init: (node) => {
           node.setAttribute("draggable", true);
           return () => {
             node.setAttribute("draggable", false);
@@ -101,7 +101,7 @@ export class EventHandlers extends Handlers<
               e.stopImmediatePropagation();
               this.store.actions.setNodeEvent("dragged", id);
               EventHandlers.createShadow(e, id);
-            }
+            },
           ],
           [
             "dragend",
@@ -114,12 +114,12 @@ export class EventHandlers extends Handlers<
                   placement.index + (placement.where === "after" ? 1 : 0)
                 );
               });
-            }
-          ]
-        ]
+            },
+          ],
+        ],
       },
       create: {
-        init: el => {
+        init: (el) => {
           el.setAttribute("draggable", true);
           return () => {
             el.removeAttribute("draggable");
@@ -133,7 +133,7 @@ export class EventHandlers extends Handlers<
               e.stopImmediatePropagation();
               const node = this.store.query.createNode(userElement);
               EventHandlers.createShadow(e, node);
-            }
+            },
           ],
           [
             "dragend",
@@ -144,10 +144,10 @@ export class EventHandlers extends Handlers<
                   placement.index + (placement.where === "after" ? 1 : 0);
                 this.store.actions.add(draggedElement, placement.parent.id);
               });
-            }
-          ]
-        ]
-      }
+            },
+          ],
+        ],
+      },
     };
 
     return handlers;

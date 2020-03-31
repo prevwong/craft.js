@@ -38,7 +38,7 @@ class WatchHandler {
     this.handler = handler;
 
     this.unsubscribe = store.subscribe(
-      state => ({ enabled: state.options.enabled }),
+      (state) => ({ enabled: state.options.enabled }),
       ({ enabled }) => {
         if (!document.body.contains(el)) {
           this.remove();
@@ -61,7 +61,7 @@ class WatchHandler {
     this.listenersToRemove =
       events &&
       events.map(([event, listener, capture]) => {
-        const bindedListener = e => {
+        const bindedListener = (e) => {
           listener(e, this.opts);
         };
 
@@ -78,7 +78,7 @@ class WatchHandler {
     }
 
     if (this.listenersToRemove) {
-      this.listenersToRemove.forEach(l => l());
+      this.listenersToRemove.forEach((l) => l());
       this.listenersToRemove = null;
     }
   }
@@ -127,7 +127,7 @@ export abstract class Handlers<T extends string = null> {
 
         Handlers.wm.set(el, {
           ...domHandler,
-          [key]: new WatchHandler(this.store, el, opts, { init, events })
+          [key]: new WatchHandler(this.store, el, opts, { init, events }),
         });
       };
 

@@ -14,9 +14,9 @@ export const withDefaults = (options: Partial<Options> = {}) => ({
   enabled: true,
   indicator: {
     error: "red",
-    success: "rgb(98, 196, 98)"
+    success: "rgb(98, 196, 98)",
   },
-  ...options
+  ...options,
 });
 
 /**
@@ -30,7 +30,7 @@ export const Editor: React.FC<Partial<Options>> = ({
 
   useEffect(() => {
     if (context && options)
-      context.actions.setOptions(editorOptions => {
+      context.actions.setOptions((editorOptions) => {
         editorOptions = options;
       });
   }, [context, options]);

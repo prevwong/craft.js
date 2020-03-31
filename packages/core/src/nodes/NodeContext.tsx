@@ -14,7 +14,7 @@ export const NodeProvider: React.FC<NodeProvider> = ({
   id,
   related = false,
   connectors,
-  children
+  children,
 }) => {
   return (
     <NodeContext.Provider value={{ id, related, connectors }}>

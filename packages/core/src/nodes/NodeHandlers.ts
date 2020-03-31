@@ -16,18 +16,18 @@ export class NodeHandlers extends DerivedEventHandlers<"connect" | "drag"> {
     const parentConnectors = this.derived.connectors();
     return {
       connect: {
-        init: el => {
+        init: (el) => {
           parentConnectors.select(el, this.id);
           parentConnectors.hover(el, this.id);
           parentConnectors.drop(el, this.id);
           this.store.actions.setDOM(this.id, el);
-        }
+        },
       },
       drag: {
-        init: el => {
+        init: (el) => {
           parentConnectors.drag(el, this.id);
-        }
-      }
+        },
+      },
     };
   }
 }

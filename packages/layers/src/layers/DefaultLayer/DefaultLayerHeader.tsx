@@ -12,10 +12,10 @@ const StyledDiv = styled.div<{ depth: number; selected: boolean }>`
   flex-direction: row;
   align-items: center;
   padding: 4px 10px;
-  background: ${props => (props.selected ? "#2680eb" : "transparent")};
-  color: ${props => (props.selected ? "#fff" : "inherit")};
+  background: ${(props) => (props.selected ? "#2680eb" : "transparent")};
+  color: ${(props) => (props.selected ? "#fff" : "inherit")};
   svg {
-    fill: ${props => (props.selected ? "#fff" : "#808184")};
+    fill: ${(props) => (props.selected ? "#fff" : "#808184")};
     margin-top: 2px;
   }
   .inner {
@@ -24,7 +24,7 @@ const StyledDiv = styled.div<{ depth: number; selected: boolean }>`
       padding: 0px;
       flex: 1;
       display: flex;
-      margin-left: ${props => props.depth * 10}px;
+      margin-left: ${(props) => props.depth * 10}px;
       align-items: center;
       div.layer-name {
         flex: 1;
@@ -42,7 +42,7 @@ const Expand = styled.a<{ expanded: boolean }>`
   height: 8px;
   display: block;
   transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-  transform: rotate(${props => (props.expanded ? 180 : 0)}deg);
+  transform: rotate(${(props) => (props.expanded ? 180 : 0)}deg);
   opacity: 0.7;
   cursor: pointer;
   transform-origin: 60% center;
@@ -60,20 +60,20 @@ const Hide = styled.a<{ selected: boolean; isHidden: boolean }>`
     width: 100%;
     height: 100%;
     object-fit: contain;
-    opacity: ${props => (props.isHidden ? 0.2 : 1)};
+    opacity: ${(props) => (props.isHidden ? 0.2 : 1)};
   }
   &:after {
     content: " ";
     width: 2px;
-    height: ${props => (props.isHidden ? 100 : 0)}%;
+    height: ${(props) => (props.isHidden ? 100 : 0)}%;
     position: absolute;
     left: 2px;
     top: 3px;
-    background: ${props => (props.selected ? "#fff" : "#808184")};
+    background: ${(props) => (props.selected ? "#fff" : "#808184")};
     transform: rotate(-45deg);
     transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     transform-origin: 0% 0%;
-    opacity: ${props => (props.isHidden ? 0.4 : 1)};
+    opacity: ${(props) => (props.isHidden ? 0.4 : 1)};
   }
 `;
 
@@ -94,17 +94,17 @@ export const DefaultLayerHeader: React.FC = () => {
     expanded,
     children,
     connectors: { drag, layerHeader },
-    actions: { toggleLayer }
-  } = useLayer(layer => {
+    actions: { toggleLayer },
+  } = useLayer((layer) => {
     return {
-      expanded: layer.expanded
+      expanded: layer.expanded,
     };
   });
 
   const { hidden, actions, selected, topLevel } = useEditor((state, query) => ({
     hidden: state.nodes[id] && state.nodes[id].data.hidden,
     selected: state.events.selected === id,
-    topLevel: query.node(id).isTopLevelCanvas()
+    topLevel: query.node(id).isTopLevelCanvas(),
   }));
 
   return (

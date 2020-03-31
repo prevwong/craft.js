@@ -30,13 +30,13 @@ export function useInternalEditor<C>(collector?: any): useInternalEditor<C> {
   const collected = useCollector(store, collector);
 
   const connectors = useMemo(() => handlers && handlers.connectors(), [
-    handlers
+    handlers,
   ]);
 
   return {
     ...(collected as any),
     connectors: connectors || {},
     inContext: !!store,
-    store
+    store,
   };
 }

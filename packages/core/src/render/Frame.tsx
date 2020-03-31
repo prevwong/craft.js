@@ -3,7 +3,7 @@ import { NodeElement } from "../nodes/NodeElement";
 import { Canvas } from "../nodes/Canvas";
 import {
   ROOT_NODE,
-  ERROR_FRAME_IMMEDIATE_NON_CANVAS
+  ERROR_FRAME_IMMEDIATE_NON_CANVAS,
 } from "@candulabs/craft-utils";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import invariant from "tiny-invariant";
@@ -27,7 +27,7 @@ export const Frame: React.FC<Frame> = ({ children, json, data }) => {
 
   const initialState = useRef({
     initialChildren: children,
-    initialData: data || (json && JSON.parse(json))
+    initialData: data || (json && JSON.parse(json)),
   });
 
   useEffect(() => {

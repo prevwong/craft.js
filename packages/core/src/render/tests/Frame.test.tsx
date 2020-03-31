@@ -11,7 +11,7 @@ const children = <h1>a children</h1>;
 jest.mock("tiny-invariant");
 jest.mock("../../editor/useInternalEditor");
 jest.mock("../../nodes/NodeElement", () => ({
-  NodeElement: () => null
+  NodeElement: () => null,
 }));
 
 const mockEditor = useInternalEditor as jest.Mock<any>;

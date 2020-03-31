@@ -4,13 +4,14 @@
   "author": "Prev Wong <prevwong@gmail.com>",
   "scripts": {
     "dev": "./scripts/dev.sh",
-    "dev:docs" : "lerna run start --scope docs",
+    "dev:docs": "lerna run start --scope docs",
     "dev:all": "run-p dev dev:docs",
     "clean": "lerna run clean --stream",
     "build": "lerna run build --stream --ignore docs --ignore example-*",
-    "build:all" : "lerna run build --stream",
+    "build:all": "lerna run build --stream",
     "deploy": "cross-env ENV=production ./scripts/deploy.sh",
     "deploy:staging": "cross-env ENV=staging ./scripts/deploy.sh",
+    "prettier": "prettier --write .",
     "release": "run-s lint clean build test release:npm",
     "release:npm": "lerna publish",
     "test:watch": "jest --watch",
@@ -33,7 +34,7 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.9.0",
+    "eslint-config-prettier": "^6.10.1",
     "eslint-config-react-app": "^5.1.0",
     "eslint-plugin-flowtype": "^4.5.3",
     "eslint-plugin-import": "^2.19.1",
@@ -46,7 +47,8 @@
     "lerna": "^3.20.1",
     "lint-staged": "^9.5.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.1",
+    "pretty-quick": "^2.0.1",
     "react": "^16.9.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -98,6 +100,7 @@
   },
   "lint-staged": {
     "packages/**/*.{js,jsx,ts,tsx}": [
+      "pretty-quick --staged",
       "npm run lint",
       "git add"
     ]

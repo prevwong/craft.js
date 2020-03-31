@@ -1,29 +1,17 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-   "baseUrl": ".",
+    "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "esModuleInterop": true,
     "paths": {
-      "@candulabs/craft-core": [
-        "packages/core/src/index"
-      ],
-      "@candulabs/craft-core/*": [
-        "packages/core/src/*"
-      ],
-      "@candulabs/craft-layers": [
-        "packages/layers/src/index"
-      ],
-      "@candulabs/craft-utils": [
-        "packages/utils/src/index"
-      ],
-      "@candulabs/craft-utils/*": [
-        "packages/utils/src/*"
-      ]
+      "@candulabs/craft-core": ["packages/core/src/index"],
+      "@candulabs/craft-core/*": ["packages/core/src/*"],
+      "@candulabs/craft-layers": ["packages/layers/src/index"],
+      "@candulabs/craft-utils": ["packages/utils/src/index"],
+      "@candulabs/craft-utils/*": ["packages/utils/src/*"]
     }
   },
-  "exclude": [
-    "**/node_modules/**"
-  ]
+  "exclude": ["**/node_modules/**"]
 }

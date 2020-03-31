@@ -13,7 +13,7 @@ describe("useEditor", () => {
     setNodeEvent: "setNodeEvent",
     replaceNodes: "replaceNodes",
     reset: "reset",
-    ...otherActions
+    ...otherActions,
   };
   const otherQueries = { another: "query" };
   const query = { deserialize: "deserialize", ...otherQueries };
@@ -22,13 +22,13 @@ describe("useEditor", () => {
     connectors: "one",
     actions,
     query,
-    store: {}
+    store: {},
   };
   let collect;
   let editor;
 
   beforeEach(() => {
-    React.useMemo = f => f();
+    React.useMemo = (f) => f();
 
     internalEditorMock.mockImplementation(() => state);
     collect = jest.fn();
@@ -43,7 +43,7 @@ describe("useEditor", () => {
         actions: { ...otherActions, selectNode: expect.any(Function) },
         connectors: state.connectors,
         query: otherQueries,
-        aRandomValue: state.aRandomValue
+        aRandomValue: state.aRandomValue,
       })
     );
   });

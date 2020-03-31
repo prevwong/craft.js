@@ -18,11 +18,11 @@ describe("<Editor />", () => {
   let onStateChange;
 
   beforeEach(() => {
-    React.useEffect = f => f();
+    React.useEffect = (f) => f();
 
     query = { serialize: jest.fn().mockImplementation(() => "{}") };
     onStateChange = jest.fn();
-    mockStore.mockImplementation(value => ({ ...value, query, actions }));
+    mockStore.mockImplementation((value) => ({ ...value, query, actions }));
     act(() => {
       component = shallow(
         <Editor onStateChange={onStateChange}>{children}</Editor>

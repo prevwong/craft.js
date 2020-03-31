@@ -13,7 +13,7 @@ export class LayerHandlers extends DerivedEventHandlers<
     currentCanvasHovered: Node;
   } = {
     indicator: null,
-    currentCanvasHovered: null
+    currentCanvasHovered: null,
   };
   static currentCanvasHovered;
 
@@ -31,13 +31,13 @@ export class LayerHandlers extends DerivedEventHandlers<
     const parentConnectors = this.derived.connectors();
     return {
       layer: {
-        init: el => {
+        init: (el) => {
           parentConnectors.select(el, this.id);
           parentConnectors.hover(el, this.id);
           parentConnectors.drag(el, this.id);
 
           this.layerStore.actions.setDOM(this.id, {
-            dom: el
+            dom: el,
           });
         },
         events: [
@@ -46,11 +46,11 @@ export class LayerHandlers extends DerivedEventHandlers<
             (e: MouseEvent, id) => {
               e.stopPropagation();
               this.layerStore.actions.setLayerEvent("hovered", id);
-            }
+            },
           ],
           [
             "dragover",
-            e => {
+            (e) => {
               e.preventDefault();
               e.stopPropagation();
 
@@ -84,7 +84,7 @@ export class LayerHandlers extends DerivedEventHandlers<
 
                   LayerHandlers.events.indicator = {
                     ...indicator,
-                    onCanvas: true
+                    onCanvas: true,
                   };
 
                   this.layerStore.actions.setIndicator(
@@ -92,11 +92,11 @@ export class LayerHandlers extends DerivedEventHandlers<
                   );
                 }
               }
-            }
+            },
           ],
           [
             "dragenter",
-            e => {
+            (e) => {
               e.preventDefault();
               e.stopPropagation();
 
@@ -110,7 +110,7 @@ export class LayerHandlers extends DerivedEventHandlers<
                 dragId,
                 target,
                 { x: e.clientX, y: e.clientY },
-                node => {
+                (node) => {
                   const layer = this.getLayer(node.id);
                   return layer && layer.dom;
                 }
@@ -118,7 +118,7 @@ export class LayerHandlers extends DerivedEventHandlers<
 
               if (indicatorInfo) {
                 const {
-                  placement: { parent }
+                  placement: { parent },
                 } = indicatorInfo;
                 const parentHeadingInfo = this.getLayer(
                   parent.id
@@ -157,14 +157,14 @@ export class LayerHandlers extends DerivedEventHandlers<
 
                 LayerHandlers.events.indicator = {
                   ...indicatorInfo,
-                  onCanvas: false
+                  onCanvas: false,
                 };
 
                 this.layerStore.actions.setIndicator(
                   LayerHandlers.events.indicator
                 );
               }
-            }
+            },
           ],
           [
             "dragend",
@@ -186,19 +186,19 @@ export class LayerHandlers extends DerivedEventHandlers<
 
               LayerHandlers.draggedElement = null;
               this.layerStore.actions.setIndicator(null);
-            }
-          ]
-        ]
+            },
+          ],
+        ],
       },
       layerHeader: {
-        init: el => {
+        init: (el) => {
           this.layerStore.actions.setDOM(this.id, {
-            headingDom: el
+            headingDom: el,
           });
-        }
+        },
       },
       drag: {
-        init: el => {
+        init: (el) => {
           el.setAttribute("draggable", true);
 
           return () => {
@@ -212,10 +212,10 @@ export class LayerHandlers extends DerivedEventHandlers<
               e.stopPropagation();
 
               LayerHandlers.draggedElement = this.id;
-            }
-          ]
-        ]
-      }
+            },
+          ],
+        ],
+      },
     };
   }
 }
