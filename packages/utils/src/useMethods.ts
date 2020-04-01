@@ -7,7 +7,7 @@ export type SubscriberAndCallbacksFor<
   M extends MethodsOrOptions,
   Q extends QueryMethods = any
 > = {
-  subscribe: any;
+  subscribe: Watcher<StateFor<M>>["subscribe"];
   getState: () => { prev: StateFor<M>; current: StateFor<M> };
   actions: CallbacksFor<M>;
   query: QueryCallbacksFor<Q>;
@@ -148,7 +148,7 @@ export function useMethods<
   }, [methodsFactory]);
 
   const getState = useCallback(() => currState.current, []);
-  const watcher = useMemo(() => new Watcher(getState), [getState]);
+  const watcher = useMemo(() => new Watcher<S>(getState), [getState]);
 
   useEffect(() => {
     currState.current = state;
@@ -158,7 +158,8 @@ export function useMethods<
   return useMemo(
     () => ({
       getState,
-      subscribe: (collector, cb) => watcher.subscribe(collector, cb),
+      subscribe: (collector, cb, collectOnCreate) =>
+        watcher.subscribe(collector, cb, collectOnCreate),
       actions,
       query,
     }),
@@ -177,7 +178,7 @@ export function createQuery<Q extends QueryMethods>(queryMethods: Q, getState) {
   }, {} as QueryCallbacksFor<typeof queryMethods>);
 }
 
-class Watcher {
+class Watcher<S> {
   getState;
   subscribers: Subscriber[] = [];
 
@@ -185,8 +186,20 @@ class Watcher {
     this.getState = getState;
   }
 
-  subscribe(collector, cb: any) {
-    const subscriber = new Subscriber(() => collector(this.getState()), cb);
+  /**
+   * Creates a Subscriber
+   * @returns {() => void} a Function that removes the Subscriber
+   */
+  subscribe<C>(
+    collector: (state: S) => C,
+    onChange: (collected: C) => void,
+    collectOnCreate?: boolean
+  ): () => void {
+    const subscriber = new Subscriber(
+      () => collector(this.getState()),
+      onChange,
+      collectOnCreate
+    );
     this.subscribers.push(subscriber);
     return this.unsubscribe.bind(this, subscriber);
   }
@@ -209,11 +222,17 @@ class Watcher {
 }
 
 class Subscriber {
-  collected;
-  collector;
-  onChange;
+  collected: any;
+  collector: () => any;
+  onChange: (collected: any) => void;
   id;
 
+  /**
+   * Creates a Subscriber
+   * @param collector The method that returns an object of values to be collected
+   * @param onChange A callback method that is triggered when the collected values has changed
+   * @param collectOnCreate If set to true, the collector/onChange will be called on instantiation
+   */
   constructor(collector, onChange, collectOnCreate = false) {
     this.collector = collector;
     this.onChange = onChange;
