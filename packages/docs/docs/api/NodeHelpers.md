@@ -6,10 +6,13 @@ sidebar_label: NodeHelpers
 
 import {API, Badge} from "./API";
 
-Methods that helps describe a specified `Node`. 
+Methods that helps describe a specified `Node`.
 
 ## Usage
-### `useEditor`
+### useEditor hook
+
+You can access the NodeHelpers via the `node` query method in the `useEditor` hook.
+
 ```jsx
 import {useEditor} from "@craftjs/core";
 
@@ -22,6 +25,9 @@ const TextComponent = () => {
 }
 ```
 ### User Component rules
+
+NodeHelpers can also be accessed via the last parameter of each User Component rules.
+
 ```jsx
 const MyComp = () => {
 

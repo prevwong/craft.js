@@ -9,7 +9,7 @@ import {Image} from "../../src/components/Image.js";
 <a target="_blank" href="https://github.com/prevwong/craft.js/tree/master/packages/examples/basic" className="btn btn-text">View Code</a> 
 
 ## Overview
-In this tutorial, we'll be designing a simple page editor. It's recommended that you have a basic to intermediate workings of React and it'd be even better if you first have a quick glance at the Key Concepts and come back here; if you are feeling adventurous, that's fine too. 
+In this tutorial, we'll be designing a simple page editor. It's recommended that you have a basic to intermediate workings of React and it'd be even better if you first have a quick glance at the [Core Concepts](../concepts/nodes.md) and come back here. If you are feeling adventurous, that's fine too.
 
 
 

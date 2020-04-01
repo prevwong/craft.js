@@ -25,7 +25,8 @@ module.exports = {
     navbar: {
       title: "craft.js",
       links: [
-        { to: "docs/overview", label: "Docs", position: "left" },
+        { to: "docs/overview", label: "Documentation", position: "left" },
+        { to: "docs/support", label: "Support Craft.js", position: "right" },
         {
           href: "https://github.com/prevwong/craft.js",
           label: "GitHub",
@@ -40,7 +41,7 @@ module.exports = {
           title: "Docs",
           items: [
             {
-              label: "Docs",
+              label: "Overview",
               to: "docs/overview",
             },
             {
@@ -61,8 +62,12 @@ module.exports = {
           title: "Community",
           items: [
             {
-              label: "Project page",
+              label: "Github",
               href: "https://github.com/prevwong/craft.js",
+            },
+            {
+              label: "Open Collective",
+              href: "https://opencollective.com/craftjs",
             },
             {
               label: "Discord",
@@ -97,7 +102,7 @@ module.exports = {
         },
       ],
 
-      copyright: `Copyright © ${new Date().getFullYear()} Prev Wong.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Prev Wong`,
     },
   },
   presets: [
