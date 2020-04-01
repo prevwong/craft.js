@@ -1,6 +1,6 @@
 ---
 id: user-components
-title: User components
+title: User Components
 ---
 
 import {API} from "../api/API";
@@ -157,7 +157,7 @@ Hero.craft = {
 ```
 
 
-## Related components
+## Related Components
 What happens if you need to design some component to complement our  user component? For instance, if we were planning on building a Toolbar somewhere in our page editor, we would like the Toolbar to display a bunch of text inputs to allow the user the edit the currently selected component. It would be great if we could retrieve a specific component that has all the relevant inputs for the user to edit the currently selected component.
 
 
