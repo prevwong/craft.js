@@ -1,0 +1,30 @@
+on: push
+name: Workflow
+jobs:
+  all:
+    name: Build, Test, Publish!
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - name: Cache node_modules
+      id: cache-modules
+      uses: actions/cache@v1
+      with:
+        path: node_modules
+        key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+    - name: Install
+      if: steps.cache-modules.outputs.cache-hit != 'true'
+      run: yarn install
+    - name: Build
+      run: yarn build
+    - name: Test
+      run: yarn test
+    - name: Publish
+      if: github.ref == 'refs/heads/master'
+      run: yarn lerna:release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

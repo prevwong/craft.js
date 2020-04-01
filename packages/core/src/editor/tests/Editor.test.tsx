@@ -3,7 +3,7 @@ import { shallow } from "enzyme";
 import { act } from "react-dom/test-utils";
 
 import { EditorContext } from "../EditorContext";
-import { Editor } from "../editor";
+import { Editor } from "../Editor";
 import { Events } from "../../events";
 import { useEditorStore } from "../store";
 
