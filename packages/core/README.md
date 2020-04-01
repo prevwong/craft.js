@@ -20,7 +20,7 @@
 
 Page editors are a great way to provide an excellent user experience. However, to build one is often a pretty dreadful task.
 
-There're existing libraries that come with a fully working page editor out of the box with a user interface and editable components. However, if you wish to make customisations such as modifying the user interface and its behavior, it will most definitely involve modifying the library itself. 
+There're existing libraries that come with a fully working page editor out of the box with a user interface and editable components. However, if you wish to make customisations such as modifying the user interface and its behavior, it will most definitely involve modifying the library itself.
 
 Craft.js solves this problem by modularising the building blocks of a page editor. It ships with a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things. With this, you'll be able to build your own page editor exactly how you want it to look and behave.
 
@@ -30,7 +30,7 @@ Craft.js solves this problem by modularising the building blocks of a page edito
 - [API Reference](https://prevwong.github.io/craft.js/r/docs/api/editor-state)
 
 ## Examples
-These examples should give you an idea on the flexibility of Craft.js. 
+These examples should give you an idea on the flexibility of Craft.js.
 
 Both these examples look very different from each other, with very different UI. But they are both built with Craft.js! 🤯
 
@@ -39,7 +39,7 @@ Both these examples look very different from each other, with very different UI.
 
 
 ## Features :fire:
-### It's just React 
+### It's just React
 No need for complicated plugin systems. Design your editor from top to bottom the same way as you would design any other frontend application in React.
 
 A simple user component can easily be defined as such:
@@ -57,7 +57,7 @@ const TextComponent = ({text}) => {
 }
 ```
 
-Heck, the entire UI of your page editor is built using just React. 
+Heck, the entire UI of your page editor is built using just React.
 ```jsx
 import React from "react";
 import {Editor, Frame, Canvas, Selector} from "@craftjs/core";
@@ -67,7 +67,7 @@ const App = () => {
       <header>Some fancy header or whatever</header>
       <Editor>
         // Editable area starts here
-        <Frame resolver={TextComponent, Container}>  
+        <Frame resolver={TextComponent, Container}>
           <Canvas>
             <TextComponent text="I'm already rendered here" />
           </Canvas>
@@ -79,16 +79,16 @@ const App = () => {
 ```
 
 ### Control how your components are edited
-An obvious requirement for page editors is that they need to allow users to edit components. With Craft.js, you control the process of which these components should be edited. 
+An obvious requirement for page editors is that they need to allow users to edit components. With Craft.js, you control the process of which these components should be edited.
 
-In the following example, when the user clicks on a component, we'll display a modal that requires the user to input a value for the `text` prop. As the input value changes, the component will be re-rendered with updated prop. 
+In the following example, when the user clicks on a component, we'll display a modal that requires the user to input a value for the `text` prop. As the input value changes, the component will be re-rendered with updated prop.
 
 ```jsx
 import {useNode} from "@craftjs/core";
 
 const TextComponent = ({text}) => {
   const { connectors:{ connect, drag }, isClicked, setProp } = useNode(
-    (state) => ({ 
+    (state) => ({
       isClicked: state.event.selected,
     })
   );
@@ -99,10 +99,10 @@ const TextComponent = ({text}) => {
       {
         isClicked ? (
           <Modal>
-            <input 
-              type="text" 
-              value={text} 
-              onChange={e => setProp(e.target.value)} 
+            <input
+              type="text"
+              value={text}
+              onChange={e => setProp(e.target.value)}
             />
           </Modal>
         )
@@ -114,7 +114,7 @@ const TextComponent = ({text}) => {
 With this, you could easily implement content editable text or drag-to-resize components, just as any modern page editor would have.
 
 ### User components with droppable regions
-Let's say we need a "Container" component which users can drop into the editor. Additionally, we would also like them to be able to drag and drop other components into the Container. 
+Let's say we need a "Container" component which users can drop into the editor. Additionally, we would also like them to be able to drag and drop other components into the Container.
 
 In Craft.js, it's as simple as calling the `<Canvas />`
 
@@ -198,15 +198,15 @@ You should not use this if:
 
 ## Acknowledgements :raised_hands:
 
-- **[react-dnd](https://github.com/react-dnd/react-dnd)** The React drag-n-drop library. 
-Although it is not actually used here, many aspects of Craft.js are written with react-dnd as a reference along with some utilities and functions being borrowed. 
+- **[react-dnd](https://github.com/react-dnd/react-dnd)** The React drag-n-drop library.
+Although it is not actually used here, many aspects of Craft.js are written with react-dnd as a reference along with some utilities and functions being borrowed.
 - **[Grape.js](https://github.com/artf/grapesjs)** The HTML web builder framework. This has served as an inspiration for Craft.js. The element positioning logic used in Craft.js is borrowed from Grape.js
 - **[use-methods](https://github.com/pelotom/use-methods)** A super handy hook when dealing with reducers. Craft.js uses a slightly modified version of `use-methods` to better fit our API.
 
 
-## Getting Help :wave: 
+## Getting Help :wave:
 
-If you have questions or there's something you'd like to discuss (eg: contributing), please head over to our [Discord](https://discord.gg/sPpF7fX) server. 
+If you have questions or there's something you'd like to discuss (eg: contributing), please head over to our [Discord](https://discord.gg/sPpF7fX) server.
 
 ## Contributors ✨
 
@@ -226,4 +226,14 @@ Craft.js is made with :heart: by these wonderful people ([emoji key](https://all
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome! 
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
+
+
+## Support :heart_decoration:
+
+Craft.js is released under the [MIT license](https://github.com/prevwong/craft.js/blob/master/LICENSE) and is built with 100% love. If you found it useful and would like to ensure its continued development, please consider becoming a backer/sponsor or making a one-time donation via <a href="https://opencollective.com/craftjs/contribute" target="_blank">Open Collective</a> or <a href="https://paypal.me/prevwong" target="_blank">Paypal</a>.
+
+
+<a href="https://opencollective.com/craftjs/contribute" target="_blank">
+  <img src="https://opencollective.com/craftjs/donate/button@2x.png?color=blue" width="260" />
+</a>

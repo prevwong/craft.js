@@ -4,9 +4,11 @@ title: Layers
 ---
 
 import {API} from "../api/API";
+import {Image} from "../../src/components/Image.js";
 
 A Photoshop-like layers panel for your page editor.
 
+<Image img="layers.gif" />
 
 ## Usage
 
