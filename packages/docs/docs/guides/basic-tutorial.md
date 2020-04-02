@@ -531,7 +531,7 @@ Let's go back to our Toolbox component and make it so that dragging those button
 
 The `useEditor` also provides `connectors`; the one we are interested in right now is `create` which attaches a drag handler to the  DOM specified in its first arguement and creates the element specified in its second arguement.
 
-```jsx {19,22,25}
+```jsx {20,23,26}
 // components/Toolbox.js
 import React from "react";
 import { Box, Typography, Grid, Button as MaterialButton } from "@material-ui/core";
@@ -639,7 +639,7 @@ export const Text = ({text, fontSize}) => {
 
 This should give you an idea on the possibilities of implementing powerful visual editing features like what you'd see in most modern page editors.
 
-While we are at it, let's also add display a slider for users to edit the `fontSize`
+While we are at it, let's also add a slider for users to edit the `fontSize`
 ```jsx
 // components/user/Text.js
 import {Slider, FormControl, FormLabel} from "@material-ui/core";
@@ -978,7 +978,7 @@ export const SettingsPanel = () => {
     }
   });
 
-  return selected ? (    
+  return selected ? (
     <Box bgcolor="rgba(0, 0, 0, 0.058823529411764705)" mt={2} px={2} py={2}>
       <Grid container direction="column" spacing={0}>
         ...
@@ -1049,7 +1049,7 @@ export const Topbar = () => {
 
 <Image img="tutorial/topbar.gif" />
 
-> We'll explore how to compress the JSON output and have the editor load from the serialised JSON in the [Save and Load](/craft.js/r/docs/save-load-state) guide.
+> We'll explore how to compress the JSON output and have the editor load from the serialised JSON in the [Save and Load](./save-load.md) guide.
 
 
 ## You made it 🎉
