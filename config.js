@@ -6,9 +6,9 @@ module.exports = {
       BASIC_EXAMPLE: "https://craft.js.org/examples/basic/",
     },
     staging: {
-      LANDING: "https://craft-js.prevwong.now.sh/",
-      DOCUMENTATION: "https://craft-js.prevwong.now.sh/r/docs/overview/",
-      BASIC_EXAMPLE: "https://craft-js.prevwong.now.sh/examples/basic/",
+      LANDING: "https://craftjs.netlify.com/",
+      DOCUMENTATION: "https://craftjs.netlify.com/r/docs/overview/",
+      BASIC_EXAMPLE: "https://craftjs.netlify.com/examples/basic/",
     },
     development: {
       LANDING: "http://localhost:3001/",
