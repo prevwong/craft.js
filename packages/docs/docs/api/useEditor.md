@@ -18,7 +18,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
 ## Reference
 ### Parameters
 <API items={[
-  ["collector", "(state: ManagerState, query: Query) => Collected", "A function that collects relevant state information from the editor state. The component will re-render when the values returned by this function changes."]
+  ["collector", "(state: EditorState, query: Query) => Collected", "A function that collects relevant state information from the editor state. The component will re-render when the values returned by this function changes."]
 ]} /> 
 
 ### Returns

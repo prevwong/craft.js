@@ -40,7 +40,9 @@ const { connectors, setProp, ...collected } = useNode(collector);
     ["...collected", "Collected", "The collected values returned from the collector"]
   ]
   ]
-]} /> 
+]} />
+
+> Note: `connectors` have **no** effect when used inside [Related Components](../concepts/user-components#related-components)
 
 ## Examples
 
@@ -69,6 +71,7 @@ const Example = () => {
 
 ### Connectors
 Connectors must receive a HTML element which can be obtained via an element's `ref`.
+
 
 Typically, you would want to chain the `connect` and `drag` connectors to the root element of your component. This way, users would be able to drag anywhere within the DOM to move the component.
 ```jsx
