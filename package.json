@@ -19,7 +19,8 @@
     "lerna:publish": "lerna publish from-package --yes",
     "test:watch": "jest --watch",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "npm run lint:js -- .",
+    "lint:js": "eslint --ext .js,.jsx,.ts,.tsx"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
@@ -104,7 +105,7 @@
   "lint-staged": {
     "packages/**/*.{js,jsx,ts,tsx}": [
       "pretty-quick --staged",
-      "npm run lint",
+      "npm run lint:js",
       "git add"
     ]
   },

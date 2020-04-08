@@ -140,9 +140,13 @@ export class EventHandlers extends Handlers<
             (e: DragEvent) => {
               e.stopPropagation();
               this.dropElement((draggedElement, placement) => {
-                (draggedElement as Node).data.index =
+                const index =
                   placement.index + (placement.where === "after" ? 1 : 0);
-                this.store.actions.add(draggedElement, placement.parent.id);
+                this.store.actions.addNodeAtIndex(
+                  draggedElement,
+                  placement.parent.id,
+                  index
+                );
               });
             },
           ],
