@@ -42,43 +42,21 @@ export function QueryMethods(Editor: EditorState) {
 
   return {
     /**
-     * Get the current Editor options
-     */
-    getOptions(): Options {
-      return options;
-    },
-    /**
      * Get a Node representing the specified React Element
-     * @param child
+     * @param reactElement
      * @param extras
      */
-    createNode(child: React.ReactElement | string, extras?: any) {
-      const node = transformJSXToNode(child, extras);
+    createNode(reactElement: React.ReactElement | string, extras?: any) {
+      const node = transformJSXToNode(reactElement, extras);
+
       const name = resolveComponent(options.resolver, node.data.type);
       invariant(name !== null, ERRROR_NOT_IN_RESOLVER);
-      node.data.displayName = node.data.displayName
-        ? node.data.displayName
-        : name;
-
+      node.data.displayName = node.data.displayName || name;
       node.data.name = name;
+
       return node;
     },
 
-    getState(): Record<NodeId, SerializedNodeData> {
-      return Object.keys(Editor.nodes).reduce((result: any, id: NodeId) => {
-        const {
-          data: { ...data },
-        } = Editor.nodes[id];
-        result[id] = serializeNode({ ...data }, options.resolver);
-        return result;
-      }, {});
-    },
-    /**
-     * Retrieve the JSON representation of the editor's Nodes
-     */
-    serialize(): string {
-      return JSON.stringify(this.getState());
-    },
     /**
      * Determine the best possible location to drop the source Node relative to the target Node
      */
@@ -124,9 +102,9 @@ export function QueryMethods(Editor: EditorState) {
         pos.x,
         pos.y
       );
-      const currentNode = targetParentNodes.length
-        ? Editor.nodes[targetParentNodes[dropAction.index]]
-        : null;
+      const currentNode =
+        targetParentNodes.length &&
+        Editor.nodes[targetParentNodes[dropAction.index]];
 
       const output: Indicator = {
         placement: {
@@ -150,6 +128,24 @@ export function QueryMethods(Editor: EditorState) {
 
       return output;
     },
+
+    /**
+     * Get the current Editor options
+     */
+    getOptions(): Options {
+      return options;
+    },
+
+    getState(): Record<NodeId, SerializedNodeData> {
+      return Object.keys(Editor.nodes).reduce((result: any, id: NodeId) => {
+        const {
+          data: { ...data },
+        } = Editor.nodes[id];
+        result[id] = serializeNode({ ...data }, options.resolver);
+        return result;
+      }, {});
+    },
+
     /**
      * Helper methods to describe the specified Node
      * @param id
@@ -255,6 +251,13 @@ export function QueryMethods(Editor: EditorState) {
           }
         },
       };
+    },
+
+    /**
+     * Retrieve the JSON representation of the editor's Nodes
+     */
+    serialize(): string {
+      return JSON.stringify(this.getState());
     },
   };
 }

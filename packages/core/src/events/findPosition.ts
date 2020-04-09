@@ -21,7 +21,7 @@ export default function findPosition(
     dimDown = 0;
 
   // Each dim is: Top, Left, Height, Width
-  for (var i = 0, len = dims.length; i < len; i++) {
+  for (let i = 0, len = dims.length; i < len; i++) {
     const dim = dims[i];
 
     // Right position of the element. Left + Width
