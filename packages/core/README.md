@@ -6,6 +6,7 @@
 </a>
 <img src="https://img.shields.io/npm/l/@craftjs/core?color=%23000&style=for-the-badge">
 <img src="https://img.shields.io/github/workflow/status/prevwong/craft.js/Deploy to gh-pages?style=for-the-badge">
+  <a href="https://opencollective.com/craftjs" alt="Financial Contributors on Open Collective"><img src="https://opencollective.com/craftjs/all/badge.svg?label=financial+contributors&style=for-the-badge" /></a>
 </div>
 
 <div align="center" style={{d}}>
@@ -228,7 +229,35 @@ Craft.js is made with :heart: by these wonderful people ([emoji key](https://all
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
 
+## Contributors
 
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/prevwong/craft.js/graphs/contributors"><img src="https://opencollective.com/craftjs/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/craftjs/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/craftjs"><img src="https://opencollective.com/craftjs/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/craftjs/contribute)]
+
+<a href="https://opencollective.com/craftjs/organization/0/website"><img src="https://opencollective.com/craftjs/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/craftjs/organization/1/website"><img src="https://opencollective.com/craftjs/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/craftjs/organization/2/website"><img src="https://opencollective.com/craftjs/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/craftjs/organization/3/website"><img src="https://opencollective.com/craftjs/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/craftjs/organization/4/website"><img src="https://opencollective.com/craftjs/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/craftjs/organization/5/website"><img src="https://opencollective.com/craftjs/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/craftjs/organization/6/website"><img src="https://opencollective.com/craftjs/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/craftjs/organization/7/website"><img src="https://opencollective.com/craftjs/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/craftjs/organization/8/website"><img src="https://opencollective.com/craftjs/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/craftjs/organization/9/website"><img src="https://opencollective.com/craftjs/organization/9/avatar.svg"></a>
 ## Support :heart_decoration:
 
 Craft.js is released under the [MIT license](https://github.com/prevwong/craft.js/blob/master/LICENSE) and is built with 100% love. If you found it useful and would like to ensure its continued development, please consider becoming a backer/sponsor or making a one-time donation via <a href="https://opencollective.com/craftjs/contribute" target="_blank">Open Collective</a> or <a href="https://paypal.me/prevwong" target="_blank">Paypal</a>.
