@@ -7,6 +7,7 @@ import {
   Options,
   NodeInfo,
   SerializedNodeData,
+  Tree,
 } from "../interfaces";
 import { serializeNode } from "../utils/serializeNode";
 import { resolveComponent } from "../utils/resolveComponent";
@@ -28,17 +29,18 @@ import {
   ERROR_INVALID_NODE_ID,
 } from "@candulabs/craft-utils";
 import findPosition from "../events/findPosition";
+import { mergeTrees } from "../utils/mergeTrees";
 import { getDeepNodes } from "../utils/getDeepNodes";
 import { transformJSXToNode } from "../utils/transformJSX";
 
-export function QueryMethods(Editor: EditorState) {
-  const options = Editor && Editor.options;
+export function QueryMethods(state: EditorState) {
+  const options = state && state.options;
 
   const _: () => QueryCallbacksFor<typeof QueryMethods> = () =>
-    QueryMethods(Editor);
+    QueryMethods(state);
 
   const getNodeFromIdOrNode = (node: NodeId | Node) =>
-    typeof node === "string" ? Editor.nodes[node] : node;
+    typeof node === "string" ? state.nodes[node] : node;
 
   return {
     /**
@@ -57,6 +59,17 @@ export function QueryMethods(Editor: EditorState) {
       return node;
     },
 
+    parseTreeFromReactNode(reactNode: React.ReactElement): Tree | undefined {
+      const node = this.createNode(reactNode);
+      const childrenNodes = React.Children.map(
+        (reactNode.props && reactNode.props.children) || [],
+        (child) =>
+          React.isValidElement(child) && this.parseTreeFromReactNode(child)
+      ).filter((children) => !!children);
+
+      return mergeTrees(node, childrenNodes);
+    },
+
     /**
      * Determine the best possible location to drop the source Node relative to the target Node
      */
@@ -65,17 +78,16 @@ export function QueryMethods(Editor: EditorState) {
       target: NodeId,
       pos: { x: number; y: number },
       nodesToDOM: (node: Node) => HTMLElement = (node) =>
-        Editor.nodes[node.id].dom
+        state.nodes[node.id].dom
     ) => {
       if (source === target) return;
-      const sourceNodeFromId =
-          typeof source == "string" && Editor.nodes[source],
-        targetNode = Editor.nodes[target],
+      const sourceNodeFromId = typeof source == "string" && state.nodes[source],
+        targetNode = state.nodes[target],
         isTargetCanvas = _().node(targetNode.id).isCanvas();
 
       const targetParent = isTargetCanvas
         ? targetNode
-        : Editor.nodes[targetNode.data.parent];
+        : state.nodes[targetNode.data.parent];
 
       const targetParentNodes = targetParent.data._childCanvas
         ? Object.values(targetParent.data._childCanvas)
@@ -83,7 +95,7 @@ export function QueryMethods(Editor: EditorState) {
 
       const dimensionsInContainer = targetParentNodes
         ? targetParentNodes.reduce((result, id: NodeId) => {
-            const dom = nodesToDOM(Editor.nodes[id]);
+            const dom = nodesToDOM(state.nodes[id]);
             if (dom) {
               const info: NodeInfo = {
                 id,
@@ -104,7 +116,7 @@ export function QueryMethods(Editor: EditorState) {
       );
       const currentNode =
         targetParentNodes.length &&
-        Editor.nodes[targetParentNodes[dropAction.index]];
+        state.nodes[targetParentNodes[dropAction.index]];
 
       const output: Indicator = {
         placement: {
@@ -137,11 +149,9 @@ export function QueryMethods(Editor: EditorState) {
     },
 
     getState(): Record<NodeId, SerializedNodeData> {
-      return Object.keys(Editor.nodes).reduce((result: any, id: NodeId) => {
-        const {
-          data: { ...data },
-        } = Editor.nodes[id];
-        result[id] = serializeNode({ ...data }, options.resolver);
+      return Object.keys(state.nodes).reduce((result: any, id: NodeId) => {
+        const { data } = state.nodes[id];
+        result[id] = serializeNode(data, options.resolver);
         return result;
       }, {});
     },
@@ -153,7 +163,7 @@ export function QueryMethods(Editor: EditorState) {
     node(id: NodeId) {
       invariant(typeof id == "string", ERROR_INVALID_NODE_ID);
 
-      const node = Editor.nodes[id];
+      const node = state.nodes[id];
       const nodeQuery = _().node;
 
       return {
@@ -176,7 +186,7 @@ export function QueryMethods(Editor: EditorState) {
           return result;
         },
         decendants: (deep = false) => {
-          return getDeepNodes(Editor.nodes, id, deep);
+          return getDeepNodes(state.nodes, id, deep);
         },
         isDraggable: (onError?: (err: string) => void) => {
           try {
@@ -206,12 +216,12 @@ export function QueryMethods(Editor: EditorState) {
             const targetNode = getNodeFromIdOrNode(target);
 
             const currentParentNode =
-                targetNode.data.parent && Editor.nodes[targetNode.data.parent],
+                targetNode.data.parent && state.nodes[targetNode.data.parent],
               newParentNode = node;
 
             invariant(
               currentParentNode ||
-                (!currentParentNode && !Editor.nodes[targetNode.id]),
+                (!currentParentNode && !state.nodes[targetNode.id]),
               ERROR_DUPLICATE_NODEID
             );
 

@@ -8,6 +8,7 @@ import {
   Options,
   NodeEvents,
   SerializedNodeData,
+  Tree,
 } from "../interfaces";
 import {
   ERROR_INVALID_NODEID,
@@ -87,6 +88,41 @@ export const Actions = (
       );
 
       addNodeToParentAtIndex(node, parent, index);
+    },
+
+    /**
+     * Given a tree, it adds it at the correct position among the node children
+     *
+     * @param node
+     * @param parentId
+     * @param index
+     */
+    addTreeAtIndex(tree: Tree, parentId: NodeId, index: number) {
+      const parent = getParentAndValidate(parentId);
+
+      invariant(
+        index > -1 && index <= parent.data.nodes.length,
+        "AddTreeAtIndex: index must be between 0 and parentNodeLength inclusive"
+      );
+      const node = tree.nodes[tree.rootNodeId];
+      // first, add the node
+      this.addNodeAtIndex(node, parentId, index);
+      if (!node.data.nodes) {
+        return;
+      }
+      // then add all the children
+      const childNodes = node.data.nodes.map((nodeId) => tree.nodes[nodeId]);
+      const addChild = (childId, index) =>
+        this.addTreeAtIndex(
+          { rootNodeId: childId, nodes: tree.nodes },
+          node.id,
+          index
+        );
+
+      const childToAdd = [...node.data.nodes];
+      // we need to deep clone here...
+      node.data.nodes = [];
+      childToAdd.forEach(addChild);
     },
 
     /**
@@ -243,7 +279,7 @@ export const Actions = (
       const rehydratedNodes = Object.keys(dehydratedNodes).reduce(
         (accum: Nodes, id: string) => {
           const {
-            type: Comp,
+            type: Component,
             props,
             parent,
             nodes,
@@ -253,17 +289,17 @@ export const Actions = (
             custom,
           } = deserializeNode(dehydratedNodes[id], state.options.resolver);
 
-          if (!Comp) {
+          if (!Component) {
             return accum;
           }
 
-          accum[id] = query.createNode(createElement(Comp, props), {
+          accum[id] = query.createNode(createElement(Component, props), {
             id,
             data: {
               ...(isCanvas && { isCanvas }),
               ...(hidden && { hidden }),
               parent,
-              ...(isCanvas && { nodes }),
+              ...{ nodes },
               ...(_childCanvas && { _childCanvas }),
               custom,
             },

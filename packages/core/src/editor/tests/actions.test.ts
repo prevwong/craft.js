@@ -1,3 +1,4 @@
+import cloneDeep from "lodash/cloneDeep";
 import * as actions from "../actions";
 import { produce } from "immer";
 import { QueryMethods } from "../../editor/query";
@@ -71,6 +72,43 @@ describe("actions.addNodeAtIndex", () => {
       actions.addNodeAtIndex(leafNode, rootNode.id, 0)
     );
     expect(newState).toEqual(documentWithLeafState);
+  });
+});
+
+describe("actions.addTreeAtIndex", () => {
+  it("should throw if we give a parentId that doesnt exist", () => {
+    expect(() =>
+      Actions(emptyState)((actions) => actions.addTreeAtIndex(leafNode))
+    ).toThrow();
+  });
+  it("should throw if we give an invalid index", () => {
+    const state = Actions(documentState);
+    expect(() =>
+      state((actions) => actions.addTreeAtIndex(leafNode, rootNode.id, -1))
+    ).toThrow();
+    expect(() =>
+      state((actions) => actions.addTreeAtIndex(leafNode, rootNode.id, 1))
+    ).toThrow();
+  });
+  it("should be able to add a single node at 0", () => {
+    const tree = {
+      rootNodeId: leafNode.id,
+      nodes: { [leafNode.id]: leafNode },
+    };
+    const newState = Actions(documentState)((actions) =>
+      actions.addTreeAtIndex(tree, rootNode.id, 0)
+    );
+    expect(newState).toEqual(documentWithLeafState);
+  });
+  it("should be able to add a larger tree", () => {
+    const tree = {
+      rootNodeId: card.id,
+      nodes: cloneDeep(documentWithCardState.nodes),
+    };
+    const newState = Actions(documentState)((actions) =>
+      actions.addTreeAtIndex(tree, rootNode.id, 0)
+    );
+    expect(newState).toEqual(documentWithCardState);
   });
 });
 

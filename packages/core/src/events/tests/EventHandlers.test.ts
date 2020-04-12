@@ -35,12 +35,15 @@ describe("EventHandlers", () => {
     EventHandlers.events = undefined;
 
     actions = {
-      addNodeAtIndex: jest.fn(),
+      addTreeAtIndex: jest.fn(),
       move: jest.fn(),
       setIndicator: jest.fn(),
       setNodeEvent: jest.fn(),
     };
-    query = { createNode: jest.fn(), getDropPlaceholder: jest.fn() };
+    query = {
+      parseTreeFromReactNode: jest.fn(),
+      getDropPlaceholder: jest.fn(),
+    };
     store = { actions, query };
     eventHandlers = new EventHandlers(store);
   });
@@ -278,15 +281,15 @@ describe("EventHandlers", () => {
     describe("dragstart", () => {
       const node = "a node";
       beforeEach(() => {
-        query.createNode.mockImplementationOnce(() => node);
+        query.parseTreeFromReactNode.mockImplementationOnce(() => node);
         callHandler(create.events, "dragstart")(e, nodeId);
       });
       it("should have stopped propagation", () => {
         expect(e.stopImmediatePropagation).toHaveBeenCalled();
         expect(e.stopPropagation).toHaveBeenCalled();
       });
-      it("should call setNodeEvent on mousedown", () => {
-        expect(query.createNode).toHaveBeenCalledWith(nodeId);
+      it("should call parseTreeFromReactNode on mousedown", () => {
+        expect(query.parseTreeFromReactNode).toHaveBeenCalledWith(nodeId);
       });
       it("should have called createShadow", () => {
         expect(createShadow).toHaveBeenCalled();
@@ -312,8 +315,8 @@ describe("EventHandlers", () => {
           expect(e.stopImmediatePropagation).not.toHaveBeenCalled();
           expect(e.stopPropagation).toHaveBeenCalled();
         });
-        it("should have not call addNodeAtIndex", () => {
-          expect(actions.move).not.toHaveBeenCalled();
+        it("should have not call addTreeAtIndex", () => {
+          expect(actions.addTreeAtIndex).not.toHaveBeenCalled();
         });
       });
 
@@ -331,8 +334,8 @@ describe("EventHandlers", () => {
           expect(EventHandlers.draggedElement).toBe(null);
           expect(EventHandlers.draggedElementShadow).toBe(undefined);
         });
-        it("should have call addNodeAtIndex", () => {
-          expect(actions.addNodeAtIndex).toHaveBeenCalledWith(
+        it("should have call addTreeAtIndex", () => {
+          expect(actions.addTreeAtIndex).toHaveBeenCalledWith(
             nodeId,
             events.indicator.placement.parent.id,
             events.indicator.placement.index
