@@ -54,6 +54,10 @@ export function createNode(
         node.data.displayName = actualType.craft.name;
       }
 
+      if (actualType.craft.isCanvas) {
+        node.data.isCanvas = true;
+      }
+
       if (actualType.craft.rules) {
         Object.keys(actualType.craft.rules).forEach((key) => {
           if (["canDrag", "canMoveIn", "canMoveOut"].includes(key)) {
