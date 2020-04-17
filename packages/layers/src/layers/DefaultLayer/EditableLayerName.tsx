@@ -15,9 +15,6 @@ export const EditableLayerName = () => {
   }));
 
   const [editingName, setEditingName] = useState(false);
-  const [internalDisplayName, setInternalDisplayName] = useState<string>(
-    displayName
-  );
   const nameDOM = useRef<HTMLElement | null>(null);
 
   const clickOutside = useCallback((e) => {
@@ -32,22 +29,9 @@ export const EditableLayerName = () => {
     };
   }, [clickOutside]);
 
-  useEffect(() => {
-    if (internalDisplayName !== "")
-      actions.setCustom(
-        id,
-        (custom) => (custom.displayName = internalDisplayName)
-      );
-  }, [actions, id, internalDisplayName]);
-
-  useEffect(() => {
-    if (!editingName && internalDisplayName === "")
-      setInternalDisplayName(displayName);
-  }, [displayName, editingName, internalDisplayName]);
-
   return (
     <ContentEditable
-      html={internalDisplayName} // innerHTML of the editable div
+      html={displayName}
       disabled={!editingName}
       ref={(ref: any) => {
         if (ref) {
@@ -57,9 +41,12 @@ export const EditableLayerName = () => {
         }
       }}
       onChange={(e) => {
-        setInternalDisplayName(e.target.value);
-      }} // use true to disable editing
-      tagName="h2" // Use a custom HTML tag (uses a div by default)
+        actions.setCustom(
+          id,
+          (custom) => (custom.displayName = e.target.value)
+        );
+      }}
+      tagName="h2"
       onDoubleClick={() => {
         if (!editingName) setEditingName(true);
       }}
