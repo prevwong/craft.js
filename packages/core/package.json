@@ -1,6 +1,6 @@
 {
   "name": "@candulabs/craft-core",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "A React Framework for building extensible drag and drop page editors",
   "keywords": [
     "react",
@@ -35,7 +35,7 @@
     "url": "https://github.com/candulabs/craft.js/issues"
   },
   "dependencies": {
-    "@candulabs/craft-utils": "^0.1.14",
+    "@candulabs/craft-utils": "^0.1.15",
     "@types/react": "^16.9.11",
     "debounce": "^1.2.0",
     "immer": "^3.1.3",

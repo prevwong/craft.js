@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.1.15 (2020-04-21)
+
+
+### Bug Fixes
+
+* use Subscriber to handle onStateChange ([#15](https://github.com/candulabs/craft.js/issues/15)) ([b836815](https://github.com/candulabs/craft.js/commit/b8368158b8032cfb61e36c344804ce176e3c88f1))
+
+
+
+
+
 ## 0.1.14 (2020-04-14)
 
 **Note:** Version bump only for package docs
