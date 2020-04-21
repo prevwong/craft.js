@@ -35,13 +35,16 @@ export const Editor: React.FC<Partial<Options>> = ({
       });
   }, [context, options]);
 
-  const json = context && context.query.serialize();
-  const { onStateChange } = options;
-  // because `useEffect` doesnt allow for deep comparison, we use this trick.
-  // TODO: improve to actually use a deep comparison.
   useEffect(() => {
-    onStateChange && json && onStateChange(JSON.parse(json));
-  }, [onStateChange, json]);
+    context.subscribe(
+      (_) => ({
+        json: context.query.serialize(),
+      }),
+      ({ json }) => {
+        context.query.getOptions().onStateChange(JSON.parse(json));
+      }
+    );
+  }, [context]);
 
   return context ? (
     <EditorContext.Provider value={context}>

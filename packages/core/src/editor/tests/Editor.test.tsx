@@ -35,7 +35,6 @@ describe("<Editor />", () => {
   it("should render the EditorContext.Provider", () => {
     expect(component.find(EditorContext.Provider)).toHaveLength(1);
   });
-  it("should have called serialize", () => {
-    expect(query.serialize).toHaveBeenCalled();
-  });
+
+  // TODO: use react-testing-library to test hook-related code
 });
