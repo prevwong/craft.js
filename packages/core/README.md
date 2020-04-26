@@ -1,7 +1,10 @@
+## Important note!
+This is a fork of official [craft.js](https://github.com/prevwong/craft.js) repo. It's meant for internal @candulabs usage and might introduce some breaking changes. Use at your own risk, for stable version and support, please checkout main repo.
+
 
 <div align="center" style={{d}}>
 <h1>craft.js</h1>
-<a href="https://www.npmjs.com/package/@craftjs/core">
+<a href="https://www.npmjs.com/package/@craftjs/coreaft-core">
   <img src="https://img.shields.io/npm/v/@craftjs/core?color=%232680eb&label=NPM&logo=npm&logoColor=%232680eb&style=for-the-badge">
 </a>
 <img src="https://img.shields.io/npm/l/@craftjs/core?color=%23000&style=for-the-badge">
@@ -194,7 +197,7 @@ You should not use this if:
 
 
 ## Additional Packages :tada:
-- **[@craftjs/layers](https://github.com/prevwong/craft.js/tree/master/packages/layers)** A Photoshop-like layers panel
+- **[@craftjs/layerst-layers](https://github.com/prevwong/craft.js/tree/master/packages/layers)** A Photoshop-like layers panel
 
 ## Acknowledgements :raised_hands:
 
