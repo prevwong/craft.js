@@ -169,9 +169,11 @@ export const Actions = (
           !query.node(targetNode.id).isTopLevelCanvas(),
           "Cannot delete a Canvas that is not a direct child of another Canvas"
         );
-        targetNode.data.nodes!.forEach((childId) => {
-          _("delete")(childId);
-        });
+        if (targetNode.data.nodes) {
+          [...targetNode.data.nodes].forEach((childId) => {
+            _("delete")(childId);
+          });
+        }
       }
 
       const parentNode = state.nodes[targetNode.data.parent],
