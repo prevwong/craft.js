@@ -1,7 +1,7 @@
 #!/bin/bash
 
 args=()
-if [ "$NODE_ENV" == 'development' ]
+if [ $NODE_ENV == 'development' ]
 then
    args+=( '-w' );
 fi
