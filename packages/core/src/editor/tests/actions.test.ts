@@ -1,4 +1,5 @@
 import cloneDeep from "lodash/cloneDeep";
+import mapValues from "lodash/mapValues";
 import * as actions from "../actions";
 import { produce } from "immer";
 import { QueryMethods } from "../../editor/query";
@@ -16,7 +17,9 @@ import {
 } from "../../tests/fixtures";
 
 const Actions = (state) => (cb) =>
-  produce(state, (draft) => cb(actions.Actions(draft, QueryMethods(state))));
+  produce(state, (draft) =>
+    cb(actions.Actions(draft, QueryMethods(state, {})))
+  );
 
 describe("actions.add", () => {
   it("should throw if we give a parentId that doesnt exist", () => {
@@ -161,5 +164,44 @@ describe("actions.reset", () => {
     const newState = Actions(documentState)((actions) => actions.reset());
 
     expect(newState).toEqual(emptyState);
+  });
+});
+
+describe("actions.setState", () => {
+  const serialized = mapValues(documentState.nodes, ({ data }) => ({
+    type: {},
+    ...data,
+  }));
+
+  it("should be able to set the state correctly", () => {
+    const newState = Actions(emptyState)((actions) =>
+      actions.setState(serialized)
+    );
+
+    const nodes = {
+      "canvas-ROOT": {
+        data: {
+          _childCanvas: undefined,
+          custom: {},
+          displayName: "Document",
+          hidden: undefined,
+          isCanvas: undefined,
+          name: "Document",
+          nodes: [],
+          parent: undefined,
+          props: {},
+          type: "div",
+        },
+        events: {
+          dragged: false,
+          hovered: false,
+          selected: false,
+        },
+        related: {},
+        rules: expect.any(Object),
+        id: "canvas-ROOT",
+      },
+    };
+    expect(newState.nodes).toEqual(nodes);
   });
 });

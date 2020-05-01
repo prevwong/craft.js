@@ -17,6 +17,7 @@ import {
   ERROR_NOPARENT,
 } from "@craftjs/utils";
 import { QueryMethods } from "./query";
+import { fromEntries } from "../utils/fromEntries";
 import { updateEventsNode } from "../utils/updateEventsNode";
 import invariant from "tiny-invariant";
 import { deserializeNode } from "../utils/deserializeNode";
@@ -275,41 +276,13 @@ export const Actions = (
     },
 
     setState(dehydratedNodes: Record<NodeId, SerializedNodeData>) {
-      const rehydratedNodes = Object.keys(dehydratedNodes).reduce(
-        (accum: Nodes, id: string) => {
-          const {
-            type: Component,
-            props,
-            parent,
-            nodes,
-            _childCanvas,
-            isCanvas,
-            hidden,
-            custom,
-          } = deserializeNode(dehydratedNodes[id], state.options.resolver);
+      const nodePairs = Object.keys(dehydratedNodes).map((id) => [
+        id,
+        query.parseNodeFromSerializedNode(dehydratedNodes[id], id),
+      ]);
 
-          if (!Component) {
-            return accum;
-          }
-
-          accum[id] = query.createNode(createElement(Component, props), {
-            id,
-            data: {
-              ...(isCanvas && { isCanvas }),
-              ...(hidden && { hidden }),
-              parent,
-              ...{ nodes },
-              ...(_childCanvas && { _childCanvas }),
-              custom,
-            },
-          });
-          return accum;
-        },
-        {}
-      );
-
+      this.replaceNodes(fromEntries(nodePairs));
       this.replaceEvents(editorEmptyState.events);
-      this.replaceNodes(rehydratedNodes);
     },
   };
 };

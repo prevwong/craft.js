@@ -4,7 +4,9 @@ import { Resolver } from "../interfaces";
 import { resolveComponent } from "./resolveComponent";
 
 const reduceType = (type: React.ElementType | string, resolver: Resolver) => {
-  if (typeof type === "string") return type;
+  if (typeof type === "string") {
+    return type;
+  }
   return { resolvedName: resolveComponent(resolver, type) };
 };
 
@@ -17,7 +19,9 @@ export const serializeComp = (
     const prop = props[key];
     if (key === "children" && typeof prop !== "string") {
       result[key] = Children.map(prop, (child) => {
-        if (typeof child === "string") return child;
+        if (typeof child === "string") {
+          return child;
+        }
         return serializeComp(child, resolver);
       });
     } else if (prop.type) {
@@ -39,7 +43,7 @@ export const serializeNode = (
   data: Omit<NodeData, "event">,
   resolver: Resolver
 ): SerializedNodeData => {
-  let { type, props, isCanvas, name, ...nodeData } = data;
+  const { type, props, isCanvas, name, ...nodeData } = data;
 
   const reducedComp = serializeComp({ type, isCanvas, props }, resolver);
 

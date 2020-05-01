@@ -8,9 +8,8 @@ import {
   NodeInfo,
   SerializedNodeData,
   Tree,
+  NodeData,
 } from "../interfaces";
-import { serializeNode } from "../utils/serializeNode";
-import { resolveComponent } from "../utils/resolveComponent";
 import invariant from "tiny-invariant";
 import {
   QueryCallbacksFor,
@@ -29,9 +28,16 @@ import {
   ERROR_INVALID_NODE_ID,
 } from "@craftjs/utils";
 import findPosition from "../events/findPosition";
+import { createNode } from "../utils/createNode";
+import { fromEntries } from "../utils/fromEntries";
+import { deprecatedWarning } from "../utils/deprecatedWarning";
 import { mergeTrees } from "../utils/mergeTrees";
 import { getDeepNodes } from "../utils/getDeepNodes";
-import { transformJSXToNode } from "../utils/transformJSX";
+import { parseNodeDataFromJSX } from "../utils/parseNodeDataFromJSX";
+import { serializeNode } from "../utils/serializeNode";
+import { getRandomNodeId } from "../utils/getRandomNodeId";
+import { resolveComponent } from "../utils/resolveComponent";
+import { deserializeNode } from "../utils/deserializeNode";
 
 export function QueryMethods(state: EditorState) {
   const options = state && state.options;
@@ -48,8 +54,40 @@ export function QueryMethods(state: EditorState) {
      * @param reactElement
      * @param extras
      */
-    createNode(reactElement: React.ReactElement | string, extras?: any) {
-      const node = transformJSXToNode(reactElement, extras);
+    createNode(reactElement: React.ReactElement | string, extras?: any): Node {
+      deprecatedWarning(
+        "Warning: method createNode has been deprecated and it will be removed in the future. Please use parseNodeFromReactNode instead."
+      );
+      return this.parseNodeFromReactNode(reactElement, extras);
+    },
+
+    /**
+     * Given a `nodeData` and an optional Id, it will parse a new `Node`
+     *
+     * @param nodeData `node.data` property of the future data
+     * @param id an optional ID correspondent to the node
+     */
+    parseNodeFromSerializedNode(
+      nodeData: SerializedNodeData,
+      id?: NodeId
+    ): Node {
+      const data = deserializeNode(nodeData, options.resolver);
+
+      invariant(data.type, ERRROR_NOT_IN_RESOLVER);
+
+      return this.parseNodeFromReactNode(
+        React.createElement(data.type, data.props),
+        { id, data }
+      );
+    },
+
+    parseNodeFromReactNode(
+      reactElement: React.ReactElement | string,
+      extras: any = {}
+    ): Node {
+      const nodeData = parseNodeDataFromJSX(reactElement, extras.data);
+      // @ts-ignore
+      const node = createNode(nodeData, extras.id || getRandomNodeId());
 
       const name = resolveComponent(options.resolver, node.data.type);
       invariant(name !== null, ERRROR_NOT_IN_RESOLVER);
@@ -60,7 +98,7 @@ export function QueryMethods(state: EditorState) {
     },
 
     parseTreeFromReactNode(reactNode: React.ReactElement): Tree | undefined {
-      const node = this.createNode(reactNode);
+      const node = this.parseNodeFromReactNode(reactNode);
       const childrenNodes = React.Children.map(
         (reactNode.props && reactNode.props.children) || [],
         (child) =>
@@ -148,12 +186,15 @@ export function QueryMethods(state: EditorState) {
       return options;
     },
 
+    /**
+     * Returns all the `nodes` in a serialized format
+     */
     getState(): Record<NodeId, SerializedNodeData> {
-      return Object.keys(state.nodes).reduce((result: any, id: NodeId) => {
-        const { data } = state.nodes[id];
-        result[id] = serializeNode(data, options.resolver);
-        return result;
-      }, {});
+      const nodePairs = Object.keys(state.nodes).map((id: NodeId) => [
+        id,
+        this.serializeNode(state.nodes[id]),
+      ]);
+      return fromEntries(nodePairs);
     },
 
     /**
@@ -268,6 +309,15 @@ export function QueryMethods(state: EditorState) {
      */
     serialize(): string {
       return JSON.stringify(this.getState());
+    },
+
+    /**
+     * Given a Node, it serializes it to its node data. Useful if you need to compare state of different nodes.
+     *
+     * @param node
+     */
+    serializeNode(node: Node): SerializedNodeData {
+      return serializeNode(node.data, options.resolver);
     },
   };
 }

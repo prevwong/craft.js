@@ -24,7 +24,7 @@ describe("<Frame />", () => {
 
   beforeEach(() => {
     actions = { replaceNodes: jest.fn(), setState: jest.fn() };
-    query = { createNode: jest.fn() };
+    query = { parseNodeFromReactNode: jest.fn() };
     mockEditor.mockImplementation(() => ({ actions, query }));
   });
   describe("When rendering a Frame with no Children and no Data", () => {
