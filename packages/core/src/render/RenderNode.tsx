@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import { useNode } from "../hooks/useNode";
 import { NodeElement } from "../nodes/NodeElement";
@@ -7,27 +7,38 @@ import { NodeId } from "../interfaces";
 import { useInternalNode } from "../nodes/useInternalNode";
 
 const Render = () => {
-  const { nodes, type, props } = useInternalNode((node) => ({
-    nodes: node.data.nodes,
-    type: node.data.type,
-    props: node.data.props,
+  const { internalNode } = useInternalNode((node) => ({
+    internalNode: {
+      id: node.id,
+      data: node.data,
+    },
   }));
+  const [node, setNode] = useState(null);
 
-  if (!type) return null;
+  // This is to handle situations when a Node gets deleted
+  useEffect(() => {
+    if (internalNode && internalNode.data.type != null) {
+      setNode(internalNode);
+    }
+  }, [internalNode]);
 
-  const render = React.createElement(
-    type,
-    props,
-    <React.Fragment>
-      {nodes
-        ? nodes.map((id: NodeId) => {
-            return <NodeElement id={id} key={id} />;
-          })
-        : props && props.children}
-    </React.Fragment>
+  if (!node) return null;
+
+  return (
+    <SimpleElement
+      render={React.createElement(
+        node.data.type,
+        node.data.props,
+        <React.Fragment>
+          {node.data.nodes
+            ? node.data.nodes.map((id: NodeId) => (
+                <NodeElement id={id} key={id} />
+              ))
+            : node.data.props.children && node.data.props.children}
+        </React.Fragment>
+      )}
+    />
   );
-
-  return <SimpleElement render={render} />;
 };
 
 export const RenderNodeToElement: React.FC<any> = () => {
