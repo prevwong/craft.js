@@ -1,8 +1,8 @@
 import React from "react";
-import { NodeData, NodeId, Node } from "../interfaces";
 import { NodeData, Node } from "../interfaces";
 import { produce } from "immer";
-import { Canvas } from "../nodes/Canvas";
+import { Canvas, deprecateCanvasComponent } from "../nodes/Canvas";
+import { Element } from "../nodes/Element";
 import { NodeProvider } from "../nodes/NodeContext";
 const shortid = require("shortid");
 
@@ -41,11 +41,24 @@ export function createNode(
       ...((actualType.craft && actualType.craft.rules) || {}),
     };
 
-    if (node.data.type === Canvas) {
-      node.data.type = node.data.props.is ? node.data.props.is : "div";
-      node.data.isCanvas = true;
+    // @ts-ignore
+    if (node.data.type === Element || node.data.type === Canvas) {
+      let usingDeprecatedCanvas = node.data.type === Canvas;
+      const { is, isCanvas, custom } = node.data.props;
+
+      node.data.type = is || "div";
       actualType = node.data.type;
       delete node.data.props["is"];
+      node.data.isCanvas = isCanvas;
+      delete node.data.props["isCanvas"];
+
+      node.data.custom = custom || node.data.custom;
+      delete node.data.props["custom"];
+
+      if (usingDeprecatedCanvas) {
+        node.data.isCanvas = true;
+        deprecateCanvasComponent();
+      }
     }
 
     if (actualType.craft) {
@@ -69,6 +82,11 @@ export function createNode(
           }
         });
       }
+
+      if (actualType.craft.custom) {
+        node.data.custom = node.data.custom || actualType.craft.custom;
+      }
+
       if (normalise) {
         normalise(node);
       }

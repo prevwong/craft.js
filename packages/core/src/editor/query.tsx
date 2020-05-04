@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   NodeId,
   EditorState,
@@ -104,8 +104,8 @@ export function QueryMethods(state: EditorState) {
         ? targetNode
         : state.nodes[targetNode.data.parent];
 
-      const targetParentNodes = targetParent.data._childCanvas
-        ? Object.values(targetParent.data._childCanvas)
+      const targetParentNodes = targetParent.data.linkedNodes
+        ? Object.values(targetParent.data.linkedNodes)
         : targetParent.data.nodes || [];
 
       const dimensionsInContainer = targetParentNodes
@@ -184,13 +184,17 @@ export function QueryMethods(state: EditorState) {
       return {
         isCanvas: () => node.data.isCanvas,
         isRoot: () => node.id === ROOT_NODE,
-        isTopLevelCanvas: () =>
-          !nodeQuery(node.id).isRoot() &&
-          !node.data.parent.startsWith("canvas-"),
+        isTopLevelElement: () =>
+          !nodeQuery(node.id).isRoot() && !node.data.parent,
+        isTopLevelCanvas: () => {
+          return !nodeQuery(node.id).isRoot() && !node.data.parent;
+        },
         isDeletable: () =>
           !nodeQuery(id).isRoot() &&
-          (nodeQuery(id).isCanvas() ? !nodeQuery(id).isTopLevelCanvas() : true),
-        isParentOfTopLevelCanvas: () => !!node.data._childCanvas,
+          (nodeQuery(id).isCanvas()
+            ? !nodeQuery(id).isTopLevelElement()
+            : true),
+        isParentOfTopLevelCanvas: () => !!node.data.linkedNodes,
         get: () => node,
         ancestors: (result = []) => {
           const parent = node.data.parent;

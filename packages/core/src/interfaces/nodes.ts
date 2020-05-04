@@ -42,7 +42,8 @@ export type NodeData = {
   isCanvas?: boolean;
   parent: NodeId;
   index?: number;
-  _childCanvas?: Record<string, NodeId>;
+  _childCanvas?: Record<string, NodeId>; // to-be deprecated in favour of linkedNodes
+  linkedNodes?: Record<string, NodeId>;
   nodes?: NodeId[];
   hidden: boolean;
   custom?: any;
