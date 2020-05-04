@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { NodeElement } from "../nodes/NodeElement";
-import { Canvas } from "../nodes/Canvas";
-import { ROOT_NODE, ERROR_FRAME_IMMEDIATE_NON_CANVAS } from "@craftjs/utils";
+import { ROOT_NODE } from "@craftjs/utils";
 import { useInternalEditor } from "../editor/useInternalEditor";
-import invariant from "tiny-invariant";
 import { Nodes } from "../interfaces";
 
 export type Frame = {
@@ -28,23 +26,24 @@ export const Frame: React.FC<Frame> = ({ children, json, data }) => {
   });
 
   useEffect(() => {
-    const { replaceNodes, setState } = actions;
-    const { createNode } = query;
+    const { setState } = actions;
     const { initialChildren, initialData } = initialState.current;
 
     if (initialData) {
       setState(initialData);
     } else if (initialChildren) {
-      const rootCanvas = React.Children.only(
+      const rootNode = React.Children.only(
         initialChildren
       ) as React.ReactElement;
 
-      invariant(
-        rootCanvas.type && rootCanvas.type === Canvas,
-        ERROR_FRAME_IMMEDIATE_NON_CANVAS
-      );
-      const node = createNode(rootCanvas, { id: ROOT_NODE });
-      replaceNodes({ [ROOT_NODE]: node });
+      const node = query.parseTreeFromReactNode(rootNode, (jsx, node) => {
+        if (jsx === rootNode) {
+          node.id = ROOT_NODE;
+        }
+        return node;
+      });
+
+      actions.addTreeAtIndex(node);
     }
 
     setRender(<NodeElement id={ROOT_NODE} />);
