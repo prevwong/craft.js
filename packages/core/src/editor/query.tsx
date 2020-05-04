@@ -48,8 +48,11 @@ export function QueryMethods(state: EditorState) {
      * @param reactElement
      * @param extras
      */
-    createNode(reactElement: React.ReactElement | string, extras?: any) {
-      const node = transformJSXToNode(reactElement, extras);
+    createNode(
+      jsx: React.ReactElement,
+      normalise?: (jsx: React.ReactElement, node: Node) => void
+    ) {
+      const node = transformJSXToNode(jsx, normalise);
 
       const name = resolveComponent(options.resolver, node.data.type);
       invariant(name !== null, ERRROR_NOT_IN_RESOLVER);
@@ -59,13 +62,25 @@ export function QueryMethods(state: EditorState) {
       return node;
     },
 
-    parseTreeFromReactNode(reactNode: React.ReactElement): Tree | undefined {
-      const node = this.createNode(reactNode);
-      const childrenNodes = React.Children.map(
-        (reactNode.props && reactNode.props.children) || [],
-        (child) =>
-          React.isValidElement(child) && this.parseTreeFromReactNode(child)
-      ).filter((children) => !!children);
+    parseTreeFromReactNode(
+      reactNode: React.ReactElement,
+      normalise?: (jsx: React.ReactElement, node: Node) => void
+    ): Tree | undefined {
+      let node = this.createNode(reactNode, normalise);
+
+      let childrenNodes = [];
+
+      if (reactNode.props && reactNode.props.children) {
+        childrenNodes = React.Children.toArray(reactNode.props.children).reduce(
+          (accum, child) => {
+            if (React.isValidElement(child)) {
+              accum.push(this.parseTreeFromReactNode(child));
+            }
+            return accum;
+          },
+          []
+        );
+      }
 
       return mergeTrees(node, childrenNodes);
     },

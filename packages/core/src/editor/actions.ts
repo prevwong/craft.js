@@ -292,17 +292,22 @@ export const Actions = (
             return accum;
           }
 
-          accum[id] = query.createNode(createElement(Component, props), {
-            id,
-            data: {
-              ...(isCanvas && { isCanvas }),
-              ...(hidden && { hidden }),
-              parent,
-              ...{ nodes },
-              ...(_childCanvas && { _childCanvas }),
-              custom,
-            },
-          });
+          accum[id] = query.createNode(
+            createElement(Component, props),
+            (jsx, node) => {
+              node.id = id;
+              node.data = {
+                ...node.data,
+                ...(isCanvas && { isCanvas }),
+                ...(hidden && { hidden }),
+                parent,
+                ...{ nodes },
+                ...(_childCanvas && { _childCanvas }),
+                custom,
+              };
+            }
+          );
+
           return accum;
         },
         {}

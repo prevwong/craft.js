@@ -1,25 +1,29 @@
 import React from "react";
 import { NodeData, NodeId, Node } from "../interfaces";
+import { NodeData, Node } from "../interfaces";
 import { produce } from "immer";
 import { Canvas } from "../nodes/Canvas";
 import { NodeProvider } from "../nodes/NodeContext";
+const shortid = require("shortid");
 
 export function createNode(
-  data: Partial<NodeData> & Pick<NodeData, "type" | "props">,
-  id: NodeId
+  element: React.ReactElement,
+  normalise: (node: Node) => void
 ): Node {
-  let actualType = data.type as any;
-  const { canMoveIn, canMoveOut, ...props } = data.props;
+  let actualType = element.type as any;
+
+  const prefix = actualType === Canvas ? "canvas" : "node";
+  let id = `${prefix}-${shortid.generate()}`;
 
   let node = produce({}, (node: Node) => {
     node.id = id;
 
     node.data = {
-      ...data,
-      name: (data.type as any).name,
-      displayName: (data.type as any).name,
-      props,
-      custom: data.custom || {},
+      type: actualType,
+      props: { ...element.props },
+      name: (actualType as any).name,
+      displayName: (actualType as any).name,
+      custom: {},
     } as NodeData;
 
     node.related = {};
@@ -44,18 +48,18 @@ export function createNode(
       delete node.data.props["is"];
     }
 
-    node.data.props = {
-      ...((actualType.craft && actualType.craft.defaultProps) || {}),
-      ...node.data.props,
-    };
-
     if (actualType.craft) {
+      node.data.props = {
+        ...((actualType.craft && actualType.craft.defaultProps) || {}),
+        ...node.data.props,
+      };
+
       if (actualType.craft.name) {
         node.data.displayName = actualType.craft.name;
       }
 
       if (actualType.craft.isCanvas) {
-        node.data.isCanvas = true;
+        node.data.isCanvas = node.data.isCanvas || actualType.craft.isCanvas;
       }
 
       if (actualType.craft.rules) {
@@ -65,13 +69,21 @@ export function createNode(
           }
         });
       }
+      if (normalise) {
+        normalise(node);
+      }
+
       if (actualType.craft.related) {
         node.related = {};
+        const relatedNodeContext = {
+          id: node.id,
+          related: true,
+        };
         Object.keys(actualType.craft.related).forEach((comp) => {
           node.related[comp] = () =>
             React.createElement(
               NodeProvider,
-              { id, related: true },
+              relatedNodeContext,
               React.createElement(actualType.craft.related[comp])
             );
         });
