@@ -21,6 +21,7 @@ describe("query", () => {
   const resolver = { H1: () => null };
   let query;
   let state;
+  let normalise;
 
   beforeEach(() => {
     state = { options: { resolver } };
@@ -37,10 +38,13 @@ describe("query", () => {
       beforeEach(() => {
         transformJSXToNode = jest.fn().mockImplementation(() => rootNode);
         resolveComponent = jest.fn().mockImplementation(() => name);
-        newNode = query.createNode(node, extras);
+        newNode = query.createNode(node, normalise);
       });
       it("should call transformJSXToNode with the right arguments", () => {
-        expect(transformJSXToNode).toHaveBeenCalledWith(node, extras);
+        expect(transformJSXToNode).toHaveBeenCalledWith(node, normalise);
+      });
+      it("should be able to normalise", () => {
+        expect(rootNode.data.name).toEqual(name);
       });
       it("should have called the resolveComponent", () => {
         expect(resolveComponent).toHaveBeenCalledWith(
@@ -73,10 +77,10 @@ describe("query", () => {
     describe("when there is a single node with no children", () => {
       const node = <button />;
       beforeEach(() => {
-        tree = query.parseTreeFromReactNode(node);
+        tree = query.parseTreeFromReactNode(node, normalise);
       });
       it("should call createNode with the right payload", () => {
-        expect(query.createNode).toHaveBeenCalledWith(node);
+        expect(query.createNode).toHaveBeenLastCalledWith(node, normalise);
       });
       it("should have called createNode once", () => {
         expect(query.createNode).toHaveBeenCalledTimes(1);
@@ -95,7 +99,7 @@ describe("query", () => {
         tree = query.parseTreeFromReactNode(node);
       });
       it("should call createNode with the right payload", () => {
-        expect(query.createNode).toHaveBeenCalledWith(node);
+        expect(query.createNode).toHaveBeenCalledWith(node, normalise);
       });
       it("should have called createNode once", () => {
         expect(query.createNode).toHaveBeenCalledTimes(1);
@@ -127,7 +131,7 @@ describe("query", () => {
         tree = query.parseTreeFromReactNode(node);
       });
       it("should call createNode with the right payload", () => {
-        expect(query.createNode).toHaveBeenCalledWith(node);
+        expect(query.createNode).toHaveBeenCalledWith(node, normalise);
       });
       it("should have called createNode 4 times", () => {
         expect(query.createNode).toHaveBeenCalledTimes(4);
