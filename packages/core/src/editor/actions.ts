@@ -74,13 +74,8 @@ export const Actions = (
      * Add a new Node(s) to the editor
      * @param nodes
      * @param parentId
-     * @param onError
      */
-    add(
-      nodes: Node[] | Node,
-      parentId?: NodeId,
-      onError?: (err, node) => void
-    ) {
+    add(nodes: Node[] | Node, parentId?: NodeId) {
       const isCanvas = (node: Node | NodeId) =>
         node &&
         (typeof node === "string"
@@ -102,15 +97,8 @@ export const Actions = (
           if (!parentNode.data._childCanvas) parentNode.data._childCanvas = {};
           node.data.parent = parentNode.id;
           parentNode.data._childCanvas[node.data.props.id] = node.id;
-          delete node.data.props.id;
         } else {
-          let error;
           if (parentId) {
-            query.node(parentId).isDroppable(node, (err) => {
-              error = err;
-            });
-            if (error) return onError && onError(error, node);
-
             if (parentNode.data.props.children)
               delete parentNode.data.props["children"];
 
