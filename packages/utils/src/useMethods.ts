@@ -212,12 +212,9 @@ class Watcher<S> {
   }
 
   notify() {
-    // Give unsubscribing the priority. Any better way?
-    // setTimeout(() => {
     for (let i = 0; i < this.subscribers.length; i++) {
       this.subscribers[i].collect();
     }
-    // });
   }
 }
 
