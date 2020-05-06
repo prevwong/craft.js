@@ -29,7 +29,6 @@ describe("query", () => {
   });
 
   describe("createNode", () => {
-    const extras = { id: 1 };
     const node = <h1>Hello</h1>;
     const name = "Document";
     let newNode;
