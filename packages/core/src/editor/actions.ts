@@ -21,6 +21,7 @@ import { updateEventsNode } from "../utils/updateEventsNode";
 import invariant from "tiny-invariant";
 import { deserializeNode } from "../utils/deserializeNode";
 import { createElement } from "react";
+import { deprecationWarning } from "@craftjs/utils";
 
 // TODO: move to a constants folder
 const editorEmptyState = {
@@ -46,6 +47,7 @@ export const Actions = (
     const parent = getParentAndValidate(parentId);
     // reset the parent node ids
     if (!parent.data.nodes) parent.data.nodes = [];
+
     if (parent.data.props.children) {
       delete parent.data.props["children"];
     }
@@ -119,8 +121,19 @@ export const Actions = (
      * @param parentId
      * @param index
      */
-    add(node: Node, parentId: NodeId, index?: number) {
-      addNodeToParentAtIndex(node, parentId, index);
+    add(nodeToAdd: Node | Node[], parentId: NodeId, index?: number) {
+      // TODO: Deprecate adding array of Nodes to keep implementation simpler
+      let nodes = [nodeToAdd];
+      if (Array.isArray(nodeToAdd)) {
+        deprecationWarning(
+          "actions.add(node: Node[])",
+          "Add a single Node, actions.add(node: Node) instead."
+        );
+        nodes = nodeToAdd;
+      }
+      nodes.forEach((node: Node) => {
+        addNodeToParentAtIndex(node, parentId, index);
+      });
     },
 
     /**

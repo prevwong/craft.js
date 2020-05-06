@@ -29,15 +29,8 @@ describe("actions.add", () => {
       Actions(emptyState)((actions) => actions.add(rootNode, rootNode.id))
     ).toThrow();
   });
-  it("should be able to add leaft to the document", () => {
+  it("should be able to add leaf to the document", () => {
     const newState = Actions(documentState)((actions) =>
-      actions.add(leafNode, rootNode.id)
-    );
-
-    expect(newState).toEqual(documentWithLeafState);
-  });
-  it("should be able to add the leaf again to the same document", () => {
-    const newState = Actions(documentWithLeafState)((actions) =>
       actions.add(leafNode, rootNode.id)
     );
 
@@ -69,7 +62,7 @@ describe("actions.addNodeAtIndex", () => {
   });
   it("should be able to add the node at 0", () => {
     const newState = Actions(documentState)((actions) =>
-      actions.addNodeAtIndex(leafNode, rootNode.id, 0)
+      actions.add(leafNode, rootNode.id, 0)
     );
     expect(newState).toEqual(documentWithLeafState);
   });
