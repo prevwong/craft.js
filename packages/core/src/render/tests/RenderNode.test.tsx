@@ -2,22 +2,29 @@ import React from "react";
 import identity from "lodash/identity";
 import { mount } from "enzyme";
 
-import { Frame } from "../Frame";
-import { Canvas } from "../../nodes/Canvas";
 import { NodeElement } from "../../nodes/NodeElement";
 import { RenderNodeToElement } from "../RenderNode";
 import { SimpleElement } from "../SimpleElement";
 
+let nodeContext = {
+  id: 1,
+  connectors: { connect: identity, drag: identity },
+};
+
 let node = {};
-let onRender;
+let onRender = jest.fn();
 
 jest.mock("../../editor/useInternalEditor", () => ({
   useInternalEditor: () => ({ onRender }),
 }));
-jest.mock("../../hooks/useNode", () => ({
-  useNode: () => ({
+jest.mock("../../nodes/useNodeContext", () => ({
+  useNodeContext: () => nodeContext,
+}));
+
+jest.mock("../../nodes/useInternalNode", () => ({
+  useInternalNode: () => ({
     ...node,
-    connectors: { connect: identity, drag: identity },
+    ...nodeContext,
   }),
 }));
 jest.mock("../../nodes/Canvas", () => ({
@@ -25,6 +32,10 @@ jest.mock("../../nodes/Canvas", () => ({
 }));
 jest.mock("../../nodes/NodeElement", () => ({
   NodeElement: () => null,
+}));
+
+jest.mock("../SimpleElement", () => ({
+  SimpleElement: () => null,
 }));
 
 describe("<RenderNode />", () => {
@@ -60,9 +71,6 @@ describe("<RenderNode />", () => {
     it("should have called onRender", () => {
       expect(onRender).toHaveBeenCalled();
     });
-    it("should contain the right props", () => {
-      expect(component.props()).toEqual({ ...props, ...injectedProps });
-    });
   });
 
   describe("When the node has type and no nodes", () => {
@@ -82,9 +90,6 @@ describe("<RenderNode />", () => {
     it("should not contain a SimpleElement", () => {
       expect(component.find(SimpleElement)).toHaveLength(0);
     });
-    it("should contain the right props", () => {
-      expect(component.props()).toEqual({ ...props, ...injectedProps });
-    });
     it("should contain a button", () => {
       expect(component.find("button")).toHaveLength(1);
     });
@@ -102,7 +107,7 @@ describe("<RenderNode />", () => {
 
     beforeEach(() => {
       node = { type, props, nodes: [nodeId] };
-      component = mount(<RenderNodeToElement {...injectedProps} />);
+      component = mount(<RenderNodeToElement />);
     });
     it("should have called onRender", () => {
       expect(onRender).toHaveBeenCalled();
@@ -110,38 +115,12 @@ describe("<RenderNode />", () => {
     it("should not contain a SimpleElement", () => {
       expect(component.find(SimpleElement)).toHaveLength(0);
     });
-    it("should contain the right props", () => {
-      expect(component.props()).toEqual({ ...props, ...injectedProps });
-    });
     it("should contain one node element with the right id", () => {
       expect(component.find(NodeElement)).toHaveLength(1);
       expect(component.contains(<NodeElement id={nodeId} />)).toBe(true);
     });
     it("should contain a button", () => {
       expect(component.find("button")).toHaveLength(1);
-    });
-  });
-
-  describe("When the has a canvas", () => {
-    const type = Canvas;
-    const props = { className: "hello" };
-    const nodeId = "3910";
-
-    beforeEach(() => {
-      node = { type, props, nodes: [nodeId] };
-      component = mount(<RenderNodeToElement {...injectedProps} />);
-    });
-    it("should have called onRender", () => {
-      expect(onRender).toHaveBeenCalled();
-    });
-    it("should contain a Canvas", () => {
-      expect(component.find(Canvas)).toHaveLength(1);
-    });
-    it("should contain the right props", () => {
-      expect(component.props()).toEqual({ ...props, ...injectedProps });
-    });
-    it("should contain no node elements", () => {
-      expect(component.find(NodeElement)).toHaveLength(0);
     });
   });
 });
