@@ -15,13 +15,12 @@ import {
   ROOT_NODE,
   QueryCallbacksFor,
   ERROR_NOPARENT,
+  ERROR_ROOT_CANVAS_NO_ID,
 } from "@craftjs/utils";
 import { QueryMethods } from "./query";
 import { fromEntries } from "../utils/fromEntries";
 import { updateEventsNode } from "../utils/updateEventsNode";
 import invariant from "tiny-invariant";
-import { deserializeNode } from "../utils/deserializeNode";
-import { createElement } from "react";
 
 // TODO: move to a constants folder
 const editorEmptyState = {
@@ -40,8 +39,16 @@ export const Actions = (
 ) => {
   /** Helper functions */
   const addNodeToParentAtIndex = (node: Node, parent: Node, index: number) => {
-    parent.data.nodes.splice(index, 0, node.id);
-    node.data.parent = parent.id;
+    if (parent && node.data.isCanvas && !parent.data.isCanvas) {
+      invariant(node.data.props.id, ERROR_ROOT_CANVAS_NO_ID);
+      if (!parent.data._childCanvas) parent.data._childCanvas = {};
+      node.data.parent = parent.id;
+      parent.data._childCanvas[node.data.props.id] = node.id;
+    } else {
+      parent.data.nodes.splice(index, 0, node.id);
+      node.data.parent = parent.id;
+    }
+
     state.nodes[node.id] = node;
   };
 
@@ -61,8 +68,12 @@ export const Actions = (
      */
     add(nodes: Node[] | Node, parentId: NodeId) {
       const parent = getParentAndValidate(parentId);
-      // reset the parent node ids
-      parent.data.nodes = [];
+
+      if (!parent.data.nodes) {
+        // reset the parent node ids
+        parent.data.nodes = [];
+      }
+
       if (parent.data.props.children) {
         delete parent.data.props["children"];
       }
