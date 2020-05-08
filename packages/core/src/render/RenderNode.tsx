@@ -18,11 +18,7 @@ const Render = (injectedProps) => {
   }
 
   const Component = type;
-  const render = (
-    <Component {...props} {...injectedProps}>
-      {nodes && nodes.map((id) => <NodeElement key={id} id={id} />)}
-    </Component>
-  );
+  const render = <Component {...props} {...injectedProps} />;
 
   if (typeof Component === "string") {
     return <SimpleElement render={render} />;
