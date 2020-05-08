@@ -2,12 +2,10 @@ import React from "react";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import { useNode } from "../hooks/useNode";
 import { Canvas } from "../nodes/Canvas";
-import { NodeElement } from "../nodes/NodeElement";
 import { SimpleElement } from "./SimpleElement";
 
 const Render = (injectedProps) => {
-  const { nodes, type, props, isCanvas } = useNode((node) => ({
-    nodes: node.data.nodes,
+  const { type, props, isCanvas } = useNode((node) => ({
     type: node.data.type,
     props: node.data.props,
     isCanvas: node.data.isCanvas,

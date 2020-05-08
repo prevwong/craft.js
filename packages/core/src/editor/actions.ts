@@ -1,6 +1,5 @@
 import {
   EditorState,
-  EditorEvents,
   Indicator,
   NodeId,
   Node,
@@ -9,6 +8,7 @@ import {
   NodeEvents,
   SerializedNodeData,
   Tree,
+  SerializedNodes,
 } from "../interfaces";
 import {
   ERROR_INVALID_NODEID,
@@ -21,17 +21,7 @@ import { QueryMethods } from "./query";
 import { fromEntries } from "../utils/fromEntries";
 import { updateEventsNode } from "../utils/updateEventsNode";
 import invariant from "tiny-invariant";
-
-// TODO: move to a constants folder
-const editorEmptyState = {
-  nodes: {},
-  events: {
-    dragged: null,
-    selected: null,
-    hovered: null,
-    indicator: null,
-  },
-};
+import { editorInitialState } from "./store";
 
 export const Actions = (
   state: EditorState,
@@ -70,7 +60,6 @@ export const Actions = (
       const parent = getParentAndValidate(parentId);
 
       if (!parent.data.nodes) {
-        // reset the parent node ids
         parent.data.nodes = [];
       }
 
@@ -157,9 +146,16 @@ export const Actions = (
       delete state.nodes[id];
     },
 
-    deserialize(json: string) {
-      const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
-      this.setState(reducedNodes);
+    deserialize(input: SerializedNodes | string) {
+      const dehydratedNodes =
+        typeof input == "string" ? JSON.parse(input) : input;
+
+      const nodePairs = Object.keys(dehydratedNodes).map((id) => [
+        id,
+        query.parseNodeFromSerializedNode(dehydratedNodes[id], id),
+      ]);
+
+      this.replaceNodes(fromEntries(nodePairs));
     },
 
     /**
@@ -194,12 +190,13 @@ export const Actions = (
       currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
     },
 
-    replaceEvents(events: EditorEvents) {
-      state.events = events;
-    },
-
     replaceNodes(nodes: Nodes) {
       state.nodes = nodes;
+      this.clearEvents();
+    },
+
+    clearEvents() {
+      state.events = editorInitialState.events;
     },
 
     /**
@@ -207,7 +204,7 @@ export const Actions = (
      */
     reset() {
       this.replaceNodes({});
-      this.replaceEvents(editorEmptyState.events);
+      this.clearEvents();
     },
 
     /**
@@ -284,16 +281,6 @@ export const Actions = (
     setProp(id: NodeId, cb: (props: any) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID);
       cb(state.nodes[id].data.props);
-    },
-
-    setState(dehydratedNodes: Record<NodeId, SerializedNodeData>) {
-      const nodePairs = Object.keys(dehydratedNodes).map((id) => [
-        id,
-        query.parseNodeFromSerializedNode(dehydratedNodes[id], id),
-      ]);
-
-      this.replaceNodes(fromEntries(nodePairs));
-      this.replaceEvents(editorEmptyState.events);
     },
   };
 };

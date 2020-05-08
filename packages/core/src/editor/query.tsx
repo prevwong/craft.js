@@ -8,7 +8,8 @@ import {
   NodeInfo,
   SerializedNodeData,
   Tree,
-  NodeData,
+  SerializedNodes,
+  SerializedNode,
 } from "../interfaces";
 import invariant from "tiny-invariant";
 import {
@@ -26,11 +27,11 @@ import {
   ERROR_MOVE_TOP_LEVEL_CANVAS,
   ERROR_MOVE_ROOT_NODE,
   ERROR_INVALID_NODE_ID,
+  deprecationWarning,
 } from "@craftjs/utils";
 import findPosition from "../events/findPosition";
 import { createNode } from "../utils/createNode";
 import { fromEntries } from "../utils/fromEntries";
-import { deprecatedWarning } from "../utils/deprecatedWarning";
 import { mergeTrees } from "../utils/mergeTrees";
 import { getDeepNodes } from "../utils/getDeepNodes";
 import { parseNodeDataFromJSX } from "../utils/parseNodeDataFromJSX";
@@ -55,9 +56,9 @@ export function QueryMethods(state: EditorState) {
      * @param extras
      */
     createNode(reactElement: React.ReactElement | string, extras?: any): Node {
-      deprecatedWarning(
-        "Warning: method createNode has been deprecated and it will be removed in the future. Please use parseNodeFromReactNode instead."
-      );
+      deprecationWarning("query.createNode()", {
+        suggest: "query.parseNodeFromReactNode()",
+      });
       return this.parseNodeFromReactNode(reactElement, extras);
     },
 
@@ -187,17 +188,6 @@ export function QueryMethods(state: EditorState) {
     },
 
     /**
-     * Returns all the `nodes` in a serialized format
-     */
-    getState(): Record<NodeId, SerializedNodeData> {
-      const nodePairs = Object.keys(state.nodes).map((id: NodeId) => [
-        id,
-        this.serializeNode(state.nodes[id]),
-      ]);
-      return fromEntries(nodePairs);
-    },
-
-    /**
      * Helper methods to describe the specified Node
      * @param id
      */
@@ -301,14 +291,8 @@ export function QueryMethods(state: EditorState) {
             return false;
           }
         },
+        serialize: () => this.serialise(node),
       };
-    },
-
-    /**
-     * Retrieve the JSON representation of the editor's Nodes
-     */
-    serialize(): string {
-      return JSON.stringify(this.getState());
     },
 
     /**
@@ -316,8 +300,29 @@ export function QueryMethods(state: EditorState) {
      *
      * @param node
      */
-    serializeNode(node: Node): SerializedNodeData {
+    getSerializedNode(node: Node): SerializedNode {
       return serializeNode(node.data, options.resolver);
+    },
+
+    /**
+     * Returns all the `nodes` in a serialized format
+     */
+    getSerializedNodes(): SerializedNodes {
+      const nodePairs = Object.keys(state.nodes).map((id: NodeId) => [
+        id,
+        this.getSerializedNode(state.nodes[id]),
+      ]);
+      return fromEntries(nodePairs);
+    },
+
+    /**
+     * Retrieve the JSON representation of the editor's Nodes
+     */
+    serialize(): string {
+      deprecationWarning("query.serialize()", {
+        suggest: "query.getSerialisedNodes()",
+      });
+      return JSON.stringify(this.getSerializedNodes());
     },
   };
 }

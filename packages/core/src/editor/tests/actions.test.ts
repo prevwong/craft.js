@@ -15,10 +15,11 @@ import {
   rootNode,
   secondaryButton,
 } from "../../tests/fixtures";
+import { EditorState } from "@craftjs/core";
 
 const Actions = (state) => (cb) =>
-  produce(state, (draft) =>
-    cb(actions.Actions(draft, QueryMethods(state, {})))
+  produce<EditorState>(state, (draft) =>
+    cb(actions.Actions(draft as any, QueryMethods(state)))
   );
 
 describe("actions.add", () => {
@@ -39,13 +40,7 @@ describe("actions.add", () => {
 
     expect(newState).toEqual(documentWithLeafState);
   });
-  it("should be able to add the leaf again to the same document", () => {
-    const newState = Actions(documentWithLeafState)((actions) =>
-      actions.add(leafNode, rootNode.id)
-    );
 
-    expect(newState).toEqual(documentWithLeafState);
-  });
   it("should be able to add two nodes", () => {
     const newState = Actions(documentState)((actions) =>
       actions.add([primaryButton, secondaryButton], rootNode.id)
@@ -122,7 +117,7 @@ describe("actions.delete", () => {
   it("should throw if you try to delete the root", () => {
     expect(() => Actions(documentState)((actions) => actions.add(rootNode.id)));
   });
-  it("should be able to delete leaft from the document", () => {
+  it("should be able to delete leaf from the document", () => {
     const newState = Actions(documentWithLeafState)((actions) =>
       actions.delete(leafNode.id)
     );
@@ -138,12 +133,10 @@ describe("actions.delete", () => {
   });
 });
 
-describe("actions.replaceEvents", () => {
-  const newEvents = { ...emptyState.events, dragged: rootNode.id };
-  it("should be able to replace the events", () => {
-    const newState = Actions(emptyState)((actions) =>
-      actions.replaceEvents(newEvents)
-    );
+describe("actions.clearEvents", () => {
+  const newEvents = { ...emptyState.events };
+  it("should be able to reset the events", () => {
+    const newState = Actions(emptyState)((actions) => actions.clearEvents());
 
     expect(newState).toEqual({ ...emptyState, events: newEvents });
   });
@@ -167,7 +160,7 @@ describe("actions.reset", () => {
   });
 });
 
-describe("actions.setState", () => {
+describe("actions.deserialize", () => {
   const serialized = mapValues(documentState.nodes, ({ data }) => ({
     type: {},
     ...data,
@@ -175,7 +168,7 @@ describe("actions.setState", () => {
 
   it("should be able to set the state correctly", () => {
     const newState = Actions(emptyState)((actions) =>
-      actions.setState(serialized)
+      actions.deserialize(serialized)
     );
 
     const nodes = {

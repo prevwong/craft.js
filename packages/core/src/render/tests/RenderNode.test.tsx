@@ -2,13 +2,13 @@ import React from "react";
 import identity from "lodash/identity";
 import { mount } from "enzyme";
 
-import { Frame } from "../Frame";
 import { Canvas } from "../../nodes/Canvas";
 import { NodeElement } from "../../nodes/NodeElement";
 import { RenderNodeToElement } from "../RenderNode";
 import { SimpleElement } from "../SimpleElement";
+import { Node } from "@craftjs/core";
 
-let node = {};
+let node: { type: any; props?: any; hidden?: boolean };
 let onRender;
 
 jest.mock("../../editor/useInternalEditor", () => ({
@@ -90,45 +90,12 @@ describe("<RenderNode />", () => {
     });
   });
 
-  describe("When the node has type and contains nodes", () => {
-    const type = ({ children }) => (
-      <p>
-        <button />
-        {children}
-      </p>
-    );
-    const props = { className: "hello" };
-    const nodeId = "3910";
-
-    beforeEach(() => {
-      node = { type, props, nodes: [nodeId] };
-      component = mount(<RenderNodeToElement {...injectedProps} />);
-    });
-    it("should have called onRender", () => {
-      expect(onRender).toHaveBeenCalled();
-    });
-    it("should not contain a SimpleElement", () => {
-      expect(component.find(SimpleElement)).toHaveLength(0);
-    });
-    it("should contain the right props", () => {
-      expect(component.props()).toEqual({ ...props, ...injectedProps });
-    });
-    it("should contain one node element with the right id", () => {
-      expect(component.find(NodeElement)).toHaveLength(1);
-      expect(component.contains(<NodeElement id={nodeId} />)).toBe(true);
-    });
-    it("should contain a button", () => {
-      expect(component.find("button")).toHaveLength(1);
-    });
-  });
-
-  describe("When the has a canvas", () => {
+  describe("When the node is a canvas", () => {
     const type = Canvas;
     const props = { className: "hello" };
-    const nodeId = "3910";
 
     beforeEach(() => {
-      node = { type, props, nodes: [nodeId] };
+      node = { type, props };
       component = mount(<RenderNodeToElement {...injectedProps} />);
     });
     it("should have called onRender", () => {

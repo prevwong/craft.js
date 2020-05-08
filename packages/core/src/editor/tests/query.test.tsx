@@ -30,13 +30,12 @@ describe("query", () => {
     const extras = { id: 1 };
     const node = <h1>Hello</h1>;
     const name = "Document";
-    let newNode;
     const nodeData = { ...rootNode.data, type: "div" };
 
     describe("when we can resolve the type", () => {
       beforeEach(() => {
         resolveComponent = jest.fn().mockImplementation(() => name);
-        newNode = query.parseNodeFromReactNode(node, extras);
+        query.parseNodeFromReactNode(node, extras);
       });
       it("should have called the resolveComponent", () => {
         expect(resolveComponent).toHaveBeenCalledWith(
