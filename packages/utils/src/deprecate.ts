@@ -9,9 +9,10 @@ export const deprecationWarning = (name, payload?: DeprecationPayload) => {
   const { suggest, doc } = payload;
 
   if (suggest) {
-    message += `Please use ${suggest} instead.`;
+    message += ` Please use ${suggest} instead.`;
   }
 
+  // URL link to Documentation
   if (doc) {
     message += `(${doc})`;
   }

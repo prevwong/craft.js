@@ -313,13 +313,9 @@ export function QueryMethods(state: EditorState) {
     },
 
     /**
-     * @deprecated
      * Retrieve the JSON representation of the editor's Nodes
      */
     serialize(): string {
-      deprecationWarning("query.serialize()", {
-        suggest: "query.getSerialisedNodes()",
-      });
       return JSON.stringify(this.getSerializedNodes());
     },
   };

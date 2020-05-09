@@ -28,12 +28,12 @@ export const Frame: React.FC<Frame> = ({ children, json, data }) => {
   });
 
   useEffect(() => {
-    const { replaceNodes, setState } = actions;
+    const { replaceNodes, deserialize } = actions;
     const { parseNodeFromReactNode } = query;
     const { initialChildren, initialData } = initialState.current;
 
     if (initialData) {
-      setState(initialData);
+      deserialize(initialData);
     } else if (initialChildren) {
       const rootCanvas = React.Children.only(
         initialChildren
