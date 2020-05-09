@@ -6,7 +6,6 @@ import {
   Nodes,
   Options,
   NodeEvents,
-  SerializedNodeData,
   Tree,
   SerializedNodes,
 } from "../interfaces";

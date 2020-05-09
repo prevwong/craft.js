@@ -1,7 +1,7 @@
 import React from "react";
 import {
   NodeData,
-  SerializedNodeData,
+  SerializedNode,
   ReducedComp,
   ReduceCompType,
 } from "../interfaces";
@@ -66,7 +66,7 @@ export const deserializeComp = (
 };
 
 export const deserializeNode = (
-  data: SerializedNodeData,
+  data: SerializedNode,
   resolver: Resolver
 ): Omit<NodeData, "event"> => {
   const { type: Comp, props: Props, ...nodeData } = data;

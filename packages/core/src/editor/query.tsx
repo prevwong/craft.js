@@ -6,7 +6,6 @@ import {
   Node,
   Options,
   NodeInfo,
-  SerializedNodeData,
   Tree,
   SerializedNodes,
   SerializedNode,
@@ -51,6 +50,7 @@ export function QueryMethods(state: EditorState) {
 
   return {
     /**
+     * @deprecated
      * Get a Node representing the specified React Element
      * @param reactElement
      * @param extras
@@ -68,10 +68,7 @@ export function QueryMethods(state: EditorState) {
      * @param nodeData `node.data` property of the future data
      * @param id an optional ID correspondent to the node
      */
-    parseNodeFromSerializedNode(
-      nodeData: SerializedNodeData,
-      id?: NodeId
-    ): Node {
+    parseNodeFromSerializedNode(nodeData: SerializedNode, id?: NodeId): Node {
       const data = deserializeNode(nodeData, options.resolver);
 
       invariant(data.type, ERRROR_NOT_IN_RESOLVER);
@@ -316,6 +313,7 @@ export function QueryMethods(state: EditorState) {
     },
 
     /**
+     * @deprecated
      * Retrieve the JSON representation of the editor's Nodes
      */
     serialize(): string {

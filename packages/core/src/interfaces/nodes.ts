@@ -66,10 +66,10 @@ export type SerializedNode = Omit<
 > &
   ReducedComp;
 
+export type SerializedNodes = Record<NodeId, SerializedNode>;
+
 // TODO: Deprecate in favor of SerializedNode
 export type SerializedNodeData = SerializedNode;
-
-export type SerializedNodes = Record<NodeId, SerializedNodeData>;
 
 export type Nodes = Record<NodeId, Node>;
 

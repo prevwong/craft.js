@@ -1,5 +1,5 @@
 import React, { Children } from "react";
-import { NodeData, ReducedComp, SerializedNodeData } from "../interfaces";
+import { NodeData, ReducedComp, SerializedNode } from "../interfaces";
 import { Resolver } from "../interfaces";
 import { resolveComponent } from "./resolveComponent";
 
@@ -42,7 +42,7 @@ export const serializeComp = (
 export const serializeNode = (
   data: Omit<NodeData, "event">,
   resolver: Resolver
-): SerializedNodeData => {
+): SerializedNode => {
   const { type, props, isCanvas, name, ...nodeData } = data;
 
   const reducedComp = serializeComp({ type, isCanvas, props }, resolver);
