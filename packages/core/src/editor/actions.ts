@@ -30,7 +30,9 @@ export const Actions = (
   const addNodeToParentAtIndex = (node: Node, parent: Node, index: number) => {
     if (parent && node.data.isCanvas && !parent.data.isCanvas) {
       invariant(node.data.props.id, ERROR_ROOT_CANVAS_NO_ID);
-      if (!parent.data._childCanvas) parent.data._childCanvas = {};
+      if (!parent.data._childCanvas) {
+        parent.data._childCanvas = {};
+      }
       node.data.parent = parent.id;
       parent.data._childCanvas[node.data.props.id] = node.id;
     } else {

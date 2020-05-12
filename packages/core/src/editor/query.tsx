@@ -297,7 +297,7 @@ export function QueryMethods(state: EditorState) {
      *
      * @param node
      */
-    getSerializedNode(node: Node): SerializedNode {
+    parseSerializedNodeFromNode(node: Node): SerializedNode {
       return serializeNode(node.data, options.resolver);
     },
 
@@ -307,7 +307,7 @@ export function QueryMethods(state: EditorState) {
     getSerializedNodes(): SerializedNodes {
       const nodePairs = Object.keys(state.nodes).map((id: NodeId) => [
         id,
-        this.getSerializedNode(state.nodes[id]),
+        this.parseSerializedNodeFromNode(state.nodes[id]),
       ]);
       return fromEntries(nodePairs);
     },
