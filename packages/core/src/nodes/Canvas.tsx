@@ -53,7 +53,7 @@ export function Canvas<T extends React.ElementType>({
         invariant(passThrough, ERROR_INFINITE_CANVAS);
         if (!data.nodes) {
           const childNodes = mapChildrenToNodes(children, (jsx) =>
-            query.createNode(jsx)
+            query.parseNodeFromReactNode(jsx)
           );
 
           add(childNodes, nodeId);
@@ -79,7 +79,7 @@ export function Canvas<T extends React.ElementType>({
           }
         }
 
-        const rootNode = query.createNode(
+        const rootNode = query.parseNodeFromReactNode(
           React.createElement(Canvas, newProps, children),
           existingNode && {
             id: existingNode.id,

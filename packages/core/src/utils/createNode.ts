@@ -11,7 +11,7 @@ export function createNode(
   let actualType = data.type as any;
   const { canMoveIn, canMoveOut, ...props } = data.props;
 
-  let node = produce({}, (node: Node) => {
+  return produce({}, (node: Node) => {
     node.id = id;
 
     node.data = {
@@ -78,6 +78,4 @@ export function createNode(
       }
     }
   }) as Node;
-
-  return node;
 }

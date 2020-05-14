@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { NodeProvider } from "./NodeContext";
 import { Node } from "../interfaces";
 import { useInternalEditor } from "../editor/useInternalEditor";

@@ -1,6 +1,10 @@
 import { wrapHookToRecognizeElement, Connector } from "./wrapConnectorHooks";
 
-export type HandlersMap<T extends string> = Record<T, Handler>;
+export const defineEventListener = (
+  name: string,
+  handler: (e: MouseEvent, payload: any) => void,
+  capture?: boolean
+) => [name, handler, capture];
 
 export type Handler = {
   /**

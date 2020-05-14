@@ -1,37 +1,26 @@
 import {
   EditorState,
-  EditorEvents,
   Indicator,
   NodeId,
   Node,
   Nodes,
   Options,
   NodeEvents,
-  SerializedNodeData,
   Tree,
+  SerializedNodes,
 } from "../interfaces";
 import {
   ERROR_INVALID_NODEID,
   ROOT_NODE,
   QueryCallbacksFor,
   ERROR_NOPARENT,
+  ERROR_ROOT_CANVAS_NO_ID,
 } from "@craftjs/utils";
 import { QueryMethods } from "./query";
+import { fromEntries } from "../utils/fromEntries";
 import { updateEventsNode } from "../utils/updateEventsNode";
 import invariant from "tiny-invariant";
-import { deserializeNode } from "../utils/deserializeNode";
-import { createElement } from "react";
-
-// TODO: move to a constants folder
-const editorEmptyState = {
-  nodes: {},
-  events: {
-    dragged: null,
-    selected: null,
-    hovered: null,
-    indicator: null,
-  },
-};
+import { editorInitialState } from "./store";
 
 export const Actions = (
   state: EditorState,
@@ -39,8 +28,18 @@ export const Actions = (
 ) => {
   /** Helper functions */
   const addNodeToParentAtIndex = (node: Node, parent: Node, index: number) => {
-    parent.data.nodes.splice(index, 0, node.id);
-    node.data.parent = parent.id;
+    if (parent && node.data.isCanvas && !parent.data.isCanvas) {
+      invariant(node.data.props.id, ERROR_ROOT_CANVAS_NO_ID);
+      if (!parent.data._childCanvas) {
+        parent.data._childCanvas = {};
+      }
+      node.data.parent = parent.id;
+      parent.data._childCanvas[node.data.props.id] = node.id;
+    } else {
+      parent.data.nodes.splice(index, 0, node.id);
+      node.data.parent = parent.id;
+    }
+
     state.nodes[node.id] = node;
   };
 
@@ -60,8 +59,11 @@ export const Actions = (
      */
     add(nodes: Node[] | Node, parentId: NodeId) {
       const parent = getParentAndValidate(parentId);
-      // reset the parent node ids
-      parent.data.nodes = [];
+
+      if (!parent.data.nodes) {
+        parent.data.nodes = [];
+      }
+
       if (parent.data.props.children) {
         delete parent.data.props["children"];
       }
@@ -145,9 +147,16 @@ export const Actions = (
       delete state.nodes[id];
     },
 
-    deserialize(json: string) {
-      const reducedNodes: Record<NodeId, SerializedNodeData> = JSON.parse(json);
-      this.setState(reducedNodes);
+    deserialize(input: SerializedNodes | string) {
+      const dehydratedNodes =
+        typeof input == "string" ? JSON.parse(input) : input;
+
+      const nodePairs = Object.keys(dehydratedNodes).map((id) => [
+        id,
+        query.parseNodeFromSerializedNode(dehydratedNodes[id], id),
+      ]);
+
+      this.replaceNodes(fromEntries(nodePairs));
     },
 
     /**
@@ -182,12 +191,13 @@ export const Actions = (
       currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
     },
 
-    replaceEvents(events: EditorEvents) {
-      state.events = events;
-    },
-
     replaceNodes(nodes: Nodes) {
       state.nodes = nodes;
+      this.clearEvents();
+    },
+
+    clearEvents() {
+      state.events = editorInitialState.events;
     },
 
     /**
@@ -195,7 +205,7 @@ export const Actions = (
      */
     reset() {
       this.replaceNodes({});
-      this.replaceEvents(editorEmptyState.events);
+      this.clearEvents();
     },
 
     /**
@@ -272,44 +282,6 @@ export const Actions = (
     setProp(id: NodeId, cb: (props: any) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID);
       cb(state.nodes[id].data.props);
-    },
-
-    setState(dehydratedNodes: Record<NodeId, SerializedNodeData>) {
-      const rehydratedNodes = Object.keys(dehydratedNodes).reduce(
-        (accum: Nodes, id: string) => {
-          const {
-            type: Component,
-            props,
-            parent,
-            nodes,
-            _childCanvas,
-            isCanvas,
-            hidden,
-            custom,
-          } = deserializeNode(dehydratedNodes[id], state.options.resolver);
-
-          if (!Component) {
-            return accum;
-          }
-
-          accum[id] = query.createNode(createElement(Component, props), {
-            id,
-            data: {
-              ...(isCanvas && { isCanvas }),
-              ...(hidden && { hidden }),
-              parent,
-              ...{ nodes },
-              ...(_childCanvas && { _childCanvas }),
-              custom,
-            },
-          });
-          return accum;
-        },
-        {}
-      );
-
-      this.replaceEvents(editorEmptyState.events);
-      this.replaceNodes(rehydratedNodes);
     },
   };
 };

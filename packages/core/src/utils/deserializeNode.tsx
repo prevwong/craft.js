@@ -1,7 +1,7 @@
 import React from "react";
 import {
   NodeData,
-  SerializedNodeData,
+  SerializedNode,
   ReducedComp,
   ReduceCompType,
 } from "../interfaces";
@@ -38,14 +38,20 @@ export const deserializeComp = (
       result[key] = deserializeComp(prop, resolver);
     } else if (key === "children" && Array.isArray(prop)) {
       result[key] = prop.map((child) => {
-        if (typeof child === "string") return child;
+        if (typeof child === "string") {
+          return child;
+        }
         return deserializeComp(child, resolver);
       });
-    } else result[key] = prop;
+    } else {
+      result[key] = prop;
+    }
     return result;
   }, {});
 
-  if (index) props.key = index;
+  if (index) {
+    props.key = index;
+  }
 
   const jsx = {
     ...React.createElement(main, {
@@ -60,17 +66,33 @@ export const deserializeComp = (
 };
 
 export const deserializeNode = (
-  data: SerializedNodeData,
+  data: SerializedNode,
   resolver: Resolver
 ): Omit<NodeData, "event"> => {
-  let { type, props, ...nodeData } = data;
+  const { type: Comp, props: Props, ...nodeData } = data;
 
-  const reducedComp = deserializeComp({ type, props }, resolver) as NonNullable<
-    DeserialisedType
-  >;
+  const {
+    type,
+    name,
+    props,
+    parent,
+    nodes,
+    _childCanvas,
+    isCanvas,
+    hidden,
+    custom,
+  } = (deserializeComp(data, resolver) as unknown) as NodeData;
 
   return {
-    ...reducedComp,
+    type,
+    name,
+    props,
+    parent,
+    nodes,
+    _childCanvas,
+    isCanvas,
+    hidden,
+    custom,
     ...nodeData,
   };
 };

@@ -23,8 +23,8 @@ describe("<Frame />", () => {
   let query;
 
   beforeEach(() => {
-    actions = { replaceNodes: jest.fn(), setState: jest.fn() };
-    query = { createNode: jest.fn() };
+    actions = { replaceNodes: jest.fn(), deserialize: jest.fn() };
+    query = { parseNodeFromReactNode: jest.fn() };
     mockEditor.mockImplementation(() => ({ actions, query }));
   });
   describe("When rendering a Frame with no Children and no Data", () => {
@@ -41,8 +41,8 @@ describe("<Frame />", () => {
     beforeEach(() => {
       mount(<Frame json={json} />);
     });
-    it("should parse json and call setState", () => {
-      expect(actions.setState).toHaveBeenCalledWith(JSON.parse(json));
+    it("should parse json and call deserialize", () => {
+      expect(actions.deserialize).toHaveBeenCalledWith(JSON.parse(json));
     });
   });
 
@@ -51,7 +51,7 @@ describe("<Frame />", () => {
       mount(<Frame data={data} />);
     });
     it("should deserialize the nodes", () => {
-      expect(actions.setState).toHaveBeenCalledWith(data);
+      expect(actions.deserialize).toHaveBeenCalledWith(data);
     });
   });
 });

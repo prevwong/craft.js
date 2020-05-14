@@ -6,11 +6,10 @@ import {
   Node,
   Options,
   NodeInfo,
-  SerializedNodeData,
   Tree,
+  SerializedNodes,
+  SerializedNode,
 } from "../interfaces";
-import { serializeNode } from "../utils/serializeNode";
-import { resolveComponent } from "../utils/resolveComponent";
 import invariant from "tiny-invariant";
 import {
   QueryCallbacksFor,
@@ -27,11 +26,18 @@ import {
   ERROR_MOVE_TOP_LEVEL_CANVAS,
   ERROR_MOVE_ROOT_NODE,
   ERROR_INVALID_NODE_ID,
+  deprecationWarning,
 } from "@craftjs/utils";
 import findPosition from "../events/findPosition";
+import { createNode } from "../utils/createNode";
+import { fromEntries } from "../utils/fromEntries";
 import { mergeTrees } from "../utils/mergeTrees";
 import { getDeepNodes } from "../utils/getDeepNodes";
-import { transformJSXToNode } from "../utils/transformJSX";
+import { parseNodeDataFromJSX } from "../utils/parseNodeDataFromJSX";
+import { serializeNode } from "../utils/serializeNode";
+import { getRandomNodeId } from "../utils/getRandomNodeId";
+import { resolveComponent } from "../utils/resolveComponent";
+import { deserializeNode } from "../utils/deserializeNode";
 
 export function QueryMethods(state: EditorState) {
   const options = state && state.options;
@@ -44,12 +50,42 @@ export function QueryMethods(state: EditorState) {
 
   return {
     /**
+     * @deprecated
      * Get a Node representing the specified React Element
      * @param reactElement
      * @param extras
      */
-    createNode(reactElement: React.ReactElement | string, extras?: any) {
-      const node = transformJSXToNode(reactElement, extras);
+    createNode(reactElement: React.ReactElement | string, extras?: any): Node {
+      deprecationWarning("query.createNode()", {
+        suggest: "query.parseNodeFromReactNode()",
+      });
+      return this.parseNodeFromReactNode(reactElement, extras);
+    },
+
+    /**
+     * Given a `nodeData` and an optional Id, it will parse a new `Node`
+     *
+     * @param nodeData `node.data` property of the future data
+     * @param id an optional ID correspondent to the node
+     */
+    parseNodeFromSerializedNode(nodeData: SerializedNode, id?: NodeId): Node {
+      const data = deserializeNode(nodeData, options.resolver);
+
+      invariant(data.type, ERRROR_NOT_IN_RESOLVER);
+
+      return this.parseNodeFromReactNode(
+        React.createElement(data.type, data.props),
+        { id, data }
+      );
+    },
+
+    parseNodeFromReactNode(
+      reactElement: React.ReactElement | string,
+      extras: any = {}
+    ): Node {
+      const nodeData = parseNodeDataFromJSX(reactElement, extras.data);
+      // @ts-ignore
+      const node = createNode(nodeData, extras.id || getRandomNodeId());
 
       const name = resolveComponent(options.resolver, node.data.type);
       invariant(name !== null, ERRROR_NOT_IN_RESOLVER);
@@ -60,7 +96,7 @@ export function QueryMethods(state: EditorState) {
     },
 
     parseTreeFromReactNode(reactNode: React.ReactElement): Tree | undefined {
-      const node = this.createNode(reactNode);
+      const node = this.parseNodeFromReactNode(reactNode);
       const childrenNodes = React.Children.map(
         (reactNode.props && reactNode.props.children) || [],
         (child) =>
@@ -146,14 +182,6 @@ export function QueryMethods(state: EditorState) {
      */
     getOptions(): Options {
       return options;
-    },
-
-    getState(): Record<NodeId, SerializedNodeData> {
-      return Object.keys(state.nodes).reduce((result: any, id: NodeId) => {
-        const { data } = state.nodes[id];
-        result[id] = serializeNode(data, options.resolver);
-        return result;
-      }, {});
     },
 
     /**
@@ -260,14 +288,35 @@ export function QueryMethods(state: EditorState) {
             return false;
           }
         },
+        serialize: () => this.serialise(node),
       };
+    },
+
+    /**
+     * Given a Node, it serializes it to its node data. Useful if you need to compare state of different nodes.
+     *
+     * @param node
+     */
+    parseSerializedNodeFromNode(node: Node): SerializedNode {
+      return serializeNode(node.data, options.resolver);
+    },
+
+    /**
+     * Returns all the `nodes` in a serialized format
+     */
+    getSerializedNodes(): SerializedNodes {
+      const nodePairs = Object.keys(state.nodes).map((id: NodeId) => [
+        id,
+        this.parseSerializedNodeFromNode(state.nodes[id]),
+      ]);
+      return fromEntries(nodePairs);
     },
 
     /**
      * Retrieve the JSON representation of the editor's Nodes
      */
     serialize(): string {
-      return JSON.stringify(this.getState());
+      return JSON.stringify(this.getSerializedNodes());
     },
   };
 }
