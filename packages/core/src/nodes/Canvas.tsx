@@ -52,10 +52,9 @@ export function Canvas<T extends React.ElementType>({
       if (data.isCanvas) {
         invariant(passThrough, ERROR_INFINITE_CANVAS);
         if (!data.nodes) {
-          const childNodes = mapChildrenToNodes(children, (jsx) => {
-            const node = query.createNode(jsx);
-            return node;
-          });
+          const childNodes = mapChildrenToNodes(children, (jsx) =>
+            query.parseNodeFromReactNode(jsx)
+          );
 
           add(childNodes, nodeId);
         }
@@ -80,7 +79,7 @@ export function Canvas<T extends React.ElementType>({
           }
         }
 
-        const rootNode = query.createNode(
+        const rootNode = query.parseNodeFromReactNode(
           React.createElement(Canvas, newProps, children),
           existingNode && {
             id: existingNode.id,
@@ -124,10 +123,9 @@ export function Canvas<T extends React.ElementType>({
                 node.data.type,
                 props,
                 <React.Fragment>
-                  {node.data.nodes &&
-                    node.data.nodes.map((id: NodeId) => (
-                      <NodeElement id={id} key={id} />
-                    ))}
+                  {node.data.nodes.map((id: NodeId) => (
+                    <NodeElement id={id} key={id} />
+                  ))}
                 </React.Fragment>
               )}
             />
@@ -141,5 +139,3 @@ export function Canvas<T extends React.ElementType>({
     </React.Fragment>
   );
 }
-
-// Canvas.name = 'Canvas'

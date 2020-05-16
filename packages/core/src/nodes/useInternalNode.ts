@@ -1,7 +1,9 @@
-import { useContext, useMemo } from "react";
-import { NodeContext, NodeProvider } from "./NodeContext";
+import { useMemo } from "react";
+import { NodeProvider } from "./NodeContext";
 import { Node } from "../interfaces";
 import { useInternalEditor } from "../editor/useInternalEditor";
+
+import { useNodeContext } from "./useNodeContext";
 
 type internalActions = NodeProvider & {
   inNodeContext: boolean;
@@ -20,7 +22,7 @@ export function useInternalNode<S = null>(
 export function useInternalNode<S = null>(
   collect?: (node: Node) => S
 ): useInternalNode<S> {
-  const context = useContext(NodeContext);
+  const context = useNodeContext();
   const { id, related, connectors } = context;
 
   const { actions: EditorActions, query, ...collected } = useInternalEditor(

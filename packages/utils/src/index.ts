@@ -6,3 +6,4 @@ export * from "./wrapConnectorHooks";
 export * from "./RenderIndicator";
 export * from "./useEffectOnce";
 export * from "./Handlers";
+export * from "./deprecate";

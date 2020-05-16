@@ -26,7 +26,6 @@ export type Node = {
 
 export type NodeHelpers = QueryCallbacksFor<typeof QueryMethods>["node"];
 export type NodeEvents = "selected" | "dragged" | "hovered";
-export type InternalNode = Pick<Node, "id"> & NodeData;
 export type NodeRefEvent = Record<NodeEvents, boolean>;
 export type NodeRules = {
   canDrag(node: Node, helpers: NodeHelpers): boolean;
@@ -61,11 +60,27 @@ export type ReducedComp = {
   props: any;
 };
 
-export type SerializedNodeData = Omit<
+export type SerializedNode = Omit<
   NodeData,
   "type" | "subtype" | "name" | "event"
 > &
   ReducedComp;
 
+export type SerializedNodes = Record<NodeId, SerializedNode>;
+
+// TODO: Deprecate in favor of SerializedNode
+export type SerializedNodeData = SerializedNode;
+
 export type Nodes = Record<NodeId, Node>;
-export type TreeNode = Node & { children?: any };
+
+/**
+ * A tree is an internal data structure for CRUD operations that involve
+ * more than a single node.
+ *
+ * For example, when we drop a component we use a tree because we
+ * need to drop more than a single component.
+ */
+export interface Tree {
+  rootNodeId: NodeId;
+  nodes: Nodes;
+}

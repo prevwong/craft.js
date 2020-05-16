@@ -4,42 +4,47 @@ import { Canvas } from "../nodes/Canvas";
 import { ROOT_NODE, ERROR_FRAME_IMMEDIATE_NON_CANVAS } from "@craftjs/utils";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import invariant from "tiny-invariant";
+import { Nodes } from "../interfaces";
 
 export type Frame = {
+  /** The initial document defined in a json string */
+  nodes?: Nodes;
   json?: string;
+  // TODO(mat) this can be typed in nicer way
+  data?: any;
 };
 
 /**
  * A React Component that defines the editable area
  */
-export const Frame: React.FC<Frame> = ({ children, json }) => {
+export const Frame: React.FC<Frame> = ({ children, json, data }) => {
   const { actions, query } = useInternalEditor();
 
   const [render, setRender] = useState<React.ReactElement | null>(null);
 
-  const initialProps = useRef({
+  const initialState = useRef({
     initialChildren: children,
-    initialJson: json,
+    initialData: data || (json && JSON.parse(json)),
   });
 
   useEffect(() => {
     const { replaceNodes, deserialize } = actions;
-    const { createNode } = query;
+    const { parseNodeFromReactNode } = query;
+    const { initialChildren, initialData } = initialState.current;
 
-    const {
-      initialChildren: children,
-      initialJson: json,
-    } = initialProps.current;
-    if (!json) {
-      const rootCanvas = React.Children.only(children) as React.ReactElement;
+    if (initialData) {
+      deserialize(initialData);
+    } else if (initialChildren) {
+      const rootCanvas = React.Children.only(
+        initialChildren
+      ) as React.ReactElement;
+
       invariant(
         rootCanvas.type && rootCanvas.type === Canvas,
         ERROR_FRAME_IMMEDIATE_NON_CANVAS
       );
-      const node = createNode(rootCanvas, { id: ROOT_NODE });
+      const node = parseNodeFromReactNode(rootCanvas, { id: ROOT_NODE });
       replaceNodes({ [ROOT_NODE]: node });
-    } else {
-      deserialize(json);
     }
 
     setRender(<NodeElement id={ROOT_NODE} />);
