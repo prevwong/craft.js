@@ -49,7 +49,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
         return {
           top,
           left: headingPos.left,
-          width: pos.width,
+          width: pos.width - headingPos.left,
           height: 2,
           borderWidth: 0,
           background: color,
