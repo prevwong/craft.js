@@ -7,6 +7,7 @@ import {
   Options,
   NodeEvents,
   Tree,
+  SerializedNodes,
 } from "../interfaces";
 import {
   deprecationWarning,

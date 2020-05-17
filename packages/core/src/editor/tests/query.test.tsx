@@ -1,6 +1,5 @@
 import React from "react";
 import { resolveComponent } from "../../utils/resolveComponent";
-import { transformJSXToNode } from "../../utils/transformJSX";
 import { QueryMethods } from "../query";
 import {
   rootNode,
@@ -10,11 +9,13 @@ import {
   documentWithCardState,
 } from "../../tests/fixtures";
 
+let parseNodeFromJSX;
+
 jest.mock("../../utils/resolveComponent", () => ({
   resolveComponent: () => null,
 }));
-jest.mock("../../utils/transformJSX", () => ({
-  transformJSXToNode: () => null,
+jest.mock("../../utils/parseNodeFromJSX", () => ({
+  parseNodeFromJSX: () => null,
 }));
 
 describe("query", () => {
@@ -28,27 +29,25 @@ describe("query", () => {
     query = QueryMethods(state);
   });
 
-  describe("createNode", () => {
+  describe("parseNodeFromReactNode", () => {
     const node = <h1>Hello</h1>;
     const name = "Document";
-    let newNode;
+    const nodeData = { ...rootNode.data, type: "div" };
 
     describe("when we can resolve the type", () => {
       beforeEach(() => {
-        transformJSXToNode = jest.fn().mockImplementation(() => rootNode);
         resolveComponent = jest.fn().mockImplementation(() => name);
-        newNode = query.createNode(node, normalise);
-      });
-      it("should call transformJSXToNode with the right arguments", () => {
-        expect(transformJSXToNode).toHaveBeenCalledWith(node, normalise);
-      });
-      it("should be able to normalise", () => {
-        expect(rootNode.data.name).toEqual(name);
+        parseNodeFromJSX = jest.fn().mockImplementation(() => {
+          resolveComponent(state.options.resolver, nodeData.type);
+          return { ...rootNode.data, type: "div" };
+        });
+
+        query.parseNodeFromReactNode(node);
       });
       it("should have called the resolveComponent", () => {
         expect(resolveComponent).toHaveBeenCalledWith(
           state.options.resolver,
-          rootNode.data.type
+          nodeData.type
         );
       });
       it("should have changed the displayName and name of the node", () => {
@@ -58,11 +57,12 @@ describe("query", () => {
 
     describe("when we cant resolve a name", () => {
       beforeEach(() => {
-        transformJSXToNode = jest.fn().mockImplementation(() => rootNode);
-        resolveComponent = jest.fn().mockImplementation(() => null);
+        parseNodeFromJSX = jest.fn().mockImplementation(() => {
+          throw new Error();
+        });
       });
       it("should throw an error", () => {
-        expect(() => query.createNode(node)).toThrow();
+        expect(() => query.parseNodeFromReactNode(node)).toThrow();
       });
     });
   });
@@ -70,7 +70,9 @@ describe("query", () => {
   describe("parseTreeFromReactNode", () => {
     let tree;
     beforeEach(() => {
-      query.createNode = jest.fn().mockImplementation(() => rootNode);
+      query.parseNodeFromReactNode = jest
+        .fn()
+        .mockImplementation(() => rootNode);
     });
 
     describe("when there is a single node with no children", () => {
@@ -78,11 +80,14 @@ describe("query", () => {
       beforeEach(() => {
         tree = query.parseTreeFromReactNode(node, normalise);
       });
-      it("should call createNode with the right payload", () => {
-        expect(query.createNode).toHaveBeenLastCalledWith(node, normalise);
+      it("should call parseNodeFromReactNode with the right payload", () => {
+        expect(query.parseNodeFromReactNode).toHaveBeenCalledWith(
+          node,
+          normalise
+        );
       });
-      it("should have called createNode once", () => {
-        expect(query.createNode).toHaveBeenCalledTimes(1);
+      it("should have called parseNodeFromReactNode once", () => {
+        expect(query.parseNodeFromReactNode).toHaveBeenCalledTimes(1);
       });
       it("should have replied with the right payload", () => {
         expect(tree).toEqual({
@@ -95,13 +100,16 @@ describe("query", () => {
     describe("when there is a single node with a string children", () => {
       const node = <h1>hi</h1>;
       beforeEach(() => {
-        tree = query.parseTreeFromReactNode(node);
+        tree = query.parseTreeFromReactNode(node, normalise);
       });
-      it("should call createNode with the right payload", () => {
-        expect(query.createNode).toHaveBeenCalledWith(node, normalise);
+      it("should call parseNodeFromReactNode with the right payload", () => {
+        expect(query.parseNodeFromReactNode).toHaveBeenCalledWith(
+          node,
+          normalise
+        );
       });
-      it("should have called createNode once", () => {
-        expect(query.createNode).toHaveBeenCalledTimes(1);
+      it("should have called parseNodeFromReactNode once", () => {
+        expect(query.parseNodeFromReactNode).toHaveBeenCalledTimes(1);
       });
       it("should have replied with the right payload", () => {
         expect(tree).toEqual({
@@ -121,16 +129,19 @@ describe("query", () => {
         </div>
       );
       beforeEach(() => {
-        query.createNode = jest
+        query.parseNodeFromReactNode = jest
           .fn()
           .mockImplementationOnce(() => rootNode)
           .mockImplementationOnce(() => card)
           .mockImplementationOnce(() => primaryButton)
           .mockImplementationOnce(() => secondaryButton);
-        tree = query.parseTreeFromReactNode(node);
+        tree = query.parseTreeFromReactNode(node, normalise);
       });
       it("should call parseNodeFromReactNode with the right payload", () => {
-        expect(query.parseNodeFromReactNode).toHaveBeenCalledWith(node);
+        expect(query.parseNodeFromReactNode).toHaveBeenCalledWith(
+          node,
+          normalise
+        );
       });
       it("should have called parseNodeFromReactNode 4 times", () => {
         expect(query.parseNodeFromReactNode).toHaveBeenCalledTimes(4);
