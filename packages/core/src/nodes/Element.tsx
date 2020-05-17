@@ -35,6 +35,7 @@ export function Element<T extends React.ElementType>({
   useEffectOnce(() => {
     invariant(id != null, ERROR_ROOT_CANVAS_NO_ID);
     const { id: nodeId, data } = node;
+
     if (inNodeContext) {
       let internalId;
 
@@ -43,28 +44,21 @@ export function Element<T extends React.ElementType>({
         data.linkedNodes[id] &&
         query.node(data.linkedNodes[id]).get();
 
-      let newProps = { is, ...props };
-
       if (existingNode) {
-        if (existingNode.data.type === is && typeof is !== "string") {
-          newProps = {
-            ...newProps,
-            ...existingNode.data.props,
-          };
-        }
+        internalId = existingNode.id;
+      } else {
+        let newProps = { is, ...props };
+        const tree = query.parseTreeFromReactNode(
+          React.createElement(Element, newProps, children),
+          (node) => {
+            node.id = existingNode ? existingNode.id : node.id;
+            node.data = existingNode ? existingNode.data : node.data;
+          }
+        );
+
+        internalId = tree.rootNodeId;
+        actions.addLinkedNodeFromTree(tree, nodeId, id);
       }
-
-      const tree = query.parseTreeFromReactNode(
-        React.createElement(Element, newProps, children),
-        (jsx, node) => {
-          node.id = existingNode ? existingNode.id : node.id;
-          node.data = existingNode ? existingNode.data : node.data;
-        }
-      );
-
-      internalId = tree.rootNodeId;
-
-      actions.addLinkedNodeFromTree(tree, nodeId, id);
 
       setInternalId(internalId);
     }
