@@ -36,7 +36,7 @@ export const Frame: React.FC<Frame> = ({ children, json, data }) => {
         initialChildren
       ) as React.ReactElement;
 
-      const node = query.parseTreeFromReactNode(rootNode, (jsx, node) => {
+      const node = query.parseTreeFromReactNode(rootNode, (node, jsx) => {
         if (jsx === rootNode) {
           node.id = ROOT_NODE;
         }

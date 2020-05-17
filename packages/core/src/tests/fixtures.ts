@@ -9,6 +9,7 @@ export const rootNode = {
     displayName: "Document",
     custom: {},
     nodes: [],
+    type: { resolvedName: "Document" },
   },
   related: {},
   events: { selected: false, dragged: false, hovered: false },
@@ -77,6 +78,11 @@ export const emptyState = {
     selected: null,
     hovered: null,
     indicator: null,
+  },
+  options: {
+    resolver: {
+      Document: "div",
+    },
   },
 };
 

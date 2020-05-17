@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { NodeData, Node } from "../interfaces";
 import { produce } from "immer";
 import { Canvas, deprecateCanvasComponent } from "../nodes/Canvas";
@@ -6,10 +6,14 @@ import { Element } from "../nodes/Element";
 import { NodeProvider } from "../nodes/NodeContext";
 const shortid = require("shortid");
 
-export function createNode(
+export function parseNodeFromJSX(
   element: React.ReactElement,
-  normalise: (node: Node) => void
-): Node {
+  normalise: (node: Node, jsx: React.ReactElement) => void
+) {
+  if (typeof element === "string") {
+    element = React.createElement(Fragment, {}, element);
+  }
+
   let actualType = element.type as any;
 
   const prefix = actualType === Canvas ? "canvas" : "node";
@@ -88,7 +92,7 @@ export function createNode(
       }
 
       if (normalise) {
-        normalise(node);
+        normalise(node, element);
       }
 
       if (actualType.craft.related) {

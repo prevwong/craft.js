@@ -129,11 +129,11 @@ describe("query", () => {
           .mockImplementationOnce(() => secondaryButton);
         tree = query.parseTreeFromReactNode(node);
       });
-      it("should call createNode with the right payload", () => {
-        expect(query.createNode).toHaveBeenCalledWith(node, normalise);
+      it("should call parseNodeFromReactNode with the right payload", () => {
+        expect(query.parseNodeFromReactNode).toHaveBeenCalledWith(node);
       });
-      it("should have called createNode 4 times", () => {
-        expect(query.createNode).toHaveBeenCalledTimes(4);
+      it("should have called parseNodeFromReactNode 4 times", () => {
+        expect(query.parseNodeFromReactNode).toHaveBeenCalledTimes(4);
       });
       it("should have replied with the right payload", () => {
         expect(tree).toEqual({

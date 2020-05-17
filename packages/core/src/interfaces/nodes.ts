@@ -61,11 +61,16 @@ export type ReducedComp = {
   props: any;
 };
 
-export type SerializedNodeData = Omit<
+export type SerializedNode = Omit<
   NodeData,
   "type" | "subtype" | "name" | "event"
 > &
   ReducedComp;
+
+export type SerializedNodes = Record<NodeId, SerializedNode>;
+
+// TODO: Deprecate in favor of SerializedNode
+export type SerializedNodeData = SerializedNode;
 
 export type Nodes = Record<NodeId, Node>;
 
