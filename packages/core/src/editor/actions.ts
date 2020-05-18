@@ -296,7 +296,7 @@ export const Actions = (
      * @param bool
      */
     setHidden(id: NodeId, bool: boolean) {
-      state.nodes[id].data.hidden = bool;
+      state.nodes[id].data.isHidden = bool;
     },
 
     /**

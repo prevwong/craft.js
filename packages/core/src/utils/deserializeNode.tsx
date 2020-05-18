@@ -80,9 +80,12 @@ export const deserializeNode = (
     _childCanvas,
     linkedNodes,
     isCanvas,
+    isHidden,
     hidden,
     custom,
   } = (deserializeComp(data, resolver) as unknown) as NodeData;
+
+  const isNodeHidden = isHidden !== undefined ? isHidden : hidden;
 
   return {
     type,
@@ -92,7 +95,8 @@ export const deserializeNode = (
     nodes,
     linkedNodes: linkedNodes || _childCanvas,
     isCanvas,
-    hidden,
+    isHidden: isNodeHidden,
+    hidden: isNodeHidden,
     custom,
     ...nodeData,
   };
