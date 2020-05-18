@@ -5,12 +5,9 @@ import {
   defineEventListener,
   Handlers,
 } from "@craftjs/utils";
-import { debounce } from "debounce";
 import { EditorStore } from "../editor/store";
 
 type DraggedElement = NodeId | Tree;
-
-const rapidDebounce = (f) => debounce(f, 1);
 
 /**
  * Specifies Editor-wide event handlers and connectors
@@ -27,25 +24,19 @@ export class EventHandlers extends Handlers<
       select: {
         init: () => () => this.store.actions.setNodeEvent("selected", null),
         events: [
-          defineEventListener(
-            "mousedown",
-            rapidDebounce((_, id: NodeId) =>
-              this.store.actions.setNodeEvent("selected", id)
-            ),
-            true
-          ),
+          defineEventListener("mousedown", (e, id: NodeId) => {
+            e.stopPropagation();
+            this.store.actions.setNodeEvent("selected", id);
+          }),
         ],
       },
       hover: {
         init: () => () => this.store.actions.setNodeEvent("hovered", null),
         events: [
-          defineEventListener(
-            "mouseover",
-            rapidDebounce((_, id: NodeId) =>
-              this.store.actions.setNodeEvent("hovered", id)
-            ),
-            true
-          ),
+          defineEventListener("mouseover", (e, id: NodeId) => {
+            e.stopPropagation();
+            this.store.actions.setNodeEvent("hovered", id);
+          }),
         ],
       },
       drop: {
@@ -137,7 +128,7 @@ export class EventHandlers extends Handlers<
             const onDropElement = (draggedElement, placement) => {
               const index =
                 placement.index + (placement.where === "after" ? 1 : 0);
-              this.store.actions.addTreeAtIndex(
+              this.store.actions.addTree(
                 draggedElement,
                 placement.parent.id,
                 index
