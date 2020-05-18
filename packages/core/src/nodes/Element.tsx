@@ -1,26 +1,34 @@
 import React, { useState } from "react";
-import { NodeId } from "@craftjs/core";
+import { Node, NodeId } from "../interfaces";
 import { useInternalNode } from "./useInternalNode";
 import { ERROR_ROOT_CANVAS_NO_ID, useEffectOnce } from "@craftjs/utils";
 import invariant from "tiny-invariant";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import { NodeElement } from "./NodeElement";
 
+export const getElementDefaultProps = (props) => {
+  return {
+    ...props,
+    is: props.is || "div",
+    isCanvas: props.isCanvas || false,
+    custom: props.custom || {},
+  };
+};
+
 export type Element<T extends React.ElementType> = {
   id?: NodeId;
-  style?: any;
-  className?: any;
   is?: T;
+  custom?: Record<string, any>;
   children?: React.ReactNode;
-  passThrough?: boolean;
 } & React.ComponentProps<T>;
 
 export function Element<T extends React.ElementType>({
   id,
-  is,
   children,
-  ...props
+  ...otherProps
 }: Element<T>) {
+  const props = getElementDefaultProps(otherProps);
+
   const { query, actions } = useInternalEditor();
   const { node, inNodeContext } = useInternalNode((node) => ({
     node: {
@@ -47,9 +55,8 @@ export function Element<T extends React.ElementType>({
       if (existingNode) {
         internalId = existingNode.id;
       } else {
-        let newProps = { is, ...props };
         const tree = query.parseTreeFromReactNode(
-          React.createElement(Element, newProps, children),
+          React.createElement(Element, props, children),
           (node) => {
             node.id = existingNode ? existingNode.id : node.id;
             node.data = existingNode ? existingNode.data : node.data;

@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { NodeData, Node } from "../interfaces";
 import { produce } from "immer";
 import { Canvas, deprecateCanvasComponent } from "../nodes/Canvas";
-import { Element } from "../nodes/Element";
+import { Element, getElementDefaultProps } from "../nodes/Element";
 import { NodeProvider } from "../nodes/NodeContext";
 const shortid = require("shortid");
 
@@ -23,6 +23,7 @@ export function parseNodeFromJSX(
 
   return produce({}, (node: Node) => {
     node.id = id;
+    node._hydrationTimestamp = Date.now();
 
     node.data = {
       type: actualType,
@@ -32,6 +33,7 @@ export function parseNodeFromJSX(
       displayName:
         typeof actualType == "string" ? actualType : (actualType as any).name,
       custom: {},
+      isHidden: false,
     } as NodeData;
 
     node.related = {};
@@ -52,15 +54,16 @@ export function parseNodeFromJSX(
     // @ts-ignore
     if (node.data.type === Element || node.data.type === Canvas) {
       let usingDeprecatedCanvas = node.data.type === Canvas;
-      const { is, isCanvas, custom } = node.data.props;
+      const { is, isCanvas, custom } = getElementDefaultProps(node.data.props);
 
-      node.data.type = is || "div";
-      actualType = node.data.type;
+      node.data.type = is;
       delete node.data.props["is"];
+      actualType = node.data.type;
+
       node.data.isCanvas = isCanvas;
       delete node.data.props["isCanvas"];
 
-      node.data.custom = custom || node.data.custom;
+      node.data.custom = custom;
       delete node.data.props["custom"];
 
       if (usingDeprecatedCanvas) {
