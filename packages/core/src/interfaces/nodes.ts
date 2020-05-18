@@ -22,6 +22,7 @@ export type Node = {
   dom: HTMLElement;
   related: Record<string, React.ElementType>;
   rules: NodeRules;
+  _hydrationTimestamp: Date;
 };
 
 export type NodeHelpers = QueryCallbacksFor<typeof QueryMethods>["node"];
