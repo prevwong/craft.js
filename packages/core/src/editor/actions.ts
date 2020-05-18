@@ -47,7 +47,11 @@ export const Actions = (
     state.nodes[node.id] = node;
   };
 
-  const addTree = (tree: Tree, parentId?: NodeId, index?: number) => {
+  const addTreeToParentAtIndex = (
+    tree: Tree,
+    parentId?: NodeId,
+    index?: number
+  ) => {
     const node = tree.nodes[tree.rootNodeId];
     // first, add the node
     if (parentId != null) {
@@ -70,7 +74,11 @@ export const Actions = (
     const childToAdd = [...node.data.nodes];
     node.data.nodes = [];
     childToAdd.forEach((childId, index) =>
-      addTree({ rootNodeId: childId, nodes: tree.nodes }, node.id, index)
+      addTreeToParentAtIndex(
+        { rootNodeId: childId, nodes: tree.nodes },
+        node.id,
+        index
+      )
     );
   };
 
@@ -99,7 +107,7 @@ export const Actions = (
 
       state.nodes[tree.rootNodeId] = tree.nodes[tree.rootNodeId];
 
-      addTree(tree);
+      addTreeToParentAtIndex(tree);
     },
 
     /**
@@ -130,7 +138,7 @@ export const Actions = (
      * @param parentId
      * @param index
      */
-    addTreeAtIndex(tree: Tree, parentId?: NodeId, index?: number) {
+    addTree(tree: Tree, parentId?: NodeId, index?: number) {
       const node = tree.nodes[tree.rootNodeId];
 
       if (!parentId) {
@@ -141,7 +149,7 @@ export const Actions = (
         state.nodes[tree.rootNodeId] = node;
       }
 
-      addTree(tree, parentId, index);
+      addTreeToParentAtIndex(tree, parentId, index);
     },
 
     /**
