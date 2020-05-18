@@ -8,9 +8,9 @@ export const getDeepNodes = (
   function recursive(id: NodeId, result: NodeId[] = [], depth: number = 0) {
     const node = nodes[id];
     if (deep || (!deep && depth === 0)) {
-      if (node.data._childCanvas) {
-        Object.keys(node.data._childCanvas).forEach((canvasName) => {
-          const virtualId = node.data._childCanvas![canvasName];
+      if (node.data.linkedNodes) {
+        Object.keys(node.data.linkedNodes).forEach((canvasName) => {
+          const virtualId = node.data.linkedNodes![canvasName];
           result.push(virtualId);
           result = recursive(virtualId, result, depth + 1);
         });

@@ -42,12 +42,12 @@ export type NodeData = {
   isCanvas?: boolean;
   parent: NodeId;
   index?: number;
-  _childCanvas?: Record<string, NodeId>; // to-be deprecated in favour of linkedNodes
   linkedNodes?: Record<string, NodeId>;
   nodes?: NodeId[];
   isHidden: boolean;
   custom?: any;
   hidden: boolean; // TODO: Deprecate in favour of isHidden
+  _childCanvas?: Record<string, NodeId>; // TODO: Deprecate in favour of linkedNodes
 };
 
 export type ReduceCompType =

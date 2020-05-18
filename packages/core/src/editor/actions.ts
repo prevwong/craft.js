@@ -105,6 +105,7 @@ export const Actions = (
 
       parent.data.linkedNodes[id] = tree.rootNodeId;
 
+      tree.nodes[tree.rootNodeId].data.parent = parentId;
       state.nodes[tree.rootNodeId] = tree.nodes[tree.rootNodeId];
 
       addTreeToParentAtIndex(tree);
