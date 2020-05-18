@@ -173,7 +173,7 @@ describe("actions.deserialize", () => {
     const nodes = {
       "canvas-ROOT": {
         data: {
-          _childCanvas: undefined,
+          linkedNodes: undefined,
           custom: {},
           displayName: "Document",
           hidden: undefined,
