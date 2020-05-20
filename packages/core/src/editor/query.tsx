@@ -232,10 +232,7 @@ export function QueryMethods(state: EditorState) {
           return !nodeQuery(node.id).isRoot() && !node.data.parent;
         },
         isDeletable: () =>
-          !nodeQuery(id).isRoot() &&
-          (nodeQuery(id).isCanvas()
-            ? !nodeQuery(id).isTopLevelElement()
-            : true),
+          !nodeQuery(id).isRoot() && !nodeQuery(id).isTopLevelElement(),
         isParentOfTopLevelCanvas: () => !!node.data.linkedNodes,
         get: () => node,
         ancestors: (result = []) => {
@@ -247,6 +244,12 @@ export function QueryMethods(state: EditorState) {
           return result;
         },
         decendants: (deep = false) => {
+          deprecationWarning("query.node(id).decendants", {
+            suggest: "query.node(id).descendants 🙈",
+          });
+          return nodeQuery(id).descendants(deep);
+        },
+        descendants: (deep = false) => {
           return getDeepNodes(state.nodes, id, deep);
         },
         isDraggable: (onError?: (err: string) => void) => {
