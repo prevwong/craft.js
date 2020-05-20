@@ -71,33 +71,36 @@ export const deserializeNode = (
 ): Omit<NodeData, "event"> => {
   const { type: Comp, props: Props, ...nodeData } = data;
 
+  const { type, name, props } = (deserializeComp(
+    data,
+    resolver
+  ) as unknown) as NodeData;
+
   const {
-    type,
-    name,
-    props,
     parent,
-    nodes,
-    _childCanvas,
-    linkedNodes,
-    isCanvas,
-    isHidden,
-    hidden,
     custom,
-  } = (deserializeComp(data, resolver) as unknown) as NodeData;
+    displayName,
+    isCanvas,
+    nodes,
+    hidden,
+    isHidden,
+  } = nodeData;
 
   const isNodeHidden = isHidden !== undefined ? isHidden : hidden;
+
+  const linkedNodes = nodeData.linkedNodes || nodeData._childCanvas;
 
   return {
     type,
     name,
+    displayName: displayName || name,
     props,
     parent,
-    nodes,
-    linkedNodes: linkedNodes || _childCanvas,
-    isCanvas,
-    isHidden: isNodeHidden,
-    hidden: isNodeHidden,
-    custom,
-    ...nodeData,
+    custom: custom || {},
+    isCanvas: !!isCanvas,
+    isHidden: !!isNodeHidden,
+    hidden: !!isNodeHidden,
+    ...(linkedNodes ? { linkedNodes } : {}),
+    ...(nodes ? { nodes } : {}),
   };
 };
