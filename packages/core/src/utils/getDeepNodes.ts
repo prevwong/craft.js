@@ -9,8 +9,8 @@ export const getDeepNodes = (
     const node = nodes[id];
     if (deep || (!deep && depth === 0)) {
       if (node.data.linkedNodes) {
-        Object.keys(node.data.linkedNodes).forEach((canvasName) => {
-          const virtualId = node.data.linkedNodes![canvasName];
+        Object.keys(node.data.linkedNodes).forEach((linkedNodeId) => {
+          const virtualId = node.data.linkedNodes![linkedNodeId];
           result.push(virtualId);
           result = recursive(virtualId, result, depth + 1);
         });

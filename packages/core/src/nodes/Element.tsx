@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Node, NodeId } from "../interfaces";
+import { NodeId } from "../interfaces";
 import { useInternalNode } from "./useInternalNode";
 import { ERROR_ROOT_CANVAS_NO_ID, useEffectOnce } from "@craftjs/utils";
 import invariant from "tiny-invariant";
