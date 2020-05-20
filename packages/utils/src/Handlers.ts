@@ -126,7 +126,6 @@ export abstract class Handlers<T extends string = null> {
 
         const domHandler = Handlers.wm.get(el);
         if (domHandler && domHandler[key]) {
-          if (domHandler[key].opts === opts) return;
           domHandler[key].remove();
         }
 

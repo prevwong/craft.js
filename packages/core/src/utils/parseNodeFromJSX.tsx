@@ -4,7 +4,7 @@ import { produce } from "immer";
 import { Canvas, deprecateCanvasComponent } from "../nodes/Canvas";
 import { Element, getElementDefaultProps } from "../nodes/Element";
 import { NodeProvider } from "../nodes/NodeContext";
-const shortid = require("shortid");
+import { getRandomNodeId } from "./getRandomNodeId";
 
 export function parseNodeFromJSX(
   jsx: React.ReactElement | string,
@@ -19,7 +19,7 @@ export function parseNodeFromJSX(
   let actualType = element.type as any;
 
   const prefix = actualType === Canvas ? "canvas" : "node";
-  let id = `${prefix}-${shortid.generate()}`;
+  let id = `${prefix}-${getRandomNodeId()}`;
 
   return produce({}, (node: Node) => {
     node.id = id;
