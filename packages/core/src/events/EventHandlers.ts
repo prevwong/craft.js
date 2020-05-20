@@ -1,5 +1,5 @@
 import { createShadow } from "./createShadow";
-import { Indicator, NodeId, Tree } from "../interfaces";
+import { Indicator, NodeId, NodeTree } from "../interfaces";
 import {
   ConnectorsForHandlers,
   defineEventListener,
@@ -7,7 +7,7 @@ import {
 } from "@craftjs/utils";
 import { EditorStore } from "../editor/store";
 
-type DraggedElement = NodeId | Tree;
+type DraggedElement = NodeId | NodeTree;
 
 /**
  * Specifies Editor-wide event handlers and connectors
@@ -51,7 +51,7 @@ export class EventHandlers extends Handlers<
               e.preventDefault();
               e.stopPropagation();
 
-              const draggedElement = EventHandlers.draggedElement as Tree;
+              const draggedElement = EventHandlers.draggedElement as NodeTree;
               if (!draggedElement) {
                 return;
               }

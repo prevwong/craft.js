@@ -22,7 +22,7 @@ export type Node = {
   dom: HTMLElement;
   related: Record<string, React.ElementType>;
   rules: NodeRules;
-  _hydrationTimestamp: Date;
+  _hydrationTimestamp: number;
 };
 
 export type NodeHelpers = QueryCallbacksFor<typeof QueryMethods>["node"];
@@ -42,7 +42,6 @@ export type NodeData = {
   displayName: string;
   isCanvas?: boolean;
   parent: NodeId;
-  index?: number;
   linkedNodes?: Record<string, NodeId>;
   nodes?: NodeId[];
   isHidden: boolean;
@@ -77,13 +76,13 @@ export type SerializedNodeData = SerializedNode;
 export type Nodes = Record<NodeId, Node>;
 
 /**
- * A tree is an internal data structure for CRUD operations that involve
+ * A NodeTree is an internal data structure for CRUD operations that involve
  * more than a single node.
  *
  * For example, when we drop a component we use a tree because we
  * need to drop more than a single component.
  */
-export interface Tree {
+export interface NodeTree {
   rootNodeId: NodeId;
   nodes: Nodes;
 }

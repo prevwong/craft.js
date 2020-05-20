@@ -6,7 +6,7 @@ import {
   Node,
   Options,
   NodeInfo,
-  Tree,
+  NodeTree,
   SerializedNodes,
   SerializedNode,
 } from "../interfaces";
@@ -115,7 +115,7 @@ export function QueryMethods(state: EditorState) {
     parseTreeFromReactNode(
       reactNode: React.ReactElement,
       normalise?: (node: Node, jsx: React.ReactElement) => void
-    ): Tree | undefined {
+    ): NodeTree | undefined {
       let node = this.parseNodeFromReactNode(reactNode, normalise);
 
       let childrenNodes = [];

@@ -6,7 +6,7 @@ import {
   Nodes,
   Options,
   NodeEvents,
-  Tree,
+  NodeTree,
   SerializedNodes,
 } from "../interfaces";
 import {
@@ -93,11 +93,11 @@ export const Actions = (
     /**
      * Add a new Node(s) to the editor.
      *
-     * @param node
+     * @param tree
      * @param parentId
-     * @param index
+     * @param id
      */
-    addLinkedNodeFromTree(tree: Tree, parentId: NodeId, id?: string) {
+    addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id?: string) {
       const parent = getParentAndValidate(parentId);
       if (!parent.data.linkedNodes) {
         parent.data.linkedNodes = {};
@@ -105,7 +105,7 @@ export const Actions = (
 
       parent.data.linkedNodes[id] = tree.rootNodeId;
 
-      tree.nodes[tree.rootNodeId].data.parent = parentId;
+      // tree.nodes[tree.rootNodeId].data.parent = parentId;
       state.nodes[tree.rootNodeId] = tree.nodes[tree.rootNodeId];
 
       addTreeToParentAtIndex(tree);
@@ -114,7 +114,7 @@ export const Actions = (
     /**
      * Add a new Node(s) to the editor.
      *
-     * @param node
+     * @param nodeToAdd
      * @param parentId
      * @param index
      */
