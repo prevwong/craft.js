@@ -18,7 +18,7 @@ describe("<Frame />", () => {
   let query;
 
   beforeEach(() => {
-    actions = { addTreeAtIndex: jest.fn(), setState: jest.fn() };
+    actions = { addTreeAtIndex: jest.fn(), deserialize: jest.fn() };
     query = { createNode: jest.fn(), parseTreeFromReactNode: jest.fn() };
     mockEditor.mockImplementation(() => ({ actions, query }));
   });
@@ -27,7 +27,7 @@ describe("<Frame />", () => {
       mount(<Frame json={json} />);
     });
     it("should parse json and call setState", () => {
-      expect(actions.setState).toHaveBeenCalledWith(JSON.parse(json));
+      expect(actions.deserialize).toHaveBeenCalledWith(JSON.parse(json));
     });
   });
 
@@ -36,7 +36,7 @@ describe("<Frame />", () => {
       mount(<Frame data={data} />);
     });
     it("should deserialize the nodes", () => {
-      expect(actions.setState).toHaveBeenCalledWith(data);
+      expect(actions.deserialize).toHaveBeenCalledWith(data);
     });
   });
 });

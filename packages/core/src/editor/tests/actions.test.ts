@@ -72,7 +72,7 @@ describe("actions.addNodeAtIndex", () => {
   });
 });
 
-describe("actions.addTreeAtIndex", () => {
+describe("actions.addTree", () => {
   it("should throw if we give a parentId that doesnt exist", () => {
     expect(() =>
       Actions(emptyState)((actions) => actions.addTreeAtIndex(leafNode))
@@ -81,10 +81,10 @@ describe("actions.addTreeAtIndex", () => {
   it("should throw if we give an invalid index", () => {
     const state = Actions(documentState);
     expect(() =>
-      state((actions) => actions.addTreeAtIndex(leafNode, rootNode.id, -1))
+      state((actions) => actions.addTree(leafNode, rootNode.id, -1))
     ).toThrow();
     expect(() =>
-      state((actions) => actions.addTreeAtIndex(leafNode, rootNode.id, 1))
+      state((actions) => actions.addTree(leafNode, rootNode.id, 1))
     ).toThrow();
   });
   it("should be able to add a single node at 0", () => {
@@ -93,7 +93,7 @@ describe("actions.addTreeAtIndex", () => {
       nodes: { [leafNode.id]: leafNode },
     };
     const newState = Actions(documentState)((actions) =>
-      actions.addTreeAtIndex(tree, rootNode.id, 0)
+      actions.addTree(tree, rootNode.id, 0)
     );
     expect(newState).toEqual(documentWithLeafState);
   });
@@ -103,7 +103,7 @@ describe("actions.addTreeAtIndex", () => {
       nodes: cloneDeep(documentWithCardState.nodes),
     };
     const newState = Actions(documentState)((actions) =>
-      actions.addTreeAtIndex(tree, rootNode.id, 0)
+      actions.addTree(tree, rootNode.id, 0)
     );
     expect(newState).toEqual(documentWithCardState);
   });
@@ -176,8 +176,9 @@ describe("actions.deserialize", () => {
           linkedNodes: undefined,
           custom: {},
           displayName: "Document",
-          hidden: undefined,
-          isCanvas: undefined,
+          hidden: false,
+          isHidden: false,
+          isCanvas: false,
           name: "Document",
           nodes: [],
           parent: undefined,
@@ -190,7 +191,12 @@ describe("actions.deserialize", () => {
           selected: false,
         },
         related: {},
-        rules: expect.any(Object),
+        rules: {
+          canDrag: expect.any(Function),
+          canMoveIn: expect.any(Function),
+          canMoveOut: expect.any(Function),
+        },
+        _hydrationTimestamp: expect.any(Number),
         id: "canvas-ROOT",
       },
     };

@@ -17,9 +17,6 @@ let onRender = jest.fn();
 jest.mock("../../editor/useInternalEditor", () => ({
   useInternalEditor: () => ({ onRender }),
 }));
-jest.mock("../../nodes/useNodeContext", () => ({
-  useNodeContext: () => nodeContext,
-}));
 
 jest.mock("../../nodes/useInternalNode", () => ({
   useInternalNode: () => ({

@@ -8,8 +8,7 @@ import {
   secondaryButton,
   documentWithCardState,
 } from "../../tests/fixtures";
-
-let parseNodeFromJSX;
+import { parseNodeFromJSX } from "../../utils/parseNodeFromJSX";
 
 jest.mock("../../utils/resolveComponent", () => ({
   resolveComponent: () => null,

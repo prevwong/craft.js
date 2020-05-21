@@ -36,8 +36,8 @@ const Render = () => {
 };
 
 export const RenderNodeToElement: React.FC<any> = () => {
-  const { isHidden } = useInternalNode((node) => ({
-    isHidden: node.data.isHidden,
+  const { hidden } = useInternalNode((node) => ({
+    hidden: node.data.hidden,
   }));
 
   const { onRender } = useInternalEditor((state) => ({
@@ -45,7 +45,7 @@ export const RenderNodeToElement: React.FC<any> = () => {
   }));
 
   // don't display the node since it's hidden
-  if (isHidden) {
+  if (hidden) {
     return null;
   }
 

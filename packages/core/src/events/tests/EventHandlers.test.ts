@@ -35,7 +35,7 @@ describe("EventHandlers", () => {
     EventHandlers.events = undefined;
 
     actions = {
-      addTreeAtIndex: jest.fn(),
+      addTree: jest.fn(),
       move: jest.fn(),
       setIndicator: jest.fn(),
       setNodeEvent: jest.fn(),
@@ -63,7 +63,7 @@ describe("EventHandlers", () => {
       expect(getHandler(select.events, "mousedown")).toBeDefined();
     });
     it("should call setNodeEvent on mousedown", () => {
-      callHandler(select.events, "mousedown")(null, nodeId);
+      callHandler(select.events, "mousedown")(e, nodeId);
       expect(actions.setNodeEvent).toHaveBeenCalledWith("selected", nodeId);
     });
   });
@@ -83,7 +83,7 @@ describe("EventHandlers", () => {
       expect(getHandler(hover.events, "mouseover")).toBeDefined();
     });
     it("should call setNodeEvent on mouseover", () => {
-      callHandler(hover.events, "mouseover")(null, nodeId);
+      callHandler(hover.events, "mouseover")(e, nodeId);
       expect(actions.setNodeEvent).toHaveBeenCalledWith("hovered", nodeId);
     });
   });
@@ -315,8 +315,8 @@ describe("EventHandlers", () => {
           expect(e.stopImmediatePropagation).not.toHaveBeenCalled();
           expect(e.stopPropagation).toHaveBeenCalled();
         });
-        it("should have not call addTreeAtIndex", () => {
-          expect(actions.addTreeAtIndex).not.toHaveBeenCalled();
+        it("should have not call addTree", () => {
+          expect(actions.addTree).not.toHaveBeenCalled();
         });
       });
 
@@ -334,8 +334,8 @@ describe("EventHandlers", () => {
           expect(EventHandlers.draggedElement).toBe(null);
           expect(EventHandlers.draggedElementShadow).toBe(undefined);
         });
-        it("should have call addTreeAtIndex", () => {
-          expect(actions.addTreeAtIndex).toHaveBeenCalledWith(
+        it("should have call addTree", () => {
+          expect(actions.addTree).toHaveBeenCalledWith(
             nodeId,
             events.indicator.placement.parent.id,
             events.indicator.placement.index

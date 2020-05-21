@@ -106,7 +106,9 @@ export function QueryMethods(state: EditorState) {
         node.data.displayName = node.data.displayName || name;
         node.data.name = name;
 
-        if (normalise) normalise(node, jsx);
+        if (normalise) {
+          normalise(node, jsx);
+        }
       });
 
       return node;
