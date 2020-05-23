@@ -46,7 +46,8 @@ export function Element<T extends React.ElementType>({
     const { id: nodeId, data } = node;
 
     if (inNodeContext) {
-      let internalId;
+      let internalId,
+        newProps = props;
 
       const existingNode =
         data.linkedNodes &&
@@ -54,19 +55,30 @@ export function Element<T extends React.ElementType>({
         query.node(data.linkedNodes[id]).get();
 
       if (existingNode) {
-        internalId = existingNode.id;
-      } else {
-        const tree = query.parseTreeFromReactNode(
-          React.createElement(Element, props, children),
-          (node) => {
+        if (
+          existingNode.data.type === props.is &&
+          typeof props.is !== "string"
+        ) {
+          newProps = {
+            ...newProps,
+            ...existingNode.data.props,
+          };
+        }
+      }
+
+      const linkedElement = React.createElement(Element, newProps, children);
+
+      const tree = query
+        .parseReactElement(linkedElement)
+        .toNodeTree((node, jsx) => {
+          if (jsx == linkedElement) {
             node.id = existingNode ? existingNode.id : node.id;
             node.data = existingNode ? existingNode.data : node.data;
           }
-        );
+        });
 
-        internalId = tree.rootNodeId;
-        actions.addLinkedNodeFromTree(tree, nodeId, id);
-      }
+      internalId = tree.rootNodeId;
+      actions.addLinkedNodeFromTree(tree, nodeId, id);
 
       setInternalId(internalId);
     }

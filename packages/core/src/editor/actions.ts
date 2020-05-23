@@ -48,7 +48,7 @@ export const Actions = (
   };
 
   const addTreeToParentAtIndex = (
-    tree: Tree,
+    tree: NodeTree,
     parentId?: NodeId,
     index?: number
   ) => {
@@ -139,7 +139,7 @@ export const Actions = (
      * @param parentId
      * @param index
      */
-    addTree(tree: Tree, parentId?: NodeId, index?: number) {
+    addTree(tree: NodeTree, parentId?: NodeId, index?: number) {
       const node = tree.nodes[tree.rootNodeId];
 
       if (!parentId) {
@@ -180,7 +180,7 @@ export const Actions = (
 
       const nodePairs = Object.keys(dehydratedNodes).map((id) => [
         id,
-        query.parseNodeFromSerializedNode(dehydratedNodes[id], id),
+        query.parseSerializedNode(dehydratedNodes[id]).toNode(id),
       ]);
 
       this.replaceNodes(fromEntries(nodePairs));

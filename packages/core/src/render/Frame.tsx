@@ -1,15 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { NodeElement } from "../nodes/NodeElement";
-import { ROOT_NODE } from "@craftjs/utils";
+import { deprecationWarning, ROOT_NODE } from "@craftjs/utils";
 import { useInternalEditor } from "../editor/useInternalEditor";
-import { Nodes } from "../interfaces";
+import { SerializedNodes } from "../interfaces";
 
 export type Frame = {
-  /** The initial document defined in a json string */
-  nodes?: Nodes;
   json?: string;
-  // TODO(mat) this can be typed in nicer way
-  data?: any;
+  data?: string | SerializedNodes;
 };
 
 /**
@@ -20,9 +17,15 @@ export const Frame: React.FC<Frame> = ({ children, json, data }) => {
 
   const [render, setRender] = useState<React.ReactElement | null>(null);
 
+  if (!!json) {
+    deprecationWarning("<Frame json={...} />", {
+      suggest: "<Frame data={...} />",
+    });
+  }
+
   const initialState = useRef({
     initialChildren: children,
-    initialData: data || (json && JSON.parse(json)),
+    initialData: data || json,
   });
 
   useEffect(() => {
@@ -36,7 +39,7 @@ export const Frame: React.FC<Frame> = ({ children, json, data }) => {
         initialChildren
       ) as React.ReactElement;
 
-      const node = query.parseTreeFromReactNode(rootNode, (node, jsx) => {
+      const node = query.parseReactElement(rootNode).toNodeTree((node, jsx) => {
         if (jsx === rootNode) {
           node.id = ROOT_NODE;
         }

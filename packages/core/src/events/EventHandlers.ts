@@ -106,7 +106,7 @@ export class EventHandlers extends Handlers<
       },
       create: {
         init: (el) => {
-          el.setAttribute("draggable", true);
+          el.setAttribute("draggable", "true");
           return () => el.removeAttribute("draggable");
         },
         events: [
@@ -116,7 +116,9 @@ export class EventHandlers extends Handlers<
               e.stopPropagation();
               e.stopImmediatePropagation();
 
-              const tree = this.store.query.parseTreeFromReactNode(userElement);
+              const tree = this.store.query
+                .parseReactElement(userElement)
+                .toNodeTree();
 
               EventHandlers.draggedElementShadow = createShadow(e);
               EventHandlers.draggedElement = tree;

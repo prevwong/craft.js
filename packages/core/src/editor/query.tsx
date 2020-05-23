@@ -13,29 +13,17 @@ import {
 import invariant from "tiny-invariant";
 import {
   QueryCallbacksFor,
-  ROOT_NODE,
-  ERRROR_NOT_IN_RESOLVER,
-  ERROR_MOVE_TO_NONCANVAS_PARENT,
-  ERROR_MOVE_OUTGOING_PARENT,
-  ERROR_MOVE_INCOMING_PARENT,
-  ERROR_MOVE_TO_DESCENDANT,
-  ERROR_MOVE_NONCANVAS_CHILD,
-  ERROR_DUPLICATE_NODEID,
+  ERROR_NOT_IN_RESOLVER,
   getDOMInfo,
-  ERROR_CANNOT_DRAG,
-  ERROR_MOVE_TOP_LEVEL_CANVAS,
-  ERROR_MOVE_ROOT_NODE,
-  ERROR_INVALID_NODE_ID,
   deprecationWarning,
 } from "@craftjs/utils";
 import findPosition from "../events/findPosition";
 import { parseNodeFromJSX } from "../utils/parseNodeFromJSX";
 import { fromEntries } from "../utils/fromEntries";
 import { mergeTrees } from "../utils/mergeTrees";
-import { getDeepNodes } from "../utils/getDeepNodes";
-import { serializeNode } from "../utils/serializeNode";
 import { resolveComponent } from "../utils/resolveComponent";
 import { deserializeNode } from "../utils/deserializeNode";
+import { NodeHelpers } from "./NodeHelpers";
 
 export function QueryMethods(state: EditorState) {
   const options = state && state.options;
@@ -43,100 +31,7 @@ export function QueryMethods(state: EditorState) {
   const _: () => QueryCallbacksFor<typeof QueryMethods> = () =>
     QueryMethods(state);
 
-  const getNodeFromIdOrNode = (node: NodeId | Node) =>
-    typeof node === "string" ? state.nodes[node] : node;
-
   return {
-    /**
-     * Get a Node representing the specified React Element
-     * @param reactElement
-     * @param extras
-     */
-    createNode(reactElement: React.ReactElement, extras?: any) {
-      deprecationWarning("query.createNode()", {
-        suggest: "query.parseNodeFromReactNode()",
-      });
-      return this.parseNodeFromReactNode(reactElement, (node) => {
-        if (!extras) {
-          return node;
-        }
-
-        if (extras.id) {
-          node.id = extras.id;
-        }
-
-        if (extras.data) {
-          node.data = {
-            ...node.data,
-            ...extras.data,
-          };
-        }
-      });
-    },
-
-    /**
-     * Given a `nodeData` and an optional Id, it will parse a new `Node`
-     *
-     * @param nodeData `node.data` property of the future data
-     * @param id an optional ID correspondent to the node
-     */
-    parseNodeFromSerializedNode(nodeData: SerializedNode, id?: NodeId): Node {
-      const data = deserializeNode(nodeData, options.resolver);
-
-      invariant(data.type, ERRROR_NOT_IN_RESOLVER);
-
-      return this.parseNodeFromReactNode(
-        React.createElement(data.type, data.props),
-        (node) => {
-          if (id) {
-            node.id = id;
-          }
-          node.data = data;
-        }
-      );
-    },
-
-    parseNodeFromReactNode(
-      reactElement: React.ReactElement,
-      normalise?: (node: Node, jsx: React.ReactElement) => void
-    ): Node {
-      const node = parseNodeFromJSX(reactElement, (node, jsx) => {
-        const name = resolveComponent(options.resolver, node.data.type);
-        invariant(name !== null, ERRROR_NOT_IN_RESOLVER);
-        node.data.displayName = node.data.displayName || name;
-        node.data.name = name;
-
-        if (normalise) {
-          normalise(node, jsx);
-        }
-      });
-
-      return node;
-    },
-
-    parseTreeFromReactNode(
-      reactNode: React.ReactElement,
-      normalise?: (node: Node, jsx: React.ReactElement) => void
-    ): NodeTree | undefined {
-      let node = this.parseNodeFromReactNode(reactNode, normalise);
-
-      let childrenNodes = [];
-
-      if (reactNode.props && reactNode.props.children) {
-        childrenNodes = React.Children.toArray(reactNode.props.children).reduce(
-          (accum, child) => {
-            if (React.isValidElement(child)) {
-              accum.push(this.parseTreeFromReactNode(child));
-            }
-            return accum;
-          },
-          []
-        );
-      }
-
-      return mergeTrees(node, childrenNodes);
-    },
-
     /**
      * Determine the best possible location to drop the source Node relative to the target Node
      */
@@ -156,9 +51,9 @@ export function QueryMethods(state: EditorState) {
         ? targetNode
         : state.nodes[targetNode.data.parent];
 
-      const targetParentNodes = targetParent.data.linkedNodes
-        ? Object.values(targetParent.data.linkedNodes)
-        : targetParent.data.nodes || [];
+      if (!targetParent) return;
+
+      const targetParentNodes = targetParent.data.nodes || [];
 
       const dimensionsInContainer = targetParentNodes
         ? targetParentNodes.reduce((result, id: NodeId) => {
@@ -220,123 +115,7 @@ export function QueryMethods(state: EditorState) {
      * @param id
      */
     node(id: NodeId) {
-      invariant(typeof id == "string", ERROR_INVALID_NODE_ID);
-
-      const node = state.nodes[id];
-      const nodeQuery = _().node;
-
-      return {
-        isCanvas: () => node.data.isCanvas,
-        isRoot: () => node.id === ROOT_NODE,
-        isTopLevelElement: () =>
-          !nodeQuery(node.id).isRoot() && !node.data.parent,
-        isTopLevelCanvas: () => {
-          return !nodeQuery(node.id).isRoot() && !node.data.parent;
-        },
-        isDeletable: () =>
-          !nodeQuery(id).isRoot() && !nodeQuery(id).isTopLevelElement(),
-        isParentOfTopLevelCanvas: () => !!node.data.linkedNodes,
-        get: () => node,
-        ancestors: (result = []) => {
-          const parent = node.data.parent;
-          if (parent) {
-            result.push(parent);
-            nodeQuery(parent).ancestors(result);
-          }
-          return result;
-        },
-        decendants: (deep = false) => {
-          deprecationWarning("query.node(id).decendants", {
-            suggest: "query.node(id).descendants 🙈",
-          });
-          return nodeQuery(id).descendants(deep);
-        },
-        descendants: (deep = false) => {
-          return getDeepNodes(state.nodes, id, deep);
-        },
-        isDraggable: (onError?: (err: string) => void) => {
-          try {
-            const targetNode = node;
-            invariant(!nodeQuery(targetNode.id).isRoot(), ERROR_MOVE_ROOT_NODE);
-            if (!nodeQuery(targetNode.id).isRoot()) {
-              invariant(
-                nodeQuery(targetNode.data.parent).isCanvas() === true,
-                ERROR_MOVE_TOP_LEVEL_CANVAS
-              );
-              invariant(
-                targetNode.rules.canDrag(targetNode, _().node),
-                ERROR_CANNOT_DRAG
-              );
-            }
-            return true;
-          } catch (err) {
-            if (onError) onError(err);
-            return false;
-          }
-        },
-        isDroppable: (
-          target: NodeId | Node,
-          onError?: (err: string) => void
-        ) => {
-          try {
-            const targetNode = getNodeFromIdOrNode(target);
-
-            const currentParentNode =
-                targetNode.data.parent && state.nodes[targetNode.data.parent],
-              newParentNode = node;
-
-            invariant(
-              currentParentNode ||
-                (!currentParentNode && !state.nodes[targetNode.id]),
-              ERROR_DUPLICATE_NODEID
-            );
-
-            invariant(
-              nodeQuery(newParentNode.id).isCanvas(),
-              ERROR_MOVE_TO_NONCANVAS_PARENT
-            );
-            invariant(
-              newParentNode.rules.canMoveIn(
-                targetNode,
-                newParentNode,
-                _().node
-              ),
-              ERROR_MOVE_INCOMING_PARENT
-            );
-
-            if (currentParentNode) {
-              const targetDeepNodes = nodeQuery(targetNode.id).decendants();
-              invariant(targetNode.data.parent, ERROR_MOVE_NONCANVAS_CHILD);
-              invariant(
-                !targetDeepNodes.includes(newParentNode.id),
-                ERROR_MOVE_TO_DESCENDANT
-              );
-              invariant(
-                currentParentNode.rules.canMoveOut(
-                  targetNode,
-                  currentParentNode,
-                  _().node
-                ),
-                ERROR_MOVE_OUTGOING_PARENT
-              );
-            }
-            return true;
-          } catch (err) {
-            if (onError) onError(err);
-            return false;
-          }
-        },
-        serialize: () => this.serialise(node),
-      };
-    },
-
-    /**
-     * Given a Node, it serializes it to its node data. Useful if you need to compare state of different nodes.
-     *
-     * @param node
-     */
-    parseSerializedNodeFromNode(node: Node): SerializedNode {
-      return serializeNode(node.data, options.resolver);
+      return NodeHelpers(state, id);
     },
 
     /**
@@ -345,7 +124,7 @@ export function QueryMethods(state: EditorState) {
     getSerializedNodes(): SerializedNodes {
       const nodePairs = Object.keys(state.nodes).map((id: NodeId) => [
         id,
-        this.parseSerializedNodeFromNode(state.nodes[id]),
+        this.node(id).toSerializedNode(),
       ]);
       return fromEntries(nodePairs);
     },
@@ -355,6 +134,83 @@ export function QueryMethods(state: EditorState) {
      */
     serialize(): string {
       return JSON.stringify(this.getSerializedNodes());
+    },
+
+    parseReactElement: (reactElement: React.ReactElement) => ({
+      toNodeTree(
+        normalise?: (node: Node, jsx: React.ReactElement) => void
+      ): NodeTree {
+        let node = parseNodeFromJSX(reactElement, (node, jsx) => {
+          const name = resolveComponent(state.options.resolver, node.data.type);
+          invariant(name !== null, ERROR_NOT_IN_RESOLVER);
+          node.data.displayName = node.data.displayName || name;
+          node.data.name = name;
+
+          if (normalise) {
+            normalise(node, jsx);
+          }
+        });
+
+        let childrenNodes = [];
+
+        if (reactElement.props && reactElement.props.children) {
+          childrenNodes = React.Children.toArray(
+            reactElement.props.children
+          ).reduce((accum, child) => {
+            if (React.isValidElement(child)) {
+              accum.push(_().parseReactElement(child).toNodeTree(normalise));
+            }
+            return accum;
+          }, []);
+        }
+
+        return mergeTrees(node, childrenNodes);
+      },
+    }),
+
+    parseSerializedNode: (serializedNode: SerializedNode) => ({
+      toNode(id?: NodeId): Node {
+        const data = deserializeNode(serializedNode, state.options.resolver);
+
+        invariant(data.type, ERROR_NOT_IN_RESOLVER);
+
+        return parseNodeFromJSX(
+          React.createElement(data.type, data.props),
+          (node) => {
+            if (id) {
+              node.id = id;
+            }
+            node.data = data;
+          }
+        );
+      },
+    }),
+
+    createNode(reactElement: React.ReactElement, extras?: any) {
+      deprecationWarning(`query.createNode(${reactElement})`, {
+        suggest: `query.parseReactElement(${reactElement}).toNodeTree()`,
+      });
+
+      const tree = this.parseReactElement(reactElement).toNodeTree();
+
+      const node = tree.nodes[tree.rootNodeId];
+
+      if (!extras) {
+        return node;
+      }
+
+      if (extras.id) {
+        node.id = extras.id;
+      }
+
+      if (extras.data) {
+        node.data = {
+          ...node.data,
+          ...extras.data,
+        };
+      }
+
+      return node;
     },
   };
 }
