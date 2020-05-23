@@ -54,14 +54,14 @@ export function parseNodeFromJSX(
     // @ts-ignore
     if (node.data.type === Element || node.data.type === Canvas) {
       let usingDeprecatedCanvas = node.data.type === Canvas;
-      const { is, isCanvas, custom } = getElementDefaultProps(node.data.props);
+      const { is, canvas, custom } = getElementDefaultProps(node.data.props);
 
       node.data.type = is;
       delete node.data.props["is"];
       actualType = node.data.type;
 
-      node.data.isCanvas = isCanvas;
-      delete node.data.props["isCanvas"];
+      node.data.isCanvas = !!canvas;
+      delete node.data.props["canvas"];
 
       node.data.custom = custom;
       delete node.data.props["custom"];

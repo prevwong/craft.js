@@ -10,7 +10,7 @@ export const getElementDefaultProps = (props) => {
   return {
     ...props,
     is: props.is || "div",
-    isCanvas: props.isCanvas || false,
+    canvas: props.canvas || false,
     custom: props.custom || {},
   };
 };
@@ -20,6 +20,7 @@ export type Element<T extends React.ElementType> = {
   is?: T;
   custom?: Record<string, any>;
   children?: React.ReactNode;
+  canvas?: boolean;
 } & React.ComponentProps<T>;
 
 export function Element<T extends React.ElementType>({

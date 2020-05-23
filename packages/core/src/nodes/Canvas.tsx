@@ -6,11 +6,11 @@ export type Canvas<T extends React.ElementType> = Element<T>;
 
 export const deprecateCanvasComponent = () =>
   deprecationWarning("<Canvas />", {
-    suggest: "<Element isCanvas={true} />",
+    suggest: "<Element canvas={true} />",
   });
 
 export function Canvas<T extends React.ElementType>({ ...props }: Canvas<T>) {
   useEffect(() => deprecateCanvasComponent(), []);
 
-  return <Element {...props} isCanvas={true} />;
+  return <Element {...props} canvas={true} />;
 }
