@@ -21,6 +21,8 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
 
   const node = state.nodes[id];
 
+  const ref = (id) => NodeHelpers(state, id);
+
   const getNodeFromIdOrNode = (node: NodeId | Node) =>
     typeof node === "string" ? state.nodes[node] : node;
 
@@ -84,10 +86,7 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
           NodeHelpers(state, targetNode.data.parent).isCanvas(),
           ERROR_MOVE_NONCANVAS_CHILD
         );
-        invariant(
-          targetNode.rules.canDrag(targetNode, this),
-          ERROR_CANNOT_DRAG
-        );
+        invariant(targetNode.rules.canDrag(targetNode, ref), ERROR_CANNOT_DRAG);
         return true;
       } catch (err) {
         if (onError) onError(err);
@@ -95,13 +94,13 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
       }
     },
     isDroppable(target: NodeId | Node, onError?: (err: string) => void) {
-      const isNewNode = !state.nodes[target];
+      const isNewNode = typeof target == "object" && !state.nodes[target.id];
       const targetNode = getNodeFromIdOrNode(target),
         newParentNode = node;
       try {
         invariant(this.isCanvas(), ERROR_MOVE_TO_NONCANVAS_PARENT);
         invariant(
-          newParentNode.rules.canMoveIn(targetNode, newParentNode, this),
+          newParentNode.rules.canMoveIn(targetNode, newParentNode, ref),
           ERROR_MOVE_INCOMING_PARENT
         );
 
@@ -132,7 +131,7 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
           currentParentNode.rules.canMoveOut(
             targetNode,
             currentParentNode,
-            this
+            ref
           ),
           ERROR_MOVE_OUTGOING_PARENT
         );
