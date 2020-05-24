@@ -18,6 +18,7 @@ A wrapper of `React.ComponentType<Props>`. Accepts a static `craft` property for
     ["craft", "Object", [
       ["name", "String", "A user-friendly name for the User Component"],
       ["defaultProps", "T", "Specify default values for the props T"],
+      ["custom", "Record<string, any>", "Specify default custom values for the User Component"],
       ["related", "Record<string, React.ElementType>", "A map of React Components to share the same Node context. This components will be able access the useNode hook"],
       ["rules?", [
           ["canDrag", "(currentNode: Node, helpers: NodeHelpers) => boolean", "Specifies if the component can be dragged. Applicable only to components whose corresponding Node is a direct child of a Canvas"],

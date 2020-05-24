@@ -64,10 +64,10 @@ Get `Node` object from id
 
 
 
-### decendants
+### descendants
 <Badge type="function" />
 
-Returns an array of Node ids of all decendants
+Returns an array of Node ids of all child Nodes of a given Node.
 
 #### Returns
 <API items={[
@@ -148,7 +148,7 @@ const App  = () => {
 
 A Node may be deleted as long as it is **not** one of the following:
 - Root Node
-- Top-level Canvas Nodes
+- Top-level Node
 
 #### Parameters
 <API items={[
@@ -190,10 +190,14 @@ const Container = () => {
 ```
 
 
-### isTopLevelCanvas
+### isTopLevelNode
 <Badge type="function" noMargin={true} />
 
-A Canvas Node is considered top-level if it is defined inside a User Component and it is not rendered as an immediate child of another Node.
+A Node is considered top-level if it has no `parent` Node. There are 2 types of Nodes that are top-level:
+
+- The Root Node
+- A linked Node defined inside a User Component
+
 
 #### Parameters
 <API items={[
@@ -210,14 +214,14 @@ const App  = () => {
   return (
     <Editor resolves={{Container}}>
       <Frame>
-        <Canvas> // false
+        <div> // true
           <div>Yo</div> // false
           <h2>It's me</h2> // false
-          <Canvas> // false 
+          <div> // false 
             <h3>Child</h3> // false
             <Container /> // false
-          </Canvas>
-        </Canvas>
+          </div>
+        </div>
       </Frame>
     </Editor>
   )
@@ -226,28 +230,28 @@ const App  = () => {
 const Container = () => {
   return (
     <div>
-      <Canvas id="main"> // true
+      <Element id="main"> // true
         <h2>Hi</h2> // false
-        <Canvas> // false
+        <Element> // false
           <h2>Hi</h2> // false
-        </Canvas>
-      </Canvas>
-      <Canvas id="secondary"> // true
+        </Element>
+      </Element>
+      <Element id="secondary"> // true
         <h2>Hi</h2> // false
-        <Canvas> // false
+        <Element> // false
           <h2>Hi</h2> // false
-        </Canvas>
-      </Canvas>
+        </Element>
+      </Element>
     </div>
   )
 }
 ```
 
 
-### isParentOfTopLevelCanvas
+### isParentOfTopLevelNode
 <Badge type="function" noMargin={true} />
 
-This returns `true` if a Node's User Component defines a `<Canvas />` in its render method.
+This returns `true` if a Node's User Component defines a `<Element />` in its render method.
 
 
 #### Returns
@@ -262,14 +266,14 @@ const App  = () => {
   return (
     <Editor resolves={{Container}}>
       <Frame>
-        <Canvas> // false
+        <Element> // false
           <div>Yo</div> // false
           <h2>It's me</h2> // false
-          <Canvas> // false 
+          <Element> // false 
             <h3>Child</h3> // false
             <Container /> // true
-          </Canvas>
-        </Canvas>
+          </Element>
+        </Element>
       </Frame>
     </Editor>
   )
@@ -278,18 +282,18 @@ const App  = () => {
 const Container = () => {
   return (
     <div>
-      <Canvas id="main"> // false
+      <Element id="main"> // false
         <h2>Hi</h2> // false
-        <Canvas> // false
+        <Element> // false
           <h2>Hi</h2> // false
-        </Canvas>
-      </Canvas>
-      <Canvas id="seconday"> // false
+        </Element>
+      </Element>
+      <Element id="seconday"> // false
         <h2>Hi</h2> // false
-        <Canvas> // false
+        <Element> // false
           <h2>Hi</h2> // false
-        </Canvas>
-      </Canvas>
+        </Element>
+      </Element>
     </div>
   )
 }
@@ -347,4 +351,29 @@ const MyCanvas = () => {
   }));
 }
 ```
+
+
+### toSerializedNode
+<Badge type="function" noMargin={true} />
+
+
+Gets the current Node in it's `SerializedNode` form
+
+#### Returns
+<API items={[
+  ["SerializedNode"]
+]} /> 
+
+
+
+### toNodeTree
+<Badge type="function" noMargin={true} />
+
+
+Gets the current Node in it's `NodeTree` form
+
+#### Returns
+<API items={[
+  ["NodeTree"]
+]} /> 
 

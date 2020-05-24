@@ -267,13 +267,9 @@ Up to this point, we have made a user interface for our page editor. Now, let's 
 
 ### Setup
 - First wrap our application with `<Editor />` which sets up the Editor's context. We'll also need to specify the list of user components in the `resolver` prop for Craft.js to be able to (de)serialize our User Components.
+- Then wrap the editable area with `<Frame />`
 
-- Then wrap the editable area with `<Frame />`and `<Canvas />` 
-  - `<Frame />` passes the rendering process to Craft.js. 
-  - `<Canvas />` creates a droppable region where its immediate children are draggable.
-
-
-```jsx {19,22,23,27,29-31,40}
+```jsx {19,22,31,40}
 // pages/index.js
 import React from 'react';
 import {Typography, Paper, Grid} from '@material-ui/core';
@@ -296,14 +292,14 @@ export default function App() {
           <Grid container spacing={3}>
             <Grid item xs>
               <Frame>
-                <Canvas is={Container} padding={5} background="#eee">
+                <Element is={Container} canvas>
                   <Card />
                   <Button size="small" variant="outlined">Click</Button>
                   <Text size="small" text="Hi world!" />
-                  <Canvas is={Container} padding={6} background="#999">
+                  <Element is={Container} padding={6} background="#999" canvas>
                     <Text size="small" text="It's me again!" />
-                  </Canvas>
-                </Canvas>
+                  </Element>
+                </Element>
               </Frame>
             </Grid>
             <Grid item xs={3}>
@@ -320,21 +316,25 @@ export default function App() {
 ```
 
 Every element that is rendered in `<Frame />` is managed by an object in the editor's internal state called a `Node` which describes the element, its events, and props among other things. Whether an element is draggable or droppable or not depends on the type of `Node` that manages it. 
-
+ 
 - If the `Node` is a Canvas, then it's droppable
 - If the `Node` is an immediate child of a Canvas, then it's draggable.
 
+By default, every element inside the `<Frame />` will have a Node automatically created for it; but using the `<Element />` component, we can configure certain aspects of the Node - for instance, defining a Canvas Node.
+
+
 ```jsx
-// Explanation
+...
+
 <Frame>
-  <Canvas is={Container} padding={5} background="#eee"> // Canvas Node of type Container, droppable
+  <Element is={Container} padding={5} background="#eee" canvas> // Canvas Node of type Container, droppable
     <Card /> // Node of type Card
     <Button size="small" variant="outlined">Click</Button> // Node of type Button, draggable
     <Text size="small" text="Hi world!" /> // Node of type Text, draggable
-    <Canvas is={Container} padding={2} background="#999"> // Canvas Node of type Text, droppable and draggable
+    <Element is={Container} padding={2} background="#999" canvas> // Canvas Node of type Text, droppable and draggable
        <Text size="small" text="It's me again!" /> // Node of type Text, draggable
-    </Canvas>
-  </Canvas>
+    </Element>
+  </Element>
 </Frame>
 ```
 
@@ -421,31 +421,36 @@ At this point, you could refresh the page and you would be able to drag stuff ar
 <Image img="tutorial/dnd.gif" />
 
 #### Defining Droppable regions
-Of course, our Card component is supposed to have two droppable regions. Remember how `<Canvas />` defined a droppable region earlier in our application? We can do the same here insde our Card component.
+
+Of course, our Card component is supposed to have 2 droppable regions, which means we'll need 2 Canvas nodes. 
+
+But hold up, you might be wondering how do we even create Canvas node inside a User Component?  Remember the `<Element />` component that was used to **configure** a Node earlier in our application? Well, inside a User Component - it can be used to **create** a Node. 
+
+> The nodes created via `<Element />` inside User Components are called linked Nodes. Read more [here](../concepts/user-components#defining-editable-elements)
 
 ```jsx {2,8,11,12,14}
 // components/user/Card.js
-import {useNode, Canvas} from "@craftjs/core";
+import {useNode, Element} from "@craftjs/core";
 
 export const Card = (({bg, padding})) => {
   return (
     <Container background={background} padding={padding}>
-      <Canvas id="text">
+      <Element id="text" canvas>
         <Text text="Title" fontSize={20} />
         <Text text="Subtitle" fontSize={15} />
-      </Canvas>
-      <Canvas id="buttons">
+      </Element>
+      <Element id="buttons" canvas>
         <Button size="small" text="Learn more" />
-      </Canvas>
+      </Element>
     </Container>
   )
 }
 ```
 
-> `<Canvas />` used inside User Component must specify an `id` prop
+> `<Element />` used inside User Component must specify an `id` prop
 
 
-You might be wondering how do we set drag/drop rules for the new droppable regions we made. Currently, we have set the `is` prop in our `<Canvas />` to a div, but we can actually point it to a User Component. 
+You might be wondering how do we set drag/drop rules for the new droppable regions we made. Currently, we have set the `is` prop in our `<Element />` to a div, but we can actually point it to a User Component. 
 
 Hence, we can specify and create a new User Component and define rules via the `craft` prop just like what we have done previously.
 
@@ -454,7 +459,7 @@ Hence, we can specify and create a new User Component and define rules via the `
 import React  from "react";
 import Text from "./Text";
 import Button from "./Button";
-import { Canvas, useNode } from "@craftjs/core";
+import { Element, useNode } from "@craftjs/core";
 
 import { Container }  from "./Container";
 
@@ -495,13 +500,13 @@ CardBottom.craft = {
 export const Card = ({background, padding = 20}) => {
   return (
     <Container background={background} padding={padding}>
-      <Canvas id="text" is={CardTop}>
+      <Element id="text" is={CardTop} canvas>
         <Text text="Title" fontSize={20} />
         <Text text="Subtitle" fontSize={15} />
-      </Canvas>
-      <Canvas id="buttons" is={CardBottom}>
+      </Element>
+      <Element id="buttons" is={CardBottom} canvas>
         <Button size="small" text="Learn more" />
-      </Canvas>
+      </Element>
     </Container>
   )
 }
@@ -557,7 +562,7 @@ export const Toolbox = () => {
           <MaterialButton ref={ref=> connectors.create(ref, <Text text="Hi world" />)} variant="contained">Text</MaterialButton>
         </Grid>
         <Grid container direction="column" item>
-          <MaterialButton ref={ref=> connectors.create(ref, <Canvas is={Container} padding={20} />)} variant="contained">Container</MaterialButton>
+          <MaterialButton ref={ref=> connectors.create(ref, <Element is={Container} padding={20} canvas />)} variant="contained">Container</MaterialButton>
         </Grid>
         <Grid container direction="column" item>
           <MaterialButton ref={ref=> connectors.create(ref, <Card />)} variant="contained">Card</MaterialButton>
@@ -568,7 +573,7 @@ export const Toolbox = () => {
 };
 ```
 
-Notice for our Container component, we wrapped it with the `<Canvas />` - this makes it so that our users will be able to drag and drop a new Container component that is droppable.
+Notice for our Container component, we wrapped it with the `<Element />` - this makes it so that our users will be able to drag and drop a new Container component that is droppable.
 
 Now, you could drag and drop the Buttons, and they would actually create new instances of our User Components.
 
@@ -1055,7 +1060,7 @@ export const Topbar = () => {
 ## You made it 🎉
 We've made it until the end! Not too bad right? Hopefully, you're able to see the simplicity of building a fully working page editor with Craft.js.
 
-We do not need to worry about implementing the drag-n-drop system but rather simply focus on writing rules and attaching connectors to the desired elements. Defining droppable regions is simply wrapping an area with `<Canvas />`.
+We do not need to worry about implementing the drag-n-drop system but rather simply focus on writing rules and attaching connectors to the desired elements.
 
 When it comes to writing the components themselves, it is the same as writing any other React component - you control how the components react to different editor events and how they are edited. 
 

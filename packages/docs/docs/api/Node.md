@@ -24,7 +24,7 @@ import {API, Badge} from "./API";
     ["nodes", "NodeId[]", "The id of the child Nodes; only applicable if the current Node is a Canvas"],
     ["hidden", "boolean"],
     ["custom", "Record<String, any>", "Custom properties stored in the Node"],
-    ["childCanvas", "Record<String, NodeId>", "A map of Canvas Nodes defined inside the User Component. Only applicable if the current Node's User Element is a Component which contains &lt;Canvas /&gt; inside its render"]
+    ["linkedNodes", "Record<String, NodeId>", "A map of Nodes defined inside the User Component. Only applicable if the current Node's User Element is a Component which contains &lt;Element /&gt; inside its render"]
   ]],
   ["events", "Object", [
     ["selected", "boolean", "Is true if the user element is clicked"],

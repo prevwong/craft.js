@@ -1,28 +1,29 @@
 ---
----
-id: canvas
-title: <Canvas />
-sidebar_label: <Canvas />
+id: element
+title: <Element />
+sidebar_label: <Element />
 ---
 
 import {API, Badge} from "./API";
 
 <Badge type="component" />
 
-Creates a Canvas Node and converts all immediate children into Nodes.
-
+Defines a Node to create for a given User Element
 
 ## Reference
 ### Props
 <API items={[
-  ["is", "React.ElementType", "A map of User Components that will be used in the editor"],
-  ["id", "String", "Required if the &lt;Canvas /&gt; is being used inside a User Component"],
+  ["is", "React.ElementType", "The User Element to render"],
+  ["id", "String", "Required if the &lt;Node /&gt; is being created inside a User Component"],
+  ["canvas", "boolean", "If true, a Canvas Node will be created."],
+  ["custom", "Record<string, any>", "Sets the Node's custom properties"],
+  ["parseChildren", "boolean", "If true, a Node will be created for each child React element. By default, this is set to true."],
   ["...elementProps", "Object", "The props of the element specified in 'is'"],
 ]} /> 
 
 
 ## When to specify `id`
-You only need to specify the `id` prop when you are defining a Node inside a User Component.
+You only need to specify the `id` prop when you are defining droppable regions inside a User Component.
 ```jsx {6,7,9,12,24-25}
 const App = () => {
   return (
