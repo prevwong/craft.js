@@ -77,7 +77,11 @@ export class EventHandlers extends Handlers<
       },
 
       drag: {
-        init: (el) => {
+        init: (el, id) => {
+          if (!this.store.query.node(id).isDraggable()) {
+            return () => {};
+          }
+
           el.setAttribute("draggable", "true");
           return () => el.setAttribute("draggable", "false");
         },
