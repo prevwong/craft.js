@@ -78,8 +78,8 @@ export class EventHandlers extends Handlers<
 
       drag: {
         init: (el) => {
-          el.setAttribute("draggable", true);
-          return () => el.setAttribute("draggable", false);
+          el.setAttribute("draggable", "true");
+          return () => el.setAttribute("draggable", "false");
         },
         events: [
           defineEventListener("dragstart", (e: DragEvent, id: NodeId) => {

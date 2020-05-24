@@ -8,9 +8,10 @@ export const createTestNode = (id, data, config = {}) => {
     data: {
       props: {},
       custom: {},
-      nodes: null,
-      parent: null,
-      linkedNodes: null,
+      hidden: false,
+      isCanvas: false,
+      isHidden: false,
+
       ...data,
     },
     related: {},
@@ -27,7 +28,9 @@ export const createTestNode = (id, data, config = {}) => {
 export const rootNode = createTestNode("canvas-ROOT", {
   name: "Document",
   displayName: "Document",
-  type: { resolvedName: "Document" },
+  type: "Document",
+  isCanvas: true,
+  nodes: [],
 });
 
 export const leafNode = createTestNode("node-L1eGyOJ4m", {
@@ -67,7 +70,7 @@ export const emptyState = {
   },
   options: {
     resolver: {
-      Document: "div",
+      Document: "Document",
     },
   },
 };

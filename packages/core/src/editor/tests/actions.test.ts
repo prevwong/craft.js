@@ -161,7 +161,6 @@ describe("actions.reset", () => {
 
 describe("actions.deserialize", () => {
   const serialized = mapValues(documentState.nodes, ({ data }) => ({
-    type: {},
     ...data,
   }));
 
@@ -170,36 +169,13 @@ describe("actions.deserialize", () => {
       actions.deserialize(serialized)
     );
 
-    const nodes = {
-      "canvas-ROOT": {
-        data: {
-          linkedNodes: undefined,
-          custom: {},
-          displayName: "Document",
-          hidden: false,
-          isHidden: false,
-          isCanvas: false,
-          name: "Document",
-          nodes: [],
-          parent: undefined,
-          props: {},
-          type: "div",
-        },
-        events: {
-          dragged: false,
-          hovered: false,
-          selected: false,
-        },
-        related: {},
-        rules: {
-          canDrag: expect.any(Function),
-          canMoveIn: expect.any(Function),
-          canMoveOut: expect.any(Function),
-        },
-        _hydrationTimestamp: expect.any(Number),
-        id: "canvas-ROOT",
-      },
+    const node = {
+      ...rootNode,
+      rules: expect.anything(),
+      _hydrationTimestamp: expect.anything(),
     };
-    expect(newState.nodes).toEqual(nodes);
+
+    // console.log(newState.nodes["canvas-ROOT"], node)
+    expect(newState.nodes["canvas-ROOT"]).toEqual(node);
   });
 });

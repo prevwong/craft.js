@@ -95,11 +95,11 @@ export const deserializeNode = (
     name,
     displayName: displayName || name,
     props,
-    parent,
     custom: custom || {},
     isCanvas: !!isCanvas,
     isHidden: !!isNodeHidden,
     hidden: !!isNodeHidden,
+    ...(parent ? { parent } : {}),
     ...(linkedNodes ? { linkedNodes } : {}),
     ...(nodes ? { nodes } : {}),
   };

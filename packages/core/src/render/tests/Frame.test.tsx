@@ -22,14 +22,6 @@ describe("<Frame />", () => {
     query = { createNode: jest.fn(), parseTreeFromReactNode: jest.fn() };
     mockEditor.mockImplementation(() => ({ actions, query }));
   });
-  describe("When rendering using `json`", () => {
-    beforeEach(() => {
-      mount(<Frame json={json} />);
-    });
-    it("should parse json and call setState", () => {
-      expect(actions.deserialize).toHaveBeenCalledWith(JSON.parse(json));
-    });
-  });
 
   describe("When rendering using `data`", () => {
     beforeEach(() => {

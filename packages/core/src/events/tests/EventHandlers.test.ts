@@ -21,6 +21,11 @@ describe("EventHandlers", () => {
   let actions;
   let query;
 
+  let parsedNodeTree;
+  let parseReactElement = jest.fn().mockImplementation(() => ({
+    toNodeTree: jest.fn().mockImplementation(() => parsedNodeTree),
+  }));
+
   beforeEach(() => {
     e = {
       preventDefault: jest.fn(),
@@ -41,7 +46,7 @@ describe("EventHandlers", () => {
       setNodeEvent: jest.fn(),
     };
     query = {
-      parseTreeFromReactNode: jest.fn(),
+      parseReactElement,
       getDropPlaceholder: jest.fn(),
     };
     store = { actions, query };
@@ -179,8 +184,12 @@ describe("EventHandlers", () => {
         expect(el.setAttribute).toHaveBeenCalledTimes(2);
       });
       it("should call setAttribute with the right arguments", () => {
-        expect(el.setAttribute).toHaveBeenNthCalledWith(1, "draggable", true);
-        expect(el.setAttribute).toHaveBeenNthCalledWith(2, "draggable", false);
+        expect(el.setAttribute).toHaveBeenNthCalledWith(1, "draggable", "true");
+        expect(el.setAttribute).toHaveBeenNthCalledWith(
+          2,
+          "draggable",
+          "false"
+        );
       });
     });
 
@@ -273,7 +282,7 @@ describe("EventHandlers", () => {
         expect(el.removeAttribute).toHaveBeenCalledTimes(1);
       });
       it("should call setAttribute with the right arguments", () => {
-        expect(el.setAttribute).toHaveBeenNthCalledWith(1, "draggable", true);
+        expect(el.setAttribute).toHaveBeenNthCalledWith(1, "draggable", "true");
         expect(el.removeAttribute).toHaveBeenNthCalledWith(1, "draggable");
       });
     });
@@ -281,15 +290,15 @@ describe("EventHandlers", () => {
     describe("dragstart", () => {
       const node = "a node";
       beforeEach(() => {
-        query.parseTreeFromReactNode.mockImplementationOnce(() => node);
+        parsedNodeTree = node;
         callHandler(create.events, "dragstart")(e, nodeId);
       });
       it("should have stopped propagation", () => {
         expect(e.stopImmediatePropagation).toHaveBeenCalled();
         expect(e.stopPropagation).toHaveBeenCalled();
       });
-      it("should call parseTreeFromReactNode on mousedown", () => {
-        expect(query.parseTreeFromReactNode).toHaveBeenCalledWith(nodeId);
+      it("should call parseReactElement.toNodeTree on mousedown", () => {
+        expect(query.parseReactElement).toHaveBeenCalled();
       });
       it("should have called createShadow", () => {
         expect(createShadow).toHaveBeenCalled();
