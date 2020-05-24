@@ -21,6 +21,7 @@ describe("EventHandlers", () => {
   let actions;
   let query;
 
+  let isDraggable;
   let parsedNodeTree;
   let parseReactElement = jest.fn().mockImplementation(() => ({
     toNodeTree: jest.fn().mockImplementation(() => parsedNodeTree),
@@ -48,6 +49,9 @@ describe("EventHandlers", () => {
     query = {
       parseReactElement,
       getDropPlaceholder: jest.fn(),
+      node: jest.fn().mockImplementation(() => ({
+        isDraggable: jest.fn().mockImplementation(() => isDraggable),
+      })),
     };
     store = { actions, query };
     eventHandlers = new EventHandlers(store);
@@ -177,19 +181,35 @@ describe("EventHandlers", () => {
     });
 
     describe("init", () => {
-      beforeEach(() => {
-        drag.init(el)();
+      describe("when node can be dragged", () => {
+        beforeEach(() => {
+          isDraggable = true;
+          drag.init(el)();
+        });
+        it("should call setAttribute twice on init", () => {
+          expect(el.setAttribute).toHaveBeenCalledTimes(2);
+        });
+        it("should call setAttribute with the right arguments", () => {
+          expect(el.setAttribute).toHaveBeenNthCalledWith(
+            1,
+            "draggable",
+            "true"
+          );
+          expect(el.setAttribute).toHaveBeenNthCalledWith(
+            2,
+            "draggable",
+            "false"
+          );
+        });
       });
-      it("should call setAttribute twice on init", () => {
-        expect(el.setAttribute).toHaveBeenCalledTimes(2);
-      });
-      it("should call setAttribute with the right arguments", () => {
-        expect(el.setAttribute).toHaveBeenNthCalledWith(1, "draggable", "true");
-        expect(el.setAttribute).toHaveBeenNthCalledWith(
-          2,
-          "draggable",
-          "false"
-        );
+      describe("when node cannot be dragged", () => {
+        beforeEach(() => {
+          isDraggable = false;
+          drag.init(el)();
+        });
+        it("should not have called setAttribute", () => {
+          expect(el.setAttribute).toHaveBeenCalledTimes(0);
+        });
       });
     });
 
