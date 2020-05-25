@@ -25,7 +25,7 @@ describe("NodeHelpers", () => {
 
   describe("isRoot", () => {
     it("should return true if root node", () => {
-      expect(helper("canvas-ROOT").isRoot()).toBe(true);
+      expect(helper("ROOT").isRoot()).toBe(true);
     });
     it("should return false if non-root node", () => {
       expect(helper("node-card").isRoot()).toBe(false);
@@ -46,7 +46,7 @@ describe("NodeHelpers", () => {
       expect(helper("linked-node").isTopLevelNode()).toBe(true);
     });
     it("should return true if root Node", () => {
-      expect(helper("canvas-ROOT").isTopLevelNode()).toBe(true);
+      expect(helper("ROOT").isTopLevelNode()).toBe(true);
     });
     it("should return false if non-top-level Node", () => {
       expect(helper(secondaryButton.id).isCanvas()).toBe(false);
@@ -143,18 +143,18 @@ describe("NodeHelpers", () => {
   describe("toNodeTree", () => {
     let tree;
     beforeEach(() => {
-      tree = helper("canvas-ROOT").toNodeTree();
+      tree = helper("ROOT").toNodeTree();
     });
 
     it("should have correct rootNodeId", () => {
-      expect(tree.rootNodeId).toEqual("canvas-ROOT");
+      expect(tree.rootNodeId).toEqual("ROOT");
     });
     it("should contain root and child nodes", () => {
       const { nodes } = tree;
 
       expect(nodes).toStrictEqual({
-        "canvas-ROOT": documentWithVariousNodes.nodes["canvas-ROOT"],
-        ...documentWithVariousNodes.nodes["canvas-ROOT"].data.nodes.reduce(
+        ROOT: documentWithVariousNodes.nodes["ROOT"],
+        ...documentWithVariousNodes.nodes["ROOT"].data.nodes.reduce(
           (accum, key) => {
             accum[key] = documentWithVariousNodes.nodes[key];
             return accum;

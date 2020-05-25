@@ -1,4 +1,5 @@
-export const ROOT_NODE = "canvas-ROOT";
+export const ROOT_NODE = "ROOT";
+export const DEPRECATED_ROOT_NODE = "canvas-ROOT";
 
 // TODO: Use a better way to store/display error messages
 export const ERROR_NOPARENT = "Parent id cannot be ommited";

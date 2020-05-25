@@ -49,7 +49,7 @@ Given the above example, when a `Node` that is of the type  `Text` is serialised
   "props": {
     "text" : "Hi World!"
   },
-  "parent": "canvas-ROOT",
+  "parent": "ROOT",
   "displayName": "Card"
   ...
 }

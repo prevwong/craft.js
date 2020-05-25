@@ -16,6 +16,8 @@ import {
   ERROR_NOT_IN_RESOLVER,
   getDOMInfo,
   deprecationWarning,
+  DEPRECATED_ROOT_NODE,
+  ROOT_NODE,
 } from "@craftjs/utils";
 import findPosition from "../events/findPosition";
 import { parseNodeFromJSX } from "../utils/parseNodeFromJSX";
@@ -181,6 +183,10 @@ export function QueryMethods(state: EditorState) {
               node.id = id;
             }
             node.data = data;
+
+            if (node.data.parent == DEPRECATED_ROOT_NODE) {
+              node.data.parent = ROOT_NODE;
+            }
           }
         );
       },

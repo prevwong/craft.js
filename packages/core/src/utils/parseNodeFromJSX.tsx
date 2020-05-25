@@ -18,8 +18,7 @@ export function parseNodeFromJSX(
 
   let actualType = element.type as any;
 
-  const prefix = actualType === Canvas ? "canvas" : "node";
-  let id = `${prefix}-${getRandomNodeId()}`;
+  let id = getRandomNodeId();
 
   return produce({}, (node: Node) => {
     node.id = id;

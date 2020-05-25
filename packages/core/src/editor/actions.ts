@@ -13,6 +13,7 @@ import {
   deprecationWarning,
   ERROR_INVALID_NODEID,
   ROOT_NODE,
+  DEPRECATED_ROOT_NODE,
   QueryCallbacksFor,
   ERROR_NOPARENT,
 } from "@craftjs/utils";
@@ -178,10 +179,18 @@ export const Actions = (
       const dehydratedNodes =
         typeof input == "string" ? JSON.parse(input) : input;
 
-      const nodePairs = Object.keys(dehydratedNodes).map((id) => [
-        id,
-        query.parseSerializedNode(dehydratedNodes[id]).toNode(id),
-      ]);
+      const nodePairs = Object.keys(dehydratedNodes).map((id) => {
+        let nodeId = id;
+
+        if (id == DEPRECATED_ROOT_NODE) {
+          nodeId = ROOT_NODE;
+        }
+
+        return [
+          nodeId,
+          query.parseSerializedNode(dehydratedNodes[id]).toNode(nodeId),
+        ];
+      });
 
       this.replaceNodes(fromEntries(nodePairs));
     },

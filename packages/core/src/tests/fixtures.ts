@@ -25,7 +25,7 @@ export const createTestNode = (id, data, config = {}) => {
   };
 };
 
-export const rootNode = createTestNode("canvas-ROOT", {
+export const rootNode = createTestNode("ROOT", {
   name: "Document",
   displayName: "Document",
   type: "Document",

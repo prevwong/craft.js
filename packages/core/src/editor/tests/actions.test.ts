@@ -175,7 +175,6 @@ describe("actions.deserialize", () => {
       _hydrationTimestamp: expect.anything(),
     };
 
-    // console.log(newState.nodes["canvas-ROOT"], node)
-    expect(newState.nodes["canvas-ROOT"]).toEqual(node);
+    expect(newState.nodes["ROOT"]).toEqual(node);
   });
 });
