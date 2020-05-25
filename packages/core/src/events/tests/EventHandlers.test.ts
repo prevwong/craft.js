@@ -67,12 +67,12 @@ describe("EventHandlers", () => {
       select.init()();
       expect(actions.setNodeEvent).toHaveBeenCalledWith("selected", null);
     });
-    it("should contain one event with mousedown", () => {
+    it("should contain one event with click", () => {
       expect(select.events).toHaveLength(1);
-      expect(getHandler(select.events, "mousedown")).toBeDefined();
+      expect(getHandler(select.events, "click")).toBeDefined();
     });
     it("should call setNodeEvent on mousedown", () => {
-      callHandler(select.events, "mousedown")(e, nodeId);
+      callHandler(select.events, "click")(e, nodeId);
       expect(actions.setNodeEvent).toHaveBeenCalledWith("selected", nodeId);
     });
   });

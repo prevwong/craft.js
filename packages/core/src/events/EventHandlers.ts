@@ -24,7 +24,7 @@ export class EventHandlers extends Handlers<
       select: {
         init: () => () => this.store.actions.setNodeEvent("selected", null),
         events: [
-          defineEventListener("mousedown", (e, id: NodeId) => {
+          defineEventListener("click", (e, id: NodeId) => {
             e.stopPropagation();
             this.store.actions.setNodeEvent("selected", id);
           }),
