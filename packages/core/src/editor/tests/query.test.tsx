@@ -43,7 +43,6 @@ describe("query", () => {
         isCanvas: false,
         parent: null,
         displayName: "h2",
-        isHidden: false,
         hidden: false,
       };
       let serializedNode: SerializedNode = {

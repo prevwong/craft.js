@@ -32,7 +32,7 @@ export function parseNodeFromJSX(
       displayName:
         typeof actualType == "string" ? actualType : (actualType as any).name,
       custom: {},
-      isHidden: false,
+      hidden: false,
     } as NodeData;
 
     node.related = {};

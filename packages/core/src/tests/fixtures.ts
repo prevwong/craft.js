@@ -10,8 +10,6 @@ export const createTestNode = (id, data, config = {}) => {
       custom: {},
       hidden: false,
       isCanvas: false,
-      isHidden: false,
-
       ...data,
     },
     related: {},

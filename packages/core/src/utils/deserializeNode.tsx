@@ -76,17 +76,7 @@ export const deserializeNode = (
     resolver
   ) as unknown) as NodeData;
 
-  const {
-    parent,
-    custom,
-    displayName,
-    isCanvas,
-    nodes,
-    hidden,
-    isHidden,
-  } = nodeData;
-
-  const isNodeHidden = isHidden !== undefined ? isHidden : hidden;
+  const { parent, custom, displayName, isCanvas, nodes, hidden } = nodeData;
 
   const linkedNodes = nodeData.linkedNodes || nodeData._childCanvas;
 
@@ -97,8 +87,7 @@ export const deserializeNode = (
     props,
     custom: custom || {},
     isCanvas: !!isCanvas,
-    isHidden: !!isNodeHidden,
-    hidden: !!isNodeHidden,
+    hidden: !!hidden,
     ...(parent ? { parent } : {}),
     ...(linkedNodes ? { linkedNodes } : {}),
     ...(nodes ? { nodes } : {}),
