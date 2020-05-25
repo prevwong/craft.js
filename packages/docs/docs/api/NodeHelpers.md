@@ -212,14 +212,14 @@ const App  = () => {
   return (
     <Editor resolves={{Container}}>
       <Frame>
-        <Canvas> // false
+        <div> // false
           <div>Yo</div> // true
           <h2>It's me</h2> // true
-          <Canvas> // true 
+          <Element canvas> // true 
             <h3>Child</h3> // true
             <Container /> // true
-          </Canvas>
-        </Canvas>
+          </Element>
+        </div>
       </Frame>
     </Editor>
   )
@@ -228,9 +228,9 @@ const App  = () => {
 const Container = () => {
   return (
     <div>
-      <Canvas id="main"> // false
+      <Element id="main"> // false
         <h2>Hi</h2> // true
-      </Canvas>
+      </Element>
     </div>
   )
 }

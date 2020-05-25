@@ -30,10 +30,10 @@ const App = () => {
       "MyText" : Text
     }}>
       <Frame>
-        <Canvas is="div">
+        <Element is="div">
           <h1>Hi</h1>
           <Text text="Hi" />
-        </Canvas>
+        </Element>
       </Frame>
     </Manager>
   )

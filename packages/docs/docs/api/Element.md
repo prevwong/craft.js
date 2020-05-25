@@ -73,8 +73,8 @@ const App = () => {
             <MyComp text="You can drag me around too" /> // Node of type MyComp, draggable
             <Element is="div" style={{background: "#333" }} canvas> // Canvas Node of type div, draggable and droppable
               <p>Same here</p> // Not a Node; not draggable
-            </Canvas>
-          </Canvas>
+            </Element>
+          </Element>
         </Frame>
       </Craft>
     </div>
@@ -119,7 +119,7 @@ const App = () => {
         <Frame> 
           <Element is={Container}>
             <h2>Text</h2>
-          </Canvas>
+          </Element>
         </Frame>
       </Craft>
     </div>

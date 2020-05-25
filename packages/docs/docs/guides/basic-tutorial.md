@@ -282,7 +282,7 @@ import { Button } from '../components/user/Button';
 import { Card } from '../components/user/Card';
 import { Text } from '../components/user/Text';
 
-import {Editor, Frame, Canvas} from "@craftjs/core";
+import {Editor, Frame, Element} from "@craftjs/core";
 
 export default function App() {
   return (
@@ -540,7 +540,7 @@ The `useEditor` also provides `connectors`; the one we are interested in right n
 // components/Toolbox.js
 import React from "react";
 import { Box, Typography, Grid, Button as MaterialButton } from "@material-ui/core";
-import { Canvas, useEditor } from "@craftjs/core";
+import { Element, useEditor } from "@craftjs/core";
 import { Container } from "./user/Container";
 import { Card } from "./user/Card";
 import { Button } from "./user/Button";
@@ -573,7 +573,7 @@ export const Toolbox = () => {
 };
 ```
 
-Notice for our Container component, we wrapped it with the `<Element />` - this makes it so that our users will be able to drag and drop a new Container component that is droppable.
+Notice for our Container component, we wrapped it with the `<Element canvas />` - this makes it so that our users will be able to drag and drop a new Container component that is droppable.
 
 Now, you could drag and drop the Buttons, and they would actually create new instances of our User Components.
 

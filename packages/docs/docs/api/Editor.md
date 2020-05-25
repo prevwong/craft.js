@@ -25,7 +25,7 @@ Creates the context that stores the editor state.
 
 ### The default screen
 ```tsx {9,10,16,17}
-import {Editor, Frame, Canvas} from "@craftjs/core";
+import {Editor, Frame, Element} from "@craftjs/core";
 
 const App = () => {
   return (
@@ -34,13 +34,13 @@ const App = () => {
       <Editor>
         <h2>My Page Editor</h2>
         <Frame> 
-          <Canvas is={Container}> // defines the Root Node
+          <Element is={Container}> // defines the Root Node
             <h2>Drag me around</h2>
             <MyComp text="You can drag me around too" />
-            <Canvas is="div" style={{background: "#333" }}>
+            <Element is="div" style={{background: "#333" }}>
               <p>Same here</p>
-            </Canvas>
-          </Canvas>
+            </Element>
+          </Element>
         </Frame>
       </Editor>
     </div>
@@ -66,10 +66,10 @@ const App = () => {
   return (
     <Editor onRender={RenderNode}>
       <Frame resolver={{Hero}}>
-        <Canvas>
+        <Element>
           <h1>Hi</h1>
           <Hero />
-        </Canvas>
+        </Element>
       </Frame>
     </Editor>
   )
@@ -91,10 +91,10 @@ const App = () => {
       }}
     >
       <Frame resolver={{Hero}}>
-        <Canvas>
+        <Element>
           <h1>Hi</h1>
           <Hero />
-        </Canvas>
+        </Element>
       </Frame>
     </Editor>
   )
