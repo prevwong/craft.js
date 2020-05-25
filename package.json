@@ -15,6 +15,7 @@
     "release": "run-s lint clean build test release:npm",
     "release:npm": "lerna publish",
     "test": "jest",
+    "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "devDependencies": {
