@@ -23,20 +23,20 @@ Defines a Node to create for a given User Element
 
 
 ## When to specify `id`
-You only need to specify the `id` prop when you are defining droppable regions inside a User Component.
+You only need to specify the `id` prop when you are defining Nodes **inside** a User Component's render method.
 ```jsx {6,7,9,12,24-25}
 const App = () => {
   return (
       <Craft resolver={{MyComp, Container}}>
         <h2>My Page Editor</h2>
         <Frame> 
-          <Element is="div"> 
-            <Element is={MyComp} /> 
+          <Element is="div"> // not required
+            <Element is={MyComp} /> // not required
             <div>
-              <Element is="div" /> 
+              <Element is="div" /> // not required
             </div>
             <Container>
-              <Element is="div" /> 
+              <Element is="div" /> // not required
             </Container>
           </Element>
         </Frame>
@@ -48,8 +48,8 @@ const Container = () => {
   return (
     <div>
       <h2>Container</h2>
-      <Element id="Top" is="div" />
-      <Element id="Bottom" is={MyComp} />
+      <Element id="Top" is="div" /> // required
+      <Element id="Bottom" is={MyComp} /> // required
     </div>
   )
 }
@@ -59,7 +59,7 @@ const Container = () => {
 
 ### Basics
 ```jsx 
-import {Craft, Frame, Canvas} from "@craftjs/core";
+import {Craft, Frame, Element} from "@craftjs/core";
 
 const App = () => {
   return (
@@ -68,10 +68,10 @@ const App = () => {
       <Craft resolver={{MyComp}}>
         <h2>My Page Editor</h2>
         <Frame> 
-          <Canvas is="div"> // defines the Root Node, droppable
+          <Element is="div" canvas> // defines the Root Node, droppable
             <h2>Drag me around</h2> // Node of type h2, draggable
             <MyComp text="You can drag me around too" /> // Node of type MyComp, draggable
-            <Canvas is="div" style={{background: "#333" }}> // Canvas Node of type div, draggable and droppable
+            <Element is="div" style={{background: "#333" }} canvas> // Canvas Node of type div, draggable and droppable
               <p>Same here</p> // Not a Node; not draggable
             </Canvas>
           </Canvas>
@@ -82,7 +82,7 @@ const App = () => {
 }
 ```
 
-### User Component as Canvas
+### User Component
 ```jsx
 
 const Container = ({children}) => {
@@ -117,8 +117,8 @@ const App = () => {
       <Craft resolver={{Container}}>
         <h2>My Page Editor</h2>
         <Frame> 
-          <Canvas is={Container}> // defines the Root Node, droppable
-            <Canvas is={Container} />
+          <Element is={Container}>
+            <h2>Text</h2>
           </Canvas>
         </Frame>
       </Craft>
@@ -127,17 +127,61 @@ const App = () => {
 }
 ```
 
-### Canvas in User Components
+### Defining nodes in User Components
 
 ```jsx {5}
 const Hero = () => {
   return (
     <div>
       <h3>I'm a Hero</h3>
-      <Canvas id="drop" is={Container}>
+      <Element id="drop" is={Container} canvas>
         <h3>Hi</h3>
-      </Canvas>
+      </Element>
     </div>
   )
 }
+```
+
+
+### Setting `custom` properties
+
+User Components may consume `custom` properties from their corresponding Node. These properties essentially act like additional props.
+
+Let's say we have a Hero component that has a `css` custom property and as usual, we set its default values via the `craft` property.
+
+```jsx {2-4}
+const Hero = () => {
+  const { css } = useNode(node => ({
+    css: node.data.custom.css
+  }));
+
+  return (
+    <div style={css}>
+      <h3>I'm a Hero</h3>
+      <Element id="drop" is={Container} canvas>
+        <h3>Hi</h3>
+      </Element>
+    </div>
+  )
+}
+
+Hero.craft = {
+  custom: {
+    css: {
+      background: "#eee"
+    }
+  }
+}
+```
+
+Now, if you'd like to actually set these values when you call the component, you can do it like so:
+
+```jsx
+<Frame>
+  <Element is={Hero} custom={{
+    css: {
+      background: "#ddd"
+    }
+  }} />
+</Frame>
 ```

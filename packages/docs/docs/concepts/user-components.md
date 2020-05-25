@@ -255,6 +255,35 @@ const Hero = ({background, title}) => {
 
 > You must specify the `id` prop when defining new Nodes with `<Element />` inside a User Component
 
-In the above example, we used the `<Element />` component to define a new Node. It's important to know that this is not a child Node like what we have seen all the while before this. A child Node is rendered in its parent's `children` prop, whereas this is its own independent Node that has no parent. 
-
 We call these linked nodes since they are linked to another Node via an arbitary `id`. In this case, the `Text` node is linked to `Hero`'s node via its "title" id.
+
+### Linked nodes vs Child nodes
+
+It's important to know that this is not a child Node like what we have seen all the while before this. A child Node is passed and rendered in it's parent's `children` prop whereas this directly part of its parent's render method. 
+
+```jsx {4}
+const Hero = ({background, title}) => {
+  return (
+    <div style={{ background }}>
+      <Element id="title" is={Text} text={title} /> // Linked node
+      ...
+    </div>
+  )
+}
+```
+
+
+```jsx {5,11}
+const Container = ({background, title, children}) => {
+  return (
+    <div style={{ background }}>
+      ...
+      {children}
+    </div>
+  )
+}
+
+<Container>
+  <h2>Text</h2> // Child Node
+</Container>
+```

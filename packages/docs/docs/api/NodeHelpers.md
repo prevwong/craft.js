@@ -87,6 +87,18 @@ Returns an array of Node ids of all ancestors
 ]} /> 
 
 
+
+### linkedNodes
+<Badge type="function" />
+
+Returns an array of linked Node ids
+
+#### Returns
+<API items={[
+  ["NodeId[]"]
+]} /> 
+
+
 ### isRoot
 <Badge type="function" />
 
@@ -102,18 +114,19 @@ const App  = () => {
   return (
     <Editor>
       <Frame>
-        <Canvas> // true
+        <div> // true
           <div>Yo</div> // false
           <h2>It's me</h2> // false
-          <Canvas> // false 
+          <Element is={Container}> // false 
             <h3>Child</h3> // false
-          </Canvas>
-        </Canvas>
+          </Element>
+        </div>
       </Frame>
     </Editor>
   )
 }
 ```
+
 
 ### isCanvas
 <Badge type="function" noMargin={true} />
@@ -130,15 +143,49 @@ const App  = () => {
   return (
     <Editor>
       <Frame>
-        <Canvas> // true
+        <Element canvas> // true
           <div>Yo</div> // false
-          <h2>It's me</h2> // false
-          <Canvas> // true 
+          <Element is={Container}>It's me</Element> // false
+          <Element canvas> // true 
             <h3>Child</h3> // false
-          </Canvas>
-        </Canvas>
+          </Element>
+        </Element>
       </Frame>
     </Editor>
+  )
+}
+```
+
+### isLinkedNode
+<Badge type="function" noMargin={true} />
+
+Check if a given Node is linked to the parent Node via an arbitary id
+
+#### Returns
+<API items={[
+  ["boolean"]
+]} /> 
+
+```jsx {17}
+const App  = () => {
+  return (
+    <Editor>
+      <Frame>
+        <Element canvas> // false
+          <div>Yo</div> // false
+          <Element is={Hero}>It's me</Element> // false
+        </Element>
+      </Frame>
+    </Editor>
+  )
+}
+
+const Hero = ({background, title}) => {
+  return (
+    <div style={{ background }}>
+      <Element id="title" is={Text} text={title} /> // true
+      ...
+    </div>
   )
 }
 ```
@@ -209,7 +256,7 @@ A Node is considered top-level if it has no `parent` Node. There are 2 types of 
   ["boolean"]
 ]} /> 
 
-```jsx {21,27}
+```jsx {5,21,27}
 const App  = () => {
   return (
     <Editor resolves={{Container}}>

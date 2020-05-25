@@ -23,7 +23,8 @@ In a nutshell:
 
 
 ## Representing User Elements as Nodes
-We know what Nodes are and that every User Component must be represented by a Node. Now, let's dive deeper a little with an example:
+
+Let's take a look at how User Elements are actually represented as Nodes:
 
 ```jsx
 <div style={{ background: "#333" }}> // A Node with the type div;

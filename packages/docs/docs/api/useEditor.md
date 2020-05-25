@@ -175,8 +175,8 @@ const Example = () => {
   return (
     <div>
       <a onClick={() => {
-        const node = query.createNode(<h2>Hi</h2>);
-        actions.add(node);
+        const node = query.parseReactElement(<h2>Hi</h2>).toNodeTree();
+        actions.addNodeTree(node);
       }}>Click me to add a new Node</a>
     </div>
   )
@@ -192,7 +192,7 @@ import {useEditor} from "@craftjs/core";
 
 const Example = () => {
   const { selectedDescendants } = useEditor((state, query) => ({
-    selectedDescendants: state.events && query.getDeepNodes(state.events.selected).map(node => node.id)
+    selectedDescendants: state.events && query.node(state.events.selected).descendants().map(node => node.id)
   }));
 
   return (
