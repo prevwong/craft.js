@@ -35,14 +35,19 @@ export const Actions = (
   ) => {
     const parent = getParentAndValidate(parentId);
     // reset the parent node ids
-    if (!parent.data.nodes) parent.data.nodes = [];
+    if (!parent.data.nodes) {
+      parent.data.nodes = [];
+    }
 
     if (parent.data.props.children) {
       delete parent.data.props["children"];
     }
 
-    if (index != null) parent.data.nodes.splice(index, 0, node.id);
-    else parent.data.nodes.push(node.id);
+    if (index != null) {
+      parent.data.nodes.splice(index, 0, node.id);
+    } else {
+      parent.data.nodes.push(node.id);
+    }
 
     node.data.parent = parent.id;
     state.nodes[node.id] = node;
@@ -92,7 +97,9 @@ export const Actions = (
 
   return {
     /**
-     * Add a new Node(s) to the editor.
+     * @private
+     * Add a new linked Node to the editor.
+     * Only used internally by the <Element /> component
      *
      * @param tree
      * @param parentId
@@ -113,7 +120,7 @@ export const Actions = (
     },
 
     /**
-     * Add a new Node(s) to the editor.
+     * Add a new Node to the editor.
      *
      * @param nodeToAdd
      * @param parentId
@@ -134,7 +141,7 @@ export const Actions = (
     },
 
     /**
-     * Given a tree, it adds it at the correct position among the node children
+     * Add a NodeTree to the editor
      *
      * @param tree
      * @param parentId

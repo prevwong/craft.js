@@ -48,7 +48,7 @@ export function Element<T extends React.ElementType>({
   const [initialised, setInitialised] = useState(false);
 
   useEffectOnce(() => {
-    invariant(id != null, ERROR_ROOT_CANVAS_NO_ID);
+    invariant(id !== null, ERROR_ROOT_CANVAS_NO_ID);
     const { id: nodeId, data } = node;
 
     if (inNodeContext) {
@@ -60,16 +60,15 @@ export function Element<T extends React.ElementType>({
         data.linkedNodes[id] &&
         query.node(data.linkedNodes[id]).get();
 
-      if (existingNode) {
-        if (
-          existingNode.data.type === props.is &&
-          typeof props.is !== "string"
-        ) {
-          newProps = {
-            ...newProps,
-            ...existingNode.data.props,
-          };
-        }
+      if (
+        existingNode &&
+        existingNode.data.type === props.is &&
+        typeof props.is !== "string"
+      ) {
+        newProps = {
+          ...newProps,
+          ...existingNode.data.props,
+        };
       }
 
       const linkedElement = React.createElement(Element, newProps, children);

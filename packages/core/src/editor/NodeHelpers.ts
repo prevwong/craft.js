@@ -21,7 +21,7 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
 
   const node = state.nodes[id];
 
-  const ref = (id) => NodeHelpers(state, id);
+  const nodeHelpers = (id) => NodeHelpers(state, id);
 
   const getNodeFromIdOrNode = (node: NodeId | Node) =>
     typeof node === "string" ? state.nodes[node] : node;
@@ -36,7 +36,7 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
     isLinkedNode() {
       return (
         node.data.parent &&
-        ref(node.data.parent).linkedNodes().includes(node.id)
+        nodeHelpers(node.data.parent).linkedNodes().includes(node.id)
       );
     },
     isTopLevelNode() {
@@ -59,30 +59,34 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
       function recursive(id: NodeId, result: NodeId[] = [], depth: number = 0) {
         result.push(id);
         const node = state.nodes[id];
+        if (!node.data.parent) {
+          return result;
+        }
+
         if (deep || (!deep && depth === 0)) {
-          if (node.data.parent) {
-            result = recursive(node.data.parent, result, depth + 1);
-          }
+          result = recursive(node.data.parent, result, depth + 1);
         }
         return result;
       }
       return recursive(node.data.parent);
     },
-    descendants(deep = false, includeLinkedNodes = false) {
+    descendants(deep = false) {
       function recursive(id: NodeId, result: NodeId[] = [], depth: number = 0) {
         const node = state.nodes[id];
         if (deep || (!deep && depth === 0)) {
-          if (ref(id).linkedNodes().length > 0) {
-            ref(id)
-              .linkedNodes()
-              .forEach((nodeId) => {
-                result.push(nodeId);
-                result = recursive(nodeId, result, depth + 1);
-              });
+          const linkedNodes = nodeHelpers(id).linkedNodes();
+
+          linkedNodes.forEach((nodeId) => {
+            result.push(nodeId);
+            result = recursive(nodeId, result, depth + 1);
+          });
+
+          const childNodes = node.data.nodes;
+          if (!childNodes) {
+            return result;
           }
 
-          if (node.data.nodes) {
-            const childNodes = node.data.nodes; // ['t1c1', 't1c2']
+          if (childNodes) {
             childNodes.forEach((nodeId) => {
               result.push(nodeId);
               result = recursive(nodeId, result, depth + 1);
@@ -104,10 +108,15 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
           NodeHelpers(state, targetNode.data.parent).isCanvas(),
           ERROR_MOVE_NONCANVAS_CHILD
         );
-        invariant(targetNode.rules.canDrag(targetNode, ref), ERROR_CANNOT_DRAG);
+        invariant(
+          targetNode.rules.canDrag(targetNode, nodeHelpers),
+          ERROR_CANNOT_DRAG
+        );
         return true;
       } catch (err) {
-        if (onError) onError(err);
+        if (onError) {
+          onError(err);
+        }
         return false;
       }
     },
@@ -118,7 +127,7 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
       try {
         invariant(this.isCanvas(), ERROR_MOVE_TO_NONCANVAS_PARENT);
         invariant(
-          newParentNode.rules.canMoveIn(targetNode, newParentNode, ref),
+          newParentNode.rules.canMoveIn(targetNode, newParentNode, nodeHelpers),
           ERROR_MOVE_INCOMING_PARENT
         );
 
@@ -139,7 +148,7 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
           ERROR_DUPLICATE_NODEID
         );
 
-        const targetDeepNodes = NodeHelpers(state, targetNode.id).descendants();
+        const targetDeepNodes = nodeHelpers(targetNode.id).descendants();
 
         invariant(
           !targetDeepNodes.includes(newParentNode.id) &&
@@ -150,14 +159,16 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
           currentParentNode.rules.canMoveOut(
             targetNode,
             currentParentNode,
-            ref
+            nodeHelpers
           ),
           ERROR_MOVE_OUTGOING_PARENT
         );
 
         return true;
       } catch (err) {
-        if (onError) onError(err);
+        if (onError) {
+          onError(err);
+        }
         return false;
       }
     },
@@ -173,8 +184,8 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
     },
 
     /**
-            Deprecated NodeHelpers
-        **/
+     Deprecated NodeHelpers
+     **/
 
     decendants(deep = false) {
       deprecationWarning("query.node(id).decendants", {
