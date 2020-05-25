@@ -134,7 +134,7 @@ export class EventHandlers extends Handlers<
             const onDropElement = (draggedElement, placement) => {
               const index =
                 placement.index + (placement.where === "after" ? 1 : 0);
-              this.store.actions.addTree(
+              this.store.actions.addNodeTree(
                 draggedElement,
                 placement.parent.id,
                 index

@@ -46,7 +46,7 @@ export const Frame: React.FC<Frame> = ({ children, json, data }) => {
         return node;
       });
 
-      actions.addTree(node);
+      actions.addNodeTree(node);
     }
 
     setRender(<NodeElement id={ROOT_NODE} />);

@@ -13,7 +13,6 @@ const mockEditor = useInternalEditor as jest.Mock<any>;
 
 describe("<Frame />", () => {
   const data = {};
-  const json = JSON.stringify(data);
   let actions;
   let query;
 

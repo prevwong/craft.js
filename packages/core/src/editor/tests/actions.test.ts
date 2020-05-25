@@ -72,7 +72,7 @@ describe("actions.addNodeAtIndex", () => {
   });
 });
 
-describe("actions.addTree", () => {
+describe("actions.addNodeTree", () => {
   it("should throw if we give a parentId that doesnt exist", () => {
     expect(() =>
       Actions(emptyState)((actions) => actions.addTreeAtIndex(leafNode))
@@ -81,10 +81,10 @@ describe("actions.addTree", () => {
   it("should throw if we give an invalid index", () => {
     const state = Actions(documentState);
     expect(() =>
-      state((actions) => actions.addTree(leafNode, rootNode.id, -1))
+      state((actions) => actions.addNodeTree(leafNode, rootNode.id, -1))
     ).toThrow();
     expect(() =>
-      state((actions) => actions.addTree(leafNode, rootNode.id, 1))
+      state((actions) => actions.addNodeTree(leafNode, rootNode.id, 1))
     ).toThrow();
   });
   it("should be able to add a single node at 0", () => {
@@ -93,7 +93,7 @@ describe("actions.addTree", () => {
       nodes: { [leafNode.id]: leafNode },
     };
     const newState = Actions(documentState)((actions) =>
-      actions.addTree(tree, rootNode.id, 0)
+      actions.addNodeTree(tree, rootNode.id, 0)
     );
     expect(newState).toEqual(documentWithLeafState);
   });
@@ -103,7 +103,7 @@ describe("actions.addTree", () => {
       nodes: cloneDeep(documentWithCardState.nodes),
     };
     const newState = Actions(documentState)((actions) =>
-      actions.addTree(tree, rootNode.id, 0)
+      actions.addNodeTree(tree, rootNode.id, 0)
     );
     expect(newState).toEqual(documentWithCardState);
   });

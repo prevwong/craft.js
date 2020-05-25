@@ -41,7 +41,7 @@ describe("EventHandlers", () => {
     EventHandlers.events = undefined;
 
     actions = {
-      addTree: jest.fn(),
+      addNodeTree: jest.fn(),
       move: jest.fn(),
       setIndicator: jest.fn(),
       setNodeEvent: jest.fn(),
@@ -344,8 +344,8 @@ describe("EventHandlers", () => {
           expect(e.stopImmediatePropagation).not.toHaveBeenCalled();
           expect(e.stopPropagation).toHaveBeenCalled();
         });
-        it("should have not call addTree", () => {
-          expect(actions.addTree).not.toHaveBeenCalled();
+        it("should have not call addNodeTree", () => {
+          expect(actions.addNodeTree).not.toHaveBeenCalled();
         });
       });
 
@@ -363,8 +363,8 @@ describe("EventHandlers", () => {
           expect(EventHandlers.draggedElement).toBe(null);
           expect(EventHandlers.draggedElementShadow).toBe(undefined);
         });
-        it("should have call addTree", () => {
-          expect(actions.addTree).toHaveBeenCalledWith(
+        it("should have call addNodeTree", () => {
+          expect(actions.addNodeTree).toHaveBeenCalledWith(
             nodeId,
             events.indicator.placement.parent.id,
             events.indicator.placement.index

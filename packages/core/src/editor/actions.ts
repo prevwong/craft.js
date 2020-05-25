@@ -105,7 +105,7 @@ export const Actions = (
 
       parent.data.linkedNodes[id] = tree.rootNodeId;
 
-      // tree.nodes[tree.rootNodeId].data.parent = parentId;
+      tree.nodes[tree.rootNodeId].data.parent = parentId;
       state.nodes[tree.rootNodeId] = tree.nodes[tree.rootNodeId];
 
       addTreeToParentAtIndex(tree);
@@ -139,7 +139,7 @@ export const Actions = (
      * @param parentId
      * @param index
      */
-    addTree(tree: NodeTree, parentId?: NodeId, index?: number) {
+    addNodeTree(tree: NodeTree, parentId?: NodeId, index?: number) {
       const node = tree.nodes[tree.rootNodeId];
 
       if (!parentId) {
