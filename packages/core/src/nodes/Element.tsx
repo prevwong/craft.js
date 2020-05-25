@@ -6,13 +6,16 @@ import invariant from "tiny-invariant";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import { NodeElement } from "./NodeElement";
 
-export const getElementDefaultProps = (props) => {
-  return {
-    ...props,
-    is: props.is || "div",
-    canvas: props.canvas || false,
-    custom: props.custom || {},
-  };
+export const defaultElementProps = {
+  is: "div",
+  canvas: false,
+  custom: {},
+  hidden: false,
+};
+
+export const elementPropToNodeData = {
+  is: "type",
+  canvas: "isCanvas",
 };
 
 export type Element<T extends React.ElementType> = {
@@ -28,7 +31,10 @@ export function Element<T extends React.ElementType>({
   children,
   ...otherProps
 }: Element<T>) {
-  const props = getElementDefaultProps(otherProps);
+  const props = {
+    ...defaultElementProps,
+    ...otherProps,
+  };
 
   const { query, actions } = useInternalEditor();
   const { node, inNodeContext } = useInternalNode((node) => ({

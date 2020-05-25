@@ -17,7 +17,7 @@ Defines a Node to create for a given User Element
   ["id", "String", "Required if the &lt;Node /&gt; is being created inside a User Component"],
   ["canvas", "boolean", "If true, a Canvas Node will be created."],
   ["custom", "Record<string, any>", "Sets the Node's custom properties"],
-  ["parseChildren", "boolean", "If true, a Node will be created for each child React element. By default, this is set to true."],
+  ["hidden", "boolean", "Sets the Node's hidden property. If true, this will hide the Node"],
   ["...elementProps", "Object", "The props of the element specified in 'is'"],
 ]} /> 
 

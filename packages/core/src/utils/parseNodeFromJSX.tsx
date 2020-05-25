@@ -2,7 +2,11 @@ import React, { Fragment } from "react";
 import { NodeData, Node } from "../interfaces";
 import { produce } from "immer";
 import { Canvas, deprecateCanvasComponent } from "../nodes/Canvas";
-import { Element, getElementDefaultProps } from "../nodes/Element";
+import {
+  defaultElementProps,
+  Element,
+  elementPropToNodeData,
+} from "../nodes/Element";
 import { NodeProvider } from "../nodes/NodeContext";
 import { getRandomNodeId } from "./getRandomNodeId";
 
@@ -53,17 +57,17 @@ export function parseNodeFromJSX(
     // @ts-ignore
     if (node.data.type === Element || node.data.type === Canvas) {
       let usingDeprecatedCanvas = node.data.type === Canvas;
-      const { is, canvas, custom } = getElementDefaultProps(node.data.props);
+      const mergedProps = {
+        ...defaultElementProps,
+        ...node.data.props,
+      };
 
-      node.data.type = is;
-      delete node.data.props["is"];
+      Object.keys(defaultElementProps).forEach((key) => {
+        node.data[elementPropToNodeData[key] || key] = mergedProps[key];
+        delete node.data.props[key];
+      });
+
       actualType = node.data.type;
-
-      node.data.isCanvas = !!canvas;
-      delete node.data.props["canvas"];
-
-      node.data.custom = custom;
-      delete node.data.props["custom"];
 
       if (usingDeprecatedCanvas) {
         node.data.isCanvas = true;

@@ -56,7 +56,7 @@ In the above example, using the `<Element />` component with the `canvas` prop, 
 
 Since our `div` element is now handled by a Canvas node, therefore it is now a droppable region. On the other hand, since `h1` and `MyComp` are child Nodes of a Canvas, they are now draggable. 
 
-We could also specify other things with the `<Element />` component, such as we could tell Craft to prevent parsing the children of an element as Nodes:
+<!-- We could also specify other things with the `<Element />` component, such as we could tell Craft to prevent parsing the children of an element as Nodes:
 
 ```jsx
 <Element is="div" style={{ background: "#333" }} canvas> // A Canvas Node with the type div;
@@ -66,4 +66,4 @@ We could also specify other things with the `<Element />` component, such as we 
     <h2>Second level</h2> // NOT A NODE! 
   </Element>
 </Element>
-```
+``` -->
