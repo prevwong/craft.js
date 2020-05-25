@@ -2,7 +2,7 @@ import React, { useMemo, useContext } from "react";
 import { LayerContext } from "./LayerContext";
 import { LayerNode } from "./LayerNode";
 import { LayerHandlers } from "../events/LayerHandlers";
-import { useEventHandler } from "@craftjs/core";
+import { useEditor, useEventHandler, useNode } from "@craftjs/core";
 import { LayerManagerContext } from "../manager";
 
 export const LayerContextProvider: React.FC<Omit<
@@ -16,6 +16,14 @@ export const LayerContextProvider: React.FC<Omit<
     () => handler.derive(LayerHandlers, store, id).connectors(),
     [handler, id, store]
   );
+
+  const { exists } = useEditor((state) => ({
+    exists: !!state.nodes[id],
+  }));
+
+  if (!exists) {
+    return null;
+  }
 
   return (
     <LayerContext.Provider value={{ id, depth, connectors }}>

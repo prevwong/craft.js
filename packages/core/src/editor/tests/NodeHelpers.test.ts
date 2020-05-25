@@ -87,7 +87,7 @@ describe("NodeHelpers", () => {
       expect(helper(card.id).ancestors()).toStrictEqual([rootNode.id]);
     });
     it("should return parent node id", () => {
-      expect(helper(secondaryButton.id).ancestors()).toStrictEqual([
+      expect(helper(secondaryButton.id).ancestors(true)).toStrictEqual([
         card.id,
         rootNode.id,
       ]);

@@ -33,6 +33,12 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
     isRoot() {
       return node.id === ROOT_NODE;
     },
+    isLinkedNode() {
+      return (
+        node.data.parent &&
+        ref(node.data.parent).linkedNodes().includes(node.id)
+      );
+    },
     isTopLevelNode() {
       return !node.data.parent;
     },
@@ -54,7 +60,7 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
         result.push(id);
         const node = state.nodes[id];
         if (deep || (!deep && depth === 0)) {
-          if (node.data.nodes && node.data.parent) {
+          if (node.data.parent) {
             result = recursive(node.data.parent, result, depth + 1);
           }
         }
@@ -62,10 +68,19 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
       }
       return recursive(node.data.parent);
     },
-    descendants(deep = false) {
+    descendants(deep = false, includeLinkedNodes = false) {
       function recursive(id: NodeId, result: NodeId[] = [], depth: number = 0) {
         const node = state.nodes[id];
         if (deep || (!deep && depth === 0)) {
+          if (ref(id).linkedNodes().length > 0) {
+            ref(id)
+              .linkedNodes()
+              .forEach((nodeId) => {
+                result.push(nodeId);
+                result = recursive(nodeId, result, depth + 1);
+              });
+          }
+
           if (node.data.nodes) {
             const childNodes = node.data.nodes; // ['t1c1', 't1c2']
             childNodes.forEach((nodeId) => {
@@ -77,6 +92,9 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
         return result;
       }
       return recursive(id);
+    },
+    linkedNodes() {
+      return Object.values(node.data.linkedNodes || {});
     },
     isDraggable(onError?: (err: string) => void) {
       try {
@@ -124,7 +142,8 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
         const targetDeepNodes = NodeHelpers(state, targetNode.id).descendants();
 
         invariant(
-          !targetDeepNodes.includes(newParentNode.id),
+          !targetDeepNodes.includes(newParentNode.id) &&
+            newParentNode.id !== targetNode.id,
           ERROR_MOVE_TO_DESCENDANT
         );
         invariant(
