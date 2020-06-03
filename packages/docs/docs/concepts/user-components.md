@@ -241,11 +241,11 @@ const Hero = ({title}) => {
       <h2>{title}</h2>
       <Canvas id="Header" is="section">
         <h3>Yo</h3>
-      </section>
+      </Canvas>
       I need some coffee to continue writing this
       <Canvas id="Footer" is="section">
         <h2>Hi</h2>
-      </section>
+      </Canvas>
     </div>
   )
 }
@@ -287,11 +287,11 @@ const Hero = ({title}) => {
       <h2>{title}</h2>
       <Canvas id="Hero" is={HeroHeader}>
         <h3>Yo</h3>
-      </section>
+      </Canvas>
       I need some coffee to continue writing this
       <Canvas id="Footer" is={HeroFooter}>
         <h2>Hi</h2>
-      </section>
+      </Canvas>
     </div>
   )
 }
