@@ -26,7 +26,6 @@ describe("query", () => {
   const resolver = { H1: () => null };
   let query;
   let state;
-  let normalise;
 
   beforeEach(() => {
     state = { options: { resolver } };
@@ -35,7 +34,6 @@ describe("query", () => {
 
   describe("parseSerializedNode", () => {
     describe("toNode", () => {
-      let output;
       let data = {
         props: { className: "hello" },
         nodes: [],
@@ -52,10 +50,9 @@ describe("query", () => {
 
       beforeEach(() => {
         deserializeNode = jest.fn().mockImplementation(() => serializedNode);
-
         parseNodeFromJSX = jest.fn();
 
-        output = query.parseSerializedNode(serializedNode).toNode();
+        query.parseSerializedNode(serializedNode).toNode();
       });
 
       it("should call deserializeNode", () => {

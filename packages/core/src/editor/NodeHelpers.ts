@@ -56,7 +56,11 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
       return node;
     },
     ancestors(deep = false) {
-      function recursive(id: NodeId, result: NodeId[] = [], depth: number = 0) {
+      function appendParentNode(
+        id: NodeId,
+        result: NodeId[] = [],
+        depth: number = 0
+      ) {
         result.push(id);
         const node = state.nodes[id];
         if (!node.data.parent) {
@@ -64,38 +68,45 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
         }
 
         if (deep || (!deep && depth === 0)) {
-          result = recursive(node.data.parent, result, depth + 1);
+          result = appendParentNode(node.data.parent, result, depth + 1);
         }
         return result;
       }
-      return recursive(node.data.parent);
+      return appendParentNode(node.data.parent);
     },
     descendants(deep = false) {
-      function recursive(id: NodeId, result: NodeId[] = [], depth: number = 0) {
+      function appendChildNode(
+        id: NodeId,
+        result: NodeId[] = [],
+        depth: number = 0
+      ) {
         const node = state.nodes[id];
         if (deep || (!deep && depth === 0)) {
+          // Include linkedNodes if any
           const linkedNodes = nodeHelpers(id).linkedNodes();
 
           linkedNodes.forEach((nodeId) => {
             result.push(nodeId);
-            result = recursive(nodeId, result, depth + 1);
+            result = appendChildNode(nodeId, result, depth + 1);
           });
 
           const childNodes = node.data.nodes;
+
           if (!childNodes) {
             return result;
           }
 
+          // Include child Nodes if any
           if (childNodes) {
             childNodes.forEach((nodeId) => {
               result.push(nodeId);
-              result = recursive(nodeId, result, depth + 1);
+              result = appendChildNode(nodeId, result, depth + 1);
             });
           }
         }
         return result;
       }
-      return recursive(id);
+      return appendChildNode(id);
     },
     linkedNodes() {
       return Object.values(node.data.linkedNodes || {});
@@ -189,7 +200,7 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
 
     decendants(deep = false) {
       deprecationWarning("query.node(id).decendants", {
-        suggest: "query.node(id).descendants 🙈",
+        suggest: "query.node(id).descendants",
       });
       return this.descendants(deep);
     },

@@ -7,7 +7,7 @@ import { useEditorStore } from "./store";
 import { EditorContext } from "./EditorContext";
 
 export const withDefaults = (options: Partial<Options> = {}) => ({
-  onStateChange: () => null,
+  onNodesChange: () => null,
   onRender: ({ render }) => render,
   resolver: {},
   nodes: null,

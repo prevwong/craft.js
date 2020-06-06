@@ -184,7 +184,7 @@ export function QueryMethods(state: EditorState) {
             }
             node.data = data;
 
-            if (node.data.parent == DEPRECATED_ROOT_NODE) {
+            if (node.data.parent === DEPRECATED_ROOT_NODE) {
               node.data.parent = ROOT_NODE;
             }
           }

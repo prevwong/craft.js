@@ -8,6 +8,7 @@ describe("parseNodeFromJSX", () => {
 
   describe("Returns correct type and props", () => {
     it("should transform a link correctly", () => {
+      // eslint-disable-next-line  jsx-a11y/anchor-has-content
       const { data } = parseNodeFromJSX(<a {...props} />);
 
       expect({ type: data.type, props: data.props }).toEqual({

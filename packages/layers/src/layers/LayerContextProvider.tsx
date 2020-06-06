@@ -2,7 +2,7 @@ import React, { useMemo, useContext } from "react";
 import { LayerContext } from "./LayerContext";
 import { LayerNode } from "./LayerNode";
 import { LayerHandlers } from "../events/LayerHandlers";
-import { useEditor, useEventHandler, useNode } from "@craftjs/core";
+import { useEditor, useEventHandler } from "@craftjs/core";
 import { LayerManagerContext } from "../manager";
 
 export const LayerContextProvider: React.FC<Omit<

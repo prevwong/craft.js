@@ -189,7 +189,7 @@ export const Actions = (
       const nodePairs = Object.keys(dehydratedNodes).map((id) => {
         let nodeId = id;
 
-        if (id == DEPRECATED_ROOT_NODE) {
+        if (id === DEPRECATED_ROOT_NODE) {
           nodeId = ROOT_NODE;
         }
 

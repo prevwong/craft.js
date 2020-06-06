@@ -76,7 +76,7 @@ export function Element<T extends React.ElementType>({
       const tree = query
         .parseReactElement(linkedElement)
         .toNodeTree((node, jsx) => {
-          if (jsx == linkedElement) {
+          if (jsx === linkedElement) {
             node.id = existingNode ? existingNode.id : node.id;
             node.data = existingNode ? existingNode.data : node.data;
           }
