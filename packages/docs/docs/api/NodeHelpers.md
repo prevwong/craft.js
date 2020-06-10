@@ -240,7 +240,7 @@ const Container = () => {
 ### isTopLevelNode
 <Badge type="function" noMargin={true} />
 
-A Node is considered top-level if it has no `parent` Node. There are 2 types of Nodes that are top-level:
+A Node is considered top-level if it's one of the following:
 
 - The Root Node
 - A linked Node defined inside a User Component

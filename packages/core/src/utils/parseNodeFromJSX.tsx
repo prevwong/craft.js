@@ -12,7 +12,7 @@ import { getRandomNodeId } from "./getRandomNodeId";
 
 export function parseNodeFromJSX(
   jsx: React.ReactElement | string,
-  normalise?: (node: Node, jsx: React.ReactElement) => void
+  normalize?: (node: Node, jsx: React.ReactElement) => void
 ) {
   let element = jsx as React.ReactElement;
 
@@ -75,8 +75,8 @@ export function parseNodeFromJSX(
       }
     }
 
-    if (normalise) {
-      normalise(node, element as React.ReactElement);
+    if (normalize) {
+      normalize(node, element as React.ReactElement);
     }
 
     if (actualType.craft) {

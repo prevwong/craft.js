@@ -140,7 +140,7 @@ export function QueryMethods(state: EditorState) {
 
     parseReactElement: (reactElement: React.ReactElement) => ({
       toNodeTree(
-        normalise?: (node: Node, jsx: React.ReactElement) => void
+        normalize?: (node: Node, jsx: React.ReactElement) => void
       ): NodeTree {
         let node = parseNodeFromJSX(reactElement, (node, jsx) => {
           const name = resolveComponent(state.options.resolver, node.data.type);
@@ -148,8 +148,8 @@ export function QueryMethods(state: EditorState) {
           node.data.displayName = node.data.displayName || name;
           node.data.name = name;
 
-          if (normalise) {
-            normalise(node, jsx);
+          if (normalize) {
+            normalize(node, jsx);
           }
         });
 
@@ -160,7 +160,7 @@ export function QueryMethods(state: EditorState) {
             reactElement.props.children
           ).reduce((accum, child) => {
             if (React.isValidElement(child)) {
-              accum.push(_().parseReactElement(child).toNodeTree(normalise));
+              accum.push(_().parseReactElement(child).toNodeTree(normalize));
             }
             return accum;
           }, []);

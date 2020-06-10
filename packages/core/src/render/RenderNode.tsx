@@ -22,7 +22,7 @@ const Render = () => {
       <React.Fragment>
         {nodes
           ? nodes.map((id: NodeId) => <NodeElement id={id} key={id} />)
-          : props && props.children && props.children}
+          : props && props.children}
       </React.Fragment>
     );
 

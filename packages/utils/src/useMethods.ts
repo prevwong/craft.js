@@ -212,9 +212,7 @@ class Watcher<S> {
   }
 
   notify() {
-    for (let i = 0; i < this.subscribers.length; i++) {
-      this.subscribers[i].collect();
-    }
+    this.subscribers.forEach((subscriber) => subscriber.collect());
   }
 }
 

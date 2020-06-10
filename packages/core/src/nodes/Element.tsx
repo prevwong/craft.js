@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NodeId } from "../interfaces";
 import { useInternalNode } from "./useInternalNode";
-import { ERROR_ROOT_CANVAS_NO_ID, useEffectOnce } from "@craftjs/utils";
+import { ERROR_TOP_LEVEL_ELEMENT_NO_ID, useEffectOnce } from "@craftjs/utils";
 import invariant from "tiny-invariant";
 import { useInternalEditor } from "../editor/useInternalEditor";
 import { NodeElement } from "./NodeElement";
@@ -48,7 +48,7 @@ export function Element<T extends React.ElementType>({
   const [initialised, setInitialised] = useState(false);
 
   useEffectOnce(() => {
-    invariant(id !== null, ERROR_ROOT_CANVAS_NO_ID);
+    invariant(id !== null, ERROR_TOP_LEVEL_ELEMENT_NO_ID);
     const { id: nodeId, data } = node;
 
     if (inNodeContext) {

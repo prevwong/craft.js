@@ -34,11 +34,11 @@ const App = () => {
       <Editor>
         <h2>My Page Editor</h2>
         <Frame> 
-          <Element is={Container}> // defines the Root Node
+          <Element is={Container} canvas> // defines the Root Node
             <h2>Drag me around</h2>
             <MyComp text="You can drag me around too" />
             <Element is="div" style={{background: "#333" }}>
-              <p>Same here</p>
+              <p>You can't drag me because the Element above is not a canvas </p>
             </Element>
           </Element>
         </Frame>

@@ -244,7 +244,7 @@ Remember how the `<Element / >` component was used to define/configure Nodes? We
 const Hero = ({background, title}) => {
   return (
     <div style={{ background }}>
-      <Element id="title" is={Text} text={title} />
+      <Element id="title_text" is={Text} text={title} />
       <section>
         <h3>I need some coffee to continue writing this</h3>
       </section>
@@ -255,7 +255,7 @@ const Hero = ({background, title}) => {
 
 > You must specify the `id` prop when defining new Nodes with `<Element />` inside a User Component
 
-We call these linked nodes since they are linked to another Node via an arbitary `id`. In this case, the `Text` node is linked to `Hero`'s node via its "title" id.
+We call these linked nodes since they are linked to another Node via an arbitary `id`. In this case, the `Text` node is linked to `Hero`'s node via its "title_text" id.
 
 ### Linked nodes vs Child nodes
 
