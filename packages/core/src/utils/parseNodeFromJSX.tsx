@@ -81,12 +81,13 @@ export function parseNodeFromJSX(
 
     if (actualType.craft) {
       node.data.props = {
-        ...((actualType.craft && actualType.craft.defaultProps) || {}),
+        ...(actualType.craft.props || actualType.craft.defaultProps || {}),
         ...node.data.props,
       };
 
-      if (actualType.craft.name) {
-        node.data.displayName = actualType.craft.name;
+      const displayName = actualType.craft.displayName || actualType.craft.name;
+      if (displayName) {
+        node.data.displayName = displayName;
       }
 
       if (actualType.craft.isCanvas) {

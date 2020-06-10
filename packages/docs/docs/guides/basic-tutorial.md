@@ -838,14 +838,14 @@ Card.craft = {
 #### Setting default props
 Setting default props is not strictly necessary. However, it is helpful if we wish to access the component's props via its corresponding `Node`, like what we did in the `settings` related component above.
 
-For instance, if a Text component is rendered as `<Text text="Hi" />`, we would get a null value when we try to retrieve the `fontSize` prop via its `Node`. An easy way to solve this is to explicity define each User Component's `defaultProps`:
+For instance, if a Text component is rendered as `<Text text="Hi" />`, we would get a null value when we try to retrieve the `fontSize` prop via its `Node`. An easy way to solve this is to explicity define each User Component's `props`:
 
 ```jsx
 // components/user/Text.js
 export const Text = ({text, fontSize}) => {}
 
 Text.craft = {
-  defaultProps: {
+  props: {
     text: "Hi",
     fontSize: 20
   },
@@ -859,7 +859,7 @@ Text.craft = {
 export const Button = ({size, variant, color, text}) => {}
 
 Button.craft = {
-  defaultProps: { 
+  props: { 
     size: "small", 
     variant: "contained",
     color: "primary",
@@ -880,7 +880,7 @@ export const ContainerDefaultProps = {
 };
 
 Container.craft = {
-  defaultProps: ContainerDefaultProps,
+  props: ContainerDefaultProps,
   related: {...}
 }
 ```
@@ -892,7 +892,7 @@ import {ContainerDefaultProps} from "./Container";
 export const Card = ({background, padding}) => {}
 
 Card.craft = {
-  defaultProps: ContainerDefaultProps,
+  props: ContainerDefaultProps,
   related: {...}
 }
 ```

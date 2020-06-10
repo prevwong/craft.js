@@ -3,9 +3,13 @@ import { QueryMethods } from "../editor/query";
 import { QueryCallbacksFor } from "@craftjs/utils";
 
 type UserComponentConfig<T> = {
-  name: string;
+  displayName: string;
   rules: Partial<NodeRules>;
   related: Partial<NodeRelated>;
+  props: Partial<T>;
+
+  // TODO: Deprecate
+  name: string;
   defaultProps: Partial<T>;
 };
 

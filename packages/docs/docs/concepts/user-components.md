@@ -26,7 +26,7 @@ Additionally we can pass configuration values via the static `craft` property:
 ```jsx
 const Text = () => {...}
 Text.craft = {
-  defaultProps: {},
+  props: {},
   rules: {
     canDrag: () => true,
     canMoveIn: () => true,
@@ -124,12 +124,12 @@ const Text = ({text, fontSize}) => {
 ## Default Props
 While it's not necessary as we could simply define default parameters (e.g.: ES6 defaults) directly within our components, these default values will not actually be recorded into the component's corresponding `Node`, which could leave us with a lot of empty prop values when we wish to retrieve the `Node` for a component when building other parts of our editor (eg: a Toolbar for editing a component's values).
 
-To prevent that, we can explicitly specify default prop values via the `craft.defaultProps` like the following:
+To prevent that, we can explicitly specify default prop values via the `craft.props` like the following:
 
 ```jsx
 const Text = ({text}) => { /** same as previous example **/ }
 Hero.craft = {
-  defaultProps: {
+  props: {
     text: "Hi there!"
   }
 }
@@ -142,7 +142,7 @@ Let us write a (pretty strange) rule for our Text component which users can only
 ```jsx
 const Text = ({text}) => { /** same as the previous example **/ }
 Text.craft = {
-  defaultProps: { /** same as the previous example **/ },
+  props: { /** same as the previous example **/ },
   rules: {
     canDrag: (node) => !!node.data.props.text == "Drag"
   }
