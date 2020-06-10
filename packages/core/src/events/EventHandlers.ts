@@ -90,6 +90,9 @@ export class EventHandlers extends Handlers<
             e.stopPropagation();
             e.stopImmediatePropagation();
 
+            // Ensure the Node is selected when it is being dragged
+            this.store.actions.setNodeEvent("selected", id);
+
             this.store.actions.setNodeEvent("dragged", id);
 
             EventHandlers.draggedElementShadow = createShadow(e);
