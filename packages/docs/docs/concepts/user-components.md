@@ -206,7 +206,7 @@ const Toolbar = () => {
 ```
 
 ## Defining editable elements
-Let's say we're building a Hero user component like so:
+Let's say we're building a Hero user component:
 
 ```jsx
 const Hero = ({background, title}) => {
@@ -221,7 +221,7 @@ const Hero = ({background, title}) => {
 }
 ```
 
-Your first instinct is to simply just use the Text component directly like so:
+Your first instinct might be to simply just use the Text component directly:
 
 ```jsx
 const Hero = ({background, title}) => {
@@ -259,7 +259,7 @@ We call these linked nodes since they are linked to another Node via an arbitary
 
 ### Linked nodes vs Child nodes
 
-It's important to know that this is not a child Node like what we have seen all the while before this. A child Node is passed and rendered in it's parent's `children` prop whereas this directly part of its parent's render method. 
+It's important to know that this is not a child Node like what we have seen all the while before this. A child Node is passed and rendered in its parent's `children` prop whereas this is directly part of its parent's render method. 
 
 ```jsx {4}
 const Hero = ({background, title}) => {
