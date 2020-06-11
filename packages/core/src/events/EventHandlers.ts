@@ -157,7 +157,12 @@ export class EventHandlers extends Handlers<
     ) => void
   ) {
     const { draggedElement, draggedElementShadow, events } = EventHandlers;
-    if (draggedElement && events.indicator && !events.indicator.error) {
+    if (
+      draggedElement &&
+      events &&
+      events.indicator &&
+      !events.indicator.error
+    ) {
       const { placement } = events.indicator;
       onDropNode(draggedElement, placement);
     }
