@@ -78,7 +78,10 @@ export function Element<T extends React.ElementType>({
         .toNodeTree((node, jsx) => {
           if (jsx === linkedElement) {
             node.id = existingNode ? existingNode.id : node.id;
-            node.data = existingNode ? existingNode.data : node.data;
+            node.data = {
+              ...(existingNode ? existingNode.data.props : {}),
+              ...node.data,
+            };
           }
         });
 
