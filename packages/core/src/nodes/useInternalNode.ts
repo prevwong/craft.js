@@ -1,17 +1,21 @@
-import { useMemo } from "react";
-import { NodeProvider } from "./NodeContext";
+import { useMemo, useContext } from "react";
+import { NodeContext, NodeProvider } from "./NodeContext";
 import { Node } from "../interfaces";
 import { useInternalEditor } from "../editor/useInternalEditor";
 
-import { useNodeContext } from "./useNodeContext";
+import { NodeConnectors } from "./NodeHandlers";
 
 type internalActions = NodeProvider & {
   inNodeContext: boolean;
+  connectors: NodeConnectors;
   actions: {
-    setProp: (cb: any) => void;
+    setProp: (cb: (props: any) => void) => void;
+    setCustom: (cb: (custom: any) => void) => void;
+    setHidden: (bool: boolean) => void;
   };
 };
 
+// TODO: Deprecate useInternalNode in favor of useNode
 export type useInternalNode<S = null> = S extends null
   ? internalActions
   : S & internalActions;
@@ -22,7 +26,7 @@ export function useInternalNode<S = null>(
 export function useInternalNode<S = null>(
   collect?: (node: Node) => S
 ): useInternalNode<S> {
-  const context = useNodeContext();
+  const context = useContext(NodeContext);
   const { id, related, connectors } = context;
 
   const { actions: EditorActions, query, ...collected } = useInternalEditor(
@@ -32,6 +36,8 @@ export function useInternalNode<S = null>(
   const actions = useMemo(() => {
     return {
       setProp: (cb: any) => EditorActions.setProp(id, cb),
+      setCustom: (cb: any) => EditorActions.setCustom(id, cb),
+      setHidden: (bool: boolean) => EditorActions.setHidden(id, bool),
     };
   }, [EditorActions, id]);
 

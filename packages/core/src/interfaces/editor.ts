@@ -4,7 +4,7 @@ import { useInternalEditor } from "../editor/useInternalEditor";
 
 export type Options = {
   onRender: React.ComponentType<{ render: React.ReactElement }>;
-  onStateChange: (Nodes) => any;
+  onNodesChange: (Nodes) => any;
   resolver: Resolver;
   enabled: boolean;
   indicator: Record<"success" | "error", string>;

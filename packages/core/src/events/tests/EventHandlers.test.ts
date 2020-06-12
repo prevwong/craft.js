@@ -21,6 +21,12 @@ describe("EventHandlers", () => {
   let actions;
   let query;
 
+  let isDraggable;
+  let parsedNodeTree;
+  let parseReactElement = jest.fn().mockImplementation(() => ({
+    toNodeTree: jest.fn().mockImplementation(() => parsedNodeTree),
+  }));
+
   beforeEach(() => {
     e = {
       preventDefault: jest.fn(),
@@ -35,14 +41,17 @@ describe("EventHandlers", () => {
     EventHandlers.events = undefined;
 
     actions = {
-      addTreeAtIndex: jest.fn(),
+      addNodeTree: jest.fn(),
       move: jest.fn(),
       setIndicator: jest.fn(),
       setNodeEvent: jest.fn(),
     };
     query = {
-      parseTreeFromReactNode: jest.fn(),
+      parseReactElement,
       getDropPlaceholder: jest.fn(),
+      node: jest.fn().mockImplementation(() => ({
+        isDraggable: jest.fn().mockImplementation(() => isDraggable),
+      })),
     };
     store = { actions, query };
     eventHandlers = new EventHandlers(store);
@@ -58,12 +67,12 @@ describe("EventHandlers", () => {
       select.init()();
       expect(actions.setNodeEvent).toHaveBeenCalledWith("selected", null);
     });
-    it("should contain one event with mousedown", () => {
+    it("should contain one event with click", () => {
       expect(select.events).toHaveLength(1);
-      expect(getHandler(select.events, "mousedown")).toBeDefined();
+      expect(getHandler(select.events, "click")).toBeDefined();
     });
     it("should call setNodeEvent on mousedown", () => {
-      callHandler(select.events, "mousedown")(null, nodeId);
+      callHandler(select.events, "click")(e, nodeId);
       expect(actions.setNodeEvent).toHaveBeenCalledWith("selected", nodeId);
     });
   });
@@ -83,7 +92,7 @@ describe("EventHandlers", () => {
       expect(getHandler(hover.events, "mouseover")).toBeDefined();
     });
     it("should call setNodeEvent on mouseover", () => {
-      callHandler(hover.events, "mouseover")(null, nodeId);
+      callHandler(hover.events, "mouseover")(e, nodeId);
       expect(actions.setNodeEvent).toHaveBeenCalledWith("hovered", nodeId);
     });
   });
@@ -172,15 +181,35 @@ describe("EventHandlers", () => {
     });
 
     describe("init", () => {
-      beforeEach(() => {
-        drag.init(el)();
+      describe("when node can be dragged", () => {
+        beforeEach(() => {
+          isDraggable = true;
+          drag.init(el)();
+        });
+        it("should call setAttribute twice on init", () => {
+          expect(el.setAttribute).toHaveBeenCalledTimes(2);
+        });
+        it("should call setAttribute with the right arguments", () => {
+          expect(el.setAttribute).toHaveBeenNthCalledWith(
+            1,
+            "draggable",
+            "true"
+          );
+          expect(el.setAttribute).toHaveBeenNthCalledWith(
+            2,
+            "draggable",
+            "false"
+          );
+        });
       });
-      it("should call setAttribute twice on init", () => {
-        expect(el.setAttribute).toHaveBeenCalledTimes(2);
-      });
-      it("should call setAttribute with the right arguments", () => {
-        expect(el.setAttribute).toHaveBeenNthCalledWith(1, "draggable", true);
-        expect(el.setAttribute).toHaveBeenNthCalledWith(2, "draggable", false);
+      describe("when node cannot be dragged", () => {
+        beforeEach(() => {
+          isDraggable = false;
+          drag.init(el)();
+        });
+        it("should not have called setAttribute", () => {
+          expect(el.setAttribute).toHaveBeenCalledTimes(0);
+        });
       });
     });
 
@@ -273,7 +302,7 @@ describe("EventHandlers", () => {
         expect(el.removeAttribute).toHaveBeenCalledTimes(1);
       });
       it("should call setAttribute with the right arguments", () => {
-        expect(el.setAttribute).toHaveBeenNthCalledWith(1, "draggable", true);
+        expect(el.setAttribute).toHaveBeenNthCalledWith(1, "draggable", "true");
         expect(el.removeAttribute).toHaveBeenNthCalledWith(1, "draggable");
       });
     });
@@ -281,15 +310,15 @@ describe("EventHandlers", () => {
     describe("dragstart", () => {
       const node = "a node";
       beforeEach(() => {
-        query.parseTreeFromReactNode.mockImplementationOnce(() => node);
+        parsedNodeTree = node;
         callHandler(create.events, "dragstart")(e, nodeId);
       });
       it("should have stopped propagation", () => {
         expect(e.stopImmediatePropagation).toHaveBeenCalled();
         expect(e.stopPropagation).toHaveBeenCalled();
       });
-      it("should call parseTreeFromReactNode on mousedown", () => {
-        expect(query.parseTreeFromReactNode).toHaveBeenCalledWith(nodeId);
+      it("should call parseReactElement.toNodeTree on mousedown", () => {
+        expect(query.parseReactElement).toHaveBeenCalled();
       });
       it("should have called createShadow", () => {
         expect(createShadow).toHaveBeenCalled();
@@ -315,8 +344,8 @@ describe("EventHandlers", () => {
           expect(e.stopImmediatePropagation).not.toHaveBeenCalled();
           expect(e.stopPropagation).toHaveBeenCalled();
         });
-        it("should have not call addTreeAtIndex", () => {
-          expect(actions.addTreeAtIndex).not.toHaveBeenCalled();
+        it("should have not call addNodeTree", () => {
+          expect(actions.addNodeTree).not.toHaveBeenCalled();
         });
       });
 
@@ -334,8 +363,8 @@ describe("EventHandlers", () => {
           expect(EventHandlers.draggedElement).toBe(null);
           expect(EventHandlers.draggedElementShadow).toBe(undefined);
         });
-        it("should have call addTreeAtIndex", () => {
-          expect(actions.addTreeAtIndex).toHaveBeenCalledWith(
+        it("should have call addNodeTree", () => {
+          expect(actions.addNodeTree).toHaveBeenCalledWith(
             nodeId,
             events.indicator.placement.parent.id,
             events.indicator.placement.index

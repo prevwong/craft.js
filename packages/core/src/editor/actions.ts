@@ -6,15 +6,17 @@ import {
   Nodes,
   Options,
   NodeEvents,
-  Tree,
+  NodeTree,
   SerializedNodes,
 } from "../interfaces";
 import {
+  deprecationWarning,
   ERROR_INVALID_NODEID,
   ROOT_NODE,
+  DEPRECATED_ROOT_NODE,
   QueryCallbacksFor,
   ERROR_NOPARENT,
-  ERROR_ROOT_CANVAS_NO_ID,
+  ERROR_DELETE_TOP_LEVEL_NODE,
 } from "@craftjs/utils";
 import { QueryMethods } from "./query";
 import { fromEntries } from "../utils/fromEntries";
@@ -27,20 +29,55 @@ export const Actions = (
   query: QueryCallbacksFor<typeof QueryMethods>
 ) => {
   /** Helper functions */
-  const addNodeToParentAtIndex = (node: Node, parent: Node, index: number) => {
-    if (parent && node.data.isCanvas && !parent.data.isCanvas) {
-      invariant(node.data.props.id, ERROR_ROOT_CANVAS_NO_ID);
-      if (!parent.data._childCanvas) {
-        parent.data._childCanvas = {};
-      }
-      node.data.parent = parent.id;
-      parent.data._childCanvas[node.data.props.id] = node.id;
-    } else {
-      parent.data.nodes.splice(index, 0, node.id);
-      node.data.parent = parent.id;
+  const addNodeToParentAtIndex = (
+    node: Node,
+    parentId: NodeId,
+    index?: number
+  ) => {
+    const parent = getParentAndValidate(parentId);
+    // reset the parent node ids
+    if (!parent.data.nodes) {
+      parent.data.nodes = [];
     }
 
+    if (parent.data.props.children) {
+      delete parent.data.props["children"];
+    }
+
+    if (index != null) {
+      parent.data.nodes.splice(index, 0, node.id);
+    } else {
+      parent.data.nodes.push(node.id);
+    }
+
+    node.data.parent = parent.id;
     state.nodes[node.id] = node;
+  };
+
+  const addTreeToParentAtIndex = (
+    tree: NodeTree,
+    parentId?: NodeId,
+    index?: number
+  ) => {
+    const node = tree.nodes[tree.rootNodeId];
+
+    if (parentId != null) {
+      addNodeToParentAtIndex(node, parentId, index);
+    }
+
+    if (!node.data.nodes) {
+      return;
+    }
+    // we need to deep clone here...
+    const childToAdd = [...node.data.nodes];
+    node.data.nodes = [];
+    childToAdd.forEach((childId, index) =>
+      addTreeToParentAtIndex(
+        { rootNodeId: childId, nodes: tree.nodes },
+        node.id,
+        index
+      )
+    );
   };
 
   const getParentAndValidate = (parentId: NodeId): Node => {
@@ -52,78 +89,68 @@ export const Actions = (
 
   return {
     /**
-     * Add a new Node(s) to the editor.
+     * @private
+     * Add a new linked Node to the editor.
+     * Only used internally by the <Element /> component
      *
-     * @param nodes
+     * @param tree
      * @param parentId
+     * @param id
      */
-    add(nodes: Node[] | Node, parentId: NodeId) {
+    addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id?: string) {
       const parent = getParentAndValidate(parentId);
-
-      if (!parent.data.nodes) {
-        parent.data.nodes = [];
+      if (!parent.data.linkedNodes) {
+        parent.data.linkedNodes = {};
       }
 
-      if (parent.data.props.children) {
-        delete parent.data.props["children"];
-      }
+      parent.data.linkedNodes[id] = tree.rootNodeId;
 
-      const nodesToAdd = Array.isArray(nodes) ? nodes : [nodes];
-      nodesToAdd.forEach((node, index) =>
-        addNodeToParentAtIndex(node, parent, index)
-      );
+      tree.nodes[tree.rootNodeId].data.parent = parentId;
+      state.nodes[tree.rootNodeId] = tree.nodes[tree.rootNodeId];
+
+      addTreeToParentAtIndex(tree);
     },
 
     /**
-     * Given a Node, it adds it at the correct position among the node children
+     * Add a new Node to the editor.
      *
-     * @param node
+     * @param nodeToAdd
      * @param parentId
      * @param index
      */
-    addNodeAtIndex(node: Node, parentId: NodeId, index: number) {
-      const parent = getParentAndValidate(parentId);
-
-      invariant(
-        index > -1 && index <= parent.data.nodes.length,
-        "AddNodeAtIndex: index must be between 0 and parentNodeLength inclusive"
-      );
-
-      addNodeToParentAtIndex(node, parent, index);
+    add(nodeToAdd: Node | Node[], parentId: NodeId, index?: number) {
+      // TODO: Deprecate adding array of Nodes to keep implementation simpler
+      let nodes = [nodeToAdd];
+      if (Array.isArray(nodeToAdd)) {
+        deprecationWarning("actions.add(node: Node[])", {
+          suggest: "actions.add(node: Node)",
+        });
+        nodes = nodeToAdd;
+      }
+      nodes.forEach((node: Node) => {
+        addNodeToParentAtIndex(node, parentId, index);
+      });
     },
 
     /**
-     * Given a tree, it adds it at the correct position among the node children
+     * Add a NodeTree to the editor
      *
      * @param tree
      * @param parentId
      * @param index
      */
-    addTreeAtIndex(tree: Tree, parentId: NodeId, index: number) {
-      const parent = getParentAndValidate(parentId);
-
-      invariant(
-        index > -1 && index <= parent.data.nodes.length,
-        "AddTreeAtIndex: index must be between 0 and parentNodeLength inclusive"
-      );
+    addNodeTree(tree: NodeTree, parentId?: NodeId, index?: number) {
       const node = tree.nodes[tree.rootNodeId];
-      // first, add the node
-      this.addNodeAtIndex(node, parentId, index);
-      if (!node.data.nodes) {
-        return;
-      }
-      // then add all the children
-      const addChild = (childId, index) =>
-        this.addTreeAtIndex(
-          { rootNodeId: childId, nodes: tree.nodes },
-          node.id,
-          index
-        );
 
-      // we need to deep clone here...
-      const childToAdd = [...node.data.nodes];
-      node.data.nodes = [];
-      childToAdd.forEach(addChild);
+      if (!parentId) {
+        invariant(
+          tree.rootNodeId === ROOT_NODE,
+          "Cannot add non-root Node without a parent"
+        );
+        state.nodes[tree.rootNodeId] = node;
+      }
+
+      addTreeToParentAtIndex(tree, parentId, index);
     },
 
     /**
@@ -131,16 +158,16 @@ export const Actions = (
      * @param id
      */
     delete(id: NodeId) {
-      invariant(id !== ROOT_NODE, "Cannot delete Root node");
-      const targetNode = state.nodes[id];
+      invariant(!query.node(id).isTopLevelNode(), ERROR_DELETE_TOP_LEVEL_NODE);
 
+      const targetNode = state.nodes[id];
       if (targetNode.data.nodes) {
         // we deep clone here because otherwise immer will mutate the node
         // object as we remove nodes
         [...targetNode.data.nodes].forEach((childId) => this.delete(childId));
       }
 
-      const parentChildren = state.nodes[targetNode.data.parent].data.nodes!;
+      const parentChildren = state.nodes[targetNode.data.parent].data.nodes;
       parentChildren.splice(parentChildren.indexOf(id), 1);
 
       updateEventsNode(state, id, true);
@@ -151,14 +178,21 @@ export const Actions = (
       const dehydratedNodes =
         typeof input == "string" ? JSON.parse(input) : input;
 
-      const nodePairs = Object.keys(dehydratedNodes).map((id) => [
-        id,
-        query.parseNodeFromSerializedNode(dehydratedNodes[id], id),
-      ]);
+      const nodePairs = Object.keys(dehydratedNodes).map((id) => {
+        let nodeId = id;
+
+        if (id === DEPRECATED_ROOT_NODE) {
+          nodeId = ROOT_NODE;
+        }
+
+        return [
+          nodeId,
+          query.parseSerializedNode(dehydratedNodes[id]).toNode(nodeId),
+        ];
+      });
 
       this.replaceNodes(fromEntries(nodePairs));
     },
-
     /**
      * Move a target Node to a new Parent at a given index
      * @param targetId

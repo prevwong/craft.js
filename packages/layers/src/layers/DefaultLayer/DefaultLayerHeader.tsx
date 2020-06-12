@@ -129,7 +129,7 @@ export const DefaultLayerHeader: React.FC = () => {
           </div>
           <div>
             {children && children.length ? (
-              <Expand expanded={expanded} onClick={() => toggleLayer()}>
+              <Expand expanded={expanded} onMouseDown={() => toggleLayer()}>
                 <Arrow />
               </Expand>
             ) : null}

@@ -21,17 +21,17 @@ const { connectors, setProp, ...collected } = useNode(collector);
 Both props specifies the initial screen to render. You must specify at least one of them (`json` takes precendence over `children`).
 
 <API items={[
-  ["children?", "React.ReactElement<Canvas>", "Creates the initial screen using React Elements. Must begin with a &lt;Canvas /&gt; which creates the Root Node."],
-  ["json?", "String", "Loads the initial screen from the serialised JSON Nodes"]
+  ["children?", "React.ReactElement", "Creates the initial screen using React Elements. The element defined here will be the Root Node"],
+  ["data?", "SerializedNodes | string", "Loads the initial nodes from SerializedNodes (can be supplied in JSON)"]
 ]} />
 
 > These props are memoized - after the initial render, changes to these props will have no effect. If for example, you wish to load a different set of serialised JSON nodes after the initial render, you may use the `deserialize` method via the [`useEditor`](/r/docs/api/useEditor) hook.
 
 ## Examples
 
-### Designing the default screen
+### With JSX
 ```tsx {9,10,16,17}
-import {Editor, Frame, Canvas} from "@craftjs/core";
+import {Editor, Frame, Element} from "@craftjs/core";
 
 const App = () => {
   return (
@@ -40,13 +40,13 @@ const App = () => {
       <Editor>
         <h2>My Page Editor</h2>
         <Frame> 
-          <Canvas is={Container}> // defines the Root Node
+          <Element is={Container} canvas> // defines the Root Node
             <h2>Drag me around</h2>
             <MyComp text="You can drag me around too" />
-            <Canvas is="div" style={{background: "#333" }}>
+            <Element is="div" style={{background: "#333" }}>
               <p>Same here</p>
-            </Canvas>
-          </Canvas>
+            </Element>
+          </Element>
         </Frame>
       </Editor>
     </div>
@@ -56,7 +56,7 @@ const App = () => {
 
 ### Loading from serialised Nodes
 ```tsx {10}
-import {Editor, Frame, Canvas} from "@craftjs/core";
+import {Editor, Frame, Element} from "@craftjs/core";
 
 const App = () => {
   return (
@@ -65,15 +65,15 @@ const App = () => {
       <Editor>
         <h2>My Page Editor</h2>
         <Frame
-          json='{"canvas-ROOT":{"type":"div","isCanvas":true,"props":{},"parent":null,"displayName":"div","custom":{},"nodes":["node-sdiwzXkvQ","node-rGFDi0G6m","node-yNBLMy5Oj"]},"node-sdiwzXkvQ":{"type":{"resolvedName":"Card"},"props":{},"parent":"canvas-ROOT","displayName":"Card","custom":{},"_childCanvas":{"main":"canvas-_EEw_eBD_","second":"canvas-lE4Ni9oIn"}}'
+          data='{"ROOT":{"type":"div","isCanvas":true,"props":{},"parent":null,"displayName":"div","custom":{},"nodes":["node-sdiwzXkvQ","node-rGFDi0G6m","node-yNBLMy5Oj"]},"node-sdiwzXkvQ":{"type":{"resolvedName":"Card"},"props":{},"parent":"ROOT","displayName":"Card","custom":{},"_childCanvas":{"main":"canvas-_EEw_eBD_","second":"canvas-lE4Ni9oIn"}}'
         > 
-          <Canvas is={Container}> // defines the Root Node
+          <Element is={Container} canvas> // defines the Root Node
             <h2>Drag me around</h2>
             <MyComp text="You can drag me around too" />
-            <Canvas is="div" style={{background: "#333" }}>
+            <Element is="div" style={{background: "#333" }}>
               <p>Same here</p>
-            </Canvas>
-          </Canvas>
+            </Element>
+          </Element>
         </Frame>
       </Editor>
     </div>

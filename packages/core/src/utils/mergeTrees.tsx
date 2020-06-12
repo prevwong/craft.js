@@ -1,6 +1,6 @@
-import { Node, Tree } from "../interfaces";
+import { Node, NodeTree } from "../interfaces";
 
-const mergeNodes = (rootNode: Node, childrenNodes: Tree[]) => {
+const mergeNodes = (rootNode: Node, childrenNodes: NodeTree[]) => {
   if (childrenNodes.length < 1) {
     return { [rootNode.id]: rootNode };
   }
@@ -24,7 +24,10 @@ const mergeNodes = (rootNode: Node, childrenNodes: Tree[]) => {
   }, rootNodes);
 };
 
-export const mergeTrees = (rootNode: Node, childrenNodes: Tree[]): Tree => ({
+export const mergeTrees = (
+  rootNode: Node,
+  childrenNodes: NodeTree[]
+): NodeTree => ({
   rootNodeId: rootNode.id,
   nodes: mergeNodes(rootNode, childrenNodes),
 });

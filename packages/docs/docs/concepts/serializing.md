@@ -30,10 +30,10 @@ const App = () => {
       "MyText" : Text
     }}>
       <Frame>
-        <Canvas is="div">
+        <Element is="div">
           <h1>Hi</h1>
           <Text text="Hi" />
-        </Canvas>
+        </Element>
       </Frame>
     </Manager>
   )
@@ -49,7 +49,7 @@ Given the above example, when a `Node` that is of the type  `Text` is serialised
   "props": {
     "text" : "Hi World!"
   },
-  "parent": "canvas-ROOT",
+  "parent": "ROOT",
   "displayName": "Card"
   ...
 }

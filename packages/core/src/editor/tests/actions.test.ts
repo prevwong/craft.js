@@ -33,14 +33,13 @@ describe("actions.add", () => {
       Actions(emptyState)((actions) => actions.add(rootNode, rootNode.id))
     ).toThrow();
   });
-  it("should be able to add leaft to the document", () => {
+  it("should be able to add leaf to the document", () => {
     const newState = Actions(documentState)((actions) =>
       actions.add(leafNode, rootNode.id)
     );
 
     expect(newState).toEqual(documentWithLeafState);
   });
-
   it("should be able to add two nodes", () => {
     const newState = Actions(documentState)((actions) =>
       actions.add([primaryButton, secondaryButton], rootNode.id)
@@ -67,13 +66,13 @@ describe("actions.addNodeAtIndex", () => {
   });
   it("should be able to add the node at 0", () => {
     const newState = Actions(documentState)((actions) =>
-      actions.addNodeAtIndex(leafNode, rootNode.id, 0)
+      actions.add(leafNode, rootNode.id, 0)
     );
     expect(newState).toEqual(documentWithLeafState);
   });
 });
 
-describe("actions.addTreeAtIndex", () => {
+describe("actions.addNodeTree", () => {
   it("should throw if we give a parentId that doesnt exist", () => {
     expect(() =>
       Actions(emptyState)((actions) => actions.addTreeAtIndex(leafNode))
@@ -82,10 +81,10 @@ describe("actions.addTreeAtIndex", () => {
   it("should throw if we give an invalid index", () => {
     const state = Actions(documentState);
     expect(() =>
-      state((actions) => actions.addTreeAtIndex(leafNode, rootNode.id, -1))
+      state((actions) => actions.addNodeTree(leafNode, rootNode.id, -1))
     ).toThrow();
     expect(() =>
-      state((actions) => actions.addTreeAtIndex(leafNode, rootNode.id, 1))
+      state((actions) => actions.addNodeTree(leafNode, rootNode.id, 1))
     ).toThrow();
   });
   it("should be able to add a single node at 0", () => {
@@ -94,7 +93,7 @@ describe("actions.addTreeAtIndex", () => {
       nodes: { [leafNode.id]: leafNode },
     };
     const newState = Actions(documentState)((actions) =>
-      actions.addTreeAtIndex(tree, rootNode.id, 0)
+      actions.addNodeTree(tree, rootNode.id, 0)
     );
     expect(newState).toEqual(documentWithLeafState);
   });
@@ -104,7 +103,7 @@ describe("actions.addTreeAtIndex", () => {
       nodes: cloneDeep(documentWithCardState.nodes),
     };
     const newState = Actions(documentState)((actions) =>
-      actions.addTreeAtIndex(tree, rootNode.id, 0)
+      actions.addNodeTree(tree, rootNode.id, 0)
     );
     expect(newState).toEqual(documentWithCardState);
   });
@@ -162,7 +161,6 @@ describe("actions.reset", () => {
 
 describe("actions.deserialize", () => {
   const serialized = mapValues(documentState.nodes, ({ data }) => ({
-    type: {},
     ...data,
   }));
 
@@ -171,30 +169,12 @@ describe("actions.deserialize", () => {
       actions.deserialize(serialized)
     );
 
-    const nodes = {
-      "canvas-ROOT": {
-        data: {
-          _childCanvas: undefined,
-          custom: {},
-          displayName: "Document",
-          hidden: undefined,
-          isCanvas: undefined,
-          name: "Document",
-          nodes: [],
-          parent: undefined,
-          props: {},
-          type: "div",
-        },
-        events: {
-          dragged: false,
-          hovered: false,
-          selected: false,
-        },
-        related: {},
-        rules: expect.any(Object),
-        id: "canvas-ROOT",
-      },
+    const node = {
+      ...rootNode,
+      rules: expect.anything(),
+      _hydrationTimestamp: expect.anything(),
     };
-    expect(newState.nodes).toEqual(nodes);
+
+    expect(newState.nodes["ROOT"]).toEqual(node);
   });
 });

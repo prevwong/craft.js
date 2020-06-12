@@ -1,16 +1,13 @@
 import { createShadow } from "./createShadow";
-import { Indicator, NodeId, Tree } from "../interfaces";
+import { Indicator, NodeId, NodeTree } from "../interfaces";
 import {
   ConnectorsForHandlers,
   defineEventListener,
   Handlers,
 } from "@craftjs/utils";
-import { debounce } from "debounce";
 import { EditorStore } from "../editor/store";
 
-type DraggedElement = NodeId | Tree;
-
-const rapidDebounce = (f) => debounce(f, 1);
+type DraggedElement = NodeId | NodeTree;
 
 /**
  * Specifies Editor-wide event handlers and connectors
@@ -27,25 +24,19 @@ export class EventHandlers extends Handlers<
       select: {
         init: () => () => this.store.actions.setNodeEvent("selected", null),
         events: [
-          defineEventListener(
-            "mousedown",
-            rapidDebounce((_, id: NodeId) =>
-              this.store.actions.setNodeEvent("selected", id)
-            ),
-            true
-          ),
+          defineEventListener("click", (e, id: NodeId) => {
+            e.stopPropagation();
+            this.store.actions.setNodeEvent("selected", id);
+          }),
         ],
       },
       hover: {
         init: () => () => this.store.actions.setNodeEvent("hovered", null),
         events: [
-          defineEventListener(
-            "mouseover",
-            rapidDebounce((_, id: NodeId) =>
-              this.store.actions.setNodeEvent("hovered", id)
-            ),
-            true
-          ),
+          defineEventListener("mouseover", (e, id: NodeId) => {
+            e.stopPropagation();
+            this.store.actions.setNodeEvent("hovered", id);
+          }),
         ],
       },
       drop: {
@@ -60,7 +51,7 @@ export class EventHandlers extends Handlers<
               e.preventDefault();
               e.stopPropagation();
 
-              const draggedElement = EventHandlers.draggedElement as Tree;
+              const draggedElement = EventHandlers.draggedElement as NodeTree;
               if (!draggedElement) {
                 return;
               }
@@ -86,14 +77,21 @@ export class EventHandlers extends Handlers<
       },
 
       drag: {
-        init: (el) => {
-          el.setAttribute("draggable", true);
-          return () => el.setAttribute("draggable", false);
+        init: (el, id) => {
+          if (!this.store.query.node(id).isDraggable()) {
+            return () => {};
+          }
+
+          el.setAttribute("draggable", "true");
+          return () => el.setAttribute("draggable", "false");
         },
         events: [
           defineEventListener("dragstart", (e: DragEvent, id: NodeId) => {
             e.stopPropagation();
             e.stopImmediatePropagation();
+
+            // Ensure the Node is selected when it is being dragged
+            this.store.actions.setNodeEvent("selected", id);
 
             this.store.actions.setNodeEvent("dragged", id);
 
@@ -115,7 +113,7 @@ export class EventHandlers extends Handlers<
       },
       create: {
         init: (el) => {
-          el.setAttribute("draggable", true);
+          el.setAttribute("draggable", "true");
           return () => el.removeAttribute("draggable");
         },
         events: [
@@ -125,7 +123,9 @@ export class EventHandlers extends Handlers<
               e.stopPropagation();
               e.stopImmediatePropagation();
 
-              const tree = this.store.query.parseTreeFromReactNode(userElement);
+              const tree = this.store.query
+                .parseReactElement(userElement)
+                .toNodeTree();
 
               EventHandlers.draggedElementShadow = createShadow(e);
               EventHandlers.draggedElement = tree;
@@ -137,7 +137,7 @@ export class EventHandlers extends Handlers<
             const onDropElement = (draggedElement, placement) => {
               const index =
                 placement.index + (placement.where === "after" ? 1 : 0);
-              this.store.actions.addTreeAtIndex(
+              this.store.actions.addNodeTree(
                 draggedElement,
                 placement.parent.id,
                 index
@@ -157,7 +157,12 @@ export class EventHandlers extends Handlers<
     ) => void
   ) {
     const { draggedElement, draggedElementShadow, events } = EventHandlers;
-    if (draggedElement && events.indicator && !events.indicator.error) {
+    if (
+      draggedElement &&
+      events &&
+      events.indicator &&
+      !events.indicator.error
+    ) {
       const { placement } = events.indicator;
       onDropNode(draggedElement, placement);
     }

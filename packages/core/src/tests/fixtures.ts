@@ -1,72 +1,39 @@
 /**
  * Nodes
  */
-export const rootNode = {
-  id: "canvas-ROOT",
-  data: {
-    props: {},
-    name: "Document",
-    displayName: "Document",
-    custom: {},
-    nodes: [],
-    type: { resolvedName: "Document" },
-  },
-  related: {},
-  events: { selected: false, dragged: false, hovered: false },
-  rules: {},
-};
+import { createTestNode } from "../utils/createTestNode";
 
-export const leafNode = {
-  id: "node-L1eGyOJ4m",
-  data: {
-    props: { childrenString: "Header 1" },
-    name: "Text",
-    displayName: "Text",
-    custom: {},
-  },
-  related: {},
-  events: { selected: false, dragged: false, hovered: false },
-  rules: {},
-};
+export const rootNode = createTestNode("ROOT", {
+  name: "Document",
+  displayName: "Document",
+  type: "Document",
+  isCanvas: true,
+  nodes: [],
+});
 
-export const primaryButton = {
-  id: "node-primary-button",
-  data: {
-    props: { childrenString: "Button one" },
-    name: "Button",
-    displayName: "Button",
-    custom: {},
-  },
-  related: {},
-  events: { selected: false, dragged: false, hovered: false },
-  rules: {},
-};
+export const leafNode = createTestNode("node-L1eGyOJ4m", {
+  props: { childrenString: "Header 1" },
+  name: "Text",
+  displayName: "Text",
+});
 
-export const secondaryButton = {
-  id: "node-secondary-button",
-  data: {
-    props: { childrenString: "Button two" },
-    name: "Button",
-    displayName: "Button",
-    custom: {},
-  },
-  related: {},
-  events: { selected: false, dragged: false, hovered: false },
-  rules: {},
-};
+export const primaryButton = createTestNode("node-primary-button", {
+  props: { childrenString: "Button one" },
+  name: "Button",
+  displayName: "Button",
+});
 
-export const card = {
-  id: "card",
-  data: {
-    props: {},
-    name: "Card",
-    displayName: "Button",
-    custom: {},
-  },
-  related: {},
-  events: { selected: false, dragged: false, hovered: false },
-  rules: {},
-};
+export const secondaryButton = createTestNode("node-secondary-button", {
+  props: { childrenString: "Button two" },
+  name: "Button",
+  displayName: "Button",
+});
+
+export const card = createTestNode("node-card", {
+  name: "Card",
+  displayName: "Button",
+  isCanvas: true,
+});
 
 /**
  * Editor states
@@ -81,7 +48,7 @@ export const emptyState = {
   },
   options: {
     resolver: {
-      Document: "div",
+      Document: "Document",
     },
   },
 };
@@ -148,5 +115,59 @@ export const documentWithCardState = {
       ...secondaryButton,
       data: { ...secondaryButton.data, parent: card.id },
     },
+  },
+};
+
+export const documentWithVariousNodes = {
+  ...documentWithCardState,
+  nodes: {
+    ...documentWithCardState.nodes,
+    "canvas-node": createTestNode("canvas-node", {
+      isCanvas: true,
+      nodes: ["node-reject-dnd", "canvas-node-reject-dnd"],
+    }),
+    "node-reject-dnd": createTestNode(
+      "node-reject-dnd",
+      {
+        nodes: ["non-immediate-canvas-child"],
+        parent: "canvas-node",
+      },
+      {
+        rules: {
+          canDrag: () => false,
+        },
+      }
+    ),
+    "canvas-node-reject-dnd": createTestNode(
+      "canvas-node-reject-dnd",
+      {
+        nodes: ["fixed-child-node", "parent-of-linked-node"],
+        parent: "canvas-node",
+        isCanvas: true,
+      },
+      {
+        rules: {
+          canMoveIn: () => false,
+          canMoveOut: () => false,
+        },
+      }
+    ),
+    "non-immediate-canvas-child": createTestNode("non-immediate-canvas-child", {
+      parent: "node-reject-dnd",
+    }),
+    "fixed-child-node": createTestNode("fixed-child-node", {
+      parent: "canvas-node-reject-dnd",
+    }),
+    "parent-of-linked-node": createTestNode("parent-of-linked-node", {
+      isCanvas: true,
+      parent: "canvas-node-reject-dnd",
+      linkedNodes: {
+        test: "linked-node",
+      },
+    }),
+    "linked-node": createTestNode("linked-node", {
+      isCanvas: true,
+      parent: "parent-of-linked-node",
+    }),
   },
 };
