@@ -173,6 +173,7 @@ export class EventHandlers extends Handlers<
     }
 
     EventHandlers.draggedElement = null;
+    EventHandlers.events.indicator = null;
     this.store.actions.setIndicator(null);
     this.store.actions.setNodeEvent("dragged", null);
   }
