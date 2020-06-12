@@ -61,8 +61,13 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
         result: NodeId[] = [],
         depth: number = 0
       ) {
-        result.push(id);
         const node = state.nodes[id];
+        if (!node) {
+          return result;
+        }
+
+        result.push(id);
+
         if (!node.data.parent) {
           return result;
         }
@@ -80,8 +85,13 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
         result: NodeId[] = [],
         depth: number = 0
       ) {
-        const node = state.nodes[id];
         if (deep || (!deep && depth === 0)) {
+          const node = state.nodes[id];
+
+          if (!node) {
+            return result;
+          }
+
           // Include linkedNodes if any
           const linkedNodes = nodeHelpers(id).linkedNodes();
 
