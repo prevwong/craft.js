@@ -174,9 +174,9 @@ function Navbar() {
   const { navbarRef, isNavbarVisible } = useHideableNavbar(hideOnScroll);
   const { logoLink, logoLinkProps, logoImageUrl, logoAlt } = useLogo();
 
-  const path = window.location.pathname;
-
   let version = versions[0];
+
+  const path = typeof window !== "undefined" ? window.location.pathname : null;
 
   if (path && path.indexOf(baseUrl + "docs/") > -1) {
     const matches = versions.filter((version) => path.indexOf(version) > -1);
