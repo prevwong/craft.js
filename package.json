@@ -13,7 +13,7 @@
     "deploy:staging": "cross-env ENV=staging ./scripts/deploy.sh",
     "prettier": "prettier --write .",
     "release": "run-s lint clean build test release:npm",
-    "release:npm": "lerna publish",
+    "release:npm": "./scripts/release.sh",
     "test": "jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
