@@ -52,6 +52,7 @@ export const RenderNode = ({ render }) => {
     moveable: query.node(node.id).isDraggable(),
     deletable: query.node(node.id).isDeletable(),
     parent: node.data.parent,
+    props: node.data.props,
   }));
 
   const currentRef = useRef<HTMLDivElement>();
