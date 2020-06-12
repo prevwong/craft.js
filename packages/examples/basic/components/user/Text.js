@@ -7,7 +7,7 @@ export const Text = ({ text, fontSize, textAlign }) => {
   const {
     connectors: { connect, drag },
     selected,
-    setProp,
+    actions: { setProp },
   } = useNode((state) => ({
     selected: state.events.selected,
     dragged: state.events.dragged,
@@ -41,7 +41,10 @@ export const Text = ({ text, fontSize, textAlign }) => {
 };
 
 const TextSettings = () => {
-  const { setProp, fontSize } = useNode((node) => ({
+  const {
+    actions: { setProp },
+    fontSize,
+  } = useNode((node) => ({
     text: node.data.props.text,
     fontSize: node.data.props.fontSize,
   }));
@@ -70,7 +73,7 @@ export const TextDefaultProps = {
 };
 
 Text.craft = {
-  defaultProps: TextDefaultProps,
+  props: TextDefaultProps,
   related: {
     settings: TextSettings,
   },

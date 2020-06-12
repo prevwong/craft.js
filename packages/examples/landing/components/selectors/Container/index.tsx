@@ -80,8 +80,8 @@ export const Container = (props: Partial<Container>) => {
 };
 
 Container.craft = {
-  name: "Container",
-  defaultProps,
+  displayName: "Container",
+  props: defaultProps,
   rules: {
     canDrag: () => true,
   },

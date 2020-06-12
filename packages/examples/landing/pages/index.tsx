@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NextSeo } from "next-seo";
-import { Editor, Frame, Canvas } from "@craftjs/core";
+import { Editor, Frame, Element } from "@craftjs/core";
 import { Container, Text } from "../components/selectors";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
@@ -61,15 +61,17 @@ function App() {
           onRender={RenderNode}
         >
           <Viewport>
-            <Frame json={json}>
-              <Canvas
+            <Frame data={json}>
+              <Element
+                canvas
                 is={Container}
                 width="800px"
                 height="auto"
                 background={{ r: 255, g: 255, b: 255, a: 1 }}
                 padding={["40", "40", "40", "40"]}
               >
-                <Canvas
+                <Element
+                  canvas
                   is={Container}
                   flexDirection="row"
                   width="100%"
@@ -77,7 +79,8 @@ function App() {
                   padding={["40", "40", "40", "40"]}
                   margin={["0", "0", "40", "0"]}
                 >
-                  <Canvas
+                  <Element
+                    canvas
                     is={Container}
                     width="40%"
                     height="100%"
@@ -88,8 +91,9 @@ function App() {
                       fontWeight="400"
                       text="Craft.js is a React framework for building powerful &amp; feature-rich drag-n-drop page editors."
                     ></Text>
-                  </Canvas>
-                  <Canvas
+                  </Element>
+                  <Element
+                    canvas
                     is={Container}
                     width="60%"
                     height="100%"
@@ -100,10 +104,11 @@ function App() {
                       fontWeight="400"
                       text="Everything you see here, including the editor, itself is made of React components. Craft.js comes only with the building blocks for a page editor; it provides a drag-n-drop system and handles the way user components should be rendered, updated and moved, among other things. <br /> <br /> You control the way your editor looks and behave."
                     ></Text>
-                  </Canvas>
-                </Canvas>
+                  </Element>
+                </Element>
 
-                <Canvas
+                <Element
+                  canvas
                   is={Container}
                   background={{ r: 39, g: 41, b: 41, a: 1 }}
                   flexDirection="column"
@@ -112,7 +117,8 @@ function App() {
                   padding={["40", "40", "40", "40"]}
                   margin={["0", "0", "40", "0"]}
                 >
-                  <Canvas
+                  <Element
+                    canvas
                     background={{ r: 76, g: 78, b: 78, a: 0 }}
                     is={Container}
                     flexDirection="row"
@@ -121,7 +127,8 @@ function App() {
                     height="auto"
                     alignItems="center"
                   >
-                    <Canvas
+                    <Element
+                      canvas
                       background={{ r: 0, g: 0, b: 0, a: 0 }}
                       is={Container}
                       alignItems="center"
@@ -130,7 +137,8 @@ function App() {
                       width="350px"
                       height="250px"
                     >
-                      <Canvas
+                      <Element
+                        canvas
                         is={Container}
                         justifyContent="center"
                         alignItems="center"
@@ -140,7 +148,8 @@ function App() {
                         height="90%"
                         padding={["10", "20", "10", "20"]}
                       >
-                        <Canvas
+                        <Element
+                          canvas
                           is={Container}
                           justifyContent="center"
                           alignItems="center"
@@ -150,7 +159,8 @@ function App() {
                           height="80%"
                           padding={["10", "20", "10", "20"]}
                         >
-                          <Canvas
+                          <Element
+                            canvas
                             is={Container}
                             justifyContent="center"
                             alignItems="center"
@@ -160,10 +170,11 @@ function App() {
                             height="60%"
                             padding={["10", "20", "10", "20"]}
                           />
-                        </Canvas>
-                      </Canvas>
-                    </Canvas>
-                    <Canvas
+                        </Element>
+                      </Element>
+                    </Element>
+                    <Element
+                      canvas
                       background={{ r: 0, g: 0, b: 0, a: 0 }}
                       is={Container}
                       padding={["0", "0", "0", "20"]}
@@ -184,10 +195,11 @@ function App() {
                         fontWeight="400"
                         text="You can define areas within your React component which users can drop other components into. <br/><br />You can even design how the component should be edited — content editable, drag to resize, have inputs on toolbars — anything really."
                       ></Text>
-                    </Canvas>
-                  </Canvas>
-                </Canvas>
-                <Canvas
+                    </Element>
+                  </Element>
+                </Element>
+                <Element
+                  canvas
                   is={Container}
                   background={{ r: 234, g: 245, b: 245, a: 1 }}
                   flexDirection="column"
@@ -196,7 +208,8 @@ function App() {
                   padding={["40", "40", "40", "40"]}
                   margin={["0", "0", "40", "0"]}
                 >
-                  <Canvas
+                  <Element
+                    canvas
                     background={{ r: 76, g: 78, b: 78, a: 0 }}
                     is={Container}
                     flexDirection="column"
@@ -214,8 +227,9 @@ function App() {
                       fontWeight="400"
                       text="Govern what goes in and out of your components"
                     ></Text>
-                  </Canvas>
-                  <Canvas
+                  </Element>
+                  <Element
+                    canvas
                     background={{ r: 76, g: 78, b: 78, a: 0 }}
                     is={Container}
                     flexDirection="row"
@@ -223,7 +237,8 @@ function App() {
                     width="100%"
                     height="auto"
                   >
-                    <Canvas
+                    <Element
+                      canvas
                       background={{ r: 0, g: 0, b: 0, a: 0 }}
                       is={Container}
                       padding={["0", "20", "0", "0"]}
@@ -238,8 +253,9 @@ function App() {
                         margin={["0", "0", "0", "0"]}
                         shadow={40}
                       />
-                    </Canvas>
-                    <Canvas
+                    </Element>
+                    <Element
+                      canvas
                       background={{ r: 0, g: 0, b: 0, a: 0 }}
                       is={Container}
                       padding={["0", "0", "0", "20"]}
@@ -265,10 +281,10 @@ function App() {
                         shadow={40}
                         flexDirection="column"
                       />
-                    </Canvas>
-                  </Canvas>
-                </Canvas>
-              </Canvas>
+                    </Element>
+                  </Element>
+                </Element>
+              </Element>
             </Frame>
           </Viewport>
         </Editor>
