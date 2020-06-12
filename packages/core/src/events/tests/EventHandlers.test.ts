@@ -255,7 +255,7 @@ describe("EventHandlers", () => {
 
       describe("if there are all the events", () => {
         beforeEach(() => {
-          EventHandlers.events = events;
+          EventHandlers.events = { ...events };
           EventHandlers.draggedElement = nodeId;
           callHandler(drag.events, "dragend")(e, nodeId);
         });
@@ -351,7 +351,7 @@ describe("EventHandlers", () => {
 
       describe("if there are all the events", () => {
         beforeEach(() => {
-          EventHandlers.events = events;
+          EventHandlers.events = { ...events };
           EventHandlers.draggedElement = nodeId;
           callHandler(create.events, "dragend")(e, nodeId);
         });
