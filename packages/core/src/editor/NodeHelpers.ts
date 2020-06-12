@@ -40,7 +40,7 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
       );
     },
     isTopLevelNode() {
-      return !node.data.parent;
+      return this.isRoot() || this.isLinkedNode();
     },
     isDeletable() {
       return !this.isTopLevelNode();
@@ -136,6 +136,10 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
       const targetNode = getNodeFromIdOrNode(target),
         newParentNode = node;
       try {
+        invariant(
+          !nodeHelpers(target).isTopLevelNode(),
+          ERROR_MOVE_TOP_LEVEL_NODE
+        ); // Ensure target is not a top-level-node
         invariant(this.isCanvas(), ERROR_MOVE_TO_NONCANVAS_PARENT);
         invariant(
           newParentNode.rules.canMoveIn(targetNode, newParentNode, nodeHelpers),
@@ -148,8 +152,6 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
 
         const currentParentNode =
           targetNode.data.parent && state.nodes[targetNode.data.parent];
-
-        invariant(!!currentParentNode, ERROR_MOVE_TOP_LEVEL_NODE);
 
         invariant(currentParentNode.data.isCanvas, ERROR_MOVE_NONCANVAS_CHILD);
 

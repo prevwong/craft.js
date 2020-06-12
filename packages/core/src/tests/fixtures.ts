@@ -167,6 +167,7 @@ export const documentWithVariousNodes = {
     }),
     "linked-node": createTestNode("linked-node", {
       isCanvas: true,
+      parent: "parent-of-linked-node",
     }),
   },
 };

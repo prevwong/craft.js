@@ -16,6 +16,7 @@ import {
   DEPRECATED_ROOT_NODE,
   QueryCallbacksFor,
   ERROR_NOPARENT,
+  ERROR_DELETE_TOP_LEVEL_NODE,
 } from "@craftjs/utils";
 import { QueryMethods } from "./query";
 import { fromEntries } from "../utils/fromEntries";
@@ -59,17 +60,8 @@ export const Actions = (
     index?: number
   ) => {
     const node = tree.nodes[tree.rootNodeId];
-    // first, add the node
+
     if (parentId != null) {
-      const parent = getParentAndValidate(parentId);
-
-      if (index != null) {
-        invariant(
-          index > -1 && index <= parent.data.nodes.length,
-          "AddTreeAtIndex: index must be between 0 and parentNodeLength inclusive"
-        );
-      }
-
       addNodeToParentAtIndex(node, parentId, index);
     }
 
@@ -166,16 +158,16 @@ export const Actions = (
      * @param id
      */
     delete(id: NodeId) {
-      invariant(id !== ROOT_NODE, "Cannot delete Root node");
-      const targetNode = state.nodes[id];
+      invariant(!query.node(id).isTopLevelNode(), ERROR_DELETE_TOP_LEVEL_NODE);
 
+      const targetNode = state.nodes[id];
       if (targetNode.data.nodes) {
         // we deep clone here because otherwise immer will mutate the node
         // object as we remove nodes
         [...targetNode.data.nodes].forEach((childId) => this.delete(childId));
       }
 
-      const parentChildren = state.nodes[targetNode.data.parent].data.nodes!;
+      const parentChildren = state.nodes[targetNode.data.parent].data.nodes;
       parentChildren.splice(parentChildren.indexOf(id), 1);
 
       updateEventsNode(state, id, true);

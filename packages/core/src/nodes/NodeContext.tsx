@@ -19,7 +19,7 @@ export const NodeProvider: React.FC<NodeProvider> = ({
   const handlers = useEventHandler();
 
   const { hydrationTimestamp } = useInternalEditor((state) => ({
-    hydrationTimestamp: state.nodes[id]._hydrationTimestamp,
+    hydrationTimestamp: state.nodes[id] && state.nodes[id]._hydrationTimestamp,
   }));
 
   // Get fresh connectors whenever the Nodes are rehydrated (eg: after deserialisation)
