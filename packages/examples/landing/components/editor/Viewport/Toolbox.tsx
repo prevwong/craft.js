@@ -1,5 +1,5 @@
 import React from "react";
-import { Canvas, useEditor } from "@craftjs/core";
+import { Element, useEditor } from "@craftjs/core";
 import { Container } from "../../selectors/Container";
 import { Text } from "../../selectors/Text";
 import { Video } from "../../selectors/Video";
@@ -42,13 +42,14 @@ export const Toolbox = () => {
           ref={(ref) =>
             create(
               ref,
-              <Canvas
+              <Element
+                canvas
                 is={Container}
                 background={{ r: 78, g: 78, b: 78, a: 1 }}
                 color={{ r: 0, g: 0, b: 0, a: 1 }}
                 height="300px"
                 width="300px"
-              ></Canvas>
+              ></Element>
             )
           }
         >

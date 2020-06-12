@@ -27,7 +27,10 @@ export const Button = ({ size, variant, color, text }) => {
 };
 
 export const ButtonSettings = () => {
-  const { setProp, props } = useNode((node) => ({
+  const {
+    actions: { setProp },
+    props,
+  } = useNode((node) => ({
     props: node.data.props,
   }));
 
@@ -114,7 +117,7 @@ export const ButtonDefaultProps = {
 };
 
 Button.craft = {
-  defaultProps: ButtonDefaultProps,
+  props: ButtonDefaultProps,
   related: {
     settings: ButtonSettings,
   },

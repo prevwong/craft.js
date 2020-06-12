@@ -7,7 +7,7 @@ import { Button } from "../components/user/Button";
 import { Card, CardBottom, CardTop } from "../components/user/Card";
 import { Text } from "../components/user/Text";
 import { SettingsPanel } from "../components/SettingsPanel";
-import { Editor, Frame, Canvas } from "@craftjs/core";
+import { Editor, Frame, Element } from "@craftjs/core";
 import { Topbar } from "../components/Topbar";
 
 const useStyles = makeStyles((theme) => ({
@@ -29,14 +29,14 @@ export default function App() {
         <Grid container spacing={5} style={{ paddingTop: "10px" }}>
           <Grid item xs>
             <Frame>
-              <Canvas is={Container} padding={5} background="#eeeeee">
+              <Element canvas is={Container} padding={5} background="#eeeeee">
                 <Card />
                 <Button text="Click me" size="small" />
                 <Text fontSize={20} text="Hi world!" />
-                <Canvas is={Container} padding={6} background="#999999">
+                <Element canvas is={Container} padding={6} background="#999999">
                   <Text size="small" text="It's me again!" />
-                </Canvas>
-              </Canvas>
+                </Element>
+              </Element>
             </Frame>
           </Grid>
           <Grid item xs={4}>

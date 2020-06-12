@@ -43,8 +43,8 @@ export const Video = (props: any) => {
 };
 
 Video.craft = {
-  name: "Video",
-  defaultProps: {
+  displayName: "Video",
+  props: {
     videoId: "IwzUs1IMdyQ",
   },
   related: {

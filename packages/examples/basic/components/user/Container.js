@@ -19,7 +19,11 @@ export const Container = ({ background, padding, children }) => {
 };
 
 export const ContainerSettings = () => {
-  const { background, padding, setProp } = useNode((node) => ({
+  const {
+    background,
+    padding,
+    actions: { setProp },
+  } = useNode((node) => ({
     background: node.data.props.background,
     padding: node.data.props.padding,
   }));
@@ -52,7 +56,7 @@ export const ContainerDefaultProps = {
 };
 
 Container.craft = {
-  defaultProps: ContainerDefaultProps,
+  props: ContainerDefaultProps,
   related: {
     settings: ContainerSettings,
   },
