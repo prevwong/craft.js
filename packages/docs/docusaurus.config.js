@@ -23,10 +23,17 @@ module.exports = {
       theme: require("prism-react-renderer/themes/shadesOfPurple"),
     },
     navbar: {
+      hideOnScroll: false,
       title: "craft.js",
       links: [
-        { to: "docs/overview", label: "Documentation", position: "left" },
-        { to: "docs/support", label: "Support Craft.js", position: "right" },
+        {
+          to: "docs/overview",
+          label: "Documentation",
+          position: "left",
+          activeBasePath: `docs`,
+          position: "right",
+        },
+        { to: "support", label: "Support", position: "right" },
         {
           href: "https://github.com/prevwong/craft.js",
           label: "GitHub",
@@ -62,7 +69,7 @@ module.exports = {
           title: "Community",
           items: [
             {
-              label: "Github",
+              label: "Github Repository",
               href: "https://github.com/prevwong/craft.js",
             },
             {

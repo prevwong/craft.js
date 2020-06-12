@@ -193,7 +193,7 @@ import {Button} from '../components/user/Button';
 import {Card, CardBottom, CardTop} from '../components/user/Card';
 import {Text} from '../components/user/Text';
 import {SettingsPanel} from '../components/SettingsPanel';
-import {Editor, Frame, Element} from "@craftjs/core";
+import {Editor, Frame, Canvas} from "@craftjs/core";
 import { Topbar } from '../components/Topbar';
 
 
@@ -219,9 +219,9 @@ export default function App() {
           <Grid container spacing={5} style={{paddingTop: "10px"}}>
             <Grid item xs>
               <Frame json={json}>
-                <Element is={Container} padding={5} background="#eeeeee">
+                <Canvas is={Container} padding={5} background="#eeeeee">
                   ...
-                </Element>
+                </Canvas>
               </Frame>
             </Grid>
             <Grid item xs={4}>

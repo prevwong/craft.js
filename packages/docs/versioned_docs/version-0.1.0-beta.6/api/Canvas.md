@@ -1,11 +1,10 @@
 ---
----
 id: canvas
 title: <Canvas />
 sidebar_label: <Canvas />
 ---
 
-import {API, Badge} from "./API";
+import {API, Badge} from "@site/src/components";
 
 <Badge type="component" />
 
@@ -22,22 +21,22 @@ Creates a Canvas Node and converts all immediate children into Nodes.
 
 
 ## When to specify `id`
-You only need to specify the `id` prop when you are defining a Node inside a User Component.
+You only need to specify the `id` prop when you are defining droppable regions inside a User Component.
 ```jsx {6,7,9,12,24-25}
 const App = () => {
   return (
       <Craft resolver={{MyComp, Container}}>
         <h2>My Page Editor</h2>
         <Frame> 
-          <Element is="div"> 
-            <Element is={MyComp} /> 
+          <Canvas is="div"> 
+            <Canvas is={MyComp} /> 
             <div>
-              <Element is="div" /> 
+              <Canvas is="div" /> 
             </div>
             <Container>
-              <Element is="div" /> 
+              <Canvas is="div" /> 
             </Container>
-          </Element>
+          </Canvas>
         </Frame>
       </Craft>
   )
@@ -47,8 +46,8 @@ const Container = () => {
   return (
     <div>
       <h2>Container</h2>
-      <Element id="Top" is="div" />
-      <Element id="Bottom" is={MyComp} />
+      <Canvas id="Top" is="div" />
+      <Canvas id="Bottom" is={MyComp} />
     </div>
   )
 }

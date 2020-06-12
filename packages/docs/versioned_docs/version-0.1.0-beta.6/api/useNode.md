@@ -42,6 +42,7 @@ const { connectors, setProp, ...collected } = useNode(collector);
   ]
 ]} />
 
+> Note: `connectors` have **no** effect when used inside [Related Components](../concepts/user-components#related-components)
 
 ## Examples
 

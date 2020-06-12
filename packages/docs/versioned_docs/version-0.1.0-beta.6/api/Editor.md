@@ -16,8 +16,7 @@ Creates the context that stores the editor state.
   ["resolver", "Map<String, React.ComponentType>", "A map of User Components that will be used in the editor"],
   ["enabled?", "boolean", "Optional. If set to false, all editing capabilities will be disabled"],
   ["indicator?", 'Record<"success" | "error", String>', "Optional. The colour to use for the drop indicator. The colour set in 'success' will be used when the indicator shows a droppable location; otherwise the colour set in 'error' will be used."],
-  ["onRender?", "React.ComponentType<{element: React.ReactElement}>", "Optional. Specify a custom component to render every User Element in the editor."],
-  ["onNodesChange?", "() => void", "Optional. A callback method when the values of any of the nodes in the state changes"]
+  ["onRender?", "React.ComponentType<{element: React.ReactElement}>", "Optional. Specify a custom component to render every User Element in the editor."]
 ]} />
 
 
@@ -25,7 +24,7 @@ Creates the context that stores the editor state.
 
 ### The default screen
 ```tsx {9,10,16,17}
-import {Editor, Frame, Element} from "@craftjs/core";
+import {Editor, Frame, Canvas} from "@craftjs/core";
 
 const App = () => {
   return (
@@ -34,13 +33,13 @@ const App = () => {
       <Editor>
         <h2>My Page Editor</h2>
         <Frame> 
-          <Element is={Container} canvas> // defines the Root Node
+          <Canvas is={Container}> // defines the Root Node
             <h2>Drag me around</h2>
             <MyComp text="You can drag me around too" />
-            <Element is="div" style={{background: "#333" }}>
-              <p>You can't drag me because the Element above is not a canvas </p>
-            </Element>
-          </Element>
+            <Canvas is="div" style={{background: "#333" }}>
+              <p>Same here</p>
+            </Canvas>
+          </Canvas>
         </Frame>
       </Editor>
     </div>
@@ -66,10 +65,10 @@ const App = () => {
   return (
     <Editor onRender={RenderNode}>
       <Frame resolver={{Hero}}>
-        <Element>
+        <Canvas>
           <h1>Hi</h1>
           <Hero />
-        </Element>
+        </Canvas>
       </Frame>
     </Editor>
   )
@@ -91,10 +90,10 @@ const App = () => {
       }}
     >
       <Frame resolver={{Hero}}>
-        <Element>
+        <Canvas>
           <h1>Hi</h1>
           <Hero />
-        </Element>
+        </Canvas>
       </Frame>
     </Editor>
   )

@@ -32,11 +32,9 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["create", "(dom: HTMLElement, userElement: React.ReactElement) => HTMLElement", "Specifies the DOM that when dragged will create a new instance of the specified User Element at the drop location."]
     ]],
     ["actions", "Object", [
-      ["add", "(nodes: Node, parentId?: NodeId, index?: number) => void", "Add a Node to the given parent node ID at the specified index. By default the parentId is the id of the Root Node"],
-      ["addNodeTree", "(tree: NodeTree, parentId?: NodeId) => void", "Add a NodeTree to the given parent node ID at the specified index. By default the parentId is the id of the Root Node"],
-      ["clearEvents", "() => void", "Resets the editors events state"],
+      ["add", "(nodes: Node | Node[], parentId?: NodeId) => void", "Add Node(s) to the given parent node ID. By default the parentId is the id of the Root Node"],
       ["delete", "(nodeID: NodeId) => void", "Delete the specified Node"],
-      ["deserialize", "(data: SerializedNodes | string) => void", "Recreate Nodes from a SerializedNodes object/json. This will clear all the current Nodes in the editor state with the recreated Nodes"],
+      ["deserialize", "(json: String) => void", "Recreate Nodes from JSON. This will clear all the current Nodes in the editor state with the recreated Nodes"],
       ["move", "(nodeId: NodeId, targetParentId: NodeId, index: number) => void", "Move a Node to the specified parent Node at the given index."],
       ["setProp", "(nodeId: NodeId, update: (props: Object) => void) => void", "Manipulate the props of the given Node"],
       ["setCustom", "(nodeId: NodeId, update: (custom: Object) => void) => void", "Manipulate the custom values of the given Node"],
@@ -45,20 +43,14 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["selectNode", "(nodeId: NodeId | null) => void", "Select the specified node. You can clear the selection by passing `null`"],
     ]],
     ["query", "Query", [
-      ["getSerializedNodes", "() => SerializedNodes", "Return the current Nodes into a simpler form safe for storage"],
-      ["serialize", "() => String", "Return getSerializedNodes() in JSON"],
+      ["createNode", "(child: React.ReactElement) => Node", "Create a Node from a React element"],
+      ["serialize", "() => String", "Return the current Nodes in JSON"],
       ["getOptions", "() => Object", "Get the options specified in the &lt;Editor /&gt; component"],
       ["getDropPlaceholder", 
         "(sourceNodeId: NodeId, targetNodeId: NodeId, pos: {x: number, y: number}, nodesToDOM?: (node: Node) => HTMLElement = node => node.dom)",
         "Given the target Node and mouse coordinates on the screen, determine the best possible location to drop the source Node. By default, the Node's DOM property is taken into consideration."
       ],
-      ["node", "(id: NodeId) => NodeHelpers", "Returns an object containing helper methods to describe the specified Node. Click <a href='/craft.js/r/docs/api/helpers/'>here</a> for more information."],
-      ["parseReactElement", "(element: React.ReactElement) => Object", [
-        ["toNodeTree", "() => NodeTree", "Parses a given React element into a NodeTree"]
-      ]],
-      ["parseSerializedNode", "(node: SerializedNode) => Object", [
-        ["toNode", "() => Node", "Parses a serialized Node back into it's full Node form"]
-      ]]
+      ["node", "(id: NodeId) => NodeHelpers", "Returns an object containing helper methods to describe the specified Node. Click <a href='/craft.js/r/docs/api/helpers/'>here</a> for more information."]
     ]],
     ["inContext", "boolean", "Returns false if the component is rendered outside of the `<Editor />`. This is useful if you are designing a general component that you also wish to use outside of Craft.js."],
     ["...collected", "Collected", "The collected values returned from the collector"]
@@ -175,8 +167,8 @@ const Example = () => {
   return (
     <div>
       <a onClick={() => {
-        const node = query.parseReactElement(<h2>Hi</h2>).toNodeTree();
-        actions.addNodeTree(node);
+        const node = query.createNode(<h2>Hi</h2>);
+        actions.add(node);
       }}>Click me to add a new Node</a>
     </div>
   )
@@ -192,7 +184,7 @@ import {useEditor} from "@craftjs/core";
 
 const Example = () => {
   const { selectedDescendants } = useEditor((state, query) => ({
-    selectedDescendants: state.events && query.node(state.events.selected).descendants().map(node => node.id)
+    selectedDescendants: state.events && query.getDeepNodes(state.events.selected).map(node => node.id)
   }));
 
   return (

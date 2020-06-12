@@ -64,10 +64,10 @@ Get `Node` object from id
 
 
 
-### descendants
+### decendants
 <Badge type="function" />
 
-Returns an array of Node ids of all child Nodes of a given Node.
+Returns an array of Node ids of all decendants
 
 #### Returns
 <API items={[
@@ -80,18 +80,6 @@ Returns an array of Node ids of all child Nodes of a given Node.
 <Badge type="function" />
 
 Returns an array of Node ids of all ancestors
-
-#### Returns
-<API items={[
-  ["NodeId[]"]
-]} /> 
-
-
-
-### linkedNodes
-<Badge type="function" />
-
-Returns an array of linked Node ids
 
 #### Returns
 <API items={[
@@ -114,19 +102,18 @@ const App  = () => {
   return (
     <Editor>
       <Frame>
-        <div> // true
+        <Canvas> // true
           <div>Yo</div> // false
           <h2>It's me</h2> // false
-          <Element is={Container}> // false 
+          <Canvas> // false 
             <h3>Child</h3> // false
-          </Element>
-        </div>
+          </Canvas>
+        </Canvas>
       </Frame>
     </Editor>
   )
 }
 ```
-
 
 ### isCanvas
 <Badge type="function" noMargin={true} />
@@ -143,49 +130,15 @@ const App  = () => {
   return (
     <Editor>
       <Frame>
-        <Element canvas> // true
+        <Canvas> // true
           <div>Yo</div> // false
-          <Element is={Container}>It's me</Element> // false
-          <Element canvas> // true 
+          <h2>It's me</h2> // false
+          <Canvas> // true 
             <h3>Child</h3> // false
-          </Element>
-        </Element>
+          </Canvas>
+        </Canvas>
       </Frame>
     </Editor>
-  )
-}
-```
-
-### isLinkedNode
-<Badge type="function" noMargin={true} />
-
-Check if a given Node is linked to the parent Node via an arbitary id
-
-#### Returns
-<API items={[
-  ["boolean"]
-]} /> 
-
-```jsx {17}
-const App  = () => {
-  return (
-    <Editor>
-      <Frame>
-        <Element canvas> // false
-          <div>Yo</div> // false
-          <Element is={Hero}>It's me</Element> // false
-        </Element>
-      </Frame>
-    </Editor>
-  )
-}
-
-const Hero = ({background, title}) => {
-  return (
-    <div style={{ background }}>
-      <Element id="title" is={Text} text={title} /> // true
-      ...
-    </div>
   )
 }
 ```
@@ -195,7 +148,7 @@ const Hero = ({background, title}) => {
 
 A Node may be deleted as long as it is **not** one of the following:
 - Root Node
-- Top-level Node
+- Top-level Canvas Nodes
 
 #### Parameters
 <API items={[
@@ -212,14 +165,14 @@ const App  = () => {
   return (
     <Editor resolves={{Container}}>
       <Frame>
-        <div> // false
+        <Canvas> // false
           <div>Yo</div> // true
           <h2>It's me</h2> // true
-          <Element canvas> // true 
+          <Canvas> // true 
             <h3>Child</h3> // true
             <Container /> // true
-          </Element>
-        </div>
+          </Canvas>
+        </Canvas>
       </Frame>
     </Editor>
   )
@@ -228,23 +181,19 @@ const App  = () => {
 const Container = () => {
   return (
     <div>
-      <Element id="main"> // false
+      <Canvas id="main"> // false
         <h2>Hi</h2> // true
-      </Element>
+      </Canvas>
     </div>
   )
 }
 ```
 
 
-### isTopLevelNode
+### isTopLevelCanvas
 <Badge type="function" noMargin={true} />
 
-A Node is considered top-level if it's one of the following:
-
-- The Root Node
-- A linked Node defined inside a User Component
-
+A Canvas Node is considered top-level if it is defined inside a User Component and it is not rendered as an immediate child of another Node.
 
 #### Parameters
 <API items={[
@@ -256,19 +205,19 @@ A Node is considered top-level if it's one of the following:
   ["boolean"]
 ]} /> 
 
-```jsx {5,21,27}
+```jsx {21,27}
 const App  = () => {
   return (
     <Editor resolves={{Container}}>
       <Frame>
-        <div> // true
+        <Canvas> // false
           <div>Yo</div> // false
           <h2>It's me</h2> // false
-          <div> // false 
+          <Canvas> // false 
             <h3>Child</h3> // false
             <Container /> // false
-          </div>
-        </div>
+          </Canvas>
+        </Canvas>
       </Frame>
     </Editor>
   )
@@ -277,28 +226,28 @@ const App  = () => {
 const Container = () => {
   return (
     <div>
-      <Element id="main"> // true
+      <Canvas id="main"> // true
         <h2>Hi</h2> // false
-        <Element> // false
+        <Canvas> // false
           <h2>Hi</h2> // false
-        </Element>
-      </Element>
-      <Element id="secondary"> // true
+        </Canvas>
+      </Canvas>
+      <Canvas id="secondary"> // true
         <h2>Hi</h2> // false
-        <Element> // false
+        <Canvas> // false
           <h2>Hi</h2> // false
-        </Element>
-      </Element>
+        </Canvas>
+      </Canvas>
     </div>
   )
 }
 ```
 
 
-### isParentOfTopLevelNode
+### isParentOfTopLevelCanvas
 <Badge type="function" noMargin={true} />
 
-This returns `true` if a Node's User Component defines a `<Element />` in its render method.
+This returns `true` if a Node's User Component defines a `<Canvas />` in its render method.
 
 
 #### Returns
@@ -313,14 +262,14 @@ const App  = () => {
   return (
     <Editor resolves={{Container}}>
       <Frame>
-        <Element> // false
+        <Canvas> // false
           <div>Yo</div> // false
           <h2>It's me</h2> // false
-          <Element> // false 
+          <Canvas> // false 
             <h3>Child</h3> // false
             <Container /> // true
-          </Element>
-        </Element>
+          </Canvas>
+        </Canvas>
       </Frame>
     </Editor>
   )
@@ -329,18 +278,18 @@ const App  = () => {
 const Container = () => {
   return (
     <div>
-      <Element id="main"> // false
+      <Canvas id="main"> // false
         <h2>Hi</h2> // false
-        <Element> // false
+        <Canvas> // false
           <h2>Hi</h2> // false
-        </Element>
-      </Element>
-      <Element id="seconday"> // false
+        </Canvas>
+      </Canvas>
+      <Canvas id="seconday"> // false
         <h2>Hi</h2> // false
-        <Element> // false
+        <Canvas> // false
           <h2>Hi</h2> // false
-        </Element>
-      </Element>
+        </Canvas>
+      </Canvas>
     </div>
   )
 }
@@ -398,29 +347,4 @@ const MyCanvas = () => {
   }));
 }
 ```
-
-
-### toSerializedNode
-<Badge type="function" noMargin={true} />
-
-
-Gets the current Node in it's `SerializedNode` form
-
-#### Returns
-<API items={[
-  ["SerializedNode"]
-]} /> 
-
-
-
-### toNodeTree
-<Badge type="function" noMargin={true} />
-
-
-Gets the current Node in it's `NodeTree` form
-
-#### Returns
-<API items={[
-  ["NodeTree"]
-]} /> 
 

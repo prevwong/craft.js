@@ -16,9 +16,8 @@ A wrapper of `React.ComponentType<Props>`. Accepts a static `craft` property for
 <API items={[
   ["", "React.ComponentType<T> &", [
     ["craft", "Object", [
-      ["displayName", "String", "A user-friendly name for the User Component. The value here will be used to set the node.data.displayName property."],
-      ["props", "T", "Specify default values for the props T"],
-      ["custom", "Record<string, any>", "Specify default custom values for the User Component"],
+      ["name", "String", "A user-friendly name for the User Component"],
+      ["defaultProps", "T", "Specify default values for the props T"],
       ["related", "Record<string, React.ElementType>", "A map of React Components to share the same Node context. This components will be able access the useNode hook"],
       ["rules?", [
           ["canDrag", "(currentNode: Node, helpers: NodeHelpers) => boolean", "Specifies if the component can be dragged. Applicable only to components whose corresponding Node is a direct child of a Canvas"],
@@ -53,8 +52,8 @@ const TextSettings = () => {
   )
 }
 TextComponent.craft = {
-  displayName: "My Text Component",
-  props: {
+  name: "Aweomse Text",
+  defaultProps: {
     color: "#000",
     text: "Hi"
   },
