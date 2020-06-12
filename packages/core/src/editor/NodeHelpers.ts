@@ -136,10 +136,14 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
       const targetNode = getNodeFromIdOrNode(target),
         newParentNode = node;
       try {
-        invariant(
-          !nodeHelpers(target).isTopLevelNode(),
-          ERROR_MOVE_TOP_LEVEL_NODE
-        ); // Ensure target is not a top-level-node
+        //  If target is a NodeId (thus it's already in the state), check if it's a top-level node
+        if (typeof target === "string") {
+          invariant(
+            !nodeHelpers(target).isTopLevelNode(),
+            ERROR_MOVE_TOP_LEVEL_NODE
+          );
+        }
+
         invariant(this.isCanvas(), ERROR_MOVE_TO_NONCANVAS_PARENT);
         invariant(
           newParentNode.rules.canMoveIn(targetNode, newParentNode, nodeHelpers),
