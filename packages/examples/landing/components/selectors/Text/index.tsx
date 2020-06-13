@@ -52,8 +52,8 @@ export const Text = ({
 };
 
 Text.craft = {
-  name: "Text",
-  defaultProps: {
+  displayName: "Text",
+  props: {
     fontSize: "15",
     textAlign: "left",
     fontWeight: "500",
