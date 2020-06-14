@@ -40,8 +40,8 @@ export const Editor: React.FC<Partial<Options>> = ({
       (_) => ({
         json: context.query.serialize(),
       }),
-      ({ json }) => {
-        context.query.getOptions().onNodesChange(JSON.parse(json));
+      () => {
+        context.query.getOptions().onNodesChange(context.query);
       }
     );
   }, [context]);
