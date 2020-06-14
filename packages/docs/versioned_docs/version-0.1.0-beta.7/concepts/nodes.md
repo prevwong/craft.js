@@ -28,19 +28,19 @@ Let's take a look at how User Elements are actually represented as Nodes:
 
 ```jsx
 <div style={{ background: "#333" }}> // A Node with the type div;
-  <h1>Hi</h1> // Node of the type h1
-  <MyComp>Hey</MyComp> //  Node of the type MyComp
-  <MyContainerComponent> // A Node with the type MyContainerComponent
-    <h2>Second level</h2> // A Node with the type h2
+  <h1>Hi</h1> // Node of the type h1; not draggable
+  <MyComp>Hey</MyComp> //  Node of the type MyComp; not draggable
+  <MyContainerComponent> // A Node with the type MyContainerComponent; not draggable
+    <h2>Second level</h2> // A Node with the type h2; not draggable! 
   </MyContainerComponent>
 </div>
 ```
 
-In the above example, a Node is created for each React element. The top-level `div` has 3 child nodes and the `header` Node has a `h2` child Node.
+In the above example, a Node is created for each React element. The top-level `div` has 3 child nodes and the `MyContainerComponent` Node has a `h2` child Node.
 
-By default, a standard Node is created. So, how do we actually create a Canvas node? For example, how do we make the top-level `div` into a Canvas Node so we could drag/drop it's children around ? This is where the `<Element />` component becomes handy in defining/configuring the creation of Nodes.
+By default, a non-Canvas Node is created. So, how do we actually create a Canvas node? For example, how do we make the top-level `div` into a Canvas Node so we could drag/drop it's children around? This is where the `<Element />` component becomes handy in manually defining Nodes.
 
-```jsx
+```jsx {1}
 <Element is="div" style={{ background: "#333" }} canvas> // A Canvas Node with the type div;
   <h1>Hi</h1> // Node of the type h1; draggable
   <MyComp>Hey</MyComp> //  Node of the type MyComp; draggable
@@ -52,9 +52,9 @@ By default, a standard Node is created. So, how do we actually create a Canvas n
 
 > The `is` prop specifies the type of User Element to create; it can be either a HTML tag or a User Component
 
-In the above example, using the `<Element />` component with the `canvas` prop, we've created a Canvas node of the type `div`. 
+In the above example, using the `<Element />` component with the `canvas` prop, we've created a Canvas node of the type `div`. Since our `div` element is now handled by a Canvas node, therefore it is now a droppable region. On the other hand, since `h1`, `MyComp` and `MyContainerComp` are child Nodes of a Canvas, they are now draggable. 
 
-Since our `div` element is now handled by a Canvas node, therefore it is now a droppable region. On the other hand, since `h1` and `MyComp` are child Nodes of a Canvas, they are now draggable. 
+The `<Element />` component can also be used to configure other values of a Node, which is further detailed [here](../api/Element)
 
 <!-- We could also specify other things with the `<Element />` component, such as we could tell Craft to prevent parsing the children of an element as Nodes:
 

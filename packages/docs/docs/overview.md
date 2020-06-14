@@ -21,7 +21,7 @@ A simple user component can easily be defined as such:
 import {useNode} from "@craftjs/core";
 
 const TextComponent = ({text}) => {
-  const { connectors:{drag} } = useNode();
+  const { connectors: {drag} } = useNode();
 
   return (
     <div ref={drag}>
@@ -61,7 +61,7 @@ In the following example, when the user clicks on a component, we'll display a m
 import {useNode} from "@craftjs/core";
 
 const TextComponent = ({text}) => {
-  const { connectors:{ connect, drag }, isClicked, actions: {setProp} } = useNode(
+  const { connectors: { connect, drag }, isClicked, actions: {setProp} } = useNode(
     (state) => ({
       isClicked: state.event.selected,
     })
@@ -114,7 +114,7 @@ Craft.js provides an expressive API which allows you to easily read and manipula
 import {useEditor, useNode} from "@craftjs/core";
 const Container = () => {
   const { actions: {add}, query: { createNode, node } } = useEditor();
-  const { id, connectors: {drag, connect}} = useNode();
+  const { id, connectors: {drag, connect} } = useNode();
   return (
     <div ref={dom => connect(drag(dom))}>
       ...

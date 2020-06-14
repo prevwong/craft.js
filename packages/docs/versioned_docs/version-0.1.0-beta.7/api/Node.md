@@ -40,10 +40,13 @@ import {API, Badge} from "@site/src/components";
   ]]
 ]} />
 
-## Example
+## Examples
 
 ### Basics
+
+#### Simple elements
 ```jsx
+// Example
 <div style={{background: "#eee"}}>Hello</h2>
 
 "node-a": {
@@ -63,12 +66,16 @@ import {API, Badge} from "@site/src/components";
 }
 ```
 
+#### User Component
 ```jsx
+// Definition
 const Container = () => {}
 Container.craft = {
   name: "SimpleContainer"
 };
 
+
+// Example
 <Container bg="#fff" />
 
 "node-b": {
@@ -85,19 +92,99 @@ Container.craft = {
 }
 ```
 
-### Custom properties
+### Child Nodes
+
+Nodes that are referenced in the parent Node's `data.nodes` property. These nodes are rendered in the parent User Component's `children` prop
 
 ```jsx
+// Example
+<Container bg="#fff">
+  // highlight-next-line
+  <h2>Hello</h2>
+</Container>
 
+"node-a": {
+  id: "node-a",
+  data: {
+    ...
+    type: Container,
+    props: {...},
+    // highlight-next-line
+    nodes: ["node-b"]
+  }
+}
+
+"node-b": {
+  id: "node-b",
+  data: {
+    type: "h2,
+    props: {...},
+    // highlight-next-line
+    parent: "node-a"
+  }
+}
+```
+
+
+### Linked nodes
+
+Nodes that are linked to a parent Node via an arbitary `id`
+
+```jsx
+// Definition
+const TextEditable = () => {};
+
+const Container = () => {
+  return (
+    <div>
+      // highlight-next-line
+      <Element id="header" is={TextEditable} text="Header" />
+    </div>
+  )
+}
+
+// Example
+<Container bg="#fff" />
+
+"node-a": {
+  id: "node-a",
+  data: {
+    type: Container,
+    props: {...},
+    // highlight-next-line
+    linkedNodes: {
+      // highlight-next-line
+      "header": "node-b"
+      // highlight-next-line
+    }
+  }
+}
+
+"node-b": {
+  id: "node-b",
+  data: {
+    type: TextEditable,
+    props: {...},
+    // highlight-next-line
+    parent: "node-a"
+  }
+}
+```
+
+
+
+### Nodes with Custom properties
+
+```jsx
+// Definition
+const Container = () => {...}
 Container.craft = {
-  custom: {
-    toSaveInDatabase: false,
-    style: {{
-      display: "flex"
-    }}
+  custom: { // default custom values
+    toSaveInDatabase: false
   }
 };
 
+// Example
 <Element is={Container} bg="#fff" custom={{ toSaveInDatabase: true}} />
 
 "node-b": {
@@ -110,117 +197,6 @@ Container.craft = {
         display: "flex"
       }}
     }
-  }
-}
-```
-
-### Child nodes
-```jsx
-<div style={{background: "#eee"}}>
-  <Container bg="#fff" />
-</div>
-
-"node-a": {
-  id: "node-a",
-  data: {
-    type: "div",
-    props: {
-      style: {{
-        background: "#eee",
-      }}
-    },
-    nodes: ["node-b"]
-    name: "div",
-    displayName: "div",
-    isCanvas: false
-  }
-}
-
-"node-b": {
-  id: "node-b",
-  data: {
-    type: Container,
-    props: {
-      bg: "#fff"
-    },
-    parent: "node-a",
-    name: "Container",
-    displayName: "SimpleContainer",
-    isCanvas: false
-  }
-}
-```
-
-
-
-### Canvas nodes
-
-```jsx
-<div style={{background: "#eee"}} canvas>
-  <Container bg="#fff" />
-</div>
-
-"node-a": {
-  id: "node-a",
-  data: {
-    type: "div",
-    ...
-    nodes: ["node-b"]
-    isCanvas: true
-  }
-}
-
-"node-b": {
-  id: "node-b",
-  data: {
-    type: Container,
-    ...
-    parent: "node-a",
-    isCanvas: false
-  }
-}
-```
-
-
-### Linked nodes
-```jsx
-const TextEditable = () => {};
-
-const Container = ({children}) => {
-  return (
-    <div>
-      <Element id="header" is={TextEditable} text="Header" />
-      {children}
-    </div>
-  )
-}
-
-<Container bg="#fff">Hello</Container>
-
-"node-b": {
-  id: "node-b",
-  data: {
-    type: Container,
-    props: {
-      bg: "#fff",
-      children: "Hello",
-    },
-    linkedNodes: {
-      "header": "node-c"
-    },
-    isCanvas: false
-  }
-}
-
-"node-c": {
-  id: "node-c",
-  data: {
-    type: TextEditable,
-    props: {
-      text: "Header"
-    },
-    parent: "node-b",
-    isCanvas: false
   }
 }
 ```

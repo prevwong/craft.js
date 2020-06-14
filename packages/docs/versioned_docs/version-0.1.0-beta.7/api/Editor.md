@@ -17,36 +17,11 @@ Creates the context that stores the editor state.
   ["enabled?", "boolean", "Optional. If set to false, all editing capabilities will be disabled"],
   ["indicator?", 'Record<"success" | "error", String>', "Optional. The colour to use for the drop indicator. The colour set in 'success' will be used when the indicator shows a droppable location; otherwise the colour set in 'error' will be used."],
   ["onRender?", "React.ComponentType<{element: React.ReactElement}>", "Optional. Specify a custom component to render every User Element in the editor."],
-  ["onNodesChange?", "() => void", "Optional. A callback method when the values of any of the nodes in the state changes"]
+  ["onNodesChange?", "(query: QueryMethods) => void", "Optional. A callback method when the values of any of the nodes in the state changes"]
 ]} />
 
 
 ## Examples
-
-### The default screen
-```tsx {9,10,16,17}
-import {Editor, Frame, Element} from "@craftjs/core";
-
-const App = () => {
-  return (
-    <div>
-      <h2>My App!</h2>
-      <Editor>
-        <h2>My Page Editor</h2>
-        <Frame> 
-          <Element is={Container} canvas> // defines the Root Node
-            <h2>Drag me around</h2>
-            <MyComp text="You can drag me around too" />
-            <Element is="div" style={{background: "#333" }}>
-              <p>You can't drag me because the Element above is not a canvas </p>
-            </Element>
-          </Element>
-        </Frame>
-      </Editor>
-    </div>
-  )
-}
-```
 
 ### Custom render user elements
 By default, every user element is rendered just as it is. However, if you'd like to, for example, wrap every user element inside a `div`, you can do so through the `onRender` prop:
@@ -79,6 +54,8 @@ In the above example, every user element will now be wrapped in a black `div`.
 
 ### Specifying the Drop Indicator colour
 
+You could change the colours of the drag and drop indicators like so:
+
 ```jsx {6-9}
 import {Editor} from "@craftjs/core";
 
@@ -96,6 +73,30 @@ const App = () => {
           <Hero />
         </Element>
       </Frame>
+    </Editor>
+  )
+}
+```
+
+
+### Callback when Nodes change
+
+Perform a callback whenever the Nodes in the editor is updated/changed
+
+```jsx {6-11}
+import {Editor} from "@craftjs/core";
+
+const App = () => {
+  return (
+    <Editor
+      // Save the updated JSON whenever the Nodes has been changed
+      onNodesChange={query => {
+        const json = query.serialize();
+        // save to server
+        axios.post('/saveJSON', { json });
+      }}
+    >
+      ..
     </Editor>
   )
 }

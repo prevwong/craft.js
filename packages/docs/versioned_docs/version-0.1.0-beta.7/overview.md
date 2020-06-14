@@ -61,7 +61,7 @@ In the following example, when the user clicks on a component, we'll display a m
 import {useNode} from "@craftjs/core";
 
 const TextComponent = ({text}) => {
-  const { connectors:{ connect, drag }, isClicked, setProp } = useNode(
+  const { connectors:{ connect, drag }, isClicked, actions: {setProp} } = useNode(
     (state) => ({
       isClicked: state.event.selected,
     })
@@ -137,7 +137,7 @@ The editor's state can be serialized into JSON which you can then apply a compre
 
 ```jsx
 const SaveButton = () => {
-  const { query } = useManager();
+  const { query } = useEditor();
   return <a onClick={() => console.log(query.serialize()) }>Get JSON</a>
 }
 ```
