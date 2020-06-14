@@ -8,13 +8,13 @@ import {API, Badge} from "@site/src/components";
 
 <Badge type="component" />
 
-Defines a Node to create for a given User Element
+Defines the Node for a given User Element
 
 ## Reference
 ### Props
 <API items={[
   ["is", "React.ElementType", "The User Element to render"],
-  ["id", "String", "Required if the &lt;Node /&gt; is being created inside a User Component"],
+  ["id", "String", "Required if the &lt;Element /&gt; is being created inside a User Component"],
   ["canvas", "boolean", "If true, a Canvas Node will be created."],
   ["custom", "Record<string, any>", "Sets the Node's custom properties"],
   ["hidden", "boolean", "Sets the Node's hidden property. If true, this will hide the Node"],
@@ -22,42 +22,12 @@ Defines a Node to create for a given User Element
 ]} /> 
 
 
-## When to specify `id`
-You only need to specify the `id` prop when you are defining Nodes **inside** a User Component's render method.
-```jsx {6,7,9,12,24-25}
-const App = () => {
-  return (
-      <Craft resolver={{MyComp, Container}}>
-        <h2>My Page Editor</h2>
-        <Frame> 
-          <Element is="div"> // not required
-            <Element is={MyComp} /> // not required
-            <div>
-              <Element is="div" /> // not required
-            </div>
-            <Container>
-              <Element is="div" /> // not required
-            </Container>
-          </Element>
-        </Frame>
-      </Craft>
-  )
-}
+## Usage
 
-const Container = () => {
-  return (
-    <div>
-      <h2>Container</h2>
-      <Element id="Top" is="div" /> // required
-      <Element id="Bottom" is={MyComp} /> // required
-    </div>
-  )
-}
-```
+### Configure Nodes in &lt;Frame /&gt;
 
-## Examples
+Since the `<Frame />` component creates a Node automatically for all of its children elements, thus the `<Element />` component can be used to simply configure the values of the Node that is being created.
 
-### Basics
 ```jsx 
 import {Craft, Frame, Element} from "@craftjs/core";
 
@@ -82,52 +52,9 @@ const App = () => {
 }
 ```
 
-### User Component
-```jsx
+### Defining Linked Nodes
 
-const Container = ({children}) => {
-  return (
-    <div>
-      <h2>I am a container user component, drop stuff in here</h2>
-      {children}
-    </div>
-  )
-}
-
-Container.craft = {
-  rules: {
-    // Only allow the Container to be dragged when it has at least 2 children
-    // This is only applied when the Container is being managed by a Node that is a child of a Canvas Node
-    canDrag: (node) => node.data.props.children.length >= 2,
-
-    // Only allow the incoming Node to be dropped in the Container if its a "h1" or a "Container" user element
-    // This is only applied when the Container is being managed by a Canvas Node
-    canMoveIn: (incomingChildNode, node) => ["h1", Container].includes(incomingChildNode.data.type),
-
-    // Don't allow child Nodes that are "h1" to be dragged out of the Container
-    // This is only applied when the Container is being managed by a Canvas Node
-    canMoveOut: (incomingChildNode, node) => incomingChildNode.data.type != "h1"
-  }
-}
-
-const App = () => {
-  return (
-    <div>
-      <h2>My App!</h2>
-      <Craft resolver={{Container}}>
-        <h2>My Page Editor</h2>
-        <Frame> 
-          <Element is={Container}>
-            <h2>Text</h2>
-          </Element>
-        </Frame>
-      </Craft>
-    </div>
-  )
-}
-```
-
-### Defining nodes in User Components
+When used inside a User Component, `<Element />` works identically as used inside `<Frame />` but because there isn't a Node in-place, thus it has to create a new Linked Node - which is essentially a Node that is linked to the Node of the containing User Component via an arbitary `id`:
 
 ```jsx {5}
 const Hero = () => {
@@ -142,6 +69,10 @@ const Hero = () => {
 }
 ```
 
+> `<Element />` used inside User Component must specify an `id` prop
+
+
+## Examples
 
 ### Setting `custom` properties
 

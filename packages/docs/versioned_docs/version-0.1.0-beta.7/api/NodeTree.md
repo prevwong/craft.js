@@ -9,7 +9,7 @@ import {API, Badge} from "@site/src/components";
 <Badge type="type" />
 
 
-A useful data structure used when dealing with a Node and its child Nodes
+A useful data structure to represent the tree of a React Element as Nodes.
 
 ## Reference
 ### Properties

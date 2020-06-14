@@ -36,7 +36,9 @@ const { connectors, setProp, ...collected } = useNode(collector);
       ["connect", "(dom: HTMLElement) => HTMLElement", "Specifies the DOM that represents the User Component"],
       ["drag", "(dom: HTMLElement) => HTMLElement", "Specifies the DOM that should be draggable"]
     ]],
-    ["setProp", "(props: Object) => void", "Manipulate the current component's props"],
+    ["actions", "Object", [
+      ["setProp", "(props: Object) => void", "Manipulate the current component's props"]
+    ]],
     ["...collected", "Collected", "The collected values returned from the collector"]
   ]
   ]

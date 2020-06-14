@@ -18,7 +18,7 @@ const { connectors, setProp, ...collected } = useNode(collector);
 
 ## Reference
 ### Props
-Both props specifies the initial screen to render. You must specify at least one of them (`json` takes precendence over `children`).
+Both props specifies the initial screen to render. You must specify at least one of them (`data` takes precendence over `children`).
 
 <API items={[
   ["children?", "React.ReactElement", "Creates the initial screen using React Elements. The element defined here will be the Root Node"],

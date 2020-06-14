@@ -267,7 +267,7 @@ Up to this point, we have made a user interface for our page editor. Now, let's 
 
 ### Setup
 - First wrap our application with `<Editor />` which sets up the Editor's context. We'll also need to specify the list of user components in the `resolver` prop for Craft.js to be able to (de)serialize our User Components.
-- Then wrap the editable area with `<Frame />`
+- Then wrap the editable area with `<Frame />` which passes the rendering process to Craft.js.
 
 ```jsx {19,22,31,40}
 // pages/index.js
@@ -292,14 +292,14 @@ export default function App() {
           <Grid container spacing={3}>
             <Grid item xs>
               <Frame>
-                <Element is={Container} canvas>
+                <Container>
                   <Card />
                   <Button size="small" variant="outlined">Click</Button>
                   <Text size="small" text="Hi world!" />
-                  <Element is={Container} padding={6} background="#999" canvas>
+                  <Container padding={6} background="#999">
                     <Text size="small" text="It's me again!" />
-                  </Element>
-                </Element>
+                  </Container>
+                </Container>
               </Frame>
             </Grid>
             <Grid item xs={3}>
@@ -315,30 +315,50 @@ export default function App() {
 }
 ```
 
-Every element that is rendered in `<Frame />` is managed by an object in the editor's internal state called a `Node` which describes the element, its events, and props among other things. Whether an element is draggable or droppable or not depends on the type of `Node` that manages it. 
+Every element that is rendered in `<Frame />` is managed by an object in the editor's internal state called a `Node` which describes the element, its events, and props among other things.
+
+Whether an element is draggable or droppable (or neither) depends on the type of `Node` that manages it. 
  
 - If the `Node` is a Canvas, then it's droppable
 - If the `Node` is an immediate child of a Canvas, then it's draggable.
 
-By default, every element inside the `<Frame />` will have a Node automatically created for it; but using the `<Element />` component, we can configure certain aspects of the Node - for instance, defining a Canvas Node.
 
+By default, every element inside the `<Frame />` will have a non-Canvas Node automatically defined for it:
 
 ```jsx
-...
+// Explanation
+<Frame>
+  <Container padding={5} background="#eee" canvas> // Node of type Container
+    <Card /> // Node of type Card
+    <Button size="small" variant="outlined">Click</Button> // Node of type Button
+    <Text size="small" text="Hi world!" /> // Node of type Text
+    <Container padding={2} background="#999"> // Node of type Container
+       <Text size="small" text="It's me again!" /> // Node of type Text
+    </Container>
+  </Container>
+</Frame>
+```
 
+Hence, by default, all the Nodes above are neither draggable or droppable. So how can we define some of the Nodes above as a Canvas Node? 
+
+We can use the provided `<Element />` component to manually define Nodes:
+
+```jsx {2,6}
 <Frame>
   <Element is={Container} padding={5} background="#eee" canvas> // Canvas Node of type Container, droppable
     <Card /> // Node of type Card
     <Button size="small" variant="outlined">Click</Button> // Node of type Button, draggable
     <Text size="small" text="Hi world!" /> // Node of type Text, draggable
-    <Element is={Container} padding={2} background="#999" canvas> // Canvas Node of type Text, droppable and draggable
+    <Element is={Container} padding={2} background="#999" canvas> // Canvas Node of type Container, droppable and draggable
        <Text size="small" text="It's me again!" /> // Node of type Text, draggable
     </Element>
   </Element>
 </Frame>
 ```
 
-If you refreshed the page, you will notice that absolutely nothing has changed - and that's a good thing!
+In the above code, we've wrapped our `Container` components with `<Element />` with the `canvas` prop, thus making the component droppable and it's immediate children, draggable.
+
+Once you've applied these changes and refresh the page, you will notice that absolutely nothing has changed - and that's a good thing!
 
 ### Enabling Drag and Drop
 Inside a User Component, we have access to the `useNode` hook which provides several information and methods related to the corresponding `Node`. 
@@ -424,22 +444,20 @@ At this point, you could refresh the page and you would be able to drag stuff ar
 
 Of course, our Card component is supposed to have 2 droppable regions, which means we'll need 2 Canvas nodes. 
 
-But hold up, you might be wondering how do we even create Canvas node inside a User Component?  Remember the `<Element />` component that was used to **configure** a Node earlier in our application? Well, inside a User Component - it can be used to **create** a Node. 
+But hold up, how do we even create a Node inside a User Component?  Remember the `<Element />` component that was used to define Nodes earlier in our application? Well it can be used here as well.
 
-> The nodes created via `<Element />` inside User Components are called linked Nodes. Read more [here](../concepts/user-components#defining-editable-elements)
-
-```jsx {2,8,11,12,14}
+```jsx {2,7,10,11,13}
 // components/user/Card.js
 import {useNode, Element} from "@craftjs/core";
 
 export const Card = (({bg, padding})) => {
   return (
     <Container background={background} padding={padding}>
-      <Element id="text" canvas>
+      <Element id="text" canvas> // Canvas Node of type div
         <Text text="Title" fontSize={20} />
         <Text text="Subtitle" fontSize={15} />
       </Element>
-      <Element id="buttons" canvas>
+      <Element id="buttons" canvas> // Canvas Node of type div
         <Button size="small" text="Learn more" />
       </Element>
     </Container>
@@ -448,7 +466,6 @@ export const Card = (({bg, padding})) => {
 ```
 
 > `<Element />` used inside User Component must specify an `id` prop
-
 
 You might be wondering how do we set drag/drop rules for the new droppable regions we made. Currently, we have set the `is` prop in our `<Element />` to a div, but we can actually point it to a User Component. 
 
@@ -500,11 +517,11 @@ CardBottom.craft = {
 export const Card = ({background, padding = 20}) => {
   return (
     <Container background={background} padding={padding}>
-      <Element id="text" is={CardTop} canvas>
+      <Element id="text" is={CardTop} canvas> // Canvas Node of type CardTop
         <Text text="Title" fontSize={20} />
         <Text text="Subtitle" fontSize={15} />
       </Element>
-      <Element id="buttons" is={CardBottom} canvas>
+      <Element id="buttons" is={CardBottom} canvas> // Canvas Node of type CardBottom
         <Button size="small" text="Learn more" />
       </Element>
     </Container>
@@ -589,7 +606,7 @@ import React, {useCallback} from "react";
 import ContentEditable from 'react-contenteditable'
 
 export const Text = ({text, fontSize}) => {
-  const { connectors: {connect, drag}, setProp } = useNode();
+  const { connectors: {connect, drag}, actions: {setProp} } = useNode();
 
   return (
      <div 
@@ -617,7 +634,7 @@ The `useNode` hook accepts a collector function which can be used to retrieve st
 ```jsx {4-5,8,10,18}
 // components/user/Text.js
 export const Text = ({text, fontSize}) => {
-  const { connectors: {connect, drag}, selected, dragged, setProp } = useNode((state) => ({
+  const { connectors: {connect, drag}, selected, dragged, actions: {setProp} } = useNode((state) => ({
     selected: state.events.selected,
     dragged: state.events.dragged
   }));
@@ -650,7 +667,7 @@ While we are at it, let's also add a slider for users to edit the `fontSize`
 import {Slider, FormControl, FormLabel} from "@material-ui/core";
 
 export const Text= ({text, fontSize, textAlign}) => {
-  const { connectors: {connect, drag}, selected, dragged, setProp } = useNode((state) => ({
+  const { connectors: {connect, drag}, selected, dragged, actions: {setProp} } = useNode((state) => ({
     selected: state.events.selected,
     dragged: state.events.dragged
   }));
@@ -695,7 +712,7 @@ This is where Related Components become useful. Essentially, a Related Component
 ```jsx
 // components/user/Text.js
 export const Text = ({text, fontSize}) => {
-  const { connectors: {connect, drag}, isActive, setProp } = useNode((node) => ({
+  const { connectors: {connect, drag}, isActive, actions: {setProp} } = useNode((node) => ({
     isActive: node.events.selected
   }));
 
@@ -708,7 +725,7 @@ export const Text = ({text, fontSize}) => {
 }
 
 const TextSettings = () => {
-  const { setProp, fontSize } = useNode((node) => ({
+  const { actions: {setProp}, fontSize } = useNode((node) => ({
     fontSize: node.data.props.fontSize
   }));
 
@@ -746,7 +763,7 @@ export const Button = () => {}
 
 
 const ButtonSettings = () => {
-  const { setProp, props } = useNode((node) => ({
+  const { actions: {setProp}, props } = useNode((node) => ({
     props: node.data.props
   }));
 
@@ -795,7 +812,7 @@ import ColorPicker from 'material-ui-color-picker'
 export const Container = () => {...}
 
 export const ContainerSettings = () => {
-  const { background, padding, setProp } = useNode(node => ({
+  const { background, padding, actions: {setProp} } = useNode(node => ({
     background: node.data.props.background,
     padding: node.data.props.padding
   }));

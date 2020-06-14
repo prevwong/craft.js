@@ -31,7 +31,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["drag", "(dom: HTMLElement, nodeId: NodeId) => HTMLElement", "Specifies the DOM that when dragged will move the specified Node's user component. Only applicable if the component is rendered as an immediate child of a &lt;Canvas /&gt; component."],
       ["create", "(dom: HTMLElement, userElement: React.ReactElement) => HTMLElement", "Specifies the DOM that when dragged will create a new instance of the specified User Element at the drop location."]
     ]],
-    ["actions", "Object", [
+    ["actions", "ActionMethods", [
       ["add", "(nodes: Node, parentId?: NodeId, index?: number) => void", "Add a Node to the given parent node ID at the specified index. By default the parentId is the id of the Root Node"],
       ["addNodeTree", "(tree: NodeTree, parentId?: NodeId) => void", "Add a NodeTree to the given parent node ID at the specified index. By default the parentId is the id of the Root Node"],
       ["clearEvents", "() => void", "Resets the editors events state"],
@@ -44,7 +44,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["setOptions", "(options: Object) => void", "Update the editor's options. The options object passed is the same as the &lt;Editor /&gt; props."],
       ["selectNode", "(nodeId: NodeId | null) => void", "Select the specified node. You can clear the selection by passing `null`"],
     ]],
-    ["query", "Query", [
+    ["query", "QueryMethods", [
       ["getSerializedNodes", "() => SerializedNodes", "Return the current Nodes into a simpler form safe for storage"],
       ["serialize", "() => String", "Return getSerializedNodes() in JSON"],
       ["getOptions", "() => Object", "Get the options specified in the &lt;Editor /&gt; component"],
@@ -60,7 +60,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
         ["toNode", "() => Node", "Parses a serialized Node back into it's full Node form"]
       ]]
     ]],
-    ["inContext", "boolean", "Returns false if the component is rendered outside of the `<Editor />`. This is useful if you are designing a general component that you also wish to use outside of Craft.js."],
+    ["inContext", "boolean", "Returns false if the component is rendered outside of the &lt;Editor /&gt;. This is useful if you are designing a general component that you also wish to use outside of Craft.js."],
     ["...collected", "Collected", "The collected values returned from the collector"]
   ]
   ]
