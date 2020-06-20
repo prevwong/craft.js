@@ -1,11 +1,11 @@
-import React from 'react'
-import { Grid, Slider, RadioGroup } from '@material-ui/core'
-import { useNode } from '@craftjs/core'
-import { ToolbarTextInput } from './ToolbarTextInput'
-import { ToolbarDropdown } from './ToolbarDropdown'
-import { withStyles } from '@material-ui/styles'
+import React from 'react';
+import { Grid, Slider, RadioGroup } from '@material-ui/core';
+import { useNode } from '@craftjs/core';
+import { ToolbarTextInput } from './ToolbarTextInput';
+import { ToolbarDropdown } from './ToolbarDropdown';
+import { withStyles } from '@material-ui/styles';
 const iOSBoxShadow =
-  '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)'
+  '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
 
 const SliderStyled = withStyles({
   root: {
@@ -57,18 +57,18 @@ const SliderStyled = withStyles({
     opacity: 1,
     backgroundColor: 'currentColor',
   },
-})(Slider)
+})(Slider);
 
 export type ToolbarItem = {
-  prefix?: string
-  label?: string
-  full?: boolean
-  propKey?: string
-  index?: number
-  children?: React.ReactNode
-  type: string
-  onChange?: (value: any) => any
-}
+  prefix?: string;
+  label?: string;
+  full?: boolean;
+  propKey?: string;
+  index?: number;
+  children?: React.ReactNode;
+  type: string;
+  onChange?: (value: any) => any;
+};
 export const ToolbarItem = ({
   full = false,
   propKey,
@@ -79,8 +79,8 @@ export const ToolbarItem = ({
 }: ToolbarItem) => {
   const { setProp, propValue } = useNode((node) => ({
     propValue: node.data.props[propKey],
-  }))
-  const value = Array.isArray(propValue) ? propValue[index] : propValue
+  }));
+  const value = Array.isArray(propValue) ? propValue[index] : propValue;
 
   return (
     <Grid item xs={full ? 12 : 6}>
@@ -93,11 +93,11 @@ export const ToolbarItem = ({
             onChange={(value) => {
               setProp((props: any) => {
                 if (Array.isArray(propValue)) {
-                  props[propKey][index] = onChange ? onChange(value) : value
+                  props[propKey][index] = onChange ? onChange(value) : value;
                 } else {
-                  props[propKey] = onChange ? onChange(value) : value
+                  props[propKey] = onChange ? onChange(value) : value;
                 }
-              })
+              });
             }}
           />
         ) : type == 'slider' ? (
@@ -111,11 +111,13 @@ export const ToolbarItem = ({
                 ((_, value: number) => {
                   setProp((props: any) => {
                     if (Array.isArray(propValue)) {
-                      props[propKey][index] = onChange ? onChange(value) : value
+                      props[propKey][index] = onChange
+                        ? onChange(value)
+                        : value;
                     } else {
-                      props[propKey] = onChange ? onChange(value) : value
+                      props[propKey] = onChange ? onChange(value) : value;
                     }
-                  })
+                  });
                 }) as any
               }
             />
@@ -128,10 +130,10 @@ export const ToolbarItem = ({
             <RadioGroup
               value={value || 0}
               onChange={(e) => {
-                const value = e.target.value
+                const value = e.target.value;
                 setProp((props: any) => {
-                  props[propKey] = onChange ? onChange(value) : value
-                })
+                  props[propKey] = onChange ? onChange(value) : value;
+                });
               }}
             >
               {props.children}
@@ -151,5 +153,5 @@ export const ToolbarItem = ({
         ) : null}
       </div>
     </Grid>
-  )
-}
+  );
+};

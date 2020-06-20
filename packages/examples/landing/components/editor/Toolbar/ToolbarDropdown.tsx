@@ -1,5 +1,5 @@
-import React from 'react'
-import { FormControl, InputLabel, Select } from '@material-ui/core'
+import React from 'react';
+import { FormControl, InputLabel, Select } from '@material-ui/core';
 
 export const ToolbarDropdown = ({ title, value, onChange, children }: any) => {
   return (
@@ -9,5 +9,5 @@ export const ToolbarDropdown = ({ title, value, onChange, children }: any) => {
         {children}
       </Select>
     </FormControl>
-  )
-}
+  );
+};

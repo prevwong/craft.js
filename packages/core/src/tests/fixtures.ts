@@ -1,7 +1,7 @@
 /**
  * Nodes
  */
-import { createTestNode } from '../utils/createTestNode'
+import { createTestNode } from '../utils/createTestNode';
 
 export const rootNode = createTestNode('ROOT', {
   name: 'Document',
@@ -9,31 +9,31 @@ export const rootNode = createTestNode('ROOT', {
   type: 'Document',
   isCanvas: true,
   nodes: [],
-})
+});
 
 export const leafNode = createTestNode('node-L1eGyOJ4m', {
   props: { childrenString: 'Header 1' },
   name: 'Text',
   displayName: 'Text',
-})
+});
 
 export const primaryButton = createTestNode('node-primary-button', {
   props: { childrenString: 'Button one' },
   name: 'Button',
   displayName: 'Button',
-})
+});
 
 export const secondaryButton = createTestNode('node-secondary-button', {
   props: { childrenString: 'Button two' },
   name: 'Button',
   displayName: 'Button',
-})
+});
 
 export const card = createTestNode('node-card', {
   name: 'Card',
   displayName: 'Button',
   isCanvas: true,
-})
+});
 
 /**
  * Editor states
@@ -51,14 +51,14 @@ export const emptyState = {
       Document: 'Document',
     },
   },
-}
+};
 
 export const documentState = {
   ...emptyState,
   nodes: {
     [rootNode.id]: rootNode,
   },
-}
+};
 
 export const documentWithLeafState = {
   ...emptyState,
@@ -72,7 +72,7 @@ export const documentWithLeafState = {
       data: { ...leafNode.data, parent: rootNode.id },
     },
   },
-}
+};
 
 export const documentWithButtonsState = {
   ...emptyState,
@@ -93,7 +93,7 @@ export const documentWithButtonsState = {
       data: { ...secondaryButton.data, parent: rootNode.id },
     },
   },
-}
+};
 
 export const documentWithCardState = {
   ...emptyState,
@@ -119,7 +119,7 @@ export const documentWithCardState = {
       data: { ...secondaryButton.data, parent: card.id },
     },
   },
-}
+};
 
 export const documentWithVariousNodes = {
   ...documentWithCardState,
@@ -173,4 +173,4 @@ export const documentWithVariousNodes = {
       parent: 'parent-of-linked-node',
     }),
   },
-}
+};

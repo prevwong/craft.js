@@ -1,26 +1,26 @@
-import React from 'react'
-import { Resizer } from '../Resizer'
-import { ContainerSettings } from './ContainerSettings'
+import React from 'react';
+import { Resizer } from '../Resizer';
+import { ContainerSettings } from './ContainerSettings';
 
 export type Container = {
-  background: Record<'r' | 'g' | 'b' | 'a', number>
-  color: Record<'r' | 'g' | 'b' | 'a', number>
-  flexDirection: string
-  alignItems: string
-  justifyContent: string
-  fillSpace: string
-  width: string
-  height: string
-  padding: string[]
-  margin: string[]
-  marginTop: number
-  marginLeft: number
-  marginBottom: number
-  marginRight: number
-  shadow: number
-  children: React.ReactNode
-  radius: number
-}
+  background: Record<'r' | 'g' | 'b' | 'a', number>;
+  color: Record<'r' | 'g' | 'b' | 'a', number>;
+  flexDirection: string;
+  alignItems: string;
+  justifyContent: string;
+  fillSpace: string;
+  width: string;
+  height: string;
+  padding: string[];
+  margin: string[];
+  marginTop: number;
+  marginLeft: number;
+  marginBottom: number;
+  marginRight: number;
+  shadow: number;
+  children: React.ReactNode;
+  radius: number;
+};
 
 const defaultProps = {
   flexDirection: 'column',
@@ -35,13 +35,13 @@ const defaultProps = {
   radius: 0,
   width: '100%',
   height: 'auto',
-}
+};
 
 export const Container = (props: Partial<Container>) => {
   props = {
     ...defaultProps,
     ...props,
-  }
+  };
   const {
     flexDirection,
     alignItems,
@@ -54,7 +54,7 @@ export const Container = (props: Partial<Container>) => {
     shadow,
     radius,
     children,
-  } = props
+  } = props;
   return (
     <Resizer
       propKey={{ width: 'width', height: 'height' }}
@@ -76,8 +76,8 @@ export const Container = (props: Partial<Container>) => {
     >
       {children}
     </Resizer>
-  )
-}
+  );
+};
 
 Container.craft = {
   displayName: 'Container',
@@ -88,4 +88,4 @@ Container.craft = {
   related: {
     toolbar: ContainerSettings,
   },
-}
+};

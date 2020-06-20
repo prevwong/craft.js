@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react'
-import { ChromePicker } from 'react-color'
-import { TextField, makeStyles, InputAdornment } from '@material-ui/core'
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import { ChromePicker } from 'react-color';
+import { TextField, makeStyles, InputAdornment } from '@material-ui/core';
 
 const useStyles = makeStyles({
   root: {
@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   //   borderColor:'transparent',
   //   borderRadius: "100px"
   // }
-})
+});
 
 const useLabelStyles = makeStyles({
   root: {
@@ -42,15 +42,15 @@ const useLabelStyles = makeStyles({
     position: 'relative',
     left: '-12px',
   }, // a style rule
-})
+});
 
 export type ToolbarTextInput = {
-  prefix?: string
-  label?: string
-  type: string
-  onChange?: (value: any) => void
-  value?: any
-}
+  prefix?: string;
+  label?: string;
+  type: string;
+  onChange?: (value: any) => void;
+  value?: any;
+};
 export const ToolbarTextInput = ({
   onChange,
   value,
@@ -59,23 +59,23 @@ export const ToolbarTextInput = ({
   type,
   ...props
 }: ToolbarTextInput) => {
-  const [internalValue, setInternalValue] = useState(value)
-  const [active, setActive] = useState(false)
-  const classes = useStyles({})
-  const labelClasses = useLabelStyles({})
+  const [internalValue, setInternalValue] = useState(value);
+  const [active, setActive] = useState(false);
+  const classes = useStyles({});
+  const labelClasses = useLabelStyles({});
   useEffect(() => {
     // if (value !== internalValue) {
-    let val = value
-    if (type == 'color' || type == 'bg') val = `rgba(${Object.values(value)})`
-    setInternalValue(val)
+    let val = value;
+    if (type == 'color' || type == 'bg') val = `rgba(${Object.values(value)})`;
+    setInternalValue(val);
     // }
-  }, [value])
+  }, [value]);
 
   return (
     <div
       style={{ width: '100%', position: 'relative' }}
       onClick={() => {
-        setActive(true)
+        setActive(true);
       }}
     >
       {(type == 'color' || type == 'bg') && active ? (
@@ -90,15 +90,15 @@ export const ToolbarTextInput = ({
           <div
             className="fixed top-0 left-0 w-full h-full cursor-pointer"
             onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              setActive(false)
+              e.preventDefault();
+              e.stopPropagation();
+              setActive(false);
             }}
           ></div>
           <ChromePicker
             color={value}
             onChange={(color: any) => {
-              onChange(color.rgb)
+              onChange(color.rgb);
             }}
           />
         </div>
@@ -109,11 +109,11 @@ export const ToolbarTextInput = ({
         value={internalValue || ''}
         onKeyDown={(e) => {
           if (e.key == 'Enter') {
-            onChange((e.target as any).value)
+            onChange((e.target as any).value);
           }
         }}
         onChange={(e) => {
-          setInternalValue(e.target.value)
+          setInternalValue(e.target.value);
         }}
         margin="dense"
         variant="filled"
@@ -148,5 +148,5 @@ export const ToolbarTextInput = ({
         {...props}
       />
     </div>
-  )
-}
+  );
+};

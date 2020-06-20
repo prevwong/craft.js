@@ -1,5 +1,5 @@
-import React from 'react'
-import Layout from '@theme/Layout'
+import React from 'react';
+import Layout from '@theme/Layout';
 
 function Support() {
   return (
@@ -67,7 +67,7 @@ function Support() {
         </div>
       </div>
     </Layout>
-  )
+  );
 }
 
-export default Support
+export default Support;

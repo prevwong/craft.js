@@ -8,7 +8,7 @@ import {
   NodeEvents,
   NodeTree,
   SerializedNodes,
-} from '../interfaces'
+} from '../interfaces';
 import {
   deprecationWarning,
   ERROR_INVALID_NODEID,
@@ -17,12 +17,12 @@ import {
   QueryCallbacksFor,
   ERROR_NOPARENT,
   ERROR_DELETE_TOP_LEVEL_NODE,
-} from '@craftjs/utils'
-import { QueryMethods } from './query'
-import { fromEntries } from '../utils/fromEntries'
-import { updateEventsNode } from '../utils/updateEventsNode'
-import invariant from 'tiny-invariant'
-import { editorInitialState } from './store'
+} from '@craftjs/utils';
+import { QueryMethods } from './query';
+import { fromEntries } from '../utils/fromEntries';
+import { updateEventsNode } from '../utils/updateEventsNode';
+import invariant from 'tiny-invariant';
+import { editorInitialState } from './store';
 
 export const Actions = (
   state: EditorState,
@@ -34,58 +34,58 @@ export const Actions = (
     parentId: NodeId,
     index?: number
   ) => {
-    const parent = getParentAndValidate(parentId)
+    const parent = getParentAndValidate(parentId);
     // reset the parent node ids
     if (!parent.data.nodes) {
-      parent.data.nodes = []
+      parent.data.nodes = [];
     }
 
     if (parent.data.props.children) {
-      delete parent.data.props['children']
+      delete parent.data.props['children'];
     }
 
     if (index != null) {
-      parent.data.nodes.splice(index, 0, node.id)
+      parent.data.nodes.splice(index, 0, node.id);
     } else {
-      parent.data.nodes.push(node.id)
+      parent.data.nodes.push(node.id);
     }
 
-    node.data.parent = parent.id
-    state.nodes[node.id] = node
-  }
+    node.data.parent = parent.id;
+    state.nodes[node.id] = node;
+  };
 
   const addTreeToParentAtIndex = (
     tree: NodeTree,
     parentId?: NodeId,
     index?: number
   ) => {
-    const node = tree.nodes[tree.rootNodeId]
+    const node = tree.nodes[tree.rootNodeId];
 
     if (parentId != null) {
-      addNodeToParentAtIndex(node, parentId, index)
+      addNodeToParentAtIndex(node, parentId, index);
     }
 
     if (!node.data.nodes) {
-      return
+      return;
     }
     // we need to deep clone here...
-    const childToAdd = [...node.data.nodes]
-    node.data.nodes = []
+    const childToAdd = [...node.data.nodes];
+    node.data.nodes = [];
     childToAdd.forEach((childId, index) =>
       addTreeToParentAtIndex(
         { rootNodeId: childId, nodes: tree.nodes },
         node.id,
         index
       )
-    )
-  }
+    );
+  };
 
   const getParentAndValidate = (parentId: NodeId): Node => {
-    invariant(parentId, ERROR_NOPARENT)
-    const parent = state.nodes[parentId]
-    invariant(parent, ERROR_INVALID_NODEID)
-    return parent
-  }
+    invariant(parentId, ERROR_NOPARENT);
+    const parent = state.nodes[parentId];
+    invariant(parent, ERROR_INVALID_NODEID);
+    return parent;
+  };
 
   return {
     /**
@@ -98,17 +98,17 @@ export const Actions = (
      * @param id
      */
     addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id?: string) {
-      const parent = getParentAndValidate(parentId)
+      const parent = getParentAndValidate(parentId);
       if (!parent.data.linkedNodes) {
-        parent.data.linkedNodes = {}
+        parent.data.linkedNodes = {};
       }
 
-      parent.data.linkedNodes[id] = tree.rootNodeId
+      parent.data.linkedNodes[id] = tree.rootNodeId;
 
-      tree.nodes[tree.rootNodeId].data.parent = parentId
-      state.nodes[tree.rootNodeId] = tree.nodes[tree.rootNodeId]
+      tree.nodes[tree.rootNodeId].data.parent = parentId;
+      state.nodes[tree.rootNodeId] = tree.nodes[tree.rootNodeId];
 
-      addTreeToParentAtIndex(tree)
+      addTreeToParentAtIndex(tree);
     },
 
     /**
@@ -120,16 +120,16 @@ export const Actions = (
      */
     add(nodeToAdd: Node | Node[], parentId: NodeId, index?: number) {
       // TODO: Deprecate adding array of Nodes to keep implementation simpler
-      let nodes = [nodeToAdd]
+      let nodes = [nodeToAdd];
       if (Array.isArray(nodeToAdd)) {
         deprecationWarning('actions.add(node: Node[])', {
           suggest: 'actions.add(node: Node)',
-        })
-        nodes = nodeToAdd
+        });
+        nodes = nodeToAdd;
       }
       nodes.forEach((node: Node) => {
-        addNodeToParentAtIndex(node, parentId, index)
-      })
+        addNodeToParentAtIndex(node, parentId, index);
+      });
     },
 
     /**
@@ -140,17 +140,17 @@ export const Actions = (
      * @param index
      */
     addNodeTree(tree: NodeTree, parentId?: NodeId, index?: number) {
-      const node = tree.nodes[tree.rootNodeId]
+      const node = tree.nodes[tree.rootNodeId];
 
       if (!parentId) {
         invariant(
           tree.rootNodeId === ROOT_NODE,
           'Cannot add non-root Node without a parent'
-        )
-        state.nodes[tree.rootNodeId] = node
+        );
+        state.nodes[tree.rootNodeId] = node;
       }
 
-      addTreeToParentAtIndex(tree, parentId, index)
+      addTreeToParentAtIndex(tree, parentId, index);
     },
 
     /**
@@ -158,40 +158,40 @@ export const Actions = (
      * @param id
      */
     delete(id: NodeId) {
-      invariant(!query.node(id).isTopLevelNode(), ERROR_DELETE_TOP_LEVEL_NODE)
+      invariant(!query.node(id).isTopLevelNode(), ERROR_DELETE_TOP_LEVEL_NODE);
 
-      const targetNode = state.nodes[id]
+      const targetNode = state.nodes[id];
       if (targetNode.data.nodes) {
         // we deep clone here because otherwise immer will mutate the node
         // object as we remove nodes
-        ;[...targetNode.data.nodes].forEach((childId) => this.delete(childId))
+        [...targetNode.data.nodes].forEach((childId) => this.delete(childId));
       }
 
-      const parentChildren = state.nodes[targetNode.data.parent].data.nodes
-      parentChildren.splice(parentChildren.indexOf(id), 1)
+      const parentChildren = state.nodes[targetNode.data.parent].data.nodes;
+      parentChildren.splice(parentChildren.indexOf(id), 1);
 
-      updateEventsNode(state, id, true)
-      delete state.nodes[id]
+      updateEventsNode(state, id, true);
+      delete state.nodes[id];
     },
 
     deserialize(input: SerializedNodes | string) {
       const dehydratedNodes =
-        typeof input == 'string' ? JSON.parse(input) : input
+        typeof input == 'string' ? JSON.parse(input) : input;
 
       const nodePairs = Object.keys(dehydratedNodes).map((id) => {
-        let nodeId = id
+        let nodeId = id;
 
         if (id === DEPRECATED_ROOT_NODE) {
-          nodeId = ROOT_NODE
+          nodeId = ROOT_NODE;
         }
 
         return [
           nodeId,
           query.parseSerializedNode(dehydratedNodes[id]).toNode(nodeId),
-        ]
-      })
+        ];
+      });
 
-      this.replaceNodes(fromEntries(nodePairs))
+      this.replaceNodes(fromEntries(nodePairs));
     },
     /**
      * Move a target Node to a new Parent at a given index
@@ -203,43 +203,43 @@ export const Actions = (
       const targetNode = state.nodes[targetId],
         currentParentId = targetNode.data.parent!,
         newParent = state.nodes[newParentId],
-        newParentNodes = newParent.data.nodes
+        newParentNodes = newParent.data.nodes;
 
       query.node(newParentId).isDroppable(targetNode, (err) => {
-        throw new Error(err)
-      })
+        throw new Error(err);
+      });
 
       const currentParent = state.nodes[currentParentId],
-        currentParentNodes = currentParent.data.nodes!
+        currentParentNodes = currentParent.data.nodes!;
 
-      currentParentNodes[currentParentNodes.indexOf(targetId)] = 'marked'
+      currentParentNodes[currentParentNodes.indexOf(targetId)] = 'marked';
 
       if (newParentNodes) {
-        newParentNodes.splice(index, 0, targetId)
+        newParentNodes.splice(index, 0, targetId);
       } else {
-        newParent.data.nodes = [targetId]
+        newParent.data.nodes = [targetId];
       }
 
-      state.nodes[targetId].data.parent = newParentId
-      state.nodes[targetId].data.index = index
-      currentParentNodes.splice(currentParentNodes.indexOf('marked'), 1)
+      state.nodes[targetId].data.parent = newParentId;
+      state.nodes[targetId].data.index = index;
+      currentParentNodes.splice(currentParentNodes.indexOf('marked'), 1);
     },
 
     replaceNodes(nodes: Nodes) {
-      state.nodes = nodes
-      this.clearEvents()
+      state.nodes = nodes;
+      this.clearEvents();
     },
 
     clearEvents() {
-      state.events = editorInitialState.events
+      state.events = editorInitialState.events;
     },
 
     /**
      * Resets all the editor state.
      */
     reset() {
-      this.replaceNodes({})
-      this.clearEvents()
+      this.replaceNodes({});
+      this.clearEvents();
     },
 
     /**
@@ -248,20 +248,20 @@ export const Actions = (
      * @param cb: function used to set the options.
      */
     setOptions(cb: (options: Partial<Options>) => void) {
-      cb(state.options)
+      cb(state.options);
     },
 
     setNodeEvent(eventType: NodeEvents, id: NodeId | null) {
-      const current = state.events[eventType]
+      const current = state.events[eventType];
       if (current && id !== current) {
-        state.nodes[current].events[eventType] = false
+        state.nodes[current].events[eventType] = false;
       }
 
       if (id) {
-        state.nodes[id].events[eventType] = true
-        state.events[eventType] = id
+        state.nodes[id].events[eventType] = true;
+        state.events[eventType] = id;
       } else {
-        state.events[eventType] = null
+        state.events[eventType] = null;
       }
     },
 
@@ -274,7 +274,7 @@ export const Actions = (
       id: T,
       cb: (data: EditorState['nodes'][T]['data']['custom']) => void
     ) {
-      cb(state.nodes[id].data.custom)
+      cb(state.nodes[id].data.custom);
     },
 
     /**
@@ -284,8 +284,8 @@ export const Actions = (
      * @param dom
      */
     setDOM(id: NodeId, dom: HTMLElement) {
-      invariant(state.nodes[id], ERROR_INVALID_NODEID)
-      state.nodes[id].dom = dom
+      invariant(state.nodes[id], ERROR_INVALID_NODEID);
+      state.nodes[id].dom = dom;
     },
 
     setIndicator(indicator: Indicator | null) {
@@ -295,8 +295,8 @@ export const Actions = (
           (indicator.placement.currentNode &&
             !indicator.placement.currentNode.dom))
       )
-        return
-      state.events.indicator = indicator
+        return;
+      state.events.indicator = indicator;
     },
 
     /**
@@ -305,7 +305,7 @@ export const Actions = (
      * @param bool
      */
     setHidden(id: NodeId, bool: boolean) {
-      state.nodes[id].data.hidden = bool
+      state.nodes[id].data.hidden = bool;
     },
 
     /**
@@ -314,8 +314,8 @@ export const Actions = (
      * @param cb
      */
     setProp(id: NodeId, cb: (props: any) => void) {
-      invariant(state.nodes[id], ERROR_INVALID_NODEID)
-      cb(state.nodes[id].data.props)
+      invariant(state.nodes[id], ERROR_INVALID_NODEID);
+      cb(state.nodes[id].data.props);
     },
-  }
-}
+  };
+};

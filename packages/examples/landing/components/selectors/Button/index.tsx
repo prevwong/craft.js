@@ -1,18 +1,18 @@
-import React from 'react'
-import { UserComponent, useNode } from '@craftjs/core'
-import { Text } from '../Text'
-import { ButtonSettings } from './ButtonSettings'
-import styled from 'styled-components'
-import cx from 'classnames'
+import React from 'react';
+import { UserComponent, useNode } from '@craftjs/core';
+import { Text } from '../Text';
+import { ButtonSettings } from './ButtonSettings';
+import styled from 'styled-components';
+import cx from 'classnames';
 
 type ButtonProps = {
-  background?: Record<'r' | 'g' | 'b' | 'a', number>
-  color?: Record<'r' | 'g' | 'b' | 'a', number>
-  buttonStyle?: string
-  margin?: any[]
-  text?: string
-  textComponent?: any
-}
+  background?: Record<'r' | 'g' | 'b' | 'a', number>;
+  color?: Record<'r' | 'g' | 'b' | 'a', number>;
+  buttonStyle?: string;
+  margin?: any[];
+  text?: string;
+  textComponent?: any;
+};
 
 const StyledButton = styled.button<ButtonProps>`
   background: ${(props) =>
@@ -26,16 +26,16 @@ const StyledButton = styled.button<ButtonProps>`
       : 'transparent'};
   margin: ${({ margin }) =>
     `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`};
-`
+`;
 
 export const Button: UserComponent<ButtonProps> = (props: any) => {
   const {
     connectors: { connect },
   } = useNode((node) => ({
     selected: node.events.selected,
-  }))
+  }));
 
-  const { text, textComponent, color, ...otherProps } = props
+  const { text, textComponent, color, ...otherProps } = props;
   return (
     <StyledButton
       ref={connect}
@@ -49,8 +49,8 @@ export const Button: UserComponent<ButtonProps> = (props: any) => {
     >
       <Text {...textComponent} text={text} color={props.color} />
     </StyledButton>
-  )
-}
+  );
+};
 
 Button.craft = {
   displayName: 'Button',
@@ -68,4 +68,4 @@ Button.craft = {
   related: {
     toolbar: ButtonSettings,
   },
-}
+};

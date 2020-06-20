@@ -1,18 +1,18 @@
-import React from 'react'
-import styled from 'styled-components'
-import { useLayer } from '../useLayer'
-import { DefaultLayerHeader } from './DefaultLayerHeader'
-import { useEditor } from '@craftjs/core'
+import React from 'react';
+import styled from 'styled-components';
+import { useLayer } from '../useLayer';
+import { DefaultLayerHeader } from './DefaultLayerHeader';
+import { useEditor } from '@craftjs/core';
 
 const LayerNodeDiv = styled.div<{
-  expanded: boolean
-  hasCanvases: boolean
-  hovered: boolean
+  expanded: boolean;
+  hasCanvases: boolean;
+  hovered: boolean;
 }>`
   background: ${(props) => (props.hovered ? '#f1f1f1' : 'transparent')};
   display: block;
   padding-bottom: ${(props) => (props.hasCanvases && props.expanded ? 5 : 0)}px;
-`
+`;
 
 const LayerChildren = styled.div<{ hasCanvases: boolean }>`
   margin: 0 0 0 ${(props) => (props.hasCanvases ? 35 : 0)}px;
@@ -40,7 +40,7 @@ const LayerChildren = styled.div<{ hasCanvases: boolean }>`
     }
   `
       : ''}
-`
+`;
 
 export const DefaultLayer: React.FC = ({ children }) => {
   const {
@@ -51,12 +51,12 @@ export const DefaultLayer: React.FC = ({ children }) => {
   } = useLayer((layer) => ({
     hovered: layer.event.hovered,
     expanded: layer.expanded,
-  }))
+  }));
   const { hasChildCanvases } = useEditor((state, query) => {
     return {
       hasChildCanvases: query.node(id).isParentOfTopLevelNodes(),
-    }
-  })
+    };
+  });
 
   return (
     <LayerNodeDiv
@@ -75,5 +75,5 @@ export const DefaultLayer: React.FC = ({ children }) => {
         </LayerChildren>
       ) : null}
     </LayerNodeDiv>
-  )
-}
+  );
+};

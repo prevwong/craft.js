@@ -1,11 +1,11 @@
-import React from 'react'
-import { useEditor } from '@craftjs/core'
-import styled from 'styled-components'
-import Eye from './svg/eye.svg'
-import Arrow from './svg/arrow.svg'
-import Linked from './svg/linked.svg'
-import { useLayer } from '../useLayer'
-import { EditableLayerName } from './EditableLayerName'
+import React from 'react';
+import { useEditor } from '@craftjs/core';
+import styled from 'styled-components';
+import Eye from './svg/eye.svg';
+import Arrow from './svg/arrow.svg';
+import Linked from './svg/linked.svg';
+import { useLayer } from '../useLayer';
+import { EditableLayerName } from './EditableLayerName';
 
 const StyledDiv = styled.div<{ depth: number; selected: boolean }>`
   display: flex;
@@ -35,7 +35,7 @@ const StyledDiv = styled.div<{ depth: number; selected: boolean }>`
       }
     }
   }
-`
+`;
 
 const Expand = styled.a<{ expanded: boolean }>`
   width: 8px;
@@ -46,7 +46,7 @@ const Expand = styled.a<{ expanded: boolean }>`
   opacity: 0.7;
   cursor: pointer;
   transform-origin: 60% center;
-`
+`;
 
 const Hide = styled.a<{ selected: boolean; isHidden: boolean }>`
   width: 14px;
@@ -75,7 +75,7 @@ const Hide = styled.a<{ selected: boolean; isHidden: boolean }>`
     transform-origin: 0% 0%;
     opacity: ${(props) => (props.isHidden ? 0.4 : 1)};
   }
-`
+`;
 
 const TopLevelIndicator = styled.div`
   margin-left: -22px;
@@ -85,7 +85,7 @@ const TopLevelIndicator = styled.div`
     width: 12px;
     height: 12px;
   }
-`
+`;
 
 export const DefaultLayerHeader: React.FC = () => {
   const {
@@ -98,14 +98,14 @@ export const DefaultLayerHeader: React.FC = () => {
   } = useLayer((layer) => {
     return {
       expanded: layer.expanded,
-    }
-  })
+    };
+  });
 
   const { hidden, actions, selected, topLevel } = useEditor((state, query) => ({
     hidden: state.nodes[id] && state.nodes[id].data.hidden,
     selected: state.events.selected === id,
     topLevel: query.node(id).isTopLevelCanvas(),
-  }))
+  }));
 
   return (
     <StyledDiv selected={selected} ref={drag} depth={depth}>
@@ -137,5 +137,5 @@ export const DefaultLayerHeader: React.FC = () => {
         </div>
       </div>
     </StyledDiv>
-  )
-}
+  );
+};

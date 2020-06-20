@@ -1,7 +1,7 @@
-import React from 'react'
-import { FormControlLabel, Radio } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
-import classnames from 'classnames'
+import React from 'react';
+import { FormControlLabel, Radio } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
+import classnames from 'classnames';
 
 const useStyles = makeStyles({
   icon: {
@@ -26,11 +26,11 @@ const useStyles = makeStyles({
       background: '#fff',
     },
   },
-})
+});
 
 // Inspired by blueprintjs
 function StyledRadio(props) {
-  const classes = useStyles({})
+  const classes = useStyles({});
 
   return (
     <Radio
@@ -42,17 +42,17 @@ function StyledRadio(props) {
       icon={<span className={classes.icon} />}
       {...props}
     />
-  )
+  );
 }
 
 const useLabelStyles = makeStyles({
   label: {
     fontSize: '15px',
   },
-})
+});
 
 export const ToolbarRadio = ({ value, label }: any) => {
-  const classes = useLabelStyles({})
+  const classes = useLabelStyles({});
   return (
     <FormControlLabel
       classes={classes}
@@ -60,5 +60,5 @@ export const ToolbarRadio = ({ value, label }: any) => {
       control={<StyledRadio />}
       label={label}
     />
-  )
-}
+  );
+};

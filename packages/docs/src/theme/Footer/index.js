@@ -5,16 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react'
-import classnames from 'classnames'
+import React from 'react';
+import classnames from 'classnames';
 
-import Link from '@docusaurus/Link'
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
-import useBaseUrl from '@docusaurus/useBaseUrl'
-import styles from './styles.module.css'
+import Link from '@docusaurus/Link';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from './styles.module.css';
 
 function FooterLink({ to, href, label, ...props }) {
-  const toUrl = useBaseUrl(to)
+  const toUrl = useBaseUrl(to);
   return (
     <Link
       className="footer__link-item"
@@ -31,24 +31,24 @@ function FooterLink({ to, href, label, ...props }) {
     >
       {label}
     </Link>
-  )
+  );
 }
 
 const FooterLogo = ({ url, alt }) => (
   <img className="footer__logo" alt={alt} src={url} />
-)
+);
 
 function Footer() {
-  const context = useDocusaurusContext()
-  const { siteConfig = {} } = context
-  const { themeConfig = {} } = siteConfig
-  const { footer } = themeConfig
+  const context = useDocusaurusContext();
+  const { siteConfig = {} } = context;
+  const { themeConfig = {} } = siteConfig;
+  const { footer } = themeConfig;
 
-  const { copyright, links = [], logo = {} } = footer || {}
-  const logoUrl = useBaseUrl(logo.src)
+  const { copyright, links = [], logo = {} } = footer || {};
+  const logoUrl = useBaseUrl(logo.src);
 
   if (!footer) {
-    return null
+    return null;
   }
 
   return (
@@ -124,7 +124,7 @@ function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
 
-export default Footer
+export default Footer;

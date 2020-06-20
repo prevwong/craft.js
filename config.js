@@ -16,4 +16,4 @@ module.exports = {
       BASIC_EXAMPLE: 'http://localhost:3002/',
     },
   }[process.env.ENV || 'development'],
-}
+};

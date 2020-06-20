@@ -5,22 +5,22 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { useCallback, useState } from 'react'
-import classnames from 'classnames'
-import Link from '@docusaurus/Link'
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
-import useBaseUrl from '@docusaurus/useBaseUrl'
+import React, { useCallback, useState } from 'react';
+import classnames from 'classnames';
+import Link from '@docusaurus/Link';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
-import SearchBar from '@theme/SearchBar'
-import Toggle from '@theme/Toggle'
-import useThemeContext from '@theme/hooks/useThemeContext'
-import useHideableNavbar from '@theme/hooks/useHideableNavbar'
-import useLockBodyScroll from '@theme/hooks/useLockBodyScroll'
-import useLogo from '@theme/hooks/useLogo'
+import SearchBar from '@theme/SearchBar';
+import Toggle from '@theme/Toggle';
+import useThemeContext from '@theme/hooks/useThemeContext';
+import useHideableNavbar from '@theme/hooks/useHideableNavbar';
+import useLockBodyScroll from '@theme/hooks/useLockBodyScroll';
+import useLogo from '@theme/hooks/useLogo';
 
-import versions from '../../../versions.json'
+import versions from '../../../versions.json';
 
-import styles from './styles.module.css'
+import styles from './styles.module.css';
 
 function NavLink({
   activeBasePath,
@@ -32,9 +32,9 @@ function NavLink({
   prependBaseUrlToHref,
   ...props
 }) {
-  const toUrl = useBaseUrl(to)
-  const activeBaseUrl = useBaseUrl(activeBasePath)
-  const normalizedHref = useBaseUrl(href, true)
+  const toUrl = useBaseUrl(to);
+  const activeBaseUrl = useBaseUrl(activeBasePath);
+  const normalizedHref = useBaseUrl(href, true);
 
   return (
     <Link
@@ -61,7 +61,7 @@ function NavLink({
     >
       {label}
     </Link>
-  )
+  );
 }
 
 function NavItem({ items, position, className, ...props }) {
@@ -72,10 +72,10 @@ function NavItem({ items, position, className, ...props }) {
         dropdown__link: isDropdownItem,
       },
       extraClassName
-    )
+    );
 
   if (!items) {
-    return <NavLink className={navLinkClassNames(className)} {...props} />
+    return <NavLink className={navLinkClassNames(className)} {...props} />;
   }
 
   return (
@@ -91,7 +91,7 @@ function NavItem({ items, position, className, ...props }) {
         onClick={(e) => e.preventDefault()}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
-            e.target.parentNode.classList.toggle('dropdown--show')
+            e.target.parentNode.classList.toggle('dropdown--show');
           }
         }}
       >
@@ -111,7 +111,7 @@ function NavItem({ items, position, className, ...props }) {
         )}
       </ul>
     </div>
-  )
+  );
 }
 
 function MobileNavItem({ items, position, className, ...props }) {
@@ -123,14 +123,14 @@ function MobileNavItem({ items, position, className, ...props }) {
         'menu__link--sublist': isSubList,
       },
       extraClassName
-    )
+    );
 
   if (!items) {
     return (
       <li className="menu__list-item">
         <NavLink className={navLinkClassNames(className)} {...props} />
       </li>
-    )
+    );
   }
 
   return (
@@ -153,7 +153,7 @@ function MobileNavItem({ items, position, className, ...props }) {
         )}
       </ul>
     </li>
-  )
+  );
 }
 
 function Navbar() {
@@ -166,36 +166,36 @@ function Navbar() {
       baseUrl,
     },
     isClient,
-  } = useDocusaurusContext()
-  const [sidebarShown, setSidebarShown] = useState(false)
-  const [isSearchBarExpanded, setIsSearchBarExpanded] = useState(false)
+  } = useDocusaurusContext();
+  const [sidebarShown, setSidebarShown] = useState(false);
+  const [isSearchBarExpanded, setIsSearchBarExpanded] = useState(false);
 
-  const { isDarkTheme, setLightTheme, setDarkTheme } = useThemeContext()
-  const { navbarRef, isNavbarVisible } = useHideableNavbar(hideOnScroll)
-  const { logoLink, logoLinkProps, logoImageUrl, logoAlt } = useLogo()
+  const { isDarkTheme, setLightTheme, setDarkTheme } = useThemeContext();
+  const { navbarRef, isNavbarVisible } = useHideableNavbar(hideOnScroll);
+  const { logoLink, logoLinkProps, logoImageUrl, logoAlt } = useLogo();
 
-  let version = versions[0]
+  let version = versions[0];
 
-  const path = typeof window !== 'undefined' ? window.location.pathname : null
+  const path = typeof window !== 'undefined' ? window.location.pathname : null;
 
   if (path && path.indexOf(baseUrl + 'docs/') > -1) {
-    const matches = versions.filter((version) => path.indexOf(version) > -1)
-    version = matches[0] || version
+    const matches = versions.filter((version) => path.indexOf(version) > -1);
+    version = matches[0] || version;
   }
 
-  useLockBodyScroll(sidebarShown)
+  useLockBodyScroll(sidebarShown);
 
   const showSidebar = useCallback(() => {
-    setSidebarShown(true)
-  }, [setSidebarShown])
+    setSidebarShown(true);
+  }, [setSidebarShown]);
   const hideSidebar = useCallback(() => {
-    setSidebarShown(false)
-  }, [setSidebarShown])
+    setSidebarShown(false);
+  }, [setSidebarShown]);
 
   const onToggleChange = useCallback(
     (e) => (e.target.checked ? setDarkTheme() : setLightTheme()),
     [setLightTheme, setDarkTheme]
-  )
+  );
 
   return (
     <nav
@@ -330,7 +330,7 @@ function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;

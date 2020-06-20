@@ -1,47 +1,47 @@
-import React, { useState, useEffect } from 'react'
-import cx from 'classnames'
-import { useEditor } from '@craftjs/core'
-import { Toolbox } from './Toolbox'
-import { Sidebar } from './Sidebar'
-import { Header } from './Header'
+import React, { useState, useEffect } from 'react';
+import cx from 'classnames';
+import { useEditor } from '@craftjs/core';
+import { Toolbox } from './Toolbox';
+import { Sidebar } from './Sidebar';
+import { Header } from './Header';
 import {
   Button as MaterialButton,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-} from '@material-ui/core'
+} from '@material-ui/core';
 export const Viewport: React.FC = ({ children }) => {
   const { enabled, connectors } = useEditor((state) => ({
     enabled: state.options.enabled,
-  }))
-  const [loaded, setLoaded] = useState(false)
-  const [mouseEnabled, setMouseEnabled] = useState(false)
-  const [dialog, setDialog] = useState(false)
+  }));
+  const [loaded, setLoaded] = useState(false);
+  const [mouseEnabled, setMouseEnabled] = useState(false);
+  const [dialog, setDialog] = useState(false);
 
-  let unmounted = false
+  let unmounted = false;
   // animations with setTimeouts. I know, don't judge me! :p
   useEffect(() => {
     setTimeout(() => {
-      if (!unmounted) setLoaded(true)
+      if (!unmounted) setLoaded(true);
       setTimeout(() => {
         if (
           localStorage &&
           localStorage.getItem('craftjs-demo-notice') != 'set'
         ) {
-          setDialog(true)
-          localStorage.setItem('craftjs-demo-notice', 'set')
+          setDialog(true);
+          localStorage.setItem('craftjs-demo-notice', 'set');
         }
         setTimeout(() => {
-          if (!unmounted) setMouseEnabled(true)
-        }, 200)
-      }, 400)
-    }, 1000)
+          if (!unmounted) setMouseEnabled(true);
+        }, 200);
+      }, 400);
+    }, 1000);
 
     return () => {
-      unmounted = true
-    }
-  }, [])
+      unmounted = true;
+    };
+  }, []);
 
   return (
     <div
@@ -125,5 +125,5 @@ export const Viewport: React.FC = ({ children }) => {
         <Sidebar />
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,6 +1,6 @@
-import React from 'react'
-import { ToolbarSection, ToolbarItem } from '../../editor'
-import { ToolbarRadio } from '../../editor/Toolbar/ToolbarRadio'
+import React from 'react';
+import { ToolbarSection, ToolbarItem } from '../../editor';
+import { ToolbarRadio } from '../../editor/Toolbar/ToolbarRadio';
 
 export const ContainerSettings = () => {
   return (
@@ -9,7 +9,7 @@ export const ContainerSettings = () => {
         title="Dimensions"
         props={['width', 'height']}
         summary={({ width, height }: any) => {
-          return `${width || 0} x ${height || 0}`
+          return `${width || 0} x ${height || 0}`;
         }}
       >
         <ToolbarItem propKey="width" type="text" label="Width" />
@@ -38,7 +38,7 @@ export const ContainerSettings = () => {
                 </p>
               </div>
             </div>
-          )
+          );
         }}
       >
         <ToolbarItem
@@ -55,7 +55,7 @@ export const ContainerSettings = () => {
         summary={({ margin }: any) => {
           return `${margin[0] || 0}px ${margin[1] || 0}px ${margin[2] || 0}px ${
             margin[3] || 0
-          }px`
+          }px`;
         }}
       >
         <ToolbarItem propKey="margin" index={0} type="slider" label="Top" />
@@ -69,7 +69,7 @@ export const ContainerSettings = () => {
         summary={({ padding }: any) => {
           return `${padding[0] || 0}px ${padding[1] || 0}px ${
             padding[2] || 0
-          }px ${padding[3] || 0}px`
+          }px ${padding[3] || 0}px`;
         }}
       >
         <ToolbarItem propKey="padding" index={0} type="slider" label="Top" />
@@ -120,5 +120,5 @@ export const ContainerSettings = () => {
         </ToolbarItem>
       </ToolbarSection>
     </React.Fragment>
-  )
-}
+  );
+};

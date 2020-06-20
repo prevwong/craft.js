@@ -1,20 +1,20 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react'
-import styled from 'styled-components'
-import { Resizable } from 're-resizable'
-import { useNode, useEditor } from '@craftjs/core'
-import cx from 'classnames'
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import styled from 'styled-components';
+import { Resizable } from 're-resizable';
+import { useNode, useEditor } from '@craftjs/core';
+import cx from 'classnames';
 import {
   isPercentage,
   pxToPercent,
   percentToPx,
   getElementDimensions,
-} from '../../utils/numToMeasurement'
-import { debounce } from 'debounce'
+} from '../../utils/numToMeasurement';
+import { debounce } from 'debounce';
 
 export type Resizer = {
-  propKey: Record<'width' | 'height', string>
-  children: React.ReactNode
-}
+  propKey: Record<'width' | 'height', string>;
+  children: React.ReactNode;
+};
 
 const Indicators = styled.div<{ bound?: 'row' | 'column' }>`
   position: absolute;
@@ -83,7 +83,7 @@ const Indicators = styled.div<{ bound?: 'row' | 'column' }>`
       display: ${(props) => (props.bound ? 'none' : 'block')};
     }
   }
-`
+`;
 
 export const Resizer = ({ propKey, children, ...props }: any) => {
   const {
@@ -102,7 +102,7 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
     nodeWidth: node.data.props[propKey.width],
     nodeHeight: node.data.props[propKey.height],
     fillSpace: node.data.props.fillSpace,
-  }))
+  }));
 
   const { isRootNode, parentDirection } = useEditor((state, query) => {
     return {
@@ -111,16 +111,16 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
         state.nodes[parent] &&
         state.nodes[parent].data.props.flexDirection,
       isRootNode: query.node(id).isRoot(),
-    }
-  })
+    };
+  });
 
   // const { parentWidth, parentHeight } = useEditor((state) => ({ parentWidth: parent && state.nodes[parent].data.props.width, parentHeight: parent && state.nodes[parent].data.props.height }))
 
-  const resizable = useRef<Resizable>(null)
-  const isResizing = useRef<Boolean>(false)
-  const editingDimensions = useRef<any>(null)
-  const nodeDimensions = useRef(null)
-  nodeDimensions.current = { width: nodeWidth, height: nodeHeight }
+  const resizable = useRef<Resizable>(null);
+  const isResizing = useRef<Boolean>(false);
+  const editingDimensions = useRef<any>(null);
+  const nodeDimensions = useRef(null);
+  nodeDimensions.current = { width: nodeWidth, height: nodeHeight };
 
   /**
    * Using an internal value to ensure the width/height set in the node is converted to px
@@ -129,61 +129,61 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
   const [internalDimensions, setInternalDimensions] = useState({
     width: nodeWidth,
     height: nodeHeight,
-  })
+  });
 
   const updateInternalDimensionsInPx = useCallback(() => {
-    const { width: nodeWidth, height: nodeHeight } = nodeDimensions.current
+    const { width: nodeWidth, height: nodeHeight } = nodeDimensions.current;
 
     const width = percentToPx(
       nodeWidth,
       resizable.current &&
         getElementDimensions(resizable.current.resizable.parentElement).width
-    )
+    );
     const height = percentToPx(
       nodeHeight,
       resizable.current &&
         getElementDimensions(resizable.current.resizable.parentElement).height
-    )
+    );
 
     setInternalDimensions({
       width,
       height,
-    })
-  }, [])
+    });
+  }, []);
 
   const updateInternalDimensionsWithOriginal = useCallback(() => {
-    const { width: nodeWidth, height: nodeHeight } = nodeDimensions.current
+    const { width: nodeWidth, height: nodeHeight } = nodeDimensions.current;
     setInternalDimensions({
       width: nodeWidth,
       height: nodeHeight,
-    })
-  }, [])
+    });
+  }, []);
 
   const getUpdatedDimensions = (width, height) => {
-    const dom = resizable.current.resizable
-    if (!dom) return
+    const dom = resizable.current.resizable;
+    if (!dom) return;
 
     const currentWidth = parseInt(editingDimensions.current.width),
-      currentHeight = parseInt(editingDimensions.current.height)
+      currentHeight = parseInt(editingDimensions.current.height);
 
     return {
       width: currentWidth + parseInt(width),
       height: currentHeight + parseInt(height),
-    }
-  }
+    };
+  };
 
   useEffect(() => {
-    if (!isResizing.current) updateInternalDimensionsWithOriginal()
-  }, [nodeWidth, nodeHeight])
+    if (!isResizing.current) updateInternalDimensionsWithOriginal();
+  }, [nodeWidth, nodeHeight]);
 
   useEffect(() => {
-    const listener = debounce(updateInternalDimensionsWithOriginal, 1)
-    window.addEventListener('resize', listener)
+    const listener = debounce(updateInternalDimensionsWithOriginal, 1);
+    window.addEventListener('resize', listener);
 
     return () => {
-      window.removeEventListener('resize', listener)
-    }
-  }, [])
+      window.removeEventListener('resize', listener);
+    };
+  }, []);
 
   return (
     <Resizable
@@ -197,8 +197,8 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
         'bottomLeft',
         'bottomRight',
       ].reduce((acc: any, key) => {
-        acc[key] = active && inNodeContext
-        return acc
+        acc[key] = active && inNodeContext;
+        return acc;
       }, {})}
       className={cx([
         {
@@ -208,56 +208,56 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
       ])}
       ref={(ref) => {
         if (ref) {
-          resizable.current = ref
-          connect(resizable.current.resizable)
+          resizable.current = ref;
+          connect(resizable.current.resizable);
         }
       }}
       size={internalDimensions}
       onResizeStart={(e) => {
-        updateInternalDimensionsInPx()
-        e.preventDefault()
-        e.stopPropagation()
-        const dom = resizable.current.resizable
-        if (!dom) return
+        updateInternalDimensionsInPx();
+        e.preventDefault();
+        e.stopPropagation();
+        const dom = resizable.current.resizable;
+        if (!dom) return;
         editingDimensions.current = {
           width: dom.getBoundingClientRect().width,
           height: dom.getBoundingClientRect().height,
-        }
-        isResizing.current = true
+        };
+        isResizing.current = true;
       }}
       onResize={(_, __, ___, d) => {
-        const dom = resizable.current.resizable
-        let { width, height }: any = getUpdatedDimensions(d.width, d.height)
+        const dom = resizable.current.resizable;
+        let { width, height }: any = getUpdatedDimensions(d.width, d.height);
         if (isPercentage(nodeWidth))
           width =
             pxToPercent(width, getElementDimensions(dom.parentElement).width) +
-            '%'
-        else width = `${width}px`
+            '%';
+        else width = `${width}px`;
 
         if (isPercentage(nodeHeight))
           height =
             pxToPercent(
               height,
               getElementDimensions(dom.parentElement).height
-            ) + '%'
-        else height = `${height}px`
+            ) + '%';
+        else height = `${height}px`;
 
         if (isPercentage(width) && dom.parentElement.style.width == 'auto') {
-          width = editingDimensions.current.width + d.width + 'px'
+          width = editingDimensions.current.width + d.width + 'px';
         }
 
         if (isPercentage(height) && dom.parentElement.style.height == 'auto') {
-          height = editingDimensions.current.height + d.height + 'px'
+          height = editingDimensions.current.height + d.height + 'px';
         }
 
         setProp((prop: any) => {
-          prop[propKey.width] = width
-          prop[propKey.height] = height
-        })
+          prop[propKey.width] = width;
+          prop[propKey.height] = height;
+        });
       }}
       onResizeStop={() => {
-        isResizing.current = false
-        updateInternalDimensionsWithOriginal()
+        isResizing.current = false;
+        updateInternalDimensionsWithOriginal();
       }}
       {...props}
     >
@@ -271,5 +271,5 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
         </Indicators>
       )}
     </Resizable>
-  )
-}
+  );
+};

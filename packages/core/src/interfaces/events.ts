@@ -1,8 +1,8 @@
-import { NodeId, Node } from './nodes'
+import { NodeId, Node } from './nodes';
 
 export type NodeInfo = {
-  id?: NodeId
-} & DOMInfo
+  id?: NodeId;
+} & DOMInfo;
 
 export type DOMInfo = Record<
   | 'x'
@@ -17,17 +17,17 @@ export type DOMInfo = Record<
   | 'outerHeight',
   number
 > & {
-  inFlow: boolean
-  margin: Record<'top' | 'left' | 'bottom' | 'right', number>
-  padding: Record<'top' | 'left' | 'bottom' | 'right', number>
-}
+  inFlow: boolean;
+  margin: Record<'top' | 'left' | 'bottom' | 'right', number>;
+  padding: Record<'top' | 'left' | 'bottom' | 'right', number>;
+};
 
 export interface DropAction {
-  parent: Node
-  index: number
-  where: string
+  parent: Node;
+  index: number;
+  where: string;
 }
 
 export type Placement = DropAction & {
-  currentNode: Node | null
-}
+  currentNode: Node | null;
+};

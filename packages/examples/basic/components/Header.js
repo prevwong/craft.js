@@ -1,17 +1,17 @@
-import React from 'react'
+import React from 'react';
 import {
   Box,
   Typography,
   Grid,
   Button as MaterialButton,
-} from '@material-ui/core'
-import { useEditor } from '@craftjs/core'
-import { Card } from './user/Card'
-import { Button } from './user/Button'
-import { Text } from './user/Text'
+} from '@material-ui/core';
+import { useEditor } from '@craftjs/core';
+import { Card } from './user/Card';
+import { Button } from './user/Button';
+import { Text } from './user/Text';
 
 export const Toolbox = () => {
-  const { connectors } = useEditor()
+  const { connectors } = useEditor();
 
   return (
     <Box px={2} py={2}>
@@ -53,5 +53,5 @@ export const Toolbox = () => {
         </Grid>
       </Grid>
     </Box>
-  )
-}
+  );
+};

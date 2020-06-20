@@ -1,11 +1,11 @@
-import React from 'react'
-import { Indicator } from '../interfaces'
-import { useEditor } from '../hooks'
+import React from 'react';
+import { Indicator } from '../interfaces';
+import { useEditor } from '../hooks';
 
 export type Placeholder = {
-  placeholder: Indicator
-  suggestedStyles: any
-}
+  placeholder: Indicator;
+  suggestedStyles: any;
+};
 
 export const RenderPlaceholder: React.FC<Placeholder> = ({
   placeholder,
@@ -13,7 +13,7 @@ export const RenderPlaceholder: React.FC<Placeholder> = ({
 }) => {
   const { indicator } = useEditor((state) => ({
     indicator: state.options.indicator,
-  }))
+  }));
 
   return (
     <div
@@ -28,5 +28,5 @@ export const RenderPlaceholder: React.FC<Placeholder> = ({
         ...suggestedStyles,
       }}
     ></div>
-  )
-}
+  );
+};

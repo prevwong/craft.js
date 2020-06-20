@@ -5,37 +5,37 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react'
+import React from 'react';
 
-import Head from '@docusaurus/Head'
-import isInternalUrl from '@docusaurus/isInternalUrl'
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
-import useBaseUrl from '@docusaurus/useBaseUrl'
-import DocPaginator from '@theme/DocPaginator'
-import useTOCHighlight from '@theme/hooks/useTOCHighlight'
+import Head from '@docusaurus/Head';
+import isInternalUrl from '@docusaurus/isInternalUrl';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import DocPaginator from '@theme/DocPaginator';
+import useTOCHighlight from '@theme/hooks/useTOCHighlight';
 
-import classnames from 'classnames'
-import styles from './styles.module.css'
+import classnames from 'classnames';
+import styles from './styles.module.css';
 
-const LINK_CLASS_NAME = 'table-of-contents__link'
-const ACTIVE_LINK_CLASS_NAME = 'table-of-contents__link--active'
-const TOP_OFFSET = 100
+const LINK_CLASS_NAME = 'table-of-contents__link';
+const ACTIVE_LINK_CLASS_NAME = 'table-of-contents__link--active';
+const TOP_OFFSET = 100;
 
 function DocTOC({ headings }) {
-  useTOCHighlight(LINK_CLASS_NAME, ACTIVE_LINK_CLASS_NAME, TOP_OFFSET)
+  useTOCHighlight(LINK_CLASS_NAME, ACTIVE_LINK_CLASS_NAME, TOP_OFFSET);
   return (
     <div className="col col--3">
       <div className={styles.tableOfContents}>
         <Headings headings={headings} />
       </div>
     </div>
-  )
+  );
 }
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
 function Headings({ headings, isChild }) {
   if (!headings.length) {
-    return null
+    return null;
   }
   return (
     <ul
@@ -54,14 +54,14 @@ function Headings({ headings, isChild }) {
         </li>
       ))}
     </ul>
-  )
+  );
 }
 
 function DocItem(props) {
-  const { siteConfig = {} } = useDocusaurusContext()
-  const { url: siteUrl, title: siteTitle } = siteConfig
-  const { content: DocContent } = props
-  const { metadata } = DocContent
+  const { siteConfig = {} } = useDocusaurusContext();
+  const { url: siteUrl, title: siteTitle } = siteConfig;
+  const { content: DocContent } = props;
+  const { metadata } = DocContent;
   const {
     description,
     title,
@@ -70,7 +70,7 @@ function DocItem(props) {
     lastUpdatedAt,
     lastUpdatedBy,
     version,
-  } = metadata
+  } = metadata;
   const {
     frontMatter: {
       image: metaImage,
@@ -78,12 +78,12 @@ function DocItem(props) {
       hide_title: hideTitle,
       hide_table_of_contents: hideTableOfContents,
     },
-  } = DocContent
+  } = DocContent;
 
-  const metaTitle = title ? `${title} | ${siteTitle}` : siteTitle
-  let metaImageUrl = siteUrl + useBaseUrl(metaImage)
+  const metaTitle = title ? `${title} | ${siteTitle}` : siteTitle;
+  let metaImageUrl = siteUrl + useBaseUrl(metaImage);
   if (!isInternalUrl(metaImage)) {
-    metaImageUrl = metaImage
+    metaImageUrl = metaImage;
   }
 
   return (
@@ -210,7 +210,7 @@ function DocItem(props) {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default DocItem
+export default DocItem;

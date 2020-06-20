@@ -1,13 +1,13 @@
-import React from 'react'
-import { Slider } from '@material-ui/core'
-import { useNode } from '@craftjs/core'
-import { Paper, FormControl, FormLabel } from '@material-ui/core'
-import ColorPicker from 'material-ui-color-picker'
+import React from 'react';
+import { Slider } from '@material-ui/core';
+import { useNode } from '@craftjs/core';
+import { Paper, FormControl, FormLabel } from '@material-ui/core';
+import ColorPicker from 'material-ui-color-picker';
 
 export const Container = ({ background, padding, children }) => {
   const {
     connectors: { connect, drag },
-  } = useNode()
+  } = useNode();
   return (
     <Paper
       ref={(ref) => connect(drag(ref))}
@@ -15,8 +15,8 @@ export const Container = ({ background, padding, children }) => {
     >
       {children}
     </Paper>
-  )
-}
+  );
+};
 
 export const ContainerSettings = () => {
   const {
@@ -26,7 +26,7 @@ export const ContainerSettings = () => {
   } = useNode((node) => ({
     background: node.data.props.background,
     padding: node.data.props.padding,
-  }))
+  }));
 
   return (
     <div>
@@ -35,7 +35,7 @@ export const ContainerSettings = () => {
         <ColorPicker
           value={background}
           onChange={(color) => {
-            setProp((props) => (props.background = color))
+            setProp((props) => (props.background = color));
           }}
         />
       </FormControl>
@@ -47,17 +47,17 @@ export const ContainerSettings = () => {
         />
       </FormControl>
     </div>
-  )
-}
+  );
+};
 
 export const ContainerDefaultProps = {
   background: '#ffffff',
   padding: 3,
-}
+};
 
 Container.craft = {
   props: ContainerDefaultProps,
   related: {
     settings: ContainerSettings,
   },
-}
+};

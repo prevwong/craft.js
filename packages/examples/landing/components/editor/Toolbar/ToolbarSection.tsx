@@ -1,13 +1,13 @@
-import React from 'react'
+import React from 'react';
 import {
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   Grid,
   Divider,
-} from '@material-ui/core'
-import { useNode } from '@craftjs/core'
-import { makeStyles } from '@material-ui/core/styles'
+} from '@material-ui/core';
+import { useNode } from '@craftjs/core';
+import { makeStyles } from '@material-ui/core/styles';
 const usePanelStyles = makeStyles((_) => ({
   root: {
     background: 'transparent',
@@ -26,7 +26,7 @@ const usePanelStyles = makeStyles((_) => ({
       },
     },
   },
-}))
+}));
 
 const useSummaryStyles = makeStyles((_) => ({
   root: {
@@ -36,19 +36,19 @@ const useSummaryStyles = makeStyles((_) => ({
   content: {
     margin: '0px',
   },
-}))
+}));
 
 export const ToolbarSection = ({ title, props, summary, children }: any) => {
-  const panelClasses = usePanelStyles({})
-  const summaryClasses = useSummaryStyles({})
+  const panelClasses = usePanelStyles({});
+  const summaryClasses = useSummaryStyles({});
   const { nodeProps } = useNode((node) => ({
     nodeProps:
       props &&
       props.reduce((res: any, key: any) => {
-        res[key] = node.data.props[key] || null
-        return res
+        res[key] = node.data.props[key] || null;
+        return res;
       }, {}),
-  }))
+  }));
   return (
     <ExpansionPanel classes={panelClasses}>
       <ExpansionPanelSummary classes={summaryClasses}>
@@ -64,8 +64,8 @@ export const ToolbarSection = ({ title, props, summary, children }: any) => {
                 <h5 className="text-light-gray-2 text-sm text-right text-dark-blue">
                   {summary(
                     props.reduce((acc: any, key: any) => {
-                      acc[key] = nodeProps[key]
-                      return acc
+                      acc[key] = nodeProps[key];
+                      return acc;
                     }, {})
                   )}
                 </h5>
@@ -81,5 +81,5 @@ export const ToolbarSection = ({ title, props, summary, children }: any) => {
         </Grid>
       </ExpansionPanelDetails>
     </ExpansionPanel>
-  )
-}
+  );
+};

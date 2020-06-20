@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export const RenderIndicator: React.FC<any> = ({ style }) => {
   return (
@@ -14,5 +14,5 @@ export const RenderIndicator: React.FC<any> = ({ style }) => {
         ...style,
       }}
     ></div>
-  )
-}
+  );
+};

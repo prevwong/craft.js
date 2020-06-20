@@ -1,11 +1,11 @@
-import path from 'path'
-import resolve from 'rollup-plugin-node-resolve'
-import { terser } from 'rollup-plugin-terser'
-import typescript from 'rollup-plugin-typescript'
-import babel from 'rollup-plugin-babel'
+import path from 'path';
+import resolve from 'rollup-plugin-node-resolve';
+import { terser } from 'rollup-plugin-terser';
+import typescript from 'rollup-plugin-typescript';
+import babel from 'rollup-plugin-babel';
 
-const shouldMinify = process.env.NODE_ENV === 'production'
-const bundle = ['tslib']
+const shouldMinify = process.env.NODE_ENV === 'production';
+const bundle = ['tslib'];
 
 export default {
   input: './src/index.ts',
@@ -24,7 +24,7 @@ export default {
     },
   ],
   external: (id) => {
-    return !id.startsWith('.') && !path.isAbsolute(id) && !bundle.includes(id)
+    return !id.startsWith('.') && !path.isAbsolute(id) && !bundle.includes(id);
   },
   plugins: [
     resolve(),
@@ -63,4 +63,4 @@ export default {
         },
       }),
   ],
-}
+};

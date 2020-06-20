@@ -1,17 +1,17 @@
-import React from 'react'
-import { useNode, useEditor } from '@craftjs/core'
-import { TextSettings } from './TextSettings'
-import ContentEditable from 'react-contenteditable'
+import React from 'react';
+import { useNode, useEditor } from '@craftjs/core';
+import { TextSettings } from './TextSettings';
+import ContentEditable from 'react-contenteditable';
 
 export type Text = {
-  fontSize: string
-  textAlign: string
-  fontWeight: string
-  color: Record<'r' | 'g' | 'b' | 'a', string>
-  shadow: number
-  text: string
-  margin: [string, string, string, string]
-}
+  fontSize: string;
+  textAlign: string;
+  fontWeight: string;
+  color: Record<'r' | 'g' | 'b' | 'a', string>;
+  shadow: number;
+  text: string;
+  margin: [string, string, string, string];
+};
 
 export const Text = ({
   fontSize,
@@ -25,17 +25,17 @@ export const Text = ({
   const {
     connectors: { connect },
     setProp,
-  } = useNode()
+  } = useNode();
   const { enabled } = useEditor((state) => ({
     enabled: state.options.enabled,
-  }))
+  }));
   return (
     <ContentEditable
       innerRef={connect}
       html={text} // innerHTML of the editable div
       disabled={!enabled}
       onChange={(e) => {
-        setProp((prop) => (prop.text = e.target.value))
+        setProp((prop) => (prop.text = e.target.value));
       }} // use true to disable editing
       tagName="h2" // Use a custom HTML tag (uses a div by default)
       style={{
@@ -48,8 +48,8 @@ export const Text = ({
         textAlign,
       }}
     />
-  )
-}
+  );
+};
 
 Text.craft = {
   displayName: 'Text',
@@ -65,4 +65,4 @@ Text.craft = {
   related: {
     toolbar: TextSettings,
   },
-}
+};

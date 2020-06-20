@@ -1,24 +1,24 @@
-import React from 'react'
-import { Container } from '../Container'
-import { Element, useNode } from '@craftjs/core'
-import { Button } from '../Button'
+import React from 'react';
+import { Container } from '../Container';
+import { Element, useNode } from '@craftjs/core';
+import { Button } from '../Button';
 
 export const OnlyButtons = ({ children, ...props }) => {
   const {
     connectors: { connect },
-  } = useNode()
+  } = useNode();
   return (
     <div title="only-buttons" ref={connect} className="w-full mt-5" {...props}>
       {children}
     </div>
-  )
-}
+  );
+};
 
 OnlyButtons.craft = {
   rules: {
     canMoveIn: (node) => node.data.type == Button,
   },
-}
+};
 
 export const Custom1 = (props: any) => {
   return (
@@ -35,10 +35,10 @@ export const Custom1 = (props: any) => {
         />
       </Element>
     </Container>
-  )
-}
+  );
+};
 
 Custom1.craft = {
   ...Container.craft,
   displayName: 'Custom 1',
-}
+};

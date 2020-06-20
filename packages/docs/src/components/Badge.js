@@ -1,13 +1,13 @@
-import React from 'react'
+import React from 'react';
 
 export const Badge = ({ type, title = true, noMargin = true }) => {
-  let name
+  let name;
   switch (type) {
     case 'hoc':
-      name = 'Higher-Order Component'
-      break
+      name = 'Higher-Order Component';
+      break;
     default:
-      name = type[0].toUpperCase() + type.substring(1)
+      name = type[0].toUpperCase() + type.substring(1);
   }
 
   return (
@@ -20,5 +20,5 @@ export const Badge = ({ type, title = true, noMargin = true }) => {
         {name}
       </span>
     </div>
-  )
-}
+  );
+};

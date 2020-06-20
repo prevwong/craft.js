@@ -1,16 +1,16 @@
-import React from 'react'
-import { useEditor } from '@craftjs/core'
-export * from './ToolbarItem'
-export * from './ToolbarSection'
-export * from './ToolbarTextInput'
-export * from './ToolbarDropdown'
+import React from 'react';
+import { useEditor } from '@craftjs/core';
+export * from './ToolbarItem';
+export * from './ToolbarSection';
+export * from './ToolbarTextInput';
+export * from './ToolbarDropdown';
 
 export const Toolbar = () => {
   const { active, related } = useEditor((state) => ({
     active: state.events.selected,
     related:
       state.events.selected && state.nodes[state.events.selected].related,
-  }))
+  }));
 
   return (
     <div className="py-1 h-full">
@@ -31,5 +31,5 @@ export const Toolbar = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};

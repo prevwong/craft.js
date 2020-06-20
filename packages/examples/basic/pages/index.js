@@ -1,23 +1,23 @@
-import React from 'react'
-import '../styles/main.css'
-import { Typography, Paper, Grid, makeStyles } from '@material-ui/core'
-import { Toolbox } from '../components/Toolbox'
-import { Container } from '../components/user/Container'
-import { Button } from '../components/user/Button'
-import { Card, CardBottom, CardTop } from '../components/user/Card'
-import { Text } from '../components/user/Text'
-import { SettingsPanel } from '../components/SettingsPanel'
-import { Editor, Frame, Element } from '@craftjs/core'
-import { Topbar } from '../components/Topbar'
+import React from 'react';
+import '../styles/main.css';
+import { Typography, Paper, Grid, makeStyles } from '@material-ui/core';
+import { Toolbox } from '../components/Toolbox';
+import { Container } from '../components/user/Container';
+import { Button } from '../components/user/Button';
+import { Card, CardBottom, CardTop } from '../components/user/Card';
+import { Text } from '../components/user/Text';
+import { SettingsPanel } from '../components/SettingsPanel';
+import { Editor, Frame, Element } from '@craftjs/core';
+import { Topbar } from '../components/Topbar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: 0,
     background: 'rgb(252, 253, 253)',
   },
-}))
+}));
 export default function App() {
-  const classes = useStyles()
+  const classes = useStyles();
 
   return (
     <div style={{ margin: '0 auto', width: '800px' }}>
@@ -57,5 +57,5 @@ export default function App() {
         </Grid>
       </Editor>
     </div>
-  )
+  );
 }

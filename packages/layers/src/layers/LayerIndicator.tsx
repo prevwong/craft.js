@@ -1,11 +1,11 @@
-import React from 'react'
-import { Indicator } from '@craftjs/core'
-import { useEditor } from '@craftjs/core'
+import React from 'react';
+import { Indicator } from '@craftjs/core';
+import { useEditor } from '@craftjs/core';
 
 export type Placeholder = {
-  placeholder: Indicator
-  suggestedStyles: any
-}
+  placeholder: Indicator;
+  suggestedStyles: any;
+};
 
 export const LayerIndicator: React.FC<Placeholder> = ({
   placeholder,
@@ -13,7 +13,7 @@ export const LayerIndicator: React.FC<Placeholder> = ({
 }) => {
   const { indicator } = useEditor((state) => ({
     indicator: state.options.indicator,
-  }))
+  }));
 
   return (
     <div
@@ -28,5 +28,5 @@ export const LayerIndicator: React.FC<Placeholder> = ({
         ...suggestedStyles,
       }}
     ></div>
-  )
-}
+  );
+};

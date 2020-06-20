@@ -1,9 +1,9 @@
-import React from 'react'
-import { useEditor } from '@craftjs/core'
-import styled from 'styled-components'
-import Checkmark from '../../../public/icons/check.svg'
-import Customize from '../../../public/icons/customize.svg'
-import cx from 'classnames'
+import React from 'react';
+import { useEditor } from '@craftjs/core';
+import styled from 'styled-components';
+import Checkmark from '../../../public/icons/check.svg';
+import Customize from '../../../public/icons/customize.svg';
+import cx from 'classnames';
 
 const HeaderDiv = styled.div<{ enabled: boolean }>`
   width: ${(props) => (props.enabled ? '100%' : '800px')};
@@ -20,7 +20,7 @@ const HeaderDiv = styled.div<{ enabled: boolean }>`
     color:#2d2d2d;
   `
       : ''}
-`
+`;
 
 const Link = styled.a<any>`
   padding: 20px 0px;
@@ -43,7 +43,7 @@ const Link = styled.a<any>`
     left: 0;
     position: absolute;
   }
-`
+`;
 
 const Btn = styled.a`
   display: flex;
@@ -59,7 +59,7 @@ const Btn = styled.a`
     fill: #fff;
     opacity: 0.9;
   }
-`
+`;
 
 export const Header = () => {
   const {
@@ -67,7 +67,7 @@ export const Header = () => {
     actions: { setOptions },
   } = useEditor((state) => ({
     enabled: state.options.enabled,
-  }))
+  }));
 
   return (
     <HeaderDiv
@@ -93,7 +93,7 @@ export const Header = () => {
               },
             ])}
             onClick={() => {
-              setOptions((options) => (options.enabled = !enabled))
+              setOptions((options) => (options.enabled = !enabled));
             }}
           >
             {enabled ? <Checkmark /> : <Customize />}
@@ -102,5 +102,5 @@ export const Header = () => {
         </div>
       </div>
     </HeaderDiv>
-  )
-}
+  );
+};
