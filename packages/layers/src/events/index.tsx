@@ -1,49 +1,49 @@
-import React, { useMemo } from 'react'
-import { useEditor } from '@craftjs/core'
-import { useLayerManager } from '../manager/useLayerManager'
-import { RenderIndicator } from '@craftjs/utils'
+import React, { useMemo } from "react";
+import { useEditor } from "@craftjs/core";
+import { useLayerManager } from "../manager/useLayerManager";
+import { RenderIndicator } from "@craftjs/utils";
 
 export const EventManager: React.FC<any> = ({ children }) => {
-  const { layers, events } = useLayerManager((state) => state)
-  const { query } = useEditor((state) => ({ enabled: state.options.enabled }))
-  const { indicator: indicatorStyles } = query.getOptions()
+  const { layers, events } = useLayerManager((state) => state);
+  const { query } = useEditor((state) => ({ enabled: state.options.enabled }));
+  const { indicator: indicatorStyles } = query.getOptions();
 
   const indicatorPosition = useMemo(() => {
-    const { indicator } = events
+    const { indicator } = events;
 
     if (indicator) {
       const {
         placement: { where, parent, currentNode },
         error,
-      } = indicator
-      const layerId = currentNode ? currentNode.id : parent.id
+      } = indicator;
+      const layerId = currentNode ? currentNode.id : parent.id;
 
-      let top
-      const color = error ? indicatorStyles.error : indicatorStyles.success
+      let top;
+      const color = error ? indicatorStyles.error : indicatorStyles.success;
 
       if (indicator.onCanvas && layers[parent.id].dom != null) {
-        const parentPos = layers[parent.id].dom.getBoundingClientRect()
+        const parentPos = layers[parent.id].dom.getBoundingClientRect();
         const parentHeadingPos = layers[
           parent.id
-        ].headingDom.getBoundingClientRect()
+        ].headingDom.getBoundingClientRect();
         return {
           top: parentHeadingPos.top,
           left: parentPos.left,
           width: parentPos.width,
           height: parentHeadingPos.height,
-          background: 'transparent',
-          borderWidth: '1px',
+          background: "transparent",
+          borderWidth: "1px",
           borderColor: color,
-        }
+        };
       } else {
-        if (!layers[layerId]) return
-        const headingPos = layers[layerId].headingDom.getBoundingClientRect()
-        const pos = layers[layerId].dom.getBoundingClientRect()
+        if (!layers[layerId]) return;
+        const headingPos = layers[layerId].headingDom.getBoundingClientRect();
+        const pos = layers[layerId].dom.getBoundingClientRect();
 
-        if (where === 'after' || !currentNode) {
-          top = pos.top + pos.height
+        if (where === "after" || !currentNode) {
+          top = pos.top + pos.height;
         } else {
-          top = pos.top
+          top = pos.top;
         }
 
         return {
@@ -53,10 +53,10 @@ export const EventManager: React.FC<any> = ({ children }) => {
           height: 2,
           borderWidth: 0,
           background: color,
-        }
+        };
       }
     }
-  }, [events, indicatorStyles.error, indicatorStyles.success, layers])
+  }, [events, indicatorStyles.error, indicatorStyles.success, layers]);
 
   return (
     <div>
@@ -67,5 +67,5 @@ export const EventManager: React.FC<any> = ({ children }) => {
         : null}
       {children}
     </div>
-  )
-}
+  );
+};

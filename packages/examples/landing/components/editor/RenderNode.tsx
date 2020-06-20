@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useCallback } from 'react'
-import { useNode, useEditor } from '@craftjs/core'
-import styled from 'styled-components'
-import ArrowUp from '../../public/icons/arrow-up.svg'
-import Move from '../../public/icons/move.svg'
-import Delete from '../../public/icons/delete.svg'
-import ReactDOM from 'react-dom'
-import { ROOT_NODE } from '@craftjs/utils'
+import React, { useEffect, useRef, useCallback } from "react";
+import { useNode, useEditor } from "@craftjs/core";
+import styled from "styled-components";
+import ArrowUp from "../../public/icons/arrow-up.svg";
+import Move from "../../public/icons/move.svg";
+import Delete from "../../public/icons/delete.svg";
+import ReactDOM from "react-dom";
+import { ROOT_NODE } from "@craftjs/utils";
 
 const IndicatorDiv = styled.div`
   height: 30px;
@@ -18,7 +18,7 @@ const IndicatorDiv = styled.div`
     width: 15px;
     height: 15px;
   }
-`
+`;
 
 const Btn = styled.a`
   padding: 0 0px;
@@ -30,10 +30,10 @@ const Btn = styled.a`
     top: -50%;
     left: -50%;
   }
-`
+`;
 
 export const RenderNode = ({ render }) => {
-  const { actions, query, connectors } = useEditor()
+  const { actions, query, connectors } = useEditor();
   const {
     id,
     isActive,
@@ -53,47 +53,47 @@ export const RenderNode = ({ render }) => {
     deletable: query.node(node.id).isDeletable(),
     parent: node.data.parent,
     props: node.data.props,
-  }))
+  }));
 
-  const currentRef = useRef<HTMLDivElement>()
+  const currentRef = useRef<HTMLDivElement>();
 
   useEffect(() => {
     if (dom) {
-      if (isActive || isHover) dom.classList.add('component-selected')
-      else dom.classList.remove('component-selected')
+      if (isActive || isHover) dom.classList.add("component-selected");
+      else dom.classList.remove("component-selected");
     }
-  }, [dom, isActive, isHover])
+  }, [dom, isActive, isHover]);
 
   const getPos = useCallback((dom: HTMLElement) => {
     const { top, left, bottom } = dom
       ? dom.getBoundingClientRect()
-      : { top: 0, left: 0, bottom: 0 }
+      : { top: 0, left: 0, bottom: 0 };
     return {
       top: `${top > 0 ? top : bottom}px`,
       left: `${left}px`,
-    }
-  }, [])
+    };
+  }, []);
 
   const scroll = useCallback(() => {
-    const { current: currentDOM } = currentRef
+    const { current: currentDOM } = currentRef;
 
-    if (!currentDOM) return
-    const { top, left } = getPos(dom)
-    currentDOM.style.top = top
-    currentDOM.style.left = left
-  }, [dom])
+    if (!currentDOM) return;
+    const { top, left } = getPos(dom);
+    currentDOM.style.top = top;
+    currentDOM.style.left = left;
+  }, [dom]);
 
   useEffect(() => {
     document
-      .querySelector('.craftjs-renderer')
-      .addEventListener('scroll', scroll)
+      .querySelector(".craftjs-renderer")
+      .addEventListener("scroll", scroll);
 
     return () => {
       document
-        .querySelector('.craftjs-renderer')
-        .removeEventListener('scroll', scroll)
-    }
-  }, [scroll])
+        .querySelector(".craftjs-renderer")
+        .removeEventListener("scroll", scroll);
+    };
+  }, [scroll]);
 
   return (
     <>
@@ -118,7 +118,7 @@ export const RenderNode = ({ render }) => {
                 <Btn
                   className="mr-2 cursor-pointer"
                   onClick={() => {
-                    actions.selectNode(parent)
+                    actions.selectNode(parent);
                   }}
                 >
                   <ArrowUp />
@@ -128,8 +128,8 @@ export const RenderNode = ({ render }) => {
                 <Btn
                   className="cursor-pointer"
                   onMouseDown={(e: React.MouseEvent) => {
-                    e.stopPropagation()
-                    actions.delete(id)
+                    e.stopPropagation();
+                    actions.delete(id);
                   }}
                 >
                   <Delete />
@@ -141,5 +141,5 @@ export const RenderNode = ({ render }) => {
         : null}
       {render}
     </>
-  )
-}
+  );
+};

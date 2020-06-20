@@ -1,12 +1,12 @@
-import React from 'react'
-import { useNode } from '../hooks/useNode'
+import React from "react";
+import { useNode } from "../hooks/useNode";
 
 export const SimpleElement = ({ render }: any) => {
   const {
     connectors: { connect, drag },
-  } = useNode()
+  } = useNode();
 
-  return typeof render.type === 'string'
+  return typeof render.type === "string"
     ? connect(drag(React.cloneElement(render)))
-    : render
-}
+    : render;
+};

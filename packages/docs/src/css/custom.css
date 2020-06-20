@@ -12,8 +12,8 @@
  */
 
 /* You can override the default Infima variables here. */
-@import url('https://fonts.googleapis.com/css?family=Fira+Code&display=swap');
-@import url('https://use.typekit.net/mpa1wkh.css');
+@import url("https://fonts.googleapis.com/css?family=Fira+Code&display=swap");
+@import url("https://use.typekit.net/mpa1wkh.css");
 
 html {
   -webkit-font-smoothing: subpixel-antialiased;
@@ -31,12 +31,12 @@ html {
   --ifm-color-primary-lightest: rgb(146, 224, 208);
   --ifm-navbar-background-color: #81a9a9;
   --ifm-navbar-link-color: rgba(255, 255, 255, 0.85);
-  --ifm-font-family-base: 'acumin-pro', 'Source Sans Pro', system-ui,
+  --ifm-font-family-base: "acumin-pro", "Source Sans Pro", system-ui,
     -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif,
-    BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  --ifm-font-family-monospace: 'Fira Code', SFMono-Regular, Menlo, Monaco,
-    Consolas, 'Liberation Mono', 'Courier New', monospace;
+    BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --ifm-font-family-monospace: "Fira Code", SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
   --ifm-navbar-link-color: rgba(255, 255, 255, 0.6);
   --ifm-navbar-link-hover-color: #fff;
   --ifm-navbar-search-input-background-color: rgba(0, 0, 0, 0.2);
@@ -65,7 +65,7 @@ html {
   margin-top: -2px;
 }
 
-[data-theme='dark'] {
+[data-theme="dark"] {
   --ifm-navbar-background-color: #4c4c4c;
   --ifm-footer-background-color: #1f1f1f;
   --ifm-contents-border-color: rgba(255, 255, 255, 0.09);
@@ -91,7 +91,7 @@ strong.api-type {
   /* font-style: italic; */
   font-size: 13px;
   font-weight: 400;
-  font-family: 'Fira Code';
+  font-family: "Fira Code";
 }
 
 .api-description {
@@ -189,7 +189,7 @@ header + .markdown > .badge-wrapper:first-child {
   border: none;
   margin-bottom: 10px;
 }
-html[data-theme='dark'] .badge-type {
+html[data-theme="dark"] .badge-type {
   background: #fff;
   color: #000;
 }
@@ -296,11 +296,11 @@ a.btn.btn-text {
   box-shadow: none;
 }
 
-html[data-theme='dark'] .api-type {
+html[data-theme="dark"] .api-type {
   color: #86f3d5;
 }
 
-html[data-theme='dark'] .api-description {
+html[data-theme="dark"] .api-description {
   color: #ffffffba;
 }
 
@@ -388,7 +388,7 @@ html[data-theme='dark'] .api-description {
 }
 
 .version-header-label:after {
-  content: ' ';
+  content: " ";
   display: block;
   position: absolute;
   bottom: 0;

@@ -16,5 +16,5 @@ export const createTestNode = (id, data, config = {}) => {
       canDrag: () => true,
     },
     ...config,
-  }
-}
+  };
+};

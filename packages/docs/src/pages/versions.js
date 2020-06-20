@@ -5,16 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react'
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
 
-import Layout from '@theme/Layout'
+import Layout from "@theme/Layout";
 
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
-import Link from '@docusaurus/Link'
-import useBaseUrl from '@docusaurus/useBaseUrl'
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import Link from "@docusaurus/Link";
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
-import versions from '../../versions.json'
+import versions from "../../versions.json";
 
 const Page = styled.div`
   padding: 40px 0;
@@ -26,14 +26,14 @@ const Page = styled.div`
   > div > h3 {
     font-size: 15px;
   }
-`
+`;
 
 function Version() {
-  const context = useDocusaurusContext()
-  const { siteConfig = {} } = context
-  const latestVersion = versions[0]
-  const pastVersions = versions.filter((version) => version !== latestVersion)
-  const repoUrl = `https://github.com/${siteConfig.organizationName}/${siteConfig.projectName}`
+  const context = useDocusaurusContext();
+  const { siteConfig = {} } = context;
+  const latestVersion = versions[0];
+  const pastVersions = versions.filter((version) => version !== latestVersion);
+  const repoUrl = `https://github.com/${siteConfig.organizationName}/${siteConfig.projectName}`;
 
   return (
     <Layout
@@ -50,7 +50,7 @@ function Version() {
               <tr>
                 <th>{latestVersion}</th>
                 <td>
-                  <Link to={useBaseUrl('/docs/overview')}>Documentation</Link>
+                  <Link to={useBaseUrl("/docs/overview")}>Documentation</Link>
                 </td>
                 <td>
                   <a href={`${repoUrl}/releases/tag/v${latestVersion}`}>
@@ -87,7 +87,7 @@ function Version() {
         )}
       </Page>
     </Layout>
-  )
+  );
 }
 
-export default Version
+export default Version;

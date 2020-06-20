@@ -1,21 +1,21 @@
-import React from 'react'
-import { useEditor } from '@craftjs/core'
-import styled from 'styled-components'
-import Eye from './svg/eye.svg'
-import Arrow from './svg/arrow.svg'
-import Linked from './svg/linked.svg'
-import { useLayer } from '../useLayer'
-import { EditableLayerName } from './EditableLayerName'
+import React from "react";
+import { useEditor } from "@craftjs/core";
+import styled from "styled-components";
+import Eye from "./svg/eye.svg";
+import Arrow from "./svg/arrow.svg";
+import Linked from "./svg/linked.svg";
+import { useLayer } from "../useLayer";
+import { EditableLayerName } from "./EditableLayerName";
 
 const StyledDiv = styled.div<{ depth: number; selected: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 4px 10px;
-  background: ${(props) => (props.selected ? '#2680eb' : 'transparent')};
-  color: ${(props) => (props.selected ? '#fff' : 'inherit')};
+  background: ${(props) => (props.selected ? "#2680eb" : "transparent")};
+  color: ${(props) => (props.selected ? "#fff" : "inherit")};
   svg {
-    fill: ${(props) => (props.selected ? '#fff' : '#808184')};
+    fill: ${(props) => (props.selected ? "#fff" : "#808184")};
     margin-top: 2px;
   }
   .inner {
@@ -35,7 +35,7 @@ const StyledDiv = styled.div<{ depth: number; selected: boolean }>`
       }
     }
   }
-`
+`;
 
 const Expand = styled.a<{ expanded: boolean }>`
   width: 8px;
@@ -46,7 +46,7 @@ const Expand = styled.a<{ expanded: boolean }>`
   opacity: 0.7;
   cursor: pointer;
   transform-origin: 60% center;
-`
+`;
 
 const Hide = styled.a<{ selected: boolean; isHidden: boolean }>`
   width: 14px;
@@ -63,19 +63,19 @@ const Hide = styled.a<{ selected: boolean; isHidden: boolean }>`
     opacity: ${(props) => (props.isHidden ? 0.2 : 1)};
   }
   &:after {
-    content: ' ';
+    content: " ";
     width: 2px;
     height: ${(props) => (props.isHidden ? 100 : 0)}%;
     position: absolute;
     left: 2px;
     top: 3px;
-    background: ${(props) => (props.selected ? '#fff' : '#808184')};
+    background: ${(props) => (props.selected ? "#fff" : "#808184")};
     transform: rotate(-45deg);
     transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     transform-origin: 0% 0%;
     opacity: ${(props) => (props.isHidden ? 0.4 : 1)};
   }
-`
+`;
 
 const TopLevelIndicator = styled.div`
   margin-left: -22px;
@@ -85,7 +85,7 @@ const TopLevelIndicator = styled.div`
     width: 12px;
     height: 12px;
   }
-`
+`;
 
 export const DefaultLayerHeader: React.FC = () => {
   const {
@@ -98,14 +98,14 @@ export const DefaultLayerHeader: React.FC = () => {
   } = useLayer((layer) => {
     return {
       expanded: layer.expanded,
-    }
-  })
+    };
+  });
 
   const { hidden, actions, selected, topLevel } = useEditor((state, query) => ({
     hidden: state.nodes[id] && state.nodes[id].data.hidden,
     selected: state.events.selected === id,
     topLevel: query.node(id).isTopLevelCanvas(),
-  }))
+  }));
 
   return (
     <StyledDiv selected={selected} ref={drag} depth={depth}>
@@ -137,5 +137,5 @@ export const DefaultLayerHeader: React.FC = () => {
         </div>
       </div>
     </StyledDiv>
-  )
-}
+  );
+};

@@ -1,5 +1,5 @@
-import React from 'react'
-import Layout from '@theme/Layout'
+import React from "react";
+import Layout from "@theme/Layout";
 
 function Support() {
   return (
@@ -10,7 +10,7 @@ function Support() {
             <div className="col">
               <article>
                 <header>
-                  <h1 style={{ fontSize: '3rem', marginBottom: '3rem' }}>
+                  <h1 style={{ fontSize: "3rem", marginBottom: "3rem" }}>
                     Support
                   </h1>
                 </header>
@@ -24,23 +24,23 @@ function Support() {
                   world.
                 </p>
                 <p>
-                  Craft.js is released under the{' '}
+                  Craft.js is released under the{" "}
                   <a
                     target="_blank"
                     href="https://github.com/prevwong/craft.js/blob/master/LICENSE"
                   >
                     MIT license
-                  </a>{' '}
+                  </a>{" "}
                   and is built with 100% love. If you found it useful and would
                   like to ensure its continued development, please consider
-                  becoming a backer/sponsor or making a one-time donation via{' '}
+                  becoming a backer/sponsor or making a one-time donation via{" "}
                   <a
                     href="https://opencollective.com/craftjs/contribute"
                     target="_blank"
                   >
                     Open Collective
-                  </a>{' '}
-                  or{' '}
+                  </a>{" "}
+                  or{" "}
                   <a href="https://paypal.me/prevwong" target="_blank">
                     Paypal
                   </a>
@@ -62,7 +62,7 @@ function Support() {
         </div>
       </div>
     </Layout>
-  )
+  );
 }
 
-export default Support
+export default Support;

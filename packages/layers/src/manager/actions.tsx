@@ -1,19 +1,19 @@
-import { LayerState, LayerEvents, Layer } from '../interfaces'
+import { LayerState, LayerEvents, Layer } from "../interfaces";
 
 export const LayerMethods = (state: LayerState) => ({
   setLayerEvent: (eventType: LayerEvents, id: string) => {
-    if (id !== null && !state.layers[id]) return
+    if (id !== null && !state.layers[id]) return;
 
-    const current = state.events[eventType]
+    const current = state.events[eventType];
     if (current && id !== current) {
-      state.layers[current].event[eventType] = false
+      state.layers[current].event[eventType] = false;
     }
 
     if (id) {
-      state.layers[id].event[eventType] = true
-      state.events[eventType] = id
+      state.layers[id].event[eventType] = true;
+      state.events[eventType] = id;
     } else {
-      state.events[eventType] = null
+      state.events[eventType] = null;
     }
   },
   registerLayer: (id: string) => {
@@ -25,12 +25,12 @@ export const LayerMethods = (state: LayerState) => ({
           selected: false,
           hovered: false,
         },
-      } as Layer
+      } as Layer;
     }
   },
   setDOM: (
     id: string,
-    domCollection: Partial<Record<'dom' | 'headingDom', HTMLElement>>
+    domCollection: Partial<Record<"dom" | "headingDom", HTMLElement>>
   ) => {
     state.layers[id] = {
       ...state.layers[id],
@@ -38,12 +38,12 @@ export const LayerMethods = (state: LayerState) => ({
       ...(domCollection.headingDom
         ? { headingDom: domCollection.headingDom }
         : {}),
-    }
+    };
   },
   toggleLayer: (id: string) => {
-    state.layers[id].expanded = !state.layers[id].expanded
+    state.layers[id].expanded = !state.layers[id].expanded;
   },
   setIndicator: (indicator) => {
-    state.events.indicator = indicator
+    state.events.indicator = indicator;
   },
-})
+});

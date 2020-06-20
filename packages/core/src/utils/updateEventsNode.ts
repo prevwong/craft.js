@@ -1,4 +1,4 @@
-import { EditorState, NodeId } from '../interfaces'
+import { EditorState, NodeId } from "../interfaces";
 export const updateEventsNode = (
   state: EditorState,
   id: NodeId,
@@ -6,7 +6,7 @@ export const updateEventsNode = (
 ) => {
   Object.keys(state.events).forEach((key) => {
     if (state.events[key] && state.events[key] === id) {
-      state.events[key] = toDelete ? null : id
+      state.events[key] = toDelete ? null : id;
     }
-  })
-}
+  });
+};

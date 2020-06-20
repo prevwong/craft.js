@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { useNode } from '@craftjs/core'
-import ContentEditable from 'react-contenteditable'
-import { Slider, FormControl, FormLabel } from '@material-ui/core'
+import React, { useState, useEffect } from "react";
+import { useNode } from "@craftjs/core";
+import ContentEditable from "react-contenteditable";
+import { Slider, FormControl, FormLabel } from "@material-ui/core";
 
 export const Text = ({ text, fontSize, textAlign }) => {
   const {
@@ -11,13 +11,13 @@ export const Text = ({ text, fontSize, textAlign }) => {
   } = useNode((state) => ({
     selected: state.events.selected,
     dragged: state.events.dragged,
-  }))
+  }));
 
-  const [editable, setEditable] = useState(false)
+  const [editable, setEditable] = useState(false);
 
   useEffect(() => {
-    !selected && setEditable(false)
-  }, [selected])
+    !selected && setEditable(false);
+  }, [selected]);
 
   return (
     <div
@@ -30,15 +30,15 @@ export const Text = ({ text, fontSize, textAlign }) => {
         onChange={(e) =>
           setProp(
             (props) =>
-              (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, ''))
+              (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, ""))
           )
         }
         tagName="p"
         style={{ fontSize: `${fontSize}px`, textAlign }}
       />
     </div>
-  )
-}
+  );
+};
 
 const TextSettings = () => {
   const {
@@ -47,7 +47,7 @@ const TextSettings = () => {
   } = useNode((node) => ({
     text: node.data.props.text,
     fontSize: node.data.props.fontSize,
-  }))
+  }));
 
   return (
     <>
@@ -59,22 +59,22 @@ const TextSettings = () => {
           min={1}
           max={50}
           onChange={(_, value) => {
-            setProp((props) => (props.fontSize = value))
+            setProp((props) => (props.fontSize = value));
           }}
         />
       </FormControl>
     </>
-  )
-}
+  );
+};
 
 export const TextDefaultProps = {
-  text: 'Hi',
+  text: "Hi",
   fontSize: 20,
-}
+};
 
 Text.craft = {
   props: TextDefaultProps,
   related: {
     settings: TextSettings,
   },
-}
+};

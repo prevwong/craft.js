@@ -1,18 +1,18 @@
-import React from 'react'
-import { ToolbarSection, ToolbarItem } from '../../editor'
-import { ToolbarRadio } from '../../editor/Toolbar/ToolbarRadio'
-import { capitalize, weightDescription } from '../../../utils/text'
+import React from "react";
+import { ToolbarSection, ToolbarItem } from "../../editor";
+import { ToolbarRadio } from "../../editor/Toolbar/ToolbarRadio";
+import { capitalize, weightDescription } from "../../../utils/text";
 
 export const TextSettings = () => {
   return (
     <React.Fragment>
       <ToolbarSection
         title="Typography"
-        props={['fontSize', 'fontWeight', 'textAlign']}
+        props={["fontSize", "fontWeight", "textAlign"]}
         summary={({ fontSize, fontWeight, textAlign }: any) => {
-          return `${fontSize || ''}, ${weightDescription(
+          return `${fontSize || ""}, ${weightDescription(
             fontWeight
-          )}, ${capitalize(textAlign)}`
+          )}, ${capitalize(textAlign)}`;
         }}
       >
         <ToolbarItem
@@ -34,11 +34,11 @@ export const TextSettings = () => {
       </ToolbarSection>
       <ToolbarSection
         title="Margin"
-        props={['margin']}
+        props={["margin"]}
         summary={({ margin }: any) => {
           return `${margin[0] || 0}px ${margin[1] || 0}px ${margin[2] || 0}px ${
             margin[3] || 0
-          }px`
+          }px`;
         }}
       >
         <ToolbarItem propKey="margin" index={0} type="slider" label="Top" />
@@ -48,7 +48,7 @@ export const TextSettings = () => {
       </ToolbarSection>
       <ToolbarSection
         title="Appearance"
-        props={['color', 'shadow']}
+        props={["color", "shadow"]}
         summary={({ color, shadow }: any) => {
           return (
             <div className="fletext-right">
@@ -62,7 +62,7 @@ export const TextSettings = () => {
                 T
               </p>
             </div>
-          )
+          );
         }}
       >
         <ToolbarItem full={true} propKey="color" type="color" label="Text" />
@@ -74,5 +74,5 @@ export const TextSettings = () => {
         />
       </ToolbarSection>
     </React.Fragment>
-  )
-}
+  );
+};

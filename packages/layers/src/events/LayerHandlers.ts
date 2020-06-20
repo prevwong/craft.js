@@ -1,60 +1,60 @@
-import { NodeId, Node, DerivedEventHandlers } from '@craftjs/core'
-import { LayerIndicator } from 'interfaces'
-import { ConnectorsForHandlers } from '@craftjs/utils'
+import { NodeId, Node, DerivedEventHandlers } from "@craftjs/core";
+import { LayerIndicator } from "interfaces";
+import { ConnectorsForHandlers } from "@craftjs/utils";
 
 export class LayerHandlers extends DerivedEventHandlers<
-  'layer' | 'layerHeader' | 'drag'
+  "layer" | "layerHeader" | "drag"
 > {
-  private id
-  private layerStore
-  static draggedElement
+  private id;
+  private layerStore;
+  static draggedElement;
   static events: {
-    indicator: LayerIndicator
-    currentCanvasHovered: Node
+    indicator: LayerIndicator;
+    currentCanvasHovered: Node;
   } = {
     indicator: null,
     currentCanvasHovered: null,
-  }
-  static currentCanvasHovered
+  };
+  static currentCanvasHovered;
 
   constructor(store, derived, layerStore, layerId) {
-    super(store, derived)
-    this.id = layerId
-    this.layerStore = layerStore
+    super(store, derived);
+    this.id = layerId;
+    this.layerStore = layerStore;
   }
 
   getLayer(id) {
-    return this.layerStore.getState().layers[id]
+    return this.layerStore.getState().layers[id];
   }
 
   handlers() {
-    const parentConnectors = this.derived.connectors()
+    const parentConnectors = this.derived.connectors();
     return {
       layer: {
         init: (el) => {
-          parentConnectors.select(el, this.id)
-          parentConnectors.hover(el, this.id)
-          parentConnectors.drag(el, this.id)
+          parentConnectors.select(el, this.id);
+          parentConnectors.hover(el, this.id);
+          parentConnectors.drag(el, this.id);
 
           this.layerStore.actions.setDOM(this.id, {
             dom: el,
-          })
+          });
         },
         events: [
           [
-            'mouseover',
+            "mouseover",
             (e: MouseEvent, id) => {
-              e.stopPropagation()
-              this.layerStore.actions.setLayerEvent('hovered', id)
+              e.stopPropagation();
+              this.layerStore.actions.setLayerEvent("hovered", id);
             },
           ],
           [
-            'dragover',
+            "dragover",
             (e) => {
-              e.preventDefault()
-              e.stopPropagation()
+              e.preventDefault();
+              e.stopPropagation();
 
-              const { indicator, currentCanvasHovered } = LayerHandlers.events
+              const { indicator, currentCanvasHovered } = LayerHandlers.events;
 
               if (
                 currentCanvasHovered &&
@@ -63,7 +63,7 @@ export class LayerHandlers extends DerivedEventHandlers<
               ) {
                 const heading = this.getLayer(
                   currentCanvasHovered.id
-                ).headingDom.getBoundingClientRect()
+                ).headingDom.getBoundingClientRect();
 
                 if (
                   e.clientY > heading.top + 10 &&
@@ -72,83 +72,83 @@ export class LayerHandlers extends DerivedEventHandlers<
                   const currNode =
                     currentCanvasHovered.data.nodes[
                       currentCanvasHovered.data.nodes.length - 1
-                    ]
-                  if (!currNode) return
+                    ];
+                  if (!currNode) return;
                   indicator.placement.currentNode = this.store.query
                     .node(currNode)
-                    .get()
+                    .get();
                   indicator.placement.index =
-                    currentCanvasHovered.data.nodes.length
-                  indicator.placement.where = 'after'
-                  indicator.placement.parent = currentCanvasHovered
+                    currentCanvasHovered.data.nodes.length;
+                  indicator.placement.where = "after";
+                  indicator.placement.parent = currentCanvasHovered;
 
                   LayerHandlers.events.indicator = {
                     ...indicator,
                     onCanvas: true,
-                  }
+                  };
 
                   this.layerStore.actions.setIndicator(
                     LayerHandlers.events.indicator
-                  )
+                  );
                 }
               }
             },
           ],
           [
-            'dragenter',
+            "dragenter",
             (e) => {
-              e.preventDefault()
-              e.stopPropagation()
+              e.preventDefault();
+              e.stopPropagation();
 
-              const dragId = LayerHandlers.draggedElement
+              const dragId = LayerHandlers.draggedElement;
 
-              if (!dragId) return
+              if (!dragId) return;
 
-              let target = this.id
+              let target = this.id;
 
               const indicatorInfo = this.store.query.getDropPlaceholder(
                 dragId,
                 target,
                 { x: e.clientX, y: e.clientY },
                 (node) => {
-                  const layer = this.getLayer(node.id)
-                  return layer && layer.dom
+                  const layer = this.getLayer(node.id);
+                  return layer && layer.dom;
                 }
-              )
+              );
 
               if (indicatorInfo) {
                 const {
                   placement: { parent },
-                } = indicatorInfo
+                } = indicatorInfo;
                 const parentHeadingInfo = this.getLayer(
                   parent.id
-                ).headingDom.getBoundingClientRect()
+                ).headingDom.getBoundingClientRect();
 
-                LayerHandlers.events.currentCanvasHovered = null
+                LayerHandlers.events.currentCanvasHovered = null;
                 if (this.store.query.node(parent.id).isCanvas()) {
                   if (parent.data.parent) {
                     const grandparent = this.store.query
                       .node(parent.data.parent)
-                      .get()
+                      .get();
                     if (this.store.query.node(grandparent.id).isCanvas()) {
-                      LayerHandlers.events.currentCanvasHovered = parent
+                      LayerHandlers.events.currentCanvasHovered = parent;
                       if (
                         (e.clientY > parentHeadingInfo.bottom - 10 &&
                           !this.getLayer(parent.id).expanded) ||
                         e.clientY < parentHeadingInfo.top + 10
                       ) {
-                        indicatorInfo.placement.parent = grandparent
-                        indicatorInfo.placement.currentNode = parent
+                        indicatorInfo.placement.parent = grandparent;
+                        indicatorInfo.placement.currentNode = parent;
                         indicatorInfo.placement.index = grandparent.data.nodes
                           ? grandparent.data.nodes.indexOf(parent.id)
-                          : 0
+                          : 0;
                         if (
                           e.clientY > parentHeadingInfo.bottom - 10 &&
                           !this.getLayer(parent.id).expanded
                         ) {
-                          indicatorInfo.placement.where = 'after'
+                          indicatorInfo.placement.where = "after";
                         } else if (e.clientY < parentHeadingInfo.top + 10) {
-                          indicatorInfo.placement.where = 'before'
+                          indicatorInfo.placement.where = "before";
                         }
                       }
                     }
@@ -158,34 +158,34 @@ export class LayerHandlers extends DerivedEventHandlers<
                 LayerHandlers.events.indicator = {
                   ...indicatorInfo,
                   onCanvas: false,
-                }
+                };
 
                 this.layerStore.actions.setIndicator(
                   LayerHandlers.events.indicator
-                )
+                );
               }
             },
           ],
           [
-            'dragend',
+            "dragend",
             (e: MouseEvent) => {
-              e.stopPropagation()
-              const events = LayerHandlers.events
+              e.stopPropagation();
+              const events = LayerHandlers.events;
 
               if (events.indicator && !events.indicator.error) {
-                const { placement } = events.indicator
-                const { parent, index, where } = placement
-                const { id: parentId } = parent
+                const { placement } = events.indicator;
+                const { parent, index, where } = placement;
+                const { id: parentId } = parent;
 
                 this.store.actions.move(
                   LayerHandlers.draggedElement as NodeId,
                   parentId,
-                  index + (where === 'after' ? 1 : 0)
-                )
+                  index + (where === "after" ? 1 : 0)
+                );
               }
 
-              LayerHandlers.draggedElement = null
-              this.layerStore.actions.setIndicator(null)
+              LayerHandlers.draggedElement = null;
+              this.layerStore.actions.setIndicator(null);
             },
           ],
         ],
@@ -194,30 +194,30 @@ export class LayerHandlers extends DerivedEventHandlers<
         init: (el) => {
           this.layerStore.actions.setDOM(this.id, {
             headingDom: el,
-          })
+          });
         },
       },
       drag: {
         init: (el) => {
-          el.setAttribute('draggable', true)
+          el.setAttribute("draggable", true);
 
           return () => {
-            el.removeAttribute('draggable')
-          }
+            el.removeAttribute("draggable");
+          };
         },
         events: [
           [
-            'dragstart',
+            "dragstart",
             (e: MouseEvent) => {
-              e.stopPropagation()
+              e.stopPropagation();
 
-              LayerHandlers.draggedElement = this.id
+              LayerHandlers.draggedElement = this.id;
             },
           ],
         ],
       },
-    }
+    };
   }
 }
 
-export type LayerConnectors = ConnectorsForHandlers<LayerHandlers>
+export type LayerConnectors = ConnectorsForHandlers<LayerHandlers>;

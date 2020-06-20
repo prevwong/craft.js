@@ -1,24 +1,24 @@
-import React, { useState } from 'react'
-import { Layers } from '@craftjs/layers'
-import { Toolbar } from '../../Toolbar'
-import { SidebarItem } from './SidebarItem'
-import styled from 'styled-components'
-import CustomizeIcon from '../../../../public/icons/customize.svg'
-import LayerIcon from '../../../../public/icons/layers.svg'
-import { useEditor } from '@craftjs/core'
+import React, { useState } from "react";
+import { Layers } from "@craftjs/layers";
+import { Toolbar } from "../../Toolbar";
+import { SidebarItem } from "./SidebarItem";
+import styled from "styled-components";
+import CustomizeIcon from "../../../../public/icons/customize.svg";
+import LayerIcon from "../../../../public/icons/layers.svg";
+import { useEditor } from "@craftjs/core";
 
 export const SidebarDiv = styled.div<{ enabled: boolean }>`
   width: ${(props) => (props.enabled ? 280 : 0)}px;
   opacity: ${(props) => (props.enabled ? 1 : 0)};
   background: #fff;
-`
+`;
 
 export const Sidebar = () => {
-  const [layersVisible, setLayerVisible] = useState(true)
-  const [toolbarVisible, setToolbarVisible] = useState(true)
+  const [layersVisible, setLayerVisible] = useState(true);
+  const [toolbarVisible, setToolbarVisible] = useState(true);
   const { enabled } = useEditor((state) => ({
     enabled: state.options.enabled,
-  }))
+  }));
 
   return (
     <SidebarDiv enabled={enabled} className="sidebar transition bg-white w-2">
@@ -26,7 +26,7 @@ export const Sidebar = () => {
         <SidebarItem
           icon={CustomizeIcon}
           title="Customize"
-          height={!layersVisible ? 'full' : '55%'}
+          height={!layersVisible ? "full" : "55%"}
           visible={toolbarVisible}
           onChange={(val) => setToolbarVisible(val)}
         >
@@ -35,7 +35,7 @@ export const Sidebar = () => {
         <SidebarItem
           icon={LayerIcon}
           title="Layers"
-          height={!toolbarVisible ? 'full' : '45%'}
+          height={!toolbarVisible ? "full" : "45%"}
           visible={layersVisible}
           onChange={(val) => setLayerVisible(val)}
         >
@@ -45,5 +45,5 @@ export const Sidebar = () => {
         </SidebarItem>
       </div>
     </SidebarDiv>
-  )
-}
+  );
+};

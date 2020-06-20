@@ -4,16 +4,16 @@ export const getDOMPadding = (dom: HTMLElement) => {
     right: parseInt(window.getComputedStyle(dom).paddingRight),
     bottom: parseInt(window.getComputedStyle(dom).paddingTop),
     top: parseInt(window.getComputedStyle(dom).paddingBottom),
-  }
-}
+  };
+};
 export const getDOMMargin = (dom: HTMLElement) => {
   return {
     left: parseInt(window.getComputedStyle(dom).marginLeft),
     right: parseInt(window.getComputedStyle(dom).marginRight),
     bottom: parseInt(window.getComputedStyle(dom).marginTop),
     top: parseInt(window.getComputedStyle(dom).marginBottom),
-  }
-}
+  };
+};
 export const getDOMInfo = (dom: HTMLElement) => {
   const {
     x,
@@ -24,9 +24,9 @@ export const getDOMInfo = (dom: HTMLElement) => {
     right,
     width,
     height,
-  } = dom.getBoundingClientRect() as DOMRect
+  } = dom.getBoundingClientRect() as DOMRect;
   const margin = getDOMMargin(dom),
-    padding = getDOMPadding(dom)
+    padding = getDOMPadding(dom);
 
   return {
     x: Math.round(x),
@@ -42,45 +42,45 @@ export const getDOMInfo = (dom: HTMLElement) => {
     margin,
     padding,
     inFlow: dom && dom.parentElement && !!styleInFlow(dom, dom.parentElement),
-  }
-}
+  };
+};
 
 export const getComputedStyle = (dom: HTMLElement) => {
-  return window.getComputedStyle(dom)
-}
+  return window.getComputedStyle(dom);
+};
 
 export const styleInFlow = (el: HTMLElement, parent: HTMLElement) => {
-  const style: any = getComputedStyle(el)
-  const parentStyle: any = getComputedStyle(parent)
+  const style: any = getComputedStyle(el);
+  const parentStyle: any = getComputedStyle(parent);
 
-  if (style.overflow && style.overflow !== 'visible') return
-  if (parentStyle.float !== 'none') return
+  if (style.overflow && style.overflow !== "visible") return;
+  if (parentStyle.float !== "none") return;
   if (
     parent &&
-    parentStyle.display === 'flex' &&
-    parentStyle['flex-direction'] !== 'column'
+    parentStyle.display === "flex" &&
+    parentStyle["flex-direction"] !== "column"
   )
-    return
+    return;
   switch (style.position) {
-    case 'static':
-    case 'relative':
-      break
+    case "static":
+    case "relative":
+      break;
     default:
-      return
+      return;
   }
   switch (el.tagName) {
-    case 'TR':
-    case 'TBODY':
-    case 'THEAD':
-    case 'TFOOT':
-      return true
+    case "TR":
+    case "TBODY":
+    case "THEAD":
+    case "TFOOT":
+      return true;
   }
   switch (style.display) {
-    case 'block':
-    case 'list-item':
-    case 'table':
-    case 'flex':
-      return true
+    case "block":
+    case "list-item":
+    case "table":
+    case "flex":
+      return true;
   }
-  return
-}
+  return;
+};
