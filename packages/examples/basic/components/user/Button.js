@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Button as MaterialButton,
   FormControl,
@@ -6,25 +6,25 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
-} from "@material-ui/core";
-import { useNode } from "@craftjs/core";
+} from '@material-ui/core'
+import { useNode } from '@craftjs/core'
 
 export const Button = ({ size, variant, color, text }) => {
   const {
     connectors: { connect, drag },
-  } = useNode();
+  } = useNode()
   return (
     <MaterialButton
       ref={(ref) => connect(drag(ref))}
-      style={{ margin: "5px" }}
+      style={{ margin: '5px' }}
       size={size}
       variant={variant}
       color={color}
     >
       {text}
     </MaterialButton>
-  );
-};
+  )
+}
 
 export const ButtonSettings = () => {
   const {
@@ -32,7 +32,7 @@ export const ButtonSettings = () => {
     props,
   } = useNode((node) => ({
     props: node.data.props,
-  }));
+  }))
 
   return (
     <div>
@@ -106,19 +106,19 @@ export const ButtonSettings = () => {
         </RadioGroup>
       </FormControl>
     </div>
-  );
-};
+  )
+}
 
 export const ButtonDefaultProps = {
-  size: "small",
-  variant: "contained",
-  color: "primary",
-  text: "Click me",
-};
+  size: 'small',
+  variant: 'contained',
+  color: 'primary',
+  text: 'Click me',
+}
 
 Button.craft = {
   props: ButtonDefaultProps,
   related: {
     settings: ButtonSettings,
   },
-};
+}

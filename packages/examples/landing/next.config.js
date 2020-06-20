@@ -1,10 +1,10 @@
-const withPlugins = require("next-compose-plugins");
-const withCSS = require("@zeit/next-css");
-const config = require("../../../config");
+const withPlugins = require('next-compose-plugins')
+const withCSS = require('@zeit/next-css')
+const config = require('../../../config')
 
 module.exports = withPlugins([[withCSS]], {
-  assetPrefix: "",
+  assetPrefix: '',
   env: {
     url: config.url,
   },
-});
+})

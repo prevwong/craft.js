@@ -1,14 +1,14 @@
-import { Node, NodeTree } from "../interfaces";
+import { Node, NodeTree } from '../interfaces'
 
 const mergeNodes = (rootNode: Node, childrenNodes: NodeTree[]) => {
   if (childrenNodes.length < 1) {
-    return { [rootNode.id]: rootNode };
+    return { [rootNode.id]: rootNode }
   }
-  const nodes = childrenNodes.map(({ rootNodeId }) => rootNodeId);
-  const nodeWithChildren = { ...rootNode, data: { ...rootNode.data, nodes } };
-  const rootNodes = { [rootNode.id]: nodeWithChildren };
+  const nodes = childrenNodes.map(({ rootNodeId }) => rootNodeId)
+  const nodeWithChildren = { ...rootNode, data: { ...rootNode.data, nodes } }
+  const rootNodes = { [rootNode.id]: nodeWithChildren }
   return childrenNodes.reduce((accum, tree) => {
-    const currentNode = tree.nodes[tree.rootNodeId];
+    const currentNode = tree.nodes[tree.rootNodeId]
     return {
       ...accum,
       ...tree.nodes,
@@ -20,9 +20,9 @@ const mergeNodes = (rootNode: Node, childrenNodes: NodeTree[]) => {
           parent: rootNode.id,
         },
       },
-    };
-  }, rootNodes);
-};
+    }
+  }, rootNodes)
+}
 
 export const mergeTrees = (
   rootNode: Node,
@@ -30,4 +30,4 @@ export const mergeTrees = (
 ): NodeTree => ({
   rootNodeId: rootNode.id,
   nodes: mergeNodes(rootNode, childrenNodes),
-});
+})

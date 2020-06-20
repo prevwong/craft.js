@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react'
 import {
   Box,
   Chip,
   Grid,
   Typography,
   Button as MaterialButton,
-} from "@material-ui/core";
-import { useEditor } from "@craftjs/core";
+} from '@material-ui/core'
+import { useEditor } from '@craftjs/core'
 
 export const SettingsPanel = () => {
   const { actions, selected } = useEditor((state, query) => {
-    const currentNodeId = state.events.selected;
-    let selected;
+    const currentNodeId = state.events.selected
+    let selected
 
     if (currentNodeId) {
       selected = {
@@ -21,13 +21,13 @@ export const SettingsPanel = () => {
           state.nodes[currentNodeId].related &&
           state.nodes[currentNodeId].related.settings,
         isDeletable: query.node(currentNodeId).isDeletable(),
-      };
+      }
     }
 
     return {
       selected,
-    };
-  });
+    }
+  })
 
   return selected ? (
     <Box bgcolor="rgba(0, 0, 0, 0.06)" mt={2} px={2} py={2}>
@@ -50,7 +50,7 @@ export const SettingsPanel = () => {
             variant="contained"
             color="default"
             onClick={() => {
-              actions.delete(selected.id);
+              actions.delete(selected.id)
             }}
           >
             Delete
@@ -58,5 +58,5 @@ export const SettingsPanel = () => {
         ) : null}
       </Grid>
     </Box>
-  ) : null;
-};
+  ) : null
+}

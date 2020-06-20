@@ -1,8 +1,8 @@
-import { useMethods, SubscriberAndCallbacksFor } from "@craftjs/utils";
-import { Actions } from "./actions";
-import { QueryMethods } from "./query";
+import { useMethods, SubscriberAndCallbacksFor } from '@craftjs/utils'
+import { Actions } from './actions'
+import { QueryMethods } from './query'
 
-export type EditorStore = SubscriberAndCallbacksFor<typeof Actions>;
+export type EditorStore = SubscriberAndCallbacksFor<typeof Actions>
 
 export const editorInitialState = {
   nodes: {},
@@ -12,7 +12,7 @@ export const editorInitialState = {
     hovered: null,
     indicator: null,
   },
-};
+}
 
 export const useEditorStore = (options): EditorStore => {
   return useMethods(
@@ -22,5 +22,5 @@ export const useEditorStore = (options): EditorStore => {
       options,
     },
     QueryMethods
-  );
-};
+  )
+}
