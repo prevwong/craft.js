@@ -507,7 +507,7 @@ Gets the current Node and its descendants in its `NodeTree` form
 
 #### Parameters
 <API items={[
-  ["descendantType?", "'childNodes' | 'linkedNodes'", "Get descendants that are either childNodes or linkedNodes. If unset, get all descendants"]
+  ["includeOnly?", "'childNodes' | 'linkedNodes'", "Get descendants that are either childNodes or linkedNodes. If unset, get all descendants"]
 ]} /> 
 
 
