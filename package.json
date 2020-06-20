@@ -17,7 +17,10 @@
     "publish:beta": "lerna version prerelease --preid beta --force-publish --yes && release --pre",
     "test": "jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "scaffold": "npm run lerna:bootstrap && npm run lerna:link",
+    "lerna:link": "lerna link",
+    "lerna:bootstrap": "lerna bootstrap"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
