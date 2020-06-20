@@ -54,41 +54,44 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
     get() {
       return node;
     },
-    ancestors(deep = false) {
+    ancestors(deep = false): NodeId[] {
       function appendParentNode(
         id: NodeId,
-        result: NodeId[] = [],
+        ancestors: NodeId[] = [],
         depth: number = 0
       ) {
         const node = state.nodes[id];
         if (!node) {
-          return result;
+          return ancestors;
         }
 
-        result.push(id);
+        ancestors.push(id);
 
         if (!node.data.parent) {
-          return result;
+          return ancestors;
         }
 
         if (deep || (!deep && depth === 0)) {
-          result = appendParentNode(node.data.parent, result, depth + 1);
+          ancestors = appendParentNode(node.data.parent, ancestors, depth + 1);
         }
-        return result;
+        return ancestors;
       }
       return appendParentNode(node.data.parent);
     },
-    descendants(deep = false, includeOnly?: "linkedNodes" | "childNodes") {
+    descendants(
+      deep = false,
+      includeOnly?: "linkedNodes" | "childNodes"
+    ): NodeId[] {
       function appendChildNode(
         id: NodeId,
-        result: NodeId[] = [],
+        descendants: NodeId[] = [],
         depth: number = 0
       ) {
         if (deep || (!deep && depth === 0)) {
           const node = state.nodes[id];
 
           if (!node) {
-            return result;
+            return descendants;
           }
 
           if (includeOnly !== "childNodes") {
@@ -96,8 +99,8 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
             const linkedNodes = nodeHelpers(id).linkedNodes();
 
             linkedNodes.forEach((nodeId) => {
-              result.push(nodeId);
-              result = appendChildNode(nodeId, result, depth + 1);
+              descendants.push(nodeId);
+              descendants = appendChildNode(nodeId, descendants, depth + 1);
             });
           }
 
@@ -107,15 +110,15 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
             // Include child Nodes if any
             if (childNodes) {
               childNodes.forEach((nodeId) => {
-                result.push(nodeId);
-                result = appendChildNode(nodeId, result, depth + 1);
+                descendants.push(nodeId);
+                descendants = appendChildNode(nodeId, descendants, depth + 1);
               });
             }
           }
 
-          return result;
+          return descendants;
         }
-        return result;
+        return descendants;
       }
       return appendChildNode(id);
     },
