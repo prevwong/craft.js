@@ -11,6 +11,7 @@ import {
   ERROR_MOVE_TO_DESCENDANT,
   ERROR_MOVE_TO_NONCANVAS_PARENT,
   ERROR_MOVE_TOP_LEVEL_NODE,
+  ERROR_MOVE_CANNOT_DROP,
   ROOT_NODE,
 } from "@craftjs/utils";
 import { serializeNode } from "../utils/serializeNode";
@@ -158,6 +159,11 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
         invariant(
           newParentNode.rules.canMoveIn(targetNode, newParentNode, nodeHelpers),
           ERROR_MOVE_INCOMING_PARENT
+        );
+
+        invariant(
+          targetNode.rules.canDrop(newParentNode, targetNode, nodeHelpers),
+          ERROR_MOVE_CANNOT_DROP
         );
 
         if (isNewNode) {

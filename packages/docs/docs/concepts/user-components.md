@@ -28,6 +28,7 @@ const Text = () => {...}
 Text.craft = {
   props: {},
   rules: {
+    canDrop: () => true,
     canDrag: () => true,
     canMoveIn: () => true,
     canMoveOut: () => true

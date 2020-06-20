@@ -11,6 +11,8 @@ export const ERROR_TOP_LEVEL_ELEMENT_NO_ID =
   'A <Element /> that is used inside a User Component must specify an `id` prop, eg: <Element id="text_element">...</Element> ';
 export const ERROR_MISSING_PLACEHOLDER_PLACEMENT =
   "Placeholder required placement info (parent, index, or where) is missing";
+export const ERROR_MOVE_CANNOT_DROP =
+  "Node cannot be dropped into target parent";
 export const ERROR_MOVE_INCOMING_PARENT = "Target parent rejects incoming node";
 export const ERROR_MOVE_OUTGOING_PARENT =
   "Current parent rejects outgoing node";
