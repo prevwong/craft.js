@@ -1,6 +1,6 @@
-import { Node } from "../../interfaces";
-import React from "react";
-import { useNode } from "../useNode";
+import { Node } from '../../interfaces';
+import React from 'react';
+import { useNode } from '../useNode';
 
 export function connectNode<C>(collect?: (state: Node) => C) {
   return function (WrappedComponent: React.ElementType) {

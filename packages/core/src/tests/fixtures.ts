@@ -1,37 +1,37 @@
 /**
  * Nodes
  */
-import { createTestNode } from "../utils/createTestNode";
+import { createTestNode } from '../utils/createTestNode';
 
-export const rootNode = createTestNode("ROOT", {
-  name: "Document",
-  displayName: "Document",
-  type: "Document",
+export const rootNode = createTestNode('ROOT', {
+  name: 'Document',
+  displayName: 'Document',
+  type: 'Document',
   isCanvas: true,
   nodes: [],
 });
 
-export const leafNode = createTestNode("node-L1eGyOJ4m", {
-  props: { childrenString: "Header 1" },
-  name: "Text",
-  displayName: "Text",
+export const leafNode = createTestNode('node-L1eGyOJ4m', {
+  props: { childrenString: 'Header 1' },
+  name: 'Text',
+  displayName: 'Text',
 });
 
-export const primaryButton = createTestNode("node-primary-button", {
-  props: { childrenString: "Button one" },
-  name: "Button",
-  displayName: "Button",
+export const primaryButton = createTestNode('node-primary-button', {
+  props: { childrenString: 'Button one' },
+  name: 'Button',
+  displayName: 'Button',
 });
 
-export const secondaryButton = createTestNode("node-secondary-button", {
-  props: { childrenString: "Button two" },
-  name: "Button",
-  displayName: "Button",
+export const secondaryButton = createTestNode('node-secondary-button', {
+  props: { childrenString: 'Button two' },
+  name: 'Button',
+  displayName: 'Button',
 });
 
-export const card = createTestNode("node-card", {
-  name: "Card",
-  displayName: "Button",
+export const card = createTestNode('node-card', {
+  name: 'Card',
+  displayName: 'Button',
   isCanvas: true,
 });
 
@@ -48,7 +48,7 @@ export const emptyState = {
   },
   options: {
     resolver: {
-      Document: "Document",
+      Document: 'Document',
     },
   },
 };
@@ -79,7 +79,10 @@ export const documentWithButtonsState = {
   nodes: {
     [rootNode.id]: {
       ...rootNode,
-      data: { ...rootNode.data, nodes: [primaryButton.id, secondaryButton.id] },
+      data: {
+        ...rootNode.data,
+        nodes: [primaryButton.id, secondaryButton.id],
+      },
     },
     [primaryButton.id]: {
       ...primaryButton,
@@ -122,15 +125,15 @@ export const documentWithVariousNodes = {
   ...documentWithCardState,
   nodes: {
     ...documentWithCardState.nodes,
-    "canvas-node": createTestNode("canvas-node", {
+    'canvas-node': createTestNode('canvas-node', {
       isCanvas: true,
-      nodes: ["node-reject-dnd", "canvas-node-reject-dnd"],
+      nodes: ['node-reject-dnd', 'canvas-node-reject-dnd'],
     }),
-    "node-reject-dnd": createTestNode(
-      "node-reject-dnd",
+    'node-reject-dnd': createTestNode(
+      'node-reject-dnd',
       {
-        nodes: ["non-immediate-canvas-child"],
-        parent: "canvas-node",
+        nodes: ['non-immediate-canvas-child'],
+        parent: 'canvas-node',
       },
       {
         rules: {
@@ -138,11 +141,11 @@ export const documentWithVariousNodes = {
         },
       }
     ),
-    "canvas-node-reject-dnd": createTestNode(
-      "canvas-node-reject-dnd",
+    'canvas-node-reject-dnd': createTestNode(
+      'canvas-node-reject-dnd',
       {
-        nodes: ["fixed-child-node", "parent-of-linked-node"],
-        parent: "canvas-node",
+        nodes: ['fixed-child-node', 'parent-of-linked-node'],
+        parent: 'canvas-node',
         isCanvas: true,
       },
       {
@@ -152,22 +155,22 @@ export const documentWithVariousNodes = {
         },
       }
     ),
-    "non-immediate-canvas-child": createTestNode("non-immediate-canvas-child", {
-      parent: "node-reject-dnd",
+    'non-immediate-canvas-child': createTestNode('non-immediate-canvas-child', {
+      parent: 'node-reject-dnd',
     }),
-    "fixed-child-node": createTestNode("fixed-child-node", {
-      parent: "canvas-node-reject-dnd",
+    'fixed-child-node': createTestNode('fixed-child-node', {
+      parent: 'canvas-node-reject-dnd',
     }),
-    "parent-of-linked-node": createTestNode("parent-of-linked-node", {
+    'parent-of-linked-node': createTestNode('parent-of-linked-node', {
       isCanvas: true,
-      parent: "canvas-node-reject-dnd",
+      parent: 'canvas-node-reject-dnd',
       linkedNodes: {
-        test: "linked-node",
+        test: 'linked-node',
       },
     }),
-    "linked-node": createTestNode("linked-node", {
+    'linked-node': createTestNode('linked-node', {
       isCanvas: true,
-      parent: "parent-of-linked-node",
+      parent: 'parent-of-linked-node',
     }),
   },
 };

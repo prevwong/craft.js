@@ -1,11 +1,11 @@
 // https://github.com/react-dnd/react-dnd
-import { isValidElement, ReactElement } from "react";
-import { cloneElement } from "react";
-import invariant from "tiny-invariant";
+import { isValidElement, ReactElement } from 'react';
+import { cloneElement } from 'react';
+import invariant from 'tiny-invariant';
 
 function setRef(ref: any, node: any) {
   if (node) {
-    if (typeof ref === "function") {
+    if (typeof ref === 'function') {
       ref(node);
     } else {
       ref.current = node;
@@ -19,10 +19,10 @@ export function cloneWithRef(
 ): React.ReactElement<any> {
   const previousRef = element.ref;
   invariant(
-    typeof previousRef !== "string",
-    "Cannot connect to an element with an existing string ref. " +
-      "Please convert it to use a callback ref instead, or wrap it into a <span> or <div>. " +
-      "Read more: https://facebook.github.io/react/docs/more-about-refs.html#the-ref-callback-attribute"
+    typeof previousRef !== 'string',
+    'Cannot connect to an element with an existing string ref. ' +
+      'Please convert it to use a callback ref instead, or wrap it into a <span> or <div>. ' +
+      'Read more: https://facebook.github.io/react/docs/more-about-refs.html#the-ref-callback-attribute'
   );
 
   if (!previousRef) {
@@ -41,7 +41,7 @@ export function cloneWithRef(
 }
 
 function throwIfCompositeComponentElement(element: React.ReactElement<any>) {
-  if (typeof element.type === "string") {
+  if (typeof element.type === 'string') {
     return;
   }
 

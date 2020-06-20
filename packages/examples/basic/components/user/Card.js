@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 import {
   Container,
   ContainerSettings,
   ContainerDefaultProps,
-} from "./Container";
-import { Text } from "./Text";
-import { Button } from "./Button";
-import { Element, useNode } from "@craftjs/core";
+} from './Container';
+import { Text } from './Text';
+import { Button } from './Button';
+import { Element, useNode } from '@craftjs/core';
 
 export const CardTop = ({ children }) => {
   const {
@@ -17,12 +17,12 @@ export const CardTop = ({ children }) => {
       ref={connect}
       className="text-only"
       style={{
-        padding: "10px",
-        marginBottom: "10px",
-        borderBottom: "1px solid #eee",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
+        padding: '10px',
+        marginBottom: '10px',
+        borderBottom: '1px solid #eee',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
       }}
     >
       {children}
@@ -41,7 +41,7 @@ export const CardBottom = ({ children }) => {
     connectors: { connect },
   } = useNode();
   return (
-    <div style={{ padding: "10px 0" }} ref={connect}>
+    <div style={{ padding: '10px 0' }} ref={connect}>
       {children}
     </div>
   );

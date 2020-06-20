@@ -1,9 +1,9 @@
-import { useMemo, useContext } from "react";
-import { NodeContext, NodeProvider } from "./NodeContext";
-import { Node } from "../interfaces";
-import { useInternalEditor } from "../editor/useInternalEditor";
+import { useMemo, useContext } from 'react';
+import { NodeContext, NodeProvider } from './NodeContext';
+import { Node } from '../interfaces';
+import { useInternalEditor } from '../editor/useInternalEditor';
 
-import { NodeConnectors } from "./NodeHandlers";
+import { NodeConnectors } from './NodeHandlers';
 
 type internalActions = NodeProvider & {
   inNodeContext: boolean;

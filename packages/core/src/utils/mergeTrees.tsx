@@ -1,4 +1,4 @@
-import { Node, NodeTree } from "../interfaces";
+import { Node, NodeTree } from '../interfaces';
 
 const mergeNodes = (rootNode: Node, childrenNodes: NodeTree[]) => {
   if (childrenNodes.length < 1) {

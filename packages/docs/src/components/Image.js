@@ -1,5 +1,5 @@
-import React from "react";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import React from 'react';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 export const Image = ({ img }) => {
   const context = useDocusaurusContext();

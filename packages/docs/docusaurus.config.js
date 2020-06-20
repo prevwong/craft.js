@@ -6,104 +6,104 @@
  */
 
 module.exports = {
-  title: "craft.js",
-  tagline: "A React framework for building drag-n-drop page editors",
-  url: "https://craft.js.org/",
-  baseUrl: "/r/",
-  favicon: "img/favicon.ico",
-  organizationName: "prevwong", // Usually your GitHub org/user name.
-  projectName: "craft.js", // Usually your repo name.
+  title: 'craft.js',
+  tagline: 'A React framework for building drag-n-drop page editors',
+  url: 'https://craft.js.org/',
+  baseUrl: '/r/',
+  favicon: 'img/favicon.ico',
+  organizationName: 'prevwong', // Usually your GitHub org/user name.
+  projectName: 'craft.js', // Usually your repo name.
   themeConfig: {
     algolia: {
-      apiKey: "e641d82b10af84aa818e883b1035c3b4",
-      indexName: "craft-js",
+      apiKey: 'e641d82b10af84aa818e883b1035c3b4',
+      indexName: 'craft-js',
       algoliaOptions: {}, // Optional, if provided by Algolia
     },
     prism: {
-      theme: require("prism-react-renderer/themes/shadesOfPurple"),
+      theme: require('prism-react-renderer/themes/shadesOfPurple'),
     },
     navbar: {
       hideOnScroll: false,
-      title: "craft.js",
+      title: 'craft.js',
       links: [
         {
-          to: "docs/overview",
-          label: "Documentation",
-          position: "left",
+          to: 'docs/overview',
+          label: 'Documentation',
+          position: 'left',
           activeBasePath: `docs`,
-          position: "right",
+          position: 'right',
         },
-        { to: "support", label: "Support", position: "right" },
+        { to: 'support', label: 'Support', position: 'right' },
         {
-          href: "https://github.com/prevwong/craft.js",
-          label: "GitHub",
-          position: "right",
+          href: 'https://github.com/prevwong/craft.js',
+          label: 'GitHub',
+          position: 'right',
         },
       ],
     },
     footer: {
-      style: "light",
+      style: 'light',
       links: [
         {
-          title: "Docs",
+          title: 'Docs',
           items: [
             {
-              label: "Overview",
-              to: "docs/overview",
+              label: 'Overview',
+              to: 'docs/overview',
             },
             {
-              label: "Core Concepts",
-              to: "docs/concepts/nodes",
+              label: 'Core Concepts',
+              to: 'docs/concepts/nodes',
             },
             {
-              label: "Tutorial",
-              to: "docs/guides/basic-tutorial",
+              label: 'Tutorial',
+              to: 'docs/guides/basic-tutorial',
             },
             {
-              label: "API Reference",
-              to: "docs/api/editor-state",
+              label: 'API Reference',
+              to: 'docs/api/editor-state',
             },
           ],
         },
         {
-          title: "Community",
+          title: 'Community',
           items: [
             {
-              label: "Github Repository",
-              href: "https://github.com/prevwong/craft.js",
+              label: 'Github Repository',
+              href: 'https://github.com/prevwong/craft.js',
             },
             {
-              label: "Open Collective",
-              href: "https://opencollective.com/craftjs",
+              label: 'Open Collective',
+              href: 'https://opencollective.com/craftjs',
             },
             {
-              label: "Discord",
-              href: "https://discord.gg/sPpF7fX",
+              label: 'Discord',
+              href: 'https://discord.gg/sPpF7fX',
             },
             {
-              label: "NPM",
-              href: "https://npmjs.com/package/@craftjs/core",
+              label: 'NPM',
+              href: 'https://npmjs.com/package/@craftjs/core',
             },
           ],
         },
         {
-          title: "Find me elsewhere",
+          title: 'Find me elsewhere',
           items: [
             {
-              label: "Github",
-              href: "https://github.com/prevwong",
+              label: 'Github',
+              href: 'https://github.com/prevwong',
             },
             {
-              label: "LinkedIn",
-              href: "https://www.linkedin.com/in/prev/",
+              label: 'LinkedIn',
+              href: 'https://www.linkedin.com/in/prev/',
             },
             {
-              label: "Dribbble",
-              href: "https://dribbble.com/prevwong",
+              label: 'Dribbble',
+              href: 'https://dribbble.com/prevwong',
             },
             {
-              label: "Twitter",
-              href: "https://twitter.com/prevwong",
+              label: 'Twitter',
+              href: 'https://twitter.com/prevwong',
             },
           ],
         },
@@ -114,13 +114,13 @@ module.exports = {
   },
   presets: [
     [
-      "@docusaurus/preset-classic",
+      '@docusaurus/preset-classic',
       {
         docs: {
-          sidebarPath: require.resolve("./sidebars.js"),
+          sidebarPath: require.resolve('./sidebars.js'),
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css"),
+          customCss: require.resolve('./src/css/custom.css'),
         },
       },
     ],

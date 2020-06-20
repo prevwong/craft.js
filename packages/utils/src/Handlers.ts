@@ -1,4 +1,4 @@
-import { wrapHookToRecognizeElement, Connector } from "./wrapConnectorHooks";
+import { wrapHookToRecognizeElement, Connector } from './wrapConnectorHooks';
 
 // TODO(mat) any reason why why use array to store this information ?
 // is there a better place for these definitions ?
@@ -33,7 +33,7 @@ export type Handler = {
 };
 
 export type ConnectorsForHandlers<T extends Handlers> = ReturnType<
-  T["connectors"]
+  T['connectors']
 >;
 
 /**
@@ -80,10 +80,10 @@ class WatchHandler {
       events &&
       events.map(([eventName, listener, options = {}]) => {
         const bindedListener = (e) => {
-          if (e.craft !== "handled") {
+          if (e.craft !== 'handled') {
             listener(e, this.opts);
             if (options.blocking) {
-              e.craft = "handled";
+              e.craft = 'handled';
             }
           }
         };
@@ -126,7 +126,7 @@ export abstract class Handlers<T extends string = null> {
 
   abstract handlers(): Record<
     T,
-    Partial<Omit<Handler, "events"> & { events: any }> // (Hacky) without any, tsc throws an error
+    Partial<Omit<Handler, 'events'> & { events: any }> // (Hacky) without any, tsc throws an error
   >;
 
   // Returns ref connectors for handlers
@@ -153,7 +153,10 @@ export abstract class Handlers<T extends string = null> {
 
         Handlers.wm.set(el, {
           ...domHandler,
-          [key]: new WatchHandler(this.store, el, opts, { init, events }),
+          [key]: new WatchHandler(this.store, el, opts, {
+            init,
+            events,
+          }),
         });
       };
 
@@ -165,7 +168,7 @@ export abstract class Handlers<T extends string = null> {
   static getConnectors<T extends Handlers, U extends any[]>(
     this: { new (...args: U): T },
     ...args: U
-  ): ReturnType<T["connectors"]> {
+  ): ReturnType<T['connectors']> {
     const that = new this(...args);
     return that.connectors() as any;
   }
