@@ -69,12 +69,98 @@ Get `Node` object from id
 
 Returns an array of Node ids of all child Nodes of a given Node.
 
+#### Parameters
+<API items={[
+  ["deep", "boolean", "If set to true, retrieve all descendants in nested levels. Default is false"],
+  ["includeOnly?", "'childNodes' | 'linkedNodes'", "Get descendants that are either childNodes or linkedNodes. If unset, get all descendants"]
+]} /> 
+
+
 #### Returns
 <API items={[
   ["NodeId[]"]
 ]} /> 
 
+```jsx
+// The descendants of `div` when deep=false
+<div> 
+  // highlight-next-line
+  <h2>Yo</h2>
+  // highlight-next-line
+  <Element is={Container}>
+    <h3>Child</h3>
+    // highlight-next-line
+  </Element>
+</div>
+```
 
+```jsx
+// The descendants of `div` when deep=true
+<div> 
+  // highlight-start
+  <h2>Yo</h2>
+  <Element is={Container}>
+    <h3>Child</h3>
+  </Element>
+  // highlight-end
+</div>
+
+const Container = () => {
+  return (
+    <div>
+      // highlight-start
+      <Element id="linked-div">
+        <h1>Hello</h1>
+      <Element>
+      // highlight-end
+    </div>
+  )
+}
+```
+
+```jsx
+// The descendants of `div` when deep=true and includeOnly="childNodes" only
+<div> 
+  // highlight-start
+  <h2>Yo</h2>
+  <Element is={Container}>
+    <h3>Child</h3>
+  </Element>
+  // highlight-end
+</div>
+
+const Container = () => {
+  return (
+    <div>
+      <Element id="linked-div">
+        <h1>Hello</h1>
+      <Element>
+    </div>
+  )
+}
+```
+
+```jsx
+// The descendants of `div` when deep=true and includeOnly="linkedNodes" only
+<div> 
+  <h2>Yo</h2>
+  <Element is={Container}>
+    <h3>Child</h3>
+  </Element>
+</div>
+
+const Container = () => {
+  return (
+    <div>
+      // highlight-start
+      <Element id="linked-div">
+        <h1>Hello</h1>
+      <Element>
+      // highlight-end
+    </div>
+  )
+}
+```
 
 ### ancestors
 <Badge type="function" />
@@ -417,7 +503,13 @@ Gets the current Node in it's `SerializedNode` form
 <Badge type="function" noMargin={true} />
 
 
-Gets the current Node in it's `NodeTree` form
+Gets the current Node and its descendants in its `NodeTree` form
+
+#### Parameters
+<API items={[
+  ["descendantType?", "'childNodes' | 'linkedNodes'", "Get descendants that are either childNodes or linkedNodes. If unset, get all descendants"]
+]} /> 
+
 
 #### Returns
 <API items={[

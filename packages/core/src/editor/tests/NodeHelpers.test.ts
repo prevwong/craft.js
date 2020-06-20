@@ -71,14 +71,49 @@ describe("NodeHelpers", () => {
   });
 
   describe("descendants", () => {
-    it("should return immediate child node ids", () => {
-      expect(helper(rootNode.id).descendants()).toStrictEqual([card.id]);
+    it("should return immediate child and linked node ids", () => {
+      expect(helper("canvas-node-reject-dnd").descendants()).toStrictEqual(
+        helper("canvas-node-reject-dnd").get().data.nodes
+      );
     });
-    it("should return all child nodes", () => {
-      expect(helper(rootNode.id).descendants(true)).toStrictEqual([
-        card.id,
-        ...documentWithVariousNodes.nodes[card.id].data.nodes,
-      ]);
+    describe('when "includeOnly" is unset', () => {
+      it("should return all child and linked nodes", () => {
+        expect(
+          helper("canvas-node-reject-dnd").descendants(true)
+        ).toStrictEqual([
+          ...documentWithVariousNodes.nodes["canvas-node-reject-dnd"].data
+            .nodes,
+          ...Object.values(
+            documentWithVariousNodes.nodes["parent-of-linked-node"].data
+              .linkedNodes || {}
+          ),
+        ]);
+      });
+    });
+    describe('when "includeOnly" is set to childNodes', () => {
+      it("should return all child nodes only", () => {
+        expect(
+          helper("canvas-node-reject-dnd").descendants(true, "childNodes")
+        ).toStrictEqual([
+          ...documentWithVariousNodes.nodes["canvas-node-reject-dnd"].data
+            .nodes,
+        ]);
+      });
+    });
+    describe('when "includeOnly" is set to linkedNodes', () => {
+      it("should return all linked nodes only", () => {
+        expect(
+          helper("canvas-node-reject-dnd").descendants(true, "linkedNodes")
+        ).toStrictEqual([]);
+        expect(
+          helper("parent-of-linked-node").descendants(true, "linkedNodes")
+        ).toStrictEqual(
+          Object.values(
+            documentWithVariousNodes.nodes["parent-of-linked-node"].data
+              .linkedNodes || {}
+          )
+        );
+      });
     });
   });
 
@@ -142,33 +177,25 @@ describe("NodeHelpers", () => {
   });
   describe("toNodeTree", () => {
     let tree;
+    let testHelper;
+    let testDescendants = jest.fn().mockImplementation(() => []);
+    let descendantType;
     beforeEach(() => {
-      tree = helper("ROOT").toNodeTree();
+      testHelper = jest.fn().mockImplementation(function (...args) {
+        return {
+          ...helper(...args),
+          descendants: testDescendants,
+        };
+      });
+
+      tree = testHelper("canvas-node-reject-dnd").toNodeTree(descendantType);
     });
 
     it("should have correct rootNodeId", () => {
-      expect(tree.rootNodeId).toEqual("ROOT");
+      expect(tree.rootNodeId).toEqual("canvas-node-reject-dnd");
     });
-    it("should contain root and child nodes", () => {
-      const { nodes } = tree;
-
-      expect(nodes).toStrictEqual({
-        ROOT: documentWithVariousNodes.nodes["ROOT"],
-        ...documentWithVariousNodes.nodes["ROOT"].data.nodes.reduce(
-          (accum, key) => {
-            accum[key] = documentWithVariousNodes.nodes[key];
-            return accum;
-          },
-          {}
-        ),
-        ...documentWithVariousNodes.nodes[card.id].data.nodes.reduce(
-          (accum, key) => {
-            accum[key] = documentWithVariousNodes.nodes[key];
-            return accum;
-          },
-          {}
-        ),
-      });
+    it("should have called .descendants", () => {
+      expect(testDescendants).toHaveBeenCalledWith(true, descendantType);
     });
   });
 });
