@@ -1,14 +1,14 @@
-import React, { Fragment } from "react";
-import { NodeData, Node } from "../interfaces";
-import { produce } from "immer";
-import { Canvas, deprecateCanvasComponent } from "../nodes/Canvas";
+import React, { Fragment } from 'react';
+import { NodeData, Node } from '../interfaces';
+import { produce } from 'immer';
+import { Canvas, deprecateCanvasComponent } from '../nodes/Canvas';
 import {
   defaultElementProps,
   Element,
   elementPropToNodeData,
-} from "../nodes/Element";
-import { NodeProvider } from "../nodes/NodeContext";
-import { getRandomNodeId } from "./getRandomNodeId";
+} from '../nodes/Element';
+import { NodeProvider } from '../nodes/NodeContext';
+import { getRandomNodeId } from './getRandomNodeId';
 
 export function parseNodeFromJSX(
   jsx: React.ReactElement | string,
@@ -16,7 +16,7 @@ export function parseNodeFromJSX(
 ) {
   let element = jsx as React.ReactElement;
 
-  if (typeof element === "string") {
+  if (typeof element === 'string') {
     element = React.createElement(Fragment, {}, element) as React.ReactElement;
   }
 
@@ -32,9 +32,9 @@ export function parseNodeFromJSX(
       type: actualType,
       props: { ...element.props },
       name:
-        typeof actualType == "string" ? actualType : (actualType as any).name,
+        typeof actualType == 'string' ? actualType : (actualType as any).name,
       displayName:
-        typeof actualType == "string" ? actualType : (actualType as any).name,
+        typeof actualType == 'string' ? actualType : (actualType as any).name,
       custom: {},
       hidden: false,
     } as NodeData;
@@ -96,7 +96,7 @@ export function parseNodeFromJSX(
 
       if (actualType.craft.rules) {
         Object.keys(actualType.craft.rules).forEach((key) => {
-          if (["canDrag", "canMoveIn", "canMoveOut"].includes(key)) {
+          if (['canDrag', 'canMoveIn', 'canMoveOut'].includes(key)) {
             node.rules[key] = actualType.craft.rules[key];
           }
         });

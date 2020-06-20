@@ -1,4 +1,4 @@
-import { LayerState, LayerEvents, Layer } from "../interfaces";
+import { LayerState, LayerEvents, Layer } from '../interfaces';
 
 export const LayerMethods = (state: LayerState) => ({
   setLayerEvent: (eventType: LayerEvents, id: string) => {
@@ -30,7 +30,7 @@ export const LayerMethods = (state: LayerState) => ({
   },
   setDOM: (
     id: string,
-    domCollection: Partial<Record<"dom" | "headingDom", HTMLElement>>
+    domCollection: Partial<Record<'dom' | 'headingDom', HTMLElement>>
   ) => {
     state.layers[id] = {
       ...state.layers[id],

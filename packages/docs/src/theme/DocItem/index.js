@@ -5,20 +5,20 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react";
+import React from 'react';
 
-import Head from "@docusaurus/Head";
-import isInternalUrl from "@docusaurus/isInternalUrl";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import useBaseUrl from "@docusaurus/useBaseUrl";
-import DocPaginator from "@theme/DocPaginator";
-import useTOCHighlight from "@theme/hooks/useTOCHighlight";
+import Head from '@docusaurus/Head';
+import isInternalUrl from '@docusaurus/isInternalUrl';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import DocPaginator from '@theme/DocPaginator';
+import useTOCHighlight from '@theme/hooks/useTOCHighlight';
 
-import classnames from "classnames";
-import styles from "./styles.module.css";
+import classnames from 'classnames';
+import styles from './styles.module.css';
 
-const LINK_CLASS_NAME = "table-of-contents__link";
-const ACTIVE_LINK_CLASS_NAME = "table-of-contents__link--active";
+const LINK_CLASS_NAME = 'table-of-contents__link';
+const ACTIVE_LINK_CLASS_NAME = 'table-of-contents__link--active';
 const TOP_OFFSET = 100;
 
 function DocTOC({ headings }) {
@@ -40,7 +40,7 @@ function Headings({ headings, isChild }) {
   return (
     <ul
       className={
-        isChild ? "" : "table-of-contents table-of-contents__left-border"
+        isChild ? '' : 'table-of-contents table-of-contents__left-border'
       }
     >
       {headings.map((heading) => (
@@ -96,7 +96,7 @@ function DocItem(props) {
           <meta property="og:description" content={description} />
         )}
         {keywords && keywords.length && (
-          <meta name="keywords" content={keywords.join(",")} />
+          <meta name="keywords" content={keywords.join(',')} />
         )}
         {metaImage && <meta property="og:image" content={metaImageUrl} />}
         {metaImage && <meta property="twitter:image" content={metaImageUrl} />}
@@ -108,13 +108,13 @@ function DocItem(props) {
       </Head>
       <div
         className={classnames(
-          "container padding-vert--lg",
+          'container padding-vert--lg',
           styles.docItemWrapper
         )}
       >
         <div className="row">
           <div
-            className={classnames("col", {
+            className={classnames('col', {
               [styles.docItemCol]: !hideTableOfContents,
             })}
           >
@@ -146,8 +146,8 @@ function DocItem(props) {
                             preserveAspectRatio="xMidYMid meet"
                             viewBox="0 0 40 40"
                             style={{
-                              marginRight: "0.3em",
-                              verticalAlign: "sub",
+                              marginRight: '0.3em',
+                              verticalAlign: 'sub',
                             }}
                           >
                             <g>
@@ -162,10 +162,10 @@ function DocItem(props) {
                       <div className="col text--right">
                         <em>
                           <small>
-                            Last updated{" "}
+                            Last updated{' '}
                             {lastUpdatedAt && (
                               <>
-                                on{" "}
+                                on{' '}
                                 <time
                                   dateTime={new Date(
                                     lastUpdatedAt * 1000
@@ -176,7 +176,7 @@ function DocItem(props) {
                                     lastUpdatedAt * 1000
                                   ).toLocaleDateString()}
                                 </time>
-                                {lastUpdatedBy && " "}
+                                {lastUpdatedBy && ' '}
                               </>
                             )}
                             {lastUpdatedBy && (
@@ -184,10 +184,10 @@ function DocItem(props) {
                                 by <strong>{lastUpdatedBy}</strong>
                               </>
                             )}
-                            {process.env.NODE_ENV === "development" && (
+                            {process.env.NODE_ENV === 'development' && (
                               <div>
                                 <small>
-                                  {" "}
+                                  {' '}
                                   (Simulated during dev for better perf)
                                 </small>
                               </div>

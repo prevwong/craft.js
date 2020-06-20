@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import ContentEditable from "react-contenteditable";
-import { useEditor } from "@craftjs/core";
-import { useLayer } from "../useLayer";
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import ContentEditable from 'react-contenteditable';
+import { useEditor } from '@craftjs/core';
+import { useLayer } from '../useLayer';
 
 export const EditableLayerName = () => {
   const { id } = useLayer();
@@ -25,7 +25,7 @@ export const EditableLayerName = () => {
 
   useEffect(() => {
     return () => {
-      window.removeEventListener("click", clickOutside);
+      window.removeEventListener('click', clickOutside);
     };
   }, [clickOutside]);
 
@@ -36,8 +36,8 @@ export const EditableLayerName = () => {
       ref={(ref: any) => {
         if (ref) {
           nameDOM.current = ref.el.current;
-          window.removeEventListener("click", clickOutside);
-          window.addEventListener("click", clickOutside);
+          window.removeEventListener('click', clickOutside);
+          window.addEventListener('click', clickOutside);
         }
       }}
       onChange={(e) => {

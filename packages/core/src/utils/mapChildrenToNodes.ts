@@ -1,5 +1,5 @@
-import { Node } from "../interfaces";
-import React, { ReactNode } from "react";
+import { Node } from '../interfaces';
+import React, { ReactNode } from 'react';
 
 export function mapChildrenToNodes(
   children: ReactNode,

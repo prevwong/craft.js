@@ -1,11 +1,11 @@
-import { useContext, useMemo } from "react";
-import { EditorState } from "../interfaces";
-import { QueryMethods } from "./query";
-import { useCollector, QueryCallbacksFor } from "@craftjs/utils";
-import { Actions } from "./actions";
-import { useEventHandler } from "../events/EventContext";
-import { EditorContext } from "./EditorContext";
-import { EventConnectors } from "../events/EventHandlers";
+import { useContext, useMemo } from 'react';
+import { EditorState } from '../interfaces';
+import { QueryMethods } from './query';
+import { useCollector, QueryCallbacksFor } from '@craftjs/utils';
+import { Actions } from './actions';
+import { useEventHandler } from '../events/EventContext';
+import { EditorContext } from './EditorContext';
+import { EventConnectors } from '../events/EventHandlers';
 
 export type EditorCollector<C> = (
   state: EditorState,

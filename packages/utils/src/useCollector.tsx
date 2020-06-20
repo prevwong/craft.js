@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect } from 'react';
 import {
   CallbacksFor,
   Methods,
@@ -6,7 +6,7 @@ import {
   QueryCallbacksFor,
   QueryMethods,
   SubscriberAndCallbacksFor,
-} from "./useMethods";
+} from './useMethods';
 
 type Actions<M extends Methods, Q extends QueryMethods> = {
   actions: CallbacksFor<M>;

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   NodeId,
   EditorState,
@@ -9,8 +9,8 @@ import {
   NodeTree,
   SerializedNodes,
   SerializedNode,
-} from "../interfaces";
-import invariant from "tiny-invariant";
+} from '../interfaces';
+import invariant from 'tiny-invariant';
 import {
   QueryCallbacksFor,
   ERROR_NOT_IN_RESOLVER,
@@ -18,14 +18,14 @@ import {
   deprecationWarning,
   DEPRECATED_ROOT_NODE,
   ROOT_NODE,
-} from "@craftjs/utils";
-import findPosition from "../events/findPosition";
-import { parseNodeFromJSX } from "../utils/parseNodeFromJSX";
-import { fromEntries } from "../utils/fromEntries";
-import { mergeTrees } from "../utils/mergeTrees";
-import { resolveComponent } from "../utils/resolveComponent";
-import { deserializeNode } from "../utils/deserializeNode";
-import { NodeHelpers } from "./NodeHelpers";
+} from '@craftjs/utils';
+import findPosition from '../events/findPosition';
+import { parseNodeFromJSX } from '../utils/parseNodeFromJSX';
+import { fromEntries } from '../utils/fromEntries';
+import { mergeTrees } from '../utils/mergeTrees';
+import { resolveComponent } from '../utils/resolveComponent';
+import { deserializeNode } from '../utils/deserializeNode';
+import { NodeHelpers } from './NodeHelpers';
 
 export function QueryMethods(state: EditorState) {
   const options = state && state.options;
@@ -45,7 +45,7 @@ export function QueryMethods(state: EditorState) {
         state.nodes[node.id].dom
     ) => {
       if (source === target) return;
-      const sourceNodeFromId = typeof source == "string" && state.nodes[source],
+      const sourceNodeFromId = typeof source == 'string' && state.nodes[source],
         targetNode = state.nodes[target],
         isTargetCanvas = _().node(targetNode.id).isCanvas();
 

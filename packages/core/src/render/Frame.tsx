@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
-import { NodeElement } from "../nodes/NodeElement";
-import { deprecationWarning, ROOT_NODE } from "@craftjs/utils";
-import { useInternalEditor } from "../editor/useInternalEditor";
-import { SerializedNodes } from "../interfaces";
+import React, { useEffect, useState, useRef } from 'react';
+import { NodeElement } from '../nodes/NodeElement';
+import { deprecationWarning, ROOT_NODE } from '@craftjs/utils';
+import { useInternalEditor } from '../editor/useInternalEditor';
+import { SerializedNodes } from '../interfaces';
 
 export type Frame = {
   json?: string;
@@ -18,8 +18,8 @@ export const Frame: React.FC<Frame> = ({ children, json, data }) => {
   const [render, setRender] = useState<React.ReactElement | null>(null);
 
   if (!!json) {
-    deprecationWarning("<Frame json={...} />", {
-      suggest: "<Frame data={...} />",
+    deprecationWarning('<Frame json={...} />', {
+      suggest: '<Frame data={...} />',
     });
   }
 

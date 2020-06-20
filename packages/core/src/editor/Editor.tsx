@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import { Options } from "../interfaces";
-import { Events } from "../events";
+import { Options } from '../interfaces';
+import { Events } from '../events';
 
-import { useEditorStore } from "./store";
-import { EditorContext } from "./EditorContext";
+import { useEditorStore } from './store';
+import { EditorContext } from './EditorContext';
 
 export const withDefaults = (options: Partial<Options> = {}) => ({
   onNodesChange: () => null,
@@ -13,8 +13,8 @@ export const withDefaults = (options: Partial<Options> = {}) => ({
   nodes: null,
   enabled: true,
   indicator: {
-    error: "red",
-    success: "rgb(98, 196, 98)",
+    error: 'red',
+    success: 'rgb(98, 196, 98)',
   },
   ...options,
 });

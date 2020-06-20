@@ -5,16 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import Layout from "@theme/Layout";
+import Layout from '@theme/Layout';
 
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import Link from "@docusaurus/Link";
-import useBaseUrl from "@docusaurus/useBaseUrl";
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import Link from '@docusaurus/Link';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
-import versions from "../../versions.json";
+import versions from '../../versions.json';
 
 const Page = styled.div`
   padding: 40px 0;
@@ -50,7 +50,7 @@ function Version() {
               <tr>
                 <th>{latestVersion}</th>
                 <td>
-                  <Link to={useBaseUrl("/docs/overview")}>Documentation</Link>
+                  <Link to={useBaseUrl('/docs/overview')}>Documentation</Link>
                 </td>
                 <td>
                   <a href={`${repoUrl}/releases/tag/v${latestVersion}`}>
