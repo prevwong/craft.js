@@ -1,50 +1,50 @@
 {
-  "name": "@craftjs/layers",
-  "description": "A Photoshop-like layers panel for your page editor",
-  "keywords": [
-    "wysiwyg",
-    "html",
-    "layers",
-    "photoshop",
-    "craftjs",
-    "page-editor",
-    "web-builder",
-    "react"
-  ],
-  "version": "0.1.0-beta.7",
-  "author": "Prev Wong <prevwong@gmail.com>",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "license": "MIT",
-  "types": "./lib/index.d.ts",
-  "scripts": {
-    "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
-    "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
-    "clean": "rimraf lib dist"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/prevwong/craft.js/"
-  },
-  "bugs": {
-    "url": "https://github.com/prevwong/craft.js/issues"
-  },
-  "homepage": "https://github.com/prevwong/craft.js/",
-  "dependencies": {
-    "@craftjs/utils": "^0.1.0-beta.7",
-    "immer": "^3.1.3",
-    "lodash.isequalwith": "^4.4.0",
-    "react-contenteditable": "^3.3.3",
-    "redux": "^4.0.4",
-    "styled-components": "^4.2.1",
-    "tiny-invariant": "^1.0.6"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.7.4",
-    "@svgr/rollup": "^4.3.3"
-  },
-  "peerDependencies": {
-    "@craftjs/core": "^0.1.0-alpha.1",
-    "react": "^16.8.0"
-  }
+    "name": "@craftjs/layers",
+    "description": "A Photoshop-like layers panel for your page editor",
+    "keywords": [
+        "wysiwyg",
+        "html",
+        "layers",
+        "photoshop",
+        "craftjs",
+        "page-editor",
+        "web-builder",
+        "react"
+    ],
+    "version": "0.1.0-beta.7",
+    "author": "Prev Wong <prevwong@gmail.com>",
+    "main": "./dist/cjs/index.js",
+    "module": "./dist/esm/index.js",
+    "license": "MIT",
+    "types": "./lib/index.d.ts",
+    "scripts": {
+        "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
+        "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
+        "clean": "rimraf lib dist"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/prevwong/craft.js/"
+    },
+    "bugs": {
+        "url": "https://github.com/prevwong/craft.js/issues"
+    },
+    "homepage": "https://github.com/prevwong/craft.js/",
+    "dependencies": {
+        "@craftjs/utils": "^0.1.0-beta.7",
+        "immer": "^3.1.3",
+        "lodash.isequalwith": "^4.4.0",
+        "react-contenteditable": "^3.3.3",
+        "redux": "^4.0.4",
+        "styled-components": "^4.2.1",
+        "tiny-invariant": "^1.0.6"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.7.4",
+        "@svgr/rollup": "^4.3.3"
+    },
+    "peerDependencies": {
+        "@craftjs/core": "^0.1.0-alpha.1",
+        "react": "^16.8.0"
+    }
 }

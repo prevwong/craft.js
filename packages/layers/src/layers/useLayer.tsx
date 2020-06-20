@@ -1,44 +1,48 @@
-import { useContext, useMemo } from "react";
-import { LayerContext } from "./LayerContext";
-import { useLayerManager } from "../manager";
-import { useEditor } from "@craftjs/core";
-import { Layer } from "../interfaces";
+import { useContext, useMemo } from 'react'
+import { LayerContext } from './LayerContext'
+import { useLayerManager } from '../manager'
+import { useEditor } from '@craftjs/core'
+import { Layer } from '../interfaces'
 
 type internalActions = LayerContext & {
-  children: string[];
-  actions: {
-    toggleLayer: () => void;
-  };
-};
+    children: string[]
+    actions: {
+        toggleLayer: () => void
+    }
+}
 
 export type useLayer<S = null> = S extends null
-  ? internalActions
-  : S & internalActions;
-export function useLayer(): useLayer;
-export function useLayer<S = null>(collect?: (node: Layer) => S): useLayer<S>;
+    ? internalActions
+    : S & internalActions
+export function useLayer(): useLayer
+export function useLayer<S = null>(collect?: (node: Layer) => S): useLayer<S>
 export function useLayer<S = null>(collect?: (layer: Layer) => S): useLayer<S> {
-  const { id, depth, connectors } = useContext(LayerContext);
+    const { id, depth, connectors } = useContext(LayerContext)
 
-  const { actions: managerActions, ...collected } = useLayerManager((state) => {
-    return id && state.layers[id] && collect && collect(state.layers[id]);
-  });
+    const { actions: managerActions, ...collected } = useLayerManager(
+        (state) => {
+            return (
+                id && state.layers[id] && collect && collect(state.layers[id])
+            )
+        }
+    )
 
-  const { children } = useEditor((state, query) => ({
-    children: state.nodes[id] && query.node(id).descendants(),
-  }));
+    const { children } = useEditor((state, query) => ({
+        children: state.nodes[id] && query.node(id).descendants(),
+    }))
 
-  const actions = useMemo(() => {
+    const actions = useMemo(() => {
+        return {
+            toggleLayer: () => managerActions.toggleLayer(id),
+        }
+    }, [managerActions, id])
+
     return {
-      toggleLayer: () => managerActions.toggleLayer(id),
-    };
-  }, [managerActions, id]);
-
-  return {
-    id,
-    depth,
-    children,
-    actions,
-    connectors,
-    ...(collected as any),
-  };
+        id,
+        depth,
+        children,
+        actions,
+        connectors,
+        ...(collected as any),
+    }
 }

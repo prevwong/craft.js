@@ -1,15 +1,15 @@
 body {
-  background: #f3f3f3 !important;
+    background: #f3f3f3 !important;
 }
 
 p {
-  margin: 2px 0;
+    margin: 2px 0;
 }
 
 fieldset.MuiFormControl-root {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 *[draggable] {
-  cursor: move !important;
+    cursor: move !important;
 }

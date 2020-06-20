@@ -1,18 +1,18 @@
 {
-  "compilerOptions": {
-    "skipLibCheck": true,
-    "incremental": true,
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "lib": ["esnext", "dom"],
-    "strict": false,
-    "experimentalDecorators": true,
-    "noUnusedLocals": false,
-    "jsx": "react",
-    "forceConsistentCasingInFileNames": false,
-    "declaration": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "exclude": ["**/node_modules/**"]
+    "compilerOptions": {
+        "skipLibCheck": true,
+        "incremental": true,
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "lib": ["esnext", "dom"],
+        "strict": false,
+        "experimentalDecorators": true,
+        "noUnusedLocals": false,
+        "jsx": "react",
+        "forceConsistentCasingInFileNames": false,
+        "declaration": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "exclude": ["**/node_modules/**"]
 }
