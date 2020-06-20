@@ -30,6 +30,8 @@ describe('EventHandlers', () => {
   beforeEach(() => {
     e = {
       preventDefault: jest.fn(),
+      stopImmediatePropagation: jest.fn(),
+      stopPropagation: jest.fn(),
     }
 
     createShadow = jest.fn().mockImplementation(() => shadow)
@@ -110,6 +112,7 @@ describe('EventHandlers', () => {
     it('should have prevented default on dragover', () => {
       callHandler(drop.events, 'dragover')(e)
       expect(e.preventDefault).toHaveBeenCalled()
+      expect(e.stopPropagation).toHaveBeenCalled()
       expect(actions.setIndicator).not.toHaveBeenCalled()
     })
 
@@ -119,6 +122,7 @@ describe('EventHandlers', () => {
       })
       it('should have prevented default', () => {
         expect(e.preventDefault).toHaveBeenCalled()
+        expect(e.stopPropagation).toHaveBeenCalled()
       })
       it('should have not called set indicator or getDropPlacehalder', () => {
         expect(actions.setIndicator).not.toHaveBeenCalled()
@@ -143,6 +147,7 @@ describe('EventHandlers', () => {
       })
       it('should have prevented default', () => {
         expect(e.preventDefault).toHaveBeenCalled()
+        expect(e.stopPropagation).toHaveBeenCalled()
       })
       it('should have called getdropPlaceholder with the right arguments', () => {
         expect(query.getDropPlaceholder).toHaveBeenCalledWith(
@@ -212,6 +217,10 @@ describe('EventHandlers', () => {
       beforeEach(() => {
         callHandler(drag.events, 'dragstart')(e, nodeId)
       })
+      it('should have stopped propagation', () => {
+        expect(e.stopImmediatePropagation).toHaveBeenCalled()
+        expect(e.stopPropagation).toHaveBeenCalled()
+      })
       it('should call setNodeEvent on mousedown', () => {
         expect(actions.setNodeEvent).toHaveBeenCalledWith('dragged', nodeId)
       })
@@ -234,6 +243,10 @@ describe('EventHandlers', () => {
       describe('if there are no elements or events', () => {
         beforeEach(() => {
           callHandler(drag.events, 'dragend')(e, nodeId)
+        })
+        it('should have stopped propagation', () => {
+          expect(e.stopImmediatePropagation).not.toHaveBeenCalled()
+          expect(e.stopPropagation).toHaveBeenCalled()
         })
         it('should have not call move', () => {
           expect(actions.move).not.toHaveBeenCalled()
@@ -300,6 +313,10 @@ describe('EventHandlers', () => {
         parsedNodeTree = node
         callHandler(create.events, 'dragstart')(e, nodeId)
       })
+      it('should have stopped propagation', () => {
+        expect(e.stopImmediatePropagation).toHaveBeenCalled()
+        expect(e.stopPropagation).toHaveBeenCalled()
+      })
       it('should call parseReactElement.toNodeTree on mousedown', () => {
         expect(query.parseReactElement).toHaveBeenCalled()
       })
@@ -322,6 +339,10 @@ describe('EventHandlers', () => {
       describe('if there are no elements or events', () => {
         beforeEach(() => {
           callHandler(create.events, 'dragend')(e, nodeId)
+        })
+        it('should have stopped propagation', () => {
+          expect(e.stopImmediatePropagation).not.toHaveBeenCalled()
+          expect(e.stopPropagation).toHaveBeenCalled()
         })
         it('should have not call addNodeTree', () => {
           expect(actions.addNodeTree).not.toHaveBeenCalled()
