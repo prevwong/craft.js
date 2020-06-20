@@ -7,24 +7,24 @@ import { DefaultLayer } from '../layers'
 import { LayerManagerContext } from './context'
 
 export const LayerManagerProvider: React.FC<{
-    options: Partial<LayerOptions>
+  options: Partial<LayerOptions>
 }> = ({ children, options }) => {
-    const store = useMethods(LayerMethods, {
-        layers: {},
-        events: {
-            selected: null,
-            dragged: null,
-            hovered: null,
-        },
-        options: {
-            renderLayer: DefaultLayer,
-            ...options,
-        },
-    })
+  const store = useMethods(LayerMethods, {
+    layers: {},
+    events: {
+      selected: null,
+      dragged: null,
+      hovered: null,
+    },
+    options: {
+      renderLayer: DefaultLayer,
+      ...options,
+    },
+  })
 
-    return (
-        <LayerManagerContext.Provider value={{ store }}>
-            <EventManager>{children}</EventManager>
-        </LayerManagerContext.Provider>
-    )
+  return (
+    <LayerManagerContext.Provider value={{ store }}>
+      <EventManager>{children}</EventManager>
+    </LayerManagerContext.Provider>
+  )
 }

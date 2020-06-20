@@ -1,27 +1,27 @@
 name: Pull Request
 
 on:
-    pull_request:
-        branches:
-            - develop
+  pull_request:
+    branches:
+      - develop
 
 jobs:
-    build-test:
-        name: Build and test
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@master
-            - name: Use Node.js 10.x
-              uses: actions/setup-node@v1
-              with:
-                  node-version: 10.x
+  build-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Use Node.js 10.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
 
-            - name: Install dependencies
-              run: yarn --frozen-lockfile
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
 
-            - name: Build
-              run: yarn build
+      - name: Build
+        run: yarn build
 
-            - name: Run tests
-              run: yarn test
+      - name: Run tests
+        run: yarn test

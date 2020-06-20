@@ -6,28 +6,28 @@ import { useInternalEditor } from '../../editor/useInternalEditor'
 jest.mock('tiny-invariant')
 jest.mock('../../editor/useInternalEditor')
 jest.mock('../../nodes/NodeElement', () => ({
-    NodeElement: () => null,
+  NodeElement: () => null,
 }))
 
 const mockEditor = useInternalEditor as jest.Mock<any>
 
 describe('<Frame />', () => {
-    const data = {}
-    let actions
-    let query
+  const data = {}
+  let actions
+  let query
 
+  beforeEach(() => {
+    actions = { addTreeAtIndex: jest.fn(), deserialize: jest.fn() }
+    query = { createNode: jest.fn(), parseTreeFromReactNode: jest.fn() }
+    mockEditor.mockImplementation(() => ({ actions, query }))
+  })
+
+  describe('When rendering using `data`', () => {
     beforeEach(() => {
-        actions = { addTreeAtIndex: jest.fn(), deserialize: jest.fn() }
-        query = { createNode: jest.fn(), parseTreeFromReactNode: jest.fn() }
-        mockEditor.mockImplementation(() => ({ actions, query }))
+      mount(<Frame data={data} />)
     })
-
-    describe('When rendering using `data`', () => {
-        beforeEach(() => {
-            mount(<Frame data={data} />)
-        })
-        it('should deserialize the nodes', () => {
-            expect(actions.deserialize).toHaveBeenCalledWith(data)
-        })
+    it('should deserialize the nodes', () => {
+      expect(actions.deserialize).toHaveBeenCalledWith(data)
     })
+  })
 })

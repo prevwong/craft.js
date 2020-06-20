@@ -1,51 +1,51 @@
 {
-    "name": "@craftjs/core",
-    "version": "0.1.0-beta.7",
-    "description": "A React Framework for building extensible drag and drop page editors",
-    "keywords": [
-        "react",
-        "drag-and-drop",
-        "page-editor",
-        "web-builder",
-        "html-builder",
-        "builder",
-        "editor",
-        "draft-js",
-        "framework",
-        "wysiwyg",
-        "html"
-    ],
-    "author": "Prev Wong <prevwong@gmail.com>",
-    "homepage": "https://github.com/prevwong/craft.js/",
-    "license": "MIT",
-    "main": "./dist/cjs/index.js",
-    "module": "./dist/esm/index.js",
-    "types": "./lib/index.d.ts",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/prevwong/craft.js/"
-    },
-    "scripts": {
-        "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
-        "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
-        "clean": "rimraf lib dist"
-    },
-    "bugs": {
-        "url": "https://github.com/prevwong/craft.js/issues"
-    },
-    "dependencies": {
-        "@craftjs/utils": "^0.1.0-beta.7",
-        "@types/react": "^16.9.11",
-        "debounce": "^1.2.0",
-        "immer": "^3.1.3",
-        "lodash.isequalwith": "^4.4.0",
-        "shortid": "^2.2.15",
-        "tiny-invariant": "^1.0.6"
-    },
-    "devDependencies": {
-        "react": "^16.8.0"
-    },
-    "peerDependencies": {
-        "react": "^16.8.0"
-    }
+  "name": "@craftjs/core",
+  "version": "0.1.0-beta.7",
+  "description": "A React Framework for building extensible drag and drop page editors",
+  "keywords": [
+    "react",
+    "drag-and-drop",
+    "page-editor",
+    "web-builder",
+    "html-builder",
+    "builder",
+    "editor",
+    "draft-js",
+    "framework",
+    "wysiwyg",
+    "html"
+  ],
+  "author": "Prev Wong <prevwong@gmail.com>",
+  "homepage": "https://github.com/prevwong/craft.js/",
+  "license": "MIT",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prevwong/craft.js/"
+  },
+  "scripts": {
+    "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
+    "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
+    "clean": "rimraf lib dist"
+  },
+  "bugs": {
+    "url": "https://github.com/prevwong/craft.js/issues"
+  },
+  "dependencies": {
+    "@craftjs/utils": "^0.1.0-beta.7",
+    "@types/react": "^16.9.11",
+    "debounce": "^1.2.0",
+    "immer": "^3.1.3",
+    "lodash.isequalwith": "^4.4.0",
+    "shortid": "^2.2.15",
+    "tiny-invariant": "^1.0.6"
+  },
+  "devDependencies": {
+    "react": "^16.8.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0"
+  }
 }

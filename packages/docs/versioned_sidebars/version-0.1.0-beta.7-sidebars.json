@@ -1,106 +1,106 @@
 {
-    "version-0.1.0-beta.7/docs": [
+  "version-0.1.0-beta.7/docs": [
+    {
+      "type": "category",
+      "label": "Introduction",
+      "items": [
         {
-            "type": "category",
-            "label": "Introduction",
-            "items": [
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/overview"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/acknowledgements"
-                }
-            ]
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/overview"
         },
         {
-            "type": "category",
-            "label": "Core Concepts",
-            "items": [
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/concepts/nodes"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/concepts/user-components"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/concepts/editor-components"
-                }
-            ]
-        },
-        {
-            "type": "category",
-            "label": "Guides",
-            "items": [
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/guides/basic-tutorial"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/guides/save-load-state"
-                }
-            ]
-        },
-        {
-            "type": "category",
-            "label": "API Reference",
-            "items": [
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/api/editor-state"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/api/node"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/api/user-component"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/api/nodetree"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/api/editor"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/api/frame"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/api/element"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/api/useEditor"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/api/useNode"
-                },
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/api/helpers"
-                }
-            ]
-        },
-        {
-            "type": "category",
-            "label": "Additional Packages",
-            "items": [
-                {
-                    "type": "doc",
-                    "id": "version-0.1.0-beta.7/additional/layers"
-                }
-            ]
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/acknowledgements"
         }
-    ]
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Core Concepts",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/concepts/nodes"
+        },
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/concepts/user-components"
+        },
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/concepts/editor-components"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Guides",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/guides/basic-tutorial"
+        },
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/guides/save-load-state"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "API Reference",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/api/editor-state"
+        },
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/api/node"
+        },
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/api/user-component"
+        },
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/api/nodetree"
+        },
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/api/editor"
+        },
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/api/frame"
+        },
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/api/element"
+        },
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/api/useEditor"
+        },
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/api/useNode"
+        },
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/api/helpers"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Additional Packages",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-0.1.0-beta.7/additional/layers"
+        }
+      ]
+    }
+  ]
 }

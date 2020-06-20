@@ -4,9 +4,9 @@ import { LayerMethods } from './actions'
 
 export type LayerStore = SubscriberAndCallbacksFor<typeof LayerMethods>
 export type LayerManagerContext = {
-    store: LayerStore
+  store: LayerStore
 }
 
 export const LayerManagerContext = createContext<LayerManagerContext>(
-    {} as LayerManagerContext
+  {} as LayerManagerContext
 )
