@@ -1,4 +1,4 @@
-import { EditorState, NodeId } from "../interfaces";
+import { EditorState, NodeId } from '../interfaces';
 export const updateEventsNode = (
   state: EditorState,
   id: NodeId,

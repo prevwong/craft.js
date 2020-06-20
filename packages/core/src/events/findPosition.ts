@@ -1,4 +1,4 @@
-import { Node, NodeInfo, DropAction } from "../interfaces";
+import { Node, NodeInfo, DropAction } from '../interfaces';
 
 export default function findPosition(
   parent: Node,
@@ -9,7 +9,7 @@ export default function findPosition(
   let result: DropAction = {
     parent,
     index: 0,
-    where: "before",
+    where: 'before',
   };
 
   let leftLimit = 0,
@@ -47,17 +47,17 @@ export default function findPosition(
       //If x lefter than center
       if (posX < xCenter) {
         xLimit = xCenter;
-        result.where = "before";
+        result.where = 'before';
       } else {
         leftLimit = xCenter;
-        result.where = "after";
+        result.where = 'after';
       }
     } else {
       // If y upper than center
       if (posY < yCenter) {
-        result.where = "before";
+        result.where = 'before';
         break;
-      } else result.where = "after"; // After last element
+      } else result.where = 'after'; // After last element
     }
   }
 

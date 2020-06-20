@@ -1,7 +1,7 @@
-import React from "react";
-import { Container } from "../Container";
-import { Element, useNode } from "@craftjs/core";
-import { Button } from "../Button";
+import React from 'react';
+import { Container } from '../Container';
+import { Element, useNode } from '@craftjs/core';
+import { Button } from '../Button';
 
 export const OnlyButtons = ({ children, ...props }) => {
   const {
@@ -40,5 +40,5 @@ export const Custom1 = (props: any) => {
 
 Custom1.craft = {
   ...Container.craft,
-  displayName: "Custom 1",
+  displayName: 'Custom 1',
 };

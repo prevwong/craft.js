@@ -1,10 +1,10 @@
-import React from "react";
-import { EventManager } from "../events";
-import { useMethods } from "@craftjs/utils";
-import { LayerMethods } from "./actions";
-import { LayerOptions } from "../interfaces";
-import { DefaultLayer } from "../layers";
-import { LayerManagerContext } from "./context";
+import React from 'react';
+import { EventManager } from '../events';
+import { useMethods } from '@craftjs/utils';
+import { LayerMethods } from './actions';
+import { LayerOptions } from '../interfaces';
+import { DefaultLayer } from '../layers';
+import { LayerManagerContext } from './context';
 
 export const LayerManagerProvider: React.FC<{
   options: Partial<LayerOptions>;

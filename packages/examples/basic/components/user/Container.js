@@ -1,8 +1,8 @@
-import React from "react";
-import { Slider } from "@material-ui/core";
-import { useNode } from "@craftjs/core";
-import { Paper, FormControl, FormLabel } from "@material-ui/core";
-import ColorPicker from "material-ui-color-picker";
+import React from 'react';
+import { Slider } from '@material-ui/core';
+import { useNode } from '@craftjs/core';
+import { Paper, FormControl, FormLabel } from '@material-ui/core';
+import ColorPicker from 'material-ui-color-picker';
 
 export const Container = ({ background, padding, children }) => {
   const {
@@ -11,7 +11,7 @@ export const Container = ({ background, padding, children }) => {
   return (
     <Paper
       ref={(ref) => connect(drag(ref))}
-      style={{ margin: "5px 0", background, padding: `${padding}px` }}
+      style={{ margin: '5px 0', background, padding: `${padding}px` }}
     >
       {children}
     </Paper>
@@ -51,7 +51,7 @@ export const ContainerSettings = () => {
 };
 
 export const ContainerDefaultProps = {
-  background: "#ffffff",
+  background: '#ffffff',
   padding: 3,
 };
 

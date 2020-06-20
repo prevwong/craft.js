@@ -1,6 +1,6 @@
-import { useMethods, SubscriberAndCallbacksFor } from "@craftjs/utils";
-import { Actions } from "./actions";
-import { QueryMethods } from "./query";
+import { useMethods, SubscriberAndCallbacksFor } from '@craftjs/utils';
+import { Actions } from './actions';
+import { QueryMethods } from './query';
 
 export type EditorStore = SubscriberAndCallbacksFor<typeof Actions>;
 

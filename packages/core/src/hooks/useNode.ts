@@ -1,9 +1,9 @@
-import { Node } from "../interfaces";
-import { useInternalNode } from "../nodes/useInternalNode";
-import { deprecationWarning } from "@craftjs/utils";
+import { Node } from '../interfaces';
+import { useInternalNode } from '../nodes/useInternalNode';
+import { deprecationWarning } from '@craftjs/utils';
 
 export type useNode<S = null> = useInternalNode<S> &
-  Pick<useInternalNode<S>["actions"], "setProp">;
+  Pick<useInternalNode<S>['actions'], 'setProp'>;
 
 export function useNode(): useNode;
 
@@ -29,8 +29,8 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
     id,
     related,
     setProp: (cb) => {
-      deprecationWarning("useNode().setProp()", {
-        suggest: "useNode().actions.setProp()",
+      deprecationWarning('useNode().setProp()', {
+        suggest: 'useNode().actions.setProp()',
       });
       return actions.setProp(cb);
     },

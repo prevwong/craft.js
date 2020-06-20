@@ -1,5 +1,5 @@
-import React from "react";
-import { ToolbarSection, ToolbarItem } from "../../editor";
+import React from 'react';
+import { ToolbarSection, ToolbarItem } from '../../editor';
 
 export const VideoSettings = () => {
   return (
