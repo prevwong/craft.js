@@ -14,7 +14,6 @@ import {
   ROOT_NODE,
 } from '@craftjs/utils';
 import { serializeNode } from '../utils/serializeNode';
-import { mergeTrees } from '../utils/mergeTrees';
 
 export function NodeHelpers(state: EditorState, id: NodeId) {
   invariant(typeof id == 'string', ERROR_INVALID_NODE_ID);
@@ -55,66 +54,71 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
     get() {
       return node;
     },
-    ancestors(deep = false) {
+    ancestors(deep = false): NodeId[] {
       function appendParentNode(
         id: NodeId,
-        result: NodeId[] = [],
+        ancestors: NodeId[] = [],
         depth: number = 0
       ) {
         const node = state.nodes[id];
         if (!node) {
-          return result;
+          return ancestors;
         }
 
-        result.push(id);
+        ancestors.push(id);
 
         if (!node.data.parent) {
-          return result;
+          return ancestors;
         }
 
         if (deep || (!deep && depth === 0)) {
-          result = appendParentNode(node.data.parent, result, depth + 1);
+          ancestors = appendParentNode(node.data.parent, ancestors, depth + 1);
         }
-        return result;
+        return ancestors;
       }
       return appendParentNode(node.data.parent);
     },
-    descendants(deep = false) {
+    descendants(
+      deep = false,
+      includeOnly?: 'linkedNodes' | 'childNodes'
+    ): NodeId[] {
       function appendChildNode(
         id: NodeId,
-        result: NodeId[] = [],
+        descendants: NodeId[] = [],
         depth: number = 0
       ) {
         if (deep || (!deep && depth === 0)) {
           const node = state.nodes[id];
 
           if (!node) {
-            return result;
+            return descendants;
           }
 
-          // Include linkedNodes if any
-          const linkedNodes = nodeHelpers(id).linkedNodes();
+          if (includeOnly !== 'childNodes') {
+            // Include linkedNodes if any
+            const linkedNodes = nodeHelpers(id).linkedNodes();
 
-          linkedNodes.forEach((nodeId) => {
-            result.push(nodeId);
-            result = appendChildNode(nodeId, result, depth + 1);
-          });
-
-          const childNodes = node.data.nodes;
-
-          if (!childNodes) {
-            return result;
-          }
-
-          // Include child Nodes if any
-          if (childNodes) {
-            childNodes.forEach((nodeId) => {
-              result.push(nodeId);
-              result = appendChildNode(nodeId, result, depth + 1);
+            linkedNodes.forEach((nodeId) => {
+              descendants.push(nodeId);
+              descendants = appendChildNode(nodeId, descendants, depth + 1);
             });
           }
+
+          if (includeOnly !== 'linkedNodes') {
+            const childNodes = node.data.nodes;
+
+            // Include child Nodes if any
+            if (childNodes) {
+              childNodes.forEach((nodeId) => {
+                descendants.push(nodeId);
+                descendants = appendChildNode(nodeId, descendants, depth + 1);
+              });
+            }
+          }
+
+          return descendants;
         }
-        return result;
+        return descendants;
       }
       return appendChildNode(id);
     },
@@ -202,12 +206,19 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
     toSerializedNode() {
       return serializeNode(node.data, state.options.resolver);
     },
-    toNodeTree() {
-      const childNodes = (node.data.nodes || []).map((childNodeId) => {
-        return NodeHelpers(state, childNodeId).toNodeTree();
-      });
+    toNodeTree(includeOnly?: 'linkedNodes' | 'childNodes') {
+      const nodes = [id, ...this.descendants(true, includeOnly)].reduce(
+        (accum, descendantId) => {
+          accum[descendantId] = nodeHelpers(descendantId).get();
+          return accum;
+        },
+        {}
+      );
 
-      return mergeTrees(node, childNodes);
+      return {
+        rootNodeId: id,
+        nodes,
+      };
     },
 
     /**
