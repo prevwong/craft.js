@@ -25,7 +25,7 @@ export class EventHandlers extends Handlers<
         init: () => () => this.store.actions.setNodeEvent('selected', null),
         events: [
           defineEventListener(
-            'click',
+            'mousedown',
             (e, id: NodeId) => {
               this.store.actions.setNodeEvent('selected', id);
             },
@@ -98,9 +98,6 @@ export class EventHandlers extends Handlers<
           defineEventListener(
             'dragstart',
             (e: DragEvent, id: NodeId) => {
-              // Ensure the Node is selected when it is being dragged
-              this.store.actions.setNodeEvent('selected', id);
-
               this.store.actions.setNodeEvent('dragged', id);
 
               EventHandlers.draggedElementShadow = createShadow(e);
