@@ -1,9 +1,9 @@
-import React, { useMemo } from "react";
-import { useInternalEditor } from "../editor/useInternalEditor";
-import { NodeElement } from "../nodes/NodeElement";
-import { SimpleElement } from "./SimpleElement";
-import { NodeId } from "../interfaces";
-import { useInternalNode } from "../nodes/useInternalNode";
+import React, { useMemo } from 'react';
+import { useInternalEditor } from '../editor/useInternalEditor';
+import { NodeElement } from '../nodes/NodeElement';
+import { SimpleElement } from './SimpleElement';
+import { NodeId } from '../interfaces';
+import { useInternalNode } from '../nodes/useInternalNode';
 
 const Render = () => {
   const { type, props, nodes, hydrationTimestamp } = useInternalNode(
@@ -26,7 +26,7 @@ const Render = () => {
       </React.Fragment>
     );
 
-    if (typeof type == "string") {
+    if (typeof type == 'string') {
       return <SimpleElement render={render} />;
     }
 

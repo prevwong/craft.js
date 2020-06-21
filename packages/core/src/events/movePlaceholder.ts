@@ -1,4 +1,4 @@
-import { DropAction, DOMInfo } from "../interfaces";
+import { DropAction, DOMInfo } from '../interfaces';
 
 export default function movePlaceholder(
   pos: DropAction,
@@ -19,11 +19,11 @@ export default function movePlaceholder(
       w = 2;
       h = elDim.outerHeight;
       t = elDim.top;
-      l = where === "before" ? elDim.left : elDim.left + elDim.outerWidth;
+      l = where === 'before' ? elDim.left : elDim.left + elDim.outerWidth;
     } else {
       w = elDim.outerWidth;
       h = 2;
-      t = where === "before" ? elDim.top : elDim.bottom;
+      t = where === 'before' ? elDim.top : elDim.bottom;
       l = elDim.left;
     }
   } else {

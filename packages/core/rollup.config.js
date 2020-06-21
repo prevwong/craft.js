@@ -1,6 +1,6 @@
-import config from "../../rollup.config";
+import config from '../../rollup.config';
 
 export default {
   ...config,
-  input: "./src/index.tsx",
+  input: './src/index.tsx',
 };

@@ -1,12 +1,12 @@
-import React from "react";
-import { useEditor } from "@craftjs/core";
-import styled from "styled-components";
-import Checkmark from "../../../public/icons/check.svg";
-import Customize from "../../../public/icons/customize.svg";
-import cx from "classnames";
+import React from 'react';
+import { useEditor } from '@craftjs/core';
+import styled from 'styled-components';
+import Checkmark from '../../../public/icons/check.svg';
+import Customize from '../../../public/icons/customize.svg';
+import cx from 'classnames';
 
 const HeaderDiv = styled.div<{ enabled: boolean }>`
-  width: ${(props) => (props.enabled ? "100%" : "800px")};
+  width: ${(props) => (props.enabled ? '100%' : '800px')};
   z-index: 99999;
   position: fixed;
   transform: translateX(-50%);
@@ -19,7 +19,7 @@ const HeaderDiv = styled.div<{ enabled: boolean }>`
     background: #ccccccc2;
     color:#2d2d2d;
   `
-      : ""}
+      : ''}
 `;
 
 const Link = styled.a<any>`
@@ -33,12 +33,12 @@ const Link = styled.a<any>`
     opacity: 1;
   }
   &:after {
-    content: " ";
+    content: ' ';
     display: block;
     width: 100%;
     height: 2px;
     background: #fff;
-    bottom: ${(props) => (props.selected ? 0 : "-2")}px;
+    bottom: ${(props) => (props.selected ? 0 : '-2')}px;
     opacity: ${(props) => (props.selected ? 1 : 0)};
     left: 0;
     position: absolute;
@@ -79,17 +79,17 @@ export const Header = () => {
           <h2 className="mr-5 text-xl">craft.js</h2>
         </div>
         <div className="flex items-end justify-end">
-          <Link href={process.env.url["BASIC_EXAMPLE"]}>Another Example</Link>
+          <Link href={process.env.url['BASIC_EXAMPLE']}>Another Example</Link>
           <Link href="https://github.com/prevwong/craft.js">Github</Link>
-          <Link href={process.env.url["DOCUMENTATION"]}>Documentation</Link>
+          <Link href={process.env.url['DOCUMENTATION']}>Documentation</Link>
         </div>
         <div className="flex">
           <Btn
             className={cx([
-              "transition cursor-pointer",
+              'transition cursor-pointer',
               {
-                "bg-green-400": enabled,
-                "bg-primary": !enabled,
+                'bg-green-400': enabled,
+                'bg-primary': !enabled,
               },
             ])}
             onClick={() => {
@@ -97,7 +97,7 @@ export const Header = () => {
             }}
           >
             {enabled ? <Checkmark /> : <Customize />}
-            {enabled ? "Finish Editing" : "Edit"}
+            {enabled ? 'Finish Editing' : 'Edit'}
           </Btn>
         </div>
       </div>

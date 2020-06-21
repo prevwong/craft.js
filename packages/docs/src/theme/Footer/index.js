@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react";
-import classnames from "classnames";
+import React from 'react';
+import classnames from 'classnames';
 
-import Link from "@docusaurus/Link";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import useBaseUrl from "@docusaurus/useBaseUrl";
-import styles from "./styles.module.css";
+import Link from '@docusaurus/Link';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from './styles.module.css';
 
 function FooterLink({ to, href, label, ...props }) {
   const toUrl = useBaseUrl(to);
@@ -20,8 +20,8 @@ function FooterLink({ to, href, label, ...props }) {
       className="footer__link-item"
       {...(href
         ? {
-            target: "_blank",
-            rel: "noopener noreferrer",
+            target: '_blank',
+            rel: 'noopener noreferrer',
             href,
           }
         : {
@@ -53,8 +53,8 @@ function Footer() {
 
   return (
     <footer
-      className={classnames("footer", {
-        "footer--dark": footer.style === "dark",
+      className={classnames('footer', {
+        'footer--dark': footer.style === 'dark',
       })}
     >
       <div className="container">
@@ -91,7 +91,7 @@ function Footer() {
         )}
         <div className="footer__end text--center">
           <div className="footer__madewith margin-bottom--md">
-            Made with <img src={useBaseUrl("img/heart-fill.png")} /> in Kuala
+            Made with <img src={useBaseUrl('img/heart-fill.png')} /> in Kuala
             Lumpur, Malaysia
           </div>
           <div>Released under the MIT license</div>

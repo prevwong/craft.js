@@ -1,21 +1,21 @@
-import React, { useState } from "react";
-import { NodeId } from "../interfaces";
-import { useInternalNode } from "./useInternalNode";
-import { ERROR_TOP_LEVEL_ELEMENT_NO_ID, useEffectOnce } from "@craftjs/utils";
-import invariant from "tiny-invariant";
-import { useInternalEditor } from "../editor/useInternalEditor";
-import { NodeElement } from "./NodeElement";
+import React, { useState } from 'react';
+import { NodeId } from '../interfaces';
+import { useInternalNode } from './useInternalNode';
+import { ERROR_TOP_LEVEL_ELEMENT_NO_ID, useEffectOnce } from '@craftjs/utils';
+import invariant from 'tiny-invariant';
+import { useInternalEditor } from '../editor/useInternalEditor';
+import { NodeElement } from './NodeElement';
 
 export const defaultElementProps = {
-  is: "div",
+  is: 'div',
   canvas: false,
   custom: {},
   hidden: false,
 };
 
 export const elementPropToNodeData = {
-  is: "type",
-  canvas: "isCanvas",
+  is: 'type',
+  canvas: 'isCanvas',
 };
 
 export type Element<T extends React.ElementType> = {
@@ -63,7 +63,7 @@ export function Element<T extends React.ElementType>({
       if (
         existingNode &&
         existingNode.data.type === props.is &&
-        typeof props.is !== "string"
+        typeof props.is !== 'string'
       ) {
         newProps = {
           ...newProps,

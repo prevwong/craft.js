@@ -1,9 +1,9 @@
-import React, { useMemo } from "react";
-import { useInternalEditor } from "../editor/useInternalEditor";
-import { RenderIndicator, getDOMInfo } from "@craftjs/utils";
-import movePlaceholder from "./movePlaceholder";
-import { EventHandlers } from "./EventHandlers";
-import { EventHandlerContext } from "./EventContext";
+import React, { useMemo } from 'react';
+import { useInternalEditor } from '../editor/useInternalEditor';
+import { RenderIndicator, getDOMInfo } from '@craftjs/utils';
+import movePlaceholder from './movePlaceholder';
+import { EventHandlers } from './EventHandlers';
+import { EventHandlerContext } from './EventContext';
 
 export const Events: React.FC = ({ children }) => {
   const { events, indicator, store } = useInternalEditor((state) => ({
@@ -27,7 +27,7 @@ export const Events: React.FC = ({ children }) => {
             backgroundColor: events.indicator.error
               ? indicator.error
               : indicator.success,
-            transition: "0.2s ease-in",
+            transition: '0.2s ease-in',
           },
         })}
       {children}

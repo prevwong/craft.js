@@ -1,22 +1,22 @@
-import React from "react";
+import React from 'react';
 import {
   NodeData,
   SerializedNode,
   ReducedComp,
   ReduceCompType,
-} from "../interfaces";
-import { Canvas } from "../nodes/Canvas";
-import { Resolver } from "../interfaces";
-import { resolveComponent } from "./resolveComponent";
+} from '../interfaces';
+import { Canvas } from '../nodes/Canvas';
+import { Resolver } from '../interfaces';
+import { resolveComponent } from './resolveComponent';
 
 type DeserialisedType = JSX.Element & { name: string };
 
 const restoreType = (type: ReduceCompType, resolver: Resolver) =>
-  typeof type === "object" && type.resolvedName
-    ? type.resolvedName === "Canvas"
+  typeof type === 'object' && type.resolvedName
+    ? type.resolvedName === 'Canvas'
       ? Canvas
       : resolver[type.resolvedName]
-    : typeof type === "string"
+    : typeof type === 'string'
     ? type
     : null;
 
@@ -34,11 +34,11 @@ export const deserializeComp = (
 
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
-    if (typeof prop === "object" && prop.resolvedName) {
+    if (typeof prop === 'object' && prop.resolvedName) {
       result[key] = deserializeComp(prop, resolver);
-    } else if (key === "children" && Array.isArray(prop)) {
+    } else if (key === 'children' && Array.isArray(prop)) {
       result[key] = prop.map((child) => {
-        if (typeof child === "string") {
+        if (typeof child === 'string') {
           return child;
         }
         return deserializeComp(child, resolver);
@@ -68,7 +68,7 @@ export const deserializeComp = (
 export const deserializeNode = (
   data: SerializedNode,
   resolver: Resolver
-): Omit<NodeData, "event"> => {
+): Omit<NodeData, 'event'> => {
   const { type: Comp, props: Props, ...nodeData } = data;
 
   const { type, name, props } = (deserializeComp(
