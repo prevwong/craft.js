@@ -5,22 +5,22 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { useCallback, useState } from "react";
-import classnames from "classnames";
-import Link from "@docusaurus/Link";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import useBaseUrl from "@docusaurus/useBaseUrl";
+import React, { useCallback, useState } from 'react';
+import classnames from 'classnames';
+import Link from '@docusaurus/Link';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
-import SearchBar from "@theme/SearchBar";
-import Toggle from "@theme/Toggle";
-import useThemeContext from "@theme/hooks/useThemeContext";
-import useHideableNavbar from "@theme/hooks/useHideableNavbar";
-import useLockBodyScroll from "@theme/hooks/useLockBodyScroll";
-import useLogo from "@theme/hooks/useLogo";
+import SearchBar from '@theme/SearchBar';
+import Toggle from '@theme/Toggle';
+import useThemeContext from '@theme/hooks/useThemeContext';
+import useHideableNavbar from '@theme/hooks/useHideableNavbar';
+import useLockBodyScroll from '@theme/hooks/useLockBodyScroll';
+import useLogo from '@theme/hooks/useLogo';
 
-import versions from "../../../versions.json";
+import versions from '../../../versions.json';
 
-import styles from "./styles.module.css";
+import styles from './styles.module.css';
 
 function NavLink({
   activeBasePath,
@@ -28,7 +28,7 @@ function NavLink({
   to,
   href,
   label,
-  activeClassName = "navbar__link--active",
+  activeClassName = 'navbar__link--active',
   prependBaseUrlToHref,
   ...props
 }) {
@@ -40,8 +40,8 @@ function NavLink({
     <Link
       {...(href
         ? {
-            target: "_blank",
-            rel: "noopener noreferrer",
+            target: '_blank',
+            rel: 'noopener noreferrer',
             href: prependBaseUrlToHref ? normalizedHref : href,
           }
         : {
@@ -68,7 +68,7 @@ function NavItem({ items, position, className, ...props }) {
   const navLinkClassNames = (extraClassName, isDropdownItem = false) =>
     classnames(
       {
-        "navbar__item navbar__link": !isDropdownItem,
+        'navbar__item navbar__link': !isDropdownItem,
         dropdown__link: isDropdownItem,
       },
       extraClassName
@@ -80,9 +80,9 @@ function NavItem({ items, position, className, ...props }) {
 
   return (
     <div
-      className={classnames("navbar__item", "dropdown", "dropdown--hoverable", {
-        "dropdown--left": position === "left",
-        "dropdown--right": position === "right",
+      className={classnames('navbar__item', 'dropdown', 'dropdown--hoverable', {
+        'dropdown--left': position === 'left',
+        'dropdown--right': position === 'right',
       })}
     >
       <NavLink
@@ -90,8 +90,8 @@ function NavItem({ items, position, className, ...props }) {
         {...props}
         onClick={(e) => e.preventDefault()}
         onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.target.parentNode.classList.toggle("dropdown--show");
+          if (e.key === 'Enter') {
+            e.target.parentNode.classList.toggle('dropdown--show');
           }
         }}
       >
@@ -118,9 +118,9 @@ function MobileNavItem({ items, position, className, ...props }) {
   // Need to destructure position from props so that it doesn't get passed on.
   const navLinkClassNames = (extraClassName, isSubList = false) =>
     classnames(
-      "menu__link",
+      'menu__link',
       {
-        "menu__link--sublist": isSubList,
+        'menu__link--sublist': isSubList,
       },
       extraClassName
     );
@@ -176,9 +176,9 @@ function Navbar() {
 
   let version = versions[0];
 
-  const path = typeof window !== "undefined" ? window.location.pathname : null;
+  const path = typeof window !== 'undefined' ? window.location.pathname : null;
 
-  if (path && path.indexOf(baseUrl + "docs/") > -1) {
+  if (path && path.indexOf(baseUrl + 'docs/') > -1) {
     const matches = versions.filter((version) => path.indexOf(version) > -1);
     version = matches[0] || version;
   }
@@ -200,8 +200,8 @@ function Navbar() {
   return (
     <nav
       ref={navbarRef}
-      className={classnames("navbar", "navbar--light", "navbar--fixed-top", {
-        "navbar-sidebar--show": sidebarShown,
+      className={classnames('navbar', 'navbar--light', 'navbar--fixed-top', {
+        'navbar-sidebar--show': sidebarShown,
         [styles.navbarHideable]: hideOnScroll,
         [styles.navbarHidden]: !isNavbarVisible,
       })}
@@ -248,7 +248,7 @@ function Navbar() {
               )}
               {title != null && (
                 <strong
-                  className={classnames("navbar__title", {
+                  className={classnames('navbar__title', {
                     [styles.hideLogoText]: isSearchBarExpanded,
                   })}
                 >
@@ -256,19 +256,19 @@ function Navbar() {
                 </strong>
               )}
             </Link>
-            <Link to={useBaseUrl("versions")} className="version-header-label">
+            <Link to={useBaseUrl('versions')} className="version-header-label">
               {version}
             </Link>
           </div>
           {links
-            .filter((linkItem) => linkItem.position === "left")
+            .filter((linkItem) => linkItem.position === 'left')
             .map((linkItem, i) => (
               <NavItem {...linkItem} key={i} />
             ))}
         </div>
         <div className="navbar__items navbar__items--right">
           {links
-            .filter((linkItem) => linkItem.position === "right")
+            .filter((linkItem) => linkItem.position === 'right')
             .map((linkItem, i) => (
               <NavItem {...linkItem} key={i} />
             ))}

@@ -1,9 +1,9 @@
-import { NodeId, Node, DerivedEventHandlers } from "@craftjs/core";
-import { LayerIndicator } from "interfaces";
-import { ConnectorsForHandlers } from "@craftjs/utils";
+import { NodeId, Node, DerivedEventHandlers } from '@craftjs/core';
+import { LayerIndicator } from 'interfaces';
+import { ConnectorsForHandlers } from '@craftjs/utils';
 
 export class LayerHandlers extends DerivedEventHandlers<
-  "layer" | "layerHeader" | "drag"
+  'layer' | 'layerHeader' | 'drag'
 > {
   private id;
   private layerStore;
@@ -42,14 +42,14 @@ export class LayerHandlers extends DerivedEventHandlers<
         },
         events: [
           [
-            "mouseover",
+            'mouseover',
             (e: MouseEvent, id) => {
               e.stopPropagation();
-              this.layerStore.actions.setLayerEvent("hovered", id);
+              this.layerStore.actions.setLayerEvent('hovered', id);
             },
           ],
           [
-            "dragover",
+            'dragover',
             (e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -79,7 +79,7 @@ export class LayerHandlers extends DerivedEventHandlers<
                     .get();
                   indicator.placement.index =
                     currentCanvasHovered.data.nodes.length;
-                  indicator.placement.where = "after";
+                  indicator.placement.where = 'after';
                   indicator.placement.parent = currentCanvasHovered;
 
                   LayerHandlers.events.indicator = {
@@ -95,7 +95,7 @@ export class LayerHandlers extends DerivedEventHandlers<
             },
           ],
           [
-            "dragenter",
+            'dragenter',
             (e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -146,9 +146,9 @@ export class LayerHandlers extends DerivedEventHandlers<
                           e.clientY > parentHeadingInfo.bottom - 10 &&
                           !this.getLayer(parent.id).expanded
                         ) {
-                          indicatorInfo.placement.where = "after";
+                          indicatorInfo.placement.where = 'after';
                         } else if (e.clientY < parentHeadingInfo.top + 10) {
-                          indicatorInfo.placement.where = "before";
+                          indicatorInfo.placement.where = 'before';
                         }
                       }
                     }
@@ -167,7 +167,7 @@ export class LayerHandlers extends DerivedEventHandlers<
             },
           ],
           [
-            "dragend",
+            'dragend',
             (e: MouseEvent) => {
               e.stopPropagation();
               const events = LayerHandlers.events;
@@ -180,7 +180,7 @@ export class LayerHandlers extends DerivedEventHandlers<
                 this.store.actions.move(
                   LayerHandlers.draggedElement as NodeId,
                   parentId,
-                  index + (where === "after" ? 1 : 0)
+                  index + (where === 'after' ? 1 : 0)
                 );
               }
 
@@ -199,15 +199,15 @@ export class LayerHandlers extends DerivedEventHandlers<
       },
       drag: {
         init: (el) => {
-          el.setAttribute("draggable", true);
+          el.setAttribute('draggable', true);
 
           return () => {
-            el.removeAttribute("draggable");
+            el.removeAttribute('draggable');
           };
         },
         events: [
           [
-            "dragstart",
+            'dragstart',
             (e: MouseEvent) => {
               e.stopPropagation();
 

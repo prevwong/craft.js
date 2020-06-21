@@ -1,21 +1,21 @@
-import React from "react";
-import { useEditor } from "@craftjs/core";
-import styled from "styled-components";
-import Eye from "./svg/eye.svg";
-import Arrow from "./svg/arrow.svg";
-import Linked from "./svg/linked.svg";
-import { useLayer } from "../useLayer";
-import { EditableLayerName } from "./EditableLayerName";
+import React from 'react';
+import { useEditor } from '@craftjs/core';
+import styled from 'styled-components';
+import Eye from './svg/eye.svg';
+import Arrow from './svg/arrow.svg';
+import Linked from './svg/linked.svg';
+import { useLayer } from '../useLayer';
+import { EditableLayerName } from './EditableLayerName';
 
 const StyledDiv = styled.div<{ depth: number; selected: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 4px 10px;
-  background: ${(props) => (props.selected ? "#2680eb" : "transparent")};
-  color: ${(props) => (props.selected ? "#fff" : "inherit")};
+  background: ${(props) => (props.selected ? '#2680eb' : 'transparent')};
+  color: ${(props) => (props.selected ? '#fff' : 'inherit')};
   svg {
-    fill: ${(props) => (props.selected ? "#fff" : "#808184")};
+    fill: ${(props) => (props.selected ? '#fff' : '#808184')};
     margin-top: 2px;
   }
   .inner {
@@ -63,13 +63,13 @@ const Hide = styled.a<{ selected: boolean; isHidden: boolean }>`
     opacity: ${(props) => (props.isHidden ? 0.2 : 1)};
   }
   &:after {
-    content: " ";
+    content: ' ';
     width: 2px;
     height: ${(props) => (props.isHidden ? 100 : 0)}%;
     position: absolute;
     left: 2px;
     top: 3px;
-    background: ${(props) => (props.selected ? "#fff" : "#808184")};
+    background: ${(props) => (props.selected ? '#fff' : '#808184')};
     transform: rotate(-45deg);
     transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     transform-origin: 0% 0%;

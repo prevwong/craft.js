@@ -8,7 +8,7 @@ import {
   NodeEvents,
   NodeTree,
   SerializedNodes,
-} from "../interfaces";
+} from '../interfaces';
 import {
   deprecationWarning,
   ERROR_INVALID_NODEID,
@@ -17,12 +17,12 @@ import {
   QueryCallbacksFor,
   ERROR_NOPARENT,
   ERROR_DELETE_TOP_LEVEL_NODE,
-} from "@craftjs/utils";
-import { QueryMethods } from "./query";
-import { fromEntries } from "../utils/fromEntries";
-import { updateEventsNode } from "../utils/updateEventsNode";
-import invariant from "tiny-invariant";
-import { editorInitialState } from "./store";
+} from '@craftjs/utils';
+import { QueryMethods } from './query';
+import { fromEntries } from '../utils/fromEntries';
+import { updateEventsNode } from '../utils/updateEventsNode';
+import invariant from 'tiny-invariant';
+import { editorInitialState } from './store';
 
 export const Actions = (
   state: EditorState,
@@ -41,7 +41,7 @@ export const Actions = (
     }
 
     if (parent.data.props.children) {
-      delete parent.data.props["children"];
+      delete parent.data.props['children'];
     }
 
     if (index != null) {
@@ -122,8 +122,8 @@ export const Actions = (
       // TODO: Deprecate adding array of Nodes to keep implementation simpler
       let nodes = [nodeToAdd];
       if (Array.isArray(nodeToAdd)) {
-        deprecationWarning("actions.add(node: Node[])", {
-          suggest: "actions.add(node: Node)",
+        deprecationWarning('actions.add(node: Node[])', {
+          suggest: 'actions.add(node: Node)',
         });
         nodes = nodeToAdd;
       }
@@ -145,7 +145,7 @@ export const Actions = (
       if (!parentId) {
         invariant(
           tree.rootNodeId === ROOT_NODE,
-          "Cannot add non-root Node without a parent"
+          'Cannot add non-root Node without a parent'
         );
         state.nodes[tree.rootNodeId] = node;
       }
@@ -176,7 +176,7 @@ export const Actions = (
 
     deserialize(input: SerializedNodes | string) {
       const dehydratedNodes =
-        typeof input == "string" ? JSON.parse(input) : input;
+        typeof input == 'string' ? JSON.parse(input) : input;
 
       const nodePairs = Object.keys(dehydratedNodes).map((id) => {
         let nodeId = id;
@@ -212,7 +212,7 @@ export const Actions = (
       const currentParent = state.nodes[currentParentId],
         currentParentNodes = currentParent.data.nodes!;
 
-      currentParentNodes[currentParentNodes.indexOf(targetId)] = "marked";
+      currentParentNodes[currentParentNodes.indexOf(targetId)] = 'marked';
 
       if (newParentNodes) {
         newParentNodes.splice(index, 0, targetId);
@@ -222,7 +222,7 @@ export const Actions = (
 
       state.nodes[targetId].data.parent = newParentId;
       state.nodes[targetId].data.index = index;
-      currentParentNodes.splice(currentParentNodes.indexOf("marked"), 1);
+      currentParentNodes.splice(currentParentNodes.indexOf('marked'), 1);
     },
 
     replaceNodes(nodes: Nodes) {
@@ -272,7 +272,7 @@ export const Actions = (
      */
     setCustom<T extends NodeId>(
       id: T,
-      cb: (data: EditorState["nodes"][T]["data"]["custom"]) => void
+      cb: (data: EditorState['nodes'][T]['data']['custom']) => void
     ) {
       cb(state.nodes[id].data.custom);
     },

@@ -1,16 +1,16 @@
-import { QueryCallbacksFor } from "@craftjs/utils";
+import { QueryCallbacksFor } from '@craftjs/utils';
 
-import { Nodes, NodeEvents, NodeId } from "./nodes";
-import { Placement } from "./events";
-import { useInternalEditor } from "../editor/useInternalEditor";
-import { QueryMethods } from "../editor/query";
+import { Nodes, NodeEvents, NodeId } from './nodes';
+import { Placement } from './events';
+import { useInternalEditor } from '../editor/useInternalEditor';
+import { QueryMethods } from '../editor/query';
 
 export type Options = {
   onRender: React.ComponentType<{ render: React.ReactElement }>;
   onNodesChange: (query: QueryCallbacksFor<typeof QueryMethods>) => void;
   resolver: Resolver;
   enabled: boolean;
-  indicator: Record<"success" | "error", string>;
+  indicator: Record<'success' | 'error', string>;
 };
 
 export type Resolver = Record<string, string | React.ElementType>;

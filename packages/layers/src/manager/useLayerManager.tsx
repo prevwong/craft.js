@@ -1,8 +1,8 @@
-import { useCollector } from "@craftjs/utils";
-import { useContext } from "react";
-import { LayerManagerContext } from "./context";
-import { LayerState } from "../interfaces";
-import { LayerMethods } from "./actions";
+import { useCollector } from '@craftjs/utils';
+import { useContext } from 'react';
+import { LayerManagerContext } from './context';
+import { LayerState } from '../interfaces';
+import { LayerMethods } from './actions';
 
 export function useLayerManager(): useCollector<typeof LayerMethods, null>;
 export function useLayerManager<C>(

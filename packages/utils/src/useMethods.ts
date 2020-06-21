@@ -1,13 +1,13 @@
 // https://github.com/pelotom/use-methods
-import produce, { PatchListener } from "immer";
-import { useMemo, useEffect, useRef, useReducer, useCallback } from "react";
-import isEqualWith from "lodash.isequalwith";
+import produce, { PatchListener } from 'immer';
+import { useMemo, useEffect, useRef, useReducer, useCallback } from 'react';
+import isEqualWith from 'lodash.isequalwith';
 
 export type SubscriberAndCallbacksFor<
   M extends MethodsOrOptions,
   Q extends QueryMethods = any
 > = {
-  subscribe: Watcher<StateFor<M>>["subscribe"];
+  subscribe: Watcher<StateFor<M>>['subscribe'];
   getState: () => { prev: StateFor<M>; current: StateFor<M> };
   actions: CallbacksFor<M>;
   query: QueryCallbacksFor<Q>;
@@ -24,8 +24,8 @@ export type CallbacksFor<
   M extends MethodsOrOptions
 > = M extends MethodsOrOptions<any, infer R>
   ? {
-      [T in ActionUnion<R>["type"]]: (
-        ...payload: ActionByType<ActionUnion<R>, T>["payload"]
+      [T in ActionUnion<R>['type']]: (
+        ...payload: ActionByType<ActionUnion<R>, T>['payload']
       ) => void;
     }
   : never;
@@ -72,8 +72,8 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<
   infer R
 >
   ? {
-      [T in ActionUnion<R>["type"]]: (
-        ...payload: ActionByType<ActionUnion<R>, T>["payload"]
+      [T in ActionUnion<R>['type']]: (
+        ...payload: ActionByType<ActionUnion<R>, T>['payload']
       ) => ReturnType<R[T]>;
     }
   : never;
@@ -105,7 +105,7 @@ export function useMethods<
   const [reducer, methodsFactory] = useMemo(() => {
     let methods: Methods<S, R>;
     let patchListener: PatchListener | undefined;
-    if (typeof methodsOrOptions === "function") {
+    if (typeof methodsOrOptions === 'function') {
       methods = methodsOrOptions;
     } else {
       methods = methodsOrOptions.methods;
@@ -137,7 +137,7 @@ export function useMethods<
   );
 
   const actions = useMemo(() => {
-    const actionTypes: ActionUnion<R>["type"][] = Object.keys(
+    const actionTypes: ActionUnion<R>['type'][] = Object.keys(
       methodsFactory(null, null)
     );
     return actionTypes.reduce((accum, type) => {

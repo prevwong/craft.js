@@ -1,5 +1,5 @@
-import { EditorState, Node, NodeId } from "@craftjs/core";
-import invariant from "tiny-invariant";
+import { EditorState, Node, NodeId } from '@craftjs/core';
+import invariant from 'tiny-invariant';
 import {
   deprecationWarning,
   ERROR_CANNOT_DRAG,
@@ -13,19 +13,19 @@ import {
   ERROR_MOVE_TOP_LEVEL_NODE,
   ERROR_MOVE_CANNOT_DROP,
   ROOT_NODE,
-} from "@craftjs/utils";
-import { serializeNode } from "../utils/serializeNode";
-import { mergeTrees } from "../utils/mergeTrees";
+} from '@craftjs/utils';
+import { serializeNode } from '../utils/serializeNode';
+import { mergeTrees } from '../utils/mergeTrees';
 
 export function NodeHelpers(state: EditorState, id: NodeId) {
-  invariant(typeof id == "string", ERROR_INVALID_NODE_ID);
+  invariant(typeof id == 'string', ERROR_INVALID_NODE_ID);
 
   const node = state.nodes[id];
 
   const nodeHelpers = (id) => NodeHelpers(state, id);
 
   const getNodeFromIdOrNode = (node: NodeId | Node) =>
-    typeof node === "string" ? state.nodes[node] : node;
+    typeof node === 'string' ? state.nodes[node] : node;
 
   return {
     isCanvas() {
@@ -48,8 +48,8 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
     },
     isParentOfTopLevelNodes: () => !!node.data.linkedNodes,
     isParentOfTopLevelCanvas() {
-      deprecationWarning("query.node(id).isParentOfTopLevelCanvas", {
-        suggest: "query.node(id).isParentOfTopLevelNodes",
+      deprecationWarning('query.node(id).isParentOfTopLevelCanvas', {
+        suggest: 'query.node(id).isParentOfTopLevelNodes',
       });
       return this.isParentOfTopLevelNodes();
     },
@@ -143,12 +143,12 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
       }
     },
     isDroppable(target: NodeId | Node, onError?: (err: string) => void) {
-      const isNewNode = typeof target == "object" && !state.nodes[target.id];
+      const isNewNode = typeof target == 'object' && !state.nodes[target.id];
       const targetNode = getNodeFromIdOrNode(target),
         newParentNode = node;
       try {
         //  If target is a NodeId (thus it's already in the state), check if it's a top-level node
-        if (typeof target === "string") {
+        if (typeof target === 'string') {
           invariant(
             !nodeHelpers(target).isTopLevelNode(),
             ERROR_MOVE_TOP_LEVEL_NODE
@@ -221,8 +221,8 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
      **/
 
     decendants(deep = false) {
-      deprecationWarning("query.node(id).decendants", {
-        suggest: "query.node(id).descendants",
+      deprecationWarning('query.node(id).decendants', {
+        suggest: 'query.node(id).descendants',
       });
       return this.descendants(deep);
     },

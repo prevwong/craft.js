@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useNode } from "@craftjs/core";
-import ContentEditable from "react-contenteditable";
-import { Slider, FormControl, FormLabel } from "@material-ui/core";
+import React, { useState, useEffect } from 'react';
+import { useNode } from '@craftjs/core';
+import ContentEditable from 'react-contenteditable';
+import { Slider, FormControl, FormLabel } from '@material-ui/core';
 
 export const Text = ({ text, fontSize, textAlign }) => {
   const {
@@ -30,7 +30,7 @@ export const Text = ({ text, fontSize, textAlign }) => {
         onChange={(e) =>
           setProp(
             (props) =>
-              (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, ""))
+              (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, ''))
           )
         }
         tagName="p"
@@ -68,7 +68,7 @@ const TextSettings = () => {
 };
 
 export const TextDefaultProps = {
-  text: "Hi",
+  text: 'Hi',
   fontSize: 20,
 };
 
