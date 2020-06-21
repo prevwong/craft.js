@@ -24,32 +24,40 @@ export class EventHandlers extends Handlers<
       select: {
         init: () => () => this.store.actions.setNodeEvent('selected', null),
         events: [
-          defineEventListener('click', (e, id: NodeId) => {
-            e.stopPropagation();
-            this.store.actions.setNodeEvent('selected', id);
-          }),
+          defineEventListener(
+            'mousedown',
+            (e, id: NodeId) => {
+              this.store.actions.setNodeEvent('selected', id);
+            },
+            { blocking: true }
+          ),
         ],
       },
       hover: {
         init: () => () => this.store.actions.setNodeEvent('hovered', null),
         events: [
-          defineEventListener('mouseover', (e, id: NodeId) => {
-            e.stopPropagation();
-            this.store.actions.setNodeEvent('hovered', id);
-          }),
+          defineEventListener(
+            'mouseover',
+            (e, id: NodeId) => {
+              this.store.actions.setNodeEvent('hovered', id);
+            },
+            { blocking: true }
+          ),
         ],
       },
       drop: {
         events: [
-          defineEventListener('dragover', (e: MouseEvent) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }),
+          defineEventListener(
+            'dragover',
+            (e: MouseEvent) => {
+              e.preventDefault();
+            },
+            { blocking: true }
+          ),
           defineEventListener(
             'dragenter',
             (e: MouseEvent, targetId: NodeId) => {
               e.preventDefault();
-              e.stopPropagation();
 
               const draggedElement = EventHandlers.draggedElement as NodeTree;
               if (!draggedElement) {
@@ -71,7 +79,8 @@ export class EventHandlers extends Handlers<
               }
               this.store.actions.setIndicator(indicator);
               EventHandlers.events = { indicator };
-            }
+            },
+            { blocking: true }
           ),
         ],
       },
@@ -86,29 +95,29 @@ export class EventHandlers extends Handlers<
           return () => el.setAttribute('draggable', 'false');
         },
         events: [
-          defineEventListener('dragstart', (e: DragEvent, id: NodeId) => {
-            e.stopPropagation();
-            e.stopImmediatePropagation();
+          defineEventListener(
+            'dragstart',
+            (e: DragEvent, id: NodeId) => {
+              this.store.actions.setNodeEvent('dragged', id);
 
-            // Ensure the Node is selected when it is being dragged
-            this.store.actions.setNodeEvent('selected', id);
-
-            this.store.actions.setNodeEvent('dragged', id);
-
-            EventHandlers.draggedElementShadow = createShadow(e);
-            EventHandlers.draggedElement = id;
-          }),
-          defineEventListener('dragend', (e: DragEvent) => {
-            e.stopPropagation();
-
-            const onDropElement = (draggedElement, placement) =>
-              this.store.actions.move(
-                draggedElement as NodeId,
-                placement.parent.id,
-                placement.index + (placement.where === 'after' ? 1 : 0)
-              );
-            this.dropElement(onDropElement);
-          }),
+              EventHandlers.draggedElementShadow = createShadow(e);
+              EventHandlers.draggedElement = id;
+            },
+            { blocking: true }
+          ),
+          defineEventListener(
+            'dragend',
+            (e: DragEvent) => {
+              const onDropElement = (draggedElement, placement) =>
+                this.store.actions.move(
+                  draggedElement as NodeId,
+                  placement.parent.id,
+                  placement.index + (placement.where === 'after' ? 1 : 0)
+                );
+              this.dropElement(onDropElement);
+            },
+            { blocking: true }
+          ),
         ],
       },
       create: {
@@ -120,31 +129,31 @@ export class EventHandlers extends Handlers<
           defineEventListener(
             'dragstart',
             (e: DragEvent, userElement: React.ReactElement) => {
-              e.stopPropagation();
-              e.stopImmediatePropagation();
-
               const tree = this.store.query
                 .parseReactElement(userElement)
                 .toNodeTree();
 
               EventHandlers.draggedElementShadow = createShadow(e);
               EventHandlers.draggedElement = tree;
-            }
+            },
+            { blocking: true }
           ),
-          defineEventListener('dragend', (e: DragEvent) => {
-            e.stopPropagation();
-
-            const onDropElement = (draggedElement, placement) => {
-              const index =
-                placement.index + (placement.where === 'after' ? 1 : 0);
-              this.store.actions.addNodeTree(
-                draggedElement,
-                placement.parent.id,
-                index
-              );
-            };
-            this.dropElement(onDropElement);
-          }),
+          defineEventListener(
+            'dragend',
+            (e: DragEvent) => {
+              const onDropElement = (draggedElement, placement) => {
+                const index =
+                  placement.index + (placement.where === 'after' ? 1 : 0);
+                this.store.actions.addNodeTree(
+                  draggedElement,
+                  placement.parent.id,
+                  index
+                );
+              };
+              this.dropElement(onDropElement);
+            },
+            { blocking: true }
+          ),
         ],
       },
     };

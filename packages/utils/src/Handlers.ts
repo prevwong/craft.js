@@ -1,10 +1,23 @@
 import { wrapHookToRecognizeElement, Connector } from './wrapConnectorHooks';
 
+// TODO(mat) any reason why why use array to store this information ?
+// is there a better place for these definitions ?
+export type CraftEventListener = [
+  string,
+  (e: Event, opts: any) => void,
+  Partial<CraftEventOptions>?
+];
+
+export interface CraftEventOptions {
+  capture: boolean;
+  blocking: boolean;
+}
+
 export const defineEventListener = (
   name: string,
   handler: (e: MouseEvent, payload: any) => void,
-  capture?: boolean
-) => [name, handler, capture];
+  options?: Partial<CraftEventOptions>
+): CraftEventListener => [name, handler, options];
 
 export type Handler = {
   /**
@@ -16,7 +29,7 @@ export type Handler = {
   /**
    * List of Event Listeners to add to the attached DOM element
    */
-  events: readonly [string, (e: HTMLElement, opts: any) => void, boolean?][];
+  events: readonly CraftEventListener[];
 };
 
 export type ConnectorsForHandlers<T extends Handlers> = ReturnType<
@@ -65,14 +78,23 @@ class WatchHandler {
     this.cleanDOM = init && init(this.el, this.opts);
     this.listenersToRemove =
       events &&
-      events.map(([event, listener, capture]) => {
+      events.map(([eventName, listener, options = {}]) => {
         const bindedListener = (e) => {
-          listener(e, this.opts);
+          if (e.craft !== 'handled') {
+            listener(e, this.opts);
+            if (options.blocking) {
+              e.craft = 'handled';
+            }
+          }
         };
 
-        this.el.addEventListener(event, bindedListener, capture);
+        this.el.addEventListener(eventName, bindedListener, options.capture);
         return () =>
-          this.el.removeEventListener(event, bindedListener, capture);
+          this.el.removeEventListener(
+            eventName,
+            bindedListener,
+            options.capture
+          );
       });
   }
 
