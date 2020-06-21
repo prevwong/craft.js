@@ -121,13 +121,18 @@ export const documentWithCardState = {
   },
 };
 
+// TODO: Find a better way to create test child nodes
 export const documentWithVariousNodes = {
   ...documentWithCardState,
   nodes: {
     ...documentWithCardState.nodes,
     'canvas-node': createTestNode('canvas-node', {
       isCanvas: true,
-      nodes: ['node-reject-dnd', 'canvas-node-reject-dnd'],
+      nodes: [
+        'node-reject-dnd',
+        'canvas-node-incoming-dnd',
+        'canvas-node-reject-outgoing-dnd',
+      ],
     }),
     'node-reject-dnd': createTestNode(
       'node-reject-dnd',
@@ -141,8 +146,21 @@ export const documentWithVariousNodes = {
         },
       }
     ),
-    'canvas-node-reject-dnd': createTestNode(
-      'canvas-node-reject-dnd',
+    'canvas-node-reject-incoming-dnd': createTestNode(
+      'canvas-node-reject-incoming-dnd',
+      {
+        nodes: [],
+        parent: 'canvas-node',
+        isCanvas: true,
+      },
+      {
+        rules: {
+          canMoveIn: () => false,
+        },
+      }
+    ),
+    'canvas-node-reject-outgoing-dnd': createTestNode(
+      'canvas-node-reject-outgoing-dnd',
       {
         nodes: ['fixed-child-node', 'parent-of-linked-node'],
         parent: 'canvas-node',
@@ -150,7 +168,6 @@ export const documentWithVariousNodes = {
       },
       {
         rules: {
-          canMoveIn: () => false,
           canMoveOut: () => false,
         },
       }
@@ -159,11 +176,11 @@ export const documentWithVariousNodes = {
       parent: 'node-reject-dnd',
     }),
     'fixed-child-node': createTestNode('fixed-child-node', {
-      parent: 'canvas-node-reject-dnd',
+      parent: 'canvas-node-reject-outgoing-dnd',
     }),
     'parent-of-linked-node': createTestNode('parent-of-linked-node', {
       isCanvas: true,
-      parent: 'canvas-node-reject-dnd',
+      parent: 'canvas-node-reject-outgoing-dnd',
       linkedNodes: {
         test: 'linked-node',
       },
@@ -171,6 +188,11 @@ export const documentWithVariousNodes = {
     'linked-node': createTestNode('linked-node', {
       isCanvas: true,
       parent: 'parent-of-linked-node',
+      nodes: ['linked-node-child-canvas'],
+    }),
+    'linked-node-child-canvas': createTestNode('linked-node-child-canvas', {
+      isCanvas: true,
+      parent: 'linked-node',
     }),
   },
 };
