@@ -166,11 +166,14 @@ describe('NodeHelpers', () => {
       ).toEqual(false);
     });
     it("should return false if node's rule rejects outgoing target", () => {
+      // Should not return false if the target is moving within the same parent
       expect(
-        helper(
-          'canvas-node-reject-outgoing-dnd'
-        ).isDroppable('fixed-child-node', (err) => console.log(err))
+        helper('canvas-node-reject-outgoing-dnd').isDroppable(
+          'fixed-child-node'
+        )
       ).toEqual(true);
+
+      // should return false if the target moved to a different parent
       expect(helper('canvas-node').isDroppable('fixed-child-node')).toEqual(
         false
       );
