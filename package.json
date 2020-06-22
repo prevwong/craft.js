@@ -13,9 +13,10 @@
     "deploy:staging": "cross-env ENV=staging ./scripts/deploy.sh",
     "prettier": "prettier --write .",
     "release": "run-s lint clean build test release:npm",
-    "release:npm": "lerna publish",
-    "test:watch": "jest --watch",
+    "release:npm": "./scripts/release.sh",
+    "publish:beta": "lerna version prerelease --preid beta --force-publish --yes && release --pre",
     "test": "jest",
+    "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "devDependencies": {
@@ -32,6 +33,8 @@
     "@typescript-eslint/parser": "^2.14.0",
     "babel-eslint": "^10.0.3",
     "cross-env": "^6.0.3",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-config-react-app": "^5.1.0",
@@ -49,6 +52,7 @@
     "prettier": "^2.0.1",
     "pretty-quick": "^2.0.1",
     "react": "^16.9.0",
+    "release": "^6.1.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
@@ -68,6 +72,10 @@
     "rollup-plugin-typescript": "^1.0.1"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prevwong/craft.js.git"
+  },
   "jest": {
     "setupFilesAfterEnv": [
       "<rootDir>/jest/setup.js"
@@ -83,7 +91,7 @@
       "<rootDir>/packages/core/"
     ],
     "testMatch": [
-      "<rootDir>/packages/core/src/**/__tests__/?(*.)spec.ts(x|)"
+      "<rootDir>/packages/core/src/**/?(*.)test.ts(x|)"
     ],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"

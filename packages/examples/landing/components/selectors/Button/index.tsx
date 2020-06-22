@@ -1,13 +1,13 @@
-import React from "react";
-import { UserComponent, useNode } from "@craftjs/core";
-import { Text } from "../Text";
-import { ButtonSettings } from "./ButtonSettings";
-import styled from "styled-components";
-import cx from "classnames";
+import React from 'react';
+import { UserComponent, useNode } from '@craftjs/core';
+import { Text } from '../Text';
+import { ButtonSettings } from './ButtonSettings';
+import styled from 'styled-components';
+import cx from 'classnames';
 
 type ButtonProps = {
-  background?: Record<"r" | "g" | "b" | "a", number>;
-  color?: Record<"r" | "g" | "b" | "a", number>;
+  background?: Record<'r' | 'g' | 'b' | 'a', number>;
+  color?: Record<'r' | 'g' | 'b' | 'a', number>;
   buttonStyle?: string;
   margin?: any[];
   text?: string;
@@ -16,14 +16,14 @@ type ButtonProps = {
 
 const StyledButton = styled.button<ButtonProps>`
   background: ${(props) =>
-    props.buttonStyle == "full"
+    props.buttonStyle == 'full'
       ? `rgba(${Object.values(props.background)})`
-      : "transparent"};
+      : 'transparent'};
   border: 2px solid transparent;
   border-color: ${(props) =>
-    props.buttonStyle == "outline"
+    props.buttonStyle == 'outline'
       ? `rgba(${Object.values(props.background)})`
-      : "transparent"};
+      : 'transparent'};
   margin: ${({ margin }) =>
     `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`};
 `;
@@ -40,9 +40,9 @@ export const Button: UserComponent<ButtonProps> = (props: any) => {
     <StyledButton
       ref={connect}
       className={cx([
-        "rounded w-full px-4 py-2",
+        'rounded w-full px-4 py-2',
         {
-          "shadow-lg": props.buttonStyle == "full",
+          'shadow-lg': props.buttonStyle == 'full',
         },
       ])}
       {...otherProps}
@@ -53,16 +53,16 @@ export const Button: UserComponent<ButtonProps> = (props: any) => {
 };
 
 Button.craft = {
-  name: "Button",
-  defaultProps: {
+  displayName: 'Button',
+  props: {
     background: { r: 255, g: 255, b: 255, a: 0.5 },
     color: { r: 92, g: 90, b: 90, a: 1 },
-    buttonStyle: "full",
-    text: "Button",
-    margin: ["5", "0", "5", "0"],
+    buttonStyle: 'full',
+    text: 'Button',
+    margin: ['5', '0', '5', '0'],
     textComponent: {
-      ...Text.craft.defaultProps,
-      textAlign: "center",
+      ...Text.craft.props,
+      textAlign: 'center',
     },
   },
   related: {

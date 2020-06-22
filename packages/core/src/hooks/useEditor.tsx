@@ -1,9 +1,9 @@
 import {
   useInternalEditor,
   EditorCollector,
-} from "../editor/useInternalEditor";
-import { useMemo } from "react";
-import { NodeId } from "../interfaces";
+} from '../editor/useInternalEditor';
+import { useMemo } from 'react';
+import { NodeId } from '../interfaces';
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 type Delete<T, U> = Pick<T, Exclude<keyof T, U>>;
@@ -12,12 +12,16 @@ export type useEditor<S = null> = Overwrite<
   useInternalEditor<S>,
   {
     actions: Delete<
-      useInternalEditor<S>["actions"],
-      "setNodeEvent" | "setDOM" | "replaceNodes" | "reset"
+      useInternalEditor<S>['actions'],
+      | 'addLinkedNodeFromTree'
+      | 'setNodeEvent'
+      | 'setDOM'
+      | 'replaceNodes'
+      | 'reset'
     > & {
       selectNode: (nodeId: NodeId | null) => void;
     };
-    query: Delete<useInternalEditor<S>["query"], "deserialize">;
+    query: Delete<useInternalEditor<S>['query'], 'deserialize'>;
   }
 >;
 
@@ -31,7 +35,14 @@ export function useEditor<S>(collect: EditorCollector<S>): useEditor<S>;
 export function useEditor<S>(collect?: any): useEditor<S> {
   const {
     connectors,
-    actions: { setDOM, setNodeEvent, replaceNodes, reset, ...EditorActions },
+    actions: {
+      addLinkedNodeFromTree,
+      setDOM,
+      setNodeEvent,
+      replaceNodes,
+      reset,
+      ...EditorActions
+    },
     query: { deserialize, ...query },
     store,
     ...collected
@@ -41,14 +52,14 @@ export function useEditor<S>(collect?: any): useEditor<S> {
     return {
       ...EditorActions,
       selectNode: (nodeId: NodeId | null) => {
-        setNodeEvent("selected", nodeId);
-        setNodeEvent("hovered", null);
+        setNodeEvent('selected', nodeId);
+        setNodeEvent('hovered', null);
       },
     };
   }, [EditorActions, setNodeEvent]);
 
   return {
-    connectors: connectors,
+    connectors,
     actions,
     query,
     ...(collected as any),

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useNode } from "@craftjs/core";
-import ContentEditable from "react-contenteditable";
-import { Slider, FormControl, FormLabel } from "@material-ui/core";
+import React, { useState, useEffect } from 'react';
+import { useNode } from '@craftjs/core';
+import ContentEditable from 'react-contenteditable';
+import { Slider, FormControl, FormLabel } from '@material-ui/core';
 
 export const Text = ({ text, fontSize, textAlign }) => {
   const {
     connectors: { connect, drag },
     selected,
-    setProp,
+    actions: { setProp },
   } = useNode((state) => ({
     selected: state.events.selected,
     dragged: state.events.dragged,
@@ -30,7 +30,7 @@ export const Text = ({ text, fontSize, textAlign }) => {
         onChange={(e) =>
           setProp(
             (props) =>
-              (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, ""))
+              (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, ''))
           )
         }
         tagName="p"
@@ -41,7 +41,10 @@ export const Text = ({ text, fontSize, textAlign }) => {
 };
 
 const TextSettings = () => {
-  const { setProp, fontSize } = useNode((node) => ({
+  const {
+    actions: { setProp },
+    fontSize,
+  } = useNode((node) => ({
     text: node.data.props.text,
     fontSize: node.data.props.fontSize,
   }));
@@ -65,12 +68,12 @@ const TextSettings = () => {
 };
 
 export const TextDefaultProps = {
-  text: "Hi",
+  text: 'Hi',
   fontSize: 20,
 };
 
 Text.craft = {
-  defaultProps: TextDefaultProps,
+  props: TextDefaultProps,
   related: {
     settings: TextSettings,
   },

@@ -1,6 +1,10 @@
-import { wrapHookToRecognizeElement, Connector } from "./wrapConnectorHooks";
+import { wrapHookToRecognizeElement, Connector } from './wrapConnectorHooks';
 
-export type HandlersMap<T extends string> = Record<T, Handler>;
+export const defineEventListener = (
+  name: string,
+  handler: (e: MouseEvent, payload: any) => void,
+  capture?: boolean
+) => [name, handler, capture];
 
 export type Handler = {
   /**
@@ -16,7 +20,7 @@ export type Handler = {
 };
 
 export type ConnectorsForHandlers<T extends Handlers> = ReturnType<
-  T["connectors"]
+  T['connectors']
 >;
 
 /**
@@ -50,7 +54,8 @@ class WatchHandler {
         } else {
           this.remove();
         }
-      }
+      },
+      true
     );
   }
 
@@ -99,7 +104,7 @@ export abstract class Handlers<T extends string = null> {
 
   abstract handlers(): Record<
     T,
-    Partial<Omit<Handler, "events"> & { events: any }> // (Hacky) without any, tsc throws an error
+    Partial<Omit<Handler, 'events'> & { events: any }> // (Hacky) without any, tsc throws an error
   >;
 
   // Returns ref connectors for handlers
@@ -121,13 +126,15 @@ export abstract class Handlers<T extends string = null> {
 
         const domHandler = Handlers.wm.get(el);
         if (domHandler && domHandler[key]) {
-          if (domHandler[key].opts === opts) return;
           domHandler[key].remove();
         }
 
         Handlers.wm.set(el, {
           ...domHandler,
-          [key]: new WatchHandler(this.store, el, opts, { init, events }),
+          [key]: new WatchHandler(this.store, el, opts, {
+            init,
+            events,
+          }),
         });
       };
 
@@ -139,7 +146,7 @@ export abstract class Handlers<T extends string = null> {
   static getConnectors<T extends Handlers, U extends any[]>(
     this: { new (...args: U): T },
     ...args: U
-  ): ReturnType<T["connectors"]> {
+  ): ReturnType<T['connectors']> {
     const that = new this(...args);
     return that.connectors() as any;
   }

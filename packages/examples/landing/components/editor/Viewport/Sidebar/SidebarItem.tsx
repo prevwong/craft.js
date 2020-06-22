@@ -1,14 +1,14 @@
-import React from "react";
-import Arrow from "../../../../public/icons/arrow.svg";
-import styled from "styled-components";
+import React from 'react';
+import Arrow from '../../../../public/icons/arrow.svg';
+import styled from 'styled-components';
 
 const SidebarItemDiv = styled.div<{ visible?: boolean; height?: string }>`
   height: ${(props) =>
-    props.visible && props.height && props.height !== "full"
+    props.visible && props.height && props.height !== 'full'
       ? `${props.height}`
-      : "auto"};
+      : 'auto'};
   flex: ${(props) =>
-    props.visible && props.height && props.height == "full" ? `1` : "unset"};
+    props.visible && props.height && props.height == 'full' ? `1` : 'unset'};
   color: #545454;
 `;
 
@@ -50,11 +50,11 @@ export const SidebarItem: React.FC<SidebarItem> = ({
           if (onChange) onChange(!visible);
         }}
         className={`cursor-pointer bg-white border-b last:border-b-0 flex items-center px-2 py-2 ${
-          visible ? "shadow-sm" : ""
+          visible ? 'shadow-sm' : ''
         }`}
       >
         <div className="flex-1 flex items-center">
-          {React.createElement(icon, { className: "w-4 h-4 mr-2" })}
+          {React.createElement(icon, { className: 'w-4 h-4 mr-2' })}
           <h2 className="text-xs uppercase">{title}</h2>
         </div>
         <Chevron visible={visible}>

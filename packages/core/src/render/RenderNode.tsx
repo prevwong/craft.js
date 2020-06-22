@@ -1,14 +1,42 @@
-import React from "react";
-import { useNode } from "../hooks/useNode";
-import { Canvas } from "../nodes/Canvas";
-import { useInternalEditor } from "../editor/useInternalEditor";
-import { SimpleElement } from "./SimpleElement";
+import React, { useMemo } from 'react';
+import { useInternalEditor } from '../editor/useInternalEditor';
+import { NodeElement } from '../nodes/NodeElement';
+import { SimpleElement } from './SimpleElement';
+import { NodeId } from '../interfaces';
+import { useInternalNode } from '../nodes/useInternalNode';
 
-export const RenderNodeToElement: React.FC<any> = ({ ...injectedProps }) => {
-  const { type, props, isCanvas, hidden } = useNode((node) => ({
-    type: node.data.type,
-    props: node.data.props,
-    isCanvas: node.data.isCanvas,
+const Render = () => {
+  const { type, props, nodes, hydrationTimestamp } = useInternalNode(
+    (node) => ({
+      type: node.data.type,
+      props: node.data.props,
+      nodes: node.data.nodes,
+      hydrationTimestamp: node._hydrationTimestamp,
+    })
+  );
+
+  return useMemo(() => {
+    const render = React.createElement(
+      type,
+      props,
+      <React.Fragment>
+        {nodes
+          ? nodes.map((id: NodeId) => <NodeElement id={id} key={id} />)
+          : props && props.children}
+      </React.Fragment>
+    );
+
+    if (typeof type == 'string') {
+      return <SimpleElement render={render} />;
+    }
+
+    return render;
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
+  }, [type, props, hydrationTimestamp, nodes]);
+};
+
+export const RenderNodeToElement: React.FC<any> = () => {
+  const { hidden } = useInternalNode((node) => ({
     hidden: node.data.hidden,
   }));
 
@@ -16,11 +44,10 @@ export const RenderNodeToElement: React.FC<any> = ({ ...injectedProps }) => {
     onRender: state.options.onRender,
   }));
 
-  let Comp = isCanvas ? Canvas : type;
-  let render = React.cloneElement(<Comp {...props} {...injectedProps} />);
-  if (typeof Comp === "string") render = <SimpleElement render={render} />;
-  else if (Comp === Canvas)
-    render = React.cloneElement(render, { passThrough: true });
+  // don't display the node since it's hidden
+  if (hidden) {
+    return null;
+  }
 
-  return !hidden ? React.createElement(onRender, { render }, null) : null;
+  return React.createElement(onRender, { render: <Render /> });
 };

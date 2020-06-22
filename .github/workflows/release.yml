@@ -1,0 +1,23 @@
+name: Release to NPM
+on:
+  push:
+    branches:
+      - master
+
+env:
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: git fetch --prune --unshallow
+
+      - name: Use Node.js 10.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+
+      - run: yarn install --frozen-lockfile
+      - run: yarn release

@@ -1,13 +1,13 @@
 // https://github.com/pelotom/use-methods
-import produce, { PatchListener } from "immer";
-import { useMemo, useEffect, useRef, useReducer, useCallback } from "react";
-import isEqualWith from "lodash.isequalwith";
+import produce, { PatchListener } from 'immer';
+import { useMemo, useEffect, useRef, useReducer, useCallback } from 'react';
+import isEqualWith from 'lodash.isequalwith';
 
 export type SubscriberAndCallbacksFor<
   M extends MethodsOrOptions,
   Q extends QueryMethods = any
 > = {
-  subscribe: any;
+  subscribe: Watcher<StateFor<M>>['subscribe'];
   getState: () => { prev: StateFor<M>; current: StateFor<M> };
   actions: CallbacksFor<M>;
   query: QueryCallbacksFor<Q>;
@@ -24,8 +24,8 @@ export type CallbacksFor<
   M extends MethodsOrOptions
 > = M extends MethodsOrOptions<any, infer R>
   ? {
-      [T in ActionUnion<R>["type"]]: (
-        ...payload: ActionByType<ActionUnion<R>, T>["payload"]
+      [T in ActionUnion<R>['type']]: (
+        ...payload: ActionByType<ActionUnion<R>, T>['payload']
       ) => void;
     }
   : never;
@@ -72,8 +72,8 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<
   infer R
 >
   ? {
-      [T in ActionUnion<R>["type"]]: (
-        ...payload: ActionByType<ActionUnion<R>, T>["payload"]
+      [T in ActionUnion<R>['type']]: (
+        ...payload: ActionByType<ActionUnion<R>, T>['payload']
       ) => ReturnType<R[T]>;
     }
   : never;
@@ -105,7 +105,7 @@ export function useMethods<
   const [reducer, methodsFactory] = useMemo(() => {
     let methods: Methods<S, R>;
     let patchListener: PatchListener | undefined;
-    if (typeof methodsOrOptions === "function") {
+    if (typeof methodsOrOptions === 'function') {
       methods = methodsOrOptions;
     } else {
       methods = methodsOrOptions.methods;
@@ -137,7 +137,7 @@ export function useMethods<
   );
 
   const actions = useMemo(() => {
-    const actionTypes: ActionUnion<R>["type"][] = Object.keys(
+    const actionTypes: ActionUnion<R>['type'][] = Object.keys(
       methodsFactory(null, null)
     );
     return actionTypes.reduce((accum, type) => {
@@ -148,7 +148,7 @@ export function useMethods<
   }, [methodsFactory]);
 
   const getState = useCallback(() => currState.current, []);
-  const watcher = useMemo(() => new Watcher(getState), [getState]);
+  const watcher = useMemo(() => new Watcher<S>(getState), [getState]);
 
   useEffect(() => {
     currState.current = state;
@@ -158,7 +158,8 @@ export function useMethods<
   return useMemo(
     () => ({
       getState,
-      subscribe: (collector, cb) => watcher.subscribe(collector, cb),
+      subscribe: (collector, cb, collectOnCreate) =>
+        watcher.subscribe(collector, cb, collectOnCreate),
       actions,
       query,
     }),
@@ -177,7 +178,7 @@ export function createQuery<Q extends QueryMethods>(queryMethods: Q, getState) {
   }, {} as QueryCallbacksFor<typeof queryMethods>);
 }
 
-class Watcher {
+class Watcher<S> {
   getState;
   subscribers: Subscriber[] = [];
 
@@ -185,8 +186,20 @@ class Watcher {
     this.getState = getState;
   }
 
-  subscribe(collector, cb: any) {
-    const subscriber = new Subscriber(() => collector(this.getState()), cb);
+  /**
+   * Creates a Subscriber
+   * @returns {() => void} a Function that removes the Subscriber
+   */
+  subscribe<C>(
+    collector: (state: S) => C,
+    onChange: (collected: C) => void,
+    collectOnCreate?: boolean
+  ): () => void {
+    const subscriber = new Subscriber(
+      () => collector(this.getState()),
+      onChange,
+      collectOnCreate
+    );
     this.subscribers.push(subscriber);
     return this.unsubscribe.bind(this, subscriber);
   }
@@ -199,24 +212,28 @@ class Watcher {
   }
 
   notify() {
-    // Give unsubscribing the priority. Any better way?
-    setTimeout(() => {
-      for (let i = 0; i < this.subscribers.length; i++) {
-        this.subscribers[i].collect();
-      }
-    });
+    this.subscribers.forEach((subscriber) => subscriber.collect());
   }
 }
 
 class Subscriber {
-  collected;
-  collector;
-  onChange;
+  collected: any;
+  collector: () => any;
+  onChange: (collected: any) => void;
   id;
 
-  constructor(collector, onChange) {
+  /**
+   * Creates a Subscriber
+   * @param collector The method that returns an object of values to be collected
+   * @param onChange A callback method that is triggered when the collected values has changed
+   * @param collectOnCreate If set to true, the collector/onChange will be called on instantiation
+   */
+  constructor(collector, onChange, collectOnCreate = false) {
     this.collector = collector;
     this.onChange = onChange;
+
+    // Collect and run onChange callback when Subscriber is created
+    if (collectOnCreate) this.collect();
   }
 
   collect() {

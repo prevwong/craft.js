@@ -1,7 +1,7 @@
-import React from "react";
-import { Container } from "../Container";
-import { Canvas, useNode } from "@craftjs/core";
-import { Button } from "../Button";
+import React from 'react';
+import { Container } from '../Container';
+import { Element, useNode } from '@craftjs/core';
+import { Button } from '../Button';
 
 export const Custom3BtnDrop = ({ children }) => {
   const {
@@ -36,14 +36,14 @@ export const Custom3 = (props: any) => {
           I must have at least 1 button
         </h2>
       </div>
-      <Canvas is={Custom3BtnDrop} id="wow">
+      <Element canvas is={Custom3BtnDrop} id="wow">
         <Button background={{ r: 184, g: 247, b: 247, a: 1 }} />
-      </Canvas>
+      </Element>
     </Container>
   );
 };
 
 Custom3.craft = {
   ...Container.craft,
-  name: "Custom 3",
+  displayName: 'Custom 3',
 };

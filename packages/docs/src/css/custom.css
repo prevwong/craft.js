@@ -12,27 +12,70 @@
  */
 
 /* You can override the default Infima variables here. */
-@import url("https://fonts.googleapis.com/css?family=Fira+Code&display=swap");
-@import url("https://use.typekit.net/mpa1wkh.css");
+@import url('https://fonts.googleapis.com/css?family=Fira+Code&display=swap');
+@import url('https://use.typekit.net/mpa1wkh.css');
+
+html {
+  -webkit-font-smoothing: subpixel-antialiased;
+}
 
 :root {
-  --ifm-color-primary: rgb(129, 169, 169);
+  --ifm-color-primary: #6aad9d;
+  --ifm-color-secondary: #0d66d0;
+  --ifm-color-secondary-lighter: #1473e6;
   --ifm-color-primary-dark: rgb(33, 175, 144);
   --ifm-color-primary-darker: rgb(31, 165, 136);
   --ifm-color-primary-darkest: rgb(26, 136, 112);
   --ifm-color-primary-light: rgb(70, 203, 174);
   --ifm-color-primary-lighter: rgb(102, 212, 189);
   --ifm-color-primary-lightest: rgb(146, 224, 208);
-  --ifm-navbar-background-color: rgb(129, 169, 169);
+  --ifm-navbar-background-color: #81a9a9;
   --ifm-navbar-link-color: rgba(255, 255, 255, 0.85);
-  --ifm-font-family-base: "acumin-pro", "Source Sans Pro", system-ui,
+  --ifm-font-family-base: 'acumin-pro', 'Source Sans Pro', system-ui,
     -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif,
-    BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --ifm-font-family-monospace: "Fira Code", SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
+    BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --ifm-font-family-monospace: 'Fira Code', SFMono-Regular, Menlo, Monaco,
+    Consolas, 'Liberation Mono', 'Courier New', monospace;
   --ifm-navbar-link-color: rgba(255, 255, 255, 0.6);
   --ifm-navbar-link-hover-color: #fff;
+  --ifm-navbar-search-input-background-color: rgba(0, 0, 0, 0.2);
+  --ifm-navbar-search-input-color: rgba(255, 255, 255, 0.9);
+  --ifm-contents-border-color: #ececec;
+  --ifm-footer-background-color: #f7f9f8;
+  --ifm-footer-madewith-color: rgba(0, 0, 0, 0.7);
+
+  --ifm-sidebar-background-color: #fff;
+  --ifm-sidebar-color: #222;
+  --ifm-link-color: #4ba0a0;
+  --ifm-code-font-size: 12px;
+  --ifm-font-size-base: 0.9rem;
+  --ifm-navbar-padding-vertical: 2rem;
+  --ifm-navbar-padding-horizontal: 1.4rem;
+}
+
+.navbar__inner {
+  flex-wrap: unset;
+}
+
+.navbar__title {
+  font-size: 20px;
+  font-weight: 200;
+  color: #fff;
+  margin-top: -2px;
+}
+
+[data-theme='dark'] {
+  --ifm-navbar-background-color: #4c4c4c;
+  --ifm-footer-background-color: #1f1f1f;
+  --ifm-contents-border-color: rgba(255, 255, 255, 0.09);
+  --ifm-footer-madewith-color: rgba(255, 255, 255, 0.7);
+
+  --ifm-sidebar-background-color: #1f1f1f;
+  --ifm-sidebar-color: #fff;
+}
+.navbar .navbar__search .navbar__search-input {
+  font-weight: 300;
 }
 
 .docusaurus-highlight-code-line {
@@ -44,11 +87,11 @@
 
 strong.api-type {
   margin-left: 5px;
-  color: rgb(50, 61, 199);
+  color: var(--ifm-color-secondary);
   /* font-style: italic; */
   font-size: 13px;
   font-weight: 400;
-  font-family: "Fira Code";
+  font-family: 'Fira Code';
 }
 
 .api-description {
@@ -127,6 +170,14 @@ li.api-item {
   display: flex;
   width: 100%;
 }
+.badge-wrapper + p {
+  margin-top: 10px;
+}
+
+header + .markdown > .badge-wrapper:first-child {
+  margin-top: -10px !important;
+}
+
 .badge {
   display: inline-block;
   color: #fff;
@@ -138,7 +189,7 @@ li.api-item {
   border: none;
   margin-bottom: 10px;
 }
-html[data-theme="dark"] .badge-type {
+html[data-theme='dark'] .badge-type {
   background: #fff;
   color: #000;
 }
@@ -226,7 +277,7 @@ a.big-btn:hover i {
 }
 
 a.btn {
-  background: #7d56f3;
+  background: var(--ifm-color-secondary-lighter);
   padding: 5px 20px;
   border-radius: 100px;
   text-transform: uppercase;
@@ -234,21 +285,153 @@ a.btn {
   padding: 10px 20px;
   font-weight: 700;
   line-height: 3px;
-  box-shadow: 0px 16px 33px -15px #000;
+  box-shadow: 0px 8px 27px -3px rgba(0, 0, 0, 0.25);
   color: #fff;
   margin-right: 10px;
 }
 
 a.btn.btn-text {
   background: transparent;
-  color: #7d56f3;
+  color: var(--ifm-color-secondary-lighter);
   box-shadow: none;
 }
 
-html[data-theme="dark"] .api-type {
+html[data-theme='dark'] .api-type {
   color: #86f3d5;
 }
 
-html[data-theme="dark"] .api-description {
+html[data-theme='dark'] .api-description {
   color: #ffffffba;
+}
+
+.navbar__inner .react-toggle-track,
+.navbar-sidebar .react-toggle-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.navbar__inner .react-toggle-thumb,
+.navbar-sidebar .react-toggle-thumb {
+  left: 0;
+  border: none;
+  width: 23px;
+  height: 23px;
+  outline: none;
+}
+
+.footer .footer__links {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--ifm-contents-border-color);
+}
+
+.footer .footer__end {
+  color: var(--ifm-footer-madewith-color);
+  font-size: 13px;
+}
+
+.footer .footer__madewith img {
+  width: 20px;
+  vertical-align: middle;
+  margin-top: -4px;
+}
+
+.menu.menu--responsive .menu__button {
+  box-shadow: 0px 3px 50px 0px rgba(0, 0, 0, 0.33);
+  background: #fff;
+  color: rgba(0, 0, 0, 0.5490196078431373);
+  border: none;
+}
+
+@media (max-width: 996px) {
+  .navbar .navbar__inner > .navbar__items:first-child {
+    flex: 0;
+  }
+
+  .navbar__items .navbar__items--right {
+    flex: 1;
+  }
+
+  .navbar__search,
+  .navbar__search input,
+  .algolia-autocomplete {
+    width: 100% !important;
+  }
+}
+
+.navbar__toggle > svg > path {
+  stroke: #fff;
+}
+
+.navbar .navbar-sidebar {
+  background: var(--ifm-sidebar-background-color);
+  color: var(--ifm-sidebar-color);
+}
+
+.navbar .navbar-sidebar a.navbar__brand.active {
+  color: var(--ifm-sidebar-color);
+}
+
+.navbar .navbar-sidebar a.navbar__brand .navbar__title {
+  color: var(--ifm-sidebar-color);
+}
+
+.navbar .navbar-sidebar .navbar-sidebar__items .navbar__link--active {
+  color: var(--ifm-color-primary);
+}
+
+.version-header-label {
+  color: #fff !important;
+  margin-left: 10px;
+  position: relative;
+  text-decoration: none !important;
+  transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.version-header-label:after {
+  content: ' ';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: #fff;
+  transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: -1;
+}
+
+.version-header-label:hover:after {
+  bottom: -2px;
+}
+
+.docSidebarContainer_node_modules-\@docusaurus-theme-classic-src-theme-DocPage- {
+  width: 250px !important;
+}
+
+.navbar__title.hideLogoText_src-theme-Navbar- {
+  display: block !important;
+}
+
+@media (min-width: 996px) {
+  .main-wrapper {
+    display: flex;
+  }
+}
+
+.main-wrapper > div {
+  width: 100%;
+}
+
+@media (max-width: 996px) {
+  .navbar .navbar__inner > .navbar__items:first-child {
+    min-width: 215px;
+  }
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.table-of-contents {
+  font-size: 0.9rem;
 }

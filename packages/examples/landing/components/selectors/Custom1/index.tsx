@@ -1,7 +1,7 @@
-import React from "react";
-import { Container } from "../Container";
-import { Canvas, useNode } from "@craftjs/core";
-import { Button } from "../Button";
+import React from 'react';
+import { Container } from '../Container';
+import { Element, useNode } from '@craftjs/core';
+import { Button } from '../Button';
 
 export const OnlyButtons = ({ children, ...props }) => {
   const {
@@ -27,18 +27,18 @@ export const Custom1 = (props: any) => {
         I'm a component that only accepts
         <br /> buttons.
       </h2>
-      <Canvas id="wow" is={OnlyButtons}>
+      <Element canvas id="wow" is={OnlyButtons}>
         <Button />
         <Button
           buttonStyle="outline"
           color={{ r: 255, g: 255, b: 255, a: 1 }}
         />
-      </Canvas>
+      </Element>
     </Container>
   );
 };
 
 Custom1.craft = {
   ...Container.craft,
-  name: "Custom 1",
+  displayName: 'Custom 1',
 };

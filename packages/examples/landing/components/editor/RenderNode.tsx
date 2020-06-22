@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useCallback } from "react";
-import { useNode, useEditor } from "@craftjs/core";
-import styled from "styled-components";
-import ArrowUp from "../../public/icons/arrow-up.svg";
-import Move from "../../public/icons/move.svg";
-import Delete from "../../public/icons/delete.svg";
-import ReactDOM from "react-dom";
-import { ROOT_NODE } from "@craftjs/utils";
+import React, { useEffect, useRef, useCallback } from 'react';
+import { useNode, useEditor } from '@craftjs/core';
+import styled from 'styled-components';
+import ArrowUp from '../../public/icons/arrow-up.svg';
+import Move from '../../public/icons/move.svg';
+import Delete from '../../public/icons/delete.svg';
+import ReactDOM from 'react-dom';
+import { ROOT_NODE } from '@craftjs/utils';
 
 const IndicatorDiv = styled.div`
   height: 30px;
@@ -52,14 +52,15 @@ export const RenderNode = ({ render }) => {
     moveable: query.node(node.id).isDraggable(),
     deletable: query.node(node.id).isDeletable(),
     parent: node.data.parent,
+    props: node.data.props,
   }));
 
   const currentRef = useRef<HTMLDivElement>();
 
   useEffect(() => {
     if (dom) {
-      if (isActive || isHover) dom.classList.add("component-selected");
-      else dom.classList.remove("component-selected");
+      if (isActive || isHover) dom.classList.add('component-selected');
+      else dom.classList.remove('component-selected');
     }
   }, [dom, isActive, isHover]);
 
@@ -84,13 +85,13 @@ export const RenderNode = ({ render }) => {
 
   useEffect(() => {
     document
-      .querySelector(".craftjs-renderer")
-      .addEventListener("scroll", scroll);
+      .querySelector('.craftjs-renderer')
+      .addEventListener('scroll', scroll);
 
     return () => {
       document
-        .querySelector(".craftjs-renderer")
-        .removeEventListener("scroll", scroll);
+        .querySelector('.craftjs-renderer')
+        .removeEventListener('scroll', scroll);
     };
   }, [scroll]);
 

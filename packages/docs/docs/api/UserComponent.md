@@ -4,7 +4,7 @@ title: UserComponent
 sidebar_label: UserComponent
 ---
 
-import {API, Badge} from "./API";
+import {API, Badge} from "@site/src/components";
 
 <Badge type="type" />
 
@@ -16,19 +16,19 @@ A wrapper of `React.ComponentType<Props>`. Accepts a static `craft` property for
 <API items={[
   ["", "React.ComponentType<T> &", [
     ["craft", "Object", [
-      ["name", "String", "A user-friendly name for the User Component"],
-      ["defaultProps", "T", "Specify default values for the props T"],
+      ["displayName", "String", "A user-friendly name for the User Component. The value here will be used to set the node.data.displayName property."],
+      ["props", "T", "Specify default values for the props T"],
+      ["custom", "Record<string, any>", "Specify default custom values for the User Component"],
       ["related", "Record<string, React.ElementType>", "A map of React Components to share the same Node context. This components will be able access the useNode hook"],
       ["rules?", [
-          ["canDrag", "(currentNode: Node, helpers: NodeHelpers) => boolean", "Specifies if a component can be dragged. Applicable only to components whose corresponding `Node` is a direct child of a `Canvas`."],
-          ["canDrop", "(targetNode: Node, currentNode, helpers: NodeHelpers) => boolean", "Decides if the current Node that is being dragged can be dropped into the target component. Reminder: Nodes cannot be dropped into non-Canvas components even if `canDrop` returns `true`."],
-          ["canMoveIn", "(incomingNode: Node, currentNode: Node, helpers: NodeHelpers) => boolean", "Decides if an incoming Node can be dropped into the current component. Applicable only to components whose corresponding `Node` is a `Canvas`."],
-          ["canMoveOut", "(outgoingNode: Node, currentNode: Node, helpers: NodeHelpers) => boolean", "Decides if a child Node can be dragged out of the current component. Applicable only to components whose corresponding `Node` is a `Canvas`."],
+          ["canDrag", "(currentNode: Node, helpers: NodeHelpers) => boolean", "Specifies if the component can be dragged. Applicable only to components whose corresponding Node is a direct child of a Canvas"],
+          ["canDrop", "(targetNode: Node, currentNode, helpers: NodeHelpers) => boolean", "Decides if the current Node that is being dragged can be dropped into the target component. Note: Nodes cannot be dropped into non-Canvas components even if `canDrop` returns `true`"],
+          ["canMoveIn", "(incomingNode: Node, currentNode: Node, helpers: NodeHelpers) => boolean", "Specifies if an incoming Node can be dropped into the current component. Applicable only to components whose corresponding Node is a Canvas"],
+          ["canMoveOut", "(outgoingNode: Node, currentNode: Node, helpers: NodeHelpers) => boolean", "Specifies if a child Node can be dragged out of the current component. Applicable only to components whose corresponding Node is a Canvas"],
       ]],
-      
     ]]
   ]]
-]} /> 
+]} />
 
 
 ## Example
@@ -54,8 +54,8 @@ const TextSettings = () => {
   )
 }
 TextComponent.craft = {
-  name: "Aweomse Text",
-  defaultProps: {
+  displayName: "My Text Component",
+  props: {
     color: "#000",
     text: "Hi"
   },

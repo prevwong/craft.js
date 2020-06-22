@@ -1,20 +1,18 @@
 ---
 id: user-components
-title: User components
+title: User Components
 ---
 
-import {API} from "../api/API";
+import {API} from "@site/src/components";
 
 User Components are intended to be written just like any other React Component. 
 
-Let's start with a simple Hero component:
+Let's start with a simple Text component:
 
 ```jsx
-const Hero = ({title}) => {
+const Text = ({text, fontSize}) => {
   return (
-    <div>
-      <h2>{title}</h2>
-    </div>
+    <span contenteditable="true" style={{fontSize}}>{text}</span>
   )
 }
 ```
@@ -26,9 +24,9 @@ const { connectors: {connect, drag}, setProp, ...collected } = useNode((node) =>
 
 Additionally we can pass configuration values via the static `craft` property:
 ```jsx
-const Hero = () => {...}
-Hero.craft = {
-  defaultProps: {},
+const Text = () => {...}
+Text.craft = {
+  props: {},
   rules: {
     canDrop: () => true,
     canDrag: () => true,
@@ -47,31 +45,28 @@ The first thing we would want to do is to actually let Craft.js to manage the DO
 - `connect`: specifies the DOM that represents the User Component.  If the component's corresponding Node is a Canvas, then this also defines the area that is droppable.
 - `drag`: specifies the DOM element that should be made draggable. When the user drags this element, it'll be considered as dragging the entire component, therefore moving the entire component to the drop location. This connector only takes effect if the component's corresponding node is a Canvas Node.
 
-```jsx {17,18,21}
-const Hero = ({title, children}) => {
+```jsx {14,15,18}
+const Container = ({children}) => {
   const { connectors: {connect, drag} } = useNode();
   return (
     <div ref={dom => connect(drag(dom))}>
-      <h2>{title}</h2>
-      <div>
-        {children}
-      </div>
+      {children}
     </div>
   )
 }
 
 const App = () => {
   return (
-    <Editor resolvers={{Hero}}>
+    <Editor resolvers={{Container}}>
       <Frame>
-        <Canvas is={Hero}> // (i)
-          <Hero> // (ii)
+        <Element is={Container} canvas> // (i)
+          <Container> // (ii)
             <h2>Hi</h2>
-          </Hero>
-          <Canvas is={Hero}> // (iii)
+          </Container>
+          <Element is={Container} canvas> // (iii)
             <h2>Hi</h2>
-          </Canvas>
-        </Canvas>
+          </Element>
+        </Element>
       </Frame>
     </Editor>
   )
@@ -87,23 +82,22 @@ You've probably seen page editors where you could directly interact with the com
 
 Since components are managed by their corresponding `Node` which contains information including the component's props, thus we can call the `setProp` method to update the prop values stored in the `Node`. In turn, this will re-render the component with its updated values.
 
-```jsx
-const Hero = ({title}) => {
-  const { connectors: {connect, drag}, setProp } = useNode();
+```jsx {2,6-8}
+const Text = ({text, fontSize}) => {
+  const { connectors: {connect, drag}, actions: {setProp} } = useNode();
 
   return (
-    <div ref={dom => connect(drag(dom))}>
-      <h2 contentEditable={true} onKeyUp={(e) => {
+    <span ref={dom => connect(drag(dom))} style={{fontSize}} onKeyUp={(e) => {
         setProp(props => {
-          props.title = e.target.innerText;
+          props.text = e.target.innerText;
         })
-      }}>{title}</h2>
-    </div>
+      }}>{text}
+    </span>
   )
 }
 ```
 
-In the above example, we have updated our `h2` element to be content editable and added an event handler to update the `title` prop as the user visually enters in a new value.
+In the above example, we have updated our `span` element to be content editable and added an event handler to update the `text` prop as the user visually enters in a new value.
 
 ## Collecting Node's state
 The information stored in a corresponding `Node` could be useful in helping you build more usable components. We can retrieve information from a `Node` by passing a collector function to the `useNode` hook. Every time the values we retrieved via the collector function changes, our component will re-render. This is very much similar to Redux's `connect` pattern.
@@ -112,19 +106,21 @@ The information stored in a corresponding `Node` could be useful in helping you 
 For instance, let's say we would like to enable the content editable text from the previous section only when the user has actually clicked on our component: 
 
 ```jsx
-const Hero = ({title}) => {
+const Text = ({text, fontSize}) => {
+  // highlight-next-line
   const { connectors: {connect, drag}, setProp, isClicked } = useNode((node) => ({
+    // highlight-next-line
     isClicked: node.events.selected
   }));
 
   return (
-    <div ref={dom => connect(drag(dom))}>
-      <h2 contentEditable={isClicked} onKeyUp={(e) => {
+    // highlight-next-line
+    <span ref={dom => connect(drag(dom))} style={{fontSize}} contentEditable={isClicked} onKeyUp={(e) => {
         setProp(props => {
-          props.title = e.target.innerText;
+          props.text = e.target.innerText;
         })
-      }}>{title}</h2>
-    </div>
+      }}>{text}
+    </span>
   )
 }
 ```
@@ -132,13 +128,14 @@ const Hero = ({title}) => {
 ## Default Props
 While it's not necessary as we could simply define default parameters (e.g.: ES6 defaults) directly within our components, these default values will not actually be recorded into the component's corresponding `Node`, which could leave us with a lot of empty prop values when we wish to retrieve the `Node` for a component when building other parts of our editor (eg: a Toolbar for editing a component's values).
 
-To prevent that, we can explicitly specify default prop values via the `craft.defaultProps` like the following:
+To prevent that, we can explicitly specify default prop values via the `craft.props` like the following:
 
 ```jsx
-const Hero = ({text}) => { /** same as previous example **/ }
+const Text = ({text, fontSize}) => { /** same as previous example **/ }
 Hero.craft = {
-  defaultProps: {
-    text: "Hi there!"
+  props: {
+    text: "Hi there!",
+    fontSize: 12
   }
 }
 ```
@@ -146,11 +143,11 @@ Hero.craft = {
 ## Specify drag/drop rules
 You may want to restrict how your components are dragged or what goes in and out of your component. These rules can be specified in the static `craft.rules`.
 
-Let us write a (pretty strange) rule for our Hero component which users can only drag if they change the `text` prop to "Drag": 
+Let us write a (pretty strange) rule for our Text component which users can only drag if they change the `text` prop to "Drag": 
 ```jsx
-const Hero = ({text}) => { /** same as the previous example **/ }
-Hero.craft = {
-  defaultProps: { /** same as the previous example **/ },
+const Text = ({text, fontSize}) => { /** same as the previous example **/ }
+Text.craft = {
+  props: { /** same as the previous example **/ },
   rules: {
     canDrag: (node) => !!node.data.props.text == "Drag"
   }
@@ -158,33 +155,34 @@ Hero.craft = {
 ```
 
 
-## Related components
+## Related Components
 What happens if you need to design some component to complement our  user component? For instance, if we were planning on building a Toolbar somewhere in our page editor, we would like the Toolbar to display a bunch of text inputs to allow the user the edit the currently selected component. It would be great if we could retrieve a specific component that has all the relevant inputs for the user to edit the currently selected component.
 
 
 This is where related components become useful. These components share the same corresponding `Node` as the actual user component, hence the `useNode` hook that we have been using all this while will be made available to these components as well. 
 
 ```jsx
-const Hero = ({text}) => { /** same as the previous example **/ }
-Hero.craft = {
+const Text = ({text, fontSize}) => { /** same as the previous example **/ }
+Text.craft = {
   related: {
-    toolbar: HeroToolbarSettings
+    toolbar: TextToolbarSettings
   }
 }
 
-const HeroToolbarSettings = () => {
-  const { setProp, text } = useNode((node) => ({
-    text: node.data.props.text
+const TextToolbarSettings = () => {
+  const { setProp, fontSize } = useNode((node) => ({
+    fontSize: node.data.props.fontSize
   }));
 
   return (
     <div>
-      <h2>Hero settings</h2>
+      <h2>Text settings</h2>
       <input 
-        type = "text" 
-        value={text} 
+        type = "number" 
+        value={fontSize} 
+        placeholder="Font size"
         onChange={e => 
-          setProp(prop => prop.text = e.target.value) 
+          setProp(prop => prop.fontSize = e.target.value) 
         }
        />
     </div>
@@ -213,89 +211,144 @@ const Toolbar = () => {
 
 ```
 
-## Defining droppable regions
-Let's say we are creating a Hero component that has two sections where the users could drop other user elements into. 
+## Defining editable elements
 
+Now, let's say we are creating a new User Component like so:
 ```jsx
-const Hero = ({title}) => {
+const Hero = ({background}) => {
   return (
-    <div>
-      <h2>{title}</h2>
-      <section>
-        <h3>Yo</h3>
-      </section>
-      I need some coffee to continue writing this
-      <section>
-        <h2>Hi</h2>
-      </section>
+    <div style={{ background }}>
+      <span>Hero Title</span>
     </div>
   )
 }
 ```
 
-Previously, we discussed how `<Canvas />` creates a droppable Canvas node; that concept is applied universally in Craft.js. Hence, we just have to wrap our `section` elements in the example above with a `Canvas`. 
+Then, we decide that we want to have the `span` element to be editable indepdently via the Text user component that we made from earlier.
 
-```jsx {5,9}
-const Hero = ({title}) => {
+Your first instinct might be to just use the Text component directly:
+
+```jsx {4}
+const Hero = ({background}) => {
   return (
-    <div>
-      <h2>{title}</h2>
-      <Canvas id="Header" is="section">
-        <h3>Yo</h3>
-      </section>
-      I need some coffee to continue writing this
-      <Canvas id="Footer" is="section">
-        <h2>Hi</h2>
-      </section>
+    <div style={{ background }}>
+      <Text text="Hero Title" />
     </div>
   )
 }
 ```
 
-But wait, what if we want to define rules for these two new droppable regions? 
+But this won't really work the way we want it to - the Text Component will not have its own Node. Instead, it will still be a part of Hero's Node. So, inside the Text Component, when we call `setProps(props => props.text = "...")`, it will actually be editing the props of `Hero`. In this case, it will be adding a new prop `text` to Hero, which is not consumed by Hero and therefore makes no sense.
 
-The `is` prop of the `<Canvas />` component is used to specify the `type` of the User Element for the Canvas Node. Hence, instead of specifying a simple DOM element which we don't have much control over, let's specify a brand new User Component.
+So how do we even define new Nodes inside a User Component? Previously, we discussed how `<Element />` is used to define Nodes; that concept is applied universally in Craft.js. Hence, we just have to wrap our `<Text />` element in the example above with `<Element />`. 
 
 
-```jsx {1-23,29,33}
-const HeroHeader = ({children}) => {
+```jsx {4}
+const Hero = ({background}) => {
   return (
-    <section>
+    <div style={{ background }}>
+      <Element is={Text} text="Hero Title" id="title_text" />
+    </div>
+  )
+}
+```
+
+> You must specify the `id` prop of `<Element />` when used inside a User Component
+
+In the above example, we used `<Element />` to create and configure a new Node inside our User Component. We call these Linked Nodes since they are linked to a parent Node via an arbitary `id`. In this case, the `Text` node is linked to the `Hero` node via its "title_text" id.
+
+Similarly, we could also create a droppable region inside a User Component via a Canvas Node:
+
+```jsx {5-7}
+const Hero = ({background}) => {
+  return (
+    <div style={{ background }}>
+      <Element is={Text} text="Hero Title" id="title_text" />
+      <Element canvas is="section" id="droppable_container">
+        <h2>I'm dropped here for now</h2>
+      </Elemnet>
+    </div>
+  )
+}
+```
+
+<!--
+### Linked nodes vs Child nodes
+
+It's important to know that Linked Nodes are not child Nodes. A child Node is passed and rendered in its parent's `children` prop whereas this is directly part of its parent's render method. 
+
+#### Linked Node
+```jsx {4}
+const Hero = ({background}) => {
+  return (
+    <div style={{ background }}>
+      <Element is={Text} text="Hero Title" id="title_text" /> // Linked node
+      ...
+    </div>
+  )
+}
+
+// Node representation
+{
+  "node-a": {
+    data: {
+      type: Hero,
+      props: {
+        background: "...",
+        title: "..."
+      },
+      linkedNodes: {
+        "title_text": "node-b"
+      }
+    }
+  },
+  "node-b": {
+    data: {
+      type: Text,
+      props: {
+        text: "...",
+      },
+    }
+  }
+}
+```
+
+#### Child Node
+
+```jsx {5,11}
+const Container = ({background, title, children}) => {
+  return (
+    <div style={{ background }}>
+      ...
       {children}
-    </section>
-  )
-}
-
-HeroHeader.craft = {
-  rules : {...}
-}
-
-const HeroFooter = ({children}) => {
-  return (
-    <section>
-      {children}
-    </section>
-  )
-}
-
-HeroFooter.craft = {
-  rules : {...}
-}
-
-const Hero = ({title}) => {
-  return (
-    <div>
-      <h2>{title}</h2>
-      <Canvas id="Hero" is={HeroHeader}>
-        <h3>Yo</h3>
-      </section>
-      I need some coffee to continue writing this
-      <Canvas id="Footer" is={HeroFooter}>
-        <h2>Hi</h2>
-      </section>
     </div>
   )
 }
-```
 
-`HeroHeader` and `HeroFooter` are User Components, so we can now design and configure them just like any other User Components. On that note, don't forget that you will need to include these in the `resolver` as well.
+<Container>
+  <h2>Text</h2> // Child Node
+</Container>
+
+// Node representation
+{
+  "node-a": {
+    data: {
+      type: Container,
+      props: {
+        background: "...",
+        title: "..."
+      },
+      nodes: {
+        "node-b"
+      }
+    }
+  },
+  "node-b": {
+    data: {
+      type: "h2",
+      children: "Text"
+    }
+  }
+}
+```
+-->

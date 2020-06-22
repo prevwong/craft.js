@@ -1,213 +1,199 @@
-import { NodeId, Node, Indicator } from "../interfaces";
-import { Handlers, ConnectorsForHandlers } from "@craftjs/utils";
-import { debounce } from "debounce";
-import { EditorStore } from "../editor/store";
+import { createShadow } from './createShadow';
+import { Indicator, NodeId, NodeTree } from '../interfaces';
+import {
+  ConnectorsForHandlers,
+  defineEventListener,
+  Handlers,
+} from '@craftjs/utils';
+import { EditorStore } from '../editor/store';
 
-type DraggedElement = NodeId | Node;
+type DraggedElement = NodeId | NodeTree;
 
 /**
  * Specifies Editor-wide event handlers and connectors
  */
 export class EventHandlers extends Handlers<
-  "select" | "hover" | "drag" | "drop" | "create"
+  'select' | 'hover' | 'drag' | 'drop' | 'create'
 > {
   static draggedElementShadow: HTMLElement;
   static draggedElement: DraggedElement;
   static events: { indicator: Indicator };
 
   handlers() {
-    let handlers = {
+    return {
       select: {
-        init: () => {
-          return () => {
-            this.store.actions.setNodeEvent("selected", null);
-          };
-        },
+        init: () => () => this.store.actions.setNodeEvent('selected', null),
         events: [
-          [
-            "mousedown",
-            debounce((_, id: NodeId) => {
-              this.store.actions.setNodeEvent("selected", id);
-            }, 1),
-            true,
-          ],
+          defineEventListener('click', (e, id: NodeId) => {
+            e.stopPropagation();
+            this.store.actions.setNodeEvent('selected', id);
+          }),
         ],
       },
       hover: {
-        init: () => {
-          return () => {
-            this.store.actions.setNodeEvent("hovered", null);
-          };
-        },
+        init: () => () => this.store.actions.setNodeEvent('hovered', null),
         events: [
-          [
-            "mouseover",
-            debounce((_, id: NodeId) => {
-              this.store.actions.setNodeEvent("hovered", id);
-            }, 1),
-            true,
-          ],
+          defineEventListener('mouseover', (e, id: NodeId) => {
+            e.stopPropagation();
+            this.store.actions.setNodeEvent('hovered', id);
+          }),
         ],
       },
       drop: {
         events: [
-          [
-            "dragover",
-            (e: MouseEvent, id: NodeId) => {
-              e.preventDefault();
-              e.stopPropagation();
-            },
-          ],
-          [
-            "dragenter",
-            (e: MouseEvent, id: NodeId) => {
+          defineEventListener('dragover', (e: MouseEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }),
+          defineEventListener(
+            'dragenter',
+            (e: MouseEvent, targetId: NodeId) => {
               e.preventDefault();
               e.stopPropagation();
 
-              if (!EventHandlers.draggedElement) return;
+              const draggedElement = EventHandlers.draggedElement as NodeTree;
+              if (!draggedElement) {
+                return;
+              }
 
-              const getPlaceholder = this.store.query.getDropPlaceholder(
-                EventHandlers.draggedElement,
-                id,
-                {
-                  x: e.clientX,
-                  y: e.clientY,
-                }
+              const node = draggedElement.rootNodeId
+                ? draggedElement.nodes[draggedElement.rootNodeId]
+                : draggedElement;
+              const { clientX: x, clientY: y } = e;
+              const indicator = this.store.query.getDropPlaceholder(
+                node,
+                targetId,
+                { x, y }
               );
 
-              if (getPlaceholder) {
-                this.store.actions.setIndicator(getPlaceholder);
-                EventHandlers.events = {
-                  indicator: getPlaceholder,
-                };
+              if (!indicator) {
+                return;
               }
-            },
-          ],
+              this.store.actions.setIndicator(indicator);
+              EventHandlers.events = { indicator };
+            }
+          ),
         ],
       },
 
       drag: {
-        init: (node) => {
-          node.setAttribute("draggable", true);
-          return () => {
-            node.setAttribute("draggable", false);
-          };
+        init: (el, id) => {
+          if (!this.store.query.node(id).isDraggable()) {
+            return () => {};
+          }
+
+          el.setAttribute('draggable', 'true');
+          return () => el.setAttribute('draggable', 'false');
         },
         events: [
-          [
-            "dragstart",
-            (e: DragEvent, id: NodeId) => {
-              e.stopPropagation();
-              e.stopImmediatePropagation();
-              this.store.actions.setNodeEvent("dragged", id);
-              EventHandlers.createShadow(e, id);
-            },
-          ],
-          [
-            "dragend",
-            (e: DragEvent) => {
-              e.stopPropagation();
-              this.dropElement((draggedElement, placement) => {
-                this.store.actions.move(
-                  draggedElement as NodeId,
-                  placement.parent.id,
-                  placement.index + (placement.where === "after" ? 1 : 0)
-                );
-              });
-            },
-          ],
+          defineEventListener('dragstart', (e: DragEvent, id: NodeId) => {
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+
+            // Ensure the Node is selected when it is being dragged
+            this.store.actions.setNodeEvent('selected', id);
+
+            this.store.actions.setNodeEvent('dragged', id);
+
+            EventHandlers.draggedElementShadow = createShadow(e);
+            EventHandlers.draggedElement = id;
+          }),
+          defineEventListener('dragend', (e: DragEvent) => {
+            e.stopPropagation();
+
+            const onDropElement = (draggedElement, placement) =>
+              this.store.actions.move(
+                draggedElement as NodeId,
+                placement.parent.id,
+                placement.index + (placement.where === 'after' ? 1 : 0)
+              );
+            this.dropElement(onDropElement);
+          }),
         ],
       },
       create: {
         init: (el) => {
-          el.setAttribute("draggable", true);
-          return () => {
-            el.removeAttribute("draggable");
-          };
+          el.setAttribute('draggable', 'true');
+          return () => el.removeAttribute('draggable');
         },
         events: [
-          [
-            "dragstart",
-            (e: DragEvent, userElement: React.ElementType) => {
+          defineEventListener(
+            'dragstart',
+            (e: DragEvent, userElement: React.ReactElement) => {
               e.stopPropagation();
               e.stopImmediatePropagation();
-              const node = this.store.query.createNode(userElement);
-              EventHandlers.createShadow(e, node);
-            },
-          ],
-          [
-            "dragend",
-            (e: DragEvent) => {
-              e.stopPropagation();
-              this.dropElement((draggedElement, placement) => {
-                (draggedElement as Node).data.index =
-                  placement.index + (placement.where === "after" ? 1 : 0);
-                this.store.actions.add(draggedElement, placement.parent.id);
-              });
-            },
-          ],
+
+              const tree = this.store.query
+                .parseReactElement(userElement)
+                .toNodeTree();
+
+              EventHandlers.draggedElementShadow = createShadow(e);
+              EventHandlers.draggedElement = tree;
+            }
+          ),
+          defineEventListener('dragend', (e: DragEvent) => {
+            e.stopPropagation();
+
+            const onDropElement = (draggedElement, placement) => {
+              const index =
+                placement.index + (placement.where === 'after' ? 1 : 0);
+              this.store.actions.addNodeTree(
+                draggedElement,
+                placement.parent.id,
+                index
+              );
+            };
+            this.dropElement(onDropElement);
+          }),
         ],
       },
     };
-
-    return handlers;
   }
 
   private dropElement(
     onDropNode: (
       draggedElement: DraggedElement,
-      placement: Indicator["placement"]
+      placement: Indicator['placement']
     ) => void
   ) {
-    const events = EventHandlers.events;
+    const { draggedElement, draggedElementShadow, events } = EventHandlers;
     if (
-      EventHandlers.draggedElement &&
+      draggedElement &&
+      events &&
       events.indicator &&
       !events.indicator.error
     ) {
       const { placement } = events.indicator;
-      onDropNode(EventHandlers.draggedElement, placement);
+      onDropNode(draggedElement, placement);
     }
 
-    if (EventHandlers.draggedElementShadow) {
-      EventHandlers.draggedElementShadow.parentNode.removeChild(
-        EventHandlers.draggedElementShadow
-      );
+    if (draggedElementShadow) {
+      draggedElementShadow.parentNode.removeChild(draggedElementShadow);
       EventHandlers.draggedElementShadow = null;
     }
 
     EventHandlers.draggedElement = null;
+
+    if (events) {
+      EventHandlers.events.indicator = null;
+    }
+
     this.store.actions.setIndicator(null);
-    this.store.actions.setNodeEvent("dragged", null);
-  }
-
-  static createShadow(e: DragEvent, node?: DraggedElement) {
-    const shadow = (e.target as HTMLElement).cloneNode(true) as HTMLElement;
-    const { width, height } = (e.target as HTMLElement).getBoundingClientRect();
-    shadow.style.width = `${width}px`;
-    shadow.style.height = `${height}px`;
-    shadow.style.position = "fixed";
-    shadow.style.left = "-100%";
-    shadow.style.top = "-100%";
-
-    document.body.appendChild(shadow);
-    e.dataTransfer.setDragImage(shadow, 0, 0);
-
-    EventHandlers.draggedElementShadow = shadow;
-    EventHandlers.draggedElement = node;
+    this.store.actions.setNodeEvent('dragged', null);
   }
 
   /**
    * Create a new instance of Handlers with reference to the current EventHandlers
    * @param type A class that extends DerivedEventHandlers
-   * @param args Additional arguements to pass to the constructor
+   * @param args Additional arguments to pass to the constructor
    */
   derive<T extends DerivedEventHandlers<any>, U extends any[]>(
-    type: { new (store: EditorStore, derived: EventHandlers, ...args: U): T },
+    type: {
+      new (store: EditorStore, derived: EventHandlers, ...args: U): T;
+    },
     ...args: U
   ): T {
-    const derivedHandler = new type(this.store, this, ...args);
-    return derivedHandler;
+    return new type(this.store, this, ...args);
   }
 }
 
@@ -218,7 +204,8 @@ export abstract class DerivedEventHandlers<T extends string> extends Handlers<
   T
 > {
   derived: EventHandlers;
-  constructor(store: EditorStore, derived: EventHandlers) {
+
+  protected constructor(store: EditorStore, derived: EventHandlers) {
     super(store);
     this.derived = derived;
   }

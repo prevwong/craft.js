@@ -1,8 +1,9 @@
-import { Node } from "../interfaces";
-import { useInternalNode } from "../nodes/useInternalNode";
+import { Node } from '../interfaces';
+import { useInternalNode } from '../nodes/useInternalNode';
+import { deprecationWarning } from '@craftjs/utils';
 
-export type useNode<S = null> = Omit<useInternalNode<S>, "actions"> &
-  Pick<useInternalNode<S>["actions"], "setProp">;
+export type useNode<S = null> = useInternalNode<S> &
+  Pick<useInternalNode<S>['actions'], 'setProp'>;
 
 export function useNode(): useNode;
 
@@ -10,13 +11,13 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S>;
 
 /**
  * A Hook to that provides methods and state information related to the corresponding Node that manages the current component.
- * @param collector Collector function to consume values from the corresponding Node's state
+ * @param collect - Collector function to consume values from the corresponding Node's state
  */
 export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
   const {
     id,
     related,
-    actions: { setProp },
+    actions,
     inNodeContext,
     connectors,
     ...collected
@@ -24,9 +25,15 @@ export function useNode<S = null>(collect?: (node: Node) => S): useNode<S> {
 
   return {
     ...(collected as any),
+    actions,
     id,
     related,
-    setProp,
+    setProp: (cb) => {
+      deprecationWarning('useNode().setProp()', {
+        suggest: 'useNode().actions.setProp()',
+      });
+      return actions.setProp(cb);
+    },
     inNodeContext,
     connectors,
   };

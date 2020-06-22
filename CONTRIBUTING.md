@@ -32,8 +32,8 @@ cd craft.js
 
 # URL
 - Production (master branch): https://craft.js.org/
-- Staging (develop branch): https://craft-js.prevwong.now.sh/
+- Staging (develop branch): https://craftjs.netlify.com/
 
-# License 
+# License
 By contributing, you agree that your contributions will be licensed under MIT License.
 

@@ -1,5 +1,5 @@
-import { Resolver } from "../interfaces";
-import { Canvas } from "../nodes/Canvas";
+import { Resolver } from '../interfaces';
+import { Canvas } from '../nodes/Canvas';
 
 export const resolveComponent = (
   resolver: Resolver,
@@ -8,7 +8,7 @@ export const resolveComponent = (
   let Comp: string;
   const name = (comp as any).name || (comp as any).displayName;
 
-  if (comp === Canvas) return "Canvas";
+  if (comp === Canvas) return 'Canvas';
 
   if (resolver[name]) return name;
 
@@ -21,5 +21,5 @@ export const resolveComponent = (
     }
   }
 
-  if (typeof comp === "string") return comp;
+  if (typeof comp === 'string') return comp;
 };

@@ -53,33 +53,33 @@ export const styleInFlow = (el: HTMLElement, parent: HTMLElement) => {
   const style: any = getComputedStyle(el);
   const parentStyle: any = getComputedStyle(parent);
 
-  if (style.overflow && style.overflow !== "visible") return;
-  if (parentStyle.float !== "none") return;
+  if (style.overflow && style.overflow !== 'visible') return;
+  if (parentStyle.float !== 'none') return;
   if (
     parent &&
-    parentStyle.display === "flex" &&
-    parentStyle["flex-direction"] !== "column"
+    parentStyle.display === 'flex' &&
+    parentStyle['flex-direction'] !== 'column'
   )
     return;
   switch (style.position) {
-    case "static":
-    case "relative":
+    case 'static':
+    case 'relative':
       break;
     default:
       return;
   }
   switch (el.tagName) {
-    case "TR":
-    case "TBODY":
-    case "THEAD":
-    case "TFOOT":
+    case 'TR':
+    case 'TBODY':
+    case 'THEAD':
+    case 'TFOOT':
       return true;
   }
   switch (style.display) {
-    case "block":
-    case "list-item":
-    case "table":
-    case "flex":
+    case 'block':
+    case 'list-item':
+    case 'table':
+    case 'flex':
       return true;
   }
   return;

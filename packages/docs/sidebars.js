@@ -7,24 +7,25 @@
 
 module.exports = {
   docs: {
-    Introduction: ["overview", "acknowledgements"],
-    "Core Concepts": [
-      "concepts/nodes",
-      "concepts/user-components",
-      "concepts/editor-components",
+    Introduction: ['overview', 'acknowledgements'],
+    'Core Concepts': [
+      'concepts/nodes',
+      'concepts/user-components',
+      'concepts/editor-components',
     ],
-    Guides: ["guides/basic-tutorial", "guides/save-load-state"],
-    "API Reference": [
-      "api/editor-state",
-      "api/node",
-      "api/user-component",
-      "api/editor",
-      "api/frame",
-      "api/canvas",
-      "api/useEditor",
-      "api/useNode",
-      "api/helpers",
+    Guides: ['guides/basic-tutorial', 'guides/save-load-state'],
+    'API Reference': [
+      'api/editor-state',
+      'api/node',
+      'api/user-component',
+      'api/nodetree',
+      'api/editor',
+      'api/frame',
+      'api/element',
+      'api/useEditor',
+      'api/useNode',
+      'api/helpers',
     ],
-    "Additional Packages": ["additional/layers"],
+    'Additional Packages': ['additional/layers'],
   },
 };

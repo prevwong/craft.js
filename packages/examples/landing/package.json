@@ -1,6 +1,6 @@
 {
   "name": "example-landing",
-  "version": "0.1.0-beta.4",
+  "version": "0.1.0-beta.7",
   "private": true,
   "scripts": {
     "start": "next dev -p 3001",
@@ -9,8 +9,8 @@
     "clean": "rimraf lib .next out dist"
   },
   "dependencies": {
-    "@craftjs/core": "^0.1.0-beta.4",
-    "@craftjs/layers": "^0.1.0-beta.4",
+    "@craftjs/core": "^0.1.0-beta.7",
+    "@craftjs/layers": "^0.1.0-beta.7",
     "@material-ui/core": "^4.5.2",
     "@material-ui/icons": "^4.5.1",
     "@material-ui/styles": "^4.5.2",
