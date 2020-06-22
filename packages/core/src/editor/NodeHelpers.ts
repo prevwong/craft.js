@@ -168,6 +168,14 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
           return true;
         }
 
+        const targetDeepNodes = nodeHelpers(targetNode.id).descendants(true);
+
+        invariant(
+          !targetDeepNodes.includes(newParentNode.id) &&
+            newParentNode.id !== targetNode.id,
+          ERROR_MOVE_TO_DESCENDANT
+        );
+
         const currentParentNode =
           targetNode.data.parent && state.nodes[targetNode.data.parent];
 
@@ -179,21 +187,18 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
           ERROR_DUPLICATE_NODEID
         );
 
-        const targetDeepNodes = nodeHelpers(targetNode.id).descendants();
-
-        invariant(
-          !targetDeepNodes.includes(newParentNode.id) &&
-            newParentNode.id !== targetNode.id,
-          ERROR_MOVE_TO_DESCENDANT
-        );
-        invariant(
-          currentParentNode.rules.canMoveOut(
-            targetNode,
-            currentParentNode,
-            nodeHelpers
-          ),
-          ERROR_MOVE_OUTGOING_PARENT
-        );
+        // If the Node we're checking for is not the same as the currentParentNode
+        // Check if the currentParentNode allows the targetNode to be dragged out
+        if (node !== currentParentNode) {
+          invariant(
+            currentParentNode.rules.canMoveOut(
+              targetNode,
+              currentParentNode,
+              nodeHelpers
+            ),
+            ERROR_MOVE_OUTGOING_PARENT
+          );
+        }
 
         return true;
       } catch (err) {

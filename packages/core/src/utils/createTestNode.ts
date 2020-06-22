@@ -1,5 +1,8 @@
-export const createTestNode = (id, data, config = {}) => {
+import { Node } from '../interfaces';
+
+export const createTestNode = (id, data, config: Partial<Node> = {}) => {
   return {
+    ...config,
     id,
     data: {
       props: {},
@@ -9,12 +12,17 @@ export const createTestNode = (id, data, config = {}) => {
       ...data,
     },
     related: {},
-    events: { selected: false, dragged: false, hovered: false },
+    events: {
+      selected: false,
+      dragged: false,
+      hovered: false,
+      ...config.events,
+    },
     rules: {
       canMoveIn: () => true,
       canMoveOut: () => true,
       canDrag: () => true,
+      ...config.rules,
     },
-    ...config,
   };
 };

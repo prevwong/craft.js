@@ -72,31 +72,37 @@ describe('NodeHelpers', () => {
 
   describe('descendants', () => {
     it('should return immediate child and linked node ids', () => {
-      expect(helper('canvas-node-reject-dnd').descendants()).toStrictEqual(
-        helper('canvas-node-reject-dnd').get().data.nodes
+      expect(
+        helper('canvas-node-reject-outgoing-dnd').descendants()
+      ).toStrictEqual(
+        helper('canvas-node-reject-outgoing-dnd').get().data.nodes
       );
     });
     describe('when "includeOnly" is unset', () => {
       it('should return all child and linked nodes', () => {
         expect(
-          helper('canvas-node-reject-dnd').descendants(true)
+          helper('canvas-node-reject-outgoing-dnd').descendants(true)
         ).toStrictEqual([
-          ...documentWithVariousNodes.nodes['canvas-node-reject-dnd'].data
-            .nodes,
+          ...documentWithVariousNodes.nodes['canvas-node-reject-outgoing-dnd']
+            .data.nodes,
           ...Object.values(
             documentWithVariousNodes.nodes['parent-of-linked-node'].data
               .linkedNodes || {}
           ),
+          ...documentWithVariousNodes.nodes['linked-node'].data.nodes,
         ]);
       });
     });
     describe('when "includeOnly" is set to childNodes', () => {
       it('should return all child nodes only', () => {
         expect(
-          helper('canvas-node-reject-dnd').descendants(true, 'childNodes')
+          helper('canvas-node-reject-outgoing-dnd').descendants(
+            true,
+            'childNodes'
+          )
         ).toStrictEqual([
-          ...documentWithVariousNodes.nodes['canvas-node-reject-dnd'].data
-            .nodes,
+          ...documentWithVariousNodes.nodes['canvas-node-reject-outgoing-dnd']
+            .data.nodes,
         ]);
       });
     });
@@ -154,17 +160,27 @@ describe('NodeHelpers', () => {
     });
     it("should return false if node's rule rejects incoming target", () => {
       expect(
-        helper('canvas-node-reject-dnd').isDroppable(secondaryButton.id)
+        helper('canvas-node-reject-incoming-dnd').isDroppable(
+          secondaryButton.id
+        )
       ).toEqual(false);
     });
     it("should return false if node's rule rejects outgoing target", () => {
+      // Should not return false if the target is moving within the same parent
+      expect(
+        helper('canvas-node-reject-outgoing-dnd').isDroppable(
+          'fixed-child-node'
+        )
+      ).toEqual(true);
+
+      // should return false if the target moved to a different parent
       expect(helper('canvas-node').isDroppable('fixed-child-node')).toEqual(
         false
       );
     });
     it('should return false if target is a descendant', () => {
       expect(
-        helper('parent-of-linked-node').isDroppable('canvas-node-reject-dnd')
+        helper('linked-node-child-canvas').isDroppable('parent-of-linked-node')
       ).toEqual(false);
     });
   });
