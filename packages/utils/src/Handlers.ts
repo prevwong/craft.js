@@ -47,8 +47,6 @@ const isEventBlockedByDescendant = (e, eventName, el) => {
   for (let i = 0; i < blockingElements.length; i++) {
     const blockingElement = blockingElements[i];
 
-    // If the specified element is an ancestor of one of the child elements
-    // that prevented propagation of the specified event
     if (el.contains(blockingElement)) {
       return true;
     }
