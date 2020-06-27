@@ -1,23 +1,20 @@
 import { wrapHookToRecognizeElement, Connector } from './wrapConnectorHooks';
 
-// TODO(mat) any reason why why use array to store this information ?
-// is there a better place for these definitions ?
+export type CraftEvent<T extends Event> = T & {
+  stopCraftPropagation: () => void;
+};
+
 export type CraftEventListener = [
   string,
-  (e: Event, opts: any) => void,
-  Partial<CraftEventOptions>?
+  (e: CraftEvent<Event>, opts: any) => void,
+  boolean
 ];
-
-export interface CraftEventOptions {
-  capture: boolean;
-  blocking: boolean;
-}
 
 export const defineEventListener = (
   name: string,
-  handler: (e: MouseEvent, payload: any) => void,
-  options?: Partial<CraftEventOptions>
-): CraftEventListener => [name, handler, options];
+  handler: (e: CraftEvent<Event>, payload: any) => void,
+  capture?: boolean
+): CraftEventListener => [name, handler, capture];
 
 export type Handler = {
   /**
@@ -78,23 +75,18 @@ class WatchHandler {
     this.cleanDOM = init && init(this.el, this.opts);
     this.listenersToRemove =
       events &&
-      events.map(([eventName, listener, options = {}]) => {
+      events.map(([eventName, listener, capture]) => {
         const bindedListener = (e) => {
           if (e.craft !== 'handled') {
+            e['stopCraftPropagation'] = () => (e.craft = 'handled');
             listener(e, this.opts);
-            if (options.blocking) {
-              e.craft = 'handled';
-            }
           }
         };
 
-        this.el.addEventListener(eventName, bindedListener, options.capture);
+        this.el.addEventListener(eventName, bindedListener, capture);
+
         return () =>
-          this.el.removeEventListener(
-            eventName,
-            bindedListener,
-            options.capture
-          );
+          this.el.removeEventListener(eventName, bindedListener, capture);
       });
   }
 
@@ -142,13 +134,14 @@ export abstract class Handlers<T extends string = null> {
       }
 
       const connector = (el, opts) => {
-        if (!document.body.contains(el)) {
+        if (!el || !document.body.contains(el)) {
           Handlers.wm.delete(el);
+          return;
         }
 
         const domHandler = Handlers.wm.get(el);
         if (domHandler && domHandler[key]) {
-          domHandler[key].remove();
+          return;
         }
 
         Handlers.wm.set(el, {

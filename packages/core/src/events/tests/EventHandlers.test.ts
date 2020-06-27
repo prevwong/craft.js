@@ -15,7 +15,13 @@ describe('EventHandlers', () => {
   const callHandler = (events, name) => getHandler(events, name)[1];
   const shadow = 'a shadow';
 
-  let e;
+  let e = {
+    preventDefault: jest.fn(),
+    stopImmediatePropagation: jest.fn(),
+    stopCraftPropagation: jest.fn(),
+    clientX: 0,
+    clientY: 0,
+  };
   let eventHandlers;
   let store;
   let actions;
@@ -28,10 +34,6 @@ describe('EventHandlers', () => {
   }));
 
   beforeEach(() => {
-    e = {
-      preventDefault: jest.fn(),
-    };
-
     createShadow = jest.fn().mockImplementation(() => shadow);
 
     EventHandlers.draggedElement = undefined;
@@ -99,7 +101,6 @@ describe('EventHandlers', () => {
     let drop;
 
     beforeEach(() => {
-      e = { preventDefault: jest.fn() };
       drop = eventHandlers.handlers().drop;
     });
     it('should contain two events, dragover and dragenter', () => {
