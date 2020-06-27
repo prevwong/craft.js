@@ -1,7 +1,10 @@
 import { wrapHookToRecognizeElement, Connector } from './wrapConnectorHooks';
 
 export type CraftDOMEvent<T extends Event> = T & {
-  stopCraftPropagation: () => void;
+  craft: {
+    stopPropagation: () => void;
+    blockedEvents: Record<string, boolean>;
+  };
 };
 
 export type CraftEventListener = [
@@ -32,6 +35,27 @@ export type Handler = {
 export type ConnectorsForHandlers<T extends Handlers> = ReturnType<
   T['connectors']
 >;
+
+/**
+ * Check if a specified event is blocked by a child
+ * that's a descendant of the specified element
+ */
+const isEventBlockedByDescendant = (e, eventName, el) => {
+  // TODO: Update TS to use optional chaining
+  const blockingElements = (e.craft && e.craft.blockedEvents[eventName]) || [];
+
+  for (let i = 0; i < blockingElements.length; i++) {
+    const blockingElement = blockingElements[i];
+
+    // If the specified element is an ancestor of one of the child elements
+    // that prevented propagation of the specified event
+    if (el.contains(blockingElement)) {
+      return true;
+    }
+  }
+
+  return false;
+};
 
 /**
  * Attaches/detaches a Handler to a DOM element
@@ -77,8 +101,23 @@ class WatchHandler {
       events &&
       events.map(([eventName, listener, capture]) => {
         const bindedListener = (e) => {
-          if (e.craft !== 'handled') {
-            e['stopCraftPropagation'] = () => (e.craft = 'handled');
+          // Store initial Craft event value
+          if (!e.craft) {
+            e.craft = {
+              blockedEvents: {},
+              stopPropagation: () => {},
+            };
+          }
+
+          if (!isEventBlockedByDescendant(e, eventName, this.el)) {
+            e.craft.stopPropagation = () => {
+              if (!e.craft.blockedEvents[eventName]) {
+                e.craft.blockedEvents[eventName] = [];
+              }
+
+              e.craft.blockedEvents[eventName].push(this.el);
+            };
+
             listener(e, this.opts);
           }
         };
