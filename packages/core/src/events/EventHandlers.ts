@@ -4,7 +4,7 @@ import {
   ConnectorsForHandlers,
   defineEventListener,
   Handlers,
-  CraftEvent,
+  CraftDOMEvent,
 } from '@craftjs/utils';
 import { EditorStore } from '../editor/store';
 
@@ -27,7 +27,7 @@ export class EventHandlers extends Handlers<
         events: [
           defineEventListener(
             'mousedown',
-            (e: CraftEvent<MouseEvent>, id: NodeId) => {
+            (e: CraftDOMEvent<MouseEvent>, id: NodeId) => {
               e.stopCraftPropagation();
               this.store.actions.setNodeEvent('selected', id);
             }
@@ -39,7 +39,7 @@ export class EventHandlers extends Handlers<
         events: [
           defineEventListener(
             'mouseover',
-            (e: CraftEvent<MouseEvent>, id: NodeId) => {
+            (e: CraftDOMEvent<MouseEvent>, id: NodeId) => {
               e.stopCraftPropagation();
               this.store.actions.setNodeEvent('hovered', id);
             }
@@ -48,13 +48,13 @@ export class EventHandlers extends Handlers<
       },
       drop: {
         events: [
-          defineEventListener('dragover', (e: CraftEvent<MouseEvent>) => {
+          defineEventListener('dragover', (e: CraftDOMEvent<MouseEvent>) => {
             e.stopCraftPropagation();
             e.preventDefault();
           }),
           defineEventListener(
             'dragenter',
-            (e: CraftEvent<MouseEvent>, targetId: NodeId) => {
+            (e: CraftDOMEvent<MouseEvent>, targetId: NodeId) => {
               e.stopCraftPropagation();
               e.preventDefault();
 
@@ -95,7 +95,7 @@ export class EventHandlers extends Handlers<
         events: [
           defineEventListener(
             'dragstart',
-            (e: CraftEvent<DragEvent>, id: NodeId) => {
+            (e: CraftDOMEvent<DragEvent>, id: NodeId) => {
               e.stopCraftPropagation();
               this.store.actions.setNodeEvent('dragged', id);
 
@@ -103,7 +103,7 @@ export class EventHandlers extends Handlers<
               EventHandlers.draggedElement = id;
             }
           ),
-          defineEventListener('dragend', (e: CraftEvent<DragEvent>) => {
+          defineEventListener('dragend', (e: CraftDOMEvent<DragEvent>) => {
             e.stopCraftPropagation();
             const onDropElement = (draggedElement, placement) =>
               this.store.actions.move(
@@ -123,7 +123,7 @@ export class EventHandlers extends Handlers<
         events: [
           defineEventListener(
             'dragstart',
-            (e: CraftEvent<DragEvent>, userElement: React.ReactElement) => {
+            (e: CraftDOMEvent<DragEvent>, userElement: React.ReactElement) => {
               e.stopCraftPropagation();
               const tree = this.store.query
                 .parseReactElement(userElement)
@@ -133,7 +133,7 @@ export class EventHandlers extends Handlers<
               EventHandlers.draggedElement = tree;
             }
           ),
-          defineEventListener('dragend', (e: CraftEvent<DragEvent>) => {
+          defineEventListener('dragend', (e: CraftDOMEvent<DragEvent>) => {
             e.stopCraftPropagation();
             const onDropElement = (draggedElement, placement) => {
               const index =

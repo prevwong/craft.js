@@ -1,18 +1,18 @@
 import { wrapHookToRecognizeElement, Connector } from './wrapConnectorHooks';
 
-export type CraftEvent<T extends Event> = T & {
+export type CraftDOMEvent<T extends Event> = T & {
   stopCraftPropagation: () => void;
 };
 
 export type CraftEventListener = [
   string,
-  (e: CraftEvent<Event>, opts: any) => void,
+  (e: CraftDOMEvent<Event>, opts: any) => void,
   boolean
 ];
 
 export const defineEventListener = (
   name: string,
-  handler: (e: CraftEvent<Event>, payload: any) => void,
+  handler: (e: CraftDOMEvent<Event>, payload: any) => void,
   capture?: boolean
 ): CraftEventListener => [name, handler, capture];
 
