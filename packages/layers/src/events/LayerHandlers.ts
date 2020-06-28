@@ -1,6 +1,10 @@
 import { NodeId, Node, DerivedEventHandlers } from '@craftjs/core';
 import { LayerIndicator } from 'interfaces';
-import { ConnectorsForHandlers } from '@craftjs/utils';
+import {
+  ConnectorsForHandlers,
+  defineEventListener,
+  CraftDOMEvent,
+} from '@craftjs/utils';
 
 export class LayerHandlers extends DerivedEventHandlers<
   'layer' | 'layerHeader' | 'drag'
@@ -41,153 +45,125 @@ export class LayerHandlers extends DerivedEventHandlers<
           });
         },
         events: [
-          [
+          defineEventListener(
             'mouseover',
-            (e: MouseEvent, id) => {
-              e.stopPropagation();
+            (e: CraftDOMEvent<MouseEvent>, id) => {
+              e.craft.stopPropagation();
               this.layerStore.actions.setLayerEvent('hovered', id);
-            },
-          ],
-          [
-            'dragover',
-            (e) => {
-              e.preventDefault();
-              e.stopPropagation();
+            }
+          ),
+          defineEventListener('dragover', (e: CraftDOMEvent<DragEvent>) => {
+            e.craft.stopPropagation();
+            e.preventDefault();
 
-              const { indicator, currentCanvasHovered } = LayerHandlers.events;
+            const { indicator, currentCanvasHovered } = LayerHandlers.events;
+
+            if (
+              currentCanvasHovered &&
+              indicator &&
+              currentCanvasHovered.data.nodes
+            ) {
+              const heading = this.getLayer(
+                currentCanvasHovered.id
+              ).headingDom.getBoundingClientRect();
 
               if (
-                currentCanvasHovered &&
-                indicator &&
-                currentCanvasHovered.data.nodes
+                e.clientY > heading.top + 10 &&
+                e.clientY < heading.bottom - 10
               ) {
-                const heading = this.getLayer(
-                  currentCanvasHovered.id
-                ).headingDom.getBoundingClientRect();
-
-                if (
-                  e.clientY > heading.top + 10 &&
-                  e.clientY < heading.bottom - 10
-                ) {
-                  const currNode =
-                    currentCanvasHovered.data.nodes[
-                      currentCanvasHovered.data.nodes.length - 1
-                    ];
-                  if (!currNode) return;
-                  indicator.placement.currentNode = this.store.query
-                    .node(currNode)
-                    .get();
-                  indicator.placement.index =
-                    currentCanvasHovered.data.nodes.length;
-                  indicator.placement.where = 'after';
-                  indicator.placement.parent = currentCanvasHovered;
-
-                  LayerHandlers.events.indicator = {
-                    ...indicator,
-                    onCanvas: true,
-                  };
-
-                  this.layerStore.actions.setIndicator(
-                    LayerHandlers.events.indicator
-                  );
-                }
-              }
-            },
-          ],
-          [
-            'dragenter',
-            (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-
-              const dragId = LayerHandlers.draggedElement;
-
-              if (!dragId) return;
-
-              let target = this.id;
-
-              const indicatorInfo = this.store.query.getDropPlaceholder(
-                dragId,
-                target,
-                { x: e.clientX, y: e.clientY },
-                (node) => {
-                  const layer = this.getLayer(node.id);
-                  return layer && layer.dom;
-                }
-              );
-
-              if (indicatorInfo) {
-                const {
-                  placement: { parent },
-                } = indicatorInfo;
-                const parentHeadingInfo = this.getLayer(
-                  parent.id
-                ).headingDom.getBoundingClientRect();
-
-                LayerHandlers.events.currentCanvasHovered = null;
-                if (this.store.query.node(parent.id).isCanvas()) {
-                  if (parent.data.parent) {
-                    const grandparent = this.store.query
-                      .node(parent.data.parent)
-                      .get();
-                    if (this.store.query.node(grandparent.id).isCanvas()) {
-                      LayerHandlers.events.currentCanvasHovered = parent;
-                      if (
-                        (e.clientY > parentHeadingInfo.bottom - 10 &&
-                          !this.getLayer(parent.id).expanded) ||
-                        e.clientY < parentHeadingInfo.top + 10
-                      ) {
-                        indicatorInfo.placement.parent = grandparent;
-                        indicatorInfo.placement.currentNode = parent;
-                        indicatorInfo.placement.index = grandparent.data.nodes
-                          ? grandparent.data.nodes.indexOf(parent.id)
-                          : 0;
-                        if (
-                          e.clientY > parentHeadingInfo.bottom - 10 &&
-                          !this.getLayer(parent.id).expanded
-                        ) {
-                          indicatorInfo.placement.where = 'after';
-                        } else if (e.clientY < parentHeadingInfo.top + 10) {
-                          indicatorInfo.placement.where = 'before';
-                        }
-                      }
-                    }
-                  }
-                }
+                const currNode =
+                  currentCanvasHovered.data.nodes[
+                    currentCanvasHovered.data.nodes.length - 1
+                  ];
+                if (!currNode) return;
+                indicator.placement.currentNode = this.store.query
+                  .node(currNode)
+                  .get();
+                indicator.placement.index =
+                  currentCanvasHovered.data.nodes.length;
+                indicator.placement.where = 'after';
+                indicator.placement.parent = currentCanvasHovered;
 
                 LayerHandlers.events.indicator = {
-                  ...indicatorInfo,
-                  onCanvas: false,
+                  ...indicator,
+                  onCanvas: true,
                 };
 
                 this.layerStore.actions.setIndicator(
                   LayerHandlers.events.indicator
                 );
               }
-            },
-          ],
-          [
-            'dragend',
-            (e: MouseEvent) => {
-              e.stopPropagation();
-              const events = LayerHandlers.events;
+            }
+          }),
+          defineEventListener('dragenter', (e: CraftDOMEvent<DragEvent>) => {
+            e.craft.stopPropagation();
+            e.preventDefault();
 
-              if (events.indicator && !events.indicator.error) {
-                const { placement } = events.indicator;
-                const { parent, index, where } = placement;
-                const { id: parentId } = parent;
+            const dragId = LayerHandlers.draggedElement;
 
-                this.store.actions.move(
-                  LayerHandlers.draggedElement as NodeId,
-                  parentId,
-                  index + (where === 'after' ? 1 : 0)
-                );
+            if (!dragId) return;
+
+            let target = this.id;
+
+            const indicatorInfo = this.store.query.getDropPlaceholder(
+              dragId,
+              target,
+              { x: e.clientX, y: e.clientY },
+              (node) => {
+                const layer = this.getLayer(node.id);
+                return layer && layer.dom;
+              }
+            );
+
+            if (indicatorInfo) {
+              const {
+                placement: { parent },
+              } = indicatorInfo;
+              const parentHeadingInfo = this.getLayer(
+                parent.id
+              ).headingDom.getBoundingClientRect();
+
+              LayerHandlers.events.currentCanvasHovered = null;
+              if (this.store.query.node(parent.id).isCanvas()) {
+                if (parent.data.parent) {
+                  const grandparent = this.store.query
+                    .node(parent.data.parent)
+                    .get();
+                  if (this.store.query.node(grandparent.id).isCanvas()) {
+                    LayerHandlers.events.currentCanvasHovered = parent;
+                    if (
+                      (e.clientY > parentHeadingInfo.bottom - 10 &&
+                        !this.getLayer(parent.id).expanded) ||
+                      e.clientY < parentHeadingInfo.top + 10
+                    ) {
+                      indicatorInfo.placement.parent = grandparent;
+                      indicatorInfo.placement.currentNode = parent;
+                      indicatorInfo.placement.index = grandparent.data.nodes
+                        ? grandparent.data.nodes.indexOf(parent.id)
+                        : 0;
+                      if (
+                        e.clientY > parentHeadingInfo.bottom - 10 &&
+                        !this.getLayer(parent.id).expanded
+                      ) {
+                        indicatorInfo.placement.where = 'after';
+                      } else if (e.clientY < parentHeadingInfo.top + 10) {
+                        indicatorInfo.placement.where = 'before';
+                      }
+                    }
+                  }
+                }
               }
 
-              LayerHandlers.draggedElement = null;
-              this.layerStore.actions.setIndicator(null);
-            },
-          ],
+              LayerHandlers.events.indicator = {
+                ...indicatorInfo,
+                onCanvas: false,
+              };
+
+              this.layerStore.actions.setIndicator(
+                LayerHandlers.events.indicator
+              );
+            }
+          }),
         ],
       },
       layerHeader: {
@@ -206,14 +182,30 @@ export class LayerHandlers extends DerivedEventHandlers<
           };
         },
         events: [
-          [
-            'dragstart',
-            (e: MouseEvent) => {
-              e.stopPropagation();
+          defineEventListener('dragstart', (e: CraftDOMEvent<MouseEvent>) => {
+            e.craft.stopPropagation();
+            LayerHandlers.draggedElement = this.id;
+          }),
+          defineEventListener('dragend', (e: CraftDOMEvent<MouseEvent>, id) => {
+            e.craft.stopPropagation();
+            const events = LayerHandlers.events;
 
-              LayerHandlers.draggedElement = this.id;
-            },
-          ],
+            if (events.indicator && !events.indicator.error) {
+              const { placement } = events.indicator;
+              const { parent, index, where } = placement;
+              const { id: parentId } = parent;
+
+              this.store.actions.move(
+                LayerHandlers.draggedElement as NodeId,
+                parentId,
+                index + (where === 'after' ? 1 : 0)
+              );
+            }
+
+            LayerHandlers.draggedElement = null;
+            LayerHandlers.events.indicator = null;
+            this.layerStore.actions.setIndicator(null);
+          }),
         ],
       },
     };
