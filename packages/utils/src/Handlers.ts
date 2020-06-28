@@ -47,7 +47,7 @@ const isEventBlockedByDescendant = (e, eventName, el) => {
   for (let i = 0; i < blockingElements.length; i++) {
     const blockingElement = blockingElements[i];
 
-    if (el.contains(blockingElement)) {
+    if (el !== blockingElement && el.contains(blockingElement)) {
       return true;
     }
   }
