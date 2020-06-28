@@ -1,6 +1,6 @@
 import { Node } from '../interfaces';
 
-export const createTestNode = (id, data, config: Partial<Node> = {}) => {
+export const createTestNode = (id, data, config: any = {}) => {
   return {
     ...config,
     id,
@@ -16,14 +16,14 @@ export const createTestNode = (id, data, config: Partial<Node> = {}) => {
       selected: false,
       dragged: false,
       hovered: false,
-      ...config.events,
+      ...(config.events || {}),
     },
     rules: {
       canMoveIn: () => true,
       canMoveOut: () => true,
       canDrag: () => true,
       canDrop: () => true,
-      ...config.rules,
+      ...(config.rules || {}),
     },
   };
 };

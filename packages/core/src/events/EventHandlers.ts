@@ -18,7 +18,9 @@ export class EventHandlers extends Handlers<
 > {
   static draggedElementShadow: HTMLElement;
   static draggedElement: DraggedElement;
-  static events: { indicator: Indicator };
+  static events: { indicator: Indicator } = {
+    indicator: null,
+  };
 
   handlers() {
     return {
@@ -158,12 +160,7 @@ export class EventHandlers extends Handlers<
     ) => void
   ) {
     const { draggedElement, draggedElementShadow, events } = EventHandlers;
-    if (
-      draggedElement &&
-      events &&
-      events.indicator &&
-      !events.indicator.error
-    ) {
+    if (draggedElement && events.indicator && !events.indicator.error) {
       const { placement } = events.indicator;
       onDropNode(draggedElement, placement);
     }
@@ -174,10 +171,7 @@ export class EventHandlers extends Handlers<
     }
 
     EventHandlers.draggedElement = null;
-
-    if (events) {
-      EventHandlers.events.indicator = null;
-    }
+    EventHandlers.events.indicator = null;
 
     this.store.actions.setIndicator(null);
     this.store.actions.setNodeEvent('dragged', null);

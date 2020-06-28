@@ -1,11 +1,13 @@
 import { EventHandlers } from '../EventHandlers';
-import { createShadow } from '../createShadow';
+
+let shadow;
+let createShadow = jest.fn().mockImplementation(() => shadow);
 
 jest.mock('debounce', () => ({
   debounce: (f) => (...args) => f(...args),
 }));
 jest.mock('../createShadow', () => ({
-  createShadow: () => null,
+  createShadow: () => createShadow(),
 }));
 
 describe('EventHandlers', () => {
@@ -13,7 +15,6 @@ describe('EventHandlers', () => {
   const getHandler = (events, name) =>
     events.find(([eventName]) => name === eventName);
   const callHandler = (events, name) => getHandler(events, name)[1];
-  const shadow = 'a shadow';
 
   let e = {
     preventDefault: jest.fn(),
@@ -36,11 +37,8 @@ describe('EventHandlers', () => {
   }));
 
   beforeEach(() => {
-    createShadow = jest.fn().mockImplementation(() => shadow);
-
     EventHandlers.draggedElement = undefined;
     EventHandlers.draggedElementShadow = undefined;
-    EventHandlers.events = undefined;
 
     actions = {
       addNodeTree: jest.fn(),
@@ -164,7 +162,7 @@ describe('EventHandlers', () => {
   });
 
   describe('handlers.drag', () => {
-    const shadow = 'a shadow';
+    shadow = 'a shadow';
     let drag;
     let el;
 
@@ -245,7 +243,7 @@ describe('EventHandlers', () => {
 
       describe('if there are all the events', () => {
         beforeEach(() => {
-          EventHandlers.events = { ...events };
+          EventHandlers.events = { ...events } as any;
           EventHandlers.draggedElement = nodeId;
           callHandler(drag.events, 'dragend')(e, nodeId);
         });
@@ -333,7 +331,7 @@ describe('EventHandlers', () => {
 
       describe('if there are all the events', () => {
         beforeEach(() => {
-          EventHandlers.events = { ...events };
+          EventHandlers.events = { ...events } as any;
           EventHandlers.draggedElement = nodeId;
           callHandler(create.events, 'dragend')(e, nodeId);
         });
