@@ -77,7 +77,10 @@ export const ToolbarItem = ({
   index,
   ...props
 }: ToolbarItem) => {
-  const { setProp, propValue } = useNode((node) => ({
+  const {
+    actions: { setProp },
+    propValue,
+  } = useNode((node) => ({
     propValue: node.data.props[propKey],
   }));
   const value = Array.isArray(propValue) ? propValue[index] : propValue;

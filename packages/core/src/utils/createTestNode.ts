@@ -1,5 +1,3 @@
-import { Node } from '../interfaces';
-
 export const createTestNode = (id, data, config: any = {}) => {
   return {
     ...config,

@@ -88,7 +88,7 @@ const Indicators = styled.div<{ bound?: 'row' | 'column' }>`
 export const Resizer = ({ propKey, children, ...props }: any) => {
   const {
     id,
-    setProp,
+    actions: { setProp },
     connectors: { connect },
     fillSpace,
     nodeWidth,
