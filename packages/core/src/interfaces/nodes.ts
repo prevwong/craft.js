@@ -34,6 +34,7 @@ export type NodeEvents = 'selected' | 'dragged' | 'hovered';
 export type NodeRefEvent = Record<NodeEvents, boolean>;
 export type NodeRules = {
   canDrag(node: Node, helpers: NodeHelpers): boolean;
+  canDrop(dropTarget: Node, self: Node, helpers: NodeHelpers): boolean;
   canMoveIn(canMoveIn: Node, self: Node, helpers: NodeHelpers): boolean;
   canMoveOut(canMoveOut: Node, self: Node, helpers: NodeHelpers): boolean;
 };
