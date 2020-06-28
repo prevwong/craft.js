@@ -22,6 +22,7 @@ export const createTestNode = (id, data, config: Partial<Node> = {}) => {
       canMoveIn: () => true,
       canMoveOut: () => true,
       canDrag: () => true,
+      canDrop: () => true,
       ...config.rules,
     },
   };
