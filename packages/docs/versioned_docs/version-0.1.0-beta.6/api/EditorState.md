@@ -11,7 +11,7 @@ import {API, Badge} from "@site/src/components";
 ## Reference
 ### Properties
 <API items={[
-  ["nodes", "Record<NodeId, Node>", "A map sof all the Nodes in the editor"],
+  ["nodes", "Record<NodeId, Node>", "A map of all the Nodes in the editor"],
   ["events", "Object", [
     ["selected", "NodeId"],
     ["hovered", "NodeId"],
