@@ -28,7 +28,7 @@ export class EventHandlers extends Handlers<
           defineEventListener(
             'mousedown',
             (e: CraftDOMEvent<MouseEvent>, id: NodeId) => {
-              e.stopCraftPropagation();
+              e.craft.stopPropagation();
               this.store.actions.setNodeEvent('selected', id);
             }
           ),
@@ -40,7 +40,7 @@ export class EventHandlers extends Handlers<
           defineEventListener(
             'mouseover',
             (e: CraftDOMEvent<MouseEvent>, id: NodeId) => {
-              e.stopCraftPropagation();
+              e.craft.stopPropagation();
               this.store.actions.setNodeEvent('hovered', id);
             }
           ),
@@ -49,13 +49,13 @@ export class EventHandlers extends Handlers<
       drop: {
         events: [
           defineEventListener('dragover', (e: CraftDOMEvent<MouseEvent>) => {
-            e.stopCraftPropagation();
+            e.craft.stopPropagation();
             e.preventDefault();
           }),
           defineEventListener(
             'dragenter',
             (e: CraftDOMEvent<MouseEvent>, targetId: NodeId) => {
-              e.stopCraftPropagation();
+              e.craft.stopPropagation();
               e.preventDefault();
 
               const draggedElement = EventHandlers.draggedElement as NodeTree;
@@ -96,7 +96,7 @@ export class EventHandlers extends Handlers<
           defineEventListener(
             'dragstart',
             (e: CraftDOMEvent<DragEvent>, id: NodeId) => {
-              e.stopCraftPropagation();
+              e.craft.stopPropagation();
               this.store.actions.setNodeEvent('dragged', id);
 
               EventHandlers.draggedElementShadow = createShadow(e);
@@ -104,7 +104,7 @@ export class EventHandlers extends Handlers<
             }
           ),
           defineEventListener('dragend', (e: CraftDOMEvent<DragEvent>) => {
-            e.stopCraftPropagation();
+            e.craft.stopPropagation();
             const onDropElement = (draggedElement, placement) =>
               this.store.actions.move(
                 draggedElement as NodeId,
@@ -124,7 +124,7 @@ export class EventHandlers extends Handlers<
           defineEventListener(
             'dragstart',
             (e: CraftDOMEvent<DragEvent>, userElement: React.ReactElement) => {
-              e.stopCraftPropagation();
+              e.craft.stopPropagation();
               const tree = this.store.query
                 .parseReactElement(userElement)
                 .toNodeTree();
@@ -134,7 +134,7 @@ export class EventHandlers extends Handlers<
             }
           ),
           defineEventListener('dragend', (e: CraftDOMEvent<DragEvent>) => {
-            e.stopCraftPropagation();
+            e.craft.stopPropagation();
             const onDropElement = (draggedElement, placement) => {
               const index =
                 placement.index + (placement.where === 'after' ? 1 : 0);

@@ -18,7 +18,9 @@ describe('EventHandlers', () => {
   let e = {
     preventDefault: jest.fn(),
     stopImmediatePropagation: jest.fn(),
-    stopCraftPropagation: jest.fn(),
+    craft: {
+      stopPropagation: jest.fn(),
+    },
     clientX: 0,
     clientY: 0,
   };
