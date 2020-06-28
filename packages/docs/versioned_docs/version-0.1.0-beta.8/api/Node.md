@@ -35,6 +35,7 @@ import {API, Badge} from "@site/src/components";
   ["related", "Record<String, React.ElementType>", "A map of React Components that shares the current Node context"],
   ["rules", "Object", [
     ["canDrag", "(currentNode: Node) => boolean", "Specifies if the current Node can be dragged. Applicable only if the current Node is a direct child of a Canvas Node"],
+    ["canDrop", "(targetNode: Node, currentNode: Node) => boolean", "Specifies if the current Node that is being dragged can be dropped in its target. Applicable only if the current Node is a direct child of a Canvas Node"],
     ["canMoveIn", "(incomingNode: Node, currentNode: Node) => boolean", "Specifies if an incoming Node can be dropped in the current Node. Applicable only if the current Node is a Canvas Node"],
     ["canMoveOut", "(outgoingNode: Node, currentNode: Node) => boolean", "Specifies if a child Node can be dragged out of the current Node. Applicable only if the current Node is a Canvas Node"],
   ]]
