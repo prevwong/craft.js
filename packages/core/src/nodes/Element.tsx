@@ -29,11 +29,11 @@ export type Element<T extends React.ElementType> = {
 export function Element<T extends React.ElementType>({
   id,
   children,
-  ...otherProps
+  ...elementProps
 }: Element<T>) {
-  const props = {
+  const { is, custom, canvas, ...otherProps } = {
     ...defaultElementProps,
-    ...otherProps,
+    ...elementProps,
   };
 
   const { query, actions } = useInternalEditor();
@@ -44,55 +44,52 @@ export function Element<T extends React.ElementType>({
     },
   }));
 
-  const [internalId, setInternalId] = useState<NodeId | null>(null);
-  const [initialised, setInitialised] = useState(false);
+  const [linkedNodeId, setLinkedNodeId] = useState<NodeId | null>(null);
 
   useEffectOnce(() => {
-    invariant(id !== null, ERROR_TOP_LEVEL_ELEMENT_NO_ID);
+    invariant(!!id, ERROR_TOP_LEVEL_ELEMENT_NO_ID);
     const { id: nodeId, data } = node;
 
     if (inNodeContext) {
-      let internalId,
-        newProps = props;
+      let linkedNodeId;
 
       const existingNode =
         data.linkedNodes &&
         data.linkedNodes[id] &&
         query.node(data.linkedNodes[id]).get();
 
-      if (
-        existingNode &&
-        existingNode.data.type === props.is &&
-        typeof props.is !== 'string'
-      ) {
-        newProps = {
-          ...newProps,
+      // Render existing linked Node if it already exists (and is the same type as the JSX)
+      if (existingNode && existingNode.data.type === is) {
+        linkedNodeId = existingNode.id;
+
+        // Merge JSX and existing props
+        const mergedProps = {
           ...existingNode.data.props,
+          ...otherProps,
         };
+
+        actions.setProp(linkedNodeId, (props) =>
+          Object.keys(mergedProps).forEach(
+            (key) => (props[key] = mergedProps[key])
+          )
+        );
+      } else {
+        // otherwise, create and render a new linked Node
+        const linkedElement = React.createElement(
+          Element,
+          elementProps,
+          children
+        );
+
+        const tree = query.parseReactElement(linkedElement).toNodeTree();
+
+        linkedNodeId = tree.rootNodeId;
+        actions.addLinkedNodeFromTree(tree, nodeId, id);
       }
 
-      const linkedElement = React.createElement(Element, newProps, children);
-
-      const tree = query
-        .parseReactElement(linkedElement)
-        .toNodeTree((node, jsx) => {
-          if (jsx === linkedElement) {
-            node.id = existingNode ? existingNode.id : node.id;
-            node.data = {
-              ...(existingNode ? existingNode.data.props : {}),
-              ...node.data,
-            };
-          }
-        });
-
-      internalId = tree.rootNodeId;
-      actions.addLinkedNodeFromTree(tree, nodeId, id);
-
-      setInternalId(internalId);
+      setLinkedNodeId(linkedNodeId);
     }
-
-    setInitialised(true);
   });
 
-  return initialised ? <NodeElement id={internalId} /> : null;
+  return linkedNodeId ? <NodeElement id={linkedNodeId} /> : null;
 }

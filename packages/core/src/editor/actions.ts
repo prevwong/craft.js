@@ -87,6 +87,32 @@ export const Actions = (
     return parent;
   };
 
+  const deleteNode = (id: NodeId, isLinkedNode: boolean = false) => {
+    const targetNode = state.nodes[id],
+      parentNode = state.nodes[targetNode.data.parent];
+
+    if (targetNode.data.nodes) {
+      // we deep clone here because otherwise immer will mutate the node
+      // object as we remove nodes
+      [...targetNode.data.nodes].forEach((childId) => deleteNode(childId));
+    }
+
+    if (isLinkedNode && parentNode.data.linkedNodes) {
+      const linkedId = Object.keys(parentNode.data.linkedNodes).filter(
+        (id) => parentNode.data.linkedNodes[id] === id
+      )[0];
+      if (linkedId) {
+        delete parentNode.data.linkedNodes[linkedId];
+      }
+    } else {
+      const parentChildren = parentNode.data.nodes;
+      parentChildren.splice(parentChildren.indexOf(id), 1);
+    }
+
+    updateEventsNode(state, id, true);
+    delete state.nodes[id];
+  };
+
   return {
     /**
      * @private
@@ -101,6 +127,11 @@ export const Actions = (
       const parent = getParentAndValidate(parentId);
       if (!parent.data.linkedNodes) {
         parent.data.linkedNodes = {};
+      }
+
+      const existingLinkedNode = parent.data.linkedNodes[id];
+      if (existingLinkedNode) {
+        deleteNode(existingLinkedNode, true);
       }
 
       parent.data.linkedNodes[id] = tree.rootNodeId;
@@ -160,18 +191,7 @@ export const Actions = (
     delete(id: NodeId) {
       invariant(!query.node(id).isTopLevelNode(), ERROR_DELETE_TOP_LEVEL_NODE);
 
-      const targetNode = state.nodes[id];
-      if (targetNode.data.nodes) {
-        // we deep clone here because otherwise immer will mutate the node
-        // object as we remove nodes
-        [...targetNode.data.nodes].forEach((childId) => this.delete(childId));
-      }
-
-      const parentChildren = state.nodes[targetNode.data.parent].data.nodes;
-      parentChildren.splice(parentChildren.indexOf(id), 1);
-
-      updateEventsNode(state, id, true);
-      delete state.nodes[id];
+      deleteNode(id);
     },
 
     deserialize(input: SerializedNodes | string) {
