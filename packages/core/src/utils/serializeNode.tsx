@@ -17,6 +17,10 @@ export const serializeComp = (
   let { type, isCanvas, props } = data;
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
+    if (!prop) {
+      return result;
+    }
+
     if (key === 'children' && typeof prop !== 'string') {
       result[key] = Children.map(prop, (child) => {
         if (typeof child === 'string') {
