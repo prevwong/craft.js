@@ -1,4 +1,4 @@
-export const createTestNode = (id, data, config: any = {}) => {
+export const createTestNode = (id, data = {}, config: any = {}) => {
   return {
     ...config,
     id,

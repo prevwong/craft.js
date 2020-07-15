@@ -65,19 +65,25 @@ export const Actions = (
       addNodeToParentAtIndex(node, parentId, index);
     }
 
-    if (!node.data.nodes) {
-      return;
+    if (node.data.nodes) {
+      const childToAdd = [...node.data.nodes];
+      node.data.nodes = [];
+      childToAdd.forEach((childId, index) =>
+        addTreeToParentAtIndex(
+          { rootNodeId: childId, nodes: tree.nodes },
+          node.id,
+          index
+        )
+      );
     }
-    // we need to deep clone here...
-    const childToAdd = [...node.data.nodes];
-    node.data.nodes = [];
-    childToAdd.forEach((childId, index) =>
-      addTreeToParentAtIndex(
-        { rootNodeId: childId, nodes: tree.nodes },
-        node.id,
-        index
-      )
-    );
+
+    if (node.data.linkedNodes) {
+      Object.keys(node.data.linkedNodes).forEach((linkedId) => {
+        const nodeId = node.data.linkedNodes[linkedId];
+        state.nodes[nodeId] = tree.nodes[nodeId];
+        addTreeToParentAtIndex({ rootNodeId: nodeId, nodes: tree.nodes });
+      });
+    }
   };
 
   const getParentAndValidate = (parentId: NodeId): Node => {
@@ -85,6 +91,32 @@ export const Actions = (
     const parent = state.nodes[parentId];
     invariant(parent, ERROR_INVALID_NODEID);
     return parent;
+  };
+
+  const deleteNode = (id: NodeId, isLinkedNode: boolean = false) => {
+    const targetNode = state.nodes[id],
+      parentNode = state.nodes[targetNode.data.parent];
+
+    if (targetNode.data.nodes) {
+      // we deep clone here because otherwise immer will mutate the node
+      // object as we remove nodes
+      [...targetNode.data.nodes].forEach((childId) => deleteNode(childId));
+    }
+
+    if (isLinkedNode && parentNode.data.linkedNodes) {
+      const linkedId = Object.keys(parentNode.data.linkedNodes).filter(
+        (id) => parentNode.data.linkedNodes[id] === id
+      )[0];
+      if (linkedId) {
+        delete parentNode.data.linkedNodes[linkedId];
+      }
+    } else {
+      const parentChildren = parentNode.data.nodes;
+      parentChildren.splice(parentChildren.indexOf(id), 1);
+    }
+
+    updateEventsNode(state, id, true);
+    delete state.nodes[id];
   };
 
   return {
@@ -101,6 +133,11 @@ export const Actions = (
       const parent = getParentAndValidate(parentId);
       if (!parent.data.linkedNodes) {
         parent.data.linkedNodes = {};
+      }
+
+      const existingLinkedNode = parent.data.linkedNodes[id];
+      if (existingLinkedNode) {
+        deleteNode(existingLinkedNode, true);
       }
 
       parent.data.linkedNodes[id] = tree.rootNodeId;
@@ -160,18 +197,7 @@ export const Actions = (
     delete(id: NodeId) {
       invariant(!query.node(id).isTopLevelNode(), ERROR_DELETE_TOP_LEVEL_NODE);
 
-      const targetNode = state.nodes[id];
-      if (targetNode.data.nodes) {
-        // we deep clone here because otherwise immer will mutate the node
-        // object as we remove nodes
-        [...targetNode.data.nodes].forEach((childId) => this.delete(childId));
-      }
-
-      const parentChildren = state.nodes[targetNode.data.parent].data.nodes;
-      parentChildren.splice(parentChildren.indexOf(id), 1);
-
-      updateEventsNode(state, id, true);
-      delete state.nodes[id];
+      deleteNode(id);
     },
 
     deserialize(input: SerializedNodes | string) {
