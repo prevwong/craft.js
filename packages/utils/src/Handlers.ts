@@ -177,9 +177,6 @@ export abstract class Handlers<T extends string = null> {
         }
 
         const domHandler = Handlers.wm.get(el);
-        if (domHandler && domHandler[key]) {
-          return;
-        }
 
         Handlers.wm.set(el, {
           ...domHandler,
