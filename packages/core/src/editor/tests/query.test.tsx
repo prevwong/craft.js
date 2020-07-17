@@ -8,12 +8,15 @@ import {
   secondaryButton,
   documentWithCardState,
 } from '../../tests/fixtures';
+import { createNode } from '../../utils/createNode';
 import { parseNodeFromJSX } from '../../utils/parseNodeFromJSX';
 import { deserializeNode } from '../../utils/deserializeNode';
-import { SerializedNode } from '@craftjs/core';
 
 jest.mock('../../utils/resolveComponent', () => ({
   resolveComponent: () => null,
+}));
+jest.mock('../../utils/createNode', () => ({
+  createNode: () => null,
 }));
 jest.mock('../../utils/parseNodeFromJSX', () => ({
   parseNodeFromJSX: () => null,
@@ -35,36 +38,61 @@ describe('query', () => {
   describe('parseSerializedNode', () => {
     describe('toNode', () => {
       let data = {
+        type: 'h2',
         props: { className: 'hello' },
         nodes: [],
         custom: {},
         isCanvas: false,
         parent: null,
+
         displayName: 'h2',
         hidden: false,
       };
-      let serializedNode: SerializedNode = {
-        type: 'h2',
-        ...data,
-      };
 
       beforeEach(() => {
-        deserializeNode = jest.fn().mockImplementation(() => serializedNode);
-        parseNodeFromJSX = jest.fn();
+        deserializeNode = jest.fn().mockImplementation(() => data);
+        createNode = jest.fn().mockImplementation(() => null);
 
-        query.parseSerializedNode(serializedNode).toNode();
+        query.parseSerializedNode(data).toNode();
       });
 
       it('should call deserializeNode', () => {
-        expect(deserializeNode).toBeCalledWith(
-          serializedNode,
-          state.options.resolver
-        );
+        expect(deserializeNode).toBeCalledWith(data, state.options.resolver);
       });
 
       it('should call parseNodeFromJSX', () => {
-        expect(parseNodeFromJSX).toBeCalledWith(
-          React.createElement('h2', data.props),
+        expect(createNode).toHaveBeenCalledWith(
+          {
+            data,
+          },
+          expect.any(Function)
+        );
+      });
+    });
+  });
+
+  describe('parseFreshNode', () => {
+    describe('toNode', () => {
+      let data = {
+        type: 'h1',
+      };
+
+      beforeEach(() => {
+        createNode = jest.fn().mockImplementation(() => null);
+        query
+          .parseFreshNode({
+            data: {
+              type: 'h1',
+            },
+          })
+          .toNode();
+      });
+
+      it('should call createNode', () => {
+        expect(createNode).toHaveBeenCalledWith(
+          {
+            data,
+          },
           expect.any(Function)
         );
       });
@@ -72,10 +100,6 @@ describe('query', () => {
   });
 
   describe('parseReactElement', () => {
-    describe('toNodeTree', () => {});
-  });
-
-  describe('parseNodeFromReactNode', () => {
     let tree;
     const node = <h1>Hello</h1>;
     const name = 'Document';
