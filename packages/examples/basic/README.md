@@ -10,5 +10,5 @@ Check out the live demo [here](https://craft.js.org/examples/basic/)
 > git clone https://github.com/prevwong/craft.js/
 > cd craft.js/packages/examples/basic
 > npm install
-> npm dev
+> npm start
 ```
