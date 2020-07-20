@@ -145,7 +145,7 @@ class WatchHandler {
  */
 export abstract class Handlers<T extends string = null> {
   // Stores a map of DOM elements to their attached connector's WatchHandler
-  private static wm = new WeakMap<HTMLElement, Record<string, WatchHandler>>();
+  private wm = new WeakMap<HTMLElement, Record<string, WatchHandler>>();
   // Data store to infer the enabled state from
   protected store;
 
@@ -172,13 +172,17 @@ export abstract class Handlers<T extends string = null> {
 
       const connector = (el, opts) => {
         if (!el || !document.body.contains(el)) {
-          Handlers.wm.delete(el);
+          this.wm.delete(el);
           return;
         }
 
-        const domHandler = Handlers.wm.get(el);
+        const domHandler = this.wm.get(el);
 
-        Handlers.wm.set(el, {
+        if (domHandler && domHandler[key]) {
+          return;
+        }
+
+        this.wm.set(el, {
           ...domHandler,
           [key]: new WatchHandler(this.store, el, opts, {
             init,
