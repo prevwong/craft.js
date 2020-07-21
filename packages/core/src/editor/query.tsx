@@ -173,15 +173,24 @@ export function QueryMethods(state: EditorState) {
     }),
 
     parseSerializedNode: (serializedNode: SerializedNode) => ({
-      toNode(id?: NodeId): Node {
+      toNode(normalize?: (node: Node) => void): Node {
         const data = deserializeNode(serializedNode, state.options.resolver);
         invariant(data.type, ERROR_NOT_IN_RESOLVER);
+
+        const id = typeof normalize === 'string' && normalize;
+
+        if (id) {
+          deprecationWarning(`query.parseSerializedNode(...).toNode(id)`, {
+            suggest: `query.parseSerializedNode(...).toNode(node => node.id = id)`,
+          });
+        }
+
         return _()
           .parseFreshNode({
             ...(id ? { id } : {}),
             data,
           })
-          .toNode();
+          .toNode(!id && normalize);
       },
     }),
 

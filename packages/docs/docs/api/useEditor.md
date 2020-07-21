@@ -54,13 +54,13 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ],
       ["node", "(id: NodeId) => NodeHelpers", "Returns an object containing helper methods to describe the specified Node. Click <a href='/craft.js/r/docs/api/helpers/'>here</a> for more information."],
       ["parseReactElement", "(element: React.ReactElement) => Object", [
-        ["toNodeTree", "() => NodeTree", "Parse a given React element into a NodeTree"]
+        ["toNodeTree", "(normalize?: (node: Node, jsx: React.ReactElement) => void) => NodeTree", "Parse a given React element into a NodeTree"]
       ]],
       ["parseSerializedNode", "(node: SerializedNode) => Object", [
-        ["toNode", "() => Node", "Parse a serialized Node back into it's full Node form"]
+        ["toNode", "(normalize?: (node: Node) => void) => Node", "Parse a serialized Node back into it's full Node form"]
       ]],
       ["parseFreshNode", "(node: FreshNode) => Object", [
-        ["toNode", "() => Node", "Parse a fresh/new Node object into it's full Node form, ensuring all properties of a Node is correctly initialised. This is useful when you need to create a new Node"]
+        ["toNode", "(normalize?: (node: Node) => void) => Node", "Parse a fresh/new Node object into it's full Node form, ensuring all properties of a Node is correctly initia lised. This is useful when you need to create a new Node."]
       ]],
     ]],
     ["inContext", "boolean", "Returns false if the component is rendered outside of the &lt;Editor /&gt;. This is useful if you are designing a general component that you also wish to use outside of Craft.js."],
