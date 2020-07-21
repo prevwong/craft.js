@@ -38,7 +38,102 @@
       "contributions": [
         "doc"
       ]
+    },
+     {
+      "login": "fengzilong",
+      "name": "MO",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/9125255?v=4",
+      "profile": "https://github.com/fengzilong",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ankri",
+      "name": "Andy Krings-Stern",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2842920?v=4",
+      "profile": "https://github.com/ankri",
+      "contributions": [
+        "code",
+        "doc",
+        "examples"
+      ]
+    },
+    {
+      "login": "zaki-yama",
+      "name": "Shingo Yamazaki",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1001444?v=4",
+      "profile": "https://dackdive.hateblo.jp/",
+      "contributions": [
+        "doc"
+      ]
+    },
+     {
+      "login": "jmschneider",
+      "name": "Joel Schneider",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3977552?v=4",
+      "profile": "http://joelschneider.com",
+      "contributions": [
+        "bug",
+        "doc"
+      ]
+    },
+    {
+      "login": "Enva2712",
+      "name": "Evan Rusmisel",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/18131608?v=4",
+      "profile": "https://github.com/Enva2712",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mresposito",
+      "name": "Michele Riccardo Esposito",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1311832?v=4",
+      "profile": "https://www.candu.ai",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
+    },
+    {
+      "login": "matdru",
+      "name": "Mateusz Drulis",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4158076?v=4",
+      "profile": "https://github.com/matdru",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
+    },
+    {
+      "login": "sprabowo",
+      "name": "Sigit Prabowo",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11748183?v=4",
+      "profile": "https://github.com/sprabowo",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "vjsrinath",
+      "name": "Srinath Janakiraman",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5001683?v=4",
+      "profile": "http://vjsrinath.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "boqiaok",
+      "name": "Kim",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/15731814?v=4",
+      "profile": "https://github.com/boqiaok",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 6
 }
