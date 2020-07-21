@@ -37,10 +37,9 @@ function App() {
         <NextSeo
           title="Craft.js"
           description="A React framework for building drag-n-drop page editors."
-          canonical="https://www.canonical.ie/"
+          canonical="https://craft.js.org/"
           twitter={{
-            handle: '@handle',
-            site: '@site',
+            site: 'craft.js.org',
             cardType: 'summary_large_image',
           }}
         />
