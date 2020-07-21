@@ -55,6 +55,11 @@ export type NodeData = {
   _childCanvas?: Record<string, NodeId>; // TODO: Deprecate in favour of linkedNodes
 };
 
+export type FreshNode = {
+  id?: NodeId;
+  data: Partial<NodeData> & Required<Pick<NodeData, 'type'>>;
+};
+
 export type ReduceCompType =
   | string
   | {

@@ -1,65 +1,70 @@
 import React, { Fragment } from 'react';
 import { parseNodeFromJSX } from '../parseNodeFromJSX';
+import { createNode } from '../createNode';
 
 const Component = ({ href }) => <a href={href}>Hi</a>;
 
 describe('parseNodeFromJSX', () => {
   const props = { href: 'href' };
 
+  beforeEach(() => {
+    createNode = jest.fn();
+  });
+
   describe('Returns correct type and props', () => {
     it('should transform a link correctly', () => {
       // eslint-disable-next-line  jsx-a11y/anchor-has-content
-      const { data } = parseNodeFromJSX(<a {...props} />);
+      parseNodeFromJSX(<a {...props} />);
 
-      expect({ type: data.type, props: data.props }).toEqual({
-        type: 'a',
-        props,
-      });
-    });
-    it('should normalise data correctly', () => {
-      const extraData = { props: { style: 'purple' } };
-      const { data } = parseNodeFromJSX(
-        <button {...(props as any)} />,
-        (node) => {
-          node.data.props = {
-            ...node.data.props,
-            ...extraData.props,
-          };
-        }
-      );
-
-      expect({ type: data.type, props: data.props }).toEqual({
-        type: 'button',
-        props: {
-          ...props,
-          ...extraData.props,
+      expect(createNode).toBeCalledWith(
+        {
+          data: {
+            type: 'a',
+            props,
+          },
         },
-      });
+        expect.any(Function)
+      );
     });
     it('should be able to parse a component correctly', () => {
-      const { data } = parseNodeFromJSX(<Component {...props} />);
+      parseNodeFromJSX(<Component {...props} />);
 
-      expect({ type: data.type, props: data.props }).toEqual({
-        type: Component,
-        props,
-      });
+      expect(createNode).toBeCalledWith(
+        {
+          data: {
+            type: Component,
+            props,
+          },
+        },
+        expect.any(Function)
+      );
     });
     it('should transform text with `div` correctly', () => {
-      const { data } = parseNodeFromJSX('div');
-      expect({ type: data.type, props: data.props }).toEqual({
-        type: Fragment,
-        props: { children: 'div' },
-      });
+      parseNodeFromJSX('div');
+
+      expect(createNode).toBeCalledWith(
+        {
+          data: {
+            type: Fragment,
+            props: { children: 'div' },
+          },
+        },
+        expect.any(Function)
+      );
     });
     it('should be able to parse plain text correctly', () => {
       const text = 'hello there';
-      const { data } = parseNodeFromJSX(text);
-      expect({ type: data.type, props: data.props }).toEqual({
-        type: Fragment,
-        props: {
-          children: text,
+      parseNodeFromJSX(text);
+
+      expect(createNode).toBeCalledWith(
+        {
+          data: {
+            type: Fragment,
+            props: { children: text },
+          },
         },
-      });
+        expect.any(Function)
+      );
     });
   });
 });
