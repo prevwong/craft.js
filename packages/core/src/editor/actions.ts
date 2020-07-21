@@ -213,7 +213,9 @@ export const Actions = (
 
         return [
           nodeId,
-          query.parseSerializedNode(dehydratedNodes[id]).toNode(nodeId),
+          query
+            .parseSerializedNode(dehydratedNodes[id])
+            .toNode((node) => (node.id = nodeId)),
         ];
       });
 
