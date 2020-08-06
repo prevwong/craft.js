@@ -35,7 +35,6 @@ export const Video = (props: any) => {
         opts={{
           width: '100%',
           height: '100%',
-          showinfo: 0,
         }}
       />
     </YoutubeDiv>
