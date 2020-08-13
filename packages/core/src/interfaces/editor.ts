@@ -1,6 +1,6 @@
 import { QueryCallbacksFor, Delete, PatchListenerAction } from '@craftjs/utils';
 
-import { Nodes, NodeEvents, NodeId } from './nodes';
+import { Nodes, NodeEventTypes, NodeId } from './nodes';
 import { Placement } from './events';
 import { useInternalEditorReturnType } from '../editor/useInternalEditor';
 import { QueryMethods } from '../editor/query';
@@ -20,7 +20,7 @@ export interface Indicator {
   error: string | false;
 }
 
-export type EditorEvents = Record<NodeEvents, NodeId | null> & {
+export type EditorEvents = Record<NodeEventTypes, NodeId | null> & {
   indicator: Indicator | null;
 };
 

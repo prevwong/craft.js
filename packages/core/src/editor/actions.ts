@@ -238,18 +238,13 @@ export const Actions = (
       });
 
       const currentParent = state.nodes[currentParentId],
-        currentParentNodes = currentParent.data.nodes!;
+        currentParentNodes = currentParent.data.nodes;
 
       currentParentNodes[currentParentNodes.indexOf(targetId)] = 'marked';
 
-      if (newParentNodes) {
-        newParentNodes.splice(index, 0, targetId);
-      } else {
-        newParent.data.nodes = [targetId];
-      }
+      newParentNodes.splice(index, 0, targetId);
 
       state.nodes[targetId].data.parent = newParentId;
-      state.nodes[targetId].data.index = index;
       currentParentNodes.splice(currentParentNodes.indexOf('marked'), 1);
     },
 

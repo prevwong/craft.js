@@ -18,20 +18,19 @@ export type UserComponent<T = any> = React.ComponentType<T> & {
 };
 
 export type NodeId = string;
+export type NodeEventTypes = 'selected' | 'dragged' | 'hovered';
 
 export type Node = {
   id: NodeId;
   data: NodeData;
-  events: NodeRefEvent;
-  dom: HTMLElement;
+  events: Record<NodeEventTypes, boolean>;
+  dom: HTMLElement | null;
   related: Record<string, React.ElementType>;
   rules: NodeRules;
   _hydrationTimestamp: number;
 };
 
 export type NodeHelpers = QueryCallbacksFor<typeof QueryMethods>['node'];
-export type NodeEvents = 'selected' | 'dragged' | 'hovered';
-export type NodeRefEvent = Record<NodeEvents, boolean>;
 export type NodeRules = {
   canDrag(node: Node, helpers: NodeHelpers): boolean;
   canDrop(dropTarget: Node, self: Node, helpers: NodeHelpers): boolean;
@@ -45,11 +44,10 @@ export type NodeData = {
   type: string | React.ElementType;
   name: string;
   displayName: string;
-  isCanvas?: boolean;
-  parent?: NodeId;
-  index?: number;
-  linkedNodes?: Record<string, NodeId>;
-  nodes?: NodeId[];
+  isCanvas: boolean;
+  parent: NodeId;
+  linkedNodes: Record<string, NodeId>;
+  nodes: NodeId[];
   hidden: boolean;
   custom?: any;
   _childCanvas?: Record<string, NodeId>; // TODO: Deprecate in favour of linkedNodes
@@ -68,7 +66,7 @@ export type ReduceCompType =
 
 export type ReducedComp = {
   type: ReduceCompType;
-  isCanvas?: boolean;
+  isCanvas: boolean;
   props: any;
 };
 
