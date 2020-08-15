@@ -33,7 +33,7 @@ export function QueryMethods(state: EditorState) {
   const options = state && state.options;
 
   const _: () => QueryCallbacksFor<typeof QueryMethods> = () =>
-    QueryMethods(state);
+    QueryMethods(state) as any;
 
   return {
     /**

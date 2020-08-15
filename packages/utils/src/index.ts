@@ -7,3 +7,4 @@ export * from './RenderIndicator';
 export * from './useEffectOnce';
 export * from './Handlers';
 export * from './deprecate';
+export * from './utilityTypes';

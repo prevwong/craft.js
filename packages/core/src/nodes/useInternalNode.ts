@@ -16,16 +16,16 @@ type internalActions = NodeProvider & {
 };
 
 // TODO: Deprecate useInternalNode in favor of useNode
-export type useInternalNode<S = null> = S extends null
+export type useInternalNodeReturnType<S = null> = S extends null
   ? internalActions
   : S & internalActions;
-export function useInternalNode(): useInternalNode;
+export function useInternalNode(): useInternalNodeReturnType;
 export function useInternalNode<S = null>(
   collect?: (node: Node) => S
-): useInternalNode<S>;
+): useInternalNodeReturnType<S>;
 export function useInternalNode<S = null>(
   collect?: (node: Node) => S
-): useInternalNode<S> {
+): useInternalNodeReturnType<S> {
   const context = useContext(NodeContext);
   const { id, related, connectors } = context;
 

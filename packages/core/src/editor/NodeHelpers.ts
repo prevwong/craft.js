@@ -1,4 +1,4 @@
-import { EditorState, Node, NodeId } from '@craftjs/core';
+import { EditorState, Node, NodeId } from '../interfaces';
 import invariant from 'tiny-invariant';
 import {
   deprecationWarning,

@@ -1,30 +1,31 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import {
   CallbacksFor,
-  Methods,
+  MethodsOrOptions,
   StateFor,
   QueryCallbacksFor,
   QueryMethods,
   SubscriberAndCallbacksFor,
 } from './useMethods';
 
-type Actions<M extends Methods, Q extends QueryMethods> = {
+type Actions<M extends MethodsOrOptions, Q extends QueryMethods> = {
   actions: CallbacksFor<M>;
   query: QueryCallbacksFor<Q>;
 };
 
 export type useCollector<
-  M extends Methods,
+  M extends MethodsOrOptions,
   Q extends QueryMethods | null,
   C = null
 > = C extends null ? Actions<M, Q> : C & Actions<M, Q>;
 
-export function useCollector<M extends Methods, Q extends QueryMethods | null>(
-  store: SubscriberAndCallbacksFor<M, Q>
-): useCollector<M, Q>;
+export function useCollector<
+  M extends MethodsOrOptions,
+  Q extends QueryMethods | null
+>(store: SubscriberAndCallbacksFor<M, Q>): useCollector<M, Q>;
 
 export function useCollector<
-  M extends Methods,
+  M extends MethodsOrOptions,
   Q extends QueryMethods | null,
   C
 >(
@@ -33,7 +34,7 @@ export function useCollector<
 ): useCollector<M, Q, C>;
 
 export function useCollector<
-  M extends Methods,
+  M extends MethodsOrOptions,
   Q extends QueryMethods | null,
   C
 >(store: SubscriberAndCallbacksFor<M, Q>, collector?: any) {

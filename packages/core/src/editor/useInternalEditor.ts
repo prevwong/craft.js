@@ -12,7 +12,7 @@ export type EditorCollector<C> = (
   query: QueryCallbacksFor<typeof QueryMethods>
 ) => C;
 
-export type useInternalEditor<C = null> = (C extends null
+export type useInternalEditorReturnType<C = null> = (C extends null
   ? useCollector<typeof Actions, typeof QueryMethods>
   : useCollector<typeof Actions, typeof QueryMethods, C>) & {
   inContext: boolean;
@@ -20,11 +20,13 @@ export type useInternalEditor<C = null> = (C extends null
   connectors: EventConnectors;
 };
 
-export function useInternalEditor(): useInternalEditor;
+export function useInternalEditor(): useInternalEditorReturnType;
 export function useInternalEditor<C>(
   collector: EditorCollector<C>
-): useInternalEditor<C>;
-export function useInternalEditor<C>(collector?: any): useInternalEditor<C> {
+): useInternalEditorReturnType<C>;
+export function useInternalEditor<C>(
+  collector?: any
+): useInternalEditorReturnType<C> {
   const handlers = useEventHandler();
   const store = useContext<EditorContext>(EditorContext);
   const collected = useCollector(store, collector);
