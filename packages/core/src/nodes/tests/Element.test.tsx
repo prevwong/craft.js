@@ -20,8 +20,12 @@ let parseReactElement = jest.fn().mockImplementation(() => ({
 jest.mock('../../editor/useInternalEditor', () => ({
   useInternalEditor: () => ({
     actions: {
-      addLinkedNodeFromTree,
-      setProp,
+      history: {
+        ignore: jest.fn().mockImplementation(() => ({
+          addLinkedNodeFromTree,
+          setProp,
+        })),
+      },
     },
     query: {
       parseReactElement,

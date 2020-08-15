@@ -10,6 +10,7 @@ type internalActions = NodeProvider & {
   connectors: NodeConnectors;
   actions: {
     setProp: (cb: (props: any) => void) => void;
+    setPropThrottled: (cb: (props: any) => void, throttleRate?: number) => void;
     setCustom: (cb: (custom: any) => void) => void;
     setHidden: (bool: boolean) => void;
   };
@@ -38,6 +39,8 @@ export function useInternalNode<S = null>(
       setProp: (cb: any) => EditorActions.setProp(id, cb),
       setCustom: (cb: any) => EditorActions.setCustom(id, cb),
       setHidden: (bool: boolean) => EditorActions.setHidden(id, bool),
+      setPropThrottled: (cb: any, throttleRate: number) =>
+        EditorActions.history.throttle(throttleRate).setProp(id, cb),
     };
   }, [EditorActions, id]);
 
