@@ -1,4 +1,5 @@
-export const createTestNode = (id, data = {}, config: any = {}) => {
+// TODO: deprecate in favor of testUtils
+export const createTestNode = (id, data, config: any = {}) => {
   return {
     ...config,
     id,
@@ -7,6 +8,8 @@ export const createTestNode = (id, data = {}, config: any = {}) => {
       custom: {},
       hidden: false,
       isCanvas: false,
+      nodes: [],
+      linkedNodes: {},
       ...data,
     },
     related: {},

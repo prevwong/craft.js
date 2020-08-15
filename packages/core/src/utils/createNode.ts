@@ -31,6 +31,8 @@ export function createNode(
       custom: {},
       isCanvas: false,
       hidden: false,
+      nodes: [],
+      linkedNodes: {},
       ...newNode.data,
     } as NodeData;
 
