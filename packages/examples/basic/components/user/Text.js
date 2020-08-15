@@ -7,7 +7,7 @@ export const Text = ({ text, fontSize, textAlign }) => {
   const {
     connectors: { connect, drag },
     selected,
-    actions: { setProp },
+    actions: { setPropThrottled },
   } = useNode((state) => ({
     selected: state.events.selected,
     dragged: state.events.dragged,
@@ -28,7 +28,7 @@ export const Text = ({ text, fontSize, textAlign }) => {
         html={text}
         disabled={!editable}
         onChange={(e) =>
-          setProp(
+          setPropThrottled(
             (props) =>
               (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, ''))
           )
@@ -42,7 +42,7 @@ export const Text = ({ text, fontSize, textAlign }) => {
 
 const TextSettings = () => {
   const {
-    actions: { setProp },
+    actions: { setPropThrottled },
     fontSize,
   } = useNode((node) => ({
     text: node.data.props.text,
@@ -59,7 +59,7 @@ const TextSettings = () => {
           min={1}
           max={50}
           onChange={(_, value) => {
-            setProp((props) => (props.fontSize = value));
+            setPropThrottled((props) => (props.fontSize = value));
           }}
         />
       </FormControl>
