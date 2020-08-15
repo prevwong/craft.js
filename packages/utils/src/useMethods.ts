@@ -131,13 +131,23 @@ export type PatchListener<
   previousState: S,
   actionPerformedWithPatches: PatchListenerAction<S, M>,
   query: QueryCallbacksFor<Q>,
-  normaliser: (cb: (draft: S) => void) => void
+  normalizer: (cb: (draft: S) => void) => void
 ) => void;
 
 export function useMethods<S, R extends MethodRecordBase<S>>(
   methodsOrOptions: Methods<S, R>,
   initialState: any
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>>;
+
+export function useMethods<
+  S,
+  R extends MethodRecordBase<S>,
+  Q extends QueryMethods
+>(
+  methodsOrOptions: MethodsOrOptions<S, R, QueryCallbacksFor<Q>>, // methods to manipulate the state
+  initialState: any,
+  queryMethods: Q
+): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q>;
 
 export function useMethods<
   S,
@@ -218,6 +228,7 @@ export function useMethods<
 
         finalState = nextState;
 
+        // TODO: Allow the ability to add normalization function in <Editor />
         if (patchListener) {
           patchListener(
             nextState,
@@ -225,11 +236,11 @@ export function useMethods<
             { type: action.type, params: action.payload, patches },
             query,
             (cb) => {
-              let normalisedDraft = produceWithPatches(nextState, cb);
-              finalState = normalisedDraft[0];
+              let normalizedDraft = produceWithPatches(nextState, cb);
+              finalState = normalizedDraft[0];
 
-              patches = [...patches, ...normalisedDraft[1]];
-              inversePatches = [...normalisedDraft[2], ...inversePatches];
+              patches = [...patches, ...normalizedDraft[1]];
+              inversePatches = [...normalizedDraft[2], ...inversePatches];
             }
           );
         }
