@@ -1,11 +1,6 @@
-import {
-  useMethods,
-  SubscriberAndCallbacksFor,
-  PatchListener,
-} from '@craftjs/utils';
+import { useMethods, SubscriberAndCallbacksFor } from '@craftjs/utils';
 import { Actions } from './actions';
 import { QueryMethods } from './query';
-import { EditorState } from '../interfaces';
 
 export const editorInitialState = {
   nodes: {},
@@ -62,14 +57,7 @@ export type EditorStore = SubscriberAndCallbacksFor<
   typeof QueryMethods
 >;
 
-export const useEditorStore = (
-  options,
-  patchListener: PatchListener<
-    EditorState,
-    typeof ActionMethodsWithConfig,
-    typeof QueryMethods
-  >
-): EditorStore => {
+export const useEditorStore = (options): EditorStore => {
   return useMethods(
     ActionMethodsWithConfig,
     {
@@ -82,7 +70,6 @@ export const useEditorStore = (
       },
       options,
     },
-    QueryMethods,
-    patchListener
+    QueryMethods
   ) as EditorStore;
 };

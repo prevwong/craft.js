@@ -3,7 +3,6 @@ import { QueryCallbacksFor, Delete, PatchListenerAction } from '@craftjs/utils';
 import { Nodes, NodeEvents, NodeId } from './nodes';
 import { Placement } from './events';
 import { useInternalEditorReturnType } from '../editor/useInternalEditor';
-import { ActionMethodsWithConfig } from '../editor/store';
 import { QueryMethods } from '../editor/query';
 
 export type Options = {
@@ -12,15 +11,6 @@ export type Options = {
   resolver: Resolver;
   enabled: boolean;
   indicator: Record<'success' | 'error', string>;
-  normaliseNodes: (
-    state: EditorState,
-    previousState: EditorState,
-    actionPerformed: Delete<
-      PatchListenerAction<EditorState, typeof ActionMethodsWithConfig>,
-      'patches'
-    >,
-    query: QueryCallbacksFor<typeof QueryMethods>
-  ) => void;
 };
 
 export type Resolver = Record<string, string | React.ElementType>;
