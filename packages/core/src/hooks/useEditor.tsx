@@ -27,19 +27,21 @@ const getPublicActions = (actions) => {
   return EditorActions;
 };
 
-export type WithoutPrivateActions<S = null> = Delete<
-  useInternalEditorReturnType<S>['actions'],
+type Actions = useInternalEditorReturnType['actions'];
+
+export type WithoutPrivateActions = Delete<
+  Actions,
   PrivateActions | 'history'
 > & {
   history: Overwrite<
-    useInternalEditorReturnType<S>['actions']['history'],
+    Actions['history'],
     {
       ignore: OverwriteFnReturnType<
-        useInternalEditorReturnType<S>['actions']['history']['ignore'],
+        Actions['history']['ignore'],
         PrivateActions
       >;
       throttle: OverwriteFnReturnType<
-        useInternalEditorReturnType<S>['actions']['history']['throttle'],
+        Actions['history']['throttle'],
         PrivateActions
       >;
     }
