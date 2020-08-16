@@ -45,7 +45,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["selectNode", "(nodeId: NodeId | null) => void", "Select the specified node. You can clear the selection by passing `null`"],
       ["history", [
         ["undo", "() => void", "Undo the last recorded action"],
-        ["redo", "() => void", "Redo the last recorded action"],
+        ["redo", "() => void", "Redo the last undone action"],
         ["ignore", "() => ActionMethods", "Run an action without recording its changes in the history"],
         ["throttle", "(throttleRate: number = 500) => ActionMethods", "Run an action while throttling its changes recorded to the history. This is useful if you need to group the changes made by a certain action as a single history record"],
       ]]
