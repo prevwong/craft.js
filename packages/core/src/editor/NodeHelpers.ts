@@ -45,7 +45,8 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
     isDeletable() {
       return !this.isTopLevelNode();
     },
-    isParentOfTopLevelNodes: () => !!node.data.linkedNodes,
+    isParentOfTopLevelNodes: () =>
+      node.data.linkedNodes && Object.keys(node.data.linkedNodes).length > 0,
     isParentOfTopLevelCanvas() {
       deprecationWarning('query.node(id).isParentOfTopLevelCanvas', {
         suggest: 'query.node(id).isParentOfTopLevelNodes',
