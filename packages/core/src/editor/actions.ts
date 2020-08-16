@@ -5,7 +5,7 @@ import {
   Node,
   Nodes,
   Options,
-  NodeEvents,
+  NodeEventTypes,
   NodeTree,
   SerializedNodes,
 } from '../interfaces';
@@ -274,7 +274,7 @@ export const Actions = (
       cb(state.options);
     },
 
-    setNodeEvent(eventType: NodeEvents, id: NodeId | null) {
+    setNodeEvent(eventType: NodeEventTypes, id: NodeId | null) {
       const current = state.events[eventType];
       if (current && id !== current) {
         state.nodes[current].events[eventType] = false;
