@@ -68,11 +68,13 @@ export function Element<T extends React.ElementType>({
           ...otherProps,
         };
 
-        actions.setProp(linkedNodeId, (props) =>
-          Object.keys(mergedProps).forEach(
-            (key) => (props[key] = mergedProps[key])
-          )
-        );
+        actions.history
+          .ignore()
+          .setProp(linkedNodeId, (props) =>
+            Object.keys(mergedProps).forEach(
+              (key) => (props[key] = mergedProps[key])
+            )
+          );
       } else {
         // otherwise, create and render a new linked Node
         const linkedElement = React.createElement(
@@ -84,7 +86,7 @@ export function Element<T extends React.ElementType>({
         const tree = query.parseReactElement(linkedElement).toNodeTree();
 
         linkedNodeId = tree.rootNodeId;
-        actions.addLinkedNodeFromTree(tree, nodeId, id);
+        actions.history.ignore().addLinkedNodeFromTree(tree, nodeId, id);
       }
 
       setLinkedNodeId(linkedNodeId);

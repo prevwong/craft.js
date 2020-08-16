@@ -13,11 +13,21 @@ const mockEditor = useInternalEditor as jest.Mock<any>;
 
 describe('<Frame />', () => {
   const data = {};
+  const addNodeTree = jest.fn();
+  const deserialize = jest.fn();
+
   let actions;
   let query;
 
   beforeEach(() => {
-    actions = { addTreeAtIndex: jest.fn(), deserialize: jest.fn() };
+    actions = {
+      history: {
+        ignore: jest.fn().mockImplementation(() => ({
+          addNodeTree,
+          deserialize,
+        })),
+      },
+    };
     query = { createNode: jest.fn(), parseTreeFromReactNode: jest.fn() };
     mockEditor.mockImplementation(() => ({ actions, query }));
   });
@@ -27,7 +37,7 @@ describe('<Frame />', () => {
       mount(<Frame data={data} />);
     });
     it('should deserialize the nodes', () => {
-      expect(actions.deserialize).toHaveBeenCalledWith(data);
+      expect(deserialize).toHaveBeenCalledWith(data);
     });
   });
 });

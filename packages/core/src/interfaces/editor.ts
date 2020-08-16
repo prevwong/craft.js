@@ -1,4 +1,4 @@
-import { QueryCallbacksFor } from '@craftjs/utils';
+import { QueryCallbacksFor, Delete, PatchListenerAction } from '@craftjs/utils';
 
 import { Nodes, NodeEvents, NodeId } from './nodes';
 import { Placement } from './events';

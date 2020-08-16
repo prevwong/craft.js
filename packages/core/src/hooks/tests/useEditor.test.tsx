@@ -40,7 +40,11 @@ describe('useEditor', () => {
   it('should return the correct editor', () => {
     expect(editor).toEqual(
       expect.objectContaining({
-        actions: { ...otherActions, selectNode: expect.any(Function) },
+        actions: {
+          ...otherActions,
+          history: expect.any(Object),
+          selectNode: expect.any(Function),
+        },
         connectors: state.connectors,
         query: otherQueries,
         aRandomValue: state.aRandomValue,

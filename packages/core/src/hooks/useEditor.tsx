@@ -1,4 +1,4 @@
-import { Overwrite, Delete } from '@craftjs/utils';
+import { Overwrite, Delete, OverwriteFnReturnType } from '@craftjs/utils';
 import {
   useInternalEditor,
   EditorCollector,
@@ -27,10 +27,26 @@ const getPublicActions = (actions) => {
   return EditorActions;
 };
 
-export type WithoutPrivateActions<S = null> = Delete<
-  useInternalEditorReturnType<S>['actions'],
-  PrivateActions
->;
+type Actions = useInternalEditorReturnType['actions'];
+
+export type WithoutPrivateActions = Delete<
+  Actions,
+  PrivateActions | 'history'
+> & {
+  history: Overwrite<
+    Actions['history'],
+    {
+      ignore: OverwriteFnReturnType<
+        Actions['history']['ignore'],
+        PrivateActions
+      >;
+      throttle: OverwriteFnReturnType<
+        Actions['history']['throttle'],
+        PrivateActions
+      >;
+    }
+  >;
+};
 
 export type useEditorReturnType<S = null> = Overwrite<
   useInternalEditorReturnType<S>,
@@ -68,6 +84,13 @@ export function useEditor<S>(collect?: any): useEditorReturnType<S> {
       selectNode: (nodeId: NodeId | null) => {
         internalActions.setNodeEvent('selected', nodeId);
         internalActions.setNodeEvent('hovered', null);
+      },
+      history: {
+        ...EditorActions.history,
+        ignore: (...args) =>
+          getPublicActions(EditorActions.history.ignore(...args)),
+        throttle: (...args) =>
+          getPublicActions(EditorActions.history.throttle(...args)),
       },
     };
   }, [EditorActions, internalActions]);
