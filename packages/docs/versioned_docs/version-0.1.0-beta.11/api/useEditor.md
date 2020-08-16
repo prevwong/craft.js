@@ -43,6 +43,12 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["setHidden", "(nodeId: NodeId, bool: boolean) => void", "When set to true, the User Component of the specified Node will be hidden, but not removed"],
       ["setOptions", "(options: Object) => void", "Update the editor's options. The options object passed is the same as the &lt;Editor /&gt; props."],
       ["selectNode", "(nodeId: NodeId | null) => void", "Select the specified node. You can clear the selection by passing `null`"],
+      ["history", [
+        ["undo", "() => void", "Undo the last recorded action"],
+        ["redo", "() => void", "Redo the last undone action"],
+        ["ignore", "() => ActionMethods", "Run an action without recording its changes in the history"],
+        ["throttle", "(throttleRate: number = 500) => ActionMethods", "Run an action while throttling its changes recorded to the history. This is useful if you need to group the changes made by a certain action as a single history record"],
+      ]]
     ]],
     ["query", "QueryMethods", [
       ["getSerializedNodes", "() => SerializedNodes", "Return the current Nodes into a simpler form safe for storage"],
@@ -62,6 +68,10 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["parseFreshNode", "(node: FreshNode) => Object", [
         ["toNode", "(normalize?: (node: Node) => void) => Node", "Parse a fresh/new Node object into it's full Node form, ensuring all properties of a Node is correctly initia lised. This is useful when you need to create a new Node."]
       ]],
+      ["history", [
+        ["canUndo", "() => boolean", "Returns true if undo is possible"],
+        ["canRedo", "() => boolean", "Returns true if redo is possible"]
+      ]]
     ]],
     ["inContext", "boolean", "Returns false if the component is rendered outside of the &lt;Editor /&gt;. This is useful if you are designing a general component that you also wish to use outside of Craft.js."],
     ["...collected", "Collected", "The collected values returned from the collector"]
@@ -278,6 +288,44 @@ const Example = () => {
           </button>
         )
       }
+    </div>
+  )
+}
+```
+
+### History
+
+```tsx
+import {useEditor} from "@craftjs/core";
+
+const Example = () => {
+  const { canUndo, canRedo, actions } = useEditor((state, query) => ({
+    canUndo: query.history.canUndo(),
+    canRedo: query.history.canRedo()
+  }));
+
+  return (
+    <div>
+      {
+        canUndo && <button onClick={() => actions.history.undo()}>Undo</button>
+      }
+      {
+        canRedo && <button onClick={() => actions.history.redo()}>Redo</button>
+      }
+
+      <button onClick={() => {
+        // The following action will be ignored by the history
+        // Hence, it will not be possible to undo/redo the following changes
+        actions.history.ignore().setProp("ROOT", props => prop.darkMode = !prop.darkMode);
+      }}>
+        Toggle
+      </button>
+
+      <input type="text" onChange={e => {
+        // In cases where you need to perform an action in rapid successions
+        // It might be a good idea to throttle the changes
+        actions.history.throttle().setProp("ROOT", props => props.text = e.target.value);
+      }} placeholder="Type some text" />
     </div>
   )
 }
