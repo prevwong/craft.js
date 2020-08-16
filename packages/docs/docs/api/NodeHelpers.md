@@ -185,6 +185,17 @@ Returns an array of linked Node ids
 ]} /> 
 
 
+### childNodes
+<Badge type="function" />
+
+Returns an array of child Node ids
+
+#### Returns
+<API items={[
+  ["NodeId[]"]
+]} /> 
+
+
 ### isRoot
 <Badge type="function" />
 

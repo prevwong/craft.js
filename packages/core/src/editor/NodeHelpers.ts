@@ -107,15 +107,12 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
           }
 
           if (includeOnly !== 'linkedNodes') {
-            const childNodes = node.data.nodes;
+            const childNodes = nodeHelpers(id).childNodes();
 
-            // Include child Nodes if any
-            if (childNodes) {
-              childNodes.forEach((nodeId) => {
-                descendants.push(nodeId);
-                descendants = appendChildNode(nodeId, descendants, depth + 1);
-              });
-            }
+            childNodes.forEach((nodeId) => {
+              descendants.push(nodeId);
+              descendants = appendChildNode(nodeId, descendants, depth + 1);
+            });
           }
 
           return descendants;
@@ -126,6 +123,9 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
     },
     linkedNodes() {
       return Object.values(node.data.linkedNodes || {});
+    },
+    childNodes() {
+      return node.data.nodes || [];
     },
     isDraggable(onError?: (err: string) => void) {
       try {
