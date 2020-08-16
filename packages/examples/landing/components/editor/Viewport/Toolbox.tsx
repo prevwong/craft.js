@@ -1,5 +1,6 @@
 import React from 'react';
 import { Element, useEditor } from '@craftjs/core';
+import { Tooltip } from '@material-ui/core';
 import { Container } from '../../selectors/Container';
 import { Text } from '../../selectors/Text';
 import { Video } from '../../selectors/Video';
@@ -9,6 +10,8 @@ import SquareSvg from '../../../public/icons/toolbox/rectangle.svg';
 import TypeSvg from '../../../public/icons/toolbox/text.svg';
 import YoutubeSvg from '../../../public/icons/toolbox/video-line.svg';
 import ButtonSvg from '../../../public/icons/toolbox/button.svg';
+import UndoSvg from '../../../public/icons/toolbox/undo.svg';
+import RedoSvg from '../../../public/icons/toolbox/redo.svg';
 
 import styled from 'styled-components';
 
@@ -18,26 +21,44 @@ const ToolboxDiv = styled.div<{ enabled: boolean }>`
   ${(props) => (!props.enabled ? `opacity: 0;` : '')}
 `;
 
-const Item = styled.div`
+const Item = styled.a<{ disabled?: boolean; move?: boolean }>`
   svg {
     width: 22px;
     height: 22px;
     fill: #707070;
   }
+  ${(props) =>
+    props.move &&
+    `
+    cursor: move;
+  `}
+  ${(props) =>
+    props.disabled &&
+    `
+    opacity:0.5;
+    cursor: not-allowed;
+  `}
 `;
 
 export const Toolbox = () => {
   const {
     enabled,
     connectors: { create },
-  } = useEditor((state) => ({ enabled: state.options.enabled }));
+    actions,
+    canUndo,
+    canRedo,
+  } = useEditor((state, query) => ({
+    enabled: state.options.enabled,
+    canUndo: query.history.canUndo(),
+    canRedo: query.history.canRedo(),
+  }));
 
   return (
     <ToolboxDiv
       enabled={enabled && enabled}
-      className="toolbox transition w-12 border-r h-screen bg-white"
+      className="toolbox transition w-12 border-r h-full flex flex-col bg-white"
     >
-      <div className="flex flex-col items-center pt-3">
+      <div className="flex flex-1 flex-col items-center pt-3">
         <div
           ref={(ref) =>
             create(
@@ -53,28 +74,60 @@ export const Toolbox = () => {
             )
           }
         >
-          <Item className="m-2 pb-2 cursor-pointer block">
-            <SquareSvg />
-          </Item>
+          <Tooltip title="Container" placement="right">
+            <Item className="m-2 pb-2 cursor-pointer block" move>
+              <SquareSvg />
+            </Item>
+          </Tooltip>
         </div>
         <div
           ref={(ref) =>
             create(ref, <Text fontSize="12" textAlign="left" text="Hi there" />)
           }
         >
-          <Item className="m-2 pb-2 cursor-pointer block">
-            <TypeSvg />
-          </Item>
+          <Tooltip title="Text" placement="right">
+            <Item className="m-2 pb-2 cursor-pointer block" move>
+              <TypeSvg />
+            </Item>
+          </Tooltip>
         </div>
         <div ref={(ref) => create(ref, <Button />)}>
-          <Item className="m-2 pb-2 cursor-pointer block">
-            <ButtonSvg />
-          </Item>
+          <Tooltip title="Button" placement="right">
+            <Item className="m-2 pb-2 cursor-pointer block" move>
+              <ButtonSvg />
+            </Item>
+          </Tooltip>
         </div>
         <div ref={(ref) => create(ref, <Video />)}>
-          <Item className="m-2 pb-2 cursor-pointer block">
-            <YoutubeSvg />
-          </Item>
+          <Tooltip title="Video" placement="right">
+            <Item className="m-2 pb-2 cursor-pointer block" move>
+              <YoutubeSvg />
+            </Item>
+          </Tooltip>
+        </div>
+      </div>
+      <div className="flex flex-col items-center pt-3">
+        <div>
+          <Tooltip title="Undo" placement="right">
+            <Item
+              className="m-2 pb-2 cursor-pointer block"
+              disabled={!canUndo}
+              onClick={() => actions.history.undo()}
+            >
+              <UndoSvg />
+            </Item>
+          </Tooltip>
+        </div>
+        <div>
+          <Tooltip title="Redo" placement="right">
+            <Item
+              className="m-2 pb-2 cursor-pointer block"
+              disabled={!canRedo}
+              onClick={() => actions.history.redo()}
+            >
+              <RedoSvg />
+            </Item>
+          </Tooltip>
         </div>
       </div>
     </ToolboxDiv>

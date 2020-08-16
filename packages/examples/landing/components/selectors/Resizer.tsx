@@ -88,7 +88,7 @@ const Indicators = styled.div<{ bound?: 'row' | 'column' }>`
 export const Resizer = ({ propKey, children, ...props }: any) => {
   const {
     id,
-    actions: { setProp },
+    actions: { setPropThrottled },
     connectors: { connect },
     fillSpace,
     nodeWidth,
@@ -250,7 +250,7 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
           height = editingDimensions.current.height + d.height + 'px';
         }
 
-        setProp((prop: any) => {
+        setPropThrottled((prop: any) => {
           prop[propKey.width] = width;
           prop[propKey.height] = height;
         });

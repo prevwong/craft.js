@@ -78,7 +78,7 @@ export const ToolbarItem = ({
   ...props
 }: ToolbarItem) => {
   const {
-    actions: { setProp },
+    actions: { setProp, setPropThrottled },
     propValue,
   } = useNode((node) => ({
     propValue: node.data.props[propKey],
@@ -94,7 +94,7 @@ export const ToolbarItem = ({
             type={type}
             value={value}
             onChange={(value) => {
-              setProp((props: any) => {
+              setPropThrottled((props: any) => {
                 if (Array.isArray(propValue)) {
                   props[propKey][index] = onChange ? onChange(value) : value;
                 } else {
@@ -112,7 +112,7 @@ export const ToolbarItem = ({
               value={parseInt(value) || 0}
               onChange={
                 ((_, value: number) => {
-                  setProp((props: any) => {
+                  setPropThrottled((props: any) => {
                     if (Array.isArray(propValue)) {
                       props[propKey][index] = onChange
                         ? onChange(value)
