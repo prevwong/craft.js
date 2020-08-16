@@ -1,4 +1,5 @@
 import { useMethods, SubscriberAndCallbacksFor } from '@craftjs/utils';
+import { Options } from '../interfaces';
 import { Actions } from './actions';
 import { QueryMethods } from './query';
 
@@ -9,6 +10,17 @@ export const editorInitialState = {
     selected: null,
     hovered: null,
     indicator: null,
+  },
+  options: {
+    onNodesChange: () => null,
+    onRender: ({ render }) => render,
+    resolver: {},
+    nodes: null,
+    enabled: true,
+    indicator: {
+      error: 'red',
+      success: 'rgb(98, 196, 98)',
+    },
   },
 };
 
@@ -57,18 +69,15 @@ export type EditorStore = SubscriberAndCallbacksFor<
   typeof QueryMethods
 >;
 
-export const useEditorStore = (options): EditorStore => {
+export const useEditorStore = (options: Partial<Options>): EditorStore => {
   return useMethods(
     ActionMethodsWithConfig,
     {
-      nodes: {},
-      events: {
-        selected: null,
-        dragged: null,
-        hovered: null,
-        indicator: null,
+      ...editorInitialState,
+      options: {
+        ...editorInitialState.options,
+        ...options,
       },
-      options,
     },
     QueryMethods
   ) as EditorStore;

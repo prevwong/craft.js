@@ -6,19 +6,6 @@ import { Events } from '../events';
 import { useEditorStore } from './store';
 import { EditorContext } from './EditorContext';
 
-export const withDefaults = (options: Partial<Options> = {}) => ({
-  onNodesChange: () => null,
-  onRender: ({ render }) => render,
-  resolver: {},
-  nodes: null,
-  enabled: true,
-  indicator: {
-    error: 'red',
-    success: 'rgb(98, 196, 98)',
-  },
-  ...options,
-});
-
 /**
  * A React Component that provides the Editor context
  */
@@ -26,7 +13,7 @@ export const Editor: React.FC<Partial<Options>> = ({
   children,
   ...options
 }) => {
-  const context = useEditorStore(withDefaults(options));
+  const context = useEditorStore(options);
 
   useEffect(() => {
     if (context && options)
