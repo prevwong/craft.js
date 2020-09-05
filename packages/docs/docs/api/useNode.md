@@ -37,9 +37,8 @@ const { connectors, setProp, ...collected } = useNode(collector);
       ["drag", "(dom: HTMLElement) => HTMLElement", "Specifies the DOM that should be draggable"]
     ]],
     ["actions", "Object", [
-      ["setProp", "(props: Object) => void", "Manipulate the current component's props"],
-      ["setPropThrottled", "(props: Object, throttleRate?: number) => void", "Manipulate the current component's props while throttling the changes recorded in history for undo/redo"],
-      ["setCustom", "(custom: Object) => void", "Manipulate the current component's custom properties"],
+      ["setProp", "(props: Object, throttleRate?: number) => void", "Manipulate the current component's props. Additionally, specify a throttleRate to throttle the changes recoded in history for undo/redo"],
+      ["setCustom", "(custom: Object, throttleRate?: number) => void", "Manipulate the current component's custom properties. Additionally, specify a throttleRate to throttle the changes recoded in history for undo/redo"],
       ["setHidden", "(bool: boolean) => void", "Hide/unhide the current component"]
     ]],
     ["...collected", "Collected", "The collected values returned from the collector"]
@@ -158,7 +157,7 @@ const Example = () => {
 
 ```jsx
 const Example = ({enabled, text}) => {
-  const { connectors: {connect, drag} } = useNode();
+  const { connectors: {connect, drag}, actions: {setProp} } = useNode();
 
   return (
     <div ref={connect}>
@@ -171,9 +170,9 @@ const Example = ({enabled, text}) => {
       }}>Toggle</button>
 
       <input type="text" value={text} onChange={e => {
-        setPropThrottled(props => {
+        setProp(props => {
           props.text = e.target.value;
-        });
+        }, 500);
       }} />
     </div>
   )

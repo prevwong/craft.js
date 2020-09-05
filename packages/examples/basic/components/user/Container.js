@@ -22,7 +22,7 @@ export const ContainerSettings = () => {
   const {
     background,
     padding,
-    actions: { setPropThrottled },
+    actions: { setProp },
   } = useNode((node) => ({
     background: node.data.props.background,
     padding: node.data.props.padding,
@@ -35,7 +35,7 @@ export const ContainerSettings = () => {
         <ColorPicker
           value={background}
           onChange={(color) => {
-            setPropThrottled((props) => (props.background = color));
+            setProp((props) => (props.background = color), 500);
           }}
         />
       </FormControl>
@@ -44,7 +44,7 @@ export const ContainerSettings = () => {
         <Slider
           defaultValue={padding}
           onChange={(_, value) =>
-            setPropThrottled((props) => (props.padding = value))
+            setProp((props) => (props.padding = value), 500)
           }
         />
       </FormControl>

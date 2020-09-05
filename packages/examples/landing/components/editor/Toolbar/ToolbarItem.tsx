@@ -78,7 +78,7 @@ export const ToolbarItem = ({
   ...props
 }: ToolbarItem) => {
   const {
-    actions: { setProp, setPropThrottled },
+    actions: { setProp },
     propValue,
   } = useNode((node) => ({
     propValue: node.data.props[propKey],
@@ -94,13 +94,13 @@ export const ToolbarItem = ({
             type={type}
             value={value}
             onChange={(value) => {
-              setPropThrottled((props: any) => {
+              setProp((props: any) => {
                 if (Array.isArray(propValue)) {
                   props[propKey][index] = onChange ? onChange(value) : value;
                 } else {
                   props[propKey] = onChange ? onChange(value) : value;
                 }
-              });
+              }, 500);
             }}
           />
         ) : type == 'slider' ? (
@@ -112,7 +112,7 @@ export const ToolbarItem = ({
               value={parseInt(value) || 0}
               onChange={
                 ((_, value: number) => {
-                  setPropThrottled((props: any) => {
+                  setProp((props: any) => {
                     if (Array.isArray(propValue)) {
                       props[propKey][index] = onChange
                         ? onChange(value)
@@ -120,7 +120,7 @@ export const ToolbarItem = ({
                     } else {
                       props[propKey] = onChange ? onChange(value) : value;
                     }
-                  });
+                  }, 1000);
                 }) as any
               }
             />
