@@ -29,6 +29,7 @@ export const Events: React.FC = ({ children }) => {
               : indicator.success,
             transition: '0.2s ease-in',
           },
+          parentDom: events.indicator.placement.parent.dom,
         })}
       {children}
     </EventHandlerContext.Provider>
