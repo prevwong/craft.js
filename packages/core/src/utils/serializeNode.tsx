@@ -17,7 +17,8 @@ export const serializeComp = (
   let { type, isCanvas, props } = data;
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
-    if (!prop) {
+
+    if (prop == null) {
       return result;
     }
 
