@@ -6,6 +6,8 @@ import { EditorContext } from '../EditorContext';
 import { Editor } from '../Editor';
 import { Events } from '../../events';
 import { useEditorStore } from '../store';
+import { render } from '@testing-library/react';
+import { ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
 
 jest.mock('../store');
 const mockStore = useEditorStore as jest.Mock<any>;
@@ -36,5 +38,11 @@ describe('<Editor />', () => {
     expect(component.find(EditorContext.Provider)).toHaveLength(1);
   });
 
+  it('should throw an error when resolver is not an object', () => {
+    expect(() => {
+      // @ts-ignore
+      render(<Editor resolver={[]} />);
+    }).toThrowError(ERROR_RESOLVER_NOT_AN_OBJECT);
+  });
   // TODO: use react-testing-library to test hook-related code
 });
