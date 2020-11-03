@@ -8,6 +8,8 @@ import {
 import { Canvas } from '../nodes/Canvas';
 import { Resolver } from '../interfaces';
 import { resolveComponent } from './resolveComponent';
+import { ERROR_DESERIALIZE_COMPONENT_NOT_IN_RESOLVER } from '@craftjs/utils';
+import invariant from 'tiny-invariant';
 
 type DeserialisedType = JSX.Element & { name: string };
 
@@ -26,6 +28,7 @@ export const deserializeComp = (
   index?: number
 ): DeserialisedType | void => {
   let { type, props } = data;
+
   const main = restoreType(type, resolver);
 
   if (!main) {
@@ -70,6 +73,15 @@ export const deserializeNode = (
   resolver: Resolver
 ): Omit<NodeData, 'event'> => {
   const { type: Comp, props: Props, ...nodeData } = data;
+
+  invariant(
+    (Comp !== undefined && typeof Comp === 'string' && Comp.length > 0) ||
+      (Comp as { resolvedName?: string }).resolvedName !== undefined,
+    ERROR_DESERIALIZE_COMPONENT_NOT_IN_RESOLVER.replace(
+      '%displayName%',
+      data.displayName
+    ).replace('%availableComponents%', Object.keys(resolver).join(', '))
+  );
 
   const { type, name, props } = (deserializeComp(
     data,
