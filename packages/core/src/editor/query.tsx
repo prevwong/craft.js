@@ -139,8 +139,7 @@ export function QueryMethods(state: EditorState) {
      */
     serialize(): string {
       invariant(
-        options.resolver !== undefined &&
-          Object.keys(options.resolver).length > 0,
+        options.resolver !== undefined,
         ERROR_SERIALIZE_WITHOUT_RESOLVER
       );
 
@@ -182,8 +181,7 @@ export function QueryMethods(state: EditorState) {
     parseSerializedNode: (serializedNode: SerializedNode) => ({
       toNode(normalize?: (node: Node) => void): Node {
         invariant(
-          options.resolver !== undefined &&
-            Object.keys(options.resolver).length > 0,
+          options.resolver !== undefined,
           ERROR_SERIALIZE_WITHOUT_RESOLVER
         );
 
