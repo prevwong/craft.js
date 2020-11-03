@@ -15,6 +15,7 @@ import invariant from 'tiny-invariant';
 import {
   QueryCallbacksFor,
   ERROR_NOT_IN_RESOLVER,
+  ERROR_SERIALIZE_WITHOUT_RESOLVER,
   getDOMInfo,
   deprecationWarning,
   DEPRECATED_ROOT_NODE,
@@ -137,6 +138,12 @@ export function QueryMethods(state: EditorState) {
      * Retrieve the JSON representation of the editor's Nodes
      */
     serialize(): string {
+      invariant(
+        options.resolver !== undefined &&
+          Object.keys(options.resolver).length > 0,
+        ERROR_SERIALIZE_WITHOUT_RESOLVER
+      );
+
       return JSON.stringify(this.getSerializedNodes());
     },
 
@@ -174,6 +181,12 @@ export function QueryMethods(state: EditorState) {
 
     parseSerializedNode: (serializedNode: SerializedNode) => ({
       toNode(normalize?: (node: Node) => void): Node {
+        invariant(
+          options.resolver !== undefined &&
+            Object.keys(options.resolver).length > 0,
+          ERROR_SERIALIZE_WITHOUT_RESOLVER
+        );
+
         const data = deserializeNode(serializedNode, state.options.resolver);
         invariant(data.type, ERROR_NOT_IN_RESOLVER);
 
