@@ -138,11 +138,6 @@ export function QueryMethods(state: EditorState) {
      * Retrieve the JSON representation of the editor's Nodes
      */
     serialize(): string {
-      invariant(
-        options.resolver !== undefined,
-        ERROR_SERIALIZE_WITHOUT_RESOLVER
-      );
-
       return JSON.stringify(this.getSerializedNodes());
     },
 
@@ -180,11 +175,6 @@ export function QueryMethods(state: EditorState) {
 
     parseSerializedNode: (serializedNode: SerializedNode) => ({
       toNode(normalize?: (node: Node) => void): Node {
-        invariant(
-          options.resolver !== undefined,
-          ERROR_SERIALIZE_WITHOUT_RESOLVER
-        );
-
         const data = deserializeNode(serializedNode, state.options.resolver);
         invariant(data.type, ERROR_NOT_IN_RESOLVER);
 

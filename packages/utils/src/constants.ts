@@ -38,10 +38,6 @@ export const ERROR_RESOLVER_NOT_AN_OBJECT = `Resolver in <Editor /> has to be an
     
 More info: https://craft.js.org/r/docs/api/editor#props`;
 
-export const ERROR_SERIALIZE_WITHOUT_RESOLVER = `You cannot (de)serialize nodes without providing a resolver map on <Editor />
-      
-More info: https://craft.js.org/r/docs/api/editor#props`;
-
 export const ERROR_DESERIALIZE_COMPONENT_NOT_IN_RESOLVER = `An Error occurred while deserializing components: Cannot find component <%displayName% /> in resolver map. Please check your resolver in <Editor />
 
 Available components in resolver: %availableComponents%
