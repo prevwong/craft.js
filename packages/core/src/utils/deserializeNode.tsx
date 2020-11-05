@@ -37,6 +37,7 @@ export const deserializeComp = (
 
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
+
     if (typeof prop === 'object' && prop.resolvedName) {
       result[key] = deserializeComp(prop, resolver);
     } else if (key === 'children' && Array.isArray(prop)) {
@@ -74,9 +75,13 @@ export const deserializeNode = (
 ): Omit<NodeData, 'event'> => {
   const { type: Comp, props: Props, ...nodeData } = data;
 
+  const isCompAnHtmlElement = Comp !== undefined && typeof Comp === 'string';
+  const isCompAUserComponent =
+    Comp !== undefined &&
+    (Comp as { resolvedName?: string }).resolvedName !== undefined;
+
   invariant(
-    (Comp !== undefined && typeof Comp === 'string' && Comp.length > 0) ||
-      (Comp as { resolvedName?: string }).resolvedName !== undefined,
+    isCompAnHtmlElement || isCompAUserComponent,
     ERROR_DESERIALIZE_COMPONENT_NOT_IN_RESOLVER.replace(
       '%displayName%',
       data.displayName
