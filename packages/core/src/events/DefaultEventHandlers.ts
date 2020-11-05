@@ -3,6 +3,8 @@ import { CoreEventHandlers } from './CoreEventHandlers';
 import { Indicator, NodeId, NodeTree, Node } from '../interfaces';
 import { defineEventListener, CraftDOMEvent } from '../utils/Handlers';
 
+export * from '../utils/Handlers';
+
 type DraggedElement = NodeId | NodeTree;
 
 /**
