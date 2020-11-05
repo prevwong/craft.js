@@ -1,10 +1,10 @@
 import { useMethods, SubscriberAndCallbacksFor } from '@craftjs/utils';
-import { Options } from '../interfaces';
+import { EditorState, Options } from '../interfaces';
 import { ActionMethods } from './actions';
 import { QueryMethods } from './query';
 import { DefaultEventHandlers } from '../events';
 
-export const editorInitialState = {
+export const editorInitialState: EditorState = {
   nodes: {},
   events: {
     dragged: null,
@@ -12,11 +12,11 @@ export const editorInitialState = {
     hovered: null,
     indicator: null,
   },
+  handlers: null,
   options: {
     onNodesChange: () => null,
     onRender: ({ render }) => render,
     resolver: {},
-    nodes: null,
     enabled: true,
     indicator: {
       error: 'red',
