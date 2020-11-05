@@ -782,3 +782,59 @@ describe('actions.setIndicator', () => {
     );
   });
 });
+
+describe('actions.setState', () => {
+  let state, root;
+  beforeEach(() => {
+    root = {
+      id: 'root',
+      dom: document.createElement('div'),
+      data: {
+        type: 'div',
+        nodes: [],
+      },
+    };
+
+    state = createTestState({
+      nodes: root,
+    });
+  });
+  it('should be able to manipulate state', () => {
+    const newDOM = document.createElement('h1');
+
+    const newState = Actions(state)((actions) =>
+      actions.setState((state) => {
+        state.nodes['root'].dom = newDOM;
+      })
+    );
+
+    expectEditorState(
+      newState,
+      createTestState({
+        nodes: {
+          ...root,
+          dom: newDOM,
+        },
+      })
+    );
+  });
+  it('should be able to chain action', () => {
+    const newDOM = document.createElement('h1');
+
+    const newState = Actions(state)((actions) =>
+      actions.setState((_, methods) => {
+        methods.setDOM('root', newDOM);
+      })
+    );
+
+    expectEditorState(
+      newState,
+      createTestState({
+        nodes: {
+          ...root,
+          dom: newDOM,
+        },
+      })
+    );
+  });
+});
