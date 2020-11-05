@@ -2,6 +2,7 @@ import { useMethods, SubscriberAndCallbacksFor } from '@craftjs/utils';
 import { Options } from '../interfaces';
 import { ActionMethods } from './actions';
 import { QueryMethods } from './query';
+import { DefaultEventHandlers } from '../events';
 
 export const editorInitialState = {
   nodes: {},
@@ -21,6 +22,7 @@ export const editorInitialState = {
       error: 'red',
       success: 'rgb(98, 196, 98)',
     },
+    handlers: (store) => new DefaultEventHandlers(store),
   },
 };
 
