@@ -11,12 +11,16 @@ export const LayerNode: React.FC = () => {
     expanded: layer.expanded,
   }));
 
-  const { data, shouldBeExpanded } = useEditor((state, query) => ({
-    data: state.nodes[id] && state.nodes[id].data,
-    shouldBeExpanded:
-      state.events.selected &&
-      query.node(state.events.selected).ancestors(true).includes(id),
-  }));
+  const { data, shouldBeExpanded } = useEditor((state, query) => {
+    // TODO: handle multiple selected elements
+    const selected = query.getEvent('selected').first();
+
+    return {
+      data: state.nodes[id] && state.nodes[id].data,
+      shouldBeExpanded:
+        selected && query.node(selected).ancestors(true).includes(id),
+    };
+  });
 
   const { actions, renderLayer, expandRootOnLoad } = useLayerManager(
     (state) => ({
