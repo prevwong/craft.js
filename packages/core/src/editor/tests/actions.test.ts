@@ -12,7 +12,7 @@ import {
 
 const Actions = (state) => (cb) =>
   produce<EditorState>(state, (draft) =>
-    cb(ActionMethods(draft as any, QueryMethods(state)))
+    cb(ActionMethods(draft as any, QueryMethods(state) as any))
   );
 
 describe('actions.add', () => {

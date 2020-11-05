@@ -15,7 +15,6 @@ import invariant from 'tiny-invariant';
 import {
   QueryCallbacksFor,
   ERROR_NOT_IN_RESOLVER,
-  ERROR_SERIALIZE_WITHOUT_RESOLVER,
   getDOMInfo,
   deprecationWarning,
   DEPRECATED_ROOT_NODE,

@@ -16,17 +16,17 @@ describe('<Editor />', () => {
   let actions;
   let component;
   let query;
-  let onStateChange;
+  let onNodesChange;
 
   beforeEach(() => {
     React.useEffect = (f) => f();
 
     query = { serialize: jest.fn().mockImplementation(() => '{}') };
-    onStateChange = jest.fn();
+    onNodesChange = jest.fn();
     mockStore.mockImplementation((value) => ({ ...value, query, actions }));
     act(() => {
       component = shallow(
-        <Editor onStateChange={onStateChange}>{children}</Editor>
+        <Editor onNodesChange={onNodesChange}>{children}</Editor>
       );
     });
   });
