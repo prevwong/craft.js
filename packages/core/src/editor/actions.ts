@@ -23,7 +23,6 @@ import { QueryMethods } from './query';
 import { fromEntries } from '../utils/fromEntries';
 import { removeNodeFromEvents } from '../utils/removeNodeFromEvents';
 import invariant from 'tiny-invariant';
-import { editorInitialState } from './store';
 
 const Methods = (
   state: EditorState,

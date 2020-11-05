@@ -13,10 +13,6 @@ export class DefaultEventHandlers extends CoreEventHandlers {
   static draggedElement: DraggedElement;
   static indicator: Indicator = null;
 
-  constructor(store) {
-    super(store);
-  }
-
   // Safely run handler if Node Id exists
   defineNodeEventListener(
     eventName: string,
