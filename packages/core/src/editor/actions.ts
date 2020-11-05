@@ -17,14 +17,15 @@ import {
   QueryCallbacksFor,
   ERROR_NOPARENT,
   ERROR_DELETE_TOP_LEVEL_NODE,
+  CallbacksFor,
 } from '@craftjs/utils';
 import { QueryMethods } from './query';
 import { fromEntries } from '../utils/fromEntries';
-import { updateEventsNode } from '../utils/updateEventsNode';
+import { removeNodeFromEvents } from '../utils/removeNodeFromEvents';
 import invariant from 'tiny-invariant';
 import { editorInitialState } from './store';
 
-export const Actions = (
+const Methods = (
   state: EditorState,
   query: QueryCallbacksFor<typeof QueryMethods>
 ) => {
@@ -94,6 +95,10 @@ export const Actions = (
   };
 
   const deleteNode = (id: NodeId, isLinkedNode: boolean = false) => {
+    if (!isLinkedNode) {
+      invariant(!query.node(id).isTopLevelNode(), ERROR_DELETE_TOP_LEVEL_NODE);
+    }
+
     const targetNode = state.nodes[id],
       parentNode = state.nodes[targetNode.data.parent];
 
@@ -115,7 +120,7 @@ export const Actions = (
       parentChildren.splice(parentChildren.indexOf(id), 1);
     }
 
-    updateEventsNode(state, id, true);
+    removeNodeFromEvents(state, id);
     delete state.nodes[id];
   };
 
@@ -254,15 +259,18 @@ export const Actions = (
     },
 
     clearEvents() {
-      state.events = editorInitialState.events;
+      this.setNodeEvent('selected', null);
+      this.setNodeEvent('hovered', null);
+      this.setNodeEvent('dragged', null);
+      this.setIndicator(null);
     },
 
     /**
      * Resets all the editor state.
      */
     reset() {
-      this.replaceNodes({});
       this.clearEvents();
+      this.replaceNodes({});
     },
 
     /**
@@ -339,6 +347,25 @@ export const Actions = (
     setProp(id: NodeId, cb: (props: any) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID);
       cb(state.nodes[id].data.props);
+    },
+
+    selectNode(nodeId: NodeId | null) {
+      this.setNodeEvent('selected', nodeId);
+      this.setNodeEvent('hovered', null);
+    },
+  };
+};
+
+export const ActionMethods = (
+  state: EditorState,
+  query: QueryCallbacksFor<typeof QueryMethods>
+) => {
+  return {
+    ...Methods(state, query),
+    setState(
+      cb: (state: EditorState, actions: CallbacksFor<typeof Methods>) => void
+    ) {
+      cb(state, this);
     },
   };
 };
