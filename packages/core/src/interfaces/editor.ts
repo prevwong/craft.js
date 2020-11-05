@@ -1,10 +1,10 @@
-import { QueryCallbacksFor } from '@craftjs/utils';
+import { QueryCallbacksFor, Delete, PatchListenerAction } from '@craftjs/utils';
 
 import { Placement } from './events';
 import { Nodes, NodeEventTypes, NodeId } from './nodes';
 
 import { QueryMethods } from '../editor/query';
-import { EditorStore } from '../editor/store';
+import { EditorStore, ActionMethodsWithConfig } from '../editor/store';
 import { useInternalEditorReturnType } from '../editor/useInternalEditor';
 import { CoreEventHandlers } from '../events';
 
@@ -15,6 +15,15 @@ export type Options = {
   enabled: boolean;
   indicator: Record<'success' | 'error', string>;
   handlers: (store: EditorStore) => CoreEventHandlers;
+  normalizeNodes: (
+    state: EditorState,
+    previousState: EditorState,
+    actionPerformed: Delete<
+      PatchListenerAction<EditorState, typeof ActionMethodsWithConfig>,
+      'patches'
+    >,
+    query: QueryCallbacksFor<typeof QueryMethods>
+  ) => void;
 };
 
 export type Resolver = Record<string, string | React.ElementType>;
