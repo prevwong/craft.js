@@ -23,8 +23,11 @@ import {
   NodeEventTypes,
   NodeTree,
   SerializedNodes,
+  NodeSelector,
+  NodeSelectorType,
 } from '../interfaces';
 import { fromEntries } from '../utils/fromEntries';
+import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 import { removeNodeFromEvents } from '../utils/removeNodeFromEvents';
 
 const Methods = (
@@ -197,10 +200,19 @@ const Methods = (
      * Delete a Node
      * @param id
      */
-    delete(id: NodeId) {
-      invariant(!query.node(id).isTopLevelNode(), ERROR_DELETE_TOP_LEVEL_NODE);
+    delete(selector: NodeSelector<NodeSelectorType.Id>) {
+      const targets = getNodesFromSelector(state.nodes, selector, {
+        existOnly: true,
+        idOnly: true,
+      });
 
-      deleteNode(id);
+      targets.forEach(({ node }) => {
+        invariant(
+          !query.node(node.id).isTopLevelNode(),
+          ERROR_DELETE_TOP_LEVEL_NODE
+        );
+        deleteNode(node.id);
+      });
     },
 
     deserialize(input: SerializedNodes | string) {
@@ -224,31 +236,37 @@ const Methods = (
 
       this.replaceNodes(fromEntries(nodePairs));
     },
+
     /**
      * Move a target Node to a new Parent at a given index
      * @param targetId
      * @param newParentId
      * @param index
      */
-    move(targetId: NodeId, newParentId: NodeId, index: number) {
-      const targetNode = state.nodes[targetId],
-        currentParentId = targetNode.data.parent!,
-        newParent = state.nodes[newParentId],
-        newParentNodes = newParent.data.nodes;
-
-      query.node(newParentId).isDroppable(targetNode, (err) => {
-        throw new Error(err);
+    move(selector: NodeSelector, newParentId: NodeId, index: number) {
+      const targets = getNodesFromSelector(state.nodes, selector, {
+        existOnly: true,
       });
 
-      const currentParent = state.nodes[currentParentId],
-        currentParentNodes = currentParent.data.nodes;
+      const newParent = state.nodes[newParentId];
+      targets.forEach(({ node: targetNode }, i) => {
+        const targetId = targetNode.id;
+        const currentParentId = targetNode.data.parent;
 
-      currentParentNodes[currentParentNodes.indexOf(targetId)] = 'marked';
+        query.node(newParentId).isDroppable([targetId], (err) => {
+          throw new Error(err);
+        });
 
-      newParentNodes.splice(index, 0, targetId);
+        const currentParent = state.nodes[currentParentId];
+        const currentParentNodes = currentParent.data.nodes;
 
-      state.nodes[targetId].data.parent = newParentId;
-      currentParentNodes.splice(currentParentNodes.indexOf('marked'), 1);
+        currentParentNodes[currentParentNodes.indexOf(targetId)] = 'marked';
+
+        newParent.data.nodes.splice(index + i, 0, targetId);
+
+        state.nodes[targetId].data.parent = newParentId;
+        currentParentNodes.splice(currentParentNodes.indexOf('marked'), 1);
+      });
     },
 
     replaceNodes(nodes: Nodes) {
@@ -280,17 +298,35 @@ const Methods = (
       cb(state.options);
     },
 
-    setNodeEvent(eventType: NodeEventTypes, id: NodeId | null) {
+    setNodeEvent(
+      eventType: NodeEventTypes,
+      nodeIdSelector: NodeSelector<NodeSelectorType.Id>
+    ) {
       const current = state.events[eventType];
-      if (current && id !== current) {
-        state.nodes[current].events[eventType] = false;
+      if (current.size > 0) {
+        current.forEach((id) => {
+          state.nodes[id].events[eventType] = false;
+        });
       }
 
-      if (id) {
-        state.nodes[id].events[eventType] = true;
-        state.events[eventType] = id;
-      } else {
-        state.events[eventType] = null;
+      state.events[eventType] = new Set();
+
+      if (!nodeIdSelector) {
+        return;
+      }
+
+      const targets = getNodesFromSelector(state.nodes, nodeIdSelector, {
+        idOnly: true,
+        existOnly: true,
+      });
+
+      const nodeIds: Set<NodeId> = new Set(targets.map(({ node }) => node.id));
+
+      if (nodeIds) {
+        nodeIds.forEach((id) => {
+          state.nodes[id].events[eventType] = true;
+        });
+        state.events[eventType] = nodeIds;
       }
     },
 
@@ -300,10 +336,15 @@ const Methods = (
      * @param cb
      */
     setCustom<T extends NodeId>(
-      id: T,
+      selector: NodeSelector<NodeSelectorType.Id>,
       cb: (data: EditorState['nodes'][T]['data']['custom']) => void
     ) {
-      cb(state.nodes[id].data.custom);
+      const targets = getNodesFromSelector(state.nodes, selector, {
+        idOnly: true,
+        existOnly: true,
+      });
+
+      targets.forEach(({ node }) => cb(state.nodes[node.id].data.custom));
     },
 
     /**
@@ -325,7 +366,7 @@ const Methods = (
             !indicator.placement.currentNode.dom))
       )
         return;
-      state.events.indicator = indicator;
+      state.indicator = indicator;
     },
 
     /**
@@ -342,13 +383,33 @@ const Methods = (
      * @param id
      * @param cb
      */
-    setProp(id: NodeId, cb: (props: any) => void) {
-      invariant(state.nodes[id], ERROR_INVALID_NODEID);
-      cb(state.nodes[id].data.props);
+    setProp(
+      selector: NodeSelector<NodeSelectorType.Id>,
+      cb: (props: any) => void
+    ) {
+      const targets = getNodesFromSelector(state.nodes, selector, {
+        idOnly: true,
+        existOnly: true,
+      });
+
+      targets.forEach(({ node }) => cb(state.nodes[node.id].data.props));
     },
 
-    selectNode(nodeId: NodeId | null) {
-      this.setNodeEvent('selected', nodeId);
+    selectNode(nodeIdSelector?: NodeSelector<NodeSelectorType.Id>) {
+      if (nodeIdSelector) {
+        const targets = getNodesFromSelector(state.nodes, nodeIdSelector, {
+          idOnly: true,
+          existOnly: true,
+        });
+
+        this.setNodeEvent(
+          'selected',
+          targets.map(({ node }) => node.id)
+        );
+      } else {
+        this.setNodeEvent('selected', null);
+      }
+
       this.setNodeEvent('hovered', null);
     },
   };

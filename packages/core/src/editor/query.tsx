@@ -9,6 +9,7 @@ import {
 import React from 'react';
 import invariant from 'tiny-invariant';
 
+import { EventHelpers } from './EventHelpers';
 import { NodeHelpers } from './NodeHelpers';
 
 import findPosition from '../events/findPosition';
@@ -18,7 +19,9 @@ import {
   Indicator,
   Node,
   Options,
+  NodeEventTypes,
   NodeInfo,
+  NodeSelector,
   NodeTree,
   SerializedNodes,
   SerializedNode,
@@ -27,6 +30,7 @@ import {
 import { createNode } from '../utils/createNode';
 import { deserializeNode } from '../utils/deserializeNode';
 import { fromEntries } from '../utils/fromEntries';
+import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 import { mergeTrees } from '../utils/mergeTrees';
 import { parseNodeFromJSX } from '../utils/parseNodeFromJSX';
 import { resolveComponent } from '../utils/resolveComponent';
@@ -42,15 +46,13 @@ export function QueryMethods(state: EditorState) {
      * Determine the best possible location to drop the source Node relative to the target Node
      */
     getDropPlaceholder: (
-      source: NodeId | Node,
+      source: NodeSelector,
       target: NodeId,
       pos: { x: number; y: number },
       nodesToDOM: (node: Node) => HTMLElement = (node) =>
         state.nodes[node.id].dom
     ) => {
-      if (source === target) return;
-      const sourceNodeFromId = typeof source == 'string' && state.nodes[source],
-        targetNode = state.nodes[target],
+      const targetNode = state.nodes[target],
         isTargetCanvas = _().node(targetNode.id).isCanvas();
 
       const targetParent = isTargetCanvas
@@ -94,12 +96,16 @@ export function QueryMethods(state: EditorState) {
         error: false,
       };
 
-      // If source Node is already in the editor, check if it's draggable
-      if (sourceNodeFromId) {
-        _()
-          .node(sourceNodeFromId.id)
-          .isDraggable((err) => (output.error = err));
-      }
+      const sourceNodes = getNodesFromSelector(state.nodes, source);
+
+      sourceNodes.forEach(({ node, exists }) => {
+        // If source Node is already in the editor, check if it's draggable
+        if (exists) {
+          _()
+            .node(node.id)
+            .isDraggable((err) => (output.error = err));
+        }
+      });
 
       // Check if source Node is droppable in target
       _()
@@ -133,6 +139,10 @@ export function QueryMethods(state: EditorState) {
         this.node(id).toSerializedNode(),
       ]);
       return fromEntries(nodePairs);
+    },
+
+    getEvent(eventType: NodeEventTypes) {
+      return EventHelpers(state, eventType);
     },
 
     /**

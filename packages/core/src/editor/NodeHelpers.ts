@@ -14,7 +14,8 @@ import {
 } from '@craftjs/utils';
 import invariant from 'tiny-invariant';
 
-import { EditorState, Node, NodeId } from '../interfaces';
+import { EditorState, NodeId, NodeSelector } from '../interfaces';
+import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 import { serializeNode } from '../utils/serializeNode';
 
 export function NodeHelpers(state: EditorState, id: NodeId) {
@@ -23,9 +24,6 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
   const node = state.nodes[id];
 
   const nodeHelpers = (id) => NodeHelpers(state, id);
-
-  const getNodeFromIdOrNode = (node: NodeId | Node) =>
-    typeof node === 'string' ? state.nodes[node] : node;
 
   return {
     isCanvas() {
@@ -53,6 +51,15 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
         suggest: 'query.node(id).isParentOfTopLevelNodes',
       });
       return this.isParentOfTopLevelNodes();
+    },
+    isSelected() {
+      return state.events.selected.has(id);
+    },
+    isHovered() {
+      return state.events.hovered.has(id);
+    },
+    isDragged() {
+      return state.events.dragged.has(id);
     },
     get() {
       return node;
@@ -148,65 +155,80 @@ export function NodeHelpers(state: EditorState, id: NodeId) {
         return false;
       }
     },
-    isDroppable(target: NodeId | Node, onError?: (err: string) => void) {
-      const isNewNode = typeof target == 'object' && !state.nodes[target.id];
-      const targetNode = getNodeFromIdOrNode(target),
-        newParentNode = node;
-      try {
-        //  If target is a NodeId (thus it's already in the state), check if it's a top-level node
-        if (typeof target === 'string') {
-          invariant(
-            !nodeHelpers(target).isTopLevelNode(),
-            ERROR_MOVE_TOP_LEVEL_NODE
-          );
-        }
+    isDroppable(selector: NodeSelector, onError?: (err: string) => void) {
+      const targets = getNodesFromSelector(state.nodes, selector);
 
+      const newParentNode = node;
+
+      try {
         invariant(this.isCanvas(), ERROR_MOVE_TO_NONCANVAS_PARENT);
         invariant(
-          newParentNode.rules.canMoveIn(targetNode, newParentNode, nodeHelpers),
+          newParentNode.rules.canMoveIn(
+            targets.map((selector) => selector.node),
+            newParentNode,
+            nodeHelpers
+          ),
           ERROR_MOVE_INCOMING_PARENT
         );
 
-        invariant(
-          targetNode.rules.canDrop(newParentNode, targetNode, nodeHelpers),
-          ERROR_MOVE_CANNOT_DROP
-        );
+        const parentNodes = {};
 
-        if (isNewNode) {
-          return true;
-        }
-
-        const targetDeepNodes = nodeHelpers(targetNode.id).descendants(true);
-
-        invariant(
-          !targetDeepNodes.includes(newParentNode.id) &&
-            newParentNode.id !== targetNode.id,
-          ERROR_MOVE_TO_DESCENDANT
-        );
-
-        const currentParentNode =
-          targetNode.data.parent && state.nodes[targetNode.data.parent];
-
-        invariant(currentParentNode.data.isCanvas, ERROR_MOVE_NONCANVAS_CHILD);
-
-        invariant(
-          currentParentNode ||
-            (!currentParentNode && !state.nodes[targetNode.id]),
-          ERROR_DUPLICATE_NODEID
-        );
-
-        // If the Node we're checking for is not the same as the currentParentNode
-        // Check if the currentParentNode allows the targetNode to be dragged out
-        if (node !== currentParentNode) {
+        targets.forEach(({ node: targetNode, exists }) => {
           invariant(
-            currentParentNode.rules.canMoveOut(
-              targetNode,
-              currentParentNode,
-              nodeHelpers
-            ),
+            targetNode.rules.canDrop(newParentNode, targetNode, nodeHelpers),
+            ERROR_MOVE_CANNOT_DROP
+          );
+
+          // Ignore other checking if the Node is new
+          if (!exists) {
+            return;
+          }
+
+          invariant(
+            !nodeHelpers(targetNode.id).isTopLevelNode(),
+            ERROR_MOVE_TOP_LEVEL_NODE
+          );
+
+          const targetDeepNodes = nodeHelpers(targetNode.id).descendants(true);
+
+          invariant(
+            !targetDeepNodes.includes(newParentNode.id) &&
+              newParentNode.id !== targetNode.id,
+            ERROR_MOVE_TO_DESCENDANT
+          );
+
+          const currentParentNode =
+            targetNode.data.parent && state.nodes[targetNode.data.parent];
+
+          invariant(
+            currentParentNode.data.isCanvas,
+            ERROR_MOVE_NONCANVAS_CHILD
+          );
+
+          invariant(
+            currentParentNode ||
+              (!currentParentNode && !state.nodes[targetNode.id]),
+            ERROR_DUPLICATE_NODEID
+          );
+
+          if (currentParentNode.id !== newParentNode.id) {
+            if (!parentNodes[currentParentNode.id]) {
+              parentNodes[currentParentNode.id] = [];
+            }
+
+            parentNodes[currentParentNode.id].push(targetNode);
+          }
+        });
+
+        Object.keys(parentNodes).forEach((parentNodeId) => {
+          const childNodes = parentNodes[parentNodeId];
+          const parentNode = state.nodes[parentNodeId];
+
+          invariant(
+            parentNode.rules.canMoveOut(childNodes, parentNode, nodeHelpers),
             ERROR_MOVE_OUTGOING_PARENT
           );
-        }
+        });
 
         return true;
       } catch (err) {

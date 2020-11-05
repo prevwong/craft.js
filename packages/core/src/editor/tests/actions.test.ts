@@ -290,8 +290,8 @@ describe('actions.clearEvents', () => {
     const state = createTestState({
       nodes,
       events: {
-        selected: 'node-a',
-        hovered: 'node-b',
+        selected: new Set(['node-a']),
+        hovered: new Set(['node-b']),
       },
     });
 
@@ -349,7 +349,7 @@ describe('actions.reset', () => {
         },
       },
       events: {
-        selected: 'node-header',
+        selected: new Set(['node-header']),
       },
     });
 
@@ -506,10 +506,17 @@ describe('actions.setOptions', () => {
 });
 
 describe('actions.setNodeEvent', () => {
-  let state, nodeA;
+  let state, nodeA, nodeB;
   beforeEach(() => {
     nodeA = {
       id: 'node-a',
+      data: {
+        type: 'button',
+      },
+    };
+
+    nodeB = {
+      id: 'node-b',
       data: {
         type: 'button',
       },
@@ -520,7 +527,7 @@ describe('actions.setNodeEvent', () => {
         id: 'root',
         data: {
           type: 'div',
-          nodes: [nodeA],
+          nodes: [nodeA, nodeB],
         },
       },
     });
@@ -528,13 +535,15 @@ describe('actions.setNodeEvent', () => {
 
   it('should be able to change events state', () => {
     const newState = Actions(state)((actions) =>
-      actions.setNodeEvent('selected', 'node-a')
+      actions.setNodeEvent('selected', ['node-a', 'node-b'])
     );
 
     nodeA.events = {
       selected: true,
     };
-
+    nodeB.events = {
+      selected: true,
+    };
     expectEditorState(
       newState,
       createTestState({
@@ -542,11 +551,11 @@ describe('actions.setNodeEvent', () => {
           id: 'root',
           data: {
             type: 'div',
-            nodes: [nodeA],
+            nodes: [nodeA, nodeB],
           },
         },
         events: {
-          selected: 'node-a',
+          selected: new Set(['node-a', 'node-b']),
         },
       })
     );
@@ -776,9 +785,7 @@ describe('actions.setIndicator', () => {
       newState,
       createTestState({
         nodes: root,
-        events: {
-          indicator,
-        },
+        indicator,
       })
     );
   });
