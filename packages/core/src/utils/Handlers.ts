@@ -1,4 +1,5 @@
 import { wrapHookToRecognizeElement, Connector } from '@craftjs/utils';
+
 import { EditorStore } from '../editor/store';
 
 export type CraftDOMEvent<T extends Event> = T & {

@@ -1,14 +1,15 @@
-import mapValues from 'lodash/mapValues';
-import { ActionMethods } from '../actions';
-import { produce } from 'immer';
-import { QueryMethods } from '../../editor/query';
 import { EditorState } from '@craftjs/core';
+import { produce } from 'immer';
+import mapValues from 'lodash/mapValues';
+
+import { QueryMethods } from '../../editor/query';
 import { createNode } from '../../utils/createNode';
 import {
   createTestState,
   createTestNodes,
   expectEditorState,
 } from '../../utils/testHelpers';
+import { ActionMethods } from '../actions';
 
 const Actions = (state) => (cb) =>
   produce<EditorState>(state, (draft) =>

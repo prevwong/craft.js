@@ -1,12 +1,13 @@
+import { Element, useNode } from '@craftjs/core';
 import React from 'react';
+
+import { Button } from './Button';
 import {
   Container,
   ContainerSettings,
   ContainerDefaultProps,
 } from './Container';
 import { Text } from './Text';
-import { Button } from './Button';
-import { Element, useNode } from '@craftjs/core';
 
 export const CardTop = ({ children }) => {
   const {

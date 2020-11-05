@@ -1,5 +1,6 @@
-import { createShadow } from './createShadow';
 import { CoreEventHandlers } from './CoreEventHandlers';
+import { createShadow } from './createShadow';
+
 import { Indicator, NodeId, NodeTree, Node } from '../interfaces';
 import { defineEventListener, CraftDOMEvent } from '../utils/Handlers';
 

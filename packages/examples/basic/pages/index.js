@@ -1,16 +1,17 @@
-import React from 'react';
-import '../styles/main.css';
+import { Editor, Frame, Element } from '@craftjs/core';
 import { Typography, Paper, Grid, makeStyles } from '@material-ui/core';
+import React from 'react';
+
+import { SettingsPanel } from '../components/SettingsPanel';
 import { Toolbox } from '../components/Toolbox';
-import { Container } from '../components/user/Container';
+import { Topbar } from '../components/Topbar';
 import { Button } from '../components/user/Button';
 import { Card, CardBottom, CardTop } from '../components/user/Card';
+import { Container } from '../components/user/Container';
 import { Text } from '../components/user/Text';
-import { SettingsPanel } from '../components/SettingsPanel';
-import { Editor, Frame, Element } from '@craftjs/core';
-import { Topbar } from '../components/Topbar';
+import '../styles/main.css';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     padding: 0,
     background: 'rgb(252, 253, 253)',

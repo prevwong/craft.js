@@ -17,5 +17,6 @@ export const deprecationWarning = (name, payload?: DeprecationPayload) => {
     message += `(${doc})`;
   }
 
+  // eslint-disable-next-line no-console
   console.warn(message);
 };

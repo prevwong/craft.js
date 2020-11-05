@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-import { useInternalEditor } from '../editor/useInternalEditor';
 import { RenderIndicator, getDOMInfo } from '@craftjs/utils';
-import movePlaceholder from './movePlaceholder';
+import React, { useEffect, useRef } from 'react';
+
 import { EventHandlerContext } from './EventContext';
+import movePlaceholder from './movePlaceholder';
+
+import { useInternalEditor } from '../editor/useInternalEditor';
 
 export const Events: React.FC = ({ children }) => {
   const {

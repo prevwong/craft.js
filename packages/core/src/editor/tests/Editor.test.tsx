@@ -1,12 +1,12 @@
-import React from 'react';
+import { ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
 import { shallow } from 'enzyme';
+import React from 'react';
 import { act } from 'react-dom/test-utils';
 
-import { EditorContext } from '../EditorContext';
-import { Editor } from '../Editor';
 import { Events } from '../../events';
+import { Editor } from '../Editor';
+import { EditorContext } from '../EditorContext';
 import { useEditorStore } from '../store';
-import { ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
 
 jest.mock('../store');
 const mockStore = useEditorStore as jest.Mock<any>;

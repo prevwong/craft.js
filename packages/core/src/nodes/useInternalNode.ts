@@ -1,9 +1,10 @@
 import { useMemo, useContext } from 'react';
-import { NodeContext, NodeProvider } from './NodeContext';
-import { Node } from '../interfaces';
-import { useInternalEditor } from '../editor/useInternalEditor';
 
+import { NodeContext, NodeProvider } from './NodeContext';
 import { NodeConnectors } from './NodeHandlers';
+
+import { useInternalEditor } from '../editor/useInternalEditor';
+import { Node } from '../interfaces';
 
 type internalActions = NodeProvider & {
   inNodeContext: boolean;

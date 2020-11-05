@@ -1,15 +1,4 @@
 import {
-  EditorState,
-  Indicator,
-  NodeId,
-  Node,
-  Nodes,
-  Options,
-  NodeEventTypes,
-  NodeTree,
-  SerializedNodes,
-} from '../interfaces';
-import {
   deprecationWarning,
   ERROR_INVALID_NODEID,
   ROOT_NODE,
@@ -20,10 +9,23 @@ import {
   CallbacksFor,
   Delete,
 } from '@craftjs/utils';
+import invariant from 'tiny-invariant';
+
 import { QueryMethods } from './query';
+
+import {
+  EditorState,
+  Indicator,
+  NodeId,
+  Node,
+  Nodes,
+  Options,
+  NodeEventTypes,
+  NodeTree,
+  SerializedNodes,
+} from '../interfaces';
 import { fromEntries } from '../utils/fromEntries';
 import { removeNodeFromEvents } from '../utils/removeNodeFromEvents';
-import invariant from 'tiny-invariant';
 
 const Methods = (
   state: EditorState,

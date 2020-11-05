@@ -1,10 +1,12 @@
+import { ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
 import React, { useEffect } from 'react';
 import invariant from 'tiny-invariant';
-import { Options } from '../interfaces';
-import { Events } from '../events';
-import { useEditorStore } from './store';
+
 import { EditorContext } from './EditorContext';
-import { ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
+import { useEditorStore } from './store';
+
+import { Events } from '../events';
+import { Options } from '../interfaces';
 
 /**
  * A React Component that provides the Editor context

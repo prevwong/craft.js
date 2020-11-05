@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react';
-import { useInternalEditor } from '../editor/useInternalEditor';
-import { NodeElement } from '../nodes/NodeElement';
+
 import { SimpleElement } from './SimpleElement';
+
+import { useInternalEditor } from '../editor/useInternalEditor';
 import { NodeId } from '../interfaces';
+import { NodeElement } from '../nodes/NodeElement';
 import { useInternalNode } from '../nodes/useInternalNode';
 
 const Render = () => {

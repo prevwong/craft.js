@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
-import { Element } from './Element';
 import { deprecationWarning } from '@craftjs/utils';
+import React, { useEffect } from 'react';
+
+import { Element } from './Element';
 
 export type Canvas<T extends React.ElementType> = Element<T>;
 

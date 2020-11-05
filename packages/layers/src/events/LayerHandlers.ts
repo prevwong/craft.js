@@ -6,7 +6,8 @@ import {
   ConnectorsForHandlers,
   defineEventListener,
 } from '@craftjs/core';
-import { LayerIndicator } from 'interfaces';
+
+import { LayerIndicator } from '../interfaces';
 
 export class LayerHandlers extends DerivedEventHandlers<
   'layer' | 'layerHeader' | 'drag'

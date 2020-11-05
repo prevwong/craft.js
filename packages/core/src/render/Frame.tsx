@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { NodeElement } from '../nodes/NodeElement';
 import { deprecationWarning, ROOT_NODE } from '@craftjs/utils';
+import React, { useEffect, useState, useRef } from 'react';
+
 import { useInternalEditor } from '../editor/useInternalEditor';
 import { SerializedNodes } from '../interfaces';
+import { NodeElement } from '../nodes/NodeElement';
 
 export type Frame = {
   json?: string;

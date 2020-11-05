@@ -1,10 +1,11 @@
 import { Overwrite, Delete, OverwriteFnReturnType } from '@craftjs/utils';
+import { useMemo } from 'react';
+
 import {
   useInternalEditor,
   EditorCollector,
   useInternalEditorReturnType,
 } from '../editor/useInternalEditor';
-import { useMemo } from 'react';
 import { NodeId } from '../interfaces';
 
 type PrivateActions =

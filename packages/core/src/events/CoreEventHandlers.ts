@@ -1,5 +1,5 @@
-import { ConnectorsForHandlers, Handlers } from '../utils/Handlers';
 import { EditorStore } from '../editor/store';
+import { ConnectorsForHandlers, Handlers } from '../utils/Handlers';
 
 /**
  * Craft's core event handlers

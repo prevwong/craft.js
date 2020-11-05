@@ -1,7 +1,8 @@
 // https://github.com/pelotom/use-methods
 import produce, { Patch, produceWithPatches } from 'immer';
-import { useMemo, useEffect, useRef, useReducer, useCallback } from 'react';
 import isEqualWith from 'lodash.isequalwith';
+import { useMemo, useEffect, useRef, useReducer, useCallback } from 'react';
+
 import { History, HISTORY_ACTIONS } from './History';
 import { Delete } from './utilityTypes';
 
@@ -473,6 +474,7 @@ class Subscriber {
         if (this.onChange) this.onChange(this.collected);
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.warn(err);
     }
   }

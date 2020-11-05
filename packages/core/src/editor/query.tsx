@@ -1,4 +1,17 @@
+import {
+  QueryCallbacksFor,
+  ERROR_NOT_IN_RESOLVER,
+  getDOMInfo,
+  deprecationWarning,
+  DEPRECATED_ROOT_NODE,
+  ROOT_NODE,
+} from '@craftjs/utils';
 import React from 'react';
+import invariant from 'tiny-invariant';
+
+import { NodeHelpers } from './NodeHelpers';
+
+import findPosition from '../events/findPosition';
 import {
   NodeId,
   EditorState,
@@ -11,23 +24,12 @@ import {
   SerializedNode,
   FreshNode,
 } from '../interfaces';
-import invariant from 'tiny-invariant';
-import {
-  QueryCallbacksFor,
-  ERROR_NOT_IN_RESOLVER,
-  getDOMInfo,
-  deprecationWarning,
-  DEPRECATED_ROOT_NODE,
-  ROOT_NODE,
-} from '@craftjs/utils';
-import findPosition from '../events/findPosition';
 import { createNode } from '../utils/createNode';
-import { parseNodeFromJSX } from '../utils/parseNodeFromJSX';
+import { deserializeNode } from '../utils/deserializeNode';
 import { fromEntries } from '../utils/fromEntries';
 import { mergeTrees } from '../utils/mergeTrees';
+import { parseNodeFromJSX } from '../utils/parseNodeFromJSX';
 import { resolveComponent } from '../utils/resolveComponent';
-import { deserializeNode } from '../utils/deserializeNode';
-import { NodeHelpers } from './NodeHelpers';
 
 export function QueryMethods(state: EditorState) {
   const options = state && state.options;

@@ -1,7 +1,7 @@
 import React from 'react';
-import { useEditor } from '../useEditor';
 
 import { useInternalEditor } from '../../editor/useInternalEditor';
+import { useEditor } from '../useEditor';
 
 jest.mock('../../editor/useInternalEditor');
 const internalEditorMock = useInternalEditor as jest.Mock<any>;

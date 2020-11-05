@@ -1,10 +1,11 @@
 import { QueryCallbacksFor } from '@craftjs/utils';
 
-import { Nodes, NodeEventTypes, NodeId } from './nodes';
 import { Placement } from './events';
-import { useInternalEditorReturnType } from '../editor/useInternalEditor';
+import { Nodes, NodeEventTypes, NodeId } from './nodes';
+
 import { QueryMethods } from '../editor/query';
 import { EditorStore } from '../editor/store';
+import { useInternalEditorReturnType } from '../editor/useInternalEditor';
 import { CoreEventHandlers } from '../events';
 
 export type Options = {

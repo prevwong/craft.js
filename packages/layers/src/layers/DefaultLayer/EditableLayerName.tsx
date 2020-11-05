@@ -1,6 +1,7 @@
+import { useEditor } from '@craftjs/core';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ContentEditable from 'react-contenteditable';
-import { useEditor } from '@craftjs/core';
+
 import { useLayer } from '../useLayer';
 
 export const EditableLayerName = () => {

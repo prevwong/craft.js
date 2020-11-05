@@ -1,5 +1,6 @@
-import { History } from '../History';
 import { applyPatches } from 'immer';
+
+import { History } from '../History';
 
 jest.mock('immer');
 
