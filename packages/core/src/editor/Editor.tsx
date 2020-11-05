@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-
+import invariant from 'tiny-invariant';
 import { Options } from '../interfaces';
 import { Events } from '../events';
-
 import { useEditorStore } from './store';
 import { EditorContext } from './EditorContext';
+import { ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
 
 /**
  * A React Component that provides the Editor context
@@ -13,6 +13,14 @@ export const Editor: React.FC<Partial<Options>> = ({
   children,
   ...options
 }) => {
+  // we do not want to warn the user if no resolver was supplied
+  if (options.resolver !== undefined) {
+    invariant(
+      typeof options.resolver === 'object' && !Array.isArray(options.resolver),
+      ERROR_RESOLVER_NOT_AN_OBJECT
+    );
+  }
+
   const context = useEditorStore(options);
 
   useEffect(() => {
