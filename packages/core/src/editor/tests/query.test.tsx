@@ -184,4 +184,9 @@ describe('query', () => {
       });
     });
   });
+  describe('getState', () => {
+    it('should return the EditorState', () => {
+      expect(query.getState()).toEqual(state);
+    });
+  });
 });

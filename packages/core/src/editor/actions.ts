@@ -17,13 +17,15 @@ import {
   QueryCallbacksFor,
   ERROR_NOPARENT,
   ERROR_DELETE_TOP_LEVEL_NODE,
+  CallbacksFor,
+  Delete,
 } from '@craftjs/utils';
 import { QueryMethods } from './query';
 import { fromEntries } from '../utils/fromEntries';
 import { removeNodeFromEvents } from '../utils/removeNodeFromEvents';
 import invariant from 'tiny-invariant';
 
-export const ActionMethods = (
+const Methods = (
   state: EditorState,
   query: QueryCallbacksFor<typeof QueryMethods>
 ) => {
@@ -346,6 +348,28 @@ export const ActionMethods = (
     selectNode(nodeId: NodeId | null) {
       this.setNodeEvent('selected', nodeId);
       this.setNodeEvent('hovered', null);
+    },
+  };
+};
+
+export const ActionMethods = (
+  state: EditorState,
+  query: QueryCallbacksFor<typeof QueryMethods>
+) => {
+  return {
+    ...Methods(state, query),
+    // Note: Beware: advanced method! You most likely don't need to use this
+    // TODO: fix parameter types and cleanup the method
+    setState(
+      cb: (
+        state: EditorState,
+        actions: Delete<CallbacksFor<typeof Methods>, 'history'>
+      ) => void
+    ) {
+      const { history, ...actions } = this;
+
+      // We pass the other actions as the second parameter, so that devs could still make use of the predefined actions
+      cb(state, actions);
     },
   };
 };
