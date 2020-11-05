@@ -4,6 +4,8 @@ import { Nodes, NodeEventTypes, NodeId } from './nodes';
 import { Placement } from './events';
 import { useInternalEditorReturnType } from '../editor/useInternalEditor';
 import { QueryMethods } from '../editor/query';
+import { EditorStore } from '../editor/store';
+import { CoreEventHandlers } from '../events';
 
 export type Options = {
   onRender: React.ComponentType<{ render: React.ReactElement }>;
@@ -11,6 +13,7 @@ export type Options = {
   resolver: Resolver;
   enabled: boolean;
   indicator: Record<'success' | 'error', string>;
+  handlers: (store: EditorStore) => CoreEventHandlers;
 };
 
 export type Resolver = Record<string, string | React.ElementType>;
@@ -28,6 +31,7 @@ export type EditorState = {
   nodes: Nodes;
   events: EditorEvents;
   options: Options;
+  handlers: CoreEventHandlers;
 };
 
 export type ConnectedEditor<S = null> = useInternalEditorReturnType<S>;

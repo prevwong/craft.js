@@ -1,4 +1,5 @@
-import { wrapHookToRecognizeElement, Connector } from './wrapConnectorHooks';
+import { wrapHookToRecognizeElement, Connector } from '@craftjs/utils';
+import { EditorStore } from '../editor/store';
 
 export type CraftDOMEvent<T extends Event> = T & {
   craft: {
@@ -147,7 +148,7 @@ export abstract class Handlers<T extends string = null> {
   // Stores a map of DOM elements to their attached connector's WatchHandler
   private wm = new WeakMap<HTMLElement, Record<string, WatchHandler>>();
   // Data store to infer the enabled state from
-  protected store;
+  protected store: EditorStore;
 
   constructor(store) {
     this.store = store;
