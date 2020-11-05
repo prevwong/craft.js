@@ -43,7 +43,6 @@ describe('useEditor', () => {
         actions: {
           ...otherActions,
           history: expect.any(Object),
-          selectNode: expect.any(Function),
         },
         connectors: state.connectors,
         query: otherQueries,

@@ -81,10 +81,6 @@ export function useEditor<S>(collect?: any): useEditorReturnType<S> {
   const actions = useMemo(() => {
     return {
       ...EditorActions,
-      selectNode: (nodeId: NodeId | null) => {
-        internalActions.setNodeEvent('selected', nodeId);
-        internalActions.setNodeEvent('hovered', null);
-      },
       history: {
         ...EditorActions.history,
         ignore: (...args) =>
@@ -93,7 +89,7 @@ export function useEditor<S>(collect?: any): useEditorReturnType<S> {
           getPublicActions(EditorActions.history.throttle(...args)),
       },
     };
-  }, [EditorActions, internalActions]);
+  }, [EditorActions]);
 
   return {
     connectors,

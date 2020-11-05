@@ -167,6 +167,21 @@ export function useMethods<
 export function useMethods<
   S,
   R extends MethodRecordBase<S>,
+  Q extends QueryMethods
+>(
+  methodsOrOptions: MethodsOrOptions<S, R, QueryCallbacksFor<Q>>, // methods to manipulate the state
+  initialState: any,
+  queryMethods: Q,
+  patchListener: PatchListener<
+    S,
+    MethodsOrOptions<S, R, QueryCallbacksFor<Q>>,
+    Q
+  >
+): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q>;
+
+export function useMethods<
+  S,
+  R extends MethodRecordBase<S>,
   Q extends QueryMethods = null
 >(
   methodsOrOptions: MethodsOrOptions<S, R>,
@@ -228,7 +243,6 @@ export function useMethods<
 
         finalState = nextState;
 
-        // TODO: Allow the ability to add normalization function in <Editor />
         if (patchListener) {
           patchListener(
             nextState,
