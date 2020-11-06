@@ -132,7 +132,7 @@ const Methods = (
      * @param parentId
      * @param id
      */
-    addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id?: string) {
+    addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id: string) {
       const parent = getParentAndValidate(parentId);
       if (!parent.data.linkedNodes) {
         parent.data.linkedNodes = {};
@@ -347,8 +347,12 @@ const Methods = (
       cb(state.nodes[id].data.props);
     },
 
-    selectNode(nodeId: NodeId | null) {
-      this.setNodeEvent('selected', nodeId);
+    selectNode(nodeId?: NodeId | null) {
+      // TODO: use ts strict-null checks
+      this.setNodeEvent(
+        'selected',
+        nodeId !== undefined && nodeId !== null ? nodeId : null
+      );
       this.setNodeEvent('hovered', null);
     },
   };

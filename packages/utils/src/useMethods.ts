@@ -86,7 +86,7 @@ export type Action<T = any, P = any> = {
 };
 
 export type ActionUnion<R extends MethodRecordBase> = {
-  [T in keyof R]: Action<T, Parameters<R[T]>>;
+  [T in keyof R]: { type: T; payload: Parameters<R[T]> };
 }[keyof R];
 
 export type ActionByType<A, T> = A extends { type: infer T2 }
@@ -136,7 +136,7 @@ export type PatchListener<
 ) => void;
 
 export function useMethods<S, R extends MethodRecordBase<S>>(
-  methodsOrOptions: Methods<S, R>,
+  methodsOrOptions: MethodsOrOptions<S, R>, // methods to manipulate the state
   initialState: any
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>>;
 
@@ -148,21 +148,6 @@ export function useMethods<
   methodsOrOptions: MethodsOrOptions<S, R, QueryCallbacksFor<Q>>, // methods to manipulate the state
   initialState: any,
   queryMethods: Q
-): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q>;
-
-export function useMethods<
-  S,
-  R extends MethodRecordBase<S>,
-  Q extends QueryMethods
->(
-  methodsOrOptions: MethodsOrOptions<S, R, QueryCallbacksFor<Q>>, // methods to manipulate the state
-  initialState: any,
-  queryMethods: Q,
-  patchListener: PatchListener<
-    S,
-    MethodsOrOptions<S, R, QueryCallbacksFor<Q>>,
-    Q
-  >
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q>;
 
 export function useMethods<
