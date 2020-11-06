@@ -347,8 +347,12 @@ const Methods = (
       cb(state.nodes[id].data.props);
     },
 
-    selectNode(nodeId: NodeId | null) {
-      this.setNodeEvent('selected', nodeId);
+    selectNode(nodeId?: NodeId | null) {
+      // TODO: use ts strict-null checks
+      this.setNodeEvent(
+        'selected',
+        nodeId !== undefined && nodeId !== null ? nodeId : null
+      );
       this.setNodeEvent('hovered', null);
     },
   };
