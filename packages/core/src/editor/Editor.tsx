@@ -26,7 +26,7 @@ export const Editor: React.FC<Partial<Options>> = ({
 
   const context = useEditorStore(
     options,
-    (_, previousState, actionPerformedWithPatches, query, normaliser) => {
+    (_, previousState, actionPerformedWithPatches, query, normalizer) => {
       if (!actionPerformedWithPatches) {
         return;
       }
@@ -54,7 +54,7 @@ export const Editor: React.FC<Partial<Options>> = ({
           isModifyingNodeData
         ) {
           if (normalizeNodes) {
-            normaliser((draft) => {
+            normalizer((draft) => {
               normalizeNodes(draft, previousState, actionPerformed, query);
             });
           }
