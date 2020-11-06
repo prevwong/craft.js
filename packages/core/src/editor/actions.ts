@@ -135,7 +135,7 @@ const Methods = (
      * @param parentId
      * @param id
      */
-    addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id?: string) {
+    addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id: string) {
       const parent = getParentAndValidate(parentId);
       if (!parent.data.linkedNodes) {
         parent.data.linkedNodes = {};

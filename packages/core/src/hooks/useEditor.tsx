@@ -6,7 +6,6 @@ import {
   EditorCollector,
   useInternalEditorReturnType,
 } from '../editor/useInternalEditor';
-import { NodeId } from '../interfaces';
 
 type PrivateActions =
   | 'addLinkedNodeFromTree'
@@ -28,21 +27,19 @@ const getPublicActions = (actions) => {
   return EditorActions;
 };
 
-type Actions = useInternalEditorReturnType['actions'];
-
-export type WithoutPrivateActions = Delete<
-  Actions,
+export type WithoutPrivateActions<S = null> = Delete<
+  useInternalEditorReturnType<S>['actions'],
   PrivateActions | 'history'
 > & {
   history: Overwrite<
-    Actions['history'],
+    useInternalEditorReturnType<S>['actions']['history'],
     {
       ignore: OverwriteFnReturnType<
-        Actions['history']['ignore'],
+        useInternalEditorReturnType<S>['actions']['history']['ignore'],
         PrivateActions
       >;
       throttle: OverwriteFnReturnType<
-        Actions['history']['throttle'],
+        useInternalEditorReturnType<S>['actions']['history']['throttle'],
         PrivateActions
       >;
     }
@@ -52,9 +49,7 @@ export type WithoutPrivateActions = Delete<
 export type useEditorReturnType<S = null> = Overwrite<
   useInternalEditorReturnType<S>,
   {
-    actions: WithoutPrivateActions & {
-      selectNode: (nodeId: NodeId | null) => void;
-    };
+    actions: WithoutPrivateActions;
     query: Delete<useInternalEditorReturnType<S>['query'], 'deserialize'>;
   }
 >;

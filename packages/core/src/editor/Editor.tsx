@@ -1,4 +1,4 @@
-import { ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
+import { ERROR_RESOLVER_NOT_AN_OBJECT, HISTORY_ACTIONS } from '@craftjs/utils';
 import React, { useEffect } from 'react';
 import invariant from 'tiny-invariant';
 
@@ -13,6 +13,7 @@ import { Options } from '../interfaces';
  */
 export const Editor: React.FC<Partial<Options>> = ({
   children,
+  normalizeNodes,
   ...options
 }) => {
   // we do not want to warn the user if no resolver was supplied
@@ -23,7 +24,45 @@ export const Editor: React.FC<Partial<Options>> = ({
     );
   }
 
-  const context = useEditorStore(options);
+  const context = useEditorStore(
+    options,
+    (_, previousState, actionPerformedWithPatches, query, normalizer) => {
+      if (!actionPerformedWithPatches) {
+        return;
+      }
+
+      const { patches, ...actionPerformed } = actionPerformedWithPatches;
+
+      for (let i = 0; i < patches.length; i++) {
+        const { path } = patches[i];
+        const isModifyingNodeData =
+          path.length > 2 && path[0] === 'nodes' && path[2] === 'data';
+
+        let actionType = actionPerformed.type;
+
+        if (
+          [HISTORY_ACTIONS.IGNORE, HISTORY_ACTIONS.THROTTLE].includes(
+            actionType
+          ) &&
+          actionPerformed.params
+        ) {
+          actionPerformed.type = actionPerformed.params[0];
+        }
+
+        if (
+          ['setState', 'deserialize'].includes(actionPerformed.type) ||
+          isModifyingNodeData
+        ) {
+          if (normalizeNodes) {
+            normalizer((draft) => {
+              normalizeNodes(draft, previousState, actionPerformed, query);
+            });
+          }
+          break; // we exit the loop as soon as we find a change in node.data
+        }
+      }
+    }
+  );
 
   useEffect(() => {
     if (context && options)
