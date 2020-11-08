@@ -3,14 +3,8 @@ module.exports = {
     'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
     'react-app',
+    "plugin:import/typescript",
   ],
-  settings: {
-    'import/resolver': {
-      node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      },
-    },
-  },
   rules: {
     'no-console': 1,
     'import/no-unresolved': 2,

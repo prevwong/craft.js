@@ -13,7 +13,7 @@
     "deploy": "cross-env ENV=production ./scripts/deploy.sh",
     "deploy:staging": "cross-env ENV=staging ./scripts/deploy.sh",
     "prettier": "prettier --write .",
-    "release": "run-s lint clean build test release:npm",
+    "release": "run-s clean build test release:npm",
     "release:npm": "./scripts/release.sh",
     "publish:beta": "lerna version prerelease --preid beta --force-publish --yes",
     "test": "jest",
