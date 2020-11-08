@@ -18,15 +18,19 @@ const Render = () => {
   );
 
   return useMemo(() => {
-    const render = React.createElement(
-      type,
-      props,
-      <React.Fragment>
-        {nodes
-          ? nodes.map((id: NodeId) => <NodeElement id={id} key={id} />)
-          : props && props.children}
-      </React.Fragment>
-    );
+    let children = props.children;
+
+    if (nodes && nodes.length > 0) {
+      children = (
+        <React.Fragment>
+          {nodes.map((id: NodeId) => (
+            <NodeElement id={id} key={id} />
+          ))}
+        </React.Fragment>
+      );
+    }
+
+    const render = React.createElement(type, props, children);
 
     if (typeof type == 'string') {
       return <SimpleElement render={render} />;
