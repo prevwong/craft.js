@@ -1,7 +1,7 @@
 import React from 'react';
-import { useEditor } from '../useEditor';
 
 import { useInternalEditor } from '../../editor/useInternalEditor';
+import { useEditor } from '../useEditor';
 
 jest.mock('../../editor/useInternalEditor');
 const internalEditorMock = useInternalEditor as jest.Mock<any>;
@@ -43,7 +43,6 @@ describe('useEditor', () => {
         actions: {
           ...otherActions,
           history: expect.any(Object),
-          selectNode: expect.any(Function),
         },
         connectors: state.connectors,
         query: otherQueries,

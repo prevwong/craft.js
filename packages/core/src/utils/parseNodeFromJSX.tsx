@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
-import { Node } from '../interfaces';
+
 import { createNode } from './createNode';
+
+import { Node } from '../interfaces';
 
 export function parseNodeFromJSX(
   jsx: React.ReactElement | string,

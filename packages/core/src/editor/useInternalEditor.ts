@@ -1,11 +1,13 @@
-import { useContext, useMemo } from 'react';
-import { EditorState } from '../interfaces';
-import { QueryMethods } from './query';
 import { useCollector, QueryCallbacksFor } from '@craftjs/utils';
-import { Actions } from './actions';
-import { useEventHandler } from '../events/EventContext';
+import { useContext, useMemo } from 'react';
+
 import { EditorContext } from './EditorContext';
-import { EventConnectors } from '../events/EventHandlers';
+import { QueryMethods } from './query';
+import { ActionMethodsWithConfig } from './store';
+
+import { EventConnectors } from '../events/CoreEventHandlers';
+import { useEventHandler } from '../events/EventContext';
+import { EditorState } from '../interfaces';
 
 export type EditorCollector<C> = (
   state: EditorState,
@@ -13,8 +15,8 @@ export type EditorCollector<C> = (
 ) => C;
 
 export type useInternalEditorReturnType<C = null> = (C extends null
-  ? useCollector<typeof Actions, typeof QueryMethods>
-  : useCollector<typeof Actions, typeof QueryMethods, C>) & {
+  ? useCollector<typeof ActionMethodsWithConfig, typeof QueryMethods>
+  : useCollector<typeof ActionMethodsWithConfig, typeof QueryMethods, C>) & {
   inContext: boolean;
   store: EditorContext;
   connectors: EventConnectors;

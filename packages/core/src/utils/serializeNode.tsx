@@ -1,7 +1,9 @@
 import React, { Children } from 'react';
+
+import { resolveComponent } from './resolveComponent';
+
 import { NodeData, ReducedComp, SerializedNode } from '../interfaces';
 import { Resolver } from '../interfaces';
-import { resolveComponent } from './resolveComponent';
 
 const reduceType = (type: React.ElementType | string, resolver: Resolver) => {
   if (typeof type === 'string') {

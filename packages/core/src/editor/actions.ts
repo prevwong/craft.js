@@ -1,4 +1,19 @@
 import {
+  deprecationWarning,
+  ERROR_INVALID_NODEID,
+  ROOT_NODE,
+  DEPRECATED_ROOT_NODE,
+  QueryCallbacksFor,
+  ERROR_NOPARENT,
+  ERROR_DELETE_TOP_LEVEL_NODE,
+  CallbacksFor,
+  Delete,
+} from '@craftjs/utils';
+import invariant from 'tiny-invariant';
+
+import { QueryMethods } from './query';
+
+import {
   EditorState,
   Indicator,
   NodeId,
@@ -9,22 +24,10 @@ import {
   NodeTree,
   SerializedNodes,
 } from '../interfaces';
-import {
-  deprecationWarning,
-  ERROR_INVALID_NODEID,
-  ROOT_NODE,
-  DEPRECATED_ROOT_NODE,
-  QueryCallbacksFor,
-  ERROR_NOPARENT,
-  ERROR_DELETE_TOP_LEVEL_NODE,
-} from '@craftjs/utils';
-import { QueryMethods } from './query';
 import { fromEntries } from '../utils/fromEntries';
-import { updateEventsNode } from '../utils/updateEventsNode';
-import invariant from 'tiny-invariant';
-import { editorInitialState } from './store';
+import { removeNodeFromEvents } from '../utils/removeNodeFromEvents';
 
-export const Actions = (
+const Methods = (
   state: EditorState,
   query: QueryCallbacksFor<typeof QueryMethods>
 ) => {
@@ -115,7 +118,7 @@ export const Actions = (
       parentChildren.splice(parentChildren.indexOf(id), 1);
     }
 
-    updateEventsNode(state, id, true);
+    removeNodeFromEvents(state, id);
     delete state.nodes[id];
   };
 
@@ -129,7 +132,7 @@ export const Actions = (
      * @param parentId
      * @param id
      */
-    addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id?: string) {
+    addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id: string) {
       const parent = getParentAndValidate(parentId);
       if (!parent.data.linkedNodes) {
         parent.data.linkedNodes = {};
@@ -254,15 +257,18 @@ export const Actions = (
     },
 
     clearEvents() {
-      state.events = editorInitialState.events;
+      this.setNodeEvent('selected', null);
+      this.setNodeEvent('hovered', null);
+      this.setNodeEvent('dragged', null);
+      this.setIndicator(null);
     },
 
     /**
      * Resets all the editor state.
      */
     reset() {
-      this.replaceNodes({});
       this.clearEvents();
+      this.replaceNodes({});
     },
 
     /**
@@ -339,6 +345,37 @@ export const Actions = (
     setProp(id: NodeId, cb: (props: any) => void) {
       invariant(state.nodes[id], ERROR_INVALID_NODEID);
       cb(state.nodes[id].data.props);
+    },
+
+    selectNode(nodeId?: NodeId | null) {
+      // TODO: use ts strict-null checks
+      this.setNodeEvent(
+        'selected',
+        nodeId !== undefined && nodeId !== null ? nodeId : null
+      );
+      this.setNodeEvent('hovered', null);
+    },
+  };
+};
+
+export const ActionMethods = (
+  state: EditorState,
+  query: QueryCallbacksFor<typeof QueryMethods>
+) => {
+  return {
+    ...Methods(state, query),
+    // Note: Beware: advanced method! You most likely don't need to use this
+    // TODO: fix parameter types and cleanup the method
+    setState(
+      cb: (
+        state: EditorState,
+        actions: Delete<CallbacksFor<typeof Methods>, 'history'>
+      ) => void
+    ) {
+      const { history, ...actions } = this;
+
+      // We pass the other actions as the second parameter, so that devs could still make use of the predefined actions
+      cb(state, actions);
     },
   };
 };

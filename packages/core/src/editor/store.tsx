@@ -1,9 +1,12 @@
 import { useMethods, SubscriberAndCallbacksFor } from '@craftjs/utils';
-import { Options } from '../interfaces';
-import { Actions } from './actions';
+
+import { ActionMethods } from './actions';
 import { QueryMethods } from './query';
 
-export const editorInitialState = {
+import { DefaultEventHandlers } from '../events';
+import { EditorState, Options } from '../interfaces';
+
+export const editorInitialState: EditorState = {
   nodes: {},
   events: {
     dragged: null,
@@ -11,24 +14,26 @@ export const editorInitialState = {
     hovered: null,
     indicator: null,
   },
+  handlers: null,
   options: {
     onNodesChange: () => null,
     onRender: ({ render }) => render,
     resolver: {},
-    nodes: null,
     enabled: true,
     indicator: {
       error: 'red',
       success: 'rgb(98, 196, 98)',
     },
+    handlers: (store) => new DefaultEventHandlers(store),
   },
 };
 
 export const ActionMethodsWithConfig = {
-  methods: Actions,
+  methods: ActionMethods,
   ignoreHistoryForActions: [
     'setDOM',
     'setNodeEvent',
+    'selectNode',
     'clearEvents',
     'setOptions',
     'setIndicator',

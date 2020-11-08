@@ -29,8 +29,13 @@ export default function movePlaceholder(
   } else {
     if (canvasDOMInfo) {
       t = canvasDOMInfo.top + canvasDOMInfo.padding.top;
-      l = canvasDOMInfo.left;
-      w = canvasDOMInfo.outerWidth;
+      l = canvasDOMInfo.left + canvasDOMInfo.padding.left;
+      w =
+        canvasDOMInfo.outerWidth -
+        canvasDOMInfo.padding.right -
+        canvasDOMInfo.padding.left -
+        canvasDOMInfo.margin.left -
+        canvasDOMInfo.margin.right;
       h = 2;
     }
   }

@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react';
-import { useInternalEditor } from '../editor/useInternalEditor';
-import { NodeElement } from '../nodes/NodeElement';
+
 import { SimpleElement } from './SimpleElement';
+
+import { useInternalEditor } from '../editor/useInternalEditor';
 import { NodeId } from '../interfaces';
+import { NodeElement } from '../nodes/NodeElement';
 import { useInternalNode } from '../nodes/useInternalNode';
 
 const Render = () => {
@@ -16,15 +18,19 @@ const Render = () => {
   );
 
   return useMemo(() => {
-    const render = React.createElement(
-      type,
-      props,
-      <React.Fragment>
-        {nodes
-          ? nodes.map((id: NodeId) => <NodeElement id={id} key={id} />)
-          : props && props.children}
-      </React.Fragment>
-    );
+    let children = props.children;
+
+    if (nodes && nodes.length > 0) {
+      children = (
+        <React.Fragment>
+          {nodes.map((id: NodeId) => (
+            <NodeElement id={id} key={id} />
+          ))}
+        </React.Fragment>
+      );
+    }
+
+    const render = React.createElement(type, props, children);
 
     if (typeof type == 'string') {
       return <SimpleElement render={render} />;

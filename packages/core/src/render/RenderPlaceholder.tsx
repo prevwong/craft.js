@@ -1,6 +1,7 @@
 import React from 'react';
-import { Indicator } from '../interfaces';
+
 import { useEditor } from '../hooks';
+import { Indicator } from '../interfaces';
 
 export type Placeholder = {
   placeholder: Indicator;

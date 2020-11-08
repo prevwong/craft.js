@@ -1,7 +1,8 @@
 // https://github.com/pelotom/use-methods
 import produce, { Patch, produceWithPatches } from 'immer';
-import { useMemo, useEffect, useRef, useReducer, useCallback } from 'react';
 import isEqualWith from 'lodash.isequalwith';
+import { useMemo, useEffect, useRef, useReducer, useCallback } from 'react';
+
 import { History, HISTORY_ACTIONS } from './History';
 import { Delete } from './utilityTypes';
 
@@ -85,7 +86,7 @@ export type Action<T = any, P = any> = {
 };
 
 export type ActionUnion<R extends MethodRecordBase> = {
-  [T in keyof R]: Action<T, Parameters<R[T]>>;
+  [T in keyof R]: { type: T; payload: Parameters<R[T]> };
 }[keyof R];
 
 export type ActionByType<A, T> = A extends { type: infer T2 }
@@ -135,7 +136,7 @@ export type PatchListener<
 ) => void;
 
 export function useMethods<S, R extends MethodRecordBase<S>>(
-  methodsOrOptions: Methods<S, R>,
+  methodsOrOptions: MethodsOrOptions<S, R>, // methods to manipulate the state
   initialState: any
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>>;
 
@@ -228,7 +229,6 @@ export function useMethods<
 
         finalState = nextState;
 
-        // TODO: Allow the ability to add normalization function in <Editor />
         if (patchListener) {
           patchListener(
             nextState,
@@ -459,6 +459,7 @@ class Subscriber {
         if (this.onChange) this.onChange(this.collected);
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.warn(err);
     }
   }

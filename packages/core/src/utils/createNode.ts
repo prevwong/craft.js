@@ -1,6 +1,9 @@
-import React from 'react';
-import { NodeData, Node, FreshNode } from '../interfaces';
 import { produce } from 'immer';
+import React from 'react';
+
+import { getRandomNodeId } from './getRandomNodeId';
+
+import { NodeData, Node, FreshNode } from '../interfaces';
 import { Canvas, deprecateCanvasComponent } from '../nodes/Canvas';
 import {
   defaultElementProps,
@@ -8,7 +11,6 @@ import {
   elementPropToNodeData,
 } from '../nodes/Element';
 import { NodeProvider } from '../nodes/NodeContext';
-import { getRandomNodeId } from './getRandomNodeId';
 
 export function createNode(
   newNode: FreshNode,

@@ -1,4 +1,3 @@
-import { NodeHelpers } from '../NodeHelpers';
 import {
   card,
   documentWithVariousNodes,
@@ -7,6 +6,7 @@ import {
   secondaryButton,
 } from '../../tests/fixtures';
 import { serializeNode } from '../../utils/serializeNode';
+import { NodeHelpers } from '../NodeHelpers';
 
 let helper;
 

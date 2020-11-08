@@ -1,5 +1,5 @@
 // TODO: deprecate in favor of testUtils
-export const createTestNode = (id, data, config: any = {}) => {
+export const createTestNode = (id, data = {}, config: any = {}) => {
   return {
     ...config,
     id,

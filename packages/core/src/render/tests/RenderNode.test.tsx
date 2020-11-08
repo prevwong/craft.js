@@ -1,6 +1,6 @@
-import React from 'react';
-import identity from 'lodash/identity';
 import { mount } from 'enzyme';
+import identity from 'lodash/identity';
+import React from 'react';
 
 import { NodeElement } from '../../nodes/NodeElement';
 import { RenderNodeToElement } from '../RenderNode';
