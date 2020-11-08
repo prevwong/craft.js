@@ -39,8 +39,9 @@ export const deserializeComp = (
 
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
-
-    if (typeof prop === 'object' && prop.resolvedName) {
+    if (prop === null || prop === undefined) {
+      result[key] = null;
+    } else if (typeof prop === 'object' && prop.resolvedName) {
       result[key] = deserializeComp(prop, resolver);
     } else if (key === 'children' && Array.isArray(prop)) {
       result[key] = prop.map((child) => {
