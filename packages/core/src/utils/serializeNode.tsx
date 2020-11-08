@@ -1,7 +1,9 @@
 import React, { Children } from 'react';
+
+import { resolveComponent } from './resolveComponent';
+
 import { NodeData, ReducedComp, SerializedNode } from '../interfaces';
 import { Resolver } from '../interfaces';
-import { resolveComponent } from './resolveComponent';
 
 const reduceType = (type: React.ElementType | string, resolver: Resolver) => {
   if (typeof type === 'string') {
@@ -17,7 +19,8 @@ export const serializeComp = (
   let { type, isCanvas, props } = data;
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
-    if (!prop) {
+
+    if (prop === undefined || prop === null) {
       return result;
     }
 

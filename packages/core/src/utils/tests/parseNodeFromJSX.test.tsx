@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
-import { parseNodeFromJSX } from '../parseNodeFromJSX';
+
 import { createNode } from '../createNode';
+import { parseNodeFromJSX } from '../parseNodeFromJSX';
 
 const Component = ({ href }) => <a href={href}>Hi</a>;
 

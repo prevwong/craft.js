@@ -1,6 +1,6 @@
 {
   "name": "@craftjs/core",
-  "version": "0.1.0-beta.10",
+  "version": "0.1.0-beta.12",
   "description": "A React Framework for building extensible drag and drop page editors",
   "keywords": [
     "react",
@@ -28,13 +28,14 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
     "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
+    "dev:yalc": "../../scripts/yalc.sh",
     "clean": "rimraf lib dist"
   },
   "bugs": {
     "url": "https://github.com/prevwong/craft.js/issues"
   },
   "dependencies": {
-    "@craftjs/utils": "^0.1.0-beta.10",
+    "@craftjs/utils": "^0.1.0-beta.12",
     "@types/react": "^16.9.11",
     "debounce": "^1.2.0",
     "immer": "^3.1.3",

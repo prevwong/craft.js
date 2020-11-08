@@ -1,5 +1,3 @@
-import { EditorState, Node, NodeId } from '../interfaces';
-import invariant from 'tiny-invariant';
 import {
   deprecationWarning,
   ERROR_CANNOT_DRAG,
@@ -14,6 +12,9 @@ import {
   ERROR_MOVE_CANNOT_DROP,
   ROOT_NODE,
 } from '@craftjs/utils';
+import invariant from 'tiny-invariant';
+
+import { EditorState, Node, NodeId } from '../interfaces';
 import { serializeNode } from '../utils/serializeNode';
 
 export function NodeHelpers(state: EditorState, id: NodeId) {

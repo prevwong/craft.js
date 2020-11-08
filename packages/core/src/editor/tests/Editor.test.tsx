@@ -1,10 +1,11 @@
-import React from 'react';
+import { ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
 import { shallow } from 'enzyme';
+import React from 'react';
 import { act } from 'react-dom/test-utils';
 
-import { EditorContext } from '../EditorContext';
-import { Editor } from '../Editor';
 import { Events } from '../../events';
+import { Editor } from '../Editor';
+import { EditorContext } from '../EditorContext';
 import { useEditorStore } from '../store';
 
 jest.mock('../store');
@@ -15,17 +16,17 @@ describe('<Editor />', () => {
   let actions;
   let component;
   let query;
-  let onStateChange;
+  let onNodesChange;
 
   beforeEach(() => {
     React.useEffect = (f) => f();
 
     query = { serialize: jest.fn().mockImplementation(() => '{}') };
-    onStateChange = jest.fn();
+    onNodesChange = jest.fn();
     mockStore.mockImplementation((value) => ({ ...value, query, actions }));
     act(() => {
       component = shallow(
-        <Editor onStateChange={onStateChange}>{children}</Editor>
+        <Editor onNodesChange={onNodesChange}>{children}</Editor>
       );
     });
   });
@@ -36,5 +37,11 @@ describe('<Editor />', () => {
     expect(component.find(EditorContext.Provider)).toHaveLength(1);
   });
 
+  it('should throw an error when resolver is not an object', () => {
+    expect(() => {
+      // @ts-ignore
+      shallow(<Editor resolver={[]} />);
+    }).toThrowError(ERROR_RESOLVER_NOT_AN_OBJECT);
+  });
   // TODO: use react-testing-library to test hook-related code
 });

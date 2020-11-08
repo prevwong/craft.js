@@ -1,5 +1,6 @@
-import { Node } from '../../interfaces';
 import React from 'react';
+
+import { Node } from '../../interfaces';
 import { useNode } from '../useNode';
 
 export function connectNode<C>(collect?: (state: Node) => C) {

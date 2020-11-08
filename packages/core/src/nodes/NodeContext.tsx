@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react';
-import { NodeId } from '../interfaces';
+
 import { NodeHandlers } from './NodeHandlers';
-import { useEventHandler } from '../events';
+
 import { useInternalEditor } from '../editor/useInternalEditor';
+import { useEventHandler } from '../events';
+import { NodeId } from '../interfaces';
 
 export const NodeContext = React.createContext<any>(null);
 
