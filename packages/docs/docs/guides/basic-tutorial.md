@@ -292,7 +292,7 @@ export default function App() {
           <Grid container spacing={3}>
             <Grid item xs>
               <Frame>
-                <Container>
+                <Container padding={5} background="#eee">
                   <Card />
                   <Button size="small" variant="outlined">Click</Button>
                   <Text size="small" text="Hi world!" />
@@ -328,7 +328,7 @@ By default, every element inside the `<Frame />` will have a non-Canvas Node aut
 ```jsx
 // Explanation
 <Frame>
-  <Container padding={5} background="#eee" canvas> // Node of type Container
+  <Container padding={5} background="#eee"> // Node of type Container
     <Card /> // Node of type Card
     <Button size="small" variant="outlined">Click</Button> // Node of type Button
     <Text size="small" text="Hi world!" /> // Node of type Text
