@@ -33,15 +33,14 @@ export interface Indicator {
   error: string | false;
 }
 
-export type EditorEvents = Record<NodeEventTypes, NodeId | null> & {
-  indicator: Indicator | null;
-};
+export type EditorEvents = Record<NodeEventTypes, Set<NodeId>>;
 
 export type EditorState = {
   nodes: Nodes;
   events: EditorEvents;
   options: Options;
   handlers: CoreEventHandlers;
+  indicator: Indicator;
 };
 
 export type ConnectedEditor<S = null> = useInternalEditorReturnType<S>;

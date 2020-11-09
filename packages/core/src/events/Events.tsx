@@ -15,7 +15,7 @@ export const Events: React.FC = ({ children }) => {
     handlers,
     handlersFactory,
   } = useInternalEditor((state) => ({
-    indicator: state.events.indicator,
+    indicator: state.indicator,
     indicatorOptions: state.options.indicator,
     handlers: state.handlers,
     handlersFactory: state.options.handlers,

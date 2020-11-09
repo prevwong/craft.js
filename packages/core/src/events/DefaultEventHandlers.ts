@@ -6,7 +6,11 @@ import { defineEventListener, CraftDOMEvent } from '../utils/Handlers';
 
 export * from '../utils/Handlers';
 
-type DraggedElement = NodeId | NodeTree;
+type DraggedElement = NodeId[] | NodeTree;
+
+type DefaultEventHandlersOptions = {
+  isMultiSelectEnabled: (e) => boolean;
+};
 
 /**
  * Specifies Editor-wide event handlers and connectors
@@ -15,6 +19,17 @@ export class DefaultEventHandlers extends CoreEventHandlers {
   static draggedElementShadow: HTMLElement;
   static draggedElement: DraggedElement;
   static indicator: Indicator = null;
+
+  options: DefaultEventHandlersOptions;
+  currentSelectedElementIds = [];
+
+  constructor(store, options?: DefaultEventHandlersOptions) {
+    super(store);
+    this.options = {
+      isMultiSelectEnabled: (e: MouseEvent) => !!e.metaKey,
+      ...(options || {}),
+    };
+  }
 
   // Safely run handler if Node Id exists
   defineNodeEventListener(
@@ -47,7 +62,83 @@ export class DefaultEventHandlers extends CoreEventHandlers {
             'mousedown',
             (e: CraftDOMEvent<MouseEvent>, id: NodeId) => {
               e.craft.stopPropagation();
-              this.store.actions.setNodeEvent('selected', id);
+
+              let newSelectedElementIds = [];
+
+              if (id) {
+                const { query } = this.store;
+                const selectedElementIds = query.getEvent('selected').all();
+                const isMultiSelect = this.options.isMultiSelectEnabled(e);
+
+                /**
+                 * Retain the previously select elements if the multi-select condition is enabled
+                 * or if the currentNode is already selected
+                 *
+                 * so users can just click to drag the selected elements around without holding the multi-select key
+                 */
+
+                if (isMultiSelect || selectedElementIds.includes(id)) {
+                  newSelectedElementIds = selectedElementIds.filter(
+                    (selectedId) => {
+                      const descendants = query
+                        .node(selectedId)
+                        .descendants(true);
+                      const ancestors = query.node(selectedId).ancestors(true);
+
+                      // Deselect ancestors/descendants
+                      if (descendants.includes(id) || ancestors.includes(id)) {
+                        return false;
+                      }
+
+                      return true;
+                    }
+                  );
+                }
+
+                if (!newSelectedElementIds.includes(id)) {
+                  newSelectedElementIds.push(id);
+                }
+              }
+
+              this.store.actions.setNodeEvent(
+                'selected',
+                newSelectedElementIds
+              );
+            }
+          ),
+          this.defineNodeEventListener(
+            'click',
+            (e: CraftDOMEvent<MouseEvent>, id) => {
+              e.craft.stopPropagation();
+
+              const { query } = this.store;
+              const selectedElementIds = query.getEvent('selected').all();
+
+              const isMultiSelect = this.options.isMultiSelectEnabled(e);
+              const isNodeAlreadySelected = this.currentSelectedElementIds.includes(
+                id
+              );
+
+              let newSelectedElementIds = [...selectedElementIds];
+
+              if (isMultiSelect && isNodeAlreadySelected) {
+                newSelectedElementIds.splice(
+                  newSelectedElementIds.indexOf(id),
+                  1
+                );
+                this.store.actions.setNodeEvent(
+                  'selected',
+                  newSelectedElementIds
+                );
+              } else if (!isMultiSelect && selectedElementIds.length > 1) {
+                newSelectedElementIds = [id];
+                this.store.actions.setNodeEvent(
+                  'selected',
+                  newSelectedElementIds
+                );
+              }
+
+              this.currentSelectedElementIds = newSelectedElementIds;
             }
           ),
         ],
@@ -119,10 +210,22 @@ export class DefaultEventHandlers extends CoreEventHandlers {
             'dragstart',
             (e: CraftDOMEvent<DragEvent>, id: NodeId) => {
               e.craft.stopPropagation();
-              this.store.actions.setNodeEvent('dragged', id);
 
-              DefaultEventHandlers.draggedElementShadow = createShadow(e);
-              DefaultEventHandlers.draggedElement = id;
+              const { query, actions } = this.store;
+              const selectedElementIds = query.getEvent('selected').all();
+
+              actions.setNodeEvent('dragged', selectedElementIds);
+
+              const selectedDOMs = selectedElementIds.map(
+                (id) => query.node(id).get().dom
+              );
+
+              DefaultEventHandlers.draggedElementShadow = createShadow(
+                e,
+                query.node(id).get().dom,
+                selectedDOMs
+              );
+              DefaultEventHandlers.draggedElement = selectedElementIds;
             }
           ),
           defineEventListener('dragend', (e: CraftDOMEvent<DragEvent>) => {
@@ -154,7 +257,11 @@ export class DefaultEventHandlers extends CoreEventHandlers {
                 .parseReactElement(userElement)
                 .toNodeTree();
 
-              DefaultEventHandlers.draggedElementShadow = createShadow(e);
+              const dom = e.currentTarget as HTMLElement;
+
+              DefaultEventHandlers.draggedElementShadow = createShadow(e, dom, [
+                dom,
+              ]);
               DefaultEventHandlers.draggedElement = tree;
             }
           ),

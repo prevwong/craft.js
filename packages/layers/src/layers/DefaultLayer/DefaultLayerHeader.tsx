@@ -103,11 +103,16 @@ export const DefaultLayerHeader: React.FC = () => {
     };
   });
 
-  const { hidden, actions, selected, topLevel } = useEditor((state, query) => ({
-    hidden: state.nodes[id] && state.nodes[id].data.hidden,
-    selected: state.events.selected === id,
-    topLevel: query.node(id).isTopLevelCanvas(),
-  }));
+  const { hidden, actions, selected, topLevel } = useEditor((state, query) => {
+    // TODO: handle multiple selected elements
+    const selected = query.getEvent('selected').first() === id;
+
+    return {
+      hidden: state.nodes[id] && state.nodes[id].data.hidden,
+      selected,
+      topLevel: query.node(id).isTopLevelCanvas(),
+    };
+  });
 
   return (
     <StyledDiv selected={selected} ref={drag} depth={depth}>

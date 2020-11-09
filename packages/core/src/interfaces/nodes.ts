@@ -35,8 +35,8 @@ export type NodeHelpers = QueryCallbacksFor<typeof QueryMethods>['node'];
 export type NodeRules = {
   canDrag(node: Node, helpers: NodeHelpers): boolean;
   canDrop(dropTarget: Node, self: Node, helpers: NodeHelpers): boolean;
-  canMoveIn(canMoveIn: Node, self: Node, helpers: NodeHelpers): boolean;
-  canMoveOut(canMoveOut: Node, self: Node, helpers: NodeHelpers): boolean;
+  canMoveIn(canMoveIn: Node[], self: Node, helpers: NodeHelpers): boolean;
+  canMoveOut(canMoveOut: Node[], self: Node, helpers: NodeHelpers): boolean;
 };
 export type NodeRelated = Record<string, React.ElementType>;
 
@@ -95,3 +95,25 @@ export interface NodeTree {
   rootNodeId: NodeId;
   nodes: Nodes;
 }
+
+type NodeIdSelector = NodeId | NodeId[];
+type NodeObjSelector = Node | Node[];
+
+export enum NodeSelectorType {
+  Any,
+  Id,
+  Obj,
+}
+
+export type NodeSelector<
+  T extends NodeSelectorType = NodeSelectorType.Any
+> = T extends NodeSelectorType.Id
+  ? NodeIdSelector
+  : T extends NodeSelectorType.Obj
+  ? NodeObjSelector
+  : NodeIdSelector | NodeObjSelector;
+
+export type NodeSelectorWrapper = {
+  node: Node;
+  exists: boolean;
+};
