@@ -73,9 +73,9 @@ const App = () => {
 }
 ```
 
-- i. `Hero` is being rendered with a Canvas Node, thus it defines a droppable region. However, since it is not a child of a Canvas Node, it is not draggable (the `drag` handler will not do anything).
-- ii. `Hero` is an immediate child of a Canvas Node; it is draggable.
-- iii. `Hero` is an immediate child of a Canvas Node and is rendered with a Canvas Node - it is both draggable and droppable.
+- i. `Element` is being rendered with a Canvas Node, thus it defines a droppable region. However, since it is not a child of a Canvas Node, it is not draggable (the `drag` handler will not do anything).
+- ii. `Container` is an immediate child of a Canvas Node; it is draggable.
+- iii. `Element` is an immediate child of a Canvas Node and is rendered with a Canvas Node - it is both draggable and droppable.
 
 ## Props manipulation
 You've probably seen page editors where you could directly interact with the components and manipulate them. For instance, drag to resize an image or visually edit a text. This is easily achievable with Craft.js as well.
@@ -132,7 +132,7 @@ To prevent that, we can explicitly specify default prop values via the `craft.pr
 
 ```jsx
 const Text = ({text, fontSize}) => { /** same as previous example **/ }
-Hero.craft = {
+Text.craft = {
   props: {
     text: "Hi there!",
     fontSize: 12
@@ -224,7 +224,7 @@ const Hero = ({background}) => {
 }
 ```
 
-Then, we decide that we want to have the `span` element to be editable indepdently via the Text user component that we made from earlier.
+Then, we decide that we want to have the `span` element to be editable independent of the Text user component we made earlier.
 
 Your first instinct might be to just use the Text component directly:
 

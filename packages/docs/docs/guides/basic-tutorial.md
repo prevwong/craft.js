@@ -68,7 +68,7 @@ export const Button = ({size, variant, color, children}) => {
 ```
 
 #### Container
-We will also create a Container component which would allow our users to change its background colour and padding.
+We will also create a Container component to allow our users to change its background colour and padding.
 
 ```jsx
 // components/user/Container.js
@@ -112,7 +112,7 @@ export const Card = ({background, padding = 20}) => {
 
 ### The Editor
 #### Toolbox
-Let's build a "toolbox" which our users would be able to drag and drop to create new instances of those User Components we just defined.
+Let's build a "toolbox" which our users will be able to drag and drop to create new instances of those User Components we just defined.
 
 ```jsx
 // components/Toolbox.js
@@ -145,7 +145,7 @@ export const Toolbox = () => {
 ```
 
 #### Settings Panel
-We would also want to create a section here where we can display a bunch of settings which our users could use to edit the props of the user components.
+We also want to create a section here where we can display a bunch of settings which our users can use to edit the props of the user components.
 
 For now, let's just put in some dummy text fields. We'll revisit this in the later sections.
 
@@ -339,7 +339,7 @@ By default, every element inside the `<Frame />` will have a non-Canvas Node aut
 </Frame>
 ```
 
-Hence, by default, all the Nodes above are neither draggable or droppable. So how can we define some of the Nodes above as a Canvas Node? 
+Hence, by default, all the Nodes above are neither draggable nor droppable. So how can we define some of the Nodes above as a Canvas Node? 
 
 We can use the provided `<Element />` component to manually define Nodes:
 
@@ -356,7 +356,7 @@ We can use the provided `<Element />` component to manually define Nodes:
 </Frame>
 ```
 
-In the above code, we've wrapped our `Container` components with `<Element />` with the `canvas` prop, thus making the component droppable and it's immediate children, draggable.
+In the above code, we've wrapped our `Container` components with `<Element />` with the `canvas` prop, thus making the component droppable and its immediate children, draggable.
 
 Once you've applied these changes and refresh the page, you will notice that absolutely nothing has changed - and that's a good thing!
 
@@ -549,9 +549,9 @@ export default function App() {
 
 
 ### Implementing the Toolbox
-Let's go back to our Toolbox component and make it so that dragging those buttons into the editor would create new instances of the user components they represent. Just as `useNode` provides methods and information related to a specific `Node`, `useEditor` specifies methods and information related to the entire editor's state.
+Let's go back to our Toolbox component and modify it so that dragging those buttons into the editor will create new instances of the user components they represent. Just as `useNode` provides methods and information related to a specific `Node`, `useEditor` specifies methods and information related to the entire editor's state.
 
-The `useEditor` also provides `connectors`; the one we are interested in right now is `create` which attaches a drag handler to the  DOM specified in its first arguement and creates the element specified in its second arguement.
+The `useEditor` also provides `connectors`; the one we are interested in right now is `create` which attaches a drag handler to the  DOM specified in its first argument and creates the element specified in its second arguement.
 
 ```jsx {20,23,26}
 // components/Toolbox.js
@@ -590,12 +590,12 @@ export const Toolbox = () => {
 };
 ```
 
-Notice for our Container component, we wrapped it with the `<Element canvas />` - this makes it so that our users will be able to drag and drop a new Container component that is droppable.
+Notice for our Container component, we wrapped it with the `<Element canvas />` - this will allow our users to drag and drop a new Container component that is droppable.
 
-Now, you could drag and drop the Buttons, and they would actually create new instances of our User Components.
+Now, you can drag and drop the Buttons, and they will actually create new instances of our User Components.
 
 ### Making the components editable
-Up until this point, we have a page editor where our users can move elements around. But, we are missing one important thing - enabling our users to edit these components' props.
+Up until this point, we have a page editor where our users can move elements around. But, we are missing one important thing - enabling our users to edit the components' props.
 
 The `useNode` hook provides us with the method `setProp` which can be used to manipulate a component's props. Let's implement a content editable for our Text Component:
 
@@ -659,7 +659,7 @@ export const Text = ({text, fontSize}) => {
 
 <Image img="tutorial/text-edit.gif" />
 
-This should give you an idea on the possibilities of implementing powerful visual editing features like what you'd see in most modern page editors.
+This should give you an idea of the possibilities of implementing powerful visual editing features like what you'd see in most modern page editors.
 
 While we are at it, let's also add a slider for users to edit the `fontSize`
 ```jsx
@@ -1029,7 +1029,7 @@ This is the last part of the editor that we have to take care of and then we're 
 
 First, we can get the editor's `enabled` state by passing in a collector function just like what we did before. Then, we can use the `setOptions` action to toggle the `enabled` state.
 
-Lastly, the `useEditor` hook also provides `query` methods which provide information based the editor'state. In our case,  we would like to get the current state of all the `Nodes` in a serialised form; we can do this by calling the `serialize` query method. 
+Lastly, the `useEditor` hook also provides `query` methods which provide information based the editor'state. In our case,  we would like to get the current state of all the `Nodes` in a serialized form; we can do this by calling the `serialize` query method. 
 
 ```jsx {4,7-9,16,25-27}
 // components/Topbar.js
@@ -1075,7 +1075,7 @@ export const Topbar = () => {
 
 
 ## You made it 🎉
-We've made it until the end! Not too bad right? Hopefully, you're able to see the simplicity of building a fully working page editor with Craft.js.
+We've made it to the end! Not too bad right? Hopefully, you're able to see the simplicity of building a fully working page editor with Craft.js.
 
 We do not need to worry about implementing the drag-n-drop system but rather simply focus on writing rules and attaching connectors to the desired elements.
 

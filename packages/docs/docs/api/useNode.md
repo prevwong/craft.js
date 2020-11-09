@@ -126,7 +126,7 @@ const Example = () => {
 ```
 
 ### Usage within child components
-Since User Components are contextually bounded by the `Node` that they are being managed by, thus `useNode` can be used anywhere **within** the component tree.
+Since User Components are contextually bounded by the `Node` they are being managed by, `useNode` can be used anywhere **within** the component tree.
 
 In the previous example, we didn't actually need to forward refs from `CustomDragHandler` since it's bounded by the same `Node` as its parent. Instead, we can just use the connectors from `useNode` directly.
 
@@ -188,7 +188,7 @@ For Class Components, use `connectNode` instead.
 
 ### Parameters
 <API items={[
-  ["collector", "(node: Node) => Collected", "A function that collects relevant state information from the corresponding Node. The component will re-render when the values returned by this function changes."]
+  ["collector", "(node: Node) => Collected", "A function that collects relevant state information from the corresponding Node. The component will re-render when the values returned by this function change."]
 ]} /> 
 
 ### Injected Props

@@ -8,11 +8,11 @@ import {Image} from "@site/src/components";
 This guide extends upon the [Basic Tutorial](/craft.js/r/docs/basic-tutorial)
 
 ## Overview
-Previously, we saw how we could serialise the entire state of `Nodes` in our editor into JSON. Of course, you probably will not want to store the JSON in your server or database, for obvious reasons. Instead, you should first employ a text compression technique of your choice to compress the serialised JSON Nodes.
+Previously, we saw how we could serialize the entire state of `Nodes` in our editor into JSON. Of course, you probably will not want to store the JSON in your server or database, for obvious reasons. Instead, you should first employ a text compression technique of your choice to compress the serialized JSON Nodes.
 
 In this guide, we'll be mainly modifying the previous tutorial's Topbar component. We'll add 2 new features
-- Copy the compressed output of the serialised Nodes to the user's clipboard
-- Load the editor state from a compressed output of serialised Nodes.
+- Copy the compressed output of the serialized Nodes to the user's clipboard
+- Load the editor state from a compressed output of serialized Nodes.
 
 We'll be using 2 external libraries - `lzutf8` (for compression) and `copy-to-clipboard` (you know)
 ```bash
@@ -75,9 +75,9 @@ const [snackbarMessage, setSnackbarMessage] = useState();
 When you click on the button now, it should copy the compressed base64 string to the clipboard.
 
 ## Load state
-Now let's implement the Load State button in our Topbar component. We will display a Dialog box when the button is clicked, and our users would be able to paste the compressed base64 string here. 
+Now let's implement the Load State button in our Topbar component. We will display a Dialog box when the button is clicked, and our users will be able to paste the compressed base64 string there. 
 
-Then, we would need to work in reverse to obtain the original JSON provided by our editor. Finally, we'll call the `deserialize` action which will result in the editor replacing all the current Nodes in the editor with the deserialized output.
+Then, we will need to work in reverse to obtain the original JSON provided by our editor. Finally, we'll call the `deserialize` action which will result in the editor replacing all the current Nodes in the editor with the deserialized output.
 
 ```jsx {12-14,40-83}
 import React, { useState } from "react";
@@ -181,7 +181,7 @@ export const Topbar = () => {
 ### Load JSON on page load
 Of course, what if we wanted our editor to load a serialized output on page load? For this, we will need to take a step back and revisit the `<Frame />` component which we encountered when we first set up Craft.js. 
 
-By default, it constructs the editor state based on whats was initially rendered in its `children`. But, we could also specifiy the serialised JSON nodes to its `json` prop which would cause it to load the state from the JSON string instead. 
+By default, it constructs the editor state based on what was initially rendered in its `children`. But, we could also specifiy the serialized JSON nodes to its `json` prop which would cause it to load the state from the JSON string instead. 
 
 ```jsx
 import React, {useState, useEffect} from 'react';
