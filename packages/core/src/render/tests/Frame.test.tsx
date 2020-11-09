@@ -1,7 +1,8 @@
-import React from 'react';
 import { mount } from 'enzyme';
-import { Frame } from '../Frame';
+import React from 'react';
+
 import { useInternalEditor } from '../../editor/useInternalEditor';
+import { Frame } from '../Frame';
 
 jest.mock('tiny-invariant');
 jest.mock('../../editor/useInternalEditor');

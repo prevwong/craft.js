@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
 import { useEditor } from '@craftjs/core';
-import { useLayerManager } from '../manager/useLayerManager';
 import { RenderIndicator } from '@craftjs/utils';
+import React, { useMemo } from 'react';
+
+import { useLayerManager } from '../manager/useLayerManager';
 
 export const EventManager: React.FC<any> = ({ children }) => {
   const { layers, events } = useLayerManager((state) => state);

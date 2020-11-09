@@ -1,13 +1,17 @@
+import { ERROR_DESERIALIZE_COMPONENT_NOT_IN_RESOLVER } from '@craftjs/utils';
 import React from 'react';
+import invariant from 'tiny-invariant';
+
+import { resolveComponent } from './resolveComponent';
+
 import {
   NodeData,
   SerializedNode,
   ReducedComp,
   ReduceCompType,
 } from '../interfaces';
-import { Canvas } from '../nodes/Canvas';
 import { Resolver } from '../interfaces';
-import { resolveComponent } from './resolveComponent';
+import { Canvas } from '../nodes/Canvas';
 
 type DeserialisedType = JSX.Element & { name: string };
 
@@ -26,6 +30,7 @@ export const deserializeComp = (
   index?: number
 ): DeserialisedType | void => {
   let { type, props } = data;
+
   const main = restoreType(type, resolver);
 
   if (!main) {
@@ -34,7 +39,9 @@ export const deserializeComp = (
 
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
-    if (typeof prop === 'object' && prop.resolvedName) {
+    if (prop === null || prop === undefined) {
+      result[key] = null;
+    } else if (typeof prop === 'object' && prop.resolvedName) {
       result[key] = deserializeComp(prop, resolver);
     } else if (key === 'children' && Array.isArray(prop)) {
       result[key] = prop.map((child) => {
@@ -70,6 +77,19 @@ export const deserializeNode = (
   resolver: Resolver
 ): Omit<NodeData, 'event'> => {
   const { type: Comp, props: Props, ...nodeData } = data;
+
+  const isCompAnHtmlElement = Comp !== undefined && typeof Comp === 'string';
+  const isCompAUserComponent =
+    Comp !== undefined &&
+    (Comp as { resolvedName?: string }).resolvedName !== undefined;
+
+  invariant(
+    isCompAnHtmlElement || isCompAUserComponent,
+    ERROR_DESERIALIZE_COMPONENT_NOT_IN_RESOLVER.replace(
+      '%displayName%',
+      data.displayName
+    ).replace('%availableComponents%', Object.keys(resolver).join(', '))
+  );
 
   const { type, name, props } = (deserializeComp(
     data,

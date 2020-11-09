@@ -1,36 +1,56 @@
-import React, { useMemo } from 'react';
-import { useInternalEditor } from '../editor/useInternalEditor';
 import { RenderIndicator, getDOMInfo } from '@craftjs/utils';
-import movePlaceholder from './movePlaceholder';
-import { EventHandlers } from './EventHandlers';
+import React, { useEffect, useRef } from 'react';
+
 import { EventHandlerContext } from './EventContext';
+import movePlaceholder from './movePlaceholder';
+
+import { useInternalEditor } from '../editor/useInternalEditor';
 
 export const Events: React.FC = ({ children }) => {
-  const { events, indicator, store } = useInternalEditor((state) => ({
-    events: state.events,
-    indicator: state.options.indicator,
+  const {
+    actions,
+    indicator,
+    indicatorOptions,
+    store,
+    handlers,
+    handlersFactory,
+  } = useInternalEditor((state) => ({
+    indicator: state.events.indicator,
+    indicatorOptions: state.options.indicator,
+    handlers: state.handlers,
+    handlersFactory: state.options.handlers,
   }));
 
-  const handler = useMemo(() => new EventHandlers(store), [store]);
+  const storeRef = useRef(store);
+  storeRef.current = store;
 
-  return (
-    <EventHandlerContext.Provider value={handler}>
-      {events.indicator &&
+  useEffect(() => {
+    // TODO: Let's use setState for all internal actions
+    actions.history
+      .ignore()
+      .setState(
+        (state) => (state.handlers = handlersFactory(storeRef.current))
+      );
+  }, [actions, handlersFactory]);
+
+  return handlers ? (
+    <EventHandlerContext.Provider value={handlers}>
+      {indicator &&
         React.createElement(RenderIndicator, {
           style: {
             ...movePlaceholder(
-              events.indicator.placement,
-              getDOMInfo(events.indicator.placement.parent.dom),
-              events.indicator.placement.currentNode &&
-                getDOMInfo(events.indicator.placement.currentNode.dom)
+              indicator.placement,
+              getDOMInfo(indicator.placement.parent.dom),
+              indicator.placement.currentNode &&
+                getDOMInfo(indicator.placement.currentNode.dom)
             ),
-            backgroundColor: events.indicator.error
-              ? indicator.error
-              : indicator.success,
+            backgroundColor: indicator.error
+              ? indicatorOptions.error
+              : indicatorOptions.success,
             transition: '0.2s ease-in',
           },
         })}
       {children}
     </EventHandlerContext.Provider>
-  );
+  ) : null;
 };

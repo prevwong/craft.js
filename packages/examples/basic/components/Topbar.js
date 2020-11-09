@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEditor } from '@craftjs/core';
 import {
   Box,
   FormControlLabel,
@@ -12,11 +12,11 @@ import {
   TextField,
   Snackbar,
 } from '@material-ui/core';
-import { useEditor } from '@craftjs/core';
-import lz from 'lzutf8';
 import copy from 'copy-to-clipboard';
+import lz from 'lzutf8';
+import React, { useState } from 'react';
 
-export const Topbar = ({ onLoadState }) => {
+export const Topbar = () => {
   const { actions, query, enabled, canUndo, canRedo } = useEditor(
     (state, query) => ({
       enabled: state.options.enabled,

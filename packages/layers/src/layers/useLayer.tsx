@@ -1,8 +1,10 @@
-import { useContext, useMemo } from 'react';
-import { LayerContext } from './LayerContext';
-import { useLayerManager } from '../manager';
 import { useEditor } from '@craftjs/core';
+import { useContext, useMemo } from 'react';
+
+import { LayerContext } from './LayerContext';
+
 import { Layer } from '../interfaces';
+import { useLayerManager } from '../manager';
 
 type internalActions = LayerContext & {
   children: string[];

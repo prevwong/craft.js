@@ -1,7 +1,8 @@
-import React from 'react';
 import { mount } from 'enzyme';
-import { Element } from '../Element';
+import React from 'react';
+
 import { createTestNode } from '../../utils/createTestNode';
+import { Element } from '../Element';
 
 let parentNode;
 let existingLinkedNode;

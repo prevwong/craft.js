@@ -1,6 +1,5 @@
 import React from 'react';
-import { resolveComponent } from '../../utils/resolveComponent';
-import { QueryMethods } from '../query';
+
 import {
   rootNode,
   card,
@@ -9,8 +8,10 @@ import {
   documentWithCardState,
 } from '../../tests/fixtures';
 import { createNode } from '../../utils/createNode';
-import { parseNodeFromJSX } from '../../utils/parseNodeFromJSX';
 import { deserializeNode } from '../../utils/deserializeNode';
+import { parseNodeFromJSX } from '../../utils/parseNodeFromJSX';
+import { resolveComponent } from '../../utils/resolveComponent';
+import { QueryMethods } from '../query';
 
 jest.mock('../../utils/resolveComponent', () => ({
   resolveComponent: () => null,
@@ -182,6 +183,11 @@ describe('query', () => {
           });
         });
       });
+    });
+  });
+  describe('getState', () => {
+    it('should return the EditorState', () => {
+      expect(query.getState()).toEqual(state);
     });
   });
 });

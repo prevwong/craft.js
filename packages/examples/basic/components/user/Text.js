@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
 import { useNode } from '@craftjs/core';
-import ContentEditable from 'react-contenteditable';
 import { Slider, FormControl, FormLabel } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import ContentEditable from 'react-contenteditable';
 
 export const Text = ({ text, fontSize, textAlign }) => {
   const {
@@ -16,13 +16,17 @@ export const Text = ({ text, fontSize, textAlign }) => {
   const [editable, setEditable] = useState(false);
 
   useEffect(() => {
-    !selected && setEditable(false);
+    if (selected) {
+      return;
+    }
+
+    setEditable(false);
   }, [selected]);
 
   return (
     <div
       ref={(ref) => connect(drag(ref))}
-      onClick={(e) => selected && setEditable(true)}
+      onClick={() => selected && setEditable(true)}
     >
       <ContentEditable
         html={text}
