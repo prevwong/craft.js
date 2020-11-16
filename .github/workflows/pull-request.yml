@@ -21,6 +21,9 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
+      - name: Symlink
+        run: yarn scaffold
+
       - name: Build
         run: yarn build
 
