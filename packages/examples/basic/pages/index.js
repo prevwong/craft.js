@@ -1,5 +1,6 @@
 import { Editor, Frame, Element } from '@craftjs/core';
-import { Typography, Paper, Grid, makeStyles } from '@material-ui/core';
+import { SlateEditor, Text, Typography } from '@craftjs/slate';
+import { Paper, Grid, makeStyles } from '@material-ui/core';
 import React from 'react';
 
 import { SettingsPanel } from '../components/SettingsPanel';
@@ -8,7 +9,6 @@ import { Topbar } from '../components/Topbar';
 import { Button } from '../components/user/Button';
 import { Card, CardBottom, CardTop } from '../components/user/Card';
 import { Container } from '../components/user/Container';
-import { Text } from '../components/user/Text';
 import '../styles/main.css';
 
 const useStyles = makeStyles(() => ({
@@ -22,17 +22,16 @@ export default function App() {
 
   return (
     <div style={{ margin: '0 auto', width: '800px' }}>
-      <Typography style={{ margin: '20px 0' }} variant="h5" align="center">
-        Basic Page Editor
-      </Typography>
       <Editor
         resolver={{
           Card,
           Button,
-          Text,
           Container,
           CardTop,
           CardBottom,
+          SlateEditor,
+          Text,
+          Typography,
         }}
       >
         <Topbar />
@@ -40,12 +39,11 @@ export default function App() {
           <Grid item xs>
             <Frame>
               <Element canvas is={Container} padding={5} background="#eeeeee">
-                <Card />
-                <Button text="Click me" size="small" />
-                <Text fontSize={20} text="Hi world!" />
-                <Element canvas is={Container} padding={6} background="#999999">
-                  <Text size="small" text="It's me again!" />
-                </Element>
+                <SlateEditor>
+                  <Typography variant="h1">
+                    <Text text="Lol" />
+                  </Typography>
+                </SlateEditor>
               </Element>
             </Frame>
           </Grid>

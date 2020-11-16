@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@craftjs/core": "^0.2.0-alpha.0",
+    "@craftjs/slate": "*",
     "@material-ui/core": "latest",
     "clsx": "latest",
     "copy-to-clipboard": "^3.2.0",
