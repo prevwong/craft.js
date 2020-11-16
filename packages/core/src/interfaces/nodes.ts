@@ -31,12 +31,12 @@ export type Node = {
   _hydrationTimestamp: number;
 };
 
-export type NodeHelpers = QueryCallbacksFor<typeof QueryMethods>['node'];
+export type NodeHelpersType = QueryCallbacksFor<typeof QueryMethods>['node'];
 export type NodeRules = {
-  canDrag(node: Node, helpers: NodeHelpers): boolean;
-  canDrop(dropTarget: Node, self: Node, helpers: NodeHelpers): boolean;
-  canMoveIn(canMoveIn: Node[], self: Node, helpers: NodeHelpers): boolean;
-  canMoveOut(canMoveOut: Node[], self: Node, helpers: NodeHelpers): boolean;
+  canDrag(node: Node, helpers: NodeHelpersType): boolean;
+  canDrop(dropTarget: Node, self: Node, helpers: NodeHelpersType): boolean;
+  canMoveIn(canMoveIn: Node[], self: Node, helpers: NodeHelpersType): boolean;
+  canMoveOut(canMoveOut: Node[], self: Node, helpers: NodeHelpersType): boolean;
 };
 export type NodeRelated = Record<string, React.ElementType>;
 
