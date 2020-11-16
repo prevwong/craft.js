@@ -1,3 +1,4 @@
+import { useEditor, useNode } from '@craftjs/core';
 import React, {
   useState,
   useMemo,
@@ -7,16 +8,16 @@ import React, {
 } from 'react';
 import { createEditor } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
+
 import { CraftBinder } from './CraftBinder';
-import { useEditor, useNode } from '@craftjs/core';
 
 const Element = ({ attributes: { ref, ...attributes }, children, element }) => {
-  const { exists, connectors, query } = useEditor((state) => ({
+  const { exists, connectors } = useEditor((state) => ({
     exists: !!state.nodes[element.id],
   }));
   const domRef = useRef();
 
-  const connect = () => {
+  const connect = useCallback(() => {
     if (!domRef.current) {
       return;
     }
@@ -27,7 +28,7 @@ const Element = ({ attributes: { ref, ...attributes }, children, element }) => {
 
     connectors.connect(domRef.current, element.id);
     connectors.drag(domRef.current, element.id);
-  };
+  }, [connectors, element.id, exists]);
 
   useEffect(() => {
     if (!exists) {
@@ -35,14 +36,17 @@ const Element = ({ attributes: { ref, ...attributes }, children, element }) => {
     }
 
     connect();
-  }, [exists]);
+  }, [connect, exists]);
 
-  const refCallback = useCallback((dom: any) => {
-    // eslint-disable-next-line no-param-reassign
-    ref.current = dom;
-    domRef.current = dom;
-    connect();
-  }, []);
+  const refCallback = useCallback(
+    (dom: any) => {
+      // eslint-disable-next-line no-param-reassign
+      ref.current = dom;
+      domRef.current = dom;
+      connect();
+    },
+    [connect, ref]
+  );
 
   switch (element.type) {
     case 'Typography': {
@@ -61,8 +65,6 @@ const Element = ({ attributes: { ref, ...attributes }, children, element }) => {
   }
 };
 
-let i = 0;
-
 export const SlateEditor = () => {
   const { id } = useNode();
   const { store } = useEditor();
@@ -77,7 +79,7 @@ export const SlateEditor = () => {
       store,
       setValue,
     });
-  }, []);
+  }, [editor, id, store]);
 
   return (
     <Slate editor={editor} value={value} onChange={setValue}>
@@ -96,11 +98,14 @@ const CraftWrapper = React.forwardRef(
     const { connectors } = useEditor();
 
     // Important: ref must be memoized otherwise Slate goes insane
-    const refCallback = useCallback((dom) => {
-      ref.current = dom;
-      connectors.connect(dom, id);
-      connectors.drag(dom, id);
-    }, []);
+    const refCallback = useCallback(
+      (dom) => {
+        ref.current = dom;
+        connectors.connect(dom, id);
+        connectors.drag(dom, id);
+      },
+      [connectors, id, ref]
+    );
 
     return (
       <div {...props} ref={refCallback}>

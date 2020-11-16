@@ -43,7 +43,7 @@ export const resolvers = {
 };
 
 export const slateNodeToCraftNode = (node: any) => {
-  const { id, type, props, custom, text, children, data } = node;
+  const { id, type, props, custom, text, children } = node;
 
   return {
     id,
@@ -53,7 +53,7 @@ export const slateNodeToCraftNode = (node: any) => {
         ...props,
         ...(text ? { children: text } : {}),
       },
-      isCanvas: name !== 'Text',
+      isCanvas: type !== 'Text',
       nodes: children ? children.map((child: any) => child.id) : [],
       custom,
     },

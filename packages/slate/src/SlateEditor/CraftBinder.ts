@@ -1,12 +1,14 @@
 import isEqual from 'lodash/isEqual';
+import shortid from 'shortid';
 import { Editor, Operation } from 'slate';
-import { applyIdOnOperation } from '../utils/applyIdOnOperation';
+
 import {
   craftNodeToSlateNode,
   flattenSlateNodes,
   slateNodeToCraftNode,
 } from './Nodes';
-import shortid from 'shortid';
+
+import { applyIdOnOperation } from '../utils/applyIdOnOperation';
 
 export class CraftBinder {
   options: any;
@@ -100,7 +102,7 @@ export class CraftBinder {
 
   extendSlate() {
     const { slate: rte, store } = this.options;
-    const { apply, onChange, normalizeNode, insertBreak } = rte;
+    const { apply, onChange } = rte;
 
     rte.onChange = () => {
       onChange();

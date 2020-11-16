@@ -1,5 +1,4 @@
 import { Editor, Node, Operation } from 'slate';
-import { SplitNodeOperation } from 'slate';
 
 export const simplifySlateOperations = (
   rteEditor: Editor,
@@ -9,7 +8,7 @@ export const simplifySlateOperations = (
 
   switch (operation.type) {
     case 'split_node': {
-      const { position, target, path, properties } = operation;
+      const { position, path, properties } = operation;
       const node = Node.get(rteEditor, path);
 
       if (node.type === 'Text') {
@@ -62,7 +61,7 @@ export const simplifySlateOperations = (
         };
 
         // @ts-ignore
-        ops = [op4];
+        ops = [op4, op5];
       }
 
       break;

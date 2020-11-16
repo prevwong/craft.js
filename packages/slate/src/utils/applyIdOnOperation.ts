@@ -1,5 +1,5 @@
-import { Operation } from 'slate';
 import shortid from 'shortid';
+import { Operation } from 'slate';
 
 const fieldForOperation = {
   // eslint-disable-next-line @typescript-eslint/camelcase
