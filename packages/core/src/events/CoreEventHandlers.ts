@@ -6,7 +6,7 @@ import { ConnectorsForHandlers, Handlers } from '../utils/Handlers';
  * Connectors are created from the handlers defined here
  */
 export abstract class CoreEventHandlers extends Handlers<
-  'select' | 'hover' | 'drag' | 'drop' | 'create'
+  'select' | 'hover' | 'drag' | 'drop' | 'create' | 'connect'
 > {
   /**
    * Create a new instance of Handlers with reference to the current EventHandlers
