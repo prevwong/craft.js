@@ -26,7 +26,8 @@ jobs:
           key: ${{ runner.OS }}-build-${{ hashFiles('yarn.lock') }}
 
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
 
       - name: Build
         run: yarn build
@@ -56,6 +57,7 @@ jobs:
           key: ${{ runner.OS }}-build-${{ hashFiles('yarn.lock') }}
 
       - name: Install dependencies
+        if: steps.cache-modules.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Symlink
