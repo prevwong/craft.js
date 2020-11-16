@@ -19,7 +19,7 @@
     "test": "jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "scaffold": "npm run lerna:bootstrap && npm run lerna:link",
+    "scaffold": "lerna clean --yes && yarn run lerna:bootstrap",
     "lerna:link": "lerna link",
     "lerna:bootstrap": "lerna bootstrap"
   },
