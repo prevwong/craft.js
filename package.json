@@ -16,6 +16,8 @@
     "release": "run-s lint clean build test release:npm",
     "release:npm": "./scripts/release.sh",
     "publish:beta": "lerna version prerelease --preid beta --force-publish --yes",
+    "lerna:version": "lerna version --conventional-commits --yes",
+    "lerna:prerelease": "yarn lerna:version --conventional-prerelease --yes",
     "test": "jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",

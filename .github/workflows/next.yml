@@ -71,5 +71,8 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
+      - name: Version
+        run: yarn lerna:prerelease
+
       - name: Publish
-        run: yarn publish:beta
+        run: yarn release
