@@ -1,4 +1,3 @@
-export * from './SlateEditor/SlateEditor';
-export * from './SlateEditor/Nodes';
+export * from './Slate';
 export * from './Focus';
 export * from './normalization';

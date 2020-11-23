@@ -1,7 +1,7 @@
 import { Node, Nodes } from '@craftjs/core';
 import flatten from 'lodash/flatten';
 
-import { resolvers } from '../SlateEditor/Nodes';
+import { resolvers } from '../Slate';
 
 export const craftNodeToSlateNode = (node: Node, nodes: Nodes) => {
   const { id, data } = node;

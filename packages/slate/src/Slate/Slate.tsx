@@ -1,12 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { createEditor } from 'slate';
-import { Slate, withReact } from 'slate-react';
+import { Slate as SlateEditor, withReact } from 'slate-react';
 
-import { SlateEditorInternal } from './SlateEditorInternal';
+import { Editable } from './Editable';
+
 import { withList } from '../plugins/withList';
 import { withMarkdownShortcuts } from '../plugins/withMarkdownShortcuts';
 
-export const SlateEditor = () => {
+export const Slate = () => {
   const [value, setValue] = useState([]);
   const editor = useMemo(
     () =>
@@ -22,18 +23,12 @@ export const SlateEditor = () => {
   );
 
   return (
-    <Slate
-      editor={editor}
-      value={value}
-      onChange={(state) => {
-        setValue(state);
-      }}
-    >
-      <SlateEditorInternal onChange={setValue} />
-    </Slate>
+    <SlateEditor editor={editor} value={value} onChange={setValue}>
+      <Editable onChange={setValue} />
+    </SlateEditor>
   );
 };
 
-SlateEditor.craft = {
+Slate.craft = {
   isCanvas: true,
 };
