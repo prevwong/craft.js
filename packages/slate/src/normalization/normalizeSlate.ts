@@ -1,26 +1,23 @@
 import { EditorState } from '@craftjs/core';
-import wrapElement from './wrapElement';
 import mergeElements from './mergeElements';
+import { splitSlate } from './splitSlate';
+import { wrapRogueElement } from './wrapRogueElement';
 import { resolvers } from '../SlateEditor/Nodes';
-import removeInvalidNodes from './removeInvalidNodes';
+import { SlateEditor } from '../SlateEditor/SlateEditor';
 
 export function normalizeSlate(
   state: EditorState,
   query: any,
   previousState: EditorState
 ) {
-  wrapElement(state, query, previousState, 'SlateEditor', [
-    'Typography',
-    'List',
-  ]);
+  // Wrap Rogue Slate elements inside a <SlateEditor /> node
+  wrapRogueElement(state, SlateEditor, Object.values(resolvers));
 
-  /**
-   * Last step, combine adjacent nodes together
-   * We're doing this here instead of the previous loop
-   * because there might have been adjacent RTE after they were expelled
-   */
+  // Break <SlateEditor /> if there's non-Slate elements in it
+  splitSlate(state, SlateEditor, Object.values(resolvers));
+
+  // Last step, combine adjacent nodes together
   mergeElements('SlateEditor', state);
 
-  // removeInvalidNodes(state);
-  // return state;
+  return state;
 }

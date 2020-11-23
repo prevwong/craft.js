@@ -1,9 +1,4 @@
-import { FreshNode, Node } from '@craftjs/core';
-import {
-  createTestNodes,
-  createTestState,
-} from '@craftjs/core/src/utils/testHelpers';
-import deepClone from 'lodash/cloneDeep';
+import { createTestState } from '@craftjs/core/src/utils/testHelpers';
 
 export const rootTypographyNodes = {
   T1: {
