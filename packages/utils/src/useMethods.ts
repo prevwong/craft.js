@@ -45,16 +45,6 @@ export type CallbacksFor<
           },
           M extends Options ? M['ignoreHistoryForActions'][number] : never
         >;
-        withEvent: (
-          event?: any
-        ) => Delete<
-          {
-            [T in ActionUnion<R>['type']]: (
-              ...payload: ActionByType<ActionUnion<R>, T>['payload']
-            ) => void;
-          },
-          M extends Options ? M['ignoreHistoryForActions'][number] : never
-        >;
         ignore: () => Delete<
           {
             [T in ActionUnion<R>['type']]: (
@@ -121,7 +111,6 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<
       ) => ReturnType<R[T]>;
     } & {
       history: {
-        getTimeline: () => any;
         canUndo: () => boolean;
         canRedo: () => boolean;
       };
@@ -210,16 +199,13 @@ export function useMethods<
 
     return [
       (state: S, action: Action) => {
-        let query =
+        const query =
           queryMethods && createQuery(queryMethods, () => state, history);
 
         let finalState;
         let [nextState, patches, inversePatches] = (produceWithPatches as any)(
           state,
           (draft: S) => {
-            query =
-              queryMethods && createQuery(queryMethods, () => draft, history);
-
             switch (action.type) {
               case HISTORY_ACTIONS.UNDO: {
                 return history.undo(draft);
@@ -229,7 +215,6 @@ export function useMethods<
               }
 
               // TODO: Simplify History API
-              case HISTORY_ACTIONS.WITH_EVENT:
               case HISTORY_ACTIONS.IGNORE:
               case HISTORY_ACTIONS.THROTTLE: {
                 const [type, ...params] = action.payload;
@@ -245,9 +230,6 @@ export function useMethods<
         finalState = nextState;
 
         if (patchListener) {
-          query =
-            queryMethods && createQuery(queryMethods, () => nextState, history);
-
           patchListener(
             nextState,
             state,
@@ -285,12 +267,6 @@ export function useMethods<
               patches,
               inversePatches,
               action.config && action.config.rate
-            );
-          } else if (action.type === HISTORY_ACTIONS.WITH_EVENT) {
-            history.add(
-              patches,
-              inversePatches,
-              action.config && action.config.event
             );
           } else {
             history.add(patches, inversePatches);
@@ -337,24 +313,6 @@ export function useMethods<
           return dispatch({
             type: HISTORY_ACTIONS.REDO,
           });
-        },
-        // Pass event info with Action
-        withEvent: (event) => {
-          return {
-            ...actionTypes
-              .filter((type) => !ignoreHistoryForActions.includes(type))
-              .reduce((accum, type) => {
-                accum[type] = (...payload) =>
-                  dispatch({
-                    type: HISTORY_ACTIONS.WITH_EVENT,
-                    payload: [type, ...payload],
-                    config: {
-                      event: event,
-                    },
-                  });
-                return accum;
-              }, {} as any),
-          };
         },
         throttle: (rate) => {
           return {
@@ -429,7 +387,6 @@ export function createQuery<Q extends QueryMethods>(
   return {
     ...queries,
     history: {
-      getTimeline: () => history.getTimeline(),
       canUndo: () => history.canUndo(),
       canRedo: () => history.canRedo(),
     },
