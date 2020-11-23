@@ -70,15 +70,6 @@ export const useStateSync = ({ onChange }: any) => {
       ) as string[];
 
       store.actions.setState((state) => {
-        const focus = getFocusFromSlateRange(
-          slateEditor,
-          slateEditor.selection as any
-        );
-        state.nodes['ROOT'].data.props.selection = {
-          id,
-          focus,
-        };
-
         flattened.forEach((node) => {
           const newNode = store.query.parseFreshNode(node).toNode();
 
@@ -91,6 +82,15 @@ export const useStateSync = ({ onChange }: any) => {
         });
 
         state.nodes[id].data.nodes = childNodeIds;
+
+        const focus = getFocusFromSlateRange(
+          slateEditor,
+          slateEditor.selection as any
+        );
+        state.nodes['ROOT'].data.props.selection = {
+          id,
+          focus,
+        };
       });
     };
 
