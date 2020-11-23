@@ -8,6 +8,7 @@ type UserComponentConfig<T> = {
   rules: Partial<NodeRules>;
   related: Partial<NodeRelated>;
   props: Partial<T>;
+  isCanvas: boolean;
 
   // TODO: Deprecate
   name: string;
