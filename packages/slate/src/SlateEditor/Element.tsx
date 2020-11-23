@@ -24,7 +24,8 @@ export const Element = ({
     connectors.drag(domRef.current, element.id);
   }, [exists]);
 
-  const enable = useCallback(() => {
+  const enable = useCallback((e) => {
+    e.stopPropagation();
     const focus = createFocusOnNode(element.id, query);
     setFocus(id, focus);
   }, []);
