@@ -22,6 +22,7 @@ export const wrapRogueElement = (
         data: {
           type: rootType,
           nodes: [node.id],
+          parent: node.data.parent,
         },
       })
       .toNode();
