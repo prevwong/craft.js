@@ -26,7 +26,6 @@ export const SlateEditor = () => {
       editor={editor}
       value={value}
       onChange={(state) => {
-        // console.log(88, state, editor.selection)
         setValue(state);
       }}
     >
@@ -36,6 +35,5 @@ export const SlateEditor = () => {
 };
 
 SlateEditor.craft = {
-  name: 'SlateEditor',
   isCanvas: true,
 };

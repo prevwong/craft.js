@@ -32,9 +32,13 @@ ListItem.craft = {
   isCanvas: false,
 };
 
-export const resolvers = {
-  Text,
+export const elements = {
   Typography,
   List,
   ListItem,
+};
+
+export const resolvers = {
+  Text,
+  ...elements,
 };

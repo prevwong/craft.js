@@ -54,7 +54,7 @@ export const Element = ({
 
   switch (element.type) {
     case 'Typography': {
-      return React.createElement(element.props.variant, {
+      return React.createElement(element.props.variant || 'p', {
         ...attributes,
         children,
         ref: refCallback,

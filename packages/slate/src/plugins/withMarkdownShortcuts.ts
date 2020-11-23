@@ -77,10 +77,10 @@ export const withMarkdownShortcuts = <T extends Editor>(editor: T) => {
         const start = Editor.start(editor, path);
 
         if (
-          block.type !== 'paragraph' &&
+          block.type !== 'Typography' &&
           Point.equals(selection.anchor, start)
         ) {
-          Transforms.setNodes(editor, { type: 'paragraph' });
+          Transforms.setNodes(editor, { type: 'Typography' });
 
           if (block.type === 'list-item') {
             Transforms.unwrapNodes(editor, {
