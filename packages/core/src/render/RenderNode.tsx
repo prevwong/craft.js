@@ -1,47 +1,16 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
-import { SimpleElement } from './SimpleElement';
+import { DefaultRender } from './DefaultRender';
 
 import { useInternalEditor } from '../editor/useInternalEditor';
-import { NodeId } from '../interfaces';
-import { NodeElement } from '../nodes/NodeElement';
 import { useInternalNode } from '../nodes/useInternalNode';
 
-const Render = () => {
-  const { type, props, nodes, hydrationTimestamp } = useInternalNode(
-    (node) => ({
-      type: node.data.type,
-      props: node.data.props,
-      nodes: node.data.nodes,
-      hydrationTimestamp: node._hydrationTimestamp,
-    })
-  );
-
-  return useMemo(() => {
-    let children = props.children;
-
-    if (nodes && nodes.length > 0) {
-      children = (
-        <React.Fragment>
-          {nodes.map((id: NodeId) => (
-            <NodeElement id={id} key={id} />
-          ))}
-        </React.Fragment>
-      );
-    }
-
-    const render = React.createElement(type, props, children);
-
-    if (typeof type == 'string') {
-      return <SimpleElement render={render} />;
-    }
-
-    return render;
-    // eslint-disable-next-line  react-hooks/exhaustive-deps
-  }, [type, props, hydrationTimestamp, nodes]);
+type RenderNodeToElementType = {
+  render?: React.ReactElement;
 };
-
-export const RenderNodeToElement: React.FC<any> = () => {
+export const RenderNodeToElement: React.FC<RenderNodeToElementType> = ({
+  render,
+}) => {
   const { hidden } = useInternalNode((node) => ({
     hidden: node.data.hidden,
   }));
@@ -55,5 +24,5 @@ export const RenderNodeToElement: React.FC<any> = () => {
     return null;
   }
 
-  return React.createElement(onRender, { render: <Render /> });
+  return React.createElement(onRender, { render: render || <DefaultRender /> });
 };
