@@ -1,5 +1,5 @@
-import { Editor } from 'slate';
 import mapValues from 'lodash/mapValues';
+import { Editor } from 'slate';
 
 export const createFocusOnNode = (nodeId: string, query) => {
   const node = query.node(nodeId).get();

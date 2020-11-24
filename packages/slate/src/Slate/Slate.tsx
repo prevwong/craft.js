@@ -1,34 +1,18 @@
-import React, { useState, useMemo } from 'react';
-import { createEditor } from 'slate';
-import { Slate as SlateEditor, withReact } from 'slate-react';
+import React, { useState } from 'react';
+import { Slate as SlateEditor } from 'slate-react';
 
 import { Editable } from './Editable';
 
-import { withList } from '../plugins/withList';
-import { withMarkdownShortcuts } from '../plugins/withMarkdownShortcuts';
+import { SlateRootContextProvider } from '../contexts/SlateRootContext';
 
-export const Slate = () => {
+export const Slate = ({ editor, is, leaf }) => {
   const [value, setValue] = useState([]);
-  const editor = useMemo(
-    () =>
-      withMarkdownShortcuts(
-        withList({
-          typeLi: 'ListItem',
-          typeOl: 'List',
-          typeUl: 'List',
-          typeP: 'Typography',
-        })(withReact(createEditor()))
-      ),
-    []
-  );
 
   return (
-    <SlateEditor editor={editor} value={value} onChange={setValue}>
-      <Editable onChange={setValue} />
-    </SlateEditor>
+    <SlateRootContextProvider is={is} leaf={leaf}>
+      <SlateEditor editor={editor} value={value} onChange={setValue}>
+        <Editable onChange={setValue} />
+      </SlateEditor>
+    </SlateRootContextProvider>
   );
-};
-
-Slate.craft = {
-  isCanvas: true,
 };

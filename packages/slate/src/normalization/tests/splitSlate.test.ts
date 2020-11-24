@@ -1,5 +1,6 @@
-import { splitSlate } from '../splitSlate';
 import { createBaseSlateState } from './fixtures';
+
+import { splitSlate } from '../splitSlate';
 
 let state;
 

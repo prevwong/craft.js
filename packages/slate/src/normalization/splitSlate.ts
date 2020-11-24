@@ -1,7 +1,7 @@
 import { EditorState, QueryMethods } from '@craftjs/core';
-import shortid from 'shortid';
-import pickBy from 'lodash/pickBy';
 import forIn from 'lodash/forIn';
+import pickBy from 'lodash/pickBy';
+import shortid from 'shortid';
 
 export const splitSlate = (
   state: EditorState,

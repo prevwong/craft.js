@@ -1,19 +1,26 @@
 import { Node, Nodes } from '@craftjs/core';
 import flatten from 'lodash/flatten';
 
-import { resolvers } from '../Slate';
+import { Text } from '../render';
 
-export const craftNodeToSlateNode = (node: Node, nodes: Nodes) => {
+export const craftNodeToSlateNode = (
+  node: Node,
+  nodes: Nodes,
+  textPropKey: string
+) => {
   const { id, data } = node;
   const {
     name,
-    props: { text, ...props },
+    type,
+    props: { [textPropKey]: textProp, ...props },
     custom,
     nodes: childNodes,
   } = data;
 
   const children = childNodes
-    ? childNodes.map((id) => craftNodeToSlateNode(nodes[id], nodes))
+    ? childNodes.map((id) =>
+        craftNodeToSlateNode(nodes[id], nodes, textPropKey)
+      )
     : [];
 
   return {
@@ -22,11 +29,16 @@ export const craftNodeToSlateNode = (node: Node, nodes: Nodes) => {
     props,
     custom,
     ...(children.length > 0 ? { children } : {}),
-    ...(name === 'Text' ? { text: text || '' } : {}),
+    ...(type === Text ? { text: textProp || '' } : {}),
   };
 };
 
-export const slateNodesToCraft = (nodes: any[], parentId: string): any => {
+export const slateNodesToCraft = (
+  nodes: any[],
+  parentId: string,
+  resolvers: any,
+  textPropKey: string
+): any => {
   return flatten(
     nodes.map((node) => [
       {
@@ -35,7 +47,7 @@ export const slateNodesToCraft = (nodes: any[], parentId: string): any => {
           type: resolvers[node.type],
           props: {
             ...node.props,
-            ...(node.text ? { text: node.text } : {}),
+            ...(node.text ? { [textPropKey]: node.text } : {}),
           },
           custom: node.custom || {},
           nodes: node.children
@@ -44,7 +56,9 @@ export const slateNodesToCraft = (nodes: any[], parentId: string): any => {
           parent: parentId,
         },
       },
-      ...(node.children ? slateNodesToCraft(node.children, node.id) : []),
+      ...(node.children
+        ? slateNodesToCraft(node.children, node.id, resolvers, textPropKey)
+        : []),
     ])
   );
 };

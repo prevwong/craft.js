@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react';
 import { useNode } from '@craftjs/core';
+import { useRef, useState } from 'react';
 import { Transforms } from 'slate';
 import { useEditor as useSlateEditor, ReactEditor } from 'slate-react';
+
 import { useFocus } from '../focus';
 import { getSlateRange } from '../utils/getSlateRange';
 

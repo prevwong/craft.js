@@ -1,12 +1,15 @@
 import React, { useCallback } from 'react';
 import { Editable as SlateEditable } from 'slate-react';
 
-import { Element } from './Element';
-import { useStateSync } from './useStateSync';
 import { useSelectionSync } from './useSelectionSync';
-import { CraftWrapper } from './CraftWrapper';
+import { useStateSync } from './useStateSync';
+
+import { useSlateRoot } from '../contexts/SlateRootContext';
+import { Element, Text } from '../render';
 
 export const Editable = ({ onChange }) => {
+  const { is } = useSlateRoot();
+
   useStateSync({
     onChange: (state) => onChange(state),
   });
@@ -14,11 +17,13 @@ export const Editable = ({ onChange }) => {
   const { enabled } = useSelectionSync();
 
   const renderElement = useCallback((props) => <Element {...props} />, []);
+  const renderLeaf = useCallback((props) => <Text {...props} />, []);
 
   return (
     <SlateEditable
-      as={CraftWrapper}
+      as={is}
       renderElement={renderElement}
+      renderLeaf={renderLeaf}
       readOnly={!enabled}
     />
   );

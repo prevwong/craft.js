@@ -1,13 +1,14 @@
-import { useEditor, useNode } from '@craftjs/core';
-import { useEditor as useSlateEditor } from 'slate-react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useEditor, useNode, ROOT_NODE } from '@craftjs/core';
 import isEqual from 'lodash/isEqual';
+import { useCallback, useEffect, useRef } from 'react';
+import { useEditor as useSlateEditor } from 'slate-react';
 
-import { getFocusFromSlateRange } from '../utils/createFocusOnNode';
+import { useSlateRoot } from '../contexts/SlateRootContext';
 import { applyIdOnOperation } from '../utils/applyIdOnOperation';
+import { getFocusFromSlateRange } from '../utils/createFocusOnNode';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../utils/formats';
 
-const getSlateStateFromCraft = (rteNodeId: string, query) => {
+const getSlateStateFromCraft = (rteNodeId: string, query, textProp: string) => {
   const nodes = query.getState().nodes;
   const node = query.node(rteNodeId).get();
   if (!node) {
@@ -16,23 +17,27 @@ const getSlateStateFromCraft = (rteNodeId: string, query) => {
 
   const childNodes = node.data.nodes;
   return childNodes.map((id) =>
-    craftNodeToSlateNode(query.node(id).get(), nodes)
+    craftNodeToSlateNode(query.node(id).get(), nodes, textProp)
   );
 };
 
 export const useStateSync = ({ onChange }: any) => {
+  const {
+    leaf: { textProp },
+  } = useSlateRoot();
+
   const slateEditor = useSlateEditor();
   const { id } = useNode();
   const currentSlateStateRef = useRef<any>(null);
 
-  const { store, query, slateState } = useEditor((state, query) => ({
-    slateState: getSlateStateFromCraft(id, query),
+  const { store, query, slateState } = useEditor((_, query) => ({
+    slateState: getSlateStateFromCraft(id, query, textProp),
   }));
 
   const setSlateState = useCallback(() => {
     slateEditor.selection = null;
 
-    const newState = getSlateStateFromCraft(id, query);
+    const newState = getSlateStateFromCraft(id, query, textProp);
 
     currentSlateStateRef.current = newState;
     onChange(newState);
@@ -61,7 +66,12 @@ export const useStateSync = ({ onChange }: any) => {
         return;
       }
 
-      const flattened = slateNodesToCraft(slateEditor.children, id);
+      const flattened = slateNodesToCraft(
+        slateEditor.children,
+        id,
+        query.getOptions().resolver,
+        textProp
+      );
 
       currentSlateStateRef.current = slateEditor.children;
 
@@ -87,7 +97,7 @@ export const useStateSync = ({ onChange }: any) => {
           slateEditor,
           slateEditor.selection as any
         );
-        state.nodes['ROOT'].data.props.selection = {
+        state.nodes[ROOT_NODE].data.props.selection = {
           id,
           focus,
         };

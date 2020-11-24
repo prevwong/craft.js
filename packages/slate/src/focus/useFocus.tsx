@@ -1,6 +1,5 @@
 import { useEditor } from '@craftjs/core';
 import { useCallback, useEffect, useRef } from 'react';
-import debounce from 'lodash/debounce';
 
 export const useFocus = (id?: string, callback?: any) => {
   const { focus, actions } = useEditor((state) => ({
