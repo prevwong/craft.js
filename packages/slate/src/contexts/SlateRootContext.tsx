@@ -3,8 +3,8 @@ import React, { createContext, useContext } from 'react';
 
 export const SlateRootContext = createContext<any>(null);
 
-interface SlateRootContextProviderProps {
-  is: React.ElementType;
+export interface SlateRootContextProviderProps {
+  renderEditable: React.ReactElement;
   leaf: {
     textProp: string;
   };
@@ -16,7 +16,9 @@ export const SlateRootContextProvider: React.FC<Partial<
   const { id } = useNode();
 
   const value = {
-    is: 'div',
+    renderEditable: ({ attributes, children }) => {
+      return <div {...attributes}>{children}</div>;
+    },
     ...(props || {}),
     leaf: {
       textProp: 'text',

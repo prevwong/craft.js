@@ -4,12 +4,10 @@ import { Editable as SlateEditable } from 'slate-react';
 import { useSelectionSync } from './useSelectionSync';
 import { useStateSync } from './useStateSync';
 
-import { useSlateRoot } from '../contexts/SlateRootContext';
 import { Element, Text } from '../render';
+import { RenderEditable } from './RenderEditable';
 
 export const Editable = ({ onChange }) => {
-  const { is } = useSlateRoot();
-
   useStateSync({
     onChange: (state) => onChange(state),
   });
@@ -21,7 +19,7 @@ export const Editable = ({ onChange }) => {
 
   return (
     <SlateEditable
-      as={is}
+      as={RenderEditable}
       renderElement={renderElement}
       renderLeaf={renderLeaf}
       readOnly={!enabled}
