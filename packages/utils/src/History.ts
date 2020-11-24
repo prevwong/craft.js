@@ -1,5 +1,4 @@
 import { Patch, applyPatches } from 'immer';
-import isEqualWith from 'lodash.isequalwith';
 
 type Timeline = Array<{
   patches: Patch[];
