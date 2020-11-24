@@ -4,7 +4,6 @@ import mergeElements from './mergeElements';
 import { splitSlate } from './splitSlate';
 import { wrapRogueElement } from './wrapRogueElement';
 import { Text } from '../render/Text';
-import { removeElementsWithNoText } from './removeElementsWithNoText';
 
 export const normalizeSlate = (
   slateType: React.ElementType,

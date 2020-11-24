@@ -79,7 +79,7 @@ export const useStateSync = ({ onChange }: any) => {
         (node) => node['id']
       ) as string[];
 
-      store.actions.setState((state) => {
+      store.actions.history.throttle(500).setState((state) => {
         flattened.forEach((node) => {
           const newNode = store.query.parseFreshNode(node).toNode();
 
@@ -97,7 +97,8 @@ export const useStateSync = ({ onChange }: any) => {
           slateEditor,
           slateEditor.selection as any
         );
-        state.nodes[ROOT_NODE].data.props.selection = {
+
+        state.nodes[ROOT_NODE].data.custom.caret = {
           id,
           focus,
         };

@@ -1,5 +1,5 @@
 export * from './Slate';
 export * from './contexts';
-export * from './focus';
+export * from './caret';
 export * from './normalization';
 export { Text } from './render';

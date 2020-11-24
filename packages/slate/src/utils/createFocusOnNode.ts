@@ -1,7 +1,11 @@
 import mapValues from 'lodash/mapValues';
 import { Editor } from 'slate';
 
-export const createFocusOnNode = (nodeId: string, query) => {
+export const createFocusOnNode = (
+  nodeId: string,
+  query,
+  textPropKey: string
+) => {
   const node = query.node(nodeId).get();
 
   let point = {
@@ -16,7 +20,7 @@ export const createFocusOnNode = (nodeId: string, query) => {
       const lastChild = query.node(lastChildId).get();
       point = {
         nodeId: lastChildId,
-        offset: (lastChild.data.props.text || []).length,
+        offset: (lastChild.data.props[textPropKey] || []).length,
       };
     }
   }

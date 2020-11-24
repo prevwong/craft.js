@@ -10,7 +10,7 @@ import { createFocusOnNode } from '../utils/createFocusOnNode';
 type SlateNodeHandlersProps = {
   elementNodeId: NodeId;
   onDomReady: (dom: HTMLElement) => void;
-  onFocus: (focus: any) => void;
+  onFocus: () => void;
 };
 /**
  * Creates Node-specific event handlers and connectors
@@ -34,12 +34,7 @@ export class SlateNodeHandlers extends Handlers<'connect'> {
             e.craft.stopPropagation();
             e.stopPropagation();
 
-            const focus = createFocusOnNode(
-              this.props.elementNodeId,
-              this.store.query
-            );
-
-            this.props.onFocus(focus);
+            this.props.onFocus();
           }),
         ],
       },

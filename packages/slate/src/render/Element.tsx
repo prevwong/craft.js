@@ -6,7 +6,8 @@ import { SlateNodeHandlers } from './SlateNodeHandlers';
 
 import { SlateNodeContext, useSlateNode } from '../contexts/SlateNodeContext';
 import { useSlateRoot } from '../contexts/SlateRootContext';
-import { useFocus } from '../focus';
+import { useCaret } from '../caret';
+import { createFocusOnNode } from '../utils/createFocusOnNode';
 
 const RenderSlateNode = () => {
   const { element, children } = useSlateNode();
@@ -22,12 +23,16 @@ const RenderSlateNode = () => {
 
 export const Element = ({ attributes, children, element }) => {
   const id = element.id;
-  const { id: slateNodeId } = useSlateRoot();
-  const { setFocus } = useFocus();
+  const {
+    id: slateNodeId,
+    leaf: { textProp },
+  } = useSlateRoot();
+  const { setCaret } = useCaret();
 
   const {
     store,
     exists,
+    query,
     connectors: { connect },
   } = useEditor((state) => ({
     exists: !!state.nodes[id],
@@ -39,8 +44,10 @@ export const Element = ({ attributes, children, element }) => {
       onDomReady: (dom) => {
         attributes.ref.current = dom;
       },
-      onFocus: (focus) => {
-        setFocus(slateNodeId, focus);
+      onFocus: () => {
+        const focus = createFocusOnNode(id, query, textProp);
+
+        setCaret(slateNodeId, focus);
       },
     });
 

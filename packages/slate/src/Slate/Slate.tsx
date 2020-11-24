@@ -8,7 +8,7 @@ import {
   SlateRootContextProviderProps,
 } from '../contexts/SlateRootContext';
 
-export interface SlateProps extends SlateRootContextProviderProps {
+export interface SlateProps extends Partial<SlateRootContextProviderProps> {
   editor: ReactEditor;
 }
 
