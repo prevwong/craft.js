@@ -5,7 +5,7 @@ import forIn from 'lodash/forIn';
 import deleteNodes from './deleteNodes';
 
 export default function mergeElements(
-  nodeName: string,
+  rootType: any,
   state: EditorState,
   onDeleteCallback?: Function
 ) {
@@ -27,7 +27,7 @@ export default function mergeElements(
 
       childNodesIds.add(id);
 
-      if (childNode.data.name !== nodeName) {
+      if (childNode.data.type !== rootType) {
         lastNode = null;
         return;
       }

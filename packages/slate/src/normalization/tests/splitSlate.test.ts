@@ -7,9 +7,9 @@ let state;
 const testSplitState = (state) => {
   return splitSlate(createBaseSlateState(state), 'SlateEditor', [
     'Typography',
-    'Text',
     'List',
     'ListItem',
+    'Text',
   ]);
 };
 

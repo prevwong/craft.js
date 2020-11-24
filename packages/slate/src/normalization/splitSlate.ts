@@ -1,7 +1,8 @@
-import { EditorState, QueryMethods } from '@craftjs/core';
+import { EditorState, NodeId, QueryMethods } from '@craftjs/core';
 import forIn from 'lodash/forIn';
 import pickBy from 'lodash/pickBy';
 import shortid from 'shortid';
+import deleteNodes from './deleteNodes';
 
 export const splitSlate = (
   state: EditorState,
@@ -73,6 +74,8 @@ export const splitSlate = (
 
     let expelledIds = [];
 
+    let parentIdsToCheck = new Set<NodeId>();
+
     transfers.forEach((transfer, i) => {
       const { type } = transfer;
 
@@ -115,6 +118,7 @@ export const splitSlate = (
               parent !== currentParentId &&
               currentParentNode.data.nodes.indexOf(id) > -1
             ) {
+              parentIdsToCheck.add(currentParentId);
               state.nodes[currentParentId].data.nodes.splice(
                 currentParentNode.data.nodes.indexOf(id),
                 1
@@ -155,6 +159,29 @@ export const splitSlate = (
         insertTree(rootSlateNode, slateParentId);
       }
     });
+
+    const nodesToDelete = new Set<NodeId>();
+
+    parentIdsToCheck.forEach((id) => {
+      const node = state.nodes[id];
+      if (!node) {
+        return;
+      }
+
+      const parentId = node.data.parent;
+      const parentNode = state.nodes[parentId];
+
+      if (node.data.nodes.length === 0) {
+        if (parentNode && parentNode.data.nodes.length === 1) {
+          nodesToDelete.add(parentNode.id);
+          return;
+        }
+
+        nodesToDelete.add(id);
+      }
+    });
+
+    deleteNodes(state, Array.from(nodesToDelete).map((id) => [id]) as any);
   });
 
   return state;
