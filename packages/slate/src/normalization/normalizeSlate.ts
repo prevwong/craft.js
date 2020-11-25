@@ -3,6 +3,7 @@ import { EditorState } from '@craftjs/core';
 import mergeElements from './mergeElements';
 import { splitSlate } from './splitSlate';
 import { wrapRogueElement } from './wrapRogueElement';
+import { removeInvalidNodes } from './removeInvalidNodes';
 import { Text } from '../render/Text';
 
 export const normalizeSlate = (
@@ -20,6 +21,8 @@ export const normalizeSlate = (
 
   // Last step, combine adjacent nodes together
   mergeElements(slateType, state);
+
+  removeInvalidNodes(state, [slateType, ...elementTypes]);
 
   return state;
 };
