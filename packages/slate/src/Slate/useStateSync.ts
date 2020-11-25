@@ -45,7 +45,7 @@ export const useStateSync = ({ onChange }: any) => {
     // Normalize using Slate
     slateEditor.children = newState;
     Editor.normalize(slateEditor, { force: true });
-    
+
     // Then trigger onChange
     onChange(slateEditor.children);
   }, []);
@@ -100,14 +100,14 @@ export const useStateSync = ({ onChange }: any) => {
 
         state.nodes[id].data.nodes = childNodeIds;
 
-        const focus = getFocusFromSlateRange(
+        const selection = getFocusFromSlateRange(
           slateEditor,
           slateEditor.selection as any
         );
 
         state.nodes[ROOT_NODE].data.custom.caret = {
           id,
-          focus,
+          selection,
         };
       });
     };
