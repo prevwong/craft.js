@@ -1,6 +1,7 @@
 import { useEditor, useNode, ROOT_NODE } from '@craftjs/core';
 import isEqual from 'lodash/isEqual';
 import { useCallback, useEffect, useRef } from 'react';
+import { Editor } from 'slate';
 import { useEditor as useSlateEditor } from 'slate-react';
 
 import { useSlateRoot } from '../contexts/SlateRootContext';
@@ -40,7 +41,13 @@ export const useStateSync = ({ onChange }: any) => {
     const newState = getSlateStateFromCraft(id, query, textProp);
 
     currentSlateStateRef.current = newState;
-    onChange(newState);
+
+    // Normalize using Slate
+    slateEditor.children = newState;
+    Editor.normalize(slateEditor, { force: true });
+    
+    // Then trigger onChange
+    onChange(slateEditor.children);
   }, []);
 
   useEffect(() => {
