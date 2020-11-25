@@ -1,16 +1,51 @@
 import { ROOT_NODE, useEditor, useNode } from '@craftjs/core';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Transforms } from 'slate';
-import { useEditor as useSlateEditor, ReactEditor } from 'slate-react';
+import {
+  useEditor as useSlateEditor,
+  ReactEditor,
+  useSlate,
+} from 'slate-react';
+import debounce from 'lodash/debounce';
 
 import { useCaret } from '../caret';
 import { getSlateRange } from '../utils/getSlateRange';
+import { getClosestSelectableNodeId } from '../utils/getClosestSelectableNodeId';
+import { getFocusFromSlateRange } from '../utils/createFocusOnNode';
 
 export const useSelectionSync = () => {
   const slateEditor = useSlateEditor();
   const { id } = useNode();
   const { query, actions } = useEditor();
   const [enabled, setEnabled] = useState(false);
+  const { selection } = useSlate() as any;
+  const { setCaret } = useCaret();
+
+  const setter = useCallback(
+    debounce(() => {
+      const closestNodeId = getClosestSelectableNodeId(slateEditor);
+
+      if (
+        closestNodeId &&
+        query.node(closestNodeId).get() &&
+        !query.getEvent('selected').contains(closestNodeId)
+      ) {
+        actions.selectNode(closestNodeId);
+      }
+
+      const selection = getFocusFromSlateRange(
+        slateEditor,
+        slateEditor.selection as any
+      );
+
+      setCaret(id, selection);
+    }, 100),
+    []
+  );
+
+  useEffect(() => {
+    setter();
+  }, [selection]);
 
   const enabledRef = useRef<boolean>(enabled);
 

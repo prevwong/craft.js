@@ -16,23 +16,23 @@ export const useCaret = (id?: string, callback?: any) => {
     if (!caret || (caret && caret.id !== id)) {
       value.current = null;
     } else {
-      value.current = caret.focus;
+      value.current = caret.selection;
     }
 
     callback(value.current);
   }, [caret]);
 
-  const setCaret = useCallback((id, focus) => {
-    actions.setCustom('ROOT', (custom) => {
+  const setCaret = useCallback((id, selection) => {
+    actions.history.ignore().setCustom('ROOT', (custom) => {
       custom.caret.id = id;
-      custom.caret.focus = focus;
+      custom.caret.selection = selection;
     });
   }, []);
 
   const clearCaret = useCallback(() => {
-    actions.setCustom('ROOT', (custom) => {
+    actions.history.ignore().setCustom('ROOT', (custom) => {
       custom.caret.id = null;
-      custom.caret.focus = null;
+      custom.caret.selection = null;
     });
   }, []);
 
