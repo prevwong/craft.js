@@ -21,32 +21,6 @@ export const useSelectionSync = () => {
   const { selection } = useSlate() as any;
   const { setCaret } = useCaret();
 
-  const setter = useCallback(
-    debounce(() => {
-      const closestNodeId = getClosestSelectableNodeId(slateEditor);
-
-      if (
-        closestNodeId &&
-        query.node(closestNodeId).get() &&
-        !query.getEvent('selected').contains(closestNodeId)
-      ) {
-        actions.selectNode(closestNodeId);
-      }
-
-      const selection = getFocusFromSlateRange(
-        slateEditor,
-        slateEditor.selection as any
-      );
-
-      setCaret(id, selection);
-    }, 100),
-    []
-  );
-
-  useEffect(() => {
-    setter();
-  }, [selection]);
-
   const enabledRef = useRef<boolean>(enabled);
 
   // Store caret prop on root node
@@ -65,10 +39,33 @@ export const useSelectionSync = () => {
     actions.history.ignore().setCustom(ROOT_NODE, (custom) => {
       custom.caret = {
         id: null,
-        focus: null,
+        selection: null,
       };
     });
   }, []);
+
+  const setter = useCallback(() => {
+    const closestNodeId = getClosestSelectableNodeId(slateEditor);
+
+    if (
+      closestNodeId &&
+      query.node(closestNodeId).get() &&
+      !query.getEvent('selected').contains(closestNodeId)
+    ) {
+      actions.selectNode(closestNodeId);
+    }
+
+    const selection = getFocusFromSlateRange(
+      slateEditor,
+      slateEditor.selection as any
+    );
+
+    setCaret(id, selection);
+  }, []);
+
+  useEffect(() => {
+    setter();
+  }, [selection]);
 
   useCaret(id, (value) => {
     Promise.resolve().then(() => {

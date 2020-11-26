@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Editable as SlateEditable } from 'slate-react';
 
 import { useSelectionSync } from './useSelectionSync';
@@ -17,12 +17,14 @@ export const Editable = ({ onChange }) => {
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Text {...props} />, []);
 
-  return (
-    <SlateEditable
-      as={RenderEditable}
-      renderElement={renderElement}
-      renderLeaf={renderLeaf}
-      readOnly={!enabled}
-    />
-  );
+  return useMemo(() => {
+    return (
+      <SlateEditable
+        as={RenderEditable}
+        renderElement={renderElement}
+        renderLeaf={renderLeaf}
+        readOnly={!enabled}
+      />
+    );
+  }, [enabled]);
 };

@@ -33,7 +33,7 @@ export const Element = ({ attributes, children, element }) => {
     store,
     exists,
     query,
-    connectors: { connect },
+    connectors: { connect, drag },
   } = useEditor((state) => ({
     exists: !!state.nodes[id],
   }));
@@ -66,6 +66,7 @@ export const Element = ({ attributes, children, element }) => {
     }
 
     connect(attributes.ref.current, id);
+    drag(attributes.ref.current, id);
   }, [exists]);
 
   return (

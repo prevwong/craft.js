@@ -7,6 +7,7 @@ import {
   SlateRootContextProvider,
   SlateRootContextProviderProps,
 } from '../contexts/SlateRootContext';
+import { useNode } from '@craftjs/core';
 
 export interface SlateProps extends Partial<SlateRootContextProviderProps> {
   editor: ReactEditor;
@@ -14,10 +15,17 @@ export interface SlateProps extends Partial<SlateRootContextProviderProps> {
 
 export const Slate = ({ editor, ...props }: SlateProps) => {
   const [value, setValue] = useState([]);
+  const { id } = useNode();
 
   return (
     <SlateRootContextProvider {...props}>
-      <SlateEditor editor={editor} value={value} onChange={setValue}>
+      <SlateEditor
+        editor={editor}
+        value={value}
+        onChange={(value) => {
+          setValue(value);
+        }}
+      >
         <Editable onChange={setValue} />
       </SlateEditor>
     </SlateRootContextProvider>
