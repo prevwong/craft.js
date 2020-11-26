@@ -47,7 +47,7 @@ export const Element = ({ attributes, children, element }) => {
       onFocus: () => {
         const focus = createFocusOnNode(id, query, textProp);
 
-        setCaret(slateNodeId, focus);
+        setCaret(focus, slateNodeId);
       },
     });
 

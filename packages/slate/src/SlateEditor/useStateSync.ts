@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { Editor } from 'slate';
 import { useEditor as useSlateEditor } from 'slate-react';
 
+import { useCaret } from '../caret/useCaret';
 import { useSlateRoot } from '../contexts/SlateRootContext';
 import { applyIdOnOperation } from '../utils/applyIdOnOperation';
 import { getFocusFromSlateRange } from '../utils/createFocusOnNode';
@@ -29,6 +30,8 @@ export const useStateSync = ({ onChange }: any) => {
 
   const slateEditor = useSlateEditor();
   const { id } = useNode();
+  const { setCaret } = useCaret();
+
   const currentSlateStateRef = useRef<any>(null);
 
   const { store, query, slateState } = useEditor((_, query) => ({
@@ -66,10 +69,13 @@ export const useStateSync = ({ onChange }: any) => {
     slateEditor.onChange = () => {
       onChange();
 
-      if (
-        slateEditor.operations.length === 1 &&
-        slateEditor.operations[0].type === 'set_selection'
-      ) {
+      if (slateEditor.operations.every((op) => op.type === 'set_selection')) {
+        const selection = getFocusFromSlateRange(
+          slateEditor,
+          slateEditor.selection as any
+        );
+
+        setCaret(selection, id);
         return;
       }
 

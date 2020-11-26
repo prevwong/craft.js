@@ -18,8 +18,6 @@ export const useSelectionSync = () => {
   const { id } = useNode();
   const { query, actions } = useEditor();
   const [enabled, setEnabled] = useState(false);
-  const { selection } = useSlate() as any;
-  const { setCaret } = useCaret();
 
   const enabledRef = useRef<boolean>(enabled);
 
@@ -44,30 +42,7 @@ export const useSelectionSync = () => {
     });
   }, []);
 
-  const setter = useCallback(() => {
-    const closestNodeId = getClosestSelectableNodeId(slateEditor);
-
-    if (
-      closestNodeId &&
-      query.node(closestNodeId).get() &&
-      !query.getEvent('selected').contains(closestNodeId)
-    ) {
-      actions.selectNode(closestNodeId);
-    }
-
-    const selection = getFocusFromSlateRange(
-      slateEditor,
-      slateEditor.selection as any
-    );
-
-    setCaret(id, selection);
-  }, []);
-
-  useEffect(() => {
-    setter();
-  }, [selection]);
-
-  useCaret(id, (value) => {
+  useCaret((value) => {
     Promise.resolve().then(() => {
       if (!value) {
         if (enabledRef.current) {
@@ -94,7 +69,7 @@ export const useSelectionSync = () => {
       ReactEditor.focus(slateEditor);
       Transforms.select(slateEditor, newSelection);
     });
-  });
+  }, id);
 
   return { enabled };
 };
