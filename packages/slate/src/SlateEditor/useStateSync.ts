@@ -12,16 +12,13 @@ import { getFocusFromSlateRange } from '../utils/createFocusOnNode';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../utils/formats';
 
 const getSlateStateFromCraft = (rteNodeId: string, query, textProp: string) => {
-  const nodes = query.getState().nodes;
   const node = query.node(rteNodeId).get();
   if (!node) {
     return;
   }
 
   const childNodes = node.data.nodes;
-  return childNodes.map((id) =>
-    craftNodeToSlateNode(query.node(id).get(), nodes, textProp)
-  );
+  return childNodes.map((id) => craftNodeToSlateNode(query, id, textProp));
 };
 
 export const useStateSync = ({ onChange }: any) => {
@@ -44,8 +41,6 @@ export const useStateSync = ({ onChange }: any) => {
 
     const newState = getSlateStateFromCraft(id, query, textProp);
 
-    // console.log('setting craft!', newState);
-
     currentSlateStateRef.current = newState;
 
     // Normalize using Slate
@@ -62,8 +57,6 @@ export const useStateSync = ({ onChange }: any) => {
     if (isEqual(currentSlateState, slateState)) {
       return;
     }
-
-    console.log('diff', currentSlateState, slateState);
 
     setSlateState();
   }, [slateState]);
@@ -94,13 +87,6 @@ export const useStateSync = ({ onChange }: any) => {
         return;
       }
 
-      const flattened = slateNodesToCraft(
-        slateEditor.children,
-        id,
-        query.getOptions().resolver,
-        textProp
-      );
-
       currentSlateStateRef.current = slateEditor.children;
 
       const childNodeIds = slateEditor.children.map(
@@ -108,16 +94,7 @@ export const useStateSync = ({ onChange }: any) => {
       ) as string[];
 
       store.actions.history.throttle(500).setState((state) => {
-        flattened.forEach((node) => {
-          const newNode = store.query.parseFreshNode(node).toNode();
-
-          if (!state.nodes[node.id]) {
-            state.nodes[node.id] = newNode;
-            return;
-          }
-
-          state.nodes[node.id].data = newNode.data;
-        });
+        slateNodesToCraft(state, slateEditor.children, id, textProp);
 
         state.nodes[id].data.nodes = childNodeIds;
 

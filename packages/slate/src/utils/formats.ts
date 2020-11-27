@@ -1,106 +1,99 @@
-import { Node, Nodes } from '@craftjs/core';
+import { EditorState, QueryMethods } from '@craftjs/core';
 import flatten from 'lodash/flatten';
-import { Dictionary } from 'lodash';
-import fromPairs from 'lodash/fromPairs';
 
 import { Text } from '../render';
 
-const getSlateMarks = (marks: any) => {
-  if (!marks || !Array.isArray(marks) || marks.length < 1) {
-    return {};
-  }
-  return fromPairs(
-    marks.map((mark: keyof typeof craftToSlateMarks) => [
-      craftToSlateMarks[mark],
-      true,
-    ])
-  );
-};
-
 export const craftNodeToSlateNode = (
-  node: Node,
-  nodes: Nodes,
+  query: any,
+  nodeId: string,
   textPropKey: string
 ) => {
-  const { id, data } = node;
+  const craftNode = query.node(nodeId).get();
+
+  const { id, data } = craftNode;
   const {
     name,
     type,
-    props: { [textPropKey]: textProp, ...props },
-    custom,
+    props: { [textPropKey]: textProp },
     nodes: childNodes,
   } = data;
 
   const children = childNodes
-    ? childNodes.map((id) =>
-        craftNodeToSlateNode(nodes[id], nodes, textPropKey)
-      )
+    ? childNodes.map((id) => craftNodeToSlateNode(query, id, textPropKey))
     : [];
 
-  return {
+  const toSlateConverter = type.slate && type.slate.toSlateNode;
+
+  const slateNode = {
     id,
     type: name,
-    props,
-    custom,
     ...(children.length > 0 ? { children } : {}),
     ...(type === Text ? { text: textProp || '' } : {}),
-    // TODO: make this more extensible
-    ...(custom.marks ? getSlateMarks(custom.marks) : {}),
   };
-};
 
-export const craftToSlateMarks = {
-  B: 'bold',
-  Em: 'italic',
-  U: 'underline',
-  InlineCode: 'code',
-};
-
-export const slateToCraftMarks: Dictionary<any> = fromPairs(
-  Object.entries(craftToSlateMarks).map((entry) => entry.reverse())
-);
-
-const getCraftMarks = (node: any) => {
-  const marks = Object.keys(node)
-    .map((key) => slateToCraftMarks[key])
-    .filter((mark) => !!mark);
-
-  if (marks.length < 1) {
-    return {};
+  if (toSlateConverter) {
+    toSlateConverter(craftNode)(slateNode);
   }
 
-  return { marks };
+  return slateNode;
 };
 
 export const slateNodesToCraft = (
-  nodes: any[],
+  state: EditorState,
+  slateNodes: any[],
   parentId: string,
-  resolvers: any,
   textPropKey: string
 ): any => {
+  const query = QueryMethods(state);
+
+  const resolvers = query.getOptions().resolver;
   return flatten(
-    nodes.map((node) => [
-      {
-        id: node.id,
-        data: {
-          type: resolvers[node.type],
-          props: {
-            ...node.props,
-            ...(node.text ? { [textPropKey]: node.text } : {}),
+    slateNodes.map((slateNode) => {
+      const existingCraftNode = state.nodes[slateNode.id];
+      const type = resolvers[slateNode.type];
+      const toCraftConverter = type['slate'] && type['slate'].toCraftNode;
+
+      const newCraftNode = query
+        .parseFreshNode({
+          id: slateNode.id,
+          data: {
+            type,
+            parent: parentId,
+            nodes: slateNode.children
+              ? slateNode.children.map((childNode) => childNode.id)
+              : [],
           },
-          custom: {
-            ...(node.custom || {}),
-            // ...getCraftMarks(node),
-          },
-          nodes: node.children
-            ? node.children.map((childNode) => childNode.id)
-            : [],
-          parent: parentId,
-        },
-      },
-      ...(node.children
-        ? slateNodesToCraft(node.children, node.id, resolvers, textPropKey)
-        : []),
-    ])
+        })
+        .toNode((node) => {
+          if (toCraftConverter) {
+            toCraftConverter(slateNode)(node);
+          }
+
+          if (slateNode.text) {
+            node.data.props[textPropKey] = slateNode.text;
+          }
+        });
+
+      if (
+        existingCraftNode &&
+        existingCraftNode.data.type === newCraftNode.data.type
+      ) {
+        state.nodes[slateNode.id].data = newCraftNode.data;
+      } else {
+        state.nodes[slateNode.id] = newCraftNode;
+      }
+
+      return [
+        newCraftNode,
+        ...(slateNode.children
+          ? slateNodesToCraft(
+              state,
+              slateNode.children,
+              slateNode.id,
+              textPropKey
+            )
+          : []),
+      ];
+    })
   );
 };
