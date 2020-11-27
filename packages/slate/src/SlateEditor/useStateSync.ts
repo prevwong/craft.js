@@ -3,6 +3,7 @@ import isEqual from 'lodash/isEqual';
 import { useCallback, useEffect, useRef } from 'react';
 import { Editor } from 'slate';
 import { useEditor as useSlateEditor } from 'slate-react';
+import { getClosestSelectableNodeId } from '../utils/getClosestSelectableNodeId';
 
 import { useCaret } from '../caret/useCaret';
 import { useSlateRoot } from '../contexts/SlateRootContext';
@@ -43,6 +44,8 @@ export const useStateSync = ({ onChange }: any) => {
 
     const newState = getSlateStateFromCraft(id, query, textProp);
 
+    // console.log('setting craft!', newState);
+
     currentSlateStateRef.current = newState;
 
     // Normalize using Slate
@@ -60,6 +63,8 @@ export const useStateSync = ({ onChange }: any) => {
       return;
     }
 
+    console.log('diff', currentSlateState, slateState);
+
     setSlateState();
   }, [slateState]);
 
@@ -68,6 +73,16 @@ export const useStateSync = ({ onChange }: any) => {
 
     slateEditor.onChange = () => {
       onChange();
+
+      const closestNodeId = getClosestSelectableNodeId(slateEditor);
+
+      if (
+        closestNodeId &&
+        query.node(closestNodeId).get() &&
+        !query.getEvent('selected').contains(closestNodeId)
+      ) {
+        store.actions.selectNode(closestNodeId);
+      }
 
       if (slateEditor.operations.every((op) => op.type === 'set_selection')) {
         const selection = getFocusFromSlateRange(

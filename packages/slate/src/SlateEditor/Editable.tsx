@@ -1,15 +1,21 @@
 import React, { useCallback, useMemo } from 'react';
 import { Editable as SlateEditable } from 'slate-react';
 
-import { useSelectionSync } from './useSelectionSync';
+import { useSlateRoot } from '../contexts/SlateRootContext';
 import { useStateSync } from './useStateSync';
+import { useSelectionSync } from './useSelectionSync';
 
 import { Element, Text } from '../render';
 import { RenderEditable } from './RenderEditable';
 
-export const Editable = ({ onChange }) => {
+export const Editable = () => {
+  const {
+    onChange,
+    editable: { onKeyDown },
+  } = useSlateRoot();
+
   useStateSync({
-    onChange: (state) => onChange(state),
+    onChange,
   });
 
   const { enabled } = useSelectionSync();
@@ -24,6 +30,7 @@ export const Editable = ({ onChange }) => {
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         readOnly={!enabled}
+        onKeyDown={onKeyDown}
       />
     );
   }, [enabled]);

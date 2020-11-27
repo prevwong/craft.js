@@ -1,7 +1,21 @@
 import { Node, Nodes } from '@craftjs/core';
 import flatten from 'lodash/flatten';
+import { Dictionary } from 'lodash';
+import fromPairs from 'lodash/fromPairs';
 
 import { Text } from '../render';
+
+const getSlateMarks = (marks: any) => {
+  if (!marks || !Array.isArray(marks) || marks.length < 1) {
+    return {};
+  }
+  return fromPairs(
+    marks.map((mark: keyof typeof craftToSlateMarks) => [
+      craftToSlateMarks[mark],
+      true,
+    ])
+  );
+};
 
 export const craftNodeToSlateNode = (
   node: Node,
@@ -30,7 +44,32 @@ export const craftNodeToSlateNode = (
     custom,
     ...(children.length > 0 ? { children } : {}),
     ...(type === Text ? { text: textProp || '' } : {}),
+    // TODO: make this more extensible
+    ...(custom.marks ? getSlateMarks(custom.marks) : {}),
   };
+};
+
+export const craftToSlateMarks = {
+  B: 'bold',
+  Em: 'italic',
+  U: 'underline',
+  InlineCode: 'code',
+};
+
+export const slateToCraftMarks: Dictionary<any> = fromPairs(
+  Object.entries(craftToSlateMarks).map((entry) => entry.reverse())
+);
+
+const getCraftMarks = (node: any) => {
+  const marks = Object.keys(node)
+    .map((key) => slateToCraftMarks[key])
+    .filter((mark) => !!mark);
+
+  if (marks.length < 1) {
+    return {};
+  }
+
+  return { marks };
 };
 
 export const slateNodesToCraft = (
@@ -49,7 +88,10 @@ export const slateNodesToCraft = (
             ...node.props,
             ...(node.text ? { [textPropKey]: node.text } : {}),
           },
-          custom: node.custom || {},
+          custom: {
+            ...(node.custom || {}),
+            // ...getCraftMarks(node),
+          },
           nodes: node.children
             ? node.children.map((childNode) => childNode.id)
             : [],

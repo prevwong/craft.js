@@ -22,8 +22,7 @@ export const useSelectionSync = () => {
   const enabledRef = useRef<boolean>(enabled);
 
   // Store caret prop on root node
-  // TODO: find a better place to store this (maybe as a custom property)
-  // Also, think of a better way of setting this initial value
+  // TODO: think of a better way of setting this initial value
   useEffect(() => {
     const rootNode = query.node(ROOT_NODE).get();
     if (!rootNode) {
