@@ -1,23 +1,22 @@
 import { NodeElement } from '@craftjs/core';
 import { useEditor } from '@craftjs/core';
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
-import { SlateNodeHandlers } from './SlateNodeHandlers';
-
-import { SlateNodeContext, useSlateNode } from '../contexts/SlateNodeContext';
 import { useSlateRoot } from '../contexts/SlateRootContext';
 import { useCaret } from '../caret';
 import { createFocusOnNode } from '../utils/createFocusOnNode';
 
-const RenderSlateNode = () => {
-  const { element, children } = useSlateNode();
+const RenderSlateNode = (props: any) => {
+  const { element, attributes, children } = props;
+
   const { type } = useEditor((state) => ({
     type: state.options.resolver[element.type],
   }));
 
   return React.createElement(type, {
+    element,
     children,
-    ...element.props,
+    attributes,
   });
 };
 
@@ -30,7 +29,6 @@ export const Element = ({ attributes, children, element }) => {
   const { setCaret } = useCaret();
 
   const {
-    store,
     exists,
     query,
     connectors: { connect, drag },
@@ -38,46 +36,39 @@ export const Element = ({ attributes, children, element }) => {
     exists: !!state.nodes[id],
   }));
 
-  const connectors = useMemo(() => {
-    const slateNodeHandlers = new SlateNodeHandlers(store, {
-      elementNodeId: id,
-      onDomReady: (dom) => {
-        attributes.ref.current = dom;
-      },
-      onFocus: () => {
-        const focus = createFocusOnNode(id, query, textProp);
-
-        setCaret(focus, slateNodeId);
-      },
-    });
-
-    return slateNodeHandlers.connectors();
+  const enable = useCallback(() => {
+    const focus = createFocusOnNode(id, query, textProp);
+    setCaret(focus, slateNodeId);
   }, []);
 
-  // TOOD: There is an issue with Craft's Handlers class which does not work well when a Node is initialised later
-  // Requires further investigation. For the time being, we will handle this manually here
   useEffect(() => {
     if (!exists) {
       return;
     }
 
-    if (!attributes.ref.current) {
+    const dom = attributes.ref.current;
+
+    if (!dom) {
       return;
     }
 
-    connect(attributes.ref.current, id);
-    drag(attributes.ref.current, id);
+    connect(dom, id);
+    drag(dom, id);
+
+    dom.addEventListener('dblclick', enable);
+    return () => dom.removeEventListener('dblclick', enable);
   }, [exists]);
 
   return (
-    <SlateNodeContext.Provider
-      value={{
-        element,
-        children,
-        connectors,
-      }}
-    >
-      <NodeElement id={id} render={<RenderSlateNode />} />
-    </SlateNodeContext.Provider>
+    <NodeElement
+      id={id}
+      render={
+        <RenderSlateNode
+          element={element}
+          attributes={attributes}
+          children={children}
+        />
+      }
+    />
   );
 };
