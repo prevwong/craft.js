@@ -50,7 +50,12 @@ export const slateNodesToCraft = (
   return flatten(
     slateNodes.map((slateNode) => {
       const existingCraftNode = state.nodes[slateNode.id];
-      const type = resolvers[slateNode.type];
+      let slateNodeType = slateNode.type;
+      if (!slateNodeType && slateNode.text !== undefined) {
+        slateNodeType = 'Text';
+      }
+
+      const type = resolvers[slateNodeType];
       const toCraftConverter = type['slate'] && type['slate'].toCraftNode;
 
       const newCraftNode = query

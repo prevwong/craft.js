@@ -1,6 +1,8 @@
 import { NodeElement } from '@craftjs/core';
 import { useEditor } from '@craftjs/core';
 import React, { useCallback, useEffect } from 'react';
+import { Editor } from 'slate';
+import { useEditor as useSlateEditor } from 'slate-react';
 
 import { useSlateRoot } from '../contexts/SlateRootContext';
 import { useCaret } from '../caret';
@@ -36,12 +38,21 @@ export const Element = ({ attributes, children, element }) => {
     exists: !!state.nodes[id],
   }));
 
-  const enable = useCallback(() => {
+  const slateEditor = useSlateEditor();
+
+  const enable = useCallback((e: MouseEvent) => {
+    e.stopPropagation();
     const focus = createFocusOnNode(id, query, textProp);
     setCaret(focus, slateNodeId);
   }, []);
 
   useEffect(() => {
+    // If the current element is an inline element (ie: a link)
+    // Then we don't need to add craft connectors
+    if (Editor.isInline(slateEditor, element)) {
+      return;
+    }
+
     if (!exists) {
       return;
     }
