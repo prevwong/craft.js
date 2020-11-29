@@ -3,15 +3,21 @@ import pickBy from 'lodash/pickBy';
 import forIn from 'lodash/forIn';
 
 import deleteNodes from './deleteNodes';
-import { Text } from '../render/Text';
 
-export const removeInvalidNodes = (state: EditorState, elementTypes: any[]) => {
+export const removeInvalidNodes = (
+  state: EditorState,
+  elementTypes: any[],
+  leafElementType: any
+) => {
   const nodesToDelete = new Set<NodeId>();
 
   const slateNodes = pickBy(state.nodes, (node) =>
     elementTypes.includes(node.data.type)
   );
-  const textNodes = pickBy(state.nodes, (node) => node.data.type === Text);
+  const textNodes = pickBy(
+    state.nodes,
+    (node) => node.data.type === leafElementType
+  );
 
   let matched = new Set();
   forIn(textNodes, (node) => {

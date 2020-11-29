@@ -1,25 +1,14 @@
 import { EditorState, QueryMethods } from '@craftjs/core';
 import flatten from 'lodash/flatten';
 
-import { Text } from '../render';
-
-export const craftNodeToSlateNode = (
-  query: any,
-  nodeId: string,
-  textPropKey: string
-) => {
+export const craftNodeToSlateNode = (query: any, nodeId: string) => {
   const craftNode = query.node(nodeId).get();
 
   const { id, data } = craftNode;
-  const {
-    name,
-    type,
-    props: { [textPropKey]: textProp },
-    nodes: childNodes,
-  } = data;
+  const { name, type, nodes: childNodes } = data;
 
   const children = childNodes
-    ? childNodes.map((id) => craftNodeToSlateNode(query, id, textPropKey))
+    ? childNodes.map((id) => craftNodeToSlateNode(query, id))
     : [];
 
   const toSlateConverter = type.slate && type.slate.toSlateNode;
@@ -28,7 +17,6 @@ export const craftNodeToSlateNode = (
     id,
     type: name,
     ...(children.length > 0 ? { children } : {}),
-    ...(type === Text ? { text: textProp || '' } : {}),
   };
 
   if (toSlateConverter) {
@@ -41,8 +29,7 @@ export const craftNodeToSlateNode = (
 export const slateNodesToCraft = (
   state: EditorState,
   slateNodes: any[],
-  parentId: string,
-  textPropKey: string
+  parentId: string
 ): any => {
   const query = QueryMethods(state);
 
@@ -73,10 +60,6 @@ export const slateNodesToCraft = (
           if (toCraftConverter) {
             toCraftConverter(slateNode)(node);
           }
-
-          if (slateNode.text) {
-            node.data.props[textPropKey] = slateNode.text;
-          }
         });
 
       if (
@@ -91,12 +74,7 @@ export const slateNodesToCraft = (
       return [
         newCraftNode,
         ...(slateNode.children
-          ? slateNodesToCraft(
-              state,
-              slateNode.children,
-              slateNode.id,
-              textPropKey
-            )
+          ? slateNodesToCraft(state, slateNode.children, slateNode.id)
           : []),
       ];
     })

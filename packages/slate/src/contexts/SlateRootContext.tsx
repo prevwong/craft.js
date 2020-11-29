@@ -8,13 +8,6 @@ export const SlateRootContext = createContext<any>(null);
 export interface SlateRootContextProviderProps {
   onChange: (value: any) => void;
   editor: ReactEditor;
-  editable: Delete<
-    React.ComponentProps<typeof Editable>,
-    'renderElement' | 'renderLeaf' | 'readonly'
-  >;
-  leaf: {
-    textProp: string;
-  };
 }
 
 export const SlateRootContextProvider: React.FC<Partial<
@@ -24,16 +17,6 @@ export const SlateRootContextProvider: React.FC<Partial<
 
   const value = {
     ...(props || {}),
-    editable: {
-      as: ({ attributes, children }) => {
-        return <div {...attributes}>{children}</div>;
-      },
-      ...(props.editable || {}),
-    },
-    leaf: {
-      textProp: 'text',
-      ...((props && props.leaf) || {}),
-    },
     id,
   };
 

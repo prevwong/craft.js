@@ -1,36 +1,40 @@
 import React, { useCallback, useMemo } from 'react';
+import { Delete } from '@craftjs/utils';
 import { Editable as SlateEditable } from 'slate-react';
 
-import { useSlateRoot } from '../contexts/SlateRootContext';
 import { useStateSync } from './useStateSync';
 import { useSelectionSync } from './useSelectionSync';
 
-import { Element, Text } from '../render';
-import { RenderEditable } from './RenderEditable';
+import { Element } from '../render';
+import { connectEditable } from './connectEditable';
+import { useCraftSlateContext } from '../contexts/CraftSlateProvider';
 
-export const Editable = () => {
-  const {
-    onChange,
-    editable: { onKeyDown },
-  } = useSlateRoot();
+const DefaultRenderEditable = ({ attributes, children }) => {
+  return <div {...attributes}>{children}</div>;
+};
 
-  useStateSync({
-    onChange,
-  });
+export const Editable = (
+  props: Delete<
+    React.ComponentProps<typeof SlateEditable>,
+    'renderElement' | 'renderLeaf' | 'readonly'
+  >
+) => {
+  const { leaf: LeafElement } = useCraftSlateContext();
 
+  useStateSync();
   const { enabled } = useSelectionSync();
 
   const renderElement = useCallback((props) => <Element {...props} />, []);
-  const renderLeaf = useCallback((props) => <Text {...props} />, []);
+  const renderLeaf = useCallback((props) => <LeafElement {...props} />, []);
 
   return useMemo(() => {
     return (
       <SlateEditable
-        as={RenderEditable}
+        {...props}
+        as={connectEditable(props.as || DefaultRenderEditable)}
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         readOnly={!enabled}
-        onKeyDown={onKeyDown}
       />
     );
   }, [enabled]);

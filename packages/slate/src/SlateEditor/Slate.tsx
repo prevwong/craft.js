@@ -6,7 +6,6 @@ import {
   SlateRootContextProvider,
   SlateRootContextProviderProps,
 } from '../contexts/SlateRootContext';
-import { Editable } from './Editable';
 
 export type SlateProps = Delete<SlateRootContextProviderProps, 'onChange'>;
 
@@ -21,7 +20,6 @@ export const Slate: React.FC<SlateProps> = ({ children, ...props }) => {
       }}
     >
       <SlateEditor editor={props.editor} value={value} onChange={setValue}>
-        <Editable />
         {children}
       </SlateEditor>
     </SlateRootContextProvider>

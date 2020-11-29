@@ -5,7 +5,6 @@ const fieldForOperation = {
   // eslint-disable-next-line @typescript-eslint/camelcase
   insert_node: 'node',
   // eslint-disable-next-line @typescript-eslint/camelcase
-  // eslint-disable-next-line @typescript-eslint/camelcase
   split_node: 'properties',
 };
 

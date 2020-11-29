@@ -6,26 +6,23 @@ import { useEditor as useSlateEditor } from 'slate-react';
 import { getClosestSelectableNodeId } from '../utils/getClosestSelectableNodeId';
 
 import { useCaret } from '../caret/useCaret';
-import { useSlateRoot } from '../contexts/SlateRootContext';
 import { applyIdOnOperation } from '../utils/applyIdOnOperation';
 import { getFocusFromSlateRange } from '../utils/createFocusOnNode';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../utils/formats';
+import { useSlateRoot } from '../contexts/SlateRootContext';
 
-const getSlateStateFromCraft = (rteNodeId: string, query, textProp: string) => {
+const getSlateStateFromCraft = (rteNodeId: string, query) => {
   const node = query.node(rteNodeId).get();
   if (!node) {
     return;
   }
 
   const childNodes = node.data.nodes;
-  return childNodes.map((id) => craftNodeToSlateNode(query, id, textProp));
+  return childNodes.map((id) => craftNodeToSlateNode(query, id));
 };
 
-export const useStateSync = ({ onChange }: any) => {
-  const {
-    leaf: { textProp },
-  } = useSlateRoot();
-
+export const useStateSync = () => {
+  const { onChange } = useSlateRoot();
   const slateEditor = useSlateEditor();
   const { id } = useNode();
   const { setCaret } = useCaret();
@@ -33,13 +30,13 @@ export const useStateSync = ({ onChange }: any) => {
   const currentSlateStateRef = useRef<any>(null);
 
   const { store, query, slateState } = useEditor((_, query) => ({
-    slateState: getSlateStateFromCraft(id, query, textProp),
+    slateState: getSlateStateFromCraft(id, query),
   }));
 
   const setSlateState = useCallback(() => {
     slateEditor.selection = null;
 
-    const newState = getSlateStateFromCraft(id, query, textProp);
+    const newState = getSlateStateFromCraft(id, query);
 
     currentSlateStateRef.current = newState;
 
@@ -94,7 +91,7 @@ export const useStateSync = ({ onChange }: any) => {
       ) as string[];
 
       store.actions.history.throttle(500).setState((state) => {
-        slateNodesToCraft(state, slateEditor.children, id, textProp);
+        slateNodesToCraft(state, slateEditor.children, id);
 
         state.nodes[id].data.nodes = childNodeIds;
 

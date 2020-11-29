@@ -1,17 +1,10 @@
 import { ROOT_NODE, useEditor, useNode } from '@craftjs/core';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Transforms } from 'slate';
-import {
-  useEditor as useSlateEditor,
-  ReactEditor,
-  useSlate,
-} from 'slate-react';
-import debounce from 'lodash/debounce';
+import { useEditor as useSlateEditor, ReactEditor } from 'slate-react';
 
 import { useCaret } from '../caret';
 import { getSlateRange } from '../utils/getSlateRange';
-import { getClosestSelectableNodeId } from '../utils/getClosestSelectableNodeId';
-import { getFocusFromSlateRange } from '../utils/createFocusOnNode';
 
 export const useSelectionSync = () => {
   const slateEditor = useSlateEditor();

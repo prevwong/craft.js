@@ -1,11 +1,8 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 import { useNode, useEditor } from '@craftjs/core';
 
-import { useSlateRoot } from '../contexts/SlateRootContext';
-
-export const RenderEditable = React.forwardRef(
-  ({ children, ...props }: any, ref: any) => {
-    const { editable } = useSlateRoot();
+export const connectEditable = (as: React.ElementType) => {
+  return React.forwardRef(({ children, ...props }: any, ref: any) => {
     const { id } = useNode();
     const { connectors } = useEditor();
 
@@ -16,12 +13,12 @@ export const RenderEditable = React.forwardRef(
       connectors.drag(dom, id);
     }, []);
 
-    return editable.as({
+    return React.createElement(as, {
       attributes: {
         ref: refCallback,
         ...props,
       },
       children,
     });
-  }
-);
+  });
+};

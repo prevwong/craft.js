@@ -24,10 +24,7 @@ const RenderSlateNode = (props: any) => {
 
 export const Element = ({ attributes, children, element }) => {
   const id = element.id;
-  const {
-    id: slateNodeId,
-    leaf: { textProp },
-  } = useSlateRoot();
+  const { id: slateNodeId } = useSlateRoot();
   const { setCaret } = useCaret();
 
   const {
