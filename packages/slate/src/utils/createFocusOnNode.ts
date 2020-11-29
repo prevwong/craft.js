@@ -1,29 +1,14 @@
 import mapValues from 'lodash/mapValues';
-import { Editor } from 'slate';
+import { Editor, Node } from 'slate';
 
-export const createFocusOnNode = (
-  nodeId: string,
-  query,
-  textPropKey: string
-) => {
-  const node = query.node(nodeId).get();
+export const createFocusOnNode = (element: any) => {
+  const [leafNode] = Node.last(element, []);
+  const text = Node.string(leafNode);
 
   let point = {
-    nodeId: node.id,
-    offset: 0,
+    nodeId: leafNode.id,
+    offset: text.length || 0,
   };
-
-  // If the node is Typography, we want to focus at the last Text child node
-  if (node.data.nodes && node.data.nodes.length > 0) {
-    const lastChildId = node.data.nodes[node.data.nodes.length - 1];
-    if (lastChildId) {
-      const lastChild = query.node(lastChildId).get();
-      point = {
-        nodeId: lastChildId,
-        offset: (lastChild.data.props[textPropKey] || []).length,
-      };
-    }
-  }
 
   return {
     anchor: point,

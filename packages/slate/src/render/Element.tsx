@@ -42,7 +42,7 @@ export const Element = ({ attributes, children, element }) => {
 
   const enable = useCallback((e: MouseEvent) => {
     e.stopPropagation();
-    const focus = createFocusOnNode(id, query, textProp);
+    const focus = createFocusOnNode(element);
     setCaret(focus, slateNodeId);
   }, []);
 
