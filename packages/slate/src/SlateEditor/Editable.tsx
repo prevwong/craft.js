@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import { Delete } from '@craftjs/utils';
 import { Editable as SlateEditable } from 'slate-react';
 
-import { useStateSync } from './useStateSync';
 import { useSelectionSync } from './useSelectionSync';
 
 import { Element } from '../render';
@@ -21,7 +20,6 @@ export const Editable = (
 ) => {
   const { leaf: LeafElement } = useCraftSlateContext();
 
-  useStateSync();
   const { enabled } = useSelectionSync();
 
   const renderElement = useCallback((props) => <Element {...props} />, []);

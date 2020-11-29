@@ -9,7 +9,6 @@ import { useCaret } from '../caret/useCaret';
 import { applyIdOnOperation } from '../utils/applyIdOnOperation';
 import { getFocusFromSlateRange } from '../utils/createFocusOnNode';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../utils/formats';
-import { useSlateRoot } from '../contexts/SlateRootContext';
 
 const getSlateStateFromCraft = (rteNodeId: string, query) => {
   const node = query.node(rteNodeId).get();
@@ -21,8 +20,7 @@ const getSlateStateFromCraft = (rteNodeId: string, query) => {
   return childNodes.map((id) => craftNodeToSlateNode(query, id));
 };
 
-export const useStateSync = () => {
-  const { onChange } = useSlateRoot();
+export const CraftStateSync = ({ onChange }: any) => {
   const slateEditor = useSlateEditor();
   const { id } = useNode();
   const { setCaret } = useCaret();
@@ -121,4 +119,6 @@ export const useStateSync = () => {
   useEffect(() => {
     extendSlateEditor();
   }, []);
+
+  return null;
 };

@@ -4,10 +4,6 @@ import { normalizeSlate } from '../normalization';
 
 export const CraftSlateContext = createContext<any>(null);
 
-export const useCraftSlateContext = () => {
-  return useContext(CraftSlateContext);
-};
-
 type CraftSlateProviderProps = {
   editor: React.ElementType;
   elements: Record<string, React.ElementType>;
@@ -46,4 +42,8 @@ export const CraftSlateProvider: React.FC<CraftSlateProviderProps> = ({
       {init && children}
     </CraftSlateContext.Provider>
   );
+};
+
+export const useCraftSlateContext = () => {
+  return useContext(CraftSlateContext);
 };

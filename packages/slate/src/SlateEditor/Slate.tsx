@@ -1,27 +1,16 @@
 import React, { useState } from 'react';
-import { Delete } from '@craftjs/utils';
 import { Slate as SlateEditor } from 'slate-react';
 
-import {
-  SlateRootContextProvider,
-  SlateRootContextProviderProps,
-} from '../contexts/SlateRootContext';
+import { SlateNodeContextProvider } from '../contexts/SlateNodeContext';
+import { CraftStateSync } from './CraftStateSync';
 
-export type SlateProps = Delete<SlateRootContextProviderProps, 'onChange'>;
-
-export const Slate: React.FC<SlateProps> = ({ children, ...props }) => {
+export const Slate: React.FC<any> = ({ children, editor }) => {
   const [value, setValue] = useState([]);
 
   return (
-    <SlateRootContextProvider
-      {...props}
-      onChange={(value) => {
-        setValue(value);
-      }}
-    >
-      <SlateEditor editor={props.editor} value={value} onChange={setValue}>
-        {children}
-      </SlateEditor>
-    </SlateRootContextProvider>
+    <SlateEditor editor={editor} value={value} onChange={setValue}>
+      <CraftStateSync onChange={setValue} />
+      <SlateNodeContextProvider>{children}</SlateNodeContextProvider>
+    </SlateEditor>
   );
 };

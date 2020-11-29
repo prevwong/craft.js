@@ -4,7 +4,7 @@ import React, { useCallback, useEffect } from 'react';
 import { Editor } from 'slate';
 import { useEditor as useSlateEditor } from 'slate-react';
 
-import { useSlateRoot } from '../contexts/SlateRootContext';
+import { useSlateNode } from '../contexts/SlateNodeContext';
 import { useCaret } from '../caret';
 import { createFocusOnNode } from '../utils/createFocusOnNode';
 
@@ -24,7 +24,7 @@ const RenderSlateNode = (props: any) => {
 
 export const Element = ({ attributes, children, element }) => {
   const id = element.id;
-  const { id: slateNodeId } = useSlateRoot();
+  const { id: slateNodeId } = useSlateNode();
   const { setCaret } = useCaret();
 
   const {
