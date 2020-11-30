@@ -7,7 +7,7 @@ import { getClosestSelectableNodeId } from '../utils/getClosestSelectableNodeId'
 
 import { useCaret } from '../caret/useCaret';
 import { applyIdOnOperation } from '../utils/applyIdOnOperation';
-import { getFocusFromSlateRange } from '../utils/createFocusOnNode';
+import { getFocusFromSlateRange } from '../utils/createSelectionOnNode';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../utils/formats';
 
 const getSlateStateFromCraft = (rteNodeId: string, query) => {

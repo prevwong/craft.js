@@ -1,7 +1,9 @@
 import mapValues from 'lodash/mapValues';
 import { Editor, Node } from 'slate';
 
-export const createFocusOnNode = (element: any) => {
+import { CaretSelection } from '../caret/types';
+
+export const createSelectionOnNode = (element: any): CaretSelection => {
   const [leafNode] = Node.last(element, []);
   const text = Node.string(leafNode);
 
@@ -13,7 +15,7 @@ export const createFocusOnNode = (element: any) => {
   return {
     anchor: point,
     focus: point,
-  };
+  } as CaretSelection;
 };
 
 /**

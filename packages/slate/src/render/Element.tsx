@@ -1,12 +1,12 @@
 import { NodeElement } from '@craftjs/core';
 import { useEditor } from '@craftjs/core';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Editor } from 'slate';
 import { useEditor as useSlateEditor } from 'slate-react';
 
 import { useSlateNode } from '../contexts/SlateNodeContext';
 import { useCaret } from '../caret';
-import { createFocusOnNode } from '../utils/createFocusOnNode';
+import { createSelectionOnNode } from '../utils/createSelectionOnNode';
 
 const RenderSlateNode = (props: any) => {
   const { element, attributes, children } = props;
@@ -18,11 +18,17 @@ const RenderSlateNode = (props: any) => {
   return React.createElement(type, {
     element,
     children,
-    attributes,
+    attributes: {
+      ...attributes,
+      tabIndex: 0,
+    },
   });
 };
 
 export const Element = ({ attributes, children, element }) => {
+  const elementRef = useRef(element);
+  elementRef.current = element;
+
   const id = element.id;
   const { id: slateNodeId } = useSlateNode();
   const { setCaret } = useCaret();
@@ -39,8 +45,8 @@ export const Element = ({ attributes, children, element }) => {
 
   const enable = useCallback((e: MouseEvent) => {
     e.stopPropagation();
-    const focus = createFocusOnNode(element);
-    setCaret(focus, slateNodeId);
+    const selection = createSelectionOnNode(elementRef.current);
+    setCaret(selection, slateNodeId);
   }, []);
 
   useEffect(() => {
