@@ -1,12 +1,13 @@
 import { NodeElement } from '@craftjs/core';
 import { useEditor } from '@craftjs/core';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Editor } from 'slate';
 import { useEditor as useSlateEditor } from 'slate-react';
 
 import { useSlateNode } from '../contexts/SlateNodeContext';
 import { useCaret } from '../caret';
 import { createSelectionOnNode } from '../utils/createSelectionOnNode';
+import { getSlateRange } from '../utils/getSlateRange';
 
 const RenderSlateNode = (props: any) => {
   const { element, attributes, children } = props;
@@ -15,14 +16,18 @@ const RenderSlateNode = (props: any) => {
     type: state.options.resolver[element.type],
   }));
 
-  return React.createElement(type, {
-    element,
-    children,
-    attributes: {
-      ...attributes,
-      tabIndex: 0,
-    },
-  });
+  return useMemo(
+    () =>
+      React.createElement(type, {
+        element,
+        children,
+        attributes: {
+          ...attributes,
+          tabIndex: 0,
+        },
+      }),
+    [type, element, children, attributes]
+  );
 };
 
 export const Element = ({ attributes, children, element }) => {
@@ -35,18 +40,22 @@ export const Element = ({ attributes, children, element }) => {
 
   const {
     exists,
-    query,
     connectors: { connect, drag },
-  } = useEditor((state) => ({
-    exists: !!state.nodes[id],
-  }));
+  } = useEditor((state) => {
+    return {
+      exists: id && !!state.nodes[id],
+    };
+  });
 
   const slateEditor = useSlateEditor();
 
   const enable = useCallback((e: MouseEvent) => {
     e.stopPropagation();
-    const selection = createSelectionOnNode(elementRef.current);
-    setCaret(selection, slateNodeId);
+    const selection = createSelectionOnNode(elementRef.current) as any;
+    setCaret(selection, {
+      source: slateNodeId,
+      slateRange: getSlateRange(slateEditor, selection),
+    });
   }, []);
 
   useEffect(() => {
@@ -61,7 +70,6 @@ export const Element = ({ attributes, children, element }) => {
     }
 
     const dom = attributes.ref.current;
-
     if (!dom) {
       return;
     }
@@ -73,16 +81,19 @@ export const Element = ({ attributes, children, element }) => {
     return () => dom.removeEventListener('dblclick', enable);
   }, [exists]);
 
-  return (
-    <NodeElement
-      id={id}
-      render={
-        <RenderSlateNode
-          element={element}
-          attributes={attributes}
-          children={children}
-        />
-      }
-    />
+  return useMemo(
+    () => (
+      <NodeElement
+        id={id}
+        render={
+          <RenderSlateNode
+            element={element}
+            attributes={attributes}
+            children={children}
+          />
+        }
+      />
+    ),
+    [element, attributes, children]
   );
 };

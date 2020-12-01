@@ -1,11 +1,8 @@
 import { useEditor, useNode, ROOT_NODE } from '@craftjs/core';
-import isEqual from 'lodash/isEqual';
+import throttle from 'lodash/throttle';
 import { useCallback, useEffect, useRef } from 'react';
 import { Editor } from 'slate';
-import { useEditor as useSlateEditor } from 'slate-react';
-import { getClosestSelectableNodeId } from '../utils/getClosestSelectableNodeId';
 
-import { useCaret } from '../caret/useCaret';
 import { applyIdOnOperation } from '../utils/applyIdOnOperation';
 import { getFocusFromSlateRange } from '../utils/createSelectionOnNode';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../utils/formats';
@@ -20,78 +17,59 @@ const getSlateStateFromCraft = (rteNodeId: string, query) => {
   return childNodes.map((id) => craftNodeToSlateNode(query, id));
 };
 
-export const CraftStateSync = ({ onChange }: any) => {
-  const slateEditor = useSlateEditor();
+export const CraftStateSync = ({ editor: slateEditor, onChange }: any) => {
   const { id } = useNode();
-  const { setCaret } = useCaret();
 
-  const currentSlateStateRef = useRef<any>(null);
+  const currentStateId = useRef<number>(null);
 
-  const { store, query, slateState } = useEditor((_, query) => ({
-    slateState: getSlateStateFromCraft(id, query),
+  const { store, query, slateState } = useEditor((state, query) => ({
+    slateState: state.nodes[id].data.custom.slateState,
   }));
 
-  const setSlateState = useCallback(() => {
+  const setSlateState = useCallback((slateState) => {
     slateEditor.selection = null;
 
-    const newState = getSlateStateFromCraft(id, query);
+    let newState;
 
-    currentSlateStateRef.current = newState;
+    if (!slateState) {
+      newState = getSlateStateFromCraft(id, query);
+    } else {
+      newState = slateState;
+    }
 
     // Normalize using Slate
     slateEditor.children = newState;
     Editor.normalize(slateEditor, { force: true });
 
     // Then trigger onChange
-    onChange(slateEditor.children);
+    onChange(newState);
   }, []);
 
   useEffect(() => {
-    const { current: currentSlateState } = currentSlateStateRef;
-
-    if (isEqual(currentSlateState, slateState)) {
+    if (slateState && currentStateId.current === slateState.stateId) {
       return;
     }
 
-    setSlateState();
+    setSlateState(slateState && slateState.state);
   }, [slateState]);
 
-  const extendSlateEditor = useCallback(() => {
-    const { apply, onChange } = slateEditor;
+  const saveToCraft = useCallback(
+    throttle((slateState) => {
+      console.log('saving to craft');
+      const childNodeIds = slateState.map((node) => node['id']) as string[];
 
-    slateEditor.onChange = () => {
-      onChange();
-
-      const closestNodeId = getClosestSelectableNodeId(slateEditor);
-
-      if (
-        closestNodeId &&
-        query.node(closestNodeId).get() &&
-        !query.getEvent('selected').contains(closestNodeId)
-      ) {
-        store.actions.selectNode(closestNodeId);
-      }
-
-      if (slateEditor.operations.every((op) => op.type === 'set_selection')) {
-        const selection = getFocusFromSlateRange(
-          slateEditor,
-          slateEditor.selection as any
-        );
-
-        setCaret(selection, id);
-        return;
-      }
-
-      currentSlateStateRef.current = slateEditor.children;
-
-      const childNodeIds = slateEditor.children.map(
-        (node) => node['id']
-      ) as string[];
-
-      store.actions.history.throttle(500).setState((state) => {
-        slateNodesToCraft(state, slateEditor.children, id);
+      store.actions.setState((state) => {
+        slateNodesToCraft(state, slateState, id);
 
         state.nodes[id].data.nodes = childNodeIds;
+
+        const newStateId = Math.random();
+        currentStateId.current = newStateId;
+
+        state.nodes[id].data.custom.slateState = {
+          stateId: newStateId,
+          state: slateState,
+        };
 
         const selection = getFocusFromSlateRange(
           slateEditor,
@@ -99,10 +77,27 @@ export const CraftStateSync = ({ onChange }: any) => {
         );
 
         state.nodes[ROOT_NODE].data.custom.caret = {
-          id,
+          data: {
+            source: id,
+          },
           selection,
         };
       });
+    }, 500),
+    []
+  );
+
+  const extendSlateEditor = useCallback(() => {
+    const { apply, onChange } = slateEditor;
+
+    slateEditor.onChange = () => {
+      onChange();
+
+      if (slateEditor.operations.every((op) => op.type === 'set_selection')) {
+        return;
+      }
+
+      saveToCraft(slateEditor.children);
     };
 
     slateEditor.apply = (op) => {

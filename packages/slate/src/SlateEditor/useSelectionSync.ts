@@ -1,19 +1,22 @@
-import { useNode } from '@craftjs/core';
+import { useEditor, useNode } from '@craftjs/core';
 import { useRef, useState } from 'react';
 import { Transforms } from 'slate';
 import { useEditor as useSlateEditor, ReactEditor } from 'slate-react';
+import { getClosestSelectableNodeId } from '../utils/getClosestSelectableNodeId';
 
 import { useCaret } from '../caret';
 import { getSlateRange } from '../utils/getSlateRange';
 
 export const useSelectionSync = () => {
+  const { actions, query } = useEditor();
   const slateEditor = useSlateEditor();
   const { id } = useNode();
   const [enabled, setEnabled] = useState(false);
 
   const enabledRef = useRef<boolean>(enabled);
 
-  useCaret((value) => {
+  useCaret((caret) => {
+    const value = caret && caret.selection;
     Promise.resolve().then(() => {
       if (!value) {
         if (enabledRef.current) {
@@ -37,8 +40,19 @@ export const useSelectionSync = () => {
       }
 
       setEnabled(true);
+
       ReactEditor.focus(slateEditor);
       Transforms.select(slateEditor, newSelection);
+
+      const closestNodeId = getClosestSelectableNodeId(slateEditor);
+
+      if (
+        closestNodeId &&
+        query.node(closestNodeId).get() &&
+        !query.getEvent('selected').contains(closestNodeId)
+      ) {
+        actions.selectNode(closestNodeId);
+      }
     });
   }, id);
 
