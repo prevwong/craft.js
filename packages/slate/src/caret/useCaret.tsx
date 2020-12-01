@@ -1,27 +1,16 @@
 import { useEditor } from '@craftjs/core';
-import { useCallback, useEffect, useRef } from 'react';
-import { CaretData, CaretSelection } from './types';
+import { useCallback } from 'react';
+import { Caret, CaretData, CaretSelection } from './types';
 
-export const useCaret = (callback?: any, id?: string) => {
+export function useCaret<C>(collectCaret?: (caret: Caret) => C) {
   const { caret, actions } = useEditor((state) => ({
-    caret: state.nodes['ROOT'] && state.nodes['ROOT'].data.custom.caret,
+    caret:
+      state.nodes['ROOT'] &&
+      state.nodes['ROOT'].data.custom.caret &&
+      collectCaret
+        ? collectCaret(state.nodes['ROOT'].data.custom.caret)
+        : null,
   }));
-
-  const value = useRef(null);
-
-  useEffect(() => {
-    if (!id || !callback) {
-      return;
-    }
-
-    if (!caret || (caret && caret.data.source !== id)) {
-      value.current = null;
-    } else {
-      value.current = caret;
-    }
-
-    callback(value.current);
-  }, [caret]);
 
   const setCaret = useCallback((selection: CaretSelection, data: CaretData) => {
     actions.history.ignore().setCustom('ROOT', (custom) => {
@@ -43,4 +32,4 @@ export const useCaret = (callback?: any, id?: string) => {
     setCaret,
     clearCaret,
   };
-};
+}

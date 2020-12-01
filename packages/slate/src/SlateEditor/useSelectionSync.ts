@@ -1,5 +1,5 @@
 import { useEditor, useNode } from '@craftjs/core';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Transforms } from 'slate';
 import { useEditor as useSlateEditor, ReactEditor } from 'slate-react';
 import { getClosestSelectableNodeId } from '../utils/getClosestSelectableNodeId';
@@ -15,7 +15,11 @@ export const useSelectionSync = () => {
 
   const enabledRef = useRef<boolean>(enabled);
 
-  useCaret((caret) => {
+  const { caret } = useCaret((caret) => ({
+    selection: caret && caret.data.source === id ? caret.selection : null,
+  }));
+
+  useEffect(() => {
     const value = caret && caret.selection;
     Promise.resolve().then(() => {
       if (!value) {
@@ -54,7 +58,7 @@ export const useSelectionSync = () => {
         actions.selectNode(closestNodeId);
       }
     });
-  }, id);
+  }, [caret]);
 
   return { enabled };
 };
