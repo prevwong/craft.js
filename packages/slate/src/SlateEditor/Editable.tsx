@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { Delete } from '@craftjs/utils';
-import { Editable as SlateEditable } from 'slate-react';
+import { Editable as SlateEditable, ReactEditor, useSlate } from 'slate-react';
+import hotkey from 'is-hotkey';
 
 import { useSelectionSync } from './useSelectionSync';
 
@@ -11,6 +12,7 @@ import {
   DefaultRenderEditable,
 } from './RenderEditable';
 import { useCraftSlateContext } from '../contexts/CraftSlateProvider';
+import { useSlateNode } from '../contexts/SlateNodeContext';
 
 export const Editable = (
   props: Delete<
@@ -19,8 +21,11 @@ export const Editable = (
   >
 ) => {
   const { leaf: LeafElement } = useCraftSlateContext();
+  const { enabled } = useSlateNode();
+  const editor = useSlate();
 
-  const { enabled } = useSelectionSync();
+  // TODO: figure out bug in here
+  // useSelectionSync();
 
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <LeafElement {...props} />, []);
@@ -33,6 +38,15 @@ export const Editable = (
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         readOnly={!enabled}
+        onKeyDown={(e: any) => {
+          if (hotkey('esc', e)) {
+            ReactEditor.deselect(editor);
+            return;
+          }
+          if (props.onKeyDown) {
+            props.onKeyDown(e);
+          }
+        }}
       />
     </EditableContext.Provider>
   );

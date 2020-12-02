@@ -1,8 +1,8 @@
 import { NodeElement } from '@craftjs/core';
 import { useEditor } from '@craftjs/core';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Editor } from 'slate';
-import { useEditor as useSlateEditor } from 'slate-react';
+import { Editor, Transforms } from 'slate';
+import { ReactEditor, useEditor as useSlateEditor } from 'slate-react';
 
 import { useSlateNode } from '../contexts/SlateNodeContext';
 import { useCaret } from '../caret';
@@ -31,7 +31,7 @@ export const Element = ({ attributes, children, element }) => {
   elementRef.current = element;
 
   const id = element.id;
-  const { id: slateNodeId } = useSlateNode();
+  const { id: slateNodeId, setEnabled } = useSlateNode();
   const { setCaret } = useCaret();
 
   const {
@@ -48,10 +48,16 @@ export const Element = ({ attributes, children, element }) => {
   const enable = useCallback((e: MouseEvent) => {
     e.stopPropagation();
     const selection = createSelectionOnNode(elementRef.current) as any;
-    setCaret(selection, {
-      source: slateNodeId,
-      slateRange: getSlateRange(slateEditor, selection),
-    });
+
+    setEnabled(true);
+    ReactEditor.focus(slateEditor);
+    Transforms.select(slateEditor, getSlateRange(slateEditor, selection));
+
+    // const selection = createSelectionOnNode(elementRef.current) as any;
+    // setCaret(selection, {
+    //   source: slateNodeId,
+    //   slateRange: getSlateRange(slateEditor, selection),
+    // });
   }, []);
 
   useEffect(() => {

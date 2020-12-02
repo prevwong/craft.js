@@ -1,11 +1,14 @@
 import { useEditor, useNode, ROOT_NODE } from '@craftjs/core';
 import { useCallback, useEffect, useRef } from 'react';
 import isEqual from 'lodash/isEqual';
-import { Editor } from 'slate';
+import { Editor, Transforms } from 'slate';
 
 import { applyIdOnOperation } from '../utils/applyIdOnOperation';
 import { getFocusFromSlateRange } from '../utils/createSelectionOnNode';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../utils/formats';
+import { useSlateNode } from '../contexts/SlateNodeContext';
+import { getSlateRange } from '../utils/getSlateRange';
+import { ReactEditor } from 'slate-react';
 
 const getSlateStateFromCraft = (rteNodeId: string, query) => {
   const node = query.node(rteNodeId).get();
@@ -19,14 +22,15 @@ const getSlateStateFromCraft = (rteNodeId: string, query) => {
 
 export const CraftStateSync = ({ editor: slateEditor, onChange }: any) => {
   const { id } = useNode();
+  const { setEnabled } = useSlateNode();
 
   const currentSlateStateRef = useRef<any>(null);
 
-  const { store, slateState } = useEditor((_, query) => ({
+  const { store, slateState, query } = useEditor((_, query) => ({
     slateState: getSlateStateFromCraft(id, query),
   }));
 
-  const setSlateState = useCallback((slateState) => {
+  const setSlateState = (slateState) => {
     slateEditor.selection = null;
 
     currentSlateStateRef.current = slateState;
@@ -37,7 +41,30 @@ export const CraftStateSync = ({ editor: slateEditor, onChange }: any) => {
 
     // Then trigger onChange
     onChange(slateEditor.children);
-  }, []);
+
+    // TODO: try to move this to useSelectionSync
+    Promise.resolve().then(() => {
+      const caret = query.node(ROOT_NODE).get().data.custom.caret;
+      if (!caret) {
+        return;
+      }
+
+      const newSelection = getSlateRange(slateEditor, caret.selection);
+
+      if (!newSelection.anchor || !newSelection.focus) {
+        return;
+      }
+
+      try {
+        const domRange = ReactEditor.toDOMRange(slateEditor, newSelection);
+        if (domRange) {
+          setEnabled(true);
+          ReactEditor.focus(slateEditor);
+          Transforms.select(slateEditor, newSelection);
+        }
+      } catch (err) {}
+    });
+  };
 
   useEffect(() => {
     if (isEqual(currentSlateStateRef.current, slateState)) {
@@ -87,6 +114,11 @@ export const CraftStateSync = ({ editor: slateEditor, onChange }: any) => {
     slateEditor.apply = (op) => {
       if (op.type === 'set_selection') {
         apply(op);
+
+        if (!op.newProperties) {
+          setEnabled(false);
+        }
+
         return;
       }
 
