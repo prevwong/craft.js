@@ -1,5 +1,5 @@
 import { ERROR_RESOLVER_NOT_AN_OBJECT, HISTORY_ACTIONS } from '@craftjs/utils';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import invariant from 'tiny-invariant';
 
 import { EditorContext } from './EditorContext';
@@ -13,7 +13,6 @@ import { Options } from '../interfaces';
  */
 export const Editor: React.FC<Partial<Options>> = ({
   children,
-  normalizeNodes,
   ...options
 }) => {
   // we do not want to warn the user if no resolver was supplied
@@ -26,7 +25,7 @@ export const Editor: React.FC<Partial<Options>> = ({
 
   const context = useEditorStore(
     options,
-    (_, previousState, actionPerformedWithPatches, query, normalizer) => {
+    (state, previousState, actionPerformedWithPatches, query, normalizer) => {
       if (!actionPerformedWithPatches) {
         return;
       }
@@ -53,11 +52,14 @@ export const Editor: React.FC<Partial<Options>> = ({
           ['setState', 'deserialize'].includes(actionPerformed.type) ||
           isModifyingNodeData
         ) {
-          if (normalizeNodes) {
-            normalizer((draft) => {
-              normalizeNodes(draft, previousState, actionPerformed, query);
-            });
-          }
+          normalizer((draft) => {
+            state.options.normalizeNodes(
+              draft,
+              previousState,
+              actionPerformed,
+              query
+            );
+          });
           break; // we exit the loop as soon as we find a change in node.data
         }
       }
