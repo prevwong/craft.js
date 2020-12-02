@@ -29,12 +29,6 @@ export const CraftStateSync = ({ editor: slateEditor, onChange }: any) => {
   const setSlateState = useCallback((slateState) => {
     slateEditor.selection = null;
 
-    // if (!slateState) {
-    //   newState = getSlateStateFromCraft(id, query);
-    // } else {
-    //   newState = slateState;
-    // }
-
     currentSlateStateRef.current = slateState;
 
     // Normalize using Slate
@@ -62,14 +56,6 @@ export const CraftStateSync = ({ editor: slateEditor, onChange }: any) => {
       state.nodes[id].data.nodes = childNodeIds;
 
       currentSlateStateRef.current = slateState;
-
-      // (optimisation) Since we already have the Slate state
-      // We will store the slate state in the Node
-      // So we don't have to re-transform the Node back into a Slate format
-      // state.nodes[id].data.custom.slateState = {
-      //   stateId: newStateId,
-      //   state: slateState,
-      // };
 
       const selection = getFocusFromSlateRange(
         slateEditor,

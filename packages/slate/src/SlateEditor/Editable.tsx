@@ -1,16 +1,16 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { Delete } from '@craftjs/utils';
 import { Editable as SlateEditable } from 'slate-react';
 
 import { useSelectionSync } from './useSelectionSync';
 
 import { Element } from '../render';
-import { connectEditable } from './connectEditable';
+import {
+  EditableContext,
+  RenderEditable,
+  DefaultRenderEditable,
+} from './RenderEditable';
 import { useCraftSlateContext } from '../contexts/CraftSlateProvider';
-
-const DefaultRenderEditable = ({ attributes, children }) => {
-  return <div {...attributes}>{children}</div>;
-};
 
 export const Editable = (
   props: Delete<
@@ -25,15 +25,15 @@ export const Editable = (
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <LeafElement {...props} />, []);
 
-  return useMemo(() => {
-    return (
+  return (
+    <EditableContext.Provider value={{ as: props.as || DefaultRenderEditable }}>
       <SlateEditable
         {...props}
-        as={connectEditable(props.as || DefaultRenderEditable)}
+        as={RenderEditable}
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         readOnly={!enabled}
       />
-    );
-  }, [enabled]);
+    </EditableContext.Provider>
+  );
 };

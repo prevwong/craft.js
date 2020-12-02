@@ -1,9 +1,9 @@
 import { useNode } from '@craftjs/core';
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 export const SlateNodeContext = createContext<any>(null);
 
-export const SlateNodeContextProvider: React.FC = ({ children }) => {
+export const SlateNodeContextProvider: React.FC<any> = ({ children }) => {
   const { id } = useNode();
 
   return (
@@ -14,5 +14,7 @@ export const SlateNodeContextProvider: React.FC = ({ children }) => {
 };
 
 export const useSlateNode = () => {
-  return useContext(SlateNodeContext);
+  const context = useContext(SlateNodeContext);
+
+  return context || {};
 };

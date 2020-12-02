@@ -16,18 +16,14 @@ const RenderSlateNode = (props: any) => {
     type: state.options.resolver[element.type],
   }));
 
-  return useMemo(
-    () =>
-      React.createElement(type, {
-        element,
-        children,
-        attributes: {
-          ...attributes,
-          tabIndex: 0,
-        },
-      }),
-    [type, element, children, attributes]
-  );
+  return React.createElement(type, {
+    element,
+    children,
+    attributes: {
+      ...attributes,
+      tabIndex: 0,
+    },
+  });
 };
 
 export const Element = ({ attributes, children, element }) => {
@@ -81,19 +77,16 @@ export const Element = ({ attributes, children, element }) => {
     return () => dom.removeEventListener('dblclick', enable);
   }, [exists]);
 
-  return useMemo(
-    () => (
-      <NodeElement
-        id={id}
-        render={
-          <RenderSlateNode
-            element={element}
-            attributes={attributes}
-            children={children}
-          />
-        }
-      />
-    ),
-    [element, attributes, children]
+  return (
+    <NodeElement
+      id={id}
+      render={
+        <RenderSlateNode
+          element={element}
+          attributes={attributes}
+          children={children}
+        />
+      }
+    />
   );
 };
