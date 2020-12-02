@@ -1,4 +1,4 @@
-import { useNode } from '@craftjs/core';
+import { useEditor, useNode } from '@craftjs/core';
 import { useEffect, useRef, useState } from 'react';
 import { Transforms } from 'slate';
 import { useEditor as useSlateEditor, ReactEditor } from 'slate-react';
@@ -15,9 +15,18 @@ export const useSelectionSync = () => {
   const slateEditorRef = useRef(slateEditor);
   slateEditorRef.current = slateEditor;
 
-  const { caret } = useCaret((caret) => ({
+  const { caret, clearCaret } = useCaret((caret) => ({
     caret: caret && caret.data.source === id ? caret : null,
   }));
+
+  const { isSlateDescendantSelected } = useEditor((_, query) => {
+    const descendants = query.node(id).descendants(true) as string[];
+    return {
+      isSlateDescendantSelected: descendants.some((id) =>
+        query.getEvent('selected').contains(id)
+      ),
+    };
+  });
 
   useEffect(() => {
     Promise.resolve().then(() => {
@@ -25,12 +34,15 @@ export const useSelectionSync = () => {
       const value = caret;
 
       if (!value) {
-        ReactEditor.deselect(slateEditor);
-        enabledRef.current = false;
-        setEnabled(false);
+        if (enabledRef.current) {
+          ReactEditor.deselect(slateEditor);
+          enabledRef.current = false;
+          setEnabled(false);
+        }
         return;
       }
 
+      enabledRef.current = true;
       const newSelection = getSlateRange(slateEditor, value.selection);
 
       if (!newSelection) {
@@ -47,6 +59,17 @@ export const useSelectionSync = () => {
       Transforms.select(slateEditor, newSelection);
     });
   }, [caret]);
+
+  useEffect(() => {
+    if (isSlateDescendantSelected) {
+      return;
+    }
+
+    const slateEditor = slateEditorRef.current;
+    ReactEditor.deselect(slateEditor);
+    clearCaret();
+    setEnabled(false);
+  }, [isSlateDescendantSelected]);
 
   return { enabled };
 };
