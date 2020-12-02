@@ -1,4 +1,4 @@
-import { EditorState, NodeId, QueryMethods } from '@craftjs/core';
+import { EditorState, NodeId, QueryMethods, ROOT_NODE } from '@craftjs/core';
 import forIn from 'lodash/forIn';
 import pickBy from 'lodash/pickBy';
 import shortid from 'shortid';
@@ -8,7 +8,10 @@ export const splitSlate = (
   rootType: any,
   acceptableChildrenType: any[]
 ) => {
-  const slateNodes = pickBy(state.nodes, (node) => node.data.type === rootType);
+  const slateNodes = pickBy(
+    state.nodes,
+    (node) => node.data.type === rootType && node.data.parent === ROOT_NODE
+  );
 
   forIn(slateNodes, (slateNode) => {
     let newTree = {};
@@ -17,6 +20,17 @@ export const splitSlate = (
     let hasSplitted = false;
     const iterateNode = (nodeId: string, tree: any) => {
       const node = state.nodes[nodeId];
+      const isRootType = node.data.type === rootType;
+      const shouldAcceptRootType = isRootType && Object.keys(tree).length === 0;
+
+      if (isRootType && !shouldAcceptRootType) {
+        transfers.push({
+          type: 'move',
+          id: node.id,
+        });
+        return;
+      }
+
       if (
         [rootType, ...acceptableChildrenType].includes(node.data.type) === false
       ) {
