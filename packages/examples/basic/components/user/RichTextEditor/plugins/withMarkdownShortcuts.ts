@@ -39,22 +39,22 @@ export const withMarkdownShortcuts = <T extends Editor>(editor: T) => {
       const type = SHORTCUTS[beforeText];
 
       if (type) {
-        // Editor.withoutNormalizing(editor, () => {
-        Transforms.select(editor, range);
-        Transforms.delete(editor);
-        Transforms.setNodes(
-          editor,
-          { type },
-          { match: (n) => Editor.isBlock(editor, n) }
-        );
+        Editor.withoutNormalizing(editor, () => {
+          Transforms.select(editor, range);
+          Transforms.delete(editor);
+          Transforms.setNodes(
+            editor,
+            { type, data: {} },
+            { match: (n) => Editor.isBlock(editor, n) }
+          );
 
-        if (type === 'ListItem') {
-          const list = { type: 'List', data: {}, children: [] };
-          Transforms.wrapNodes(editor, list, {
-            match: (n) => n.type === 'ListItem',
-          });
-        }
-        // });
+          if (type === 'ListItem') {
+            const list = { type: 'List', data: {}, children: [] };
+            Transforms.wrapNodes(editor, list, {
+              match: (n) => n.type === 'ListItem',
+            });
+          }
+        });
         return;
       }
     }

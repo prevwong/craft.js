@@ -15,7 +15,9 @@ Typography.slate = {
   },
   toSlateNode: (craftNode) => (slateNode) => {
     slateNode.data = {
-      variant: craftNode.data.props.variant || 'h2',
+      ...(craftNode.data.props.variant
+        ? { variant: craftNode.data.props.variant }
+        : {}),
     };
   },
 };
@@ -28,10 +30,22 @@ List.craft = {
   isCanvas: true,
 };
 
+List.slate = {
+  toSlateNode: () => (slateNode) => {
+    slateNode.data = {};
+  },
+};
+
 export const ListItem = ({ attributes, children }) => {
   return <li {...attributes}>{children}</li>;
 };
 
 ListItem.craft = {
   isCanvas: false,
+};
+
+ListItem.slate = {
+  toSlateNode: () => (slateNode) => {
+    slateNode.data = {};
+  },
 };
