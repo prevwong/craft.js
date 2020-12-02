@@ -21,6 +21,7 @@ export const getSlateRange = (
     if (!match) {
       return undefined;
     }
+
     return { path: match[1], offset: point.offset } as Point;
   }) as Range;
 };

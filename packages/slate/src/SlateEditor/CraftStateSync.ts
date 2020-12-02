@@ -49,9 +49,11 @@ export const CraftStateSync = ({ editor: slateEditor, onChange }: any) => {
         return;
       }
 
+      // TODO Prev: this should return ?Range
+      // but TS is not checking if its safe to access for some reason
       const newSelection = getSlateRange(slateEditor, caret.selection);
 
-      if (!newSelection.anchor || !newSelection.focus) {
+      if (!newSelection || !newSelection.anchor || !newSelection.focus) {
         return;
       }
 
