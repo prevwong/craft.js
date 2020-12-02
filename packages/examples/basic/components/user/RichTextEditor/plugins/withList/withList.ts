@@ -1,4 +1,4 @@
-import { Editor, Path, Point, Range, Transforms } from 'slate';
+import { Editor, Path, Point, Range, Transforms, Element } from 'slate';
 
 import { isRangeAtRoot } from './queries';
 import { withResetBlockType } from './reset-block-type';
@@ -8,14 +8,35 @@ import { WithListOptions } from './types';
 // TODO should these types have defaults since they are optional ?
 // this is important when unwrapping, remove defaults to see the problem
 
-// prettier-ignore
 export const withList = ({
   typeUl = 'ul',
   typeOl = 'ol',
   typeLi = 'li',
   typeP = 'p',
 }: WithListOptions = {}) => <T extends Editor>(editor: T) => {
-  const { insertBreak } = editor;
+  const { insertBreak, normalizeNode } = editor;
+
+  editor.normalizeNode = (entry) => {
+    const [node, path] = entry;
+
+    // Check if ListItem is valid
+    if (Element.isElement(node) && node.type === 'ListItem') {
+      const [parent] = Editor.parent(editor, path);
+
+      if (parent.type !== 'List') {
+        // wrap in list and return
+        Transforms.wrapNodes(
+          editor,
+          { type: 'List', children: [] },
+          { at: path }
+        );
+        return;
+      }
+    }
+
+    // Fall back to the original `normalizeNode` to enforce other constraints.
+    normalizeNode(entry);
+  };
 
   /**
    * Add a new list item if selection is in a LIST_ITEM > typeP.
@@ -25,13 +46,13 @@ export const withList = ({
     if (editor.selection && !isRangeAtRoot(editor.selection)) {
       const [paragraphNode, paragraphPath] = Editor.parent(
         editor,
-        editor.selection,
+        editor.selection
       );
 
       if (paragraphNode.type === typeP) {
         const [listItemNode, listItemPath] = Editor.parent(
           editor,
-          paragraphPath,
+          paragraphPath
         );
 
         if (listItemNode.type === typeLi) {
@@ -58,7 +79,7 @@ export const withList = ({
                 type: typeLi,
                 children: [{ type: typeP, children: [{ text: '' }] }],
               },
-              { at: listItemPath },
+              { at: listItemPath }
             );
             return;
           }
@@ -74,7 +95,7 @@ export const withList = ({
                 type: typeLi,
                 children: [],
               },
-              { at: nextParagraphPath },
+              { at: nextParagraphPath }
             );
             Transforms.moveNodes(editor, {
               at: nextParagraphPath,
@@ -90,7 +111,7 @@ export const withList = ({
                 type: typeLi,
                 children: [{ type: typeP, children: [{ text: '' }] }],
               },
-              { at: nextListItemPath },
+              { at: nextListItemPath }
             );
             Transforms.select(editor, nextListItemPath);
           }
