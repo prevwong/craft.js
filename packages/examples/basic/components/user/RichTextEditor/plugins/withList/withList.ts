@@ -34,6 +34,17 @@ export const withList = ({
       }
     }
 
+    // check if its a List next to another List
+    if (Element.isElement(node) && node.type === 'List') {
+      // check next sibling
+      const nodeData = Editor.next(editor, { at: path });
+      if (nodeData && nodeData[0].type === 'List') {
+        const nextNodePath = nodeData[1];
+        Transforms.mergeNodes(editor, { at: nextNodePath });
+        return;
+      }
+    }
+
     // Fall back to the original `normalizeNode` to enforce other constraints.
     normalizeNode(entry);
   };
