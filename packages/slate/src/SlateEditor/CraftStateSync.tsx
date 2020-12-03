@@ -129,13 +129,20 @@ export const CraftStateSync = ({ onChange, children }: any) => {
         if (craftSelection) {
           try {
             const craftRange = craftSelection.selection;
-            const slateRange = getSlateRange(slateEditor, craftRange);
 
-            const domRange = ReactEditor.toDOMRange(slateEditor, slateRange);
+            // TODO Prev: this should return ?Range
+            // but TS is not checking if its safe to access for some reason
+            const newSelection = getSlateRange(slateEditor, craftRange);
+
+            if (!newSelection || !newSelection.anchor || !newSelection.focus) {
+              return;
+            }
+
+            const domRange = ReactEditor.toDOMRange(slateEditor, newSelection);
             if (domRange) {
               setEnabled(true);
               ReactEditor.focus(slateEditor);
-              Transforms.select(slateEditor, slateRange);
+              Transforms.select(slateEditor, newSelection);
             }
           } catch (err) {
             console.log(err);
