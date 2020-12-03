@@ -47,17 +47,15 @@ export const Element = ({ attributes, children, element }) => {
 
   const enable = useCallback((e: MouseEvent) => {
     e.stopPropagation();
-    const selection = createSelectionOnNode(elementRef.current) as any;
-
-    setEnabled(true);
-    ReactEditor.focus(slateEditor);
-    Transforms.select(slateEditor, getSlateRange(slateEditor, selection));
-
     // const selection = createSelectionOnNode(elementRef.current) as any;
-    // setCaret(selection, {
-    //   source: slateNodeId,
-    //   slateRange: getSlateRange(slateEditor, selection),
-    // });
+    // setEnabled(true);
+    // ReactEditor.focus(slateEditor);
+    // Transforms.select(slateEditor, getSlateRange(slateEditor, selection));
+
+    const selection = createSelectionOnNode(elementRef.current) as any;
+    setCaret(selection, {
+      source: slateNodeId,
+    });
   }, []);
 
   useEffect(() => {

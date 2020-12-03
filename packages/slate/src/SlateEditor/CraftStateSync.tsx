@@ -1,15 +1,16 @@
-import { useEditor, ROOT_NODE } from '@craftjs/core';
-import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { useEditor, ROOT_NODE, useNode } from '@craftjs/core';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import isEqual from 'lodash/isEqual';
 import { Editor, Transforms } from 'slate';
 import isShallowEqual from 'shallowequal';
 
 import { applyIdOnOperation } from '../utils/applyIdOnOperation';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../utils/formats';
-import { useSlateNode } from '../contexts/SlateNodeContext';
+import { SlateNodeContextProvider } from '../contexts/SlateNodeContext';
 import { getClosestSelectableNodeId } from '../utils/getClosestSelectableNodeId';
-import { useCaret } from '../caret';
-import { ReactEditor } from 'slate-react';
+import { ReactEditor, useSlate } from 'slate-react';
+import { getSlateRange } from '../utils/getSlateRange';
+import { getFocusFromSlateRange } from '../utils/createSelectionOnNode';
 
 const getSlateStateFromCraft = (rteNodeId: string, query) => {
   const node = query.node(rteNodeId).get();
@@ -21,8 +22,10 @@ const getSlateStateFromCraft = (rteNodeId: string, query) => {
   return childNodes.map((id) => craftNodeToSlateNode(query, id));
 };
 
-export const CraftStateSync = ({ editor: slateEditor, onChange }: any) => {
-  const { id } = useSlateNode();
+export const CraftStateSync = ({ onChange, children }: any) => {
+  const { id } = useNode();
+  const [enabled, setEnabled] = useState(false);
+  const slateEditor = useSlate();
 
   const currentSlateStateRef = useRef<any>(null);
   const lastCraftSelectionRef = useRef<any>(null);
@@ -48,27 +51,6 @@ export const CraftStateSync = ({ editor: slateEditor, onChange }: any) => {
     // Then trigger onChange
     currentSlateStateRef.current = slateEditor.children;
     onChange(currentSlateStateRef.current);
-
-    Promise.resolve().then(() => {
-      if (!isShallowEqual(lastCraftSelectionRef.current, craftSelection)) {
-        if (craftSelection) {
-          try {
-            const slateRnage = craftSelection.selection;
-
-            const domRange = ReactEditor.toDOMRange(slateEditor, slateRnage);
-            if (domRange) {
-              // setEnabled(true);
-              ReactEditor.focus(slateEditor);
-              Transforms.select(slateEditor, slateRnage);
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        }
-
-        lastCraftSelectionRef.current = craftSelection;
-      }
-    });
   };
 
   useLayoutEffect(() => {
@@ -93,7 +75,10 @@ export const CraftStateSync = ({ editor: slateEditor, onChange }: any) => {
         data: {
           source: id,
         },
-        selection: slateEditor.selection,
+        selection: getFocusFromSlateRange(
+          slateEditor,
+          slateEditor.selection as any
+        ),
       };
 
       state.nodes[ROOT_NODE].data.custom.caret = lastCraftSelectionRef.current;
@@ -137,5 +122,35 @@ export const CraftStateSync = ({ editor: slateEditor, onChange }: any) => {
     extendSlateEditor();
   }, []);
 
-  return null;
+  // Sync selection
+  useEffect(() => {
+    Promise.resolve().then(() => {
+      if (!isShallowEqual(lastCraftSelectionRef.current, craftSelection)) {
+        if (craftSelection) {
+          try {
+            const craftRange = craftSelection.selection;
+            const slateRange = getSlateRange(slateEditor, craftRange);
+
+            const domRange = ReactEditor.toDOMRange(slateEditor, slateRange);
+            if (domRange) {
+              setEnabled(true);
+              ReactEditor.focus(slateEditor);
+              Transforms.select(slateEditor, slateRange);
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        } else {
+          ReactEditor.deselect(slateEditor);
+          setEnabled(false);
+        }
+      }
+    });
+  }, [craftSelection]);
+
+  return (
+    <SlateNodeContextProvider enabled={enabled}>
+      {children}
+    </SlateNodeContextProvider>
+  );
 };

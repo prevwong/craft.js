@@ -21,11 +21,11 @@ export const Editable = (
   >
 ) => {
   const { leaf: LeafElement } = useCraftSlateContext();
-  const { enabled, setEnabled } = useSlateNode();
+  const { enabled } = useSlateNode();
   const editor = useSlate();
 
   // TODO: figure out bug in here
-  // useSelectionSync();
+  // const { enabled } = useSelectionSync();
 
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <LeafElement {...props} />, []);
@@ -38,16 +38,16 @@ export const Editable = (
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         readOnly={!enabled}
-        onKeyDown={(e: any) => {
-          if (hotkey('esc', e)) {
-            ReactEditor.deselect(editor);
-            setEnabled(false);
-            return;
-          }
-          if (props.onKeyDown) {
-            props.onKeyDown(e);
-          }
-        }}
+        // onKeyDown={(e: any) => {
+        //   if (hotkey('esc', e)) {
+        //     ReactEditor.deselect(editor);
+        //     setEnabled(false);
+        //     return;
+        //   }
+        //   if (props.onKeyDown) {
+        //     props.onKeyDown(e);
+        //   }
+        // }}
       />
     </EditableContext.Provider>
   );

@@ -10,10 +10,7 @@ export const Slate: React.FC<any> = ({ children, editor }) => {
   return (
     <Fragment>
       <SlateEditor editor={editor} value={value} onChange={setValue}>
-        <SlateNodeContextProvider>
-          <CraftStateSync editor={editor} onChange={setValue} />
-          {children}
-        </SlateNodeContextProvider>
+        <CraftStateSync onChange={setValue}>{children}</CraftStateSync>
       </SlateEditor>
     </Fragment>
   );
