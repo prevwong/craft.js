@@ -21,7 +21,7 @@ export const Editable = (
   >
 ) => {
   const { leaf: LeafElement } = useCraftSlateContext();
-  const { enabled } = useSlateNode();
+  const { enabled, setEnabled } = useSlateNode();
   const editor = useSlate();
 
   // TODO: figure out bug in here
@@ -41,6 +41,7 @@ export const Editable = (
         onKeyDown={(e: any) => {
           if (hotkey('esc', e)) {
             ReactEditor.deselect(editor);
+            setEnabled(false);
             return;
           }
           if (props.onKeyDown) {

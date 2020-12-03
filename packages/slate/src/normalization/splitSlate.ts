@@ -87,6 +87,11 @@ export const splitSlate = (
 
     let expelledIds = [];
 
+    // If there there were some Slate nodes moved; then we should reset the caret selection
+    if (transfers.length > 0) {
+      state.nodes[ROOT_NODE].data.custom.caret = null;
+    }
+
     transfers.forEach((transfer, i) => {
       const { type } = transfer;
 
