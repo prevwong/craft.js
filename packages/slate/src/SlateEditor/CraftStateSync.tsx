@@ -50,7 +50,7 @@ export const CraftStateSync = ({ onChange, children }: any) => {
 
     // Then trigger onChange
     currentSlateStateRef.current = slateEditor.children;
-    onChange(currentSlateStateRef.current);
+    onChange(slateState);
   };
 
   useLayoutEffect(() => {
