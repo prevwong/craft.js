@@ -16,14 +16,15 @@
     "release": "run-s lint clean build test release:npm",
     "release:npm": "./scripts/release.sh",
     "publish:beta": "lerna version prerelease --preid beta --force-publish --yes",
-    "lerna:version": "lerna version --conventional-commits --yes",
-    "lerna:prerelease": "yarn lerna:version --conventional-prerelease --yes",
     "test": "jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "scaffold": "lerna clean --yes && yarn run lerna:bootstrap",
     "lerna:link": "lerna link",
-    "lerna:bootstrap": "lerna bootstrap"
+    "lerna:bootstrap": "lerna bootstrap",
+    "lerna:version": "lerna version --conventional-commits --yes",
+    "lerna:prerelease": "yarn lerna:version --conventional-prerelease --yes",
+    "lerna:publish": "lerna publish from-git --yes"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
