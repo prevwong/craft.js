@@ -74,4 +74,4 @@ jobs:
         run: yarn lerna:prerelease
 
       - name: Publish
-        run: yarn release
+        run: yarn lerna:publish
