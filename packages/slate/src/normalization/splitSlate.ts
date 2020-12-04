@@ -90,6 +90,7 @@ export const splitSlate = (
     // If there there were some Slate nodes moved; then we should reset the caret selection
     if (transfers.length > 0) {
       state.nodes[ROOT_NODE].data.custom.caret = null;
+      state.nodes[ROOT_NODE].data.custom.lastSavedSelection = null;
     }
 
     transfers.forEach((transfer, i) => {

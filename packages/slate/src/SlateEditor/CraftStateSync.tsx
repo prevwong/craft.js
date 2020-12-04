@@ -70,19 +70,17 @@ export const CraftStateSync = ({ onChange, children }: any) => {
 
   const updateCaretWithSavedSelection = useCallback(
     debounce(() => {
-      Promise.resolve().then(() => {
-        const lastSavedSelection = query.node(ROOT_NODE).get().data.custom
-          .lastSavedSelection;
-        if (!lastSavedSelection) {
-          return;
-        }
+      const lastSavedSelection = query.node(ROOT_NODE).get().data.custom
+        .lastSavedSelection;
+      if (!lastSavedSelection) {
+        return;
+      }
 
-        if (lastSavedSelection.data.source !== id) {
-          return;
-        }
+      if (lastSavedSelection.data.source !== id) {
+        return;
+      }
 
-        setCaret(lastSavedSelection.selection, lastSavedSelection.data);
-      });
+      setCaret(lastSavedSelection.selection, lastSavedSelection.data);
     }, 100),
     []
   );
@@ -139,16 +137,8 @@ export const CraftStateSync = ({ onChange, children }: any) => {
     slateEditor.onChange = () => {
       onChange();
 
+      // Don't update Craft state if only selection operations had been performed
       if (slateEditor.operations.every((op) => op.type === 'set_selection')) {
-        const closestNodeId = getClosestSelectableNodeId(slateEditor);
-
-        if (
-          closestNodeId &&
-          query.node(closestNodeId).get() &&
-          !query.getEvent('selected').contains(closestNodeId)
-        ) {
-          actions.selectNode(closestNodeId);
-        }
         return;
       }
 
@@ -177,6 +167,16 @@ export const CraftStateSync = ({ onChange, children }: any) => {
     );
 
     selectionRef.current.slate = toCaretRange;
+
+    const closestNodeId = getClosestSelectableNodeId(slateEditor);
+
+    if (
+      closestNodeId &&
+      query.node(closestNodeId).get() &&
+      !query.getEvent('selected').contains(closestNodeId)
+    ) {
+      actions.selectNode(closestNodeId);
+    }
 
     if (compareCaret(toCaretRange, selectionRef.current.caret)) {
       return;
@@ -217,7 +217,7 @@ export const CraftStateSync = ({ onChange, children }: any) => {
         Transforms.select(slateEditor, newSelection);
       }
     } catch (err) {
-      console.log(err);
+      console.warn(err);
     }
   }, [caret]);
 
