@@ -11,7 +11,7 @@ export function useCaret<C>(collectCaret?: (caret: Caret) => C) {
     store: ___,
     ...collected
   } = useEditor((state) =>
-    state.nodes['ROOT'] && state.nodes['ROOT'].data.custom.caret && collectCaret
+    state.nodes['ROOT'] && collectCaret
       ? collectCaret(state.nodes['ROOT'].data.custom.caret)
       : null
   );

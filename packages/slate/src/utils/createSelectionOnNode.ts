@@ -27,16 +27,16 @@ export const getFocusFromSlateRange = (
   range?: Range | Partial<Range>
 ): any => {
   if (!range) {
-    return undefined;
+    return null;
   }
 
   const newFocus = mapValues(range, (point: any) => {
     if (!point) {
-      return undefined;
+      return null;
     }
     const match = Editor.node(editor, point);
     if (!match) {
-      return undefined;
+      return null;
     }
     const [node] = match;
     return { nodeId: node.id, offset: point.offset };

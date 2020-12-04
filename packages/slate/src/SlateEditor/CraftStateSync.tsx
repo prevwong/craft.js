@@ -1,8 +1,14 @@
 import { useEditor, ROOT_NODE, useNode } from '@craftjs/core';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import isEqual from 'lodash/isEqual';
+import debounce from 'lodash/debounce';
 import { Editor, Transforms } from 'slate';
-import isShallowEqual from 'shallowequal';
 
 import { applyIdOnOperation } from '../utils/applyIdOnOperation';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../utils/formats';
@@ -11,6 +17,26 @@ import { getClosestSelectableNodeId } from '../utils/getClosestSelectableNodeId'
 import { ReactEditor, useSlate } from 'slate-react';
 import { getSlateRange } from '../utils/getSlateRange';
 import { getFocusFromSlateRange } from '../utils/createSelectionOnNode';
+import { useCaret } from '../caret';
+import { CaretSelection } from 'caret/types';
+
+const compareCaret = (a: CaretSelection, b: CaretSelection) => {
+  if (!a && !b) {
+    return true;
+  }
+
+  if (
+    a &&
+    b &&
+    a.anchor.nodeId === b.anchor.nodeId &&
+    a.focus.nodeId === b.focus.nodeId &&
+    a.anchor.offset === b.anchor.offset
+  ) {
+    return true;
+  }
+
+  return false;
+};
 
 const getSlateStateFromCraft = (rteNodeId: string, query) => {
   const node = query.node(rteNodeId).get();
@@ -28,20 +54,42 @@ export const CraftStateSync = ({ onChange, children }: any) => {
   const slateEditor = useSlate();
 
   const currentSlateStateRef = useRef<any>(null);
-  const lastCraftSelectionRef = useRef<any>(null);
 
-  const { actions, query, slateState, craftSelection } = useEditor(
-    (state, query) => ({
-      slateState: getSlateStateFromCraft(id, query),
-      craftSelection:
-        state.nodes[ROOT_NODE].data.custom.caret &&
-        state.nodes[ROOT_NODE].data.custom.caret.data.source === id
-          ? state.nodes[ROOT_NODE].data.custom.caret
-          : null,
-    })
+  const { actions, query, slateState } = useEditor((_, query) => ({
+    slateState: getSlateStateFromCraft(id, query),
+  }));
+
+  const { caret, setCaret } = useCaret((caret) => ({
+    caret: caret && caret.data.source === id ? caret.selection : null,
+  }));
+
+  const selectionRef = useRef({
+    caret: null,
+    slate: null,
+  });
+
+  const updateCaretWithSavedSelection = useCallback(
+    debounce(() => {
+      Promise.resolve().then(() => {
+        const lastSavedSelection = query.node(ROOT_NODE).get().data.custom
+          .lastSavedSelection;
+        if (!lastSavedSelection) {
+          return;
+        }
+
+        if (lastSavedSelection.data.source !== id) {
+          return;
+        }
+
+        setCaret(lastSavedSelection.selection, lastSavedSelection.data);
+      });
+    }, 100),
+    []
   );
 
   const setSlateState = () => {
+    // Reset selection (otherwise Slate goes boom!)
+    selectionRef.current.caret = null;
     slateEditor.selection = null;
 
     // Normalize using Slate
@@ -51,6 +99,8 @@ export const CraftStateSync = ({ onChange, children }: any) => {
     // Then trigger onChange
     currentSlateStateRef.current = slateEditor.children;
     onChange(slateState);
+
+    updateCaretWithSavedSelection();
   };
 
   useLayoutEffect(() => {
@@ -71,7 +121,7 @@ export const CraftStateSync = ({ onChange, children }: any) => {
 
       currentSlateStateRef.current = slateState;
 
-      lastCraftSelectionRef.current = {
+      state.nodes[ROOT_NODE].data.custom.lastSavedSelection = {
         data: {
           source: id,
         },
@@ -80,8 +130,6 @@ export const CraftStateSync = ({ onChange, children }: any) => {
           slateEditor.selection as any
         ),
       };
-
-      state.nodes[ROOT_NODE].data.custom.caret = lastCraftSelectionRef.current;
     });
   };
 
@@ -122,38 +170,56 @@ export const CraftStateSync = ({ onChange, children }: any) => {
     extendSlateEditor();
   }, []);
 
-  // Sync selection
   useEffect(() => {
-    Promise.resolve().then(() => {
-      if (!isShallowEqual(lastCraftSelectionRef.current, craftSelection)) {
-        if (craftSelection) {
-          try {
-            const craftRange = craftSelection.selection;
+    const toCaretRange = getFocusFromSlateRange(
+      slateEditor,
+      slateEditor.selection as any
+    );
 
-            // TODO Prev: this should return ?Range
-            // but TS is not checking if its safe to access for some reason
-            const newSelection = getSlateRange(slateEditor, craftRange);
+    selectionRef.current.slate = toCaretRange;
 
-            if (!newSelection || !newSelection.anchor || !newSelection.focus) {
-              return;
-            }
+    if (compareCaret(toCaretRange, selectionRef.current.caret)) {
+      return;
+    }
 
-            const domRange = ReactEditor.toDOMRange(slateEditor, newSelection);
-            if (domRange) {
-              setEnabled(true);
-              ReactEditor.focus(slateEditor);
-              Transforms.select(slateEditor, newSelection);
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        } else {
-          ReactEditor.deselect(slateEditor);
-          setEnabled(false);
-        }
-      }
+    setCaret(toCaretRange, {
+      source: id,
     });
-  }, [craftSelection]);
+  }, [slateEditor.selection]);
+
+  useEffect(() => {
+    selectionRef.current.caret = caret;
+
+    if (compareCaret(caret, selectionRef.current.slate)) {
+      return;
+    }
+
+    // We need to do this because Slate occasioanlly retains DOM selection from elsewhere
+    window.getSelection().removeAllRanges();
+
+    if (!caret) {
+      ReactEditor.deselect(slateEditor);
+      setEnabled(false);
+      return;
+    }
+
+    const newSelection = caret ? getSlateRange(slateEditor, caret) : null;
+
+    if (!newSelection || !newSelection.anchor || !newSelection.focus) {
+      return;
+    }
+
+    try {
+      const domRange = ReactEditor.toDOMRange(slateEditor, newSelection);
+      if (domRange) {
+        setEnabled(true);
+        ReactEditor.focus(slateEditor);
+        Transforms.select(slateEditor, newSelection);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, [caret]);
 
   return (
     <SlateNodeContextProvider enabled={enabled}>
