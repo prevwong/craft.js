@@ -19,10 +19,12 @@
     "test": "jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "scaffold": "npm run lerna:clean --yes && npm run lerna:bootstrap",
-    "lerna:clean": "lerna clean",
+    "scaffold": "lerna clean --yes && yarn run lerna:bootstrap",
     "lerna:link": "lerna link",
-    "lerna:bootstrap": "lerna bootstrap"
+    "lerna:bootstrap": "lerna bootstrap",
+    "lerna:version": "lerna version --conventional-commits --yes",
+    "lerna:prerelease": "yarn lerna:version --conventional-prerelease --yes",
+    "lerna:publish": "lerna publish from-git --yes"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
