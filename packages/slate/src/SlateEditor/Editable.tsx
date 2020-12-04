@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { Delete } from '@craftjs/utils';
 import { Editable as SlateEditable } from 'slate-react';
 
-import { Element } from '../render';
+import { Element } from './Element';
 import {
   EditableContext,
   RenderEditable,
@@ -31,16 +31,6 @@ export const Editable = (
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         readOnly={!enabled}
-        // onKeyDown={(e: any) => {
-        //   if (hotkey('esc', e)) {
-        //     ReactEditor.deselect(editor);
-        //     setEnabled(false);
-        //     return;
-        //   }
-        //   if (props.onKeyDown) {
-        //     props.onKeyDown(e);
-        //   }
-        // }}
       />
     </EditableContext.Provider>
   );

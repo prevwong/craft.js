@@ -1,7 +1,6 @@
 import { useEditor } from '@craftjs/core';
 import { useCallback } from 'react';
 import { Caret, CaretData, CaretSelection } from './types';
-import { setCaret, clearCaret } from './utils';
 
 export function useCaret<C>(collectCaret?: (caret: Caret) => C) {
   const {
