@@ -31,7 +31,7 @@ export const Element = ({ attributes, children, element }) => {
   elementRef.current = element;
 
   const id = element.id;
-  const { id: slateNodeId, setEnabled } = useSlateNode();
+  const { id: slateNodeId } = useSlateNode();
   const { setCaret } = useCaret();
 
   const {

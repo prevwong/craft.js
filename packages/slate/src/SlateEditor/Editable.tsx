@@ -1,9 +1,6 @@
 import React, { useCallback } from 'react';
 import { Delete } from '@craftjs/utils';
-import { Editable as SlateEditable, ReactEditor, useSlate } from 'slate-react';
-import hotkey from 'is-hotkey';
-
-import { useSelectionSync } from './useSelectionSync';
+import { Editable as SlateEditable } from 'slate-react';
 
 import { Element } from '../render';
 import {
@@ -22,10 +19,6 @@ export const Editable = (
 ) => {
   const { leaf: LeafElement } = useCraftSlateContext();
   const { enabled } = useSlateNode();
-  const editor = useSlate();
-
-  // TODO: figure out bug in here
-  // const { enabled } = useSelectionSync();
 
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <LeafElement {...props} />, []);
