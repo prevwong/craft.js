@@ -167,6 +167,7 @@ export const CraftStateSync = ({
     });
   }, [slateEditor.selection]);
 
+  let newSelectionQueue = useRef(null);
   const syncCraftSelectionToSlate = useCallback((selection) => {
     selectionRef.current.craft = selection;
 
@@ -190,26 +191,25 @@ export const CraftStateSync = ({
       ? getSlateRange(slateEditor, selection)
       : null;
 
-    if (!newSelection || !newSelection.anchor || !newSelection.focus) {
-      return;
-    }
-
-    // We neeed to wrap this inside a try block because the leaf nodes may not have been rendered at the time we set the selection here
-    try {
-      const domRange = ReactEditor.toDOMRange(slateEditor, newSelection);
-      if (domRange) {
-        setEnabled(true);
-        ReactEditor.focus(slateEditor);
-        Transforms.select(slateEditor, newSelection);
-        slateEditor.selection = newSelection;
-      }
-    } catch (err) {
-      // console.warn(err);
-    }
+    newSelectionQueue.current = newSelection;
   }, []);
 
   useLayoutEffect(() => {
     syncCraftSelectionToSlate(slateState.selection);
+  }, [slateState.selection]);
+
+  useLayoutEffect(() => {
+    const newSelection = newSelectionQueue.current;
+    if (!newSelection) {
+      return;
+    }
+
+    setEnabled(true);
+    ReactEditor.focus(slateEditor);
+    Transforms.select(slateEditor, newSelection);
+    slateEditor.selection = newSelection;
+
+    newSelectionQueue.current = null;
   });
 
   return (
