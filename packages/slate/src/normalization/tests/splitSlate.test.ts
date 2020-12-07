@@ -14,7 +14,7 @@ const testSplitState = (state) => {
 };
 
 describe('splitSlate', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     state = testSplitState([
       {
         id: 'T1',

@@ -22,7 +22,8 @@ export const normalizeSlate = (
   // Last step, combine adjacent nodes together
   mergeElements(slateType, state);
 
-  removeInvalidNodes(state, [slateType, ...elementTypes], leafElementType);
+  // Sanity check: remove any unnecessary Slate nodes (ie: a <Slate /> without any descendant node)
+  removeInvalidNodes(state, slateType, elementTypes, leafElementType);
 
   return state;
 };

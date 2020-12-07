@@ -6,13 +6,14 @@ import deleteNodes from './deleteNodes';
 
 export const removeInvalidNodes = (
   state: EditorState,
+  rootType: any,
   elementTypes: any[],
   leafElementType: any
 ) => {
   const nodesToDelete = new Set<NodeId>();
 
   const slateNodes = pickBy(state.nodes, (node) =>
-    elementTypes.includes(node.data.type)
+    [rootType, ...elementTypes].includes(node.data.type)
   );
   const textNodes = pickBy(
     state.nodes,
@@ -34,4 +35,6 @@ export const removeInvalidNodes = (
   });
 
   deleteNodes(state, Array.from(nodesToDelete).map((id) => [id]) as any);
+
+  return state;
 };
