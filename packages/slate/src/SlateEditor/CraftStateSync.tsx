@@ -7,17 +7,14 @@ import React, {
   useState,
 } from 'react';
 import isEqual from 'lodash/isEqual';
-import debounce from 'lodash/debounce';
 import { Editor, Transforms } from 'slate';
 
 import { applyIdOnOperation } from '../utils/applyIdOnOperation';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../utils/formats';
 import { SlateNodeContextProvider } from '../contexts/SlateNodeContext';
-import { getClosestSelectableNodeId } from '../utils/getClosestSelectableNodeId';
 import { ReactEditor, useSlate } from 'slate-react';
 import { getSlateRange } from '../utils/getSlateRange';
 import { getFocusFromSlateRange } from '../utils/createSelectionOnNode';
-import { useCaret } from '../caret';
 import { CaretSelection } from 'caret/types';
 
 const compareCaret = (a: CaretSelection, b: CaretSelection) => {
