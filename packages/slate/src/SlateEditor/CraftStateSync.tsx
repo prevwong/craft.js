@@ -45,9 +45,13 @@ const getSlateStateFromCraft = (rteNodeId: string, query) => {
   return childNodes.map((id) => craftNodeToSlateNode(query, id));
 };
 
-export const CraftStateSync = ({ onChange, children }: any) => {
+export const CraftStateSync = ({
+  onChange,
+  children,
+  disableOnDeselect = false,
+}: any) => {
   const { id } = useNode();
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(disableOnDeselect ? false : true);
   const slateEditor = useSlate();
 
   const currentSlateStateRef = useRef<any>(null);
@@ -175,7 +179,10 @@ export const CraftStateSync = ({ onChange, children }: any) => {
     if (!selection) {
       ReactEditor.deselect(slateEditor);
       slateEditor.selection = null;
-      setEnabled(false);
+      if (disableOnDeselect) {
+        setEnabled(false);
+      }
+
       return;
     }
 

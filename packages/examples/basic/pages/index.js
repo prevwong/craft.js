@@ -1,5 +1,5 @@
 import { Editor, Frame, Element, useEditor } from '@craftjs/core';
-import { useCaret, CraftSlateProvider } from '@craftjs/slate';
+import { CraftSlateProvider } from '@craftjs/slate';
 import { Paper, Grid, makeStyles } from '@material-ui/core';
 import throttle from 'lodash/throttle';
 
@@ -31,7 +31,6 @@ const useStyles = makeStyles(() => ({
 
 const EventManager = () => {
   const { actions } = useEditor();
-  const { clearCaret } = useCaret();
 
   const onKeyDown = useCallback(
     (e) => {
@@ -41,11 +40,9 @@ const EventManager = () => {
       } else if (hotkey('shift+mod+z', e)) {
         // slateEditor.selection = null;
         actions.history.redo();
-      } else if (hotkey('esc', e)) {
-        clearCaret();
       }
     },
-    [actions.history, clearCaret]
+    [actions.history]
   );
 
   return <EventListener target="window" onKeyDown={onKeyDown} />;
@@ -83,6 +80,9 @@ export default function App() {
                   <RichTextEditor>
                     <Typography variant="p">
                       <Text text="Lmao"></Text>
+                    </Typography>
+                    <Typography variant="p">
+                      <Text text="haha"></Text>
                     </Typography>
                   </RichTextEditor>
                 </Element>
