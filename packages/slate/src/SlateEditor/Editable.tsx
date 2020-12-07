@@ -11,16 +11,17 @@ import {
 import { useCraftSlateContext } from '../contexts/CraftSlateProvider';
 import { useSlateNode } from '../contexts/SlateNodeContext';
 
-export const Editable = (
-  props: Delete<
-    React.ComponentProps<typeof SlateEditable>,
-    'renderElement' | 'renderLeaf' | 'readonly'
-  >
-) => {
+export const Editable = (props: any) => {
   const { leaf: LeafElement } = useCraftSlateContext();
+
   const { enabled } = useSlateNode();
 
-  const renderElement = useCallback((props) => <Element {...props} />, []);
+  const renderElement = useCallback(
+    (elementProps) => (
+      <Element {...elementProps} renderElement={props.renderElement} />
+    ),
+    []
+  );
   const renderLeaf = useCallback((props) => <LeafElement {...props} />, []);
 
   return (

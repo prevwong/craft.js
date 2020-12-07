@@ -1,38 +1,42 @@
 import { NodeElement } from '@craftjs/core';
 import { useEditor } from '@craftjs/core';
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Editor, Transforms } from 'slate';
-import { ReactEditor, useEditor as useSlateEditor } from 'slate-react';
+import React, { useEffect, useRef } from 'react';
+import { Editor } from 'slate';
+import { useEditor as useSlateEditor } from 'slate-react';
 
-import { useSlateNode } from '../contexts/SlateNodeContext';
-import { useCaret } from '../caret';
-import { createSelectionOnNode } from '../utils/createSelectionOnNode';
-import { getSlateRange } from '../utils/getSlateRange';
-
-const RenderSlateNode = (props: any) => {
-  const { element, attributes, children } = props;
-
+// Given a Slate element, render the element with the corresponding resolver type from craft
+const RenderSlateElement = ({
+  element,
+  attributes,
+  children,
+  renderElement,
+}) => {
   const { type } = useEditor((state) => ({
     type: state.options.resolver[element.type],
   }));
 
-  return React.createElement(type, {
+  const props = {
     element,
     children,
-    attributes: {
-      ...attributes,
-      tabIndex: 0,
-    },
-  });
+    attributes,
+  };
+
+  // TODO: improve API
+  if (renderElement) {
+    return React.createElement(renderElement, {
+      type,
+      ...props,
+    });
+  }
+
+  return React.createElement(type, props);
 };
 
-export const Element = ({ attributes, children, element }) => {
+export const Element = ({ attributes, children, element, renderElement }) => {
   const elementRef = useRef(element);
   elementRef.current = element;
 
   const id = element.id;
-  const { id: slateNodeId } = useSlateNode();
-  const { setCaret } = useCaret();
 
   const {
     exists,
@@ -44,19 +48,6 @@ export const Element = ({ attributes, children, element }) => {
   });
 
   const slateEditor = useSlateEditor();
-
-  const enable = useCallback((e: MouseEvent) => {
-    e.stopPropagation();
-    // const selection = createSelectionOnNode(elementRef.current) as any;
-    // setEnabled(true);
-    // ReactEditor.focus(slateEditor);
-    // Transforms.select(slateEditor, getSlateRange(slateEditor, selection));
-
-    const selection = createSelectionOnNode(elementRef.current) as any;
-    setCaret(selection, {
-      source: slateNodeId,
-    });
-  }, []);
 
   useEffect(() => {
     // If the current element is an inline element (ie: a link)
@@ -76,16 +67,14 @@ export const Element = ({ attributes, children, element }) => {
 
     connect(dom, id);
     drag(dom, id);
-
-    dom.addEventListener('dblclick', enable);
-    return () => dom.removeEventListener('dblclick', enable);
   }, [exists]);
 
   return (
     <NodeElement
       id={id}
       render={
-        <RenderSlateNode
+        <RenderSlateElement
+          renderElement={renderElement}
           element={element}
           attributes={attributes}
           children={children}
