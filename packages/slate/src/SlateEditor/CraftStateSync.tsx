@@ -1,4 +1,4 @@
-import { useEditor, ROOT_NODE, useNode } from '@craftjs/core';
+import { useEditor, useNode } from '@craftjs/core';
 import React, {
   useCallback,
   useEffect,
@@ -55,59 +55,50 @@ export const CraftStateSync = ({ onChange, children }: any) => {
 
   const currentSlateStateRef = useRef<any>(null);
 
-  const { actions, query, slateState } = useEditor((_, query) => ({
-    slateState: getSlateStateFromCraft(id, query),
-  }));
-
-  const { caret, setCaret } = useCaret((caret) => ({
-    caret: caret && caret.data.source === id ? caret.selection : null,
+  const { actions, slateState } = useEditor((state, query) => ({
+    slateState: {
+      children: getSlateStateFromCraft(id, query),
+      selection: state.nodes[id] && state.nodes[id].data.custom.selection,
+    },
   }));
 
   const selectionRef = useRef({
-    caret: null,
+    craft: null,
     slate: null,
   });
 
-  const updateCaretWithSavedSelection = useCallback(
-    debounce(() => {
-      const lastSavedSelection = query.node(ROOT_NODE).get().data.custom
-        .lastSavedSelection;
-      if (!lastSavedSelection) {
-        return;
-      }
-
-      if (lastSavedSelection.data.source !== id) {
-        return;
-      }
-
-      setCaret(lastSavedSelection.selection, lastSavedSelection.data);
-    }, 100),
-    []
-  );
-
-  const setSlateState = () => {
+  const setSlateState = (children) => {
     // Reset selection (otherwise Slate goes boom!)
-    selectionRef.current.caret = null;
+    selectionRef.current.craft = null;
+    selectionRef.current.slate = null;
+    ReactEditor.deselect(slateEditor);
     slateEditor.selection = null;
 
     // Normalize using Slate
-    slateEditor.children = slateState;
+    slateEditor.children = children;
     Editor.normalize(slateEditor, { force: true });
 
     // Then trigger onChange
     currentSlateStateRef.current = slateEditor.children;
-    onChange(slateState);
-
-    updateCaretWithSavedSelection();
+    onChange(children);
   };
 
+  // When slate children changes in Craft's state
   useLayoutEffect(() => {
-    if (isEqual(currentSlateStateRef.current, slateState)) {
+    if (!slateState.children) {
       return;
     }
 
-    setSlateState();
-  });
+    // If the state is the same with the current slate state, do nothing
+    // We could probably find a way to do this without deep-equal; but that's a problem for another time!
+    if (isEqual(currentSlateStateRef.current, slateState.children)) {
+      return;
+    }
+
+    // Otherwise, force update the slate state
+    // This only occurs in 3 scenarios: (on page load, undo and redo)
+    setSlateState(slateState.children);
+  }, [slateState.children]);
 
   const saveToCraft = (slateState) => {
     const childNodeIds = slateState.map((node) => node['id']) as string[];
@@ -119,15 +110,13 @@ export const CraftStateSync = ({ onChange, children }: any) => {
 
       currentSlateStateRef.current = slateState;
 
-      state.nodes[ROOT_NODE].data.custom.lastSavedSelection = {
-        data: {
-          source: id,
-        },
-        selection: getFocusFromSlateRange(
-          slateEditor,
-          slateEditor.selection as any
-        ),
-      };
+      // Save the current selection
+      const selection = getFocusFromSlateRange(
+        slateEditor,
+        slateEditor.selection as any
+      );
+
+      state.nodes[id].data.custom.selection = selection;
     });
   };
 
@@ -168,61 +157,59 @@ export const CraftStateSync = ({ onChange, children }: any) => {
 
     selectionRef.current.slate = toCaretRange;
 
-    const closestNodeId = getClosestSelectableNodeId(slateEditor);
-
-    if (
-      closestNodeId &&
-      query.node(closestNodeId).get() &&
-      !query.getEvent('selected').contains(closestNodeId)
-    ) {
-      actions.selectNode(closestNodeId);
-    }
-
-    if (compareCaret(toCaretRange, selectionRef.current.caret)) {
+    if (compareCaret(toCaretRange, selectionRef.current.craft)) {
       return;
     }
 
-    setCaret(toCaretRange, {
-      source: id,
+    actions.history.ignore().setState((state) => {
+      state.nodes[id].data.custom.selection = toCaretRange;
     });
   }, [slateEditor.selection]);
 
-  useEffect(() => {
-    selectionRef.current.caret = caret;
+  const syncCraftSelectionToSlate = useCallback((selection) => {
+    selectionRef.current.craft = selection;
 
-    if (compareCaret(caret, selectionRef.current.slate)) {
+    if (compareCaret(selection, selectionRef.current.slate)) {
       return;
     }
 
-    // We need to do this because Slate occasioanlly retains DOM selection from elsewhere
     window.getSelection().removeAllRanges();
 
-    if (!caret) {
+    if (!selection) {
       ReactEditor.deselect(slateEditor);
+      slateEditor.selection = null;
       setEnabled(false);
       return;
     }
 
-    const newSelection = caret ? getSlateRange(slateEditor, caret) : null;
+    const newSelection = selection
+      ? getSlateRange(slateEditor, selection)
+      : null;
 
     if (!newSelection || !newSelection.anchor || !newSelection.focus) {
       return;
     }
 
+    // We neeed to wrap this inside a try block because the leaf nodes may not have been rendered at the time we set the selection here
     try {
       const domRange = ReactEditor.toDOMRange(slateEditor, newSelection);
       if (domRange) {
         setEnabled(true);
         ReactEditor.focus(slateEditor);
         Transforms.select(slateEditor, newSelection);
+        slateEditor.selection = newSelection;
       }
     } catch (err) {
-      console.warn(err);
+      // console.warn(err);
     }
-  }, [caret]);
+  }, []);
+
+  useLayoutEffect(() => {
+    syncCraftSelectionToSlate(slateState.selection);
+  });
 
   return (
-    <SlateNodeContextProvider enabled={enabled}>
+    <SlateNodeContextProvider enabled={enabled} setEnabled={setEnabled}>
       {children}
     </SlateNodeContextProvider>
   );
