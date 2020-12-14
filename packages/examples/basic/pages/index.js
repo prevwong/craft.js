@@ -21,6 +21,7 @@ import {
   Text,
 } from '../components/user/RichTextEditor';
 import '../styles/main.css';
+import { FocusContextProvider, useFocus } from '../components/Focus';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -31,6 +32,7 @@ const useStyles = makeStyles(() => ({
 
 const EventManager = () => {
   const { actions } = useEditor();
+  const { setFocus } = useFocus();
 
   const onKeyDown = useCallback(
     (e) => {
@@ -40,6 +42,8 @@ const EventManager = () => {
       } else if (hotkey('shift+mod+z', e)) {
         // slateEditor.selection = null;
         actions.history.redo();
+      } else if (hotkey('esc', e)) {
+        setFocus(null);
       }
     },
     [actions.history]
@@ -61,41 +65,43 @@ export default function App() {
           CardBottom,
         }}
       >
-        <CraftSlateProvider
-          editor={{ RichTextEditor }}
-          elements={{
-            Typography,
-            List,
-            ListItem,
-          }}
-          leaf={{ Text }}
-        >
-          <EventManager />
-          <Topbar />
-          <Grid container spacing={5} style={{ paddingTop: '10px' }}>
-            <Grid item xs>
-              <Frame>
-                <Element canvas is={Container}>
-                  <Button>Hello</Button>
-                  <RichTextEditor>
-                    <Typography variant="p">
-                      <Text text="Lmao"></Text>
-                    </Typography>
-                    <Typography variant="p">
-                      <Text text="haha"></Text>
-                    </Typography>
-                  </RichTextEditor>
-                </Element>
-              </Frame>
+        <FocusContextProvider>
+          <CraftSlateProvider
+            editor={{ RichTextEditor }}
+            elements={{
+              Typography,
+              List,
+              ListItem,
+            }}
+            leaf={{ Text }}
+          >
+            <EventManager />
+            <Topbar />
+            <Grid container spacing={5} style={{ paddingTop: '10px' }}>
+              <Grid item xs>
+                <Frame>
+                  <Element canvas is={Container}>
+                    <Button>Hello</Button>
+                    <RichTextEditor>
+                      <Typography variant="p">
+                        <Text text="Lmao"></Text>
+                      </Typography>
+                      <Typography variant="p">
+                        <Text text="haha"></Text>
+                      </Typography>
+                    </RichTextEditor>
+                  </Element>
+                </Frame>
+              </Grid>
+              <Grid item xs={4}>
+                <Paper className={classes.root}>
+                  <Toolbox />
+                  <SettingsPanel />
+                </Paper>
+              </Grid>
             </Grid>
-            <Grid item xs={4}>
-              <Paper className={classes.root}>
-                <Toolbox />
-                <SettingsPanel />
-              </Paper>
-            </Grid>
-          </Grid>
-        </CraftSlateProvider>
+          </CraftSlateProvider>
+        </FocusContextProvider>
       </Editor>
     </div>
   );

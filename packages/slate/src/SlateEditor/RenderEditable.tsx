@@ -1,5 +1,5 @@
-import { useSlateNode } from '../contexts/SlateNodeContext';
-import React, { createContext, useContext, useCallback } from 'react';
+import { useSlateNode } from './SlateNodeContext';
+import React, { createContext, useContext, useEffect } from 'react';
 import { useEditor } from '@craftjs/core';
 
 export const EditableContext = createContext<any>(null);
@@ -15,9 +15,12 @@ export const RenderEditable = React.forwardRef(
 
     const { as } = useContext(EditableContext);
 
-    // Important: ref must be memoized otherwise Slate goes insane
-    const refCallback = useCallback((dom) => {
-      ref.current = dom;
+    useEffect(() => {
+      const dom = ref.current;
+      if (!dom) {
+        return;
+      }
+
       connectors.connect(dom, slateNodeId);
       connectors.drag(dom, slateNodeId);
     }, []);
@@ -25,7 +28,7 @@ export const RenderEditable = React.forwardRef(
     return React.createElement(as, {
       attributes: {
         ...props,
-        ref: refCallback,
+        ref,
       },
       children,
     });

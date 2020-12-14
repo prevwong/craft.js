@@ -1,23 +1,16 @@
 import { useEditor, useNode } from '@craftjs/core';
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 import { Editor, Transforms } from 'slate';
 
 import { applyIdOnOperation } from '../utils/applyIdOnOperation';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../utils/formats';
-import { SlateNodeContextProvider } from '../contexts/SlateNodeContext';
+import { useSlateNode } from './SlateNodeContext';
 import { ReactEditor, useSlate } from 'slate-react';
 import { getSlateRange } from '../utils/getSlateRange';
 import { getFocusFromSlateRange } from '../utils/createSelectionOnNode';
-import { CaretSelection } from 'caret/types';
 
-const compareCaret = (a: CaretSelection, b: CaretSelection) => {
+const compareCaret = (a: any, b: any) => {
   if (!a && !b) {
     return true;
   }
@@ -45,13 +38,8 @@ const getSlateStateFromCraft = (rteNodeId: string, query) => {
   return childNodes.map((id) => craftNodeToSlateNode(query, id));
 };
 
-export const CraftStateSync = ({
-  onChange,
-  children,
-  disableOnDeselect = false,
-}: any) => {
-  const { id } = useNode();
-  const [enabled, setEnabled] = useState(disableOnDeselect ? false : true);
+export const useCraftStateSync = () => {
+  const { id, actions: slateActions } = useSlateNode();
   const slateEditor = useSlate();
 
   const currentSlateStateRef = useRef<any>(null);
@@ -70,8 +58,8 @@ export const CraftStateSync = ({
 
   const setSlateState = (children) => {
     // Reset selection (otherwise Slate goes boom!)
-    selectionRef.current.craft = null;
-    selectionRef.current.slate = null;
+    // selectionRef.current.craft = null;
+    // selectionRef.current.slate = null;
     ReactEditor.deselect(slateEditor);
     slateEditor.selection = null;
 
@@ -81,7 +69,7 @@ export const CraftStateSync = ({
 
     // Then trigger onChange
     currentSlateStateRef.current = slateEditor.children;
-    onChange(children);
+    slateActions.setEditorValue(currentSlateStateRef.current);
   };
 
   // When slate children changes in Craft's state
@@ -167,7 +155,8 @@ export const CraftStateSync = ({
     });
   }, [slateEditor.selection]);
 
-  let newSelectionQueue = useRef(null);
+  const newSelectionQueue = useRef(null);
+
   const syncCraftSelectionToSlate = useCallback((selection) => {
     selectionRef.current.craft = selection;
 
@@ -180,9 +169,6 @@ export const CraftStateSync = ({
     if (!selection) {
       ReactEditor.deselect(slateEditor);
       slateEditor.selection = null;
-      if (disableOnDeselect) {
-        setEnabled(false);
-      }
 
       return;
     }
@@ -204,17 +190,11 @@ export const CraftStateSync = ({
       return;
     }
 
-    setEnabled(true);
+    slateActions.enableEditing();
     ReactEditor.focus(slateEditor);
     Transforms.select(slateEditor, newSelection);
     slateEditor.selection = newSelection;
 
     newSelectionQueue.current = null;
   });
-
-  return (
-    <SlateNodeContextProvider enabled={enabled} setEnabled={setEnabled}>
-      {children}
-    </SlateNodeContextProvider>
-  );
 };

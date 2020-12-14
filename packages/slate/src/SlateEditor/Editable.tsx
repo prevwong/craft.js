@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { Delete } from '@craftjs/utils';
 import { Editable as SlateEditable } from 'slate-react';
 
 import { Element } from './Element';
@@ -9,12 +8,15 @@ import {
   DefaultRenderEditable,
 } from './RenderEditable';
 import { useCraftSlateContext } from '../contexts/CraftSlateProvider';
-import { useSlateNode } from '../contexts/SlateNodeContext';
+import { useCraftStateSync } from './CraftStateSync';
+import { useSlateNode } from './SlateNodeContext';
 
 export const Editable = (props: any) => {
   const { leaf: LeafElement } = useCraftSlateContext();
 
   const { enabled } = useSlateNode();
+
+  useCraftStateSync();
 
   const renderElement = useCallback(
     (elementProps) => (
@@ -22,6 +24,7 @@ export const Editable = (props: any) => {
     ),
     []
   );
+
   const renderLeaf = useCallback((props) => <LeafElement {...props} />, []);
 
   return (

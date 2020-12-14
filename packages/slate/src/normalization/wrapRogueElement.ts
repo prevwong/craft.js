@@ -7,14 +7,14 @@ export const wrapRogueElement = (
   rootType: any,
   acceptableElements: any[]
 ) => {
-  const rogueNodes = pickBy(
-    state.nodes,
-    (node) =>
+  const rogueNodes = pickBy(state.nodes, (node) => {
+    return (
       acceptableElements.includes(node.data.type) &&
       [rootType, ...acceptableElements].includes(
         state.nodes[node.data.parent].data.type
       ) === false
-  );
+    );
+  });
 
   forIn(rogueNodes, (node) => {
     const newSlateNode = QueryMethods(state)
