@@ -29,7 +29,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
       ["select", "(dom: HTMLElement, nodeId: NodeId) => HTMLElement", "Specifies the DOM that when clicked will in turn click the specified Node's user component"],
       ["hover", "(dom: HTMLElement, nodeId: NodeId) => HTMLElement", "Specifies the DOM that when hovered will in turn hover the specified Node's user component"],
       ["drag", "(dom: HTMLElement, nodeId: NodeId) => HTMLElement", "Specifies the DOM that when dragged will move the specified Node's user component. Only applicable if the component is rendered as an immediate child of a &lt;Canvas /&gt; component."],
-      ["create", "(dom: HTMLElement, userElement: React.ReactElement) => HTMLElement", "Specifies the DOM that when dragged will create a new instance of the specified User Element at the drop location."]
+      ["create", "(dom: HTMLElement, userElement: React.ReactElement, previewImageUrl: string) => HTMLElement", "Specifies the DOM that when dragged will create a new instance of the specified User Element at the drop location."]
     ]],
     ["actions", "ActionMethods", [
       ["add", "(nodes: Node, parentId?: NodeId, index?: number) => void", "Add a Node to the given parent node ID at the specified index. By default the parentId is the id of the Root Node"],
