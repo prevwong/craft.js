@@ -30,11 +30,15 @@ export const Toolbox = () => {
         <Grid container direction="column" item>
           <MaterialButton
             ref={(ref) =>
-              connectors.create(ref, <Button text="Click me" size="small" />)
+              connectors.create(
+                ref,
+                <Button text="Click me" size="small" />,
+                'http://placekitten.com/200/200'
+              )
             }
             variant="contained"
           >
-            Button
+            Button with drag image preview
           </MaterialButton>
         </Grid>
         <Grid container direction="column" item>

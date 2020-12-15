@@ -141,20 +141,43 @@ export class DefaultEventHandlers extends CoreEventHandlers {
         ],
       },
       create: {
-        init: (el) => {
+        init: (el, _, previewImageUrl) => {
           el.setAttribute('draggable', 'true');
+
+          if (previewImageUrl) {
+            // Preload preview image
+            const preImg = document.createElement('link');
+            preImg.href = previewImageUrl;
+            preImg.rel = 'preload';
+            preImg.as = 'image';
+            document.head.appendChild(preImg);
+          }
+
           return () => el.removeAttribute('draggable');
         },
         events: [
           defineEventListener(
             'dragstart',
-            (e: CraftDOMEvent<DragEvent>, userElement: React.ReactElement) => {
+            (
+              e: CraftDOMEvent<DragEvent>,
+              userElement: React.ReactElement,
+              previewImageUrl?: string
+            ) => {
               e.craft.stopPropagation();
               const tree = this.store.query
                 .parseReactElement(userElement)
                 .toNodeTree();
 
-              DefaultEventHandlers.draggedElementShadow = createShadow(e);
+              if (previewImageUrl) {
+                // Custom drag image
+
+                const previewImage = new Image();
+                previewImage.src = previewImageUrl;
+                e.dataTransfer.setDragImage(previewImage, 0, 0);
+              } else {
+                DefaultEventHandlers.draggedElementShadow = createShadow(e);
+              }
+
               DefaultEventHandlers.draggedElement = tree;
             }
           ),

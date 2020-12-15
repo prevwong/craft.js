@@ -11,7 +11,7 @@ export type CraftDOMEvent<T extends Event> = T & {
 
 export type CraftEventListener = [
   string,
-  (e: CraftDOMEvent<Event>, opts: any) => void,
+  (e: CraftDOMEvent<Event>, opts: any, previewImage?: string) => void,
   boolean
 ];
 
@@ -26,12 +26,13 @@ export type Handler = {
    * The DOM manipulations to perform on the attached DOM element
    * @returns function that reverts the DOM manipulations performed
    */
-  init: (el: HTMLElement, opts: any) => any;
+  init: (el: HTMLElement, opts: any, previewImage?: string) => any;
 
   /**
    * List of Event Listeners to add to the attached DOM element
    */
   events: readonly CraftEventListener[];
+  previewImageUrl?: string;
 };
 
 export type ConnectorsForHandlers<T extends Handlers> = ReturnType<
@@ -64,6 +65,7 @@ const isEventBlockedByDescendant = (e, eventName, el) => {
 class WatchHandler {
   el: HTMLElement;
   opts: any;
+  previewImage?: string;
 
   private handler: Handler;
   private unsubscribe: () => void;
@@ -74,6 +76,7 @@ class WatchHandler {
     this.el = el;
     this.opts = opts;
     this.handler = handler;
+    this.previewImage = undefined;
 
     this.unsubscribe = store.subscribe(
       (state) => ({ enabled: state.options.enabled }),
@@ -94,9 +97,10 @@ class WatchHandler {
   }
 
   private add() {
-    const { init, events } = this.handler;
+    const { init, events, previewImageUrl } = this.handler;
 
-    this.cleanDOM = init && init(this.el, this.opts);
+    this.cleanDOM = init && init(this.el, this.opts, previewImageUrl);
+
     this.listenersToRemove =
       events &&
       events.map(([eventName, listener, capture]) => {
@@ -117,8 +121,7 @@ class WatchHandler {
 
               e.craft.blockedEvents[eventName].push(this.el);
             };
-
-            listener(e, this.opts);
+            listener(e, this.opts, previewImageUrl);
           }
         };
 
@@ -172,7 +175,7 @@ export abstract class Handlers<T extends string = null> {
         return accum;
       }
 
-      const connector = (el, opts) => {
+      const connector = (el, opts, previewImageUrl?: string) => {
         if (!el || !document.body.contains(el)) {
           this.wm.delete(el);
           return;
@@ -189,6 +192,7 @@ export abstract class Handlers<T extends string = null> {
           [key]: new WatchHandler(this.store, el, opts, {
             init,
             events,
+            previewImageUrl,
           }),
         });
       };

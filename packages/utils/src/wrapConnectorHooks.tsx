@@ -53,13 +53,13 @@ function throwIfCompositeComponentElement(element: React.ReactElement<any>) {
 }
 
 export function wrapHookToRecognizeElement(
-  hook: (node: any, opts: any) => void
+  hook: (node: any, opts: any, previewImage?: string) => void
 ) {
-  return (elementOrNode = null, opts: any) => {
+  return (elementOrNode = null, opts: any, previewImage: string) => {
     // When passed a node, call the hook straight away.
     if (!isValidElement(elementOrNode)) {
       const node = elementOrNode;
-      node && hook(node, opts);
+      node && hook(node, opts, previewImage);
       return node;
     }
 
@@ -81,5 +81,6 @@ export type ConnectableElement =
 
 export type Connector = (
   elementOrNode: ConnectableElement,
-  options?: any
+  options?: any,
+  previewImage?: string
 ) => React.ReactElement | null;
