@@ -72,7 +72,7 @@ export const Toolbox = () => {
               connectors.create(
                 ref,
                 <Button text="Click me" size="small" />,
-                'http://placekitten.com/200/200'
+                'https://placekitten.com/200/200'
               )
             }
             variant="contained"
