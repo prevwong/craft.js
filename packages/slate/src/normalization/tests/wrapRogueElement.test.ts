@@ -15,7 +15,7 @@ const testWrapRogueElement = (state) => {
         },
       },
     }),
-    'SlateEditor',
+    'extend',
     ['Typography', 'Text', 'List', 'ListItem']
   );
 };

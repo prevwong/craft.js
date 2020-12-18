@@ -1,14 +1,13 @@
-import { useEditor, useNode } from '@craftjs/core';
-import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { useEditor } from '@craftjs/core';
 import isEqual from 'lodash/isEqual';
-import { Editor, Transforms } from 'slate';
-
-import { applyIdOnOperation } from '../utils/applyIdOnOperation';
-import { craftNodeToSlateNode, slateNodesToCraft } from '../utils/formats';
-import { useSlateNode } from './SlateNodeContext';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { Editor } from 'slate';
 import { ReactEditor, useSlate } from 'slate-react';
-import { getSlateRange } from '../utils/getSlateRange';
-import { getFocusFromSlateRange } from '../utils/createSelectionOnNode';
+
+import { applyIdOnOperation } from '../../utils/applyIdOnOperation';
+import { craftNodeToSlateNode, slateNodesToCraft } from '../../utils/formats';
+import { getFocusFromSlateRange, getSlateRange } from '../../utils/selection';
+import { useSlateNode } from '../slate/SlateNode';
 
 const compareCaret = (a: any, b: any) => {
   if (!a && !b) {
@@ -190,11 +189,7 @@ export const useCraftStateSync = () => {
       return;
     }
 
-    slateActions.enableEditing();
-    ReactEditor.focus(slateEditor);
-    Transforms.select(slateEditor, newSelection);
-    slateEditor.selection = newSelection;
-
+    slateActions.setSelection(newSelection);
     newSelectionQueue.current = null;
   });
 };

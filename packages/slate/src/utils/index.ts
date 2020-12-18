@@ -1,3 +1,2 @@
-export * from './createSelectionOnNode';
-export * from './getSlateRange';
+export * from './selection';
 export * from './getClosestSelectableNodeId';

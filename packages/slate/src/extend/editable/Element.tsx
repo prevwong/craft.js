@@ -1,5 +1,4 @@
-import { NodeElement, useNode } from '@craftjs/core';
-import { useEditor } from '@craftjs/core';
+import { NodeElement, useEditor } from '@craftjs/core';
 import React, { useEffect, useRef } from 'react';
 import { Editor } from 'slate';
 import { useEditor as useSlateEditor } from 'slate-react';
@@ -17,7 +16,6 @@ const RenderSlateElement = ({
 
   const render = React.createElement(type, { element, children, attributes });
 
-  // TODO: improve API
   if (renderElement) {
     return React.createElement(renderElement, { render, element });
   }
@@ -60,7 +58,7 @@ export const Element = ({ attributes, children, element, renderElement }) => {
 
     connect(dom, id);
     drag(dom, id);
-  }, [exists]);
+  });
 
   return (
     <NodeElement

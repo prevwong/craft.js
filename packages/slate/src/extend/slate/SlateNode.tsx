@@ -3,7 +3,7 @@ import React, { createContext, useContext, useMemo, useState } from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor, Slate } from 'slate-react';
 
-export const SlateNodeContext = createContext<any>(null);
+export const SlateNode = createContext<any>(null);
 
 export const SlateNodeContextProvider: React.FC<any> = ({
   editor,
@@ -19,7 +19,9 @@ export const SlateNodeContextProvider: React.FC<any> = ({
       setEditorValue: (value) => {
         setValue(value);
       },
-      enableEditing: () => setEnabled(true),
+      enableEditing: () => {
+        setEnabled(true);
+      },
       disableEditing: () => {
         editor.selection = null;
         setEnabled(false);
@@ -35,14 +37,14 @@ export const SlateNodeContextProvider: React.FC<any> = ({
 
   return (
     <Slate editor={editor} value={value} onChange={setValue}>
-      <SlateNodeContext.Provider value={{ id, enabled, actions }}>
+      <SlateNode.Provider value={{ id, enabled, actions }}>
         {children}
-      </SlateNodeContext.Provider>
+      </SlateNode.Provider>
     </Slate>
   );
 };
 
 export const useSlateNode = () => {
-  const context = useContext(SlateNodeContext);
+  const context = useContext(SlateNode);
   return context || {};
 };

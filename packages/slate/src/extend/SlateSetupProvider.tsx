@@ -2,12 +2,12 @@ import React, { useState, useEffect, createContext, useContext } from 'react';
 import { useEditor } from '@craftjs/core';
 import { normalizeSlate } from '../normalization';
 
-type CraftSlateProviderProps = {
+type SlateSetupProviderProps = {
   editor: Record<string, React.ElementType>;
   elements: Record<string, React.ElementType>;
   leaf: Record<string, React.ElementType>;
 };
-export const CraftSlateContext = createContext<any>({
+export const SlateSetupContext = createContext<any>({
   editor: null,
   elements: {},
   leaf: null,
@@ -15,7 +15,7 @@ export const CraftSlateContext = createContext<any>({
 
 // Initializer; Adds Slate normalization function
 // TODO: improve API
-export const CraftSlateProvider: React.FC<CraftSlateProviderProps> = ({
+export const SlateSetupProvider: React.FC<SlateSetupProviderProps> = ({
   children,
   editor: editorResolver,
   elements: elementsResolver,
@@ -46,14 +46,14 @@ export const CraftSlateProvider: React.FC<CraftSlateProviderProps> = ({
   }, []);
 
   return (
-    <CraftSlateContext.Provider
+    <SlateSetupContext.Provider
       value={{ editor: editorType, elements: elementsResolver, leaf: leafType }}
     >
       {init && children}
-    </CraftSlateContext.Provider>
+    </SlateSetupContext.Provider>
   );
 };
 
-export const useCraftSlateContext = () => {
-  return useContext(CraftSlateContext);
+export const useSlateSetupContext = () => {
+  return useContext(SlateSetupContext);
 };

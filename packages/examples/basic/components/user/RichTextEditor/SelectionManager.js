@@ -1,13 +1,9 @@
 import React, { useEffect } from 'react';
-import {
-  getFocusFromSlateRange,
-  getSlateRange,
-  useSlateNode,
-} from '@craftjs/slate';
-import { useSlate, ReactEditor } from 'slate-react';
-import { Transforms } from 'slate';
+import { useSlateNode } from '@craftjs/slate';
+import { useSlate } from 'slate-react';
 
 import { useFocus } from '../../Focus';
+import { getFocusFromSlateRange, getSlateRange } from './utils/selection';
 
 export const SelectionManager = () => {
   const slateEditor = useSlate();
@@ -17,14 +13,14 @@ export const SelectionManager = () => {
 
   useEffect(() => {
     const newSelection = getFocusFromSlateRange(slateEditor, selection);
-    setFocus(
-      newSelection
-        ? {
-            ...newSelection,
-            source: 'RTE',
-          }
-        : null
-    );
+    if (!newSelection) {
+      return;
+    }
+
+    setFocus({
+      ...newSelection,
+      source: 'RTE',
+    });
   }, [selection]);
 
   useEffect(() => {
@@ -44,10 +40,6 @@ export const SelectionManager = () => {
     }
 
     actions.setSelection(craftRange);
-    // setEnabled(true);
-    // ReactEditor.focus(slateEditor);
-    // Transforms.select(slateEditor, craftRange);
-    // console.log(100, craftRange)
   }, [focus]);
 
   return null;

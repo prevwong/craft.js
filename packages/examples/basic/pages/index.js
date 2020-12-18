@@ -1,5 +1,5 @@
 import { Editor, Frame, Element, useEditor } from '@craftjs/core';
-import { CraftSlateProvider } from '@craftjs/slate';
+import { SlateSetupProvider } from '@craftjs/slate';
 import { Paper, Grid, makeStyles } from '@material-ui/core';
 import throttle from 'lodash/throttle';
 
@@ -66,7 +66,7 @@ export default function App() {
         }}
       >
         <FocusContextProvider>
-          <CraftSlateProvider
+          <SlateSetupProvider
             editor={{ RichTextEditor }}
             elements={{
               Typography,
@@ -81,11 +81,16 @@ export default function App() {
               <Grid item xs>
                 <Frame>
                   <Element canvas is={Container}>
-                    <Button>Hello</Button>
                     <RichTextEditor>
                       <Typography variant="p">
                         <Text text="Lmao"></Text>
                       </Typography>
+                      <Typography variant="p">
+                        <Text text="whut"></Text>
+                      </Typography>
+                    </RichTextEditor>
+                    <Button>Hello</Button>
+                    <RichTextEditor>
                       <Typography variant="p">
                         <Text text="haha"></Text>
                       </Typography>
@@ -100,7 +105,7 @@ export default function App() {
                 </Paper>
               </Grid>
             </Grid>
-          </CraftSlateProvider>
+          </SlateSetupProvider>
         </FocusContextProvider>
       </Editor>
     </div>

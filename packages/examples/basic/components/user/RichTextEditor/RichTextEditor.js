@@ -1,16 +1,12 @@
-import { useNode, useEditor } from '@craftjs/core';
-import {
-  Slate,
-  Editable,
-  useSlateElement,
-  createSelectionOnNode,
-} from '@craftjs/slate';
+import { useNode } from '@craftjs/core';
+import { Slate, Editable, createSelectionOnNode } from '@craftjs/slate';
 import React, { useMemo, useCallback, useEffect } from 'react';
 import { compose } from 'redux';
 import { createEditor } from 'slate';
-import { SelectionManager } from './SelectionManager';
 
+import { SelectionManager } from './SelectionManager';
 import plugins from './plugins';
+
 import { useFocus } from '../../Focus';
 
 const Element = ({ element, render }) => {
@@ -37,27 +33,8 @@ const Element = ({ element, render }) => {
   return render;
 };
 
-const CraftWrapper = ({ attributes: { ref, ...attributes }, children }) => {
-  const refCallback = useCallback((dom) => {
-    console.log(33, dom);
-    ref(dom);
-  }, []);
-
-  return (
-    <div
-      {...attributes}
-      ref={(dom) => {
-        if (!dom) {
-          return;
-        }
-
-        ref.current = dom;
-        // ref.current = dom;
-      }}
-    >
-      {children}
-    </div>
-  );
+const CraftWrapper = ({ attributes, children }) => {
+  return <div {...attributes}>{children}</div>;
 };
 
 export const RichTextEditor = () => {

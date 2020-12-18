@@ -1,6 +1,35 @@
 import mapValues from 'lodash/mapValues';
 import { Editor, Node, Point, Range } from 'slate';
 
+/**
+ * Given an editor and a slate range, it transforms it to a Craft range
+ *
+ * @param editor
+ * @param range
+ */
+export const getFocusFromSlateRange = (
+  editor: Editor,
+  range?: Range | Partial<Range>
+): any => {
+  if (!range) {
+    return null;
+  }
+
+  const newFocus = mapValues(range, (point: any) => {
+    if (!point) {
+      return null;
+    }
+    const match = Editor.node(editor, point);
+    if (!match) {
+      return null;
+    }
+    const [node] = match;
+    return { nodeId: node.id, offset: point.offset };
+  });
+
+  return { ...newFocus };
+};
+
 export const getSlateRange = (
   editor: Editor,
   focusObject?: any

@@ -1,4 +1,3 @@
-export * from './SlateEditor';
+export * from './extend';
 export * from './normalization';
-export * from './contexts/CraftSlateProvider';
 export * from './utils';

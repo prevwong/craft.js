@@ -58,7 +58,7 @@ export const createBaseSlateState = (nodes: any) =>
           {
             id: 'SLATE',
             data: {
-              type: 'SlateEditor',
+              type: 'extend',
               nodes,
             },
           },
