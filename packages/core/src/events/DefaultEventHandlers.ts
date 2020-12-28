@@ -16,7 +16,6 @@ export class DefaultEventHandlers extends CoreEventHandlers {
   static draggedElementShadow: HTMLElement;
   static draggedElement: DraggedElement;
   static indicator: Indicator = null;
-  setupTouchDNDCustomEvents();
 
   // Safely run handler if Node Id exists
   defineNodeEventListener(
@@ -41,6 +40,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
   }
 
   handlers() {
+    setupTouchDNDCustomEvents();
     return {
       select: {
         init: () => () => this.store.actions.setNodeEvent('selected', null),
@@ -72,7 +72,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
             e.craft.stopPropagation();
             e.preventDefault();
           }),
-	  defineEventListener('touchdragover', (e: CraftDOMEvent<MouseEvent>) => {
+          defineEventListener('touchdragover', (e: CraftDOMEvent<MouseEvent>) => {
             e.craft.stopPropagation();
             e.preventDefault();
           }),
@@ -108,7 +108,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
               DefaultEventHandlers.indicator = indicator;
             }
           ),
-	  this.defineNodeEventListener(
+          this.defineNodeEventListener(
             'touchdragenter',
             (e: CraftDOMEvent<MouseEvent>, targetId: NodeId) => {
               e.craft.stopPropagation();
@@ -163,7 +163,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
               DefaultEventHandlers.draggedElement = id;
             }
           ),
-	  this.defineNodeEventListener(
+          this.defineNodeEventListener(
             'touchdragstart',
             (e: CraftDOMEvent<DragEvent>, id: NodeId) => {
               e.craft.stopPropagation();
@@ -186,7 +186,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
             };
             this.dropElement(onDropElement);
           }),
- 	  defineEventListener('touchend', (e: CraftDOMEvent<DragEvent>) => {
+          defineEventListener('touchend', (e: CraftDOMEvent<DragEvent>) => {
             e.craft.stopPropagation();
             const onDropElement = (draggedElement, placement) => {
               const index =
@@ -219,7 +219,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
               DefaultEventHandlers.draggedElement = tree;
             }
           ),
-	  defineEventListener(
+          defineEventListener(
             'touchdragstart',
             (e: CraftDOMEvent<DragEvent>, userElement: React.ReactElement) => {
               e.craft.stopPropagation();
@@ -244,7 +244,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
             };
             this.dropElement(onDropElement);
           }),
-	  defineEventListener('touchend', (e: CraftDOMEvent<DragEvent>) => {
+          defineEventListener('touchend', (e: CraftDOMEvent<DragEvent>) => {
             e.craft.stopPropagation();
             const onDropElement = (draggedElement, placement) => {
               const index =
