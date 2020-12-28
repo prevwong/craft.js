@@ -106,10 +106,12 @@ describe('EventHandlers', () => {
     beforeEach(() => {
       drop = eventHandlers.handlers().drop;
     });
-    it('should contain two events, dragover and dragenter', () => {
-      expect(drop.events).toHaveLength(2);
+    it('should contain four events, dragover, touchdragover, dragenter and touchdragenter ', () => {
+      expect(drop.events).toHaveLength(4);
       expect(getHandler(drop.events, 'dragover')).toBeDefined();
+      expect(getHandler(drop.events, 'touchdragover')).toBeDefined();
       expect(getHandler(drop.events, 'dragenter')).toBeDefined();
+      expect(getHandler(drop.events, 'touchdragenter')).toBeDefined();
     });
     it('should have prevented default on dragover', () => {
       callHandler(drop.events, 'dragover')(e);
@@ -173,10 +175,12 @@ describe('EventHandlers', () => {
       drag = eventHandlers.handlers().drag;
       el = { setAttribute: jest.fn() };
     });
-    it('should contain two events, dragover and dragenter', () => {
-      expect(drag.events).toHaveLength(2);
+    it('should contain four events, dragstart, touchdragstart, dragend and touchend', () => {
+      expect(drag.events).toHaveLength(4);
       expect(getHandler(drag.events, 'dragstart')).toBeDefined();
+      expect(getHandler(drag.events, 'touchdragstart')).toBeDefined();
       expect(getHandler(drag.events, 'dragend')).toBeDefined();
+      expect(getHandler(drag.events, 'touchend')).toBeDefined();
     });
 
     describe('init', () => {
@@ -277,10 +281,12 @@ describe('EventHandlers', () => {
       create = eventHandlers.handlers().create;
       el = { setAttribute: jest.fn(), removeAttribute: jest.fn() };
     });
-    it('should contain two events, dragover and dragenter', () => {
-      expect(create.events).toHaveLength(2);
+    it('should contain four events, dragstart, touchdragstart, dragend and touchend', () => {
+      expect(create.events).toHaveLength(4);
       expect(getHandler(create.events, 'dragstart')).toBeDefined();
+      expect(getHandler(create.events, 'touchdragstart')).toBeDefined();
       expect(getHandler(create.events, 'dragend')).toBeDefined();
+      expect(getHandler(create.events, 'touchend')).toBeDefined();
     });
 
     describe('init', () => {
