@@ -5,13 +5,12 @@ import { Element } from './Element';
 import { RenderEditable } from './RenderEditable';
 import { useCraftStateSync } from './useCraftStateSync';
 
-import { useSlateSetupContext } from '../SlateSetupProvider';
 import { useSlateNode } from '../slate/SlateNode';
+import { Leaf } from './Leaf';
 
 export const Editable = (props: any) => {
   useCraftStateSync();
 
-  const { leaf: LeafElement } = useSlateSetupContext();
   const { enabled } = useSlateNode();
 
   const renderElement = useCallback(
@@ -21,7 +20,7 @@ export const Editable = (props: any) => {
     []
   );
 
-  const renderLeaf = useCallback((props) => <LeafElement {...props} />, []);
+  const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
 
   const renderEditable = useCallback(
     React.forwardRef(({ children, ...attributes }, ref) => (
