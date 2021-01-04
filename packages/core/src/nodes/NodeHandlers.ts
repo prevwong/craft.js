@@ -17,10 +17,7 @@ export class NodeHandlers extends DerivedEventHandlers<'connect' | 'drag'> {
     return {
       connect: {
         init: (el) => {
-          parentConnectors.select(el, this.id);
-          parentConnectors.hover(el, this.id);
-          parentConnectors.drop(el, this.id);
-          this.store.actions.setDOM(this.id, el);
+          parentConnectors.connect(el, this.id);
         },
       },
       drag: {
