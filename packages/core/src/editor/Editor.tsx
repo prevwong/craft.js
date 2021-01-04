@@ -53,12 +53,14 @@ export const Editor: React.FC<Partial<Options>> = ({
           isModifyingNodeData
         ) {
           normalizer((draft) => {
-            state.options.normalizeNodes(
-              draft,
-              previousState,
-              actionPerformed,
-              query
-            );
+            if (state.options.normalizeNodes) {
+              state.options.normalizeNodes(
+                draft,
+                previousState,
+                actionPerformed,
+                query
+              );
+            }
           });
           break; // we exit the loop as soon as we find a change in node.data
         }
