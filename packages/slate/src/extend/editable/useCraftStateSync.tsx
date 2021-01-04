@@ -1,31 +1,13 @@
 import { useEditor } from '@craftjs/core';
 import isEqual from 'lodash/isEqual';
-import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Editor } from 'slate';
-import { ReactEditor, useSlate } from 'slate-react';
+import { useSlate } from 'slate-react';
 
 import { applyIdOnOperation } from '../../utils/applyIdOnOperation';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../../utils/formats';
-import { getFocusFromSlateRange, getSlateRange } from '../../utils/selection';
 import { useSlateNode } from '../slate/SlateNode';
-
-const compareCaret = (a: any, b: any) => {
-  if (!a && !b) {
-    return true;
-  }
-
-  if (
-    a &&
-    b &&
-    a.anchor.nodeId === b.anchor.nodeId &&
-    a.focus.nodeId === b.focus.nodeId &&
-    a.anchor.offset === b.anchor.offset
-  ) {
-    return true;
-  }
-
-  return false;
-};
+import { useSlateSetupContext } from '../SlateSetupProvider';
 
 const getSlateStateFromCraft = (rteNodeId: string, query) => {
   const node = query.node(rteNodeId).get();
@@ -38,77 +20,75 @@ const getSlateStateFromCraft = (rteNodeId: string, query) => {
 };
 
 export const useCraftStateSync = () => {
+  const rteResolvers = useSlateSetupContext();
   const { id, actions: slateActions } = useSlateNode();
   const slateEditor = useSlate();
+  const slateSelection = slateEditor.selection;
 
-  const currentSlateStateRef = useRef<any>(null);
+  const slateStateRef = useRef<any>(null);
+  const craftSelectionRef = useRef(null);
+  const slateSelectionRef = useRef(null);
 
-  const { actions, slateState } = useEditor((state, query) => ({
-    slateState: {
-      children: getSlateStateFromCraft(id, query),
-      selection: state.nodes[id] && state.nodes[id].data.custom.selection,
-    },
+  const { actions, craftSlateState } = useEditor((state, query) => ({
+    craftSlateState: getSlateStateFromCraft(id, query),
   }));
 
-  const selectionRef = useRef({
-    craft: null,
-    slate: null,
-  });
+  const { craftSelection } = useEditor((state) => ({
+    craftSelection: state.nodes[id].data.custom.selection || null,
+  }));
 
-  const setSlateState = (children) => {
-    // Reset selection (otherwise Slate goes boom!)
-    // selectionRef.current.craft = null;
-    // selectionRef.current.slate = null;
-    ReactEditor.deselect(slateEditor);
-    slateEditor.selection = null;
-
-    // Normalize using Slate
-    slateEditor.children = children;
-    Editor.normalize(slateEditor, { force: true });
-
-    // Then trigger onChange
-    currentSlateStateRef.current = slateEditor.children;
-    slateActions.setEditorValue(currentSlateStateRef.current);
-  };
+  slateSelectionRef.current = slateSelection;
 
   // When slate children changes in Craft's state
-  useLayoutEffect(() => {
-    if (!slateState.children) {
+  useEffect(() => {
+    if (!craftSlateState) {
       return;
     }
 
     // If the state is the same with the current slate state, do nothing
     // We could probably find a way to do this without deep-equal; but that's a problem for another time!
-    if (isEqual(currentSlateStateRef.current, slateState.children)) {
+    if (isEqual(slateStateRef.current, craftSlateState)) {
       return;
     }
 
     // Otherwise, force update the slate state
     // This only occurs in 3 scenarios: (on page load, undo and redo)
-    setSlateState(slateState.children);
-  }, [slateState.children]);
+    slateEditor.selection = null;
+    slateEditor.children = craftSlateState;
+    Editor.normalize(slateEditor, { force: true });
 
-  const saveToCraft = (slateState) => {
-    const childNodeIds = slateState.map((node) => node['id']) as string[];
+    // Then trigger onChange
+    slateStateRef.current = slateEditor.children;
+    slateActions.setEditorValue(slateStateRef.current);
+  }, [craftSlateState]);
 
-    actions.history.throttle(500).setState((state) => {
-      slateNodesToCraft(state, slateState, id);
+  useEffect(() => {
+    const { current: currentSlateSelection } = slateSelectionRef;
+    craftSelectionRef.current = craftSelection;
 
-      state.nodes[id].data.nodes = childNodeIds;
+    if (isEqual(craftSelection, currentSlateSelection)) {
+      return;
+    }
 
-      currentSlateStateRef.current = slateState;
+    slateActions.setSelection(craftSelection);
+  }, [craftSelection]);
 
-      // Save the current selection
-      const selection = getFocusFromSlateRange(
-        slateEditor,
-        slateEditor.selection as any
-      );
+  // When slateSelection becomes null, make sure to reflect it in the Slate node
+  useEffect(() => {
+    if (!!slateSelection) {
+      return;
+    }
 
-      state.nodes[id].data.custom.selection = selection;
+    if (!craftSelectionRef.current) {
+      return;
+    }
+
+    actions.history.ignore().setState((state) => {
+      state.nodes[id].data.custom.selection = null;
     });
-  };
+  }, [slateSelection]);
 
-  const extendSlateEditor = () => {
+  useEffect(() => {
     const { apply, onChange } = slateEditor;
 
     slateEditor.onChange = () => {
@@ -119,7 +99,22 @@ export const useCraftStateSync = () => {
         return;
       }
 
-      saveToCraft(slateEditor.children);
+      const slateState = slateEditor.children;
+
+      const childNodeIds = slateState.map((node) => node['id']) as string[];
+
+      actions.history.throttle(500).setState((state) => {
+        slateNodesToCraft(rteResolvers, state, slateState, id);
+
+        state.nodes[id].data.nodes = childNodeIds;
+
+        slateStateRef.current = slateState;
+
+        const slateSelection = slateEditor.selection;
+
+        // Save the current selection
+        state.nodes[id].data.custom.selection = slateSelection;
+      });
     };
 
     slateEditor.apply = (op) => {
@@ -131,65 +126,5 @@ export const useCraftStateSync = () => {
       op = applyIdOnOperation(op);
       apply(op);
     };
-  };
-
-  useEffect(() => {
-    extendSlateEditor();
   }, []);
-
-  useEffect(() => {
-    const toCaretRange = getFocusFromSlateRange(
-      slateEditor,
-      slateEditor.selection as any
-    );
-
-    selectionRef.current.slate = toCaretRange;
-
-    if (compareCaret(toCaretRange, selectionRef.current.craft)) {
-      return;
-    }
-
-    actions.history.ignore().setState((state) => {
-      state.nodes[id].data.custom.selection = toCaretRange;
-    });
-  }, [slateEditor.selection]);
-
-  const newSelectionQueue = useRef(null);
-
-  const syncCraftSelectionToSlate = useCallback((selection) => {
-    selectionRef.current.craft = selection;
-
-    if (compareCaret(selection, selectionRef.current.slate)) {
-      return;
-    }
-
-    window.getSelection().removeAllRanges();
-
-    if (!selection) {
-      ReactEditor.deselect(slateEditor);
-      slateEditor.selection = null;
-
-      return;
-    }
-
-    const newSelection = selection
-      ? getSlateRange(slateEditor, selection)
-      : null;
-
-    newSelectionQueue.current = newSelection;
-  }, []);
-
-  useLayoutEffect(() => {
-    syncCraftSelectionToSlate(slateState.selection);
-  }, [slateState.selection]);
-
-  useLayoutEffect(() => {
-    const newSelection = newSelectionQueue.current;
-    if (!newSelection) {
-      return;
-    }
-
-    slateActions.setSelection(newSelection);
-    newSelectionQueue.current = null;
-  });
 };

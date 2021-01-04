@@ -1,5 +1,11 @@
 import { useNode } from '@craftjs/core';
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor, Slate } from 'slate-react';
 
@@ -12,7 +18,7 @@ export const SlateNodeContextProvider: React.FC<any> = ({
 }) => {
   const { id } = useNode();
   const [value, setValue] = useState([]);
-  const [enabled, setEnabled] = useState(intialEnabled);
+  const [enabled, setEnabled] = useState(intialEnabled || true);
 
   const actions = useMemo(
     () => ({
@@ -23,11 +29,18 @@ export const SlateNodeContextProvider: React.FC<any> = ({
         setEnabled(true);
       },
       disableEditing: () => {
-        editor.selection = null;
+        actions.setSelection(null);
         setEnabled(false);
       },
       setSelection: (selection: any) => {
-        setEnabled(true);
+        if (!selection) {
+          ReactEditor.deselect(editor);
+          editor.selection = null;
+          return;
+        }
+
+        window.getSelection().removeAllRanges();
+        actions.enableEditing();
         ReactEditor.focus(editor);
         Transforms.select(editor, selection);
       },

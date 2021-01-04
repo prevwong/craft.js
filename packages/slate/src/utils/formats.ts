@@ -1,5 +1,6 @@
 import { EditorState, QueryMethods } from '@craftjs/core';
 import flatten from 'lodash/flatten';
+import { Text } from 'slate';
 
 export const craftNodeToSlateNode = (query: any, nodeId: string) => {
   const craftNode = query.node(nodeId).get();
@@ -23,26 +24,29 @@ export const craftNodeToSlateNode = (query: any, nodeId: string) => {
     toSlateConverter(craftNode)(slateNode);
   }
 
+  if (Text.isText(slateNode)) {
+    delete slateNode['type'];
+  }
+
   return slateNode;
 };
 
 export const slateNodesToCraft = (
+  rteResolvers: any,
   state: EditorState,
   slateNodes: any[],
   parentId: string
 ): any => {
   const query = QueryMethods(state);
-
   const resolvers = query.getOptions().resolver;
+
   return flatten(
     slateNodes.map((slateNode) => {
       const existingCraftNode = state.nodes[slateNode.id];
-      let slateNodeType = slateNode.type;
-      if (!slateNodeType && slateNode.text !== undefined) {
-        slateNodeType = 'Text';
-      }
 
-      const type = resolvers[slateNodeType];
+      const type = Text.isText(slateNode)
+        ? rteResolvers.leaf
+        : resolvers[slateNode.type];
       const toCraftConverter = type['slate'] && type['slate'].toCraftNode;
 
       const newCraftNode = query
@@ -74,7 +78,12 @@ export const slateNodesToCraft = (
       return [
         newCraftNode,
         ...(slateNode.children
-          ? slateNodesToCraft(state, slateNode.children, slateNode.id)
+          ? slateNodesToCraft(
+              rteResolvers,
+              state,
+              slateNode.children,
+              slateNode.id
+            )
           : []),
       ];
     })
