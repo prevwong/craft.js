@@ -35,7 +35,8 @@ export const useCraftStateSync = () => {
   }));
 
   const { craftSelection } = useEditor((state) => ({
-    craftSelection: state.nodes[id].data.custom.selection || null,
+    craftSelection:
+      (state.nodes[id] && state.nodes[id].data.custom.selection) || null,
   }));
 
   slateSelectionRef.current = slateSelection;

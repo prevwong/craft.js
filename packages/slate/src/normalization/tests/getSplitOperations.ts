@@ -1,11 +1,11 @@
 import { createBaseSlateState } from './fixtures';
 
-import { getSplitTransfers } from '../getSplitTransfers';
+import { getSplitOperations } from '../getSplitOperations';
 
 let operations;
 
 const testSplitState = (state) => {
-  return getSplitTransfers(createBaseSlateState(state), 'SLATE', [
+  return getSplitOperations(createBaseSlateState(state), 'SLATE', [
     'Typography',
     'List',
     'ListItem',

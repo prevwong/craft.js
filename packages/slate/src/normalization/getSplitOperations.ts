@@ -1,7 +1,7 @@
 import { EditorState } from '@craftjs/core';
 
 // Get a list of potential operations to perform in a scenario where a non-Slate node is found
-export const getSplitTransfers = (
+export const getSplitOperations = (
   state: EditorState,
   slateNodeId: string,
   acceptableChildrenType: any[]

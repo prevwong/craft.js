@@ -3,7 +3,7 @@ import forIn from 'lodash/forIn';
 import pickBy from 'lodash/pickBy';
 import shortid from 'shortid';
 
-import { getSplitTransfers } from './getSplitTransfers';
+import { getSplitOperations } from './getSplitOperations';
 
 export const splitSlate = (
   state: EditorState,
@@ -16,7 +16,7 @@ export const splitSlate = (
   );
 
   forIn(slateNodes, (slateNode) => {
-    const transfers = getSplitTransfers(
+    const splitOperations = getSplitOperations(
       state,
       slateNode.id,
       acceptableChildrenType
@@ -29,15 +29,15 @@ export const splitSlate = (
     let expelledIds = new Set();
 
     // If we are moving something, ensure the selection of the Slate node is set to null
-    if (transfers.length > 0) {
+    if (splitOperations.length > 0) {
       state.nodes[slateNode.id].data.custom.selection = null;
     }
 
-    transfers.forEach((transfer, i) => {
-      const { type } = transfer;
+    splitOperations.forEach((splitOperation, i) => {
+      const { type } = splitOperation;
 
       if (type === 'expel') {
-        const nodeIdToMove = transfer.id;
+        const nodeIdToMove = splitOperation.id;
         const currentParentId = state.nodes[nodeIdToMove].data.parent;
         const currentParentNode = state.nodes[currentParentId];
 
@@ -59,7 +59,7 @@ export const splitSlate = (
       }
 
       if (type === 'insert_tree') {
-        const tree = transfer.tree;
+        const tree = splitOperation.tree;
         const insertTree = ({ id, nodes, expelled }, newParentId) => {
           const {
             props,
