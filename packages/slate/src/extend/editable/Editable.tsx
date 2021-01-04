@@ -5,13 +5,10 @@ import { Element } from './Element';
 import { RenderEditable } from './RenderEditable';
 import { useCraftStateSync } from './useCraftStateSync';
 
-import { useSlateNode } from '../slate/SlateNode';
 import { Leaf } from './Leaf';
 
 export const Editable = (props: any) => {
   useCraftStateSync();
-
-  const { enabled } = useSlateNode();
 
   const renderElement = useCallback(
     (elementProps) => (
@@ -37,7 +34,6 @@ export const Editable = (props: any) => {
       as={renderEditable}
       renderElement={renderElement}
       renderLeaf={renderLeaf}
-      readOnly={!enabled}
     />
   );
 };

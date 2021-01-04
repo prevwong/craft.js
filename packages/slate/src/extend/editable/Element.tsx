@@ -2,6 +2,7 @@ import { NodeElement, useEditor } from '@craftjs/core';
 import React, { useEffect, useRef } from 'react';
 import { Editor } from 'slate';
 import { useEditor as useSlateEditor } from 'slate-react';
+import { useSlateNode } from '../slate';
 
 // Given a Slate element, render the element with the corresponding resolver type from craft
 const RenderSlateElement = ({
@@ -28,6 +29,8 @@ export const Element = ({ attributes, children, element, renderElement }) => {
   elementRef.current = element;
 
   const id = element.id;
+
+  const { enabled } = useSlateNode();
 
   const {
     exists,
@@ -58,6 +61,12 @@ export const Element = ({ attributes, children, element, renderElement }) => {
 
     connect(dom, id);
     drag(dom, id);
+
+    if (!enabled) {
+      dom.setAttribute('contenteditable', false);
+    } else {
+      dom.removeAttribute('contenteditable');
+    }
   });
 
   return (
