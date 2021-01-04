@@ -13,7 +13,6 @@ import { Options } from '../interfaces';
  */
 export const Editor: React.FC<Partial<Options>> = ({
   children,
-  normalizeNodes,
   ...options
 }) => {
   // we do not want to warn the user if no resolver was supplied
@@ -26,7 +25,7 @@ export const Editor: React.FC<Partial<Options>> = ({
 
   const context = useEditorStore(
     options,
-    (_, previousState, actionPerformedWithPatches, query, normalizer) => {
+    (state, previousState, actionPerformedWithPatches, query, normalizer) => {
       if (!actionPerformedWithPatches) {
         return;
       }
@@ -53,11 +52,16 @@ export const Editor: React.FC<Partial<Options>> = ({
           ['setState', 'deserialize'].includes(actionPerformed.type) ||
           isModifyingNodeData
         ) {
-          if (normalizeNodes) {
-            normalizer((draft) => {
-              normalizeNodes(draft, previousState, actionPerformed, query);
-            });
-          }
+          normalizer((draft) => {
+            if (state.options.normalizeNodes) {
+              state.options.normalizeNodes(
+                draft,
+                previousState,
+                actionPerformed,
+                query
+              );
+            }
+          });
           break; // we exit the loop as soon as we find a change in node.data
         }
       }
