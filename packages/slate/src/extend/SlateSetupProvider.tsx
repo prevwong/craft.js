@@ -4,16 +4,21 @@ import React, { useState, createContext, useContext } from 'react';
 
 import { normalizeSlate } from '../normalization';
 
+export const SlateSetupContext = createContext<{
+  editor: React.ElementType;
+  elements: Record<string, React.ElementType>;
+  leaf: React.ElementType;
+}>({
+  editor: null,
+  elements: {},
+  leaf: null,
+});
+
 type SlateSetupProviderProps = {
   editor: Record<string, React.ElementType>;
   elements: Record<string, React.ElementType>;
   leaf: Record<string, React.ElementType>;
 };
-export const SlateSetupContext = createContext<any>({
-  editor: null,
-  elements: {},
-  leaf: null,
-});
 
 // Initializer; Adds Slate normalization function
 // TODO: improve API
