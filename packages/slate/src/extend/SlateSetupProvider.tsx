@@ -2,13 +2,10 @@ import { useEditor } from '@craftjs/core';
 import { useEffectOnce } from '@craftjs/utils';
 import React, { useState, createContext, useContext } from 'react';
 
+import { SlateResolvers } from '../interfaces';
 import { normalizeSlate } from '../normalization';
 
-export const SlateSetupContext = createContext<{
-  editor: React.ElementType;
-  elements: Record<string, React.ElementType>;
-  leaf: React.ElementType;
-}>({
+export const SlateSetupContext = createContext<SlateResolvers>({
   editor: null,
   elements: {},
   leaf: null,

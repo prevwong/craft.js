@@ -1,8 +1,14 @@
 import { EditorState, QueryMethods } from '@craftjs/core';
+import { QueryCallbacksFor } from '@craftjs/utils';
 import flatten from 'lodash/flatten';
 import { Text } from 'slate';
 
-export const craftNodeToSlateNode = (query: any, nodeId: string) => {
+import { SlateResolvers, SlateElement } from '../interfaces';
+
+export const craftNodeToSlateNode = (
+  query: QueryCallbacksFor<typeof QueryMethods>,
+  nodeId: string
+) => {
   const craftNode = query.node(nodeId).get();
 
   const { id, data } = craftNode;
@@ -12,7 +18,8 @@ export const craftNodeToSlateNode = (query: any, nodeId: string) => {
     ? childNodes.map((id) => craftNodeToSlateNode(query, id))
     : [];
 
-  const toSlateConverter = type.slate && type.slate.toSlateNode;
+  const toSlateConverter =
+    (type as any).slate && (type as any).slate.toSlateNode;
 
   const slateNode = {
     id,
@@ -32,9 +39,9 @@ export const craftNodeToSlateNode = (query: any, nodeId: string) => {
 };
 
 export const slateNodesToCraft = (
-  rteResolvers: any,
+  rteResolvers: SlateResolvers,
   state: EditorState,
-  slateNodes: any[],
+  slateNodes: SlateElement[],
   parentId: string
 ): any => {
   const query = QueryMethods(state);
@@ -56,7 +63,9 @@ export const slateNodesToCraft = (
             type,
             parent: parentId,
             nodes: slateNode.children
-              ? slateNode.children.map((childNode) => childNode.id)
+              ? slateNode.children.map(
+                  (childNode: SlateElement) => childNode.id
+                )
               : [],
           },
         })
@@ -81,7 +90,7 @@ export const slateNodesToCraft = (
           ? slateNodesToCraft(
               rteResolvers,
               state,
-              slateNode.children,
+              slateNode.children as SlateElement[],
               slateNode.id
             )
           : []),
