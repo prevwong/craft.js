@@ -1,5 +1,4 @@
 import { Patch, applyPatches } from 'immer';
-import isEqualWith from 'lodash.isequalwith';
 
 type Timeline = Array<{
   patches: Patch[];
@@ -18,7 +17,6 @@ export class History {
   timeline: Timeline = [];
   pointer = -1;
 
-  throttledInversePatch: Patch[];
   add(patches: Patch[], inversePatches: Patch[]) {
     if (patches.length === 0 && inversePatches.length === 0) {
       return;
@@ -43,30 +41,26 @@ export class History {
     }
 
     if (this.timeline.length && this.pointer >= 0) {
-      const { patches: currPatches, timestamp } = this.timeline[this.pointer];
+      const {
+        patches: currPatches,
+        inversePatches: currInversePatches,
+        timestamp,
+      } = this.timeline[this.pointer];
 
       const now = new Date();
       const diff = now.getTime() - timestamp;
 
-      if (diff < throttleRate && currPatches.length === patches.length) {
-        const isSimilar = currPatches.every((currPatch, i) => {
-          const { op: currOp, path: currPath } = currPatch;
-          const { op, path } = patches[i];
-
-          return op === currOp && isEqualWith(path, currPath);
-        });
-
-        if (isSimilar) {
-          if (!this.throttledInversePatch) {
-            this.throttledInversePatch = inversePatches;
-          }
-          return;
-        }
+      if (diff < throttleRate) {
+        this.timeline[this.pointer] = {
+          timestamp,
+          patches: [...currPatches, ...patches],
+          inversePatches: [...inversePatches, ...currInversePatches],
+        };
+        return;
       }
     }
 
-    this.add(patches, this.throttledInversePatch || inversePatches);
-    this.throttledInversePatch = null;
+    this.add(patches, inversePatches);
   }
 
   canUndo() {
@@ -81,8 +75,6 @@ export class History {
     if (!this.canUndo()) {
       return;
     }
-
-    this.throttledInversePatch = null;
 
     const { inversePatches } = this.timeline[this.pointer];
     this.pointer = this.pointer - 1;
