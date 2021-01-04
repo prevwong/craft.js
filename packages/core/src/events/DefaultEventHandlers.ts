@@ -40,6 +40,14 @@ export class DefaultEventHandlers extends CoreEventHandlers {
 
   handlers() {
     return {
+      connect: {
+        init: (el, id) => {
+          this.connectors().select(el, id);
+          this.connectors().hover(el, id);
+          this.connectors().drop(el, id);
+          this.store.actions.setDOM(id, el);
+        },
+      },
       select: {
         init: () => () => this.store.actions.setNodeEvent('selected', null),
         events: [
