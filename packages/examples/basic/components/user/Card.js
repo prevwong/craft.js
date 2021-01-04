@@ -33,8 +33,7 @@ export const CardTop = ({ children }) => {
 
 CardTop.craft = {
   rules: {
-    canMoveIn: (incomingNodes) =>
-      incomingNodes.every((incomingNode) => incomingNode.data.type === Text),
+    canMoveIn: (incomingNode) => incomingNode.data.type === Text,
   },
 };
 
@@ -51,8 +50,7 @@ export const CardBottom = ({ children }) => {
 
 CardBottom.craft = {
   rules: {
-    canMoveIn: (incomingNodes) =>
-      incomingNodes.every((incomingNode) => incomingNode.data.type === Button),
+    canMoveIn: (incomingNode) => incomingNode.data.type === Button,
   },
 };
 

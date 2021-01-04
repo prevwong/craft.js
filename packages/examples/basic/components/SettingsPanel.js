@@ -10,7 +10,7 @@ import React from 'react';
 
 export const SettingsPanel = () => {
   const { actions, selected } = useEditor((state, query) => {
-    const currentNodeId = query.getEvent('selected').last();
+    const currentNodeId = state.events.selected;
     let selected;
 
     if (currentNodeId) {
