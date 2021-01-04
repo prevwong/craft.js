@@ -313,7 +313,10 @@ const Methods = (
      * @param dom
      */
     setDOM(id: NodeId, dom: HTMLElement) {
-      invariant(state.nodes[id], ERROR_INVALID_NODEID);
+      if (!state.nodes[id]) {
+        return;
+      }
+
       state.nodes[id].dom = dom;
     },
 
