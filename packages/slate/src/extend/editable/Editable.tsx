@@ -2,10 +2,9 @@ import React, { useCallback } from 'react';
 import { Editable as SlateEditable } from 'slate-react';
 
 import { Element } from './Element';
+import { Leaf } from './Leaf';
 import { RenderEditable } from './RenderEditable';
 import { useCraftStateSync } from './useCraftStateSync';
-
-import { Leaf } from './Leaf';
 
 export const Editable = (props: any) => {
   useCraftStateSync();
@@ -14,7 +13,7 @@ export const Editable = (props: any) => {
     (elementProps) => (
       <Element {...elementProps} renderElement={props.renderElement} />
     ),
-    []
+    [props.renderElement]
   );
 
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
@@ -25,7 +24,7 @@ export const Editable = (props: any) => {
         {children}
       </RenderEditable>
     )),
-    []
+    [props.as]
   );
 
   return (

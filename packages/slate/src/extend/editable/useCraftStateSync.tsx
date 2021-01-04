@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEditor } from '@craftjs/core';
 import isEqual from 'lodash/isEqual';
 import { useEffect, useRef } from 'react';
@@ -6,8 +7,8 @@ import { useSlate } from 'slate-react';
 
 import { applyIdOnOperation } from '../../utils/applyIdOnOperation';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../../utils/formats';
-import { useSlateNode } from '../slate/SlateNode';
 import { useSlateSetupContext } from '../SlateSetupProvider';
+import { useSlateNode } from '../slate/SlateNode';
 
 const getSlateStateFromCraft = (rteNodeId: string, query) => {
   const node = query.node(rteNodeId).get();

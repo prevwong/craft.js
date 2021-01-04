@@ -1,5 +1,6 @@
-import { removeInvalidNodes } from '../removeInvalidNodes';
 import { createBaseSlateState } from './fixtures';
+
+import { removeInvalidNodes } from '../removeInvalidNodes';
 
 let state;
 

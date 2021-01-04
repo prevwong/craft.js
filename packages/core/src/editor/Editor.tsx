@@ -1,5 +1,5 @@
 import { ERROR_RESOLVER_NOT_AN_OBJECT, HISTORY_ACTIONS } from '@craftjs/utils';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import invariant from 'tiny-invariant';
 
 import { EditorContext } from './EditorContext';

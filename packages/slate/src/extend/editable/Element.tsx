@@ -2,6 +2,7 @@ import { NodeElement, useEditor } from '@craftjs/core';
 import React, { useEffect, useRef } from 'react';
 import { Editor } from 'slate';
 import { useEditor as useSlateEditor } from 'slate-react';
+
 import { useSlateNode } from '../slate';
 
 // Given a Slate element, render the element with the corresponding resolver type from craft

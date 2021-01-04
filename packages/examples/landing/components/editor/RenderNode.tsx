@@ -33,10 +33,12 @@ const Btn = styled.a`
 `;
 
 export const RenderNode = ({ render }) => {
-  const { actions, query, connectors } = useEditor();
+  const { id } = useNode();
+  const { actions, query, isActive } = useEditor((_, query) => ({
+    isActive: query.getEvent('selected').contains(id),
+  }));
+
   const {
-    id,
-    isActive,
     isHover,
     dom,
     name,
@@ -45,7 +47,6 @@ export const RenderNode = ({ render }) => {
     connectors: { drag },
     parent,
   } = useNode((node) => ({
-    isActive: node.events.selected,
     isHover: node.events.hovered,
     dom: node.dom,
     name: node.data.custom.displayName || node.data.displayName,

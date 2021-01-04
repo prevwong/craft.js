@@ -1,9 +1,9 @@
 import { EditorState } from '@craftjs/core';
 
 import mergeElements from './mergeElements';
+import { removeInvalidNodes } from './removeInvalidNodes';
 import { splitSlate } from './splitSlate';
 import { wrapRogueElement } from './wrapRogueElement';
-import { removeInvalidNodes } from './removeInvalidNodes';
 
 export const normalizeSlate = (
   slateType: React.ElementType,

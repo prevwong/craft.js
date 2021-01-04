@@ -1,7 +1,8 @@
-import { EditorState, NodeId, QueryMethods, ROOT_NODE } from '@craftjs/core';
+import { EditorState, QueryMethods, ROOT_NODE } from '@craftjs/core';
 import forIn from 'lodash/forIn';
 import pickBy from 'lodash/pickBy';
 import shortid from 'shortid';
+
 import { getSplitTransfers } from './getSplitTransfers';
 
 export const splitSlate = (

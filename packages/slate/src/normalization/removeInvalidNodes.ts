@@ -1,6 +1,6 @@
 import { EditorState, NodeHelpers, NodeId } from '@craftjs/core';
-import pickBy from 'lodash/pickBy';
 import forIn from 'lodash/forIn';
+import pickBy from 'lodash/pickBy';
 
 import deleteNodes from './deleteNodes';
 

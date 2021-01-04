@@ -1,5 +1,7 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
 import { useEditor } from '@craftjs/core';
+import { useEffectOnce } from '@craftjs/utils';
+import React, { useState, createContext, useContext } from 'react';
+
 import { normalizeSlate } from '../normalization';
 
 type SlateSetupProviderProps = {
@@ -27,7 +29,7 @@ export const SlateSetupProvider: React.FC<SlateSetupProviderProps> = ({
   const [init, setInit] = useState(false);
   const { actions } = useEditor();
 
-  useEffect(() => {
+  useEffectOnce(() => {
     actions.setOptions((options) => {
       const { normalizeNodes } = options;
       options.resolver = {
@@ -43,7 +45,7 @@ export const SlateSetupProvider: React.FC<SlateSetupProviderProps> = ({
     });
 
     setInit(true);
-  }, []);
+  });
 
   return (
     <SlateSetupContext.Provider
