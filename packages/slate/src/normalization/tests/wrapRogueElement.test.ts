@@ -1,4 +1,4 @@
-import { createTestState } from '@craftjs/core/src/utils/testHelpers';
+import { createTestState } from '@craftjs/core';
 
 import { wrapRogueElement } from '../wrapRogueElement';
 
@@ -15,7 +15,7 @@ const testWrapRogueElement = (state) => {
         },
       },
     }),
-    'extend',
+    'SLATE',
     ['Typography', 'Text', 'List', 'ListItem']
   );
 };

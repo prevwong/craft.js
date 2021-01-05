@@ -7,7 +7,7 @@ let state;
 const testSplitState = (state) => {
   return removeInvalidNodes(
     createBaseSlateState(state),
-    'extend',
+    'SLATE',
     ['Typography', 'List', 'ListItem'],
     'Text'
   );

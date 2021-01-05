@@ -5,7 +5,7 @@ import { splitSlate } from '../splitSlate';
 let state;
 
 const testSplitState = (state) => {
-  return splitSlate(createBaseSlateState(state), 'extend', [
+  return splitSlate(createBaseSlateState(state), 'SLATE', [
     'Typography',
     'List',
     'ListItem',
@@ -138,6 +138,31 @@ describe('splitSlate', () => {
           ],
         },
       },
+      {
+        id: 'SLATE2',
+        data: {
+          type: 'SLATE',
+          nodes: [
+            {
+              id: 'T7',
+              data: {
+                type: 'Typography',
+                nodes: [
+                  {
+                    id: 'TT7',
+                    data: {
+                      type: 'Text',
+                      props: {
+                        text: 'Hello',
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
     ]);
   });
 
@@ -146,9 +171,9 @@ describe('splitSlate', () => {
     expect(state.nodes['ROOT'].data.nodes[1]).toEqual('B1');
     expect(state.nodes['B1'].data.parent).toEqual('ROOT');
   });
-  it('should have wrapped remaining Slate nodes in a new extend', () => {
+  it('should have wrapped remaining Slate nodes in a new SLATE', () => {
     const newSlateNodeId = state.nodes['ROOT'].data.nodes[2];
-    expect(state.nodes[newSlateNodeId].data.name).toEqual('extend');
+    expect(state.nodes[newSlateNodeId].data.name).toEqual('SLATE');
     expect(state.nodes[newSlateNodeId].data.nodes).toEqual(['T2', 'T3', 'L1']);
     expect(state.nodes['T2'].data.parent).toEqual(newSlateNodeId);
     expect(state.nodes['T3'].data.parent).toEqual(newSlateNodeId);
@@ -160,9 +185,9 @@ describe('splitSlate', () => {
       expect(state.nodes['LL2'].data.nodes).toEqual(['TT5']);
       expect(state.nodes['ROOT'].data.nodes[3]).toEqual('B2');
     });
-    it('should have wrapped remaining Slate nodes in a new extend and maintain nested structure', () => {
+    it('should have wrapped remaining Slate nodes in a new SLATE and maintain nested structure', () => {
       const newSlateNodeId = state.nodes['ROOT'].data.nodes[4];
-      expect(state.nodes[newSlateNodeId].data.name).toEqual('extend');
+      expect(state.nodes[newSlateNodeId].data.name).toEqual('SLATE');
       expect(state.nodes[newSlateNodeId].data.nodes.length).toEqual(1);
 
       const childListId = state.nodes[newSlateNodeId].data.nodes[0];
@@ -180,6 +205,10 @@ describe('splitSlate', () => {
       const nestedChildListItemId = state.nodes[nestedListId].data.nodes[0];
       expect(state.nodes[nestedChildListItemId].data.name).toEqual('ListItem');
       expect(state.nodes[nestedChildListItemId].data.nodes).toEqual(['TT6']);
+    });
+    it('should have expelled nested Slate node', () => {
+      expect(state.nodes['SLATE'].data.nodes).not.toContain('SLATE2');
+      expect(state.nodes['ROOT'].data.nodes).toContain('SLATE2');
     });
   });
 });

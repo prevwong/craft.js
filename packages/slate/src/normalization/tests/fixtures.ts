@@ -1,4 +1,4 @@
-import { createTestState } from '@craftjs/core/src/utils/testHelpers';
+import { createTestState } from '@craftjs/core';
 
 export const rootTypographyNodes = {
   T1: {
@@ -58,7 +58,7 @@ export const createBaseSlateState = (nodes: any) =>
           {
             id: 'SLATE',
             data: {
-              type: 'extend',
+              type: 'SLATE',
               nodes,
             },
           },
