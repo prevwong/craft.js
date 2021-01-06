@@ -4,6 +4,7 @@ import forIn from 'lodash/forIn';
 
 import deleteNodes from './deleteNodes';
 
+// Merge any adjacent Slate nodes
 export default function mergeElements(
   rootType: any,
   state: EditorState,

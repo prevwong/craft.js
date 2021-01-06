@@ -5,6 +5,7 @@ import { Text } from 'slate';
 
 import { SlateResolvers, SlateElement } from '../interfaces';
 
+// Convert a Craft node to Slate node
 export const craftNodeToSlateNode = (
   query: QueryCallbacksFor<typeof QueryMethods>,
   nodeId: string
@@ -39,6 +40,7 @@ export const craftNodeToSlateNode = (
   return slateNode;
 };
 
+// Convert slateNodes into Craft nodes
 export const slateNodesToCraft = (
   rteResolvers: SlateResolvers,
   state: EditorState,

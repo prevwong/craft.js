@@ -5,6 +5,8 @@ import shortid from 'shortid';
 
 import { getSplitOperations } from './getSplitOperations';
 
+// Split a Slate node into multiple Slate nodes
+// This happens when a non-Slate node (ie: a Button) is dropped into a Slate node
 export const splitSlate = (
   state: EditorState,
   rootType: any,

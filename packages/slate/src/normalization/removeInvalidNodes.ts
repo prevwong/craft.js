@@ -4,6 +4,7 @@ import pickBy from 'lodash/pickBy';
 
 import deleteNodes from './deleteNodes';
 
+// Remove any invalid Slate nodes (ie: Slate nodes without any Text nodes)
 export const removeInvalidNodes = (
   state: EditorState,
   rootType: any,

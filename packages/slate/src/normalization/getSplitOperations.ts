@@ -1,6 +1,7 @@
 import { EditorState } from '@craftjs/core';
 
-// Get a list of potential operations to perform in a scenario where a non-Slate node is found
+// Get a list of operations to perform in a scenario where a non-Slate element is found inside the Slate node
+// For example: the user drags a Button and drops it inside between 2 Text nodes
 export const getSplitOperations = (
   state: EditorState,
   slateNodeId: string,

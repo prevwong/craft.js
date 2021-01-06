@@ -13,16 +13,16 @@ export const normalizeSlate = (
   const elementTypes = Object.values(elementResolver);
   const acceptableChildrenTypes = [...elementTypes, leafElementType];
 
-  // Break <extend /> if there's non-Slate elements in it
+  // Break the Slate node if there's non-Slate elements in it
   splitSlate(state, slateType, acceptableChildrenTypes);
 
-  // Wrap Rogue Slate elements inside a <extend /> node
+  // Wrap Rogue Slate elements inside a <Slate /> node
   wrapRogueElement(state, slateType, acceptableChildrenTypes);
 
-  // Last step, combine adjacent nodes together
+  // Last step, combine adjacent Slate nodes together
   mergeElements(slateType, state);
 
-  // Sanity check: remove any unnecessary Slate nodes (ie: a <Slate /> without any descendant node)
+  // Sanity check: remove any unnecessary Slate nodes (ie: a <Slate /> without any descendant Text node)
   removeInvalidNodes(state, slateType, elementTypes, leafElementType);
 
   return state;

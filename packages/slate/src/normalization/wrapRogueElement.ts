@@ -2,6 +2,8 @@ import { EditorState, QueryMethods } from '@craftjs/core';
 import forIn from 'lodash/forIn';
 import pickBy from 'lodash/pickBy';
 
+// Wrap any orphaned Slate child nodes with a new Slate node
+// This happens when you drag a Slate child node (ie: a Typography node) into a non-Slate parent node
 export const wrapRogueElement = (
   state: EditorState,
   rootType: any,

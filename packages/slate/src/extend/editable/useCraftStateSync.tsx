@@ -63,6 +63,8 @@ export const useCraftStateSync = () => {
     slateActions.setEditorValue(slateStateRef.current);
   }, [craftSlateState]);
 
+  // If craftSelection changes, update the slate selection
+  // This typically only occurs on undo/redo
   useEffect(() => {
     const { current: currentSlateSelection } = slateSelectionRef;
     craftSelectionRef.current = craftSelection;
