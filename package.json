@@ -95,7 +95,7 @@
       "<rootDir>/packages/core/"
     ],
     "testMatch": [
-      "<rootDir>/packages/core/src/**/?(*.)test.ts(x|)"
+      "<rootDir>/packages/**/?(*.)test.ts(x|)"
     ],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
