@@ -2,7 +2,7 @@
   "name": "@craftjs/utils",
   "description": "Utilities used internally across the craft.js monorepo",
   "private": false,
-  "version": "0.2.0-alpha.3",
+  "version": "0.2.0-alpha.4",
   "author": "Prev Wong <prevwong@gmail.com>",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
