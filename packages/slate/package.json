@@ -1,0 +1,28 @@
+{
+  "name": "@craftjs/slate",
+  "version": "0.1.0-alpha.0",
+  "author": "Prev Wong",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "license": "MIT",
+  "types": "./lib/index.d.ts",
+  "dependencies": {
+    "@craftjs/utils": "^0.2.0-alpha.0"
+  },
+  "devDependencies": {
+    "slate": "^0.57.0",
+    "slate-react": "^0.57.0"
+  },
+  "peerDependencies": {
+    "@craftjs/core": "^0.2.0-alpha.0",
+    "react": "^16.8.0",
+    "slate": "^0.57.0",
+    "slate-react": "^0.57.0"
+  },
+  "scripts": {
+    "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
+    "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
+    "dev:yalc": "../../scripts/yalc.sh",
+    "clean": "rimraf lib dist"
+  }
+}
