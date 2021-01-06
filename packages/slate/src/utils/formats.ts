@@ -31,6 +31,7 @@ export const craftNodeToSlateNode = (
     toSlateConverter(craftNode)(slateNode);
   }
 
+  // Just to maintain some symmetry with Slate's API where the leaf element typically does not have a "type" prop
   if (Text.isText(slateNode)) {
     delete slateNode['type'];
   }

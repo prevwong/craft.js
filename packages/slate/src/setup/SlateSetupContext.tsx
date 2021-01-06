@@ -1,21 +1,23 @@
 import { useEditor } from '@craftjs/core';
 import { useEffectOnce } from '@craftjs/utils';
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState, createContext } from 'react';
 
-import { SlateResolvers } from '../interfaces';
+import { SlateSetupContextType } from '../interfaces';
 import { normalizeSlate } from '../normalization';
 
-export const SlateSetupContext = createContext<SlateResolvers>({
-  editor: null,
-  elements: {},
-  leaf: null,
+export const SlateSetupContext = createContext<SlateSetupContextType>({
+  resolvers: {
+    editor: null,
+    elements: {},
+    leaf: null,
+  },
 });
 
-type SlateSetupProviderProps = {
+interface SlateSetupProviderProps {
   editor: Record<string, React.ElementType>;
   elements: Record<string, React.ElementType>;
   leaf: Record<string, React.ElementType>;
-};
+}
 
 // Initializer; Adds Slate normalization function
 // TODO: improve API
@@ -51,13 +53,15 @@ export const SlateSetupProvider: React.FC<SlateSetupProviderProps> = ({
 
   return (
     <SlateSetupContext.Provider
-      value={{ editor: editorType, elements: elementsResolver, leaf: leafType }}
+      value={{
+        resolvers: {
+          editor: editorType,
+          elements: elementsResolver,
+          leaf: leafType,
+        },
+      }}
     >
       {init && children}
     </SlateSetupContext.Provider>
   );
-};
-
-export const useSlateSetupContext = () => {
-  return useContext(SlateSetupContext);
 };

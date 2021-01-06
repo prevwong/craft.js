@@ -1,6 +1,6 @@
 {
   "name": "@craftjs/slate",
-  "version": "1.0.0",
+  "version": "0.1.0-alpha.0",
   "author": "Prev Wong",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -12,7 +12,7 @@
     "slate-react": "^0.59.0"
   },
   "peerDependencies": {
-    "@craftjs/core": "^0.1.0-alpha.1",
+    "@craftjs/core": "^0.2.0-alpha.0",
     "react": "^16.8.0"
   },
   "scripts": {

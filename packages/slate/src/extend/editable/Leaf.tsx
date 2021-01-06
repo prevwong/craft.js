@@ -1,10 +1,23 @@
 import { NodeElement } from '@craftjs/core';
+import { Overwrite } from '@craftjs/utils';
 import React from 'react';
+import { RenderLeafProps } from 'slate-react';
 
-import { useSlateSetupContext } from '../SlateSetupProvider';
+import { useSlateNode } from '../slate';
 
-export const Leaf = (props) => {
-  const { leaf: LeafElement } = useSlateSetupContext();
+type LeafProps = Overwrite<
+  RenderLeafProps,
+  {
+    leaf: {
+      id: string;
+      text: string;
+    };
+  }
+>;
+
+export const Leaf = (props: LeafProps) => {
+  const { config } = useSlateNode();
+  const LeafElement = config.resolvers.leaf;
 
   return <NodeElement id={props.leaf.id} render={<LeafElement {...props} />} />;
 };

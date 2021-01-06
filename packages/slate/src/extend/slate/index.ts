@@ -1,2 +1,2 @@
 export * from './Slate';
-export { useSlateNode } from './SlateNode';
+export * from './useSlateNode';

@@ -1,3 +1,4 @@
+import { Delete } from '@craftjs/utils';
 import React, { useCallback } from 'react';
 import { Editable as SlateEditable } from 'slate-react';
 
@@ -6,7 +7,12 @@ import { Leaf } from './Leaf';
 import { RenderEditable } from './RenderEditable';
 import { useCraftStateSync } from './useCraftStateSync';
 
-export const Editable = (props: any) => {
+type EditableProps = Delete<
+  React.ComponentProps<typeof SlateEditable>,
+  'renderLeaf'
+>;
+
+export const Editable = (props: EditableProps) => {
   useCraftStateSync();
 
   const renderElement = useCallback(

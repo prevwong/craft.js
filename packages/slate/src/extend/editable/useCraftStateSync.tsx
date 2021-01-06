@@ -5,10 +5,10 @@ import { useEffect, useRef } from 'react';
 import { Editor } from 'slate';
 import { useSlate } from 'slate-react';
 
+import { SlateElement } from '../../interfaces';
 import { applyIdOnOperation } from '../../utils/applyIdOnOperation';
 import { craftNodeToSlateNode, slateNodesToCraft } from '../../utils/formats';
-import { useSlateSetupContext } from '../SlateSetupProvider';
-import { useSlateNode } from '../slate/SlateNode';
+import { useSlateNode } from '../slate';
 
 const getSlateStateFromCraft = (rteNodeId: string, query) => {
   const node = query.node(rteNodeId).get();
@@ -21,8 +21,7 @@ const getSlateStateFromCraft = (rteNodeId: string, query) => {
 };
 
 export const useCraftStateSync = () => {
-  const rteResolvers = useSlateSetupContext();
-  const { id, actions: slateActions } = useSlateNode();
+  const { id, actions: slateActions, config } = useSlateNode();
   const slateEditor = useSlate();
   const slateSelection = slateEditor.selection;
 
@@ -106,7 +105,12 @@ export const useCraftStateSync = () => {
       const childNodeIds = slateState.map((node) => node['id']) as string[];
 
       actions.history.throttle(500).setState((state) => {
-        slateNodesToCraft(rteResolvers, state, slateState, id);
+        slateNodesToCraft(
+          config.resolvers,
+          state,
+          slateState as SlateElement[],
+          id
+        );
 
         state.nodes[id].data.nodes = childNodeIds;
 

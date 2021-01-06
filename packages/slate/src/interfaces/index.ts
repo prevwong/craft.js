@@ -1,2 +1,2 @@
 export * from './nodes';
-export * from './resolvers';
+export * from './slate';

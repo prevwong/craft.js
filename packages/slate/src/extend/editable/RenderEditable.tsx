@@ -1,7 +1,7 @@
 import { useEditor } from '@craftjs/core';
 import React, { useLayoutEffect } from 'react';
 
-import { useSlateNode } from '../slate/SlateNode';
+import { useSlateNode } from '../slate';
 
 const DefaultRenderEditable = ({ attributes, children }) => {
   return <div {...attributes}>{children}</div>;
