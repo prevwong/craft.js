@@ -19,9 +19,9 @@ export const splitSlate = (
 
     const parentId = node.data.parent;
     const parentNode = state.nodes[parentId];
-    const isParentSlateNode = parentNode
-      ? parentNode.data.type === rootType
-      : false;
+    const isParentSlateNode = [rootType, ...acceptableChildrenType].includes(
+      parentNode.data.type
+    );
 
     if (isParentSlateNode) {
       return false;
