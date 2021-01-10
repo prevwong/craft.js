@@ -28,6 +28,7 @@ export const useCraftStateSync = () => {
   const slateStateRef = useRef<any>(null);
   const craftSelectionRef = useRef(null);
   const slateSelectionRef = useRef(null);
+  const isCraftOverriding = useRef(false);
 
   const { actions, craftSlateState } = useEditor((state, query) => ({
     craftSlateState: getSlateStateFromCraft(id, query),
@@ -52,15 +53,20 @@ export const useCraftStateSync = () => {
       return;
     }
 
+    isCraftOverriding.current = true;
+
     // Otherwise, force update the slate state
     // This only occurs in 3 scenarios: (on page load, undo and redo)
     slateEditor.selection = null;
     slateEditor.children = craftSlateState;
     Editor.normalize(slateEditor, { force: true });
-
-    // Then trigger onChange
+    // We set the internal value so that the rendering can take over from here
+    slateActions.setEditorValue(slateEditor.children);
     slateStateRef.current = slateEditor.children;
-    slateActions.setEditorValue(slateStateRef.current);
+
+    Promise.resolve().then(() => {
+      isCraftOverriding.current = false;
+    });
   }, [craftSlateState]);
 
   // If craftSelection changes, update the slate selection
@@ -102,11 +108,17 @@ export const useCraftStateSync = () => {
         return;
       }
 
-      const slateState = slateEditor.children;
+      let actioner = actions.history.throttle(500);
 
-      const childNodeIds = slateState.map((node) => node['id']) as string[];
+      if (isCraftOverriding.current) {
+        actioner = actions.history.merge();
+      }
 
-      actions.history.throttle(500).setState((state) => {
+      actioner.setState((state) => {
+        const slateState = slateEditor.children;
+
+        const childNodeIds = slateState.map((node) => node['id']) as string[];
+
         slateNodesToCraft(
           config.resolvers,
           state,
