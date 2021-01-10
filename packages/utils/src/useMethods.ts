@@ -45,6 +45,14 @@ export type CallbacksFor<
           },
           M extends Options ? M['ignoreHistoryForActions'][number] : never
         >;
+        merge: () => Delete<
+          {
+            [T in ActionUnion<R>['type']]: (
+              ...payload: ActionByType<ActionUnion<R>, T>['payload']
+            ) => void;
+          },
+          M extends Options ? M['ignoreHistoryForActions'][number] : never
+        >;
         ignore: () => Delete<
           {
             [T in ActionUnion<R>['type']]: (
@@ -216,6 +224,7 @@ export function useMethods<
 
               // TODO: Simplify History API
               case HISTORY_ACTIONS.IGNORE:
+              case HISTORY_ACTIONS.MERGE:
               case HISTORY_ACTIONS.THROTTLE: {
                 const [type, ...params] = action.payload;
                 methods(draft, query)[type](...params);
@@ -268,6 +277,8 @@ export function useMethods<
               inversePatches,
               action.config && action.config.rate
             );
+          } else if (action.type === HISTORY_ACTIONS.MERGE) {
+            history.merge(patches, inversePatches);
           } else {
             history.add(patches, inversePatches);
           }
@@ -339,6 +350,20 @@ export function useMethods<
                 accum[type] = (...payload) =>
                   dispatch({
                     type: HISTORY_ACTIONS.IGNORE,
+                    payload: [type, ...payload],
+                  });
+                return accum;
+              }, {} as any),
+          };
+        },
+        merge: () => {
+          return {
+            ...actionTypes
+              .filter((type) => !ignoreHistoryForActions.includes(type))
+              .reduce((accum, type) => {
+                accum[type] = (...payload) =>
+                  dispatch({
+                    type: HISTORY_ACTIONS.MERGE,
                     payload: [type, ...payload],
                   });
                 return accum;
