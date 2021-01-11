@@ -5,6 +5,7 @@ import { EditorState } from '@craftjs/core';
 export const getSplitOperations = (
   state: EditorState,
   slateNodeId: string,
+  rootType: any,
   acceptableChildrenType: any[]
 ) => {
   const slateNode = state.nodes[slateNodeId];
@@ -12,10 +13,16 @@ export const getSplitOperations = (
   let currentTree = {};
   let hasSplitted = false;
 
-  const getOperations = (nodeId: string, parentTree: any = {}) => {
+  const getOperations = (
+    nodeId: string,
+    parentId: string,
+    parentTree: any = {}
+  ) => {
     const operations = [];
-
     const node = state.nodes[nodeId];
+
+    let parentIdForChildren = nodeId;
+
     if (nodeId === slateNodeId) {
       const nodeInfo = {
         id: nodeId,
@@ -24,6 +31,13 @@ export const getSplitOperations = (
       };
       currentTree[nodeId] = { ...nodeInfo };
       parentTree[nodeId] = { ...nodeInfo };
+    } else if (rootType === node.data.type) {
+      parentIdForChildren = parentId;
+      currentTree = { ...parentTree };
+      operations.push({
+        type: 'expand',
+        id: node.id,
+      });
     } else if (acceptableChildrenType.includes(node.data.type) === false) {
       operations.push({
         type: 'expel',
@@ -47,16 +61,16 @@ export const getSplitOperations = (
         expelled: hasSplitted,
       };
 
-      if (currentTree[node.data.parent]) {
-        currentTree[node.data.parent] = {
-          ...currentTree[node.data.parent],
-          nodes: [...currentTree[node.data.parent].nodes, nodeId],
+      if (currentTree[parentId]) {
+        currentTree[parentId] = {
+          ...currentTree[parentId],
+          nodes: [...currentTree[parentId].nodes, nodeId],
         };
       }
 
-      if (parentTree[node.data.parent]) {
-        parentTree[node.data.parent] = {
-          ...parentTree[node.data.parent],
+      if (parentTree[parentId]) {
+        parentTree[parentId] = {
+          ...parentTree[parentId],
           nodes: [nodeId],
         };
       }
@@ -68,10 +82,12 @@ export const getSplitOperations = (
     return [
       ...operations,
       ...node.data.nodes
-        .map((childNodeId) => getOperations(childNodeId, { ...parentTree }))
+        .map((childNodeId) =>
+          getOperations(childNodeId, parentIdForChildren, { ...parentTree })
+        )
         .flat(),
     ];
   };
 
-  return getOperations(slateNode.id);
+  return getOperations(slateNode.id, slateNode.data.parent);
 };
