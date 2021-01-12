@@ -108,13 +108,13 @@ export const useCraftStateSync = () => {
         return;
       }
 
-      let actioner = actions.history.throttle(500);
+      let actionCreator = actions.history.throttle(500);
 
       if (isCraftOverriding.current) {
-        actioner = actions.history.merge();
+        actionCreator = actions.history.merge();
       }
 
-      actioner.setState((state) => {
+      actionCreator.setState((state) => {
         const slateState = slateEditor.children;
 
         const childNodeIds = slateState.map((node) => node['id']) as string[];
