@@ -188,7 +188,6 @@ describe('splitSlate', () => {
     it('should have wrapped remaining Slate nodes in a new SLATE and maintain nested structure', () => {
       const newSlateNodeId = state.nodes['ROOT'].data.nodes[4];
       expect(state.nodes[newSlateNodeId].data.name).toEqual('SLATE');
-      // expect(state.nodes[newSlateNodeId].data.nodes.length).toEqual(1);
 
       const childListId = state.nodes[newSlateNodeId].data.nodes[0];
       expect(state.nodes[childListId].data.name).toEqual('List');
