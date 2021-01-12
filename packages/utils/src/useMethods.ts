@@ -266,9 +266,9 @@ export function useMethods<
         if (
           ![
             ...ignoreHistoryForActions,
-            HISTORY_ACTIONS.IGNORE,
             HISTORY_ACTIONS.UNDO,
             HISTORY_ACTIONS.REDO,
+            HISTORY_ACTIONS.IGNORE,
           ].includes(action.type as any)
         ) {
           if (action.type === HISTORY_ACTIONS.THROTTLE) {
