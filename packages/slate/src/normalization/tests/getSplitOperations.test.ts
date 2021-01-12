@@ -5,7 +5,7 @@ import { getSplitOperations } from '../getSplitOperations';
 let operations;
 
 const testSplitState = (state) => {
-  return getSplitOperations(createBaseSlateState(state), 'SLATE', [
+  return getSplitOperations(createBaseSlateState(state), 'SLATE', 'SLATE', [
     'Typography',
     'List',
     'ListItem',
@@ -104,6 +104,37 @@ describe('splitSlate', () => {
           ],
         },
       },
+      {
+        id: 'SLATE2',
+        data: {
+          type: 'SLATE',
+          nodes: [
+            {
+              id: 'S2T1',
+              data: {
+                type: 'Typography',
+                nodes: [
+                  {
+                    id: 'S2B1',
+                    data: {
+                      type: 'Button',
+                    },
+                  },
+                  {
+                    id: 'S2TT1',
+                    data: {
+                      type: 'Text',
+                      props: {
+                        text: 'Hello',
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
     ]);
   });
   it('should have expelled non-Slate node', () => {
@@ -192,6 +223,40 @@ describe('splitSlate', () => {
         },
         TT4: {
           id: 'TT4',
+          expelled: true,
+          nodes: [],
+        },
+      },
+    });
+  });
+  it('should have expand nested Slate node', () => {
+    expect(operations[4]).toEqual({
+      type: 'expand',
+      id: 'SLATE2',
+    });
+  });
+  it('should expel nested non-Slate node from nested Slate node', () => {
+    expect(operations[5]).toEqual({
+      type: 'expel',
+      id: 'S2B1',
+    });
+  });
+  it('should have created a new Slate tree for the remaining Slate nodes', () => {
+    expect(operations[6]).toEqual({
+      type: 'insert_tree',
+      tree: {
+        SLATE: {
+          id: 'SLATE',
+          expelled: false,
+          nodes: ['S2T1'],
+        },
+        S2T1: {
+          id: 'S2T1',
+          expelled: true,
+          nodes: ['S2TT1'],
+        },
+        S2TT1: {
+          id: 'S2TT1',
           expelled: true,
           nodes: [],
         },
