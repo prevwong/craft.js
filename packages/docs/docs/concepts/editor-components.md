@@ -52,7 +52,7 @@ const LayerItem = (nodeId) => {
 Or, maybe drag a button to create a new instance of a User Component
 ```jsx
 const DragToCreate = (nodeId) => {
-  const { connectors: { drag }} = useEditor();
+  const { connectors: { create }} = useEditor();
 
   return (
    <div>
