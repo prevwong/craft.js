@@ -14,7 +14,9 @@ export const Events: React.FC = ({ children }) => {
     store,
     handlers,
     handlersFactory,
+    enabled,
   } = useInternalEditor((state) => ({
+    enabled: state.options.enabled,
     indicator: state.indicator,
     indicatorOptions: state.options.indicator,
     handlers: state.handlers,
@@ -24,6 +26,9 @@ export const Events: React.FC = ({ children }) => {
   const storeRef = useRef(store);
   storeRef.current = store;
 
+  const handlersRef = useRef(handlers);
+  handlersRef.current = handlers;
+
   useEffect(() => {
     // TODO: Let's use setState for all internal actions
     actions.history
@@ -31,7 +36,24 @@ export const Events: React.FC = ({ children }) => {
       .setState(
         (state) => (state.handlers = handlersFactory(storeRef.current))
       );
+
+    return () => {
+      if (!handlersRef.current) {
+        return;
+      }
+
+      // handlersRef.current.cleanup();
+    };
   }, [actions, handlersFactory]);
+
+  useEffect(() => {
+    // if ( !enabled ) {
+    //   handlersRef.current.disable();
+    //   return;
+    // }
+    //
+    // handlersRef.current.enable();
+  }, [enabled]);
 
   return handlers ? (
     <EventHandlerContext.Provider value={handlers}>

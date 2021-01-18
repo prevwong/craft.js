@@ -1,5 +1,5 @@
 import { DerivedEventHandlers } from '../events';
-import { ConnectorsForHandlers } from '../utils/Handlers';
+import { ConnectorsForHandlers } from '../events/Handlers';
 
 /**
  * Creates Node-specific event handlers and connectors
