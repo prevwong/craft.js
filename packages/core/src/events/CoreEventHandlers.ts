@@ -76,10 +76,7 @@ export abstract class CoreEventHandlers {
 
       accum[key] = wrapHookToRecognizeElement((el, opts) => {
         if (this.registry[key].get(el)) {
-          if (
-            this.registry[key].get(el) &&
-            isEqual(opts, this.registry[key].get(el).opts)
-          ) {
+          if (isEqual(opts, this.registry[key].get(el).opts)) {
             return;
           }
 

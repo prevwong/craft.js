@@ -1,51 +1,67 @@
 import { CoreEventHandlers } from '../CoreEventHandlers';
 import { defineEventListener } from '../defineEventListener';
 
-let selectFn,
-  selectCleanup = jest.fn(),
-  selectInit = jest.fn().mockImplementation(() => () => selectCleanup());
+function triggerMouseEvent(node, eventType) {
+  var clickEvent = document.createEvent('MouseEvents');
+  clickEvent.initEvent(eventType, true, true);
+  node.dispatchEvent(clickEvent);
+}
 
-class TestHandlers extends CoreEventHandlers {
-  handlers() {
-    return {
-      select: {
-        init: selectInit,
-        events: [defineEventListener('mousedown', selectFn)],
-      },
-      hover: {
-        init: () => {},
-        events: [defineEventListener('mousedown', () => {})],
-      },
-      drag: {
-        init: () => {},
-        events: [defineEventListener('mousedown', () => {})],
-      },
-      drop: {
-        init: () => {},
-        events: [defineEventListener('mousedown', () => {})],
-      },
-      create: {
-        init: () => {},
-        events: [defineEventListener('mousedown', () => {})],
-      },
-      connect: {
-        init: () => {},
-        events: [defineEventListener('mousedown', () => {})],
+const createTestHandlers = () => {
+  jest.resetAllMocks();
+
+  const handlers = [
+    'connect',
+    'select',
+    'hover',
+    'drag',
+    'drop',
+    'create',
+  ].reduce((accum, key) => {
+    const cleanup = jest.fn();
+    const init = jest.fn().mockImplementation(() => cleanup);
+    accum[key] = {
+      init,
+      cleanup,
+      events: {
+        mousedown: jest.fn(),
+        mouseover: jest.fn(),
       },
     };
-  }
-}
-const createTestHandlers = () => {
-  selectCleanup = jest.fn();
-  selectInit = jest.fn().mockImplementation(() => () => selectCleanup());
-  return new TestHandlers();
+
+    return accum;
+  }, {});
+
+  const instance = new (class extends CoreEventHandlers {
+    handlers() {
+      return Object.keys(handlers).reduce(
+        (accum, key) => ({
+          ...accum,
+          [key]: {
+            init: handlers[key].init,
+            events: Object.keys(handlers[key].events).map((eventName) =>
+              defineEventListener(eventName, handlers[key].events[eventName])
+            ),
+          },
+        }),
+        {}
+      );
+    }
+  })();
+
+  return {
+    instance,
+    handlers,
+  };
 };
 
 describe('CoreEventHandlers', () => {
-  let instance, dom;
+  let instance, dom, handlers;
 
   beforeEach(() => {
-    instance = createTestHandlers();
+    const testEventHandler = createTestHandlers();
+    handlers = testEventHandler.handlers;
+    instance = testEventHandler.instance;
   });
   describe('connectors', () => {
     it('should have core connectors', () => {
@@ -59,47 +75,97 @@ describe('CoreEventHandlers', () => {
       });
     });
     describe('attaching a connector', () => {
-      it('should be able to attach connector', () => {
-        dom = document.createElement('a');
+      dom = document.createElement('a');
+      beforeEach(() => {
+        instance.connectors.select(dom);
+      });
 
+      it('should be able to attach connector', () => {
         const chainedValue = instance.connectors.select(dom);
         expect(chainedValue).toEqual(dom);
         expect(instance.registry['select'].get(dom)).not.toBeFalsy();
-        expect(selectInit).toHaveBeenCalled();
+        expect(handlers.select.init).toHaveBeenCalled();
+      });
+
+      it('should have attached event listeners', () => {
+        triggerMouseEvent(dom, 'mousedown');
+        expect(handlers.select.events.mousedown).toHaveBeenCalled();
+
+        triggerMouseEvent(dom, 'mouseover');
+        expect(handlers.select.events.mouseover).toHaveBeenCalled();
       });
 
       describe('re-attaching on same DOM element', () => {
-        dom = document.createElement('a');
         beforeEach(() => {
-          instance.connectors.select(dom);
-          selectInit.mockReset();
-          selectCleanup.mockReset();
+          jest.clearAllMocks();
         });
-
         it('should do nothing if opts did not change', () => {
-          selectInit.mockReset();
           instance.connectors.select(dom);
-          expect(selectInit).not.toHaveBeenCalled();
+          expect(handlers.select.init).not.toHaveBeenCalled();
         });
         it('should reattach connector if opts changed', () => {
           instance.connectors.select(dom, 'node-a');
-          expect(selectCleanup).toHaveBeenCalled();
-          expect(selectInit).toHaveBeenCalled();
-        });
-      });
-
-      describe('disabling/enabling', () => {
-        beforeEach(() => {
-          selectInit.mockReset();
-          selectCleanup.mockReset();
-          instance.connectors.select(dom);
-        });
-        it('should disable connectors', () => {
-          instance.disable();
-          // expect(selectCleanup).toHaveBeenCalled();
-          // expect(selectInit).toHaveBeenCalled();
+          expect(handlers.select.cleanup).toHaveBeenCalledTimes(1);
+          expect(handlers.select.init).toHaveBeenNthCalledWith(
+            1,
+            dom,
+            'node-a'
+          );
         });
       });
     });
   });
+  describe('disabling the EventHandler instance', () => {
+    dom = document.createElement('a');
+    beforeEach(() => {
+      instance.connectors.select(dom);
+      instance.connectors.hover(dom);
+      jest.clearAllMocks();
+      instance.disable();
+    });
+
+    it('should only run cleanup', () => {
+      expect(handlers.select.cleanup).toHaveBeenCalledTimes(1);
+      expect(handlers.select.init).toHaveBeenCalledTimes(0);
+
+      expect(handlers.hover.cleanup).toHaveBeenCalledTimes(1);
+      expect(handlers.hover.init).toHaveBeenCalledTimes(0);
+    });
+    it('should have detached event listeners', () => {
+      triggerMouseEvent(dom, 'mousedown');
+      expect(handlers.select.events.mousedown).not.toHaveBeenCalled();
+
+      triggerMouseEvent(dom, 'mouseover');
+      expect(handlers.select.events.mouseover).not.toHaveBeenCalled();
+    });
+  });
+  describe('re-enabling the EventHandler instance', () => {
+    dom = document.createElement('a');
+    beforeEach(() => {
+      Object.keys(instance.connectors).forEach((key) => {
+        instance.connectors[key](dom);
+      });
+
+      instance.disable();
+      jest.clearAllMocks();
+      instance.enable();
+    });
+
+    it('should only re-attach init', () => {
+      Object.keys(instance.connectors).forEach((key) => {
+        expect(handlers[key].cleanup).toHaveBeenCalledTimes(0);
+        expect(handlers[key].init).toHaveBeenCalledTimes(1);
+      });
+    });
+    it('should have re-attach event listeners', () => {
+      Object.keys(instance.connectors).forEach((key) => {
+        triggerMouseEvent(dom, 'mousedown');
+        expect(handlers[key].events.mousedown).toHaveBeenCalled();
+
+        triggerMouseEvent(dom, 'mouseover');
+        expect(handlers[key].events.mouseover).toHaveBeenCalled();
+      });
+    });
+  });
+  describe('derived handlers', () => {});
 });
