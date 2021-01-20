@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-alpha.9 (2021-01-20)
+
+
+### Bug Fixes
+
+* remove slate op ([#162](https://github.com/prevwong/craft.js/issues/162)) ([a46ed6c](https://github.com/prevwong/craft.js/commit/a46ed6cd72700273279e89c13e9e7c3d4238f93c))
+
+
+
+
+
 # 0.2.0-alpha.8 (2021-01-12)
 
 
