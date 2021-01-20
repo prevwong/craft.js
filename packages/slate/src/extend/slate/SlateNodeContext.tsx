@@ -1,5 +1,5 @@
 import { useNode } from '@craftjs/core';
-import React, { createContext, useMemo, useState } from 'react';
+import React, { createContext, useMemo, useRef, useState } from 'react';
 import { Node, Range, Transforms } from 'slate';
 import { ReactEditor, Slate } from 'slate-react';
 
@@ -31,6 +31,9 @@ export const SlateNodeContextProvider: React.FC<SlateNodeContextProviderProps> =
   const [value, setValue] = useState([]);
   const [enabled, setEnabled] = useState(initialEnabledValue || true);
 
+  const currentEditorSelectionRef = useRef(editor.selection);
+  currentEditorSelectionRef.current = editor.selection;
+
   const actions = useMemo(
     () => ({
       setEditorValue: (value: Node[]) => {
@@ -45,6 +48,11 @@ export const SlateNodeContextProvider: React.FC<SlateNodeContextProviderProps> =
       },
       setSelection: (selection: Range) => {
         if (!selection) {
+          // Don't do anything if the editor selection is already null
+          if (currentEditorSelectionRef.current === null) {
+            return;
+          }
+
           ReactEditor.deselect(editor);
           editor.selection = null;
           return;

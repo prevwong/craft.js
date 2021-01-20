@@ -144,12 +144,12 @@ describe('splitSlate', () => {
           type: 'SLATE',
           nodes: [
             {
-              id: 'T7',
+              id: 'S2T1',
               data: {
                 type: 'Typography',
                 nodes: [
                   {
-                    id: 'TT7',
+                    id: 'S2TT1',
                     data: {
                       type: 'Text',
                       props: {
@@ -188,7 +188,6 @@ describe('splitSlate', () => {
     it('should have wrapped remaining Slate nodes in a new SLATE and maintain nested structure', () => {
       const newSlateNodeId = state.nodes['ROOT'].data.nodes[4];
       expect(state.nodes[newSlateNodeId].data.name).toEqual('SLATE');
-      expect(state.nodes[newSlateNodeId].data.nodes.length).toEqual(1);
 
       const childListId = state.nodes[newSlateNodeId].data.nodes[0];
       expect(state.nodes[childListId].data.name).toEqual('List');
@@ -206,9 +205,13 @@ describe('splitSlate', () => {
       expect(state.nodes[nestedChildListItemId].data.name).toEqual('ListItem');
       expect(state.nodes[nestedChildListItemId].data.nodes).toEqual(['TT6']);
     });
-    it('should have expelled nested Slate node', () => {
-      expect(state.nodes['SLATE'].data.nodes).not.toContain('SLATE2');
-      expect(state.nodes['ROOT'].data.nodes).toContain('SLATE2');
+    it('should have expanded nested Slate node', () => {
+      const newSlateNodeId = state.nodes['ROOT'].data.nodes[4];
+      const lastNodeIndex = state.nodes[newSlateNodeId].data.nodes.length - 1;
+      expect(state.nodes[newSlateNodeId].data.nodes).not.toContain('SLATE2');
+      expect(state.nodes[newSlateNodeId].data.nodes[lastNodeIndex]).toEqual(
+        'S2T1'
+      );
     });
   });
 });

@@ -5,6 +5,8 @@ const fieldForOperation = {
   // eslint-disable-next-line @typescript-eslint/camelcase
   insert_node: 'node',
   // eslint-disable-next-line @typescript-eslint/camelcase
+  set_node: 'newProperties',
+  // eslint-disable-next-line @typescript-eslint/camelcase
   split_node: 'properties',
 };
 
@@ -33,6 +35,7 @@ const applyIdToProperty = (property: any) => {
 
 export const applyIdOnOperation = (operation: Operation) => {
   const { type } = operation;
+
   if (isValidOperation(type)) {
     const propertyToChange = fieldForOperation[type];
     const ops = operation[propertyToChange];
