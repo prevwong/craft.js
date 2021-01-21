@@ -4,11 +4,11 @@ import { ConnectorsForHandlers } from '../events/Handlers';
 /**
  * Creates Node-specific event handlers and connectors
  */
-export class NodeHandlers extends DerivedEventHandlers<'connect' | 'drag'> {
+export class NodeHandlers extends DerivedEventHandlers {
   id;
 
-  constructor(store, derived, nodeId) {
-    super(store, derived);
+  constructor(derived, nodeId) {
+    super(derived);
     this.id = nodeId;
   }
 

@@ -1,8 +1,9 @@
 import { Connector, wrapHookToRecognizeElement } from '@craftjs/utils';
 import isEqual from 'shallowequal';
 
-import { EditorStore } from '../editor/store';
-import { Handler } from '../interfaces';
+import { Handler } from '../interfaces/events';
+import { EditorStore } from '../editor';
+import { isEventBlockedByDescendant } from './isEventBlockedByDescendant';
 
 type CoreConnectorTypes =
   | 'select'
@@ -12,11 +13,7 @@ type CoreConnectorTypes =
   | 'create'
   | 'connect';
 
-/**
- * Craft's core event handlers
- * Connectors are created from the handlers defined here
- */
-export abstract class CoreEventHandlers {
+export abstract class Handlers {
   private registry: Record<string, Map<HTMLElement, any>> = {};
   private derivedHandlers: Set<any> = new Set();
   private listeners: any[] = [];
@@ -32,30 +29,29 @@ export abstract class CoreEventHandlers {
    * @param args Additional arguments to pass to the constructor
    */
   derive<T extends DerivedEventHandlers<any>, U extends any[]>(
-    Type: any,
+    Derived: any,
     ...args: U
   ): T {
-    const c = Type.init(this, ...args);
-    this.derivedHandlers.add(c);
-    return c;
+    return new Derived(this, ...args);
   }
 
-  abstract handlers(): Record<
-    CoreConnectorTypes,
-    Partial<Omit<Handler, 'events'> & { events: any }> // (Hacky) without any, tsc throws an error
-  >;
+  abstract handlers(): any;
 
   disable() {
-    Object.keys(this.registry).map((key) => {
+    Object.keys(this.registry).forEach((key) => {
       const registry = this.registry[key];
-      registry.forEach((r) => r.disable());
+
+      registry.forEach((r) => {
+        // console.log('disabling', r.name, key, r);
+        r.disable();
+      });
     });
 
     this.listeners.forEach((listener) => listener(false));
   }
 
   enable() {
-    Object.keys(this.registry).map((key) => {
+    Object.keys(this.registry).forEach((key) => {
       const registry = this.registry[key];
       registry.forEach((r) => r.enable());
     });
@@ -70,11 +66,15 @@ export abstract class CoreEventHandlers {
   }
 
   // Returns ref connectors for handlers
-  get connectors(): Record<CoreConnectorTypes, Connector> {
+  connectors(): any {
     const handlers = this.handlers() || {};
 
     return Object.keys(handlers).reduce((accum, key) => {
-      const { init, events } = handlers[key];
+      const { init, events } = {
+        init: null,
+        events: [],
+        ...handlers[key],
+      };
 
       if (!this.registry[key]) {
         this.registry[key] = new Map();
@@ -90,6 +90,7 @@ export abstract class CoreEventHandlers {
         }
 
         let cleanup;
+        let listenersToRemove;
 
         this.registry[key].set(el, {
           opts,
@@ -97,17 +98,43 @@ export abstract class CoreEventHandlers {
             if (init) {
               cleanup = init(el, opts);
             }
-            events.forEach(([eventName, listener, capture]) => {
-              el.addEventListener(eventName, listener, capture);
+
+            listenersToRemove = events.map(([eventName, listener, capture]) => {
+              const bindedListener = (e) => {
+                // Store initial Craft event value
+                if (!e.craft) {
+                  e.craft = {
+                    blockedEvents: {},
+                    stopPropagation: () => {},
+                  };
+                }
+
+                if (!isEventBlockedByDescendant(e, eventName, el)) {
+                  e.craft.stopPropagation = () => {
+                    if (!e.craft.blockedEvents[eventName]) {
+                      e.craft.blockedEvents[eventName] = [];
+                    }
+
+                    e.craft.blockedEvents[eventName].push(el);
+                  };
+
+                  listener(e, opts);
+                }
+              };
+              el.addEventListener(eventName, bindedListener, capture);
+              return () => {
+                el.removeEventListener(eventName, bindedListener, capture);
+              };
             });
           },
           disable: () => {
             if (cleanup) {
               cleanup();
             }
-            events.forEach(([eventName, listener, capture]) =>
-              el.removeEventListener(eventName, listener, capture)
-            );
+            if (listenersToRemove) {
+              listenersToRemove.forEach((l) => l());
+              listenersToRemove = null;
+            }
           },
         });
 
@@ -118,17 +145,26 @@ export abstract class CoreEventHandlers {
     }, {}) as any;
   }
 }
+/**
+ * Craft's core event handlers
+ * Connectors are created from the handlers defined here
+ */
+export abstract class CoreEventHandlers extends Handlers {
+  store: EditorStore;
+  constructor(store: EditorStore) {
+    super();
+    this.store = store;
+  }
+}
 
 /**
  *  Allows for external packages to easily extend and derive the CoreEventHandlers
  */
-export abstract class DerivedEventHandlers<
-  T extends string
-> extends CoreEventHandlers {
-  derived: CoreEventHandlers;
+export abstract class DerivedEventHandlers extends Handlers {
+  derived: Handlers;
   unsubscribeListener: any = null;
 
-  private constructor(derived: CoreEventHandlers) {
+  constructor(derived: Handlers) {
     super();
     this.derived = derived;
     this.unsubscribeListener = this.derived.listen((bool) => {
@@ -147,4 +183,4 @@ export abstract class DerivedEventHandlers<
   }
 }
 
-export type EventConnectors = CoreEventHandlers['connectors'];
+export type EventConnectors = any;

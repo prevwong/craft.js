@@ -42,17 +42,23 @@ export const Events: React.FC = ({ children }) => {
         return;
       }
 
-      // handlersRef.current.cleanup();
+      handlersRef.current.cleanup();
     };
   }, [actions, handlersFactory]);
 
   useEffect(() => {
-    // if ( !enabled ) {
-    //   handlersRef.current.disable();
-    //   return;
-    // }
-    //
-    // handlersRef.current.enable();
+    if (!handlersRef.current) {
+      return;
+    }
+
+    console.log(88);
+    if (!enabled) {
+      console.log('disablign!');
+      handlersRef.current.disable();
+      return;
+    }
+
+    handlersRef.current.enable();
   }, [enabled]);
 
   return handlers ? (

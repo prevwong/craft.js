@@ -1,6 +1,7 @@
 import { CoreEventHandlers } from './CoreEventHandlers';
 import { createShadow } from './createShadow';
 
+import { defineEventListener } from './defineEventListener';
 import {
   Indicator,
   NodeId,
@@ -8,7 +9,6 @@ import {
   Node,
   CraftDOMEvent,
 } from '../interfaces';
-import { defineEventListener } from './defineEventListener';
 
 type DraggedElement = NodeId[] | NodeTree;
 

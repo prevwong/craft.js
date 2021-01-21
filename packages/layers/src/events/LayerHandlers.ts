@@ -24,8 +24,8 @@ export class LayerHandlers extends DerivedEventHandlers<
   };
   static currentCanvasHovered;
 
-  constructor(store, derived, layerStore, layerId) {
-    super(store, derived);
+  constructor(derived, layerStore, layerId) {
+    super(derived);
     this.id = layerId;
     this.layerStore = layerStore;
   }
@@ -36,6 +36,8 @@ export class LayerHandlers extends DerivedEventHandlers<
 
   handlers() {
     const parentConnectors = this.derived.connectors();
+    const editorStore = this.derived.store;
+
     return {
       layer: {
         init: (el) => {
@@ -79,7 +81,7 @@ export class LayerHandlers extends DerivedEventHandlers<
                     currentCanvasHovered.data.nodes.length - 1
                   ];
                 if (!currNode) return;
-                indicator.placement.currentNode = this.store.query
+                indicator.placement.currentNode = editorStore.query
                   .node(currNode)
                   .get();
                 indicator.placement.index =
@@ -108,7 +110,7 @@ export class LayerHandlers extends DerivedEventHandlers<
 
             let target = this.id;
 
-            const indicatorInfo = this.store.query.getDropPlaceholder(
+            const indicatorInfo = editorStore.query.getDropPlaceholder(
               dragId,
               target,
               { x: e.clientX, y: e.clientY },
@@ -127,12 +129,12 @@ export class LayerHandlers extends DerivedEventHandlers<
               ).headingDom.getBoundingClientRect();
 
               LayerHandlers.events.currentCanvasHovered = null;
-              if (this.store.query.node(parent.id).isCanvas()) {
+              if (editorStore.query.node(parent.id).isCanvas()) {
                 if (parent.data.parent) {
-                  const grandparent = this.store.query
+                  const grandparent = editorStore.query
                     .node(parent.data.parent)
                     .get();
-                  if (this.store.query.node(grandparent.id).isCanvas()) {
+                  if (editorStore.query.node(grandparent.id).isCanvas()) {
                     LayerHandlers.events.currentCanvasHovered = parent;
                     if (
                       (e.clientY > parentHeadingInfo.bottom - 10 &&
@@ -198,7 +200,7 @@ export class LayerHandlers extends DerivedEventHandlers<
               const { parent, index, where } = placement;
               const { id: parentId } = parent;
 
-              this.store.actions.move(
+              editorStore.actions.move(
                 LayerHandlers.draggedElement as NodeId,
                 parentId,
                 index + (where === 'after' ? 1 : 0)
