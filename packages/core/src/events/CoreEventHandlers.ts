@@ -19,6 +19,12 @@ type CoreConnectorTypes =
 export abstract class CoreEventHandlers {
   private registry: Record<string, Map<HTMLElement, any>> = {};
   private derivedHandlers: Set<any> = new Set();
+  private listeners: any[] = [];
+
+  listen(cb: any) {
+    this.listeners.push(cb);
+    return () => this.listeners.splice(this.listeners.indexOf(cb), 1);
+  }
 
   /**
    * Create a new instance of Handlers with reference to the current EventHandlers
@@ -45,7 +51,7 @@ export abstract class CoreEventHandlers {
       registry.forEach((r) => r.disable());
     });
 
-    this.derivedHandlers.forEach((derivedHandler) => derivedHandler.disable());
+    this.listeners.forEach((listener) => listener(false));
   }
 
   enable() {
@@ -54,7 +60,7 @@ export abstract class CoreEventHandlers {
       registry.forEach((r) => r.enable());
     });
 
-    this.derivedHandlers.forEach((derivedHandler) => derivedHandler.enable());
+    this.listeners.forEach((listener) => listener(true));
   }
 
   cleanup() {
@@ -120,10 +126,24 @@ export abstract class DerivedEventHandlers<
   T extends string
 > extends CoreEventHandlers {
   derived: CoreEventHandlers;
+  unsubscribeListener: any = null;
 
-  protected constructor(derived: CoreEventHandlers) {
+  private constructor(derived: CoreEventHandlers) {
     super();
     this.derived = derived;
+    this.unsubscribeListener = this.derived.listen((bool) => {
+      if (!bool) {
+        this.disable();
+        return;
+      }
+
+      this.enable();
+    });
+  }
+
+  cleanup() {
+    super.cleanup();
+    this.unsubscribeListener();
   }
 }
 

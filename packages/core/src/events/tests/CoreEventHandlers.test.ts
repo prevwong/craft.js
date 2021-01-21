@@ -1,4 +1,4 @@
-import { CoreEventHandlers } from '../CoreEventHandlers';
+import { CoreEventHandlers, DerivedEventHandlers } from '../CoreEventHandlers';
 import { defineEventListener } from '../defineEventListener';
 
 function triggerMouseEvent(node, eventType) {
@@ -7,17 +7,8 @@ function triggerMouseEvent(node, eventType) {
   node.dispatchEvent(clickEvent);
 }
 
-const createTestHandlers = () => {
-  jest.resetAllMocks();
-
-  const handlers = [
-    'connect',
-    'select',
-    'hover',
-    'drag',
-    'drop',
-    'create',
-  ].reduce((accum, key) => {
+const createTestHandlers = (connectorNames: string[]) => {
+  const handlers = connectorNames.reduce((accum, key) => {
     const cleanup = jest.fn();
     const init = jest.fn().mockImplementation(() => cleanup);
     accum[key] = {
@@ -32,22 +23,66 @@ const createTestHandlers = () => {
     return accum;
   }, {});
 
+  const returnEventHandlersFormat = () => {
+    return Object.keys(handlers).reduce(
+      (accum, key) => ({
+        ...accum,
+        [key]: {
+          init: handlers[key].init,
+          events: Object.keys(handlers[key].events).map((eventName) =>
+            defineEventListener(eventName, handlers[key].events[eventName])
+          ),
+        },
+      }),
+      {}
+    );
+  };
+
+  return {
+    handlers,
+    returnEventHandlersFormat,
+  };
+};
+
+const createTestCoreHandlers = () => {
+  jest.resetAllMocks();
+
+  const { handlers, returnEventHandlersFormat } = createTestHandlers([
+    'connect',
+    'select',
+    'hover',
+    'drag',
+    'drop',
+    'create',
+  ]);
+
   const instance = new (class extends CoreEventHandlers {
     handlers() {
-      return Object.keys(handlers).reduce(
-        (accum, key) => ({
-          ...accum,
-          [key]: {
-            init: handlers[key].init,
-            events: Object.keys(handlers[key].events).map((eventName) =>
-              defineEventListener(eventName, handlers[key].events[eventName])
-            ),
-          },
-        }),
-        {}
-      );
+      return returnEventHandlersFormat();
     }
   })();
+
+  return {
+    instance,
+    handlers,
+  };
+};
+
+const createTestDerivedHandlers = (core: CoreEventHandlers) => {
+  jest.resetAllMocks();
+
+  const { handlers, returnEventHandlersFormat } = createTestHandlers([
+    'connect',
+    'drag',
+  ]);
+
+  class DerivedHandlers extends DerivedEventHandlers<any> {
+    handlers() {
+      return returnEventHandlersFormat();
+    }
+  }
+
+  const instance = core.derive(DerivedHandlers);
 
   return {
     instance,
@@ -59,7 +94,7 @@ describe('CoreEventHandlers', () => {
   let instance, dom, handlers;
 
   beforeEach(() => {
-    const testEventHandler = createTestHandlers();
+    const testEventHandler = createTestCoreHandlers();
     handlers = testEventHandler.handlers;
     instance = testEventHandler.instance;
   });
