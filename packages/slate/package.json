@@ -1,13 +1,13 @@
 {
   "name": "@craftjs/slate",
-  "version": "0.2.0-alpha.8",
+  "version": "0.2.0-alpha.9",
   "author": "Prev Wong",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "license": "MIT",
   "types": "./lib/index.d.ts",
   "dependencies": {
-    "@craftjs/utils": "^0.2.0-alpha.8"
+    "@craftjs/utils": "^0.2.0-alpha.9"
   },
   "devDependencies": {
     "slate": "^0.57.0",
