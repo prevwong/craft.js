@@ -78,7 +78,7 @@ class WatchHandler {
     this.unsubscribe = store.subscribe(
       (state) => ({ enabled: state.options.enabled }),
       ({ enabled }) => {
-        if (!document.body.contains(el)) {
+        if (!el.ownerDocument.body.contains(el)) {
           this.remove();
           return this.unsubscribe();
         }
@@ -173,7 +173,7 @@ export abstract class Handlers<T extends string = null> {
       }
 
       const connector = (el, opts) => {
-        if (!el || !document.body.contains(el)) {
+        if (!el || !el.ownerDocument.body.contains(el)) {
           this.wm.delete(el);
           return;
         }
