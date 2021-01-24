@@ -18,7 +18,6 @@ export const RenderEditable = ({ as, children, attributes }) => {
     }
 
     connectors.connect(dom, slateNodeId);
-    connectors.drag(dom, slateNodeId);
   });
 
   return React.createElement(as || DefaultRenderEditable, {

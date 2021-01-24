@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-alpha.10 (2021-01-22)
+
+
+### Bug Fixes
+
+* remove auto-add drag connector ([#163](https://github.com/prevwong/craft.js/issues/163)) ([60a600a](https://github.com/prevwong/craft.js/commit/60a600a8c9bc675b3715c6f5881da9574fbf3845))
+
+
+
+
+
 # 0.2.0-alpha.9 (2021-01-20)
 
 
