@@ -1,6 +1,6 @@
 // https://github.com/pelotom/use-methods
 import produce, { Patch, produceWithPatches } from 'immer';
-import isEqualWith from 'lodash.isequalwith';
+import isEqualWith from 'lodash/isEqualWith';
 import { useMemo, useEffect, useRef, useReducer, useCallback } from 'react';
 
 import { History, HISTORY_ACTIONS } from './History';
