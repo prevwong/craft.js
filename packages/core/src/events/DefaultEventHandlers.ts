@@ -1,5 +1,6 @@
 import { CoreEventHandlers } from './CoreEventHandlers';
 import { createShadow } from './createShadow';
+import { generateNewTree } from './treeStuff';
 
 import { Indicator, NodeId, NodeTree, Node } from '../interfaces';
 import { defineEventListener, CraftDOMEvent } from '../utils/Handlers';
@@ -261,9 +262,29 @@ export class DefaultEventHandlers extends CoreEventHandlers {
             'dragstart',
             (e: CraftDOMEvent<DragEvent>, userElement: React.ReactElement) => {
               e.craft.stopPropagation();
-              const tree = this.store.query
-                .parseReactElement(userElement)
-                .toNodeTree();
+
+              let tree;
+              if (userElement.props.nodeTree) {
+                // generate fresh tree
+                const { query } = this.store;
+                const freshTree = generateNewTree(
+                  userElement.props.nodeTree,
+                  query
+                );
+
+                console.log({
+                  serializedTree: userElement.props.nodeTree,
+                  freshTree,
+                });
+
+                tree = freshTree;
+              } else {
+                tree = this.store.query
+                  .parseReactElement(userElement)
+                  .toNodeTree();
+              }
+
+              console.log({ tree });
 
               const dom = e.currentTarget as HTMLElement;
 

@@ -31,12 +31,14 @@ export type Element<T extends React.ElementType> = {
 export function Element<T extends React.ElementType>({
   id,
   children,
+  nodeTree,
   ...elementProps
 }: Element<T>) {
   const { is, custom, canvas, ...otherProps } = {
     ...defaultElementProps,
     ...elementProps,
   };
+  console.log('HELLO');
 
   const { query, actions } = useInternalEditor();
   const { node, inNodeContext } = useInternalNode((node) => ({
@@ -51,6 +53,7 @@ export function Element<T extends React.ElementType>({
   useEffectOnce(() => {
     invariant(!!id, ERROR_TOP_LEVEL_ELEMENT_NO_ID);
     const { id: nodeId, data } = node;
+    console.log({ inNodeContext, nodeId });
 
     if (inNodeContext) {
       let linkedNodeId;
@@ -62,6 +65,7 @@ export function Element<T extends React.ElementType>({
 
       // Render existing linked Node if it already exists (and is the same type as the JSX)
       if (existingNode && existingNode.data.type === is) {
+        console.log('hello?');
         linkedNodeId = existingNode.id;
 
         // Merge JSX and existing props
@@ -78,14 +82,21 @@ export function Element<T extends React.ElementType>({
             )
           );
       } else {
-        // otherwise, create and render a new linked Node
-        const linkedElement = React.createElement(
-          Element,
-          elementProps,
-          children
-        );
+        let tree;
 
-        const tree = query.parseReactElement(linkedElement).toNodeTree();
+        console.log({ nodeTree, test: 'lol' });
+        // otherwise, create and render a new linked Node
+        if (!nodeTree) {
+          const linkedElement = React.createElement(
+            Element,
+            elementProps,
+            children
+          );
+
+          tree = query.parseReactElement(linkedElement).toNodeTree();
+        } else {
+          tree = nodeTree;
+        }
 
         linkedNodeId = tree.rootNodeId;
         actions.history.ignore().addLinkedNodeFromTree(tree, nodeId, id);
