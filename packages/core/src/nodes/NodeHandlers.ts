@@ -1,10 +1,9 @@
-import { DerivedEventHandlers } from '../events';
-import { ConnectorsForHandlers } from '../events/Handlers';
+import { DerivedHandlers } from '../events/Handlers';
 
 /**
  * Creates Node-specific event handlers and connectors
  */
-export class NodeHandlers extends DerivedEventHandlers {
+export class NodeHandlers extends DerivedHandlers {
   id;
 
   constructor(derived, nodeId) {
@@ -15,18 +14,18 @@ export class NodeHandlers extends DerivedEventHandlers {
   handlers() {
     const parentConnectors = this.derived.connectors();
     return {
-      connect: {
-        init: (el) => {
-          parentConnectors.connect(el, this.id);
-        },
+      connect: (el) => {
+        const cleanup = parentConnectors.connect(el, this.id);
+        return () => cleanup();
       },
-      drag: {
-        init: (el) => {
-          parentConnectors.drag(el, this.id);
-        },
+      drag: (el) => {
+        const cleanup = parentConnectors.drag(el, this.id);
+        return () => {
+          cleanup();
+        };
       },
     };
   }
 }
 
-export type NodeConnectors = ConnectorsForHandlers<NodeHandlers>;
+export type NodeConnectors = any;

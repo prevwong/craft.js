@@ -1,15 +1,14 @@
 import {
   NodeId,
   Node,
-  DerivedEventHandlers,
+  DerivedHandlers,
   CraftDOMEvent,
-  ConnectorsForHandlers,
   defineEventListener,
 } from '@craftjs/core';
 
 import { LayerIndicator } from '../interfaces';
 
-export class LayerHandlers extends DerivedEventHandlers<
+export class LayerHandlers extends DerivedHandlers<
   'layer' | 'layerHeader' | 'drag'
 > {
   private id;
@@ -217,4 +216,4 @@ export class LayerHandlers extends DerivedEventHandlers<
   }
 }
 
-export type LayerConnectors = ConnectorsForHandlers<LayerHandlers>;
+export type LayerConnectors = any;

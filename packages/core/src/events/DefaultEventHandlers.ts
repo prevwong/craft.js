@@ -16,6 +16,11 @@ type DefaultEventHandlersOptions = {
   isMultiSelectEnabled: (e) => boolean;
 };
 
+const bindEvent = (el, eventName, listener, capture?) => {
+  el.addEventListener(eventName, listener, capture);
+  return () => el.removeEventListener(eventName, listener, capture);
+};
+
 /**
  * Specifies Editor-wide event handlers and connectors
  */
@@ -59,188 +64,188 @@ export class DefaultEventHandlers extends CoreEventHandlers {
 
   handlers() {
     return {
-      connect: {
-        init: (el, id) => {
-          this.connectors().select(el, id);
-          this.connectors().hover(el, id);
-          this.connectors().drop(el, id);
-          this.store.actions.setDOM(id, el);
-        },
+      connect: (el, id) => {
+        this.store.actions.setDOM(id, el);
+        this.connectors().select(el, id);
+        this.connectors().drop(el, id);
+        this.connectors().drag(el, id);
+        return () => {};
       },
-      select: {
-        init: () => () => this.store.actions.setNodeEvent('selected', null),
-        events: [
-          this.defineNodeEventListener(
-            'mousedown',
-            (e: CraftDOMEvent<MouseEvent>, id: NodeId) => {
-              e.craft.stopPropagation();
+      select: (el, id) => {
+        const unbindOnMouseDown = bindEvent(
+          this.dom(el),
+          'mousedown',
+          (e: CraftDOMEvent<MouseEvent>) => {
+            e.craft.stopPropagation();
 
-              let newSelectedElementIds = [];
+            let newSelectedElementIds = [];
 
-              if (id) {
-                const { query } = this.store;
-                const selectedElementIds = query.getEvent('selected').all();
-                const isMultiSelect = this.options.isMultiSelectEnabled(e);
-
-                /**
-                 * Retain the previously select elements if the multi-select condition is enabled
-                 * or if the currentNode is already selected
-                 *
-                 * so users can just click to drag the selected elements around without holding the multi-select key
-                 */
-
-                if (isMultiSelect || selectedElementIds.includes(id)) {
-                  newSelectedElementIds = selectedElementIds.filter(
-                    (selectedId) => {
-                      const descendants = query
-                        .node(selectedId)
-                        .descendants(true);
-                      const ancestors = query.node(selectedId).ancestors(true);
-
-                      // Deselect ancestors/descendants
-                      if (descendants.includes(id) || ancestors.includes(id)) {
-                        return false;
-                      }
-
-                      return true;
-                    }
-                  );
-                }
-
-                if (!newSelectedElementIds.includes(id)) {
-                  newSelectedElementIds.push(id);
-                }
-              }
-
-              this.store.actions.setNodeEvent(
-                'selected',
-                newSelectedElementIds
-              );
-            }
-          ),
-          this.defineNodeEventListener(
-            'click',
-            (e: CraftDOMEvent<MouseEvent>, id) => {
-              e.craft.stopPropagation();
-
+            if (id) {
               const { query } = this.store;
               const selectedElementIds = query.getEvent('selected').all();
-
               const isMultiSelect = this.options.isMultiSelectEnabled(e);
-              const isNodeAlreadySelected = this.currentSelectedElementIds.includes(
-                id
-              );
 
-              let newSelectedElementIds = [...selectedElementIds];
+              /**
+               * Retain the previously select elements if the multi-select condition is enabled
+               * or if the currentNode is already selected
+               *
+               * so users can just click to drag the selected elements around without holding the multi-select key
+               */
 
-              if (isMultiSelect && isNodeAlreadySelected) {
-                newSelectedElementIds.splice(
-                  newSelectedElementIds.indexOf(id),
-                  1
+              if (isMultiSelect || selectedElementIds.includes(id)) {
+                newSelectedElementIds = selectedElementIds.filter(
+                  (selectedId) => {
+                    const descendants = query
+                      .node(selectedId)
+                      .descendants(true);
+                    const ancestors = query.node(selectedId).ancestors(true);
+
+                    // Deselect ancestors/descendants
+                    if (descendants.includes(id) || ancestors.includes(id)) {
+                      return false;
+                    }
+
+                    return true;
+                  }
                 );
-                this.store.actions.setNodeEvent(
-                  'selected',
-                  newSelectedElementIds
-                );
-              } else if (!isMultiSelect && selectedElementIds.length > 1) {
-                newSelectedElementIds = [id];
-                this.store.actions.setNodeEvent(
-                  'selected',
-                  newSelectedElementIds
-                );
               }
 
-              this.currentSelectedElementIds = newSelectedElementIds;
+              if (!newSelectedElementIds.includes(id)) {
+                newSelectedElementIds.push(id);
+              }
             }
-          ),
-        ],
-      },
-      hover: {
-        init: () => () => this.store.actions.setNodeEvent('hovered', null),
-        events: [
-          this.defineNodeEventListener(
-            'mouseover',
-            (e: CraftDOMEvent<MouseEvent>, id: NodeId) => {
-              e.craft.stopPropagation();
-              this.store.actions.setNodeEvent('hovered', id);
-            }
-          ),
-        ],
-      },
-      drop: {
-        events: [
-          defineEventListener('dragover', (e: CraftDOMEvent<MouseEvent>) => {
-            e.craft.stopPropagation();
-            e.preventDefault();
-          }),
-          this.defineNodeEventListener(
-            'dragenter',
-            (e: CraftDOMEvent<MouseEvent>, targetId: NodeId) => {
-              e.craft.stopPropagation();
-              e.preventDefault();
 
-              const draggedElement = DefaultEventHandlers.draggedElement;
-              if (!draggedElement) {
-                return;
-              }
+            this.store.actions.setNodeEvent('selected', newSelectedElementIds);
+          }
+        );
 
-              let node = (draggedElement as unknown) as Node;
+        const unbindOnClick = bindEvent(this.dom(el), 'click', (e) => {
+          e.craft.stopPropagation();
 
-              if ((draggedElement as NodeTree).rootNodeId) {
-                const nodeTree = draggedElement as NodeTree;
-                node = nodeTree.nodes[nodeTree.rootNodeId];
-              }
+          const { query } = this.store;
+          const selectedElementIds = query.getEvent('selected').all();
 
-              const { clientX: x, clientY: y } = e;
-              const indicator = this.store.query.getDropPlaceholder(
-                node,
-                targetId,
-                { x, y }
-              );
+          const isMultiSelect = this.options.isMultiSelectEnabled(e);
+          const isNodeAlreadySelected = this.currentSelectedElementIds.includes(
+            id
+          );
 
-              if (!indicator) {
-                return;
-              }
-              this.store.actions.setIndicator(indicator);
-              DefaultEventHandlers.indicator = indicator;
-            }
-          ),
-        ],
-      },
+          let newSelectedElementIds = [...selectedElementIds];
 
-      drag: {
-        init: (el, id) => {
-          if (!this.store.query.node(id).isDraggable()) {
-            return () => {};
+          if (isMultiSelect && isNodeAlreadySelected) {
+            newSelectedElementIds.splice(newSelectedElementIds.indexOf(id), 1);
+            this.store.actions.setNodeEvent('selected', newSelectedElementIds);
+          } else if (!isMultiSelect && selectedElementIds.length > 1) {
+            newSelectedElementIds = [id];
+            this.store.actions.setNodeEvent('selected', newSelectedElementIds);
           }
 
-          el.setAttribute('draggable', 'true');
-          return () => el.setAttribute('draggable', 'false');
-        },
-        events: [
-          this.defineNodeEventListener(
-            'dragstart',
-            (e: CraftDOMEvent<DragEvent>, id: NodeId) => {
-              e.craft.stopPropagation();
+          this.currentSelectedElementIds = newSelectedElementIds;
+        });
 
-              const { query, actions } = this.store;
-              const selectedElementIds = query.getEvent('selected').all();
+        return () => {
+          this.store.actions.setNodeEvent('selected', null);
+          unbindOnMouseDown();
+          unbindOnClick();
+        };
+      },
+      hover: (el, id) => {
+        const unbindMouseover = bindEvent(
+          this.dom(el),
+          'mouseover',
+          (e: CraftDOMEvent<MouseEvent>) => {
+            e.craft.stopPropagation();
+            this.store.actions.setNodeEvent('hovered', id);
+          }
+        );
 
-              actions.setNodeEvent('dragged', selectedElementIds);
+        return () => {
+          this.store.actions.setNodeEvent('hovered', null);
+          unbindMouseover();
+        };
+      },
+      drop: (el, targetId: NodeId) => {
+        const unbindDragOver = bindEvent(
+          this.dom(el),
+          'dragover',
+          (e: CraftDOMEvent<MouseEvent>) => {
+            e.craft.stopPropagation();
+            e.preventDefault();
+          }
+        );
 
-              const selectedDOMs = selectedElementIds.map(
-                (id) => query.node(id).get().dom
-              );
+        const unbindDragEnter = bindEvent(
+          this.dom(el),
+          'dragenter',
+          (e: CraftDOMEvent<MouseEvent>) => {
+            e.craft.stopPropagation();
+            e.preventDefault();
 
-              DefaultEventHandlers.draggedElementShadow = createShadow(
-                e,
-                query.node(id).get().dom,
-                selectedDOMs
-              );
-              DefaultEventHandlers.draggedElement = selectedElementIds;
+            const draggedElement = DefaultEventHandlers.draggedElement;
+            if (!draggedElement) {
+              return;
             }
-          ),
-          defineEventListener('dragend', (e: CraftDOMEvent<DragEvent>) => {
+
+            let node = (draggedElement as unknown) as Node;
+
+            if ((draggedElement as NodeTree).rootNodeId) {
+              const nodeTree = draggedElement as NodeTree;
+              node = nodeTree.nodes[nodeTree.rootNodeId];
+            }
+
+            const { clientX: x, clientY: y } = e;
+            const indicator = this.store.query.getDropPlaceholder(
+              node,
+              targetId,
+              { x, y }
+            );
+
+            if (!indicator) {
+              return;
+            }
+            this.store.actions.setIndicator(indicator);
+            DefaultEventHandlers.indicator = indicator;
+          }
+        );
+
+        return () => {
+          unbindDragEnter();
+          unbindDragOver();
+        };
+      },
+      drag: (el, id) => {
+        if (this.store.query.node(id).isDraggable()) {
+          el.setAttribute('draggable', 'true');
+        }
+
+        const unbindDragStart = bindEvent(
+          this.dom(el),
+          'dragstart',
+          (e: CraftDOMEvent<DragEvent>) => {
+            e.craft.stopPropagation();
+
+            const { query, actions } = this.store;
+            const selectedElementIds = query.getEvent('selected').all();
+
+            actions.setNodeEvent('dragged', selectedElementIds);
+
+            const selectedDOMs = selectedElementIds.map(
+              (id) => query.node(id).get().dom
+            );
+
+            DefaultEventHandlers.draggedElementShadow = createShadow(
+              e,
+              query.node(id).get().dom,
+              selectedDOMs
+            );
+            DefaultEventHandlers.draggedElement = selectedElementIds;
+          }
+        );
+
+        const unbindDragEnd = bindEvent(
+          this.dom(el),
+          'dragend',
+          (e: CraftDOMEvent<DragEvent>) => {
             e.craft.stopPropagation();
             const onDropElement = (draggedElement, placement) => {
               const index =
@@ -252,32 +257,40 @@ export class DefaultEventHandlers extends CoreEventHandlers {
               );
             };
             this.dropElement(onDropElement);
-          }),
-        ],
+          }
+        );
+
+        return () => {
+          el.setAttribute('draggable', 'false');
+          unbindDragStart();
+          unbindDragEnd();
+        };
       },
-      create: {
-        init: (el) => {
-          el.setAttribute('draggable', 'true');
-          return () => el.removeAttribute('draggable');
-        },
-        events: [
-          defineEventListener(
-            'dragstart',
-            (e: CraftDOMEvent<DragEvent>, userElement: React.ReactElement) => {
-              e.craft.stopPropagation();
-              const tree = this.store.query
-                .parseReactElement(userElement)
-                .toNodeTree();
+      create: (el, userElement: React.ReactElement) => {
+        el.setAttribute('draggable', 'true');
 
-              const dom = e.currentTarget as HTMLElement;
+        const unbindDragStart = bindEvent(
+          this.dom(el),
+          'dragstart',
+          (e: CraftDOMEvent<DragEvent>) => {
+            e.craft.stopPropagation();
+            const tree = this.store.query
+              .parseReactElement(userElement)
+              .toNodeTree();
 
-              DefaultEventHandlers.draggedElementShadow = createShadow(e, dom, [
-                dom,
-              ]);
-              DefaultEventHandlers.draggedElement = tree;
-            }
-          ),
-          defineEventListener('dragend', (e: CraftDOMEvent<DragEvent>) => {
+            const dom = e.currentTarget as HTMLElement;
+
+            DefaultEventHandlers.draggedElementShadow = createShadow(e, dom, [
+              dom,
+            ]);
+            DefaultEventHandlers.draggedElement = tree;
+          }
+        );
+
+        const unbindDragEnd = bindEvent(
+          this.dom(el),
+          'dragend',
+          (e: CraftDOMEvent<DragEvent>) => {
             e.craft.stopPropagation();
             const onDropElement = (draggedElement, placement) => {
               const index =
@@ -289,8 +302,14 @@ export class DefaultEventHandlers extends CoreEventHandlers {
               );
             };
             this.dropElement(onDropElement);
-          }),
-        ],
+          }
+        );
+
+        return () => {
+          el.removeAttribute('draggable');
+          unbindDragStart();
+          unbindDragEnd();
+        };
       },
     };
   }

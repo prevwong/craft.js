@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { NodeHandlers } from './NodeHandlers';
 
@@ -24,11 +24,21 @@ export const NodeProvider: React.FC<NodeProvider> = ({
     hydrationTimestamp: state.nodes[id] && state.nodes[id]._hydrationTimestamp,
   }));
 
-  // Get fresh connectors whenever the Nodes are rehydrated (eg: after deserialisation)
-  const connectors = useMemo(() => {
-    return handlers.derive(NodeHandlers, id).connectors();
-    // eslint-disable-next-line  react-hooks/exhaustive-deps
-  }, [handlers, hydrationTimestamp, id]);
+  const nodeHandlers = useMemo(() => {
+    return new NodeHandlers(handlers, id);
+  }, [handlers, id, hydrationTimestamp]);
+
+  const connectors = useMemo(() => nodeHandlers.connectors(), [nodeHandlers]);
+
+  useEffect(() => {
+    return () => {
+      if (!nodeHandlers) {
+        return;
+      }
+
+      nodeHandlers.cleanup();
+    };
+  }, []);
 
   return (
     <NodeContext.Provider value={{ id, related, connectors }}>

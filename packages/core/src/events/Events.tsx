@@ -51,9 +51,7 @@ export const Events: React.FC = ({ children }) => {
       return;
     }
 
-    console.log(88);
     if (!enabled) {
-      console.log('disablign!');
       handlersRef.current.disable();
       return;
     }
