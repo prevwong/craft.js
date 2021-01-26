@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-alpha.11 (2021-01-26)
+
+
+### Bug Fixes
+
+* **slate:** split operation bug ([#169](https://github.com/prevwong/craft.js/issues/169)) ([9a7b3b3](https://github.com/prevwong/craft.js/commit/9a7b3b3e3a4f6d71d2ef5d9d1de1cb4d2c931696))
+
+
+
+
+
 # 0.2.0-alpha.10 (2021-01-22)
 
 
