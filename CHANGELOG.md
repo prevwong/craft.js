@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-alpha.12 (2021-01-28)
+
+
+### Bug Fixes
+
+* **slate:** delete orphaned nodes ([#171](https://github.com/prevwong/craft.js/issues/171)) ([f201ddc](https://github.com/prevwong/craft.js/commit/f201ddc8a26cd09deab69220a9099bb5ff2c6973))
+
+
+
+
+
 # 0.2.0-alpha.11 (2021-01-26)
 
 
