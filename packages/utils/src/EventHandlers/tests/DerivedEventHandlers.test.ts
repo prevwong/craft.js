@@ -4,7 +4,7 @@ import {
   triggerMouseEvent,
 } from './fixtures';
 
-describe('derived handlers', () => {
+describe('DerivedEventHandlers', () => {
   let dom, instance, handlers, derivedInstance, derivedHandlers;
   beforeEach(() => {
     dom = document.createElement('a');

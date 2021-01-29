@@ -1,14 +1,14 @@
 import { useMemo, useContext } from 'react';
 
 import { NodeContext, NodeProvider } from './NodeContext';
-import { NodeConnectors } from './NodeHandlers';
+import { NodeEventConnectors } from './NodeHandlers';
 
 import { useInternalEditor } from '../editor/useInternalEditor';
 import { Node } from '../interfaces';
 
 type internalActions = NodeProvider & {
   inNodeContext: boolean;
-  connectors: NodeConnectors;
+  connectors: NodeEventConnectors;
   actions: {
     setProp: (cb: (props: any) => void, throttleRate?: number) => void;
     setCustom: (cb: (custom: any) => void, throttleRate?: number) => void;

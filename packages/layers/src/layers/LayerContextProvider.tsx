@@ -15,7 +15,11 @@ export const LayerContextProvider: React.FC<Omit<
 
   const { store } = useContext(LayerManagerContext);
   const connectors = useMemo(
-    () => handler.derive(LayerHandlers, store, id).connectors(),
+    () =>
+      handler.derive(LayerHandlers, {
+        layerStore: store,
+        layerId: id,
+      }).connectors,
     [handler, id, store]
   );
 

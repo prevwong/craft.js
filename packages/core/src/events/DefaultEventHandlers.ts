@@ -6,37 +6,33 @@ import { Indicator, NodeId, NodeTree, Node } from '../interfaces';
 type DraggedElement = NodeId[] | NodeTree;
 
 type DefaultEventHandlersOptions = {
-  isMultiSelectEnabled: (e) => boolean;
+  isMultiSelectEnabled: (e: MouseEvent) => boolean;
 };
 
 /**
  * Specifies Editor-wide event handlers and connectors
  */
-export class DefaultEventHandlers extends CoreEventHandlers {
+export class DefaultEventHandlers extends CoreEventHandlers<
+  DefaultEventHandlersOptions
+> {
   static draggedElementShadow: HTMLElement;
   static draggedElement: DraggedElement;
   static indicator: Indicator = null;
-
-  options: DefaultEventHandlersOptions;
   currentSelectedElementIds = [];
 
-  constructor(store, options?: DefaultEventHandlersOptions) {
-    super(store);
-    this.options = {
-      isMultiSelectEnabled: (e: MouseEvent) => !!e.metaKey,
-      ...(options || {}),
-    };
-  }
-
   handlers() {
+    const store = this.options.store;
+
     return {
       connect: (el: HTMLElement, id: NodeId) => {
-        this.store.actions.setDOM(id, el);
-        this.connectors().select(el, id);
-        this.connectors().hover(el, id);
-        this.connectors().drop(el, id);
-        this.connectors().drag(el, id);
-        return () => {};
+        store.actions.setDOM(id, el);
+
+        return this.reflect((connectors) => {
+          connectors.select(el, id);
+          connectors.hover(el, id);
+          connectors.drag(el, id);
+          connectors.drop(el, id);
+        });
       },
       select: (el: HTMLElement, id: NodeId) => {
         const unbindOnMouseDown = this.addCraftEventListener(
@@ -48,7 +44,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
             let newSelectedElementIds = [];
 
             if (id) {
-              const { query } = this.store;
+              const { query } = store;
               const selectedElementIds = query.getEvent('selected').all();
               const isMultiSelect = this.options.isMultiSelectEnabled(e);
 
@@ -82,14 +78,14 @@ export class DefaultEventHandlers extends CoreEventHandlers {
               }
             }
 
-            this.store.actions.setNodeEvent('selected', newSelectedElementIds);
+            store.actions.setNodeEvent('selected', newSelectedElementIds);
           }
         );
 
         const unbindOnClick = this.addCraftEventListener(el, 'click', (e) => {
           e.craft.stopPropagation();
 
-          const { query } = this.store;
+          const { query } = store;
           const selectedElementIds = query.getEvent('selected').all();
 
           const isMultiSelect = this.options.isMultiSelectEnabled(e);
@@ -101,17 +97,17 @@ export class DefaultEventHandlers extends CoreEventHandlers {
 
           if (isMultiSelect && isNodeAlreadySelected) {
             newSelectedElementIds.splice(newSelectedElementIds.indexOf(id), 1);
-            this.store.actions.setNodeEvent('selected', newSelectedElementIds);
+            store.actions.setNodeEvent('selected', newSelectedElementIds);
           } else if (!isMultiSelect && selectedElementIds.length > 1) {
             newSelectedElementIds = [id];
-            this.store.actions.setNodeEvent('selected', newSelectedElementIds);
+            store.actions.setNodeEvent('selected', newSelectedElementIds);
           }
 
           this.currentSelectedElementIds = newSelectedElementIds;
         });
 
         return () => {
-          this.store.actions.setNodeEvent('selected', null);
+          store.actions.setNodeEvent('selected', null);
           unbindOnMouseDown();
           unbindOnClick();
         };
@@ -122,12 +118,12 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           'mouseover',
           (e) => {
             e.craft.stopPropagation();
-            this.store.actions.setNodeEvent('hovered', id);
+            store.actions.setNodeEvent('hovered', id);
           }
         );
 
         return () => {
-          this.store.actions.setNodeEvent('hovered', null);
+          store.actions.setNodeEvent('hovered', null);
           unbindMouseover();
         };
       },
@@ -161,16 +157,15 @@ export class DefaultEventHandlers extends CoreEventHandlers {
             }
 
             const { clientX: x, clientY: y } = e;
-            const indicator = this.store.query.getDropPlaceholder(
-              node,
-              targetId,
-              { x, y }
-            );
+            const indicator = store.query.getDropPlaceholder(node, targetId, {
+              x,
+              y,
+            });
 
             if (!indicator) {
               return;
             }
-            this.store.actions.setIndicator(indicator);
+            store.actions.setIndicator(indicator);
             DefaultEventHandlers.indicator = indicator;
           }
         );
@@ -181,7 +176,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
         };
       },
       drag: (el: HTMLElement, id: NodeId) => {
-        if (this.store.query.node(id).isDraggable()) {
+        if (store.query.node(id).isDraggable()) {
           el.setAttribute('draggable', 'true');
         }
 
@@ -191,7 +186,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           (e) => {
             e.craft.stopPropagation();
 
-            const { query, actions } = this.store;
+            const { query, actions } = store;
             const selectedElementIds = query.getEvent('selected').all();
 
             actions.setNodeEvent('dragged', selectedElementIds);
@@ -214,7 +209,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           const onDropElement = (draggedElement, placement) => {
             const index =
               placement.index + (placement.where === 'after' ? 1 : 0);
-            this.store.actions.move(draggedElement, placement.parent.id, index);
+            store.actions.move(draggedElement, placement.parent.id, index);
           };
           this.dropElement(onDropElement);
         });
@@ -233,7 +228,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           'dragstart',
           (e) => {
             e.craft.stopPropagation();
-            const tree = this.store.query
+            const tree = store.query
               .parseReactElement(userElement)
               .toNodeTree();
 
@@ -251,7 +246,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           const onDropElement = (draggedElement, placement) => {
             const index =
               placement.index + (placement.where === 'after' ? 1 : 0);
-            this.store.actions.addNodeTree(
+            store.actions.addNodeTree(
               draggedElement,
               placement.parent.id,
               index
@@ -275,6 +270,8 @@ export class DefaultEventHandlers extends CoreEventHandlers {
       placement: Indicator['placement']
     ) => void
   ) {
+    const store = this.options.store;
+
     const {
       draggedElement,
       draggedElementShadow,
@@ -293,7 +290,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
     DefaultEventHandlers.draggedElement = null;
     DefaultEventHandlers.indicator = null;
 
-    this.store.actions.setIndicator(null);
-    this.store.actions.setNodeEvent('dragged', null);
+    store.actions.setIndicator(null);
+    store.actions.setNodeEvent('dragged', null);
   }
 }

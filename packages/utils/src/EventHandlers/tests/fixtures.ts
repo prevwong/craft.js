@@ -1,5 +1,5 @@
-import { Handlers } from '../Handlers';
-import { DerivedHandlers } from '../DerivedHandlers';
+import { EventHandlers } from '../EventHandlers';
+import { DerivedEventHandlers } from '../DerivedEventHandlers';
 
 export function triggerMouseEvent(node, eventType) {
   const clickEvent = document.createEvent('MouseEvents');
@@ -36,13 +36,13 @@ export const createTestHandlers = () => {
     return accum;
   }, {});
 
-  class CoreHandlers extends Handlers {
+  class CoreHandlers extends EventHandlers {
     handlers() {
       return Object.keys(testHandlers).reduce((accum, key) => {
         accum[key] = (el, ...args) => {
           const cleanup = testHandlers[key].init(el, ...args);
           const listenersToRemove = Object.keys(testHandlers[key].events).map(
-            (eventName) => {
+            (eventName: any) => {
               this.addCraftEventListener(
                 el,
                 eventName,
@@ -93,13 +93,13 @@ export const createTestDerivedHandlers = (core: any) => {
     return accum;
   }, {});
 
-  class DerivedEventHandlers extends DerivedHandlers {
+  class TestDerivedHandlers extends DerivedEventHandlers<any> {
     handlers() {
       return Object.keys(testHandlers).reduce((accum, key) => {
         accum[key] = (el, ...args) => {
           const cleanup = testHandlers[key].init(el, ...args);
           const listenersToRemove = Object.keys(testHandlers[key].events).map(
-            (eventName) => {
+            (eventName: any) => {
               this.addCraftEventListener(
                 el,
                 eventName,
@@ -131,7 +131,7 @@ export const createTestDerivedHandlers = (core: any) => {
     }
   }
 
-  const instance = new DerivedEventHandlers(core);
+  const instance = new TestDerivedHandlers(core);
 
   return {
     instance,

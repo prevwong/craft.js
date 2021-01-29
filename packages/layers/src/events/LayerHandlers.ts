@@ -1,11 +1,11 @@
-import { NodeId, Node } from '@craftjs/core';
-import { DerivedHandlers } from '@craftjs/utils';
+import { NodeId, Node, DerivedCoreEventHandlers } from '@craftjs/core';
 
 import { LayerIndicator } from '../interfaces';
 
-export class LayerHandlers extends DerivedHandlers {
-  private id;
-  private layerStore;
+export class LayerHandlers extends DerivedCoreEventHandlers<{
+  layerStore: any;
+  layerId: NodeId;
+}> {
   static draggedElement;
   static events: {
     indicator: LayerIndicator;
@@ -16,28 +16,22 @@ export class LayerHandlers extends DerivedHandlers {
   };
   static currentCanvasHovered;
 
-  constructor(derived, layerStore, layerId) {
-    super(derived);
-    this.id = layerId;
-    this.layerStore = layerStore;
-  }
-
   getLayer(id) {
-    return this.layerStore.getState().layers[id];
+    return this.options.layerStore.getState().layers[id];
   }
 
   handlers() {
-    const editorStore = this.derived.store;
+    const editorStore = this.derived.options.store;
+    const { layerStore, layerId } = this.options;
 
     return {
       layer: (el) => {
         const cleanupParentConnectors = this.inherit((connectors) => {
-          console.log('connecting', this.derived);
-          connectors.select(el, this.id);
-          connectors.hover(el, this.id);
-          connectors.drag(el, this.id);
+          connectors.select(el, layerId);
+          connectors.hover(el, layerId);
+          connectors.drag(el, layerId);
 
-          this.layerStore.actions.setDOM(this.id, {
+          layerStore.actions.setDOM(layerId, {
             dom: el,
           });
         });
@@ -47,7 +41,7 @@ export class LayerHandlers extends DerivedHandlers {
           'mouseover',
           (e) => {
             e.craft.stopPropagation();
-            this.layerStore.actions.setLayerEvent('hovered', this.id);
+            layerStore.actions.setLayerEvent('hovered', layerId);
           }
         );
 
@@ -91,9 +85,7 @@ export class LayerHandlers extends DerivedHandlers {
                   onCanvas: true,
                 };
 
-                this.layerStore.actions.setIndicator(
-                  LayerHandlers.events.indicator
-                );
+                layerStore.actions.setIndicator(LayerHandlers.events.indicator);
               }
             }
           }
@@ -110,7 +102,7 @@ export class LayerHandlers extends DerivedHandlers {
 
             if (!dragId) return;
 
-            let target = this.id;
+            let target = layerId;
 
             const indicatorInfo = editorStore.query.getDropPlaceholder(
               dragId,
@@ -166,9 +158,7 @@ export class LayerHandlers extends DerivedHandlers {
                 onCanvas: false,
               };
 
-              this.layerStore.actions.setIndicator(
-                LayerHandlers.events.indicator
-              );
+              layerStore.actions.setIndicator(LayerHandlers.events.indicator);
             }
           }
         );
@@ -181,7 +171,7 @@ export class LayerHandlers extends DerivedHandlers {
         };
       },
       layerHeader: (el) => {
-        this.layerStore.actions.setDOM(this.id, {
+        layerStore.actions.setDOM(layerId, {
           headingDom: el,
         });
       },
@@ -193,7 +183,7 @@ export class LayerHandlers extends DerivedHandlers {
           'dragstart',
           (e) => {
             e.craft.stopPropagation();
-            LayerHandlers.draggedElement = this.id;
+            LayerHandlers.draggedElement = layerId;
           }
         );
 
@@ -215,7 +205,7 @@ export class LayerHandlers extends DerivedHandlers {
 
           LayerHandlers.draggedElement = null;
           LayerHandlers.events.indicator = null;
-          this.layerStore.actions.setIndicator(null);
+          layerStore.actions.setIndicator(null);
         });
 
         return () => {
@@ -228,4 +218,4 @@ export class LayerHandlers extends DerivedHandlers {
   }
 }
 
-export type LayerConnectors = any;
+export type LayerEventConnectors = LayerHandlers['connectors'];

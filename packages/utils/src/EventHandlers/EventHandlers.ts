@@ -14,12 +14,13 @@ export type CraftEventListener<K extends keyof HTMLElementEventMap> = (
 ) => any;
 
 export type ChainableConnector<T extends (...args: any) => any> = T extends (
+  element: infer E,
   ...args: infer P
 ) => any
-  ? (...args: P) => HTMLElement
+  ? (element: E, ...args: P) => E
   : never;
 
-export type GetChainableConnectors<H extends Handlers> = {
+export type ChainableConnectors<H extends EventHandlers> = {
   [T in keyof ReturnType<H['handlers']>]: ReturnType<H['handlers']>[T] extends (
     ...args: any
   ) => any
@@ -27,13 +28,15 @@ export type GetChainableConnectors<H extends Handlers> = {
     : never;
 };
 
-export abstract class Handlers {
+export abstract class EventHandlers<O extends Record<string, any> = {}> {
   private registry: ConnectorRegistry = new ConnectorRegistry();
   private subscribers: Set<(...args: any[]) => void> = new Set();
-  private bindedEventListeners: WeakMap<
-    CraftEventListener<any>,
-    CraftEventListener<any>
-  > = new WeakMap();
+
+  options: O;
+
+  constructor(options: O) {
+    this.options = options;
+  }
 
   listen(cb: any) {
     this.subscribers.add(cb);
@@ -89,27 +92,15 @@ export abstract class Handlers {
       }
     };
 
-    this.bindedEventListeners.set(listener, bindedListener);
     el.addEventListener(eventName, bindedListener, options);
 
-    return () =>
-      this.removeCraftEventListener(el, eventName, listener, options);
-  }
-
-  removeCraftEventListener<K extends keyof HTMLElementEventMap>(
-    el: HTMLElement,
-    eventName: K,
-    listener: CraftEventListener<K>,
-    options?: boolean | EventListenerOptions
-  ) {
-    const bindedListener = this.bindedEventListeners.get(listener) || listener;
-    return el.removeEventListener(eventName, bindedListener, options);
+    return () => el.addEventListener(eventName, bindedListener, options);
   }
 
   // Defines the connectors and their logic
   abstract handlers(): Record<string, (el: HTMLElement, ...args: any[]) => any>;
 
-  connectors(): GetChainableConnectors<this> {
+  get connectors(): ChainableConnectors<this> {
     const connectors = this.handlers();
     return Object.keys(connectors).reduce(
       (accum, connectorName) => ({
@@ -126,7 +117,49 @@ export abstract class Handlers {
     ) as any;
   }
 
-  derive(t: any, ...args) {
-    return new t(this, ...args);
+  derive<C extends EventHandlers>(
+    type: {
+      new (...args: any[]): C;
+    },
+    opts: C['options']
+  ) {
+    return new type(this, opts);
+  }
+
+  protected createProxyHandlers<H extends EventHandlers>(
+    instance: H,
+    cb: (connectors: ChainableConnectors<H>) => void
+  ) {
+    const connectorsToCleanup = [];
+    const handlers = instance.handlers();
+
+    const proxiedHandlers = new Proxy(handlers, {
+      get: (target, key: any, receiver) => {
+        if (key in handlers === false) {
+          return Reflect.get(target, key, receiver);
+        }
+
+        return (el, ...args) => {
+          const cleanup = handlers[key](el, ...args);
+          if (!cleanup) {
+            return;
+          }
+
+          connectorsToCleanup.push(cleanup);
+        };
+      },
+    });
+
+    cb(proxiedHandlers as any);
+
+    return () => {
+      connectorsToCleanup.forEach((cleanup) => {
+        cleanup();
+      });
+    };
+  }
+
+  reflect(cb: (connectors: ChainableConnectors<this>) => void) {
+    return this.createProxyHandlers(this, cb);
   }
 }

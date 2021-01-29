@@ -49,13 +49,13 @@ function throwIfCompositeComponentElement(element: React.ReactElement<any>) {
 }
 
 export function wrapHookToRecognizeElement(
-  hook: (node: any, opts: any) => void
+  hook: (node: any, ...args: any[]) => void
 ) {
-  return (elementOrNode = null, opts: any) => {
+  return (elementOrNode = null, ...args: any) => {
     // When passed a node, call the hook straight away.
     if (!isValidElement(elementOrNode)) {
       const node = elementOrNode;
-      node && hook(node, opts);
+      node && hook(node, ...args);
       return node;
     }
 
@@ -68,14 +68,3 @@ export function wrapHookToRecognizeElement(
     return cloneWithRef(element, hook);
   };
 }
-
-export type ConnectableElement =
-  | React.RefObject<any>
-  | React.ReactElement
-  | Element
-  | null;
-
-export type Connector = (
-  elementOrNode: ConnectableElement,
-  options?: any
-) => React.ReactElement | null;

@@ -1,6 +1,6 @@
 import { createTestHandlers, triggerMouseEvent } from './fixtures';
 
-describe('CoreEventHandlers', () => {
+describe('EventHandlers', () => {
   let instance, dom, handlers;
 
   beforeEach(() => {

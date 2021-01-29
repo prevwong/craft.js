@@ -2,7 +2,7 @@ export * from './constants';
 export * from './useMethods';
 export * from './getDOMInfo';
 export * from './useCollector';
-export * from './Handlers';
+export * from './EventHandlers';
 export * from './RenderIndicator';
 export * from './useEffectOnce';
 export * from './deprecate';
