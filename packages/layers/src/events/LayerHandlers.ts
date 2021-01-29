@@ -1,16 +1,9 @@
-import {
-  NodeId,
-  Node,
-  DerivedHandlers,
-  CraftDOMEvent,
-  defineEventListener,
-} from '@craftjs/core';
+import { NodeId, Node } from '@craftjs/core';
+import { DerivedHandlers } from '@craftjs/utils';
 
 import { LayerIndicator } from '../interfaces';
 
-export class LayerHandlers extends DerivedHandlers<
-  'layer' | 'layerHeader' | 'drag'
-> {
+export class LayerHandlers extends DerivedHandlers {
   private id;
   private layerStore;
   static draggedElement;
@@ -34,29 +27,34 @@ export class LayerHandlers extends DerivedHandlers<
   }
 
   handlers() {
-    const parentConnectors = this.derived.connectors();
     const editorStore = this.derived.store;
 
     return {
-      layer: {
-        init: (el) => {
-          parentConnectors.select(el, this.id);
-          parentConnectors.hover(el, this.id);
-          parentConnectors.drag(el, this.id);
+      layer: (el) => {
+        const cleanupParentConnectors = this.inherit((connectors) => {
+          console.log('connecting', this.derived);
+          connectors.select(el, this.id);
+          connectors.hover(el, this.id);
+          connectors.drag(el, this.id);
 
           this.layerStore.actions.setDOM(this.id, {
             dom: el,
           });
-        },
-        events: [
-          defineEventListener(
-            'mouseover',
-            (e: CraftDOMEvent<MouseEvent>, id) => {
-              e.craft.stopPropagation();
-              this.layerStore.actions.setLayerEvent('hovered', id);
-            }
-          ),
-          defineEventListener('dragover', (e: CraftDOMEvent<DragEvent>) => {
+        });
+
+        const unbindMouseOver = this.addCraftEventListener(
+          el,
+          'mouseover',
+          (e) => {
+            e.craft.stopPropagation();
+            this.layerStore.actions.setLayerEvent('hovered', this.id);
+          }
+        );
+
+        const unbindDragOver = this.addCraftEventListener(
+          el,
+          'dragover',
+          (e) => {
             e.craft.stopPropagation();
             e.preventDefault();
 
@@ -98,8 +96,13 @@ export class LayerHandlers extends DerivedHandlers<
                 );
               }
             }
-          }),
-          defineEventListener('dragenter', (e: CraftDOMEvent<DragEvent>) => {
+          }
+        );
+
+        const unbindDragEnter = this.addCraftEventListener(
+          el,
+          'dragenter',
+          (e) => {
             e.craft.stopPropagation();
             e.preventDefault();
 
@@ -167,50 +170,59 @@ export class LayerHandlers extends DerivedHandlers<
                 LayerHandlers.events.indicator
               );
             }
-          }),
-        ],
-      },
-      layerHeader: {
-        init: (el) => {
-          this.layerStore.actions.setDOM(this.id, {
-            headingDom: el,
-          });
-        },
-      },
-      drag: {
-        init: (el) => {
-          el.setAttribute('draggable', true);
+          }
+        );
 
-          return () => {
-            el.removeAttribute('draggable');
-          };
-        },
-        events: [
-          defineEventListener('dragstart', (e: CraftDOMEvent<MouseEvent>) => {
+        return () => {
+          cleanupParentConnectors();
+          unbindMouseOver();
+          unbindDragOver();
+          unbindDragEnter();
+        };
+      },
+      layerHeader: (el) => {
+        this.layerStore.actions.setDOM(this.id, {
+          headingDom: el,
+        });
+      },
+      drag: (el) => {
+        el.setAttribute('draggable', true);
+
+        const unbindDragStart = this.addCraftEventListener(
+          el,
+          'dragstart',
+          (e) => {
             e.craft.stopPropagation();
             LayerHandlers.draggedElement = this.id;
-          }),
-          defineEventListener('dragend', (e: CraftDOMEvent<MouseEvent>, id) => {
-            e.craft.stopPropagation();
-            const events = LayerHandlers.events;
+          }
+        );
 
-            if (events.indicator && !events.indicator.error) {
-              const { placement } = events.indicator;
-              const { parent, index, where } = placement;
-              const { id: parentId } = parent;
+        const unbindDragEnd = this.addCraftEventListener(el, 'dragend', (e) => {
+          e.craft.stopPropagation();
+          const events = LayerHandlers.events;
 
-              editorStore.actions.move(
-                LayerHandlers.draggedElement as NodeId,
-                parentId,
-                index + (where === 'after' ? 1 : 0)
-              );
-            }
+          if (events.indicator && !events.indicator.error) {
+            const { placement } = events.indicator;
+            const { parent, index, where } = placement;
+            const { id: parentId } = parent;
 
-            LayerHandlers.draggedElement = null;
-            LayerHandlers.events.indicator = null;
-            this.layerStore.actions.setIndicator(null);
-          }),
-        ],
+            editorStore.actions.move(
+              LayerHandlers.draggedElement as NodeId,
+              parentId,
+              index + (where === 'after' ? 1 : 0)
+            );
+          }
+
+          LayerHandlers.draggedElement = null;
+          LayerHandlers.events.indicator = null;
+          this.layerStore.actions.setIndicator(null);
+        });
+
+        return () => {
+          el.removeAttribute('draggable');
+          unbindDragStart();
+          unbindDragEnd();
+        };
       },
     };
   }

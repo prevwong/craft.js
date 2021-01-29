@@ -1,28 +1,26 @@
-import { DerivedHandlers } from '../events/Handlers';
+import { DerivedHandlers } from '@craftjs/utils';
+
+import { NodeId } from '../interfaces';
+import { CoreEventHandlers } from '../events';
 
 /**
  * Creates Node-specific event handlers and connectors
  */
-export class NodeHandlers extends DerivedHandlers {
+export class NodeHandlers extends DerivedHandlers<CoreEventHandlers> {
   id;
 
-  constructor(derived, nodeId) {
+  constructor(derived: CoreEventHandlers, nodeId: NodeId) {
     super(derived);
     this.id = nodeId;
   }
 
   handlers() {
-    const parentConnectors = this.derived.connectors();
     return {
-      connect: (el) => {
-        const cleanup = parentConnectors.connect(el, this.id);
-        return () => cleanup();
+      connect: (el: HTMLElement) => {
+        return this.inherit((connectors) => connectors.connect(el, this.id));
       },
-      drag: (el) => {
-        const cleanup = parentConnectors.drag(el, this.id);
-        return () => {
-          cleanup();
-        };
+      drag: (el: HTMLElement) => {
+        return this.inherit((connectors) => connectors.drag(el, this.id));
       },
     };
   }

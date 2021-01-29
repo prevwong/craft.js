@@ -24,9 +24,11 @@ export const NodeProvider: React.FC<NodeProvider> = ({
     hydrationTimestamp: state.nodes[id] && state.nodes[id]._hydrationTimestamp,
   }));
 
-  const nodeHandlers = useMemo(() => {
-    return new NodeHandlers(handlers, id);
-  }, [handlers, id, hydrationTimestamp]);
+  const nodeHandlers = useMemo(() => handlers.derive(NodeHandlers, id), [
+    handlers,
+    id,
+    hydrationTimestamp,
+  ]);
 
   const connectors = useMemo(() => nodeHandlers.connectors(), [nodeHandlers]);
 

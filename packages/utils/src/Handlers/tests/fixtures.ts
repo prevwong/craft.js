@@ -43,12 +43,14 @@ export const createTestHandlers = () => {
           const cleanup = testHandlers[key].init(el, ...args);
           const listenersToRemove = Object.keys(testHandlers[key].events).map(
             (eventName) => {
-              el.addEventListener(
+              this.addCraftEventListener(
+                el,
                 eventName,
                 testHandlers[key].events[eventName]
               );
               return () =>
-                el.removeEventListener(
+                this.removeCraftEventListener(
+                  el,
                   eventName,
                   testHandlers[key].events[eventName]
                 );
@@ -93,27 +95,29 @@ export const createTestDerivedHandlers = (core: any) => {
 
   class DerivedEventHandlers extends DerivedHandlers {
     handlers() {
-      const parentConnectors = this.derived.connectors();
-
       return Object.keys(testHandlers).reduce((accum, key) => {
         accum[key] = (el, ...args) => {
           const cleanup = testHandlers[key].init(el, ...args);
           const listenersToRemove = Object.keys(testHandlers[key].events).map(
             (eventName) => {
-              el.addEventListener(
+              this.addCraftEventListener(
+                el,
                 eventName,
                 testHandlers[key].events[eventName]
               );
 
               return () =>
-                el.removeEventListener(
+                this.removeCraftEventListener(
+                  el,
                   eventName,
                   testHandlers[key].events[eventName]
                 );
             }
           );
 
-          const cleanupParent = parentConnectors[key](el, ...args);
+          const cleanupParent = this.inherit((connectors) => {
+            connectors[key](el, ...args);
+          });
 
           return () => {
             cleanup();

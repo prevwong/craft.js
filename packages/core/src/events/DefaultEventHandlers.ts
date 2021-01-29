@@ -1,24 +1,12 @@
 import { CoreEventHandlers } from './CoreEventHandlers';
 import { createShadow } from './createShadow';
 
-import { defineEventListener } from './defineEventListener';
-import {
-  Indicator,
-  NodeId,
-  NodeTree,
-  Node,
-  CraftDOMEvent,
-} from '../interfaces';
+import { Indicator, NodeId, NodeTree, Node } from '../interfaces';
 
 type DraggedElement = NodeId[] | NodeTree;
 
 type DefaultEventHandlersOptions = {
   isMultiSelectEnabled: (e) => boolean;
-};
-
-const bindEvent = (el, eventName, listener, capture?) => {
-  el.addEventListener(eventName, listener, capture);
-  return () => el.removeEventListener(eventName, listener, capture);
 };
 
 /**
@@ -40,42 +28,21 @@ export class DefaultEventHandlers extends CoreEventHandlers {
     };
   }
 
-  // Safely run handler if Node Id exists
-  defineNodeEventListener(
-    eventName: string,
-    handler: (e: CraftDOMEvent<Event>, id: NodeId) => void,
-    capture?: boolean
-  ) {
-    return defineEventListener(
-      eventName,
-      (e: CraftDOMEvent<Event>, id: NodeId) => {
-        if (id) {
-          const node = this.store.query.node(id).get();
-          if (!node) {
-            return;
-          }
-        }
-
-        handler(e, id);
-      },
-      capture
-    );
-  }
-
   handlers() {
     return {
-      connect: (el, id) => {
+      connect: (el: HTMLElement, id: NodeId) => {
         this.store.actions.setDOM(id, el);
         this.connectors().select(el, id);
+        this.connectors().hover(el, id);
         this.connectors().drop(el, id);
         this.connectors().drag(el, id);
         return () => {};
       },
-      select: (el, id) => {
-        const unbindOnMouseDown = bindEvent(
-          this.dom(el),
+      select: (el: HTMLElement, id: NodeId) => {
+        const unbindOnMouseDown = this.addCraftEventListener(
+          el,
           'mousedown',
-          (e: CraftDOMEvent<MouseEvent>) => {
+          (e) => {
             e.craft.stopPropagation();
 
             let newSelectedElementIds = [];
@@ -119,7 +86,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           }
         );
 
-        const unbindOnClick = bindEvent(this.dom(el), 'click', (e) => {
+        const unbindOnClick = this.addCraftEventListener(el, 'click', (e) => {
           e.craft.stopPropagation();
 
           const { query } = this.store;
@@ -149,11 +116,11 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           unbindOnClick();
         };
       },
-      hover: (el, id) => {
-        const unbindMouseover = bindEvent(
-          this.dom(el),
+      hover: (el: HTMLElement, id: NodeId) => {
+        const unbindMouseover = this.addCraftEventListener(
+          el,
           'mouseover',
-          (e: CraftDOMEvent<MouseEvent>) => {
+          (e) => {
             e.craft.stopPropagation();
             this.store.actions.setNodeEvent('hovered', id);
           }
@@ -164,20 +131,20 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           unbindMouseover();
         };
       },
-      drop: (el, targetId: NodeId) => {
-        const unbindDragOver = bindEvent(
-          this.dom(el),
+      drop: (el: HTMLElement, targetId: NodeId) => {
+        const unbindDragOver = this.addCraftEventListener(
+          el,
           'dragover',
-          (e: CraftDOMEvent<MouseEvent>) => {
+          (e) => {
             e.craft.stopPropagation();
             e.preventDefault();
           }
         );
 
-        const unbindDragEnter = bindEvent(
-          this.dom(el),
+        const unbindDragEnter = this.addCraftEventListener(
+          el,
           'dragenter',
-          (e: CraftDOMEvent<MouseEvent>) => {
+          (e) => {
             e.craft.stopPropagation();
             e.preventDefault();
 
@@ -213,15 +180,15 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           unbindDragOver();
         };
       },
-      drag: (el, id) => {
+      drag: (el: HTMLElement, id: NodeId) => {
         if (this.store.query.node(id).isDraggable()) {
           el.setAttribute('draggable', 'true');
         }
 
-        const unbindDragStart = bindEvent(
-          this.dom(el),
+        const unbindDragStart = this.addCraftEventListener(
+          el,
           'dragstart',
-          (e: CraftDOMEvent<DragEvent>) => {
+          (e) => {
             e.craft.stopPropagation();
 
             const { query, actions } = this.store;
@@ -242,23 +209,15 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           }
         );
 
-        const unbindDragEnd = bindEvent(
-          this.dom(el),
-          'dragend',
-          (e: CraftDOMEvent<DragEvent>) => {
-            e.craft.stopPropagation();
-            const onDropElement = (draggedElement, placement) => {
-              const index =
-                placement.index + (placement.where === 'after' ? 1 : 0);
-              this.store.actions.move(
-                draggedElement,
-                placement.parent.id,
-                index
-              );
-            };
-            this.dropElement(onDropElement);
-          }
-        );
+        const unbindDragEnd = this.addCraftEventListener(el, 'dragend', (e) => {
+          e.craft.stopPropagation();
+          const onDropElement = (draggedElement, placement) => {
+            const index =
+              placement.index + (placement.where === 'after' ? 1 : 0);
+            this.store.actions.move(draggedElement, placement.parent.id, index);
+          };
+          this.dropElement(onDropElement);
+        });
 
         return () => {
           el.setAttribute('draggable', 'false');
@@ -266,13 +225,13 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           unbindDragEnd();
         };
       },
-      create: (el, userElement: React.ReactElement) => {
+      create: (el: HTMLElement, userElement: React.ReactElement) => {
         el.setAttribute('draggable', 'true');
 
-        const unbindDragStart = bindEvent(
-          this.dom(el),
+        const unbindDragStart = this.addCraftEventListener(
+          el,
           'dragstart',
-          (e: CraftDOMEvent<DragEvent>) => {
+          (e) => {
             e.craft.stopPropagation();
             const tree = this.store.query
               .parseReactElement(userElement)
@@ -287,23 +246,19 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           }
         );
 
-        const unbindDragEnd = bindEvent(
-          this.dom(el),
-          'dragend',
-          (e: CraftDOMEvent<DragEvent>) => {
-            e.craft.stopPropagation();
-            const onDropElement = (draggedElement, placement) => {
-              const index =
-                placement.index + (placement.where === 'after' ? 1 : 0);
-              this.store.actions.addNodeTree(
-                draggedElement,
-                placement.parent.id,
-                index
-              );
-            };
-            this.dropElement(onDropElement);
-          }
-        );
+        const unbindDragEnd = this.addCraftEventListener(el, 'dragend', (e) => {
+          e.craft.stopPropagation();
+          const onDropElement = (draggedElement, placement) => {
+            const index =
+              placement.index + (placement.where === 'after' ? 1 : 0);
+            this.store.actions.addNodeTree(
+              draggedElement,
+              placement.parent.id,
+              index
+            );
+          };
+          this.dropElement(onDropElement);
+        });
 
         return () => {
           el.removeAttribute('draggable');

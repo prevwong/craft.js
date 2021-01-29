@@ -45,10 +45,6 @@ function throwIfCompositeComponentElement(element: React.ReactElement<any>) {
     return;
   }
 
-  // const displayName =
-  //   (element.type as any).displayName || element.type.name || 'the component'
-
-  // TODO: add error message
   throw new Error();
 }
 

@@ -1,5 +1,6 @@
+import { Handlers } from '@craftjs/utils';
+
 import { EditorStore } from '../editor';
-import { Handlers } from './Handlers';
 
 type CoreConnectorTypes =
   | 'select'
@@ -15,4 +16,9 @@ export abstract class CoreEventHandlers extends Handlers {
     super();
     this.store = store;
   }
+
+  abstract handlers(): Record<
+    CoreConnectorTypes,
+    (el: HTMLElement, ...args: any[]) => any
+  >;
 }
