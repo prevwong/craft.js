@@ -1,19 +1,27 @@
+export const round = Math.round;
+
+export const getComputedStyle = (dom: HTMLElement) => {
+  return window.getComputedStyle(dom);
+};
+
 export const getDOMPadding = (dom: HTMLElement) => {
   return {
-    left: parseInt(window.getComputedStyle(dom).paddingLeft),
-    right: parseInt(window.getComputedStyle(dom).paddingRight),
-    bottom: parseInt(window.getComputedStyle(dom).paddingTop),
-    top: parseInt(window.getComputedStyle(dom).paddingBottom),
+    left: parseInt(getComputedStyle(dom).paddingLeft),
+    right: parseInt(getComputedStyle(dom).paddingRight),
+    bottom: parseInt(getComputedStyle(dom).paddingTop),
+    top: parseInt(getComputedStyle(dom).paddingBottom),
   };
 };
+
 export const getDOMMargin = (dom: HTMLElement) => {
   return {
-    left: parseInt(window.getComputedStyle(dom).marginLeft),
-    right: parseInt(window.getComputedStyle(dom).marginRight),
-    bottom: parseInt(window.getComputedStyle(dom).marginTop),
-    top: parseInt(window.getComputedStyle(dom).marginBottom),
+    left: parseInt(getComputedStyle(dom).marginLeft),
+    right: parseInt(getComputedStyle(dom).marginRight),
+    bottom: parseInt(getComputedStyle(dom).marginTop),
+    top: parseInt(getComputedStyle(dom).marginBottom),
   };
 };
+
 export const getDOMInfo = (dom: HTMLElement) => {
   const {
     x,
@@ -29,24 +37,20 @@ export const getDOMInfo = (dom: HTMLElement) => {
     padding = getDOMPadding(dom);
 
   return {
-    x: Math.round(x),
-    y: Math.round(y),
-    top: Math.round(top),
-    left: Math.round(left),
-    bottom: Math.round(bottom),
-    right: Math.round(right),
-    width: Math.round(width),
-    height: Math.round(height),
-    outerWidth: Math.round(width + margin.left + margin.right),
-    outerHeight: Math.round(height + margin.top + margin.bottom),
+    x: round(x),
+    y: round(y),
+    top: round(top),
+    left: round(left),
+    bottom: round(bottom),
+    right: round(right),
+    width: round(width),
+    height: round(height),
+    outerWidth: round(width + margin.left + margin.right),
+    outerHeight: round(height + margin.top + margin.bottom),
     margin,
     padding,
     inFlow: dom && dom.parentElement && !!styleInFlow(dom, dom.parentElement),
   };
-};
-
-export const getComputedStyle = (dom: HTMLElement) => {
-  return window.getComputedStyle(dom);
 };
 
 export const styleInFlow = (el: HTMLElement, parent: HTMLElement) => {
