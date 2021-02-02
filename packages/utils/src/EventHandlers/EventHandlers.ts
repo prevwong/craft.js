@@ -1,44 +1,22 @@
 import { ConnectorRegistry } from './ConnectorRegistry';
 import { isEventBlockedByDescendant } from './isEventBlockedByDescendant';
-import { wrapHookToRecognizeElement } from './wrapConnectorHooks';
-
-export type CraftDOMEvent<T extends Event> = T & {
-  craft: {
-    stopPropagation: () => void;
-    blockedEvents: Record<string, boolean>;
-  };
-};
-
-export type CraftEventListener<K extends keyof HTMLElementEventMap> = (
-  ev: CraftDOMEvent<HTMLElementEventMap[K]>
-) => any;
-
-export type ChainableConnector<T extends (...args: any) => any> = T extends (
-  element: infer E,
-  ...args: infer P
-) => any
-  ? (element: E, ...args: P) => E
-  : never;
-
-export type ChainableConnectors<H extends EventHandlers> = {
-  [T in keyof ReturnType<H['handlers']>]: ReturnType<H['handlers']>[T] extends (
-    ...args: any
-  ) => any
-    ? ChainableConnector<ReturnType<H['handlers']>[T]>
-    : never;
-};
+import {
+  EventHandlerUpdates,
+  CraftEventListener,
+  EventHandlerConnectors,
+} from './interfaces';
 
 export abstract class EventHandlers<O extends Record<string, any> = {}> {
-  private registry: ConnectorRegistry = new ConnectorRegistry();
-  private subscribers: Set<(...args: any[]) => void> = new Set();
-
   options: O;
 
-  constructor(options: O) {
+  private registry: ConnectorRegistry = new ConnectorRegistry();
+  private subscribers: Set<(msg: EventHandlerUpdates) => void> = new Set();
+
+  constructor(options?: O) {
     this.options = options;
   }
 
-  listen(cb: any) {
+  listen(cb: (msg: EventHandlerUpdates) => void) {
     this.subscribers.add(cb);
     return () => this.subscribers.delete(cb);
   }
@@ -47,7 +25,7 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
     this.registry.disable();
 
     this.subscribers.forEach((listener) => {
-      listener(false);
+      listener(EventHandlerUpdates.HandlerDisabled);
     });
   }
 
@@ -55,13 +33,14 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
     this.registry.enable();
 
     this.subscribers.forEach((listener) => {
-      listener(true);
+      listener(EventHandlerUpdates.HandlerEnabled);
     });
   }
 
   cleanup() {
     this.disable();
     this.subscribers.clear();
+    this.registry.clear();
   }
 
   addCraftEventListener<K extends keyof HTMLElementEventMap>(
@@ -94,24 +73,25 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
 
     el.addEventListener(eventName, bindedListener, options);
 
-    return () => el.addEventListener(eventName, bindedListener, options);
+    return () => el.removeEventListener(eventName, bindedListener, options);
   }
 
   // Defines the connectors and their logic
   abstract handlers(): Record<string, (el: HTMLElement, ...args: any[]) => any>;
 
-  get connectors(): ChainableConnectors<this> {
+  get connectors(): EventHandlerConnectors<this> {
     const connectors = this.handlers();
     return Object.keys(connectors).reduce(
       (accum, connectorName) => ({
         ...accum,
-        [connectorName]: wrapHookToRecognizeElement((el, opts) => {
+        [connectorName]: (el, opts) => {
           this.registry.register(el, {
             opts,
             name: connectorName,
             connector: connectors[connectorName],
           });
-        }),
+          return el;
+        },
       }),
       {}
     ) as any;
@@ -128,7 +108,7 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
 
   protected createProxyHandlers<H extends EventHandlers>(
     instance: H,
-    cb: (connectors: ChainableConnectors<H>) => void
+    cb: (connectors: EventHandlerConnectors<H>) => void
   ) {
     const connectorsToCleanup = [];
     const handlers = instance.handlers();
@@ -159,7 +139,7 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
     };
   }
 
-  reflect(cb: (connectors: ChainableConnectors<this>) => void) {
+  reflect(cb: (connectors: EventHandlerConnectors<this>) => void) {
     return this.createProxyHandlers(this, cb);
   }
 }

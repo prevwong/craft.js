@@ -1,4 +1,5 @@
-import { EventHandlers, ChainableConnectors } from './EventHandlers';
+import { EventHandlers } from './EventHandlers';
+import { ChainableConnectors, EventHandlerUpdates } from './interfaces';
 
 export abstract class DerivedEventHandlers<
   P extends EventHandlers,
@@ -6,28 +7,33 @@ export abstract class DerivedEventHandlers<
 > extends EventHandlers {
   derived: P;
   options: O;
-  cleanupDerived: () => void;
+  unsubscribeParentHandlerListener: () => void;
 
-  constructor(derived: P, options: O) {
+  constructor(derived: P, options?: O) {
     super(options);
     this.derived = derived;
     this.options = options;
-    this.cleanupDerived = this.derived.listen((bool) => {
-      if (!bool) {
-        this.disable();
-        return;
+    this.unsubscribeParentHandlerListener = this.derived.listen((msg) => {
+      switch (msg) {
+        case EventHandlerUpdates.HandlerEnabled: {
+          return this.enable();
+        }
+        case EventHandlerUpdates.HandlerDisabled: {
+          return this.disable();
+        }
+        default: {
+        }
       }
-
-      this.enable();
     });
   }
 
+  // A method to easily  inherit parent connectors
   inherit(cb: (connectors: ChainableConnectors<P>) => void) {
     return this.createProxyHandlers(this.derived, cb);
   }
 
   cleanup() {
     super.cleanup();
-    this.cleanupDerived();
+    this.unsubscribeParentHandlerListener();
   }
 }

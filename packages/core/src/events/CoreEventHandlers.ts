@@ -1,26 +1,23 @@
 import { DerivedEventHandlers, EventHandlers } from '@craftjs/utils';
 
-import { EditorStore } from '../editor';
+import { EditorStore } from '../editor/store';
+import { NodeId } from '../interfaces/nodes';
 
-type CoreConnectorTypes =
-  | 'select'
-  | 'hover'
-  | 'drag'
-  | 'drop'
-  | 'create'
-  | 'connect';
-
-export abstract class CoreEventHandlers<O = {}> extends EventHandlers<
+export class CoreEventHandlers<O = {}> extends EventHandlers<
   { store: EditorStore } & O
 > {
-  abstract handlers(): Record<
-    CoreConnectorTypes,
-    (el: HTMLElement, ...args: any[]) => any
-  >;
+  handlers() {
+    return {
+      connect: (el: HTMLElement, id: NodeId) => {},
+      select: (el: HTMLElement, id: NodeId) => {},
+      hover: (el: HTMLElement, id: NodeId) => {},
+      drag: (el: HTMLElement, id: NodeId) => {},
+      drop: (el: HTMLElement, id: NodeId) => {},
+      create: (el: HTMLElement, UserElement: React.ReactElement) => {},
+    };
+  }
 }
 
 export abstract class DerivedCoreEventHandlers<
   O = {}
 > extends DerivedEventHandlers<CoreEventHandlers, O> {}
-
-export type CoreEventConnectors = CoreEventHandlers['connectors'];

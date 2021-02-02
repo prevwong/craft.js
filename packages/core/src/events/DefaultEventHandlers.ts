@@ -176,9 +176,11 @@ export class DefaultEventHandlers extends CoreEventHandlers<
         };
       },
       drag: (el: HTMLElement, id: NodeId) => {
-        if (store.query.node(id).isDraggable()) {
-          el.setAttribute('draggable', 'true');
+        if (!store.query.node(id).isDraggable()) {
+          return () => {};
         }
+
+        el.setAttribute('draggable', 'true');
 
         const unbindDragStart = this.addCraftEventListener(
           el,

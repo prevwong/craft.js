@@ -3,6 +3,8 @@ import { isValidElement, ReactElement } from 'react';
 import { cloneElement } from 'react';
 import invariant from 'tiny-invariant';
 
+import { ChainableConnectors, ConnectorsRecord } from './interfaces';
+
 function setRef(ref: any, node: any) {
   if (node) {
     if (typeof ref === 'function') {
@@ -67,4 +69,17 @@ export function wrapHookToRecognizeElement(
 
     return cloneWithRef(element, hook);
   };
+}
+
+export function wrapConnectorHooks<H extends ConnectorsRecord>(
+  connectors: H
+): ChainableConnectors<H, React.ReactElement | HTMLElement> {
+  return Object.keys(connectors).reduce((accum, key) => {
+    accum[key] = wrapHookToRecognizeElement((...args) => {
+      // @ts-ignore
+      return connectors[key](...args);
+    });
+
+    return accum;
+  }, {}) as any;
 }

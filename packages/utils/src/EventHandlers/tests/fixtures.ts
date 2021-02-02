@@ -1,5 +1,5 @@
-import { EventHandlers } from '../EventHandlers';
 import { DerivedEventHandlers } from '../DerivedEventHandlers';
+import { EventHandlers } from '../EventHandlers';
 
 export function triggerMouseEvent(node, eventType) {
   const clickEvent = document.createEvent('MouseEvents');
@@ -43,17 +43,12 @@ export const createTestHandlers = () => {
           const cleanup = testHandlers[key].init(el, ...args);
           const listenersToRemove = Object.keys(testHandlers[key].events).map(
             (eventName: any) => {
-              this.addCraftEventListener(
+              const removeCraftListener = this.addCraftEventListener(
                 el,
                 eventName,
                 testHandlers[key].events[eventName]
               );
-              return () =>
-                this.removeCraftEventListener(
-                  el,
-                  eventName,
-                  testHandlers[key].events[eventName]
-                );
+              return () => removeCraftListener();
             }
           );
 
@@ -100,18 +95,13 @@ export const createTestDerivedHandlers = (core: any) => {
           const cleanup = testHandlers[key].init(el, ...args);
           const listenersToRemove = Object.keys(testHandlers[key].events).map(
             (eventName: any) => {
-              this.addCraftEventListener(
+              const removeCraftListener = this.addCraftEventListener(
                 el,
                 eventName,
                 testHandlers[key].events[eventName]
               );
 
-              return () =>
-                this.removeCraftEventListener(
-                  el,
-                  eventName,
-                  testHandlers[key].events[eventName]
-                );
+              return () => removeCraftListener();
             }
           );
 

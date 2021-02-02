@@ -15,12 +15,15 @@ export const Events: React.FC = ({ children }) => {
     handlers,
     handlersFactory,
     enabled,
+    hydrationTimestamp,
   } = useInternalEditor((state) => ({
     enabled: state.options.enabled,
     indicator: state.indicator,
     indicatorOptions: state.options.indicator,
     handlers: state.handlers,
     handlersFactory: state.options.handlers,
+    hydrationTimestamp:
+      state.nodes.ROOT && state.nodes.ROOT._hydrationTimestamp,
   }));
 
   const storeRef = useRef(store);
@@ -44,7 +47,7 @@ export const Events: React.FC = ({ children }) => {
 
       handlersRef.current.cleanup();
     };
-  }, [actions, handlersFactory]);
+  }, [actions, handlersFactory, hydrationTimestamp]);
 
   useEffect(() => {
     if (!handlersRef.current) {

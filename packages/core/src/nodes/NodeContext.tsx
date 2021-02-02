@@ -1,48 +1,40 @@
-import React, { useEffect, useMemo } from 'react';
+import { ChainableConnectors, wrapConnectorHooks } from '@craftjs/utils';
+import React, { useMemo } from 'react';
 
-import { NodeHandlers } from './NodeHandlers';
-
-import { useInternalEditor } from '../editor/useInternalEditor';
 import { useEventHandler } from '../events';
 import { NodeId } from '../interfaces';
 
-export const NodeContext = React.createContext<any>(null);
-
-export type NodeProvider = {
+export type NodeContextType = {
   id: NodeId;
   related?: boolean;
+  connectors: ChainableConnectors<
+    {
+      connect: (element: HTMLElement) => void;
+      drag: (element: HTMLElement) => void;
+    },
+    React.ReactElement
+  >;
 };
 
-export const NodeProvider: React.FC<NodeProvider> = ({
+export const NodeContext = React.createContext<NodeContextType>(null);
+
+export type NodeProviderProps = Omit<NodeContextType, 'connectors'>;
+
+export const NodeProvider: React.FC<NodeProviderProps> = ({
   id,
   related = false,
   children,
 }) => {
   const handlers = useEventHandler();
 
-  const { hydrationTimestamp } = useInternalEditor((state) => ({
-    hydrationTimestamp: state.nodes[id] && state.nodes[id]._hydrationTimestamp,
-  }));
-
-  const nodeHandlers = useMemo(
+  const connectors = useMemo(
     () =>
-      handlers.derive(NodeHandlers, {
-        id,
+      wrapConnectorHooks({
+        connect: (dom: HTMLElement) => handlers.connectors.connect(dom, id),
+        drag: (dom: HTMLElement) => handlers.connectors.drag(dom, id),
       }),
-    [handlers, id, hydrationTimestamp]
+    [handlers]
   );
-
-  const connectors = useMemo(() => nodeHandlers.connectors, [nodeHandlers]);
-
-  useEffect(() => {
-    return () => {
-      if (!nodeHandlers) {
-        return;
-      }
-
-      nodeHandlers.cleanup();
-    };
-  }, []);
 
   return (
     <NodeContext.Provider value={{ id, related, connectors }}>

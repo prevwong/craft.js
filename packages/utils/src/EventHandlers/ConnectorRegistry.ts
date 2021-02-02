@@ -1,30 +1,35 @@
 import isEqual from 'shallowequal';
 import shortid from 'shortid';
 
+import { Connector } from './interfaces';
+
 type ConnectorToRegister = {
   name: string;
-  opts: any;
-  connector: any;
+  opts: Record<string, any>;
+  connector: Connector;
 };
 
 type RegisteredConnector = {
-  opts: any;
+  opts: Record<string, any>;
   enable: () => void;
   disable: () => void;
 };
 
+/**
+ * We store all the connected DOM elements and their connectors here
+ */
 export class ConnectorRegistry {
-  _elementIdMap: WeakMap<HTMLElement, string> = new WeakMap();
-  _registry: Map<String, RegisteredConnector> = new Map();
+  private elementIdMap: WeakMap<HTMLElement, string> = new WeakMap();
+  private registry: Map<String, RegisteredConnector> = new Map();
 
   private getElementId(element: HTMLElement) {
-    const existingId = this._elementIdMap.get(element);
+    const existingId = this.elementIdMap.get(element);
     if (existingId) {
       return existingId;
     }
 
     const newId = shortid();
-    this._elementIdMap.set(element, newId);
+    this.elementIdMap.set(element, newId);
     return newId;
   }
 
@@ -43,7 +48,7 @@ export class ConnectorRegistry {
     }
 
     let cleanup;
-    this._registry.set(this.getConnectorId(element, toRegister.name), {
+    this.registry.set(this.getConnectorId(element, toRegister.name), {
       opts: toRegister.opts,
       enable: () => {
         cleanup = toRegister.connector(element, toRegister.opts);
@@ -57,27 +62,27 @@ export class ConnectorRegistry {
       },
     });
 
-    this._registry.get(this.getConnectorId(element, toRegister.name)).enable();
+    this.registry.get(this.getConnectorId(element, toRegister.name)).enable();
   }
 
   get(element: HTMLElement, name: string) {
-    return this._registry.get(this.getConnectorId(element, name));
+    return this.registry.get(this.getConnectorId(element, name));
   }
 
   enable() {
-    this._registry.forEach((connectors) => {
+    this.registry.forEach((connectors) => {
       connectors.enable();
     });
   }
 
   disable() {
-    this._registry.forEach((connectors) => {
+    this.registry.forEach((connectors) => {
       connectors.disable();
     });
   }
 
   clear() {
-    this._elementIdMap = new WeakMap();
-    this._registry.clear();
+    this.elementIdMap = new WeakMap();
+    this.registry.clear();
   }
 }
