@@ -6,6 +6,8 @@ on:
       - next
     paths:
       - 'packages/**'
+      - 'yarn.lock'
+      - 'package.json'
 
 jobs:
   build-and-test:
