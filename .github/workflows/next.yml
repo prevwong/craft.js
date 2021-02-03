@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - next
+    paths:
+      - 'packages/**'
 
 jobs:
   build-and-test:
