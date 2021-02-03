@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-alpha.13 (2021-02-03)
+
+
+### Bug Fixes
+
+* yarn.lock ([6782edf](https://github.com/prevwong/craft.js/commit/6782edf1715a41c0f21daaeab92c5e7edb8c2f17))
+
+
+
+
+
 # 0.2.0-alpha.12 (2021-01-28)
 
 
