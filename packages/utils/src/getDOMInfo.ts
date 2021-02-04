@@ -1,5 +1,3 @@
-export const round = Math.round;
-
 export const getComputedStyle = (dom: HTMLElement) => {
   return window.getComputedStyle(dom);
 };
@@ -37,16 +35,16 @@ export const getDOMInfo = (dom: HTMLElement) => {
     padding = getDOMPadding(dom);
 
   return {
-    x: round(x),
-    y: round(y),
-    top: round(top),
-    left: round(left),
-    bottom: round(bottom),
-    right: round(right),
-    width: round(width),
-    height: round(height),
-    outerWidth: round(width + margin.left + margin.right),
-    outerHeight: round(height + margin.top + margin.bottom),
+    x: Math.round(x),
+    y: Math.round(y),
+    top: Math.round(top),
+    left: Math.round(left),
+    bottom: Math.round(bottom),
+    right: Math.round(right),
+    width: Math.round(width),
+    height: Math.round(height),
+    outerWidth: Math.round(width + margin.left + margin.right),
+    outerHeight: Math.round(height + margin.top + margin.bottom),
     margin,
     padding,
     inFlow: dom && dom.parentElement && !!styleInFlow(dom, dom.parentElement),
