@@ -1,19 +1,25 @@
+export const getComputedStyle = (dom: HTMLElement) => {
+  return window.getComputedStyle(dom);
+};
+
 export const getDOMPadding = (dom: HTMLElement) => {
   return {
-    left: parseInt(window.getComputedStyle(dom).paddingLeft),
-    right: parseInt(window.getComputedStyle(dom).paddingRight),
-    bottom: parseInt(window.getComputedStyle(dom).paddingTop),
-    top: parseInt(window.getComputedStyle(dom).paddingBottom),
+    left: parseInt(getComputedStyle(dom).paddingLeft),
+    right: parseInt(getComputedStyle(dom).paddingRight),
+    bottom: parseInt(getComputedStyle(dom).paddingTop),
+    top: parseInt(getComputedStyle(dom).paddingBottom),
   };
 };
+
 export const getDOMMargin = (dom: HTMLElement) => {
   return {
-    left: parseInt(window.getComputedStyle(dom).marginLeft),
-    right: parseInt(window.getComputedStyle(dom).marginRight),
-    bottom: parseInt(window.getComputedStyle(dom).marginTop),
-    top: parseInt(window.getComputedStyle(dom).marginBottom),
+    left: parseInt(getComputedStyle(dom).marginLeft),
+    right: parseInt(getComputedStyle(dom).marginRight),
+    bottom: parseInt(getComputedStyle(dom).marginTop),
+    top: parseInt(getComputedStyle(dom).marginBottom),
   };
 };
+
 export const getDOMInfo = (dom: HTMLElement) => {
   const {
     x,
@@ -43,10 +49,6 @@ export const getDOMInfo = (dom: HTMLElement) => {
     padding,
     inFlow: dom && dom.parentElement && !!styleInFlow(dom, dom.parentElement),
   };
-};
-
-export const getComputedStyle = (dom: HTMLElement) => {
-  return window.getComputedStyle(dom);
 };
 
 export const styleInFlow = (el: HTMLElement, parent: HTMLElement) => {
