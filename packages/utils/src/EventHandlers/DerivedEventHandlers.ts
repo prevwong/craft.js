@@ -27,7 +27,7 @@ export abstract class DerivedEventHandlers<
     });
   }
 
-  // A method to easily  inherit parent connectors
+  // A method to easily inherit parent connectors
   inherit(cb: (connectors: EventHandlerConnectors<P>) => void) {
     return this.createProxyHandlers(this.derived, cb);
   }
