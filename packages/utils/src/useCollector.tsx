@@ -68,10 +68,7 @@ export function useCollector<
     let unsubscribe;
     if (collectorRef.current) {
       unsubscribe = subscribe(
-        (current) => {
-          (window as any).state = current;
-          return collectorRef.current(current, query);
-        },
+        (current) => collectorRef.current(current, query),
         (collected) => {
           setRenderCollected(onCollect(collected));
         }
