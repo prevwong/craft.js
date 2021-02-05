@@ -4,7 +4,7 @@ import {
   wrapConnectorHooks,
   ChainableConnectors,
 } from '@craftjs/utils';
-import { useContext, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 
 import { EditorContext } from './EditorContext';
 import { QueryMethods } from './query';

@@ -5,15 +5,15 @@ import { Indicator, NodeId, NodeTree, Node } from '../interfaces';
 
 type DraggedElement = NodeId[] | NodeTree;
 
-type DefaultEventHandlersOptions = {
+export type DefaultEventHandlersOptions = {
   isMultiSelectEnabled: (e: MouseEvent) => boolean;
 };
 
 /**
  * Specifies Editor-wide event handlers and connectors
  */
-export class DefaultEventHandlers extends CoreEventHandlers<
-  DefaultEventHandlersOptions
+export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
+  DefaultEventHandlersOptions & O
 > {
   static draggedElementShadow: HTMLElement;
   static draggedElement: DraggedElement;
@@ -30,7 +30,6 @@ export class DefaultEventHandlers extends CoreEventHandlers<
         return this.reflect((connectors) => {
           connectors.select(el, id);
           connectors.hover(el, id);
-          connectors.drag(el, id);
           connectors.drop(el, id);
         });
       },
