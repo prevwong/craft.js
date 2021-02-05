@@ -1,5 +1,5 @@
 import { EventHandlers } from './EventHandlers';
-import { ChainableConnectors, EventHandlerUpdates } from './interfaces';
+import { EventHandlerConnectors, EventHandlerUpdates } from './interfaces';
 
 export abstract class DerivedEventHandlers<
   P extends EventHandlers,
@@ -28,7 +28,7 @@ export abstract class DerivedEventHandlers<
   }
 
   // A method to easily  inherit parent connectors
-  inherit(cb: (connectors: ChainableConnectors<P>) => void) {
+  inherit(cb: (connectors: EventHandlerConnectors<P>) => void) {
     return this.createProxyHandlers(this.derived, cb);
   }
 

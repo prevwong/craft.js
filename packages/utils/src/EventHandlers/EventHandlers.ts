@@ -1,10 +1,11 @@
 import { ConnectorRegistry } from './ConnectorRegistry';
-import { isEventBlockedByDescendant } from './isEventBlockedByDescendant';
 import {
   EventHandlerUpdates,
   CraftEventListener,
   EventHandlerConnectors,
+  CraftDOMEvent,
 } from './interfaces';
+import { isEventBlockedByDescendant } from './isEventBlockedByDescendant';
 
 export abstract class EventHandlers<O extends Record<string, any> = {}> {
   options: O;
@@ -49,7 +50,7 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
     listener: CraftEventListener<K>,
     options?: boolean | AddEventListenerOptions
   ) {
-    const bindedListener = (e) => {
+    const bindedListener = (e: CraftDOMEvent<HTMLElementEventMap[K]>) => {
       // Store initial Craft event value
       if (!e.craft) {
         e.craft = {
@@ -106,6 +107,7 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
     return new type(this, opts);
   }
 
+  // This method allows us to execute multiple connectors and returns a single cleanup method for all of them
   protected createProxyHandlers<H extends EventHandlers>(
     instance: H,
     cb: (connectors: EventHandlerConnectors<H>) => void

@@ -21,7 +21,7 @@ export type ChainableConnectors<
 export type CraftDOMEvent<T extends Event> = T & {
   craft: {
     stopPropagation: () => void;
-    blockedEvents: Record<string, boolean>;
+    blockedEvents: Record<string, HTMLElement[]>;
   };
 };
 

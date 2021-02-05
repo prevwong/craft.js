@@ -1,11 +1,18 @@
+import { CraftDOMEvent } from './interfaces';
+
 /**
  * Check if a specified event is blocked by a child
  * that's a descendant of the specified element
  */
-export const isEventBlockedByDescendant = (e, eventName, el) => {
+export function isEventBlockedByDescendant<K extends keyof HTMLElementEventMap>(
+  e: CraftDOMEvent<HTMLElementEventMap[K]>,
+  eventName: K,
+  el: HTMLElement
+) {
   // Store initial Craft event value
   if (!e.craft) {
     e.craft = {
+      stopPropagation: () => {},
       blockedEvents: {},
     };
   }
@@ -21,4 +28,4 @@ export const isEventBlockedByDescendant = (e, eventName, el) => {
   }
 
   return false;
-};
+}

@@ -16,7 +16,8 @@ type RegisteredConnector = {
 };
 
 /**
- * We store all the connected DOM elements and their connectors here
+ * Stores all connected DOM elements and their connectors here
+ * This allows us to easily enable/disable and perform cleanups
  */
 export class ConnectorRegistry {
   private elementIdMap: WeakMap<HTMLElement, string> = new WeakMap();

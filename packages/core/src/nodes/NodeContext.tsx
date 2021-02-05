@@ -33,7 +33,7 @@ export const NodeProvider: React.FC<NodeProviderProps> = ({
         connect: (dom: HTMLElement) => handlers.connectors.connect(dom, id),
         drag: (dom: HTMLElement) => handlers.connectors.drag(dom, id),
       }),
-    [handlers]
+    [handlers, id]
   );
 
   return (
