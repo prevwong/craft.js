@@ -32,8 +32,9 @@ export const Events: React.FC = ({ children }) => {
   const handlersRef = useRef(handlers);
   handlersRef.current = handlers;
 
+  // Generate new handlers whenever the editor deserializes a new state
   useEffect(() => {
-    // TODO: Let's use setState for all internal actions
+    // TODO: Remove this when we refactor the EditorState
     actions.history
       .ignore()
       .setState(
@@ -49,6 +50,7 @@ export const Events: React.FC = ({ children }) => {
     };
   }, [actions, handlersFactory, hydrationTimestamp]);
 
+  // Disable/Enable handlers when the enabled state is toggled
   useEffect(() => {
     if (!handlersRef.current) {
       return;
