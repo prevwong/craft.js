@@ -149,6 +149,39 @@ describe('splitSlate', () => {
                 type: 'Typography',
                 nodes: [
                   {
+                    id: 'S2C1',
+                    data: {
+                      type: 'Card',
+                      nodes: [
+                        {
+                          id: 'SLATE3',
+                          data: {
+                            type: 'SLATE',
+                            nodes: [
+                              {
+                                id: 'S3T1',
+                                data: {
+                                  type: 'Typography',
+                                  nodes: [
+                                    {
+                                      id: 'S3TT1',
+                                      data: {
+                                        type: 'Text',
+                                        props: {
+                                          text: 'Hello',
+                                        },
+                                      },
+                                    },
+                                  ],
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                  {
                     id: 'S2TT1',
                     data: {
                       type: 'Text',
@@ -206,9 +239,9 @@ describe('splitSlate', () => {
       expect(state.nodes[nestedChildListItemId].data.nodes).toEqual(['TT6']);
     });
     it('should have expanded nested Slate node', () => {
-      const newSlateNodeId = state.nodes['ROOT'].data.nodes[4];
+      expect(state.nodes['ROOT'].data.nodes[5]).toEqual('S2C1');
+      const newSlateNodeId = state.nodes['ROOT'].data.nodes[6];
       const lastNodeIndex = state.nodes[newSlateNodeId].data.nodes.length - 1;
-      expect(state.nodes[newSlateNodeId].data.nodes).not.toContain('SLATE2');
       expect(state.nodes[newSlateNodeId].data.nodes[lastNodeIndex]).toEqual(
         'S2T1'
       );

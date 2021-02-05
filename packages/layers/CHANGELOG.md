@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-alpha.13 (2021-02-03)
+
+
+### Bug Fixes
+
+* yarn.lock ([6782edf](https://github.com/prevwong/craft.js/commit/6782edf1715a41c0f21daaeab92c5e7edb8c2f17))
+
+
+
+
+
+# 0.2.0-alpha.12 (2021-01-28)
+
+
+### Bug Fixes
+
+* **slate:** delete orphaned nodes ([#171](https://github.com/prevwong/craft.js/issues/171)) ([f201ddc](https://github.com/prevwong/craft.js/commit/f201ddc8a26cd09deab69220a9099bb5ff2c6973))
+
+
+
+
+
+# 0.2.0-alpha.11 (2021-01-26)
+
+
+### Bug Fixes
+
+* **slate:** split operation bug ([#169](https://github.com/prevwong/craft.js/issues/169)) ([9a7b3b3](https://github.com/prevwong/craft.js/commit/9a7b3b3e3a4f6d71d2ef5d9d1de1cb4d2c931696))
+
+
+
+
+
+# 0.2.0-alpha.10 (2021-01-22)
+
+
+### Bug Fixes
+
+* remove auto-add drag connector ([#163](https://github.com/prevwong/craft.js/issues/163)) ([60a600a](https://github.com/prevwong/craft.js/commit/60a600a8c9bc675b3715c6f5881da9574fbf3845))
+
+
+
+
+
+# 0.2.0-alpha.9 (2021-01-20)
+
+
+### Bug Fixes
+
+* remove slate op ([#162](https://github.com/prevwong/craft.js/issues/162)) ([a46ed6c](https://github.com/prevwong/craft.js/commit/a46ed6cd72700273279e89c13e9e7c3d4238f93c))
+
+
+
+
+
 # 0.2.0-alpha.8 (2021-01-12)
 
 

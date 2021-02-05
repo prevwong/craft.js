@@ -134,6 +134,21 @@ export const useCraftStateSync = () => {
 
         // Save the current selection
         state.nodes[id].data.custom.selection = slateSelection;
+
+        // Remove any deleted Slate nodes from the Craft state
+        slateEditor.operations
+          .filter((op) => op.type === 'remove_node')
+          .forEach((op) => {
+            if (!op.node) {
+              return;
+            }
+
+            if (!state.nodes[op.node.id]) {
+              return;
+            }
+
+            delete state.nodes[op.node.id];
+          });
       });
     };
 

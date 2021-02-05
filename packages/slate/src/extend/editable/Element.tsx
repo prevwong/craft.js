@@ -11,15 +11,26 @@ const RenderSlateElement = ({
   attributes,
   children,
   renderElement,
+  drag,
 }) => {
   const { type } = useEditor((state) => ({
     type: state.options.resolver[element.type],
   }));
 
-  const render = React.createElement(type, { element, children, attributes });
+  const render = React.createElement(type, {
+    element,
+    children,
+    attributes,
+    drag,
+  });
 
   if (renderElement) {
-    return React.createElement(renderElement, { render, element });
+    return React.createElement(renderElement, {
+      render,
+      element,
+      attributes,
+      drag,
+    });
   }
 
   return render;
@@ -61,7 +72,6 @@ export const Element = ({ attributes, children, element, renderElement }) => {
     }
 
     connect(dom, id);
-    drag(dom, id);
 
     if (!enabled) {
       dom.setAttribute('contenteditable', false);
@@ -79,6 +89,13 @@ export const Element = ({ attributes, children, element, renderElement }) => {
           element={element}
           attributes={attributes}
           children={children}
+          drag={(dom) => {
+            if (!exists) {
+              return;
+            }
+
+            drag(dom, id);
+          }}
         />
       }
     />

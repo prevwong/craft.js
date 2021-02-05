@@ -270,8 +270,8 @@ const Methods = (
     },
 
     replaceNodes(nodes: Nodes) {
-      state.nodes = nodes;
       this.clearEvents();
+      state.nodes = nodes;
     },
 
     clearEvents() {

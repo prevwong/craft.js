@@ -18,6 +18,7 @@ export const getSplitOperations = (
     parentId: string,
     parentTree: any = {}
   ) => {
+    let hasCurrentNodeBeenExpelled = false;
     const operations = [];
     const node = state.nodes[nodeId];
 
@@ -46,6 +47,7 @@ export const getSplitOperations = (
 
       currentTree = null;
       hasSplitted = true;
+      hasCurrentNodeBeenExpelled = true;
     } else {
       if (!currentTree) {
         currentTree = { ...parentTree };
@@ -77,6 +79,11 @@ export const getSplitOperations = (
 
       currentTree[nodeId] = { ...nodeInfo };
       parentTree[nodeId] = { ...nodeInfo };
+    }
+
+    // If the current node has been expelled, no need to iterate through its children
+    if (hasCurrentNodeBeenExpelled) {
+      return operations;
     }
 
     return [

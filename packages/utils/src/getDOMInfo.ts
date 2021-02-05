@@ -80,6 +80,7 @@ export const styleInFlow = (el: HTMLElement, parent: HTMLElement) => {
     case 'list-item':
     case 'table':
     case 'flex':
+    case 'grid':
       return true;
   }
   return;
