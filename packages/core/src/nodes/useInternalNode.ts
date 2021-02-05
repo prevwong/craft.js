@@ -1,11 +1,11 @@
 import { useMemo, useContext } from 'react';
 
-import { NodeContext, NodeProviderProps } from './NodeContext';
+import { NodeContext, NodeContextType } from './NodeContext';
 
 import { useInternalEditor } from '../editor/useInternalEditor';
 import { Node } from '../interfaces';
 
-type internalActions = NodeProviderProps & {
+type internalActions = NodeContextType & {
   inNodeContext: boolean;
   actions: {
     setProp: (cb: (props: any) => void, throttleRate?: number) => void;

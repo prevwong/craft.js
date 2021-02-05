@@ -56,6 +56,10 @@ export function wrapHookToRecognizeElement(
   return (elementOrNode = null, ...args: any) => {
     // When passed a node, call the hook straight away.
     if (!isValidElement(elementOrNode)) {
+      if (!elementOrNode) {
+        return;
+      }
+
       const node = elementOrNode;
       node && hook(node, ...args);
       return node;

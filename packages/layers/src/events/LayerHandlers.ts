@@ -23,9 +23,8 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
   handlers() {
     const editorStore = this.derived.options.store;
     const { layerStore, layerId } = this.options;
-
     return {
-      layer: (el) => {
+      layer: (el: HTMLElement) => {
         const cleanupParentConnectors = this.inherit((connectors) => {
           connectors.select(el, layerId);
           connectors.hover(el, layerId);
@@ -170,12 +169,12 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
           unbindDragEnter();
         };
       },
-      layerHeader: (el) => {
+      layerHeader: (el: HTMLElement) => {
         layerStore.actions.setDOM(layerId, {
           headingDom: el,
         });
       },
-      drag: (el) => {
+      drag: (el: HTMLElement) => {
         el.setAttribute('draggable', true);
 
         const unbindDragStart = this.addCraftEventListener(
@@ -217,5 +216,3 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
     };
   }
 }
-
-export type LayerEventConnectors = LayerHandlers['connectors'];
