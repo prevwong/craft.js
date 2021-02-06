@@ -51,14 +51,6 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
     options?: boolean | AddEventListenerOptions
   ) {
     const bindedListener = (e: CraftDOMEvent<HTMLElementEventMap[K]>) => {
-      // Store initial Craft event value
-      if (!e.craft) {
-        e.craft = {
-          blockedEvents: {},
-          stopPropagation: () => {},
-        };
-      }
-
       if (!isEventBlockedByDescendant(e, eventName, el)) {
         e.craft.stopPropagation = () => {
           if (!e.craft.blockedEvents[eventName]) {
@@ -141,6 +133,7 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
     };
   }
 
+  // This lets us to execute and cleanup sibling connectors
   reflect(cb: (connectors: EventHandlerConnectors<this>) => void) {
     return this.createProxyHandlers(this, cb);
   }

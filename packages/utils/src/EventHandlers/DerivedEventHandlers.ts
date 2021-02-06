@@ -1,6 +1,8 @@
 import { EventHandlers } from './EventHandlers';
 import { EventHandlerConnectors, EventHandlerUpdates } from './interfaces';
 
+// Creates EventHandlers that depends on another EventHandlers instance
+// This lets us to easily create new connectors that composites of the parent EventHandlers instance
 export abstract class DerivedEventHandlers<
   P extends EventHandlers,
   O extends Record<string, any> = {}
@@ -13,6 +15,8 @@ export abstract class DerivedEventHandlers<
     super(options);
     this.derived = derived;
     this.options = options;
+
+    // Automatically disable/enable depending on the parent handlers
     this.unsubscribeParentHandlerListener = this.derived.listen((msg) => {
       switch (msg) {
         case EventHandlerUpdates.HandlerEnabled: {
@@ -22,6 +26,7 @@ export abstract class DerivedEventHandlers<
           return this.disable();
         }
         default: {
+          return;
         }
       }
     });

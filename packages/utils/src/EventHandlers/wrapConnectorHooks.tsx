@@ -75,6 +75,8 @@ export function wrapHookToRecognizeElement(
   };
 }
 
+// A React wrapper for our connectors
+// Wrap all our connectors so that would additionally accept React.ReactElement
 export function wrapConnectorHooks<H extends ConnectorsRecord>(
   connectors: H
 ): ChainableConnectors<H, React.ReactElement | HTMLElement> {
