@@ -3,6 +3,8 @@ import { isValidElement, ReactElement } from 'react';
 import { cloneElement } from 'react';
 import invariant from 'tiny-invariant';
 
+import { ChainableConnectors, ConnectorsRecord } from './interfaces';
+
 function setRef(ref: any, node: any) {
   if (node) {
     if (typeof ref === 'function') {
@@ -45,21 +47,21 @@ function throwIfCompositeComponentElement(element: React.ReactElement<any>) {
     return;
   }
 
-  // const displayName =
-  //   (element.type as any).displayName || element.type.name || 'the component'
-
-  // TODO: add error message
   throw new Error();
 }
 
 export function wrapHookToRecognizeElement(
-  hook: (node: any, opts: any) => void
+  hook: (node: any, ...args: any[]) => void
 ) {
-  return (elementOrNode = null, opts: any) => {
+  return (elementOrNode = null, ...args: any) => {
     // When passed a node, call the hook straight away.
     if (!isValidElement(elementOrNode)) {
+      if (!elementOrNode) {
+        return;
+      }
+
       const node = elementOrNode;
-      node && hook(node, opts);
+      node && hook(node, ...args);
       return node;
     }
 
@@ -73,13 +75,17 @@ export function wrapHookToRecognizeElement(
   };
 }
 
-export type ConnectableElement =
-  | React.RefObject<any>
-  | React.ReactElement
-  | Element
-  | null;
+// A React wrapper for our connectors
+// Wrap all our connectors so that would additionally accept React.ReactElement
+export function wrapConnectorHooks<H extends ConnectorsRecord>(
+  connectors: H
+): ChainableConnectors<H, React.ReactElement | HTMLElement> {
+  return Object.keys(connectors).reduce((accum, key) => {
+    accum[key] = wrapHookToRecognizeElement((...args) => {
+      // @ts-ignore
+      return connectors[key](...args);
+    });
 
-export type Connector = (
-  elementOrNode: ConnectableElement,
-  options?: any
-) => React.ReactElement | null;
+    return accum;
+  }, {}) as any;
+}

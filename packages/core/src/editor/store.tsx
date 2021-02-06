@@ -28,7 +28,11 @@ export const editorInitialState: EditorState = {
       error: 'red',
       success: 'rgb(98, 196, 98)',
     },
-    handlers: (store) => new DefaultEventHandlers(store),
+    handlers: (store) =>
+      new DefaultEventHandlers({
+        store,
+        isMultiSelectEnabled: (e: MouseEvent) => !!e.metaKey,
+      }),
     normalizeNodes: () => {},
   },
 };
