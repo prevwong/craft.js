@@ -175,7 +175,7 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
         });
       },
       drag: (el: HTMLElement) => {
-        el.setAttribute('draggable', true);
+        el.setAttribute('draggable', 'true');
 
         const unbindDragStart = this.addCraftEventListener(
           el,
