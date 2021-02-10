@@ -10,7 +10,7 @@ interface SerializedNodeTree {
 
 export const getRandomId = shortid.generate;
 
-const normalizeClonedNode = (id: string) => (node: Node) => {
+export const normalizeClonedNode = (id: string) => (node: Node) => {
   node.id = id;
 
   if (node.data.custom && node.data.custom.states) {
@@ -45,7 +45,7 @@ const normalizeClonedNode = (id: string) => (node: Node) => {
 };
 
 // TODO find better place for this
-export const generateNewTree = (oldTree: SerializedNodeTree, query) => {
+export const parseFreshTree = (oldTree: SerializedNodeTree, query) => {
   const nodeId = oldTree.rootNodeId;
   const oldIds = Object.keys(oldTree.nodes);
   const newIdMaps = fromPairs(

@@ -1,9 +1,9 @@
 import { CoreEventHandlers } from './CoreEventHandlers';
 import { createShadow } from './createShadow';
-import { generateNewTree } from './treeStuff';
 
 import { Indicator, NodeId, NodeTree, Node } from '../interfaces';
 import { defineEventListener, CraftDOMEvent } from '../utils/Handlers';
+import { parseFreshTree } from '../utils/parseFreshTree';
 
 export * from '../utils/Handlers';
 
@@ -264,18 +264,13 @@ export class DefaultEventHandlers extends CoreEventHandlers {
               e.craft.stopPropagation();
 
               let tree;
-              if (userElement.props.nodeTree) {
+              if (userElement.props && userElement.props.nodeTree) {
                 // generate fresh tree
                 const { query } = this.store;
-                const freshTree = generateNewTree(
+                const freshTree = parseFreshTree(
                   userElement.props.nodeTree,
                   query
                 );
-
-                console.log({
-                  serializedTree: userElement.props.nodeTree,
-                  freshTree,
-                });
 
                 tree = freshTree;
               } else {
@@ -283,8 +278,6 @@ export class DefaultEventHandlers extends CoreEventHandlers {
                   .parseReactElement(userElement)
                   .toNodeTree();
               }
-
-              console.log({ tree });
 
               const dom = e.currentTarget as HTMLElement;
 
