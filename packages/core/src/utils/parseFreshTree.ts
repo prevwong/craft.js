@@ -9,7 +9,7 @@ interface SerializedNodeTree {
   nodes: Record<NodeId, SerializedNode>;
 }
 
-// TODO find better place for this
+// generate fresh tree with new ids
 export const parseFreshTree = (oldTree: SerializedNodeTree, query) => {
   const nodeId = oldTree.rootNodeId;
   const oldIds = Object.keys(oldTree.nodes);
