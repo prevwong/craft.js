@@ -99,7 +99,7 @@ export const Viewport: React.FC = ({ children }) => {
           <div className="w-full h-full">
             <div
               className={cx([
-                'craftjs-renderer h-full  w-full transition',
+                'craftjs-renderer h-full w-full transition pb-8',
                 {
                   'overflow-auto': enabled,
                   'bg-renderer-gray': enabled,
@@ -111,13 +111,22 @@ export const Viewport: React.FC = ({ children }) => {
             >
               <div
                 className={cx([
-                  'relative flex-col flex items-center pb-8',
+                  'relative flex-col flex items-center',
                   {
                     'pt-8': enabled,
                   },
                 ])}
               >
                 {children}
+              </div>
+              <div
+                className={
+                  'flex items-center justify-center w-full pt-6 text-xs text-light-gray-2'
+                }
+              >
+                <a href="https://www.netlify.com">
+                  This site is powered by Netlify
+                </a>
               </div>
             </div>
           </div>
