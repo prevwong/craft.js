@@ -115,9 +115,36 @@ describe('splitSlate', () => {
                 type: 'Typography',
                 nodes: [
                   {
-                    id: 'S2B1',
+                    id: 'S2C1',
                     data: {
-                      type: 'Button',
+                      type: 'Card',
+                      nodes: [
+                        {
+                          id: 'SLATE3',
+                          data: {
+                            type: 'SLATE',
+                            nodes: [
+                              {
+                                id: 'S3T1',
+                                data: {
+                                  type: 'Typography',
+                                  nodes: [
+                                    {
+                                      id: 'S3TT1',
+                                      data: {
+                                        type: 'Text',
+                                        props: {
+                                          text: 'Hello',
+                                        },
+                                      },
+                                    },
+                                  ],
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
                     },
                   },
                   {
@@ -238,7 +265,7 @@ describe('splitSlate', () => {
   it('should expel nested non-Slate node from nested Slate node', () => {
     expect(operations[5]).toEqual({
       type: 'expel',
-      id: 'S2B1',
+      id: 'S2C1',
     });
   });
   it('should have created a new Slate tree for the remaining Slate nodes', () => {

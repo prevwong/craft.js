@@ -1,7 +1,8 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
-export const RenderIndicator: React.FC<any> = ({ style }) => {
-  return (
+export const RenderIndicator: React.FC<any> = ({ style, parentDom }) => {
+  const indicator = (
     <div
       style={{
         position: 'fixed',
@@ -15,4 +16,10 @@ export const RenderIndicator: React.FC<any> = ({ style }) => {
       }}
     ></div>
   );
+
+  if (parentDom && parentDom.ownerDocument !== document) {
+    return ReactDOM.createPortal(indicator, parentDom.ownerDocument.body);
+  }
+
+  return indicator;
 };

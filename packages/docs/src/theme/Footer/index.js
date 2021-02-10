@@ -121,6 +121,15 @@ function Footer() {
               <img src="https://img.shields.io/github/stars/prevwong/craft.js?color=%23000&logo=github&style=social" />
             </a>
           </div>
+          <div className={'margin-top--md'}>
+            <a href="https://www.netlify.com">
+              <img
+                src="https://www.netlify.com/img/global/badges/netlify-light.svg"
+                alt="Deploys by Netlify"
+                width="100px"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
