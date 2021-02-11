@@ -1,4 +1,4 @@
-import { Element, useNode } from '@craftjs/core';
+import { Element, useNode, useEditor } from '@craftjs/core';
 import React from 'react';
 
 import { Button } from './Button';
@@ -57,8 +57,22 @@ CardBottom.craft = {
 };
 
 export const Card = ({ background, padding = 20 }) => {
+  const { id } = useNode();
+  const { isDraggedOver } = useEditor((state) => {
+    return {
+      // we consider the card as being dragged over if one of its ancestors (CardTop or CardBottom)
+      // is being dragged over. This only works because neither CardTop nor CardBottom accept other canvases (Card or Container)
+      // as their children.
+      isDraggedOver: state.events.draggedOver.has(id),
+    };
+  });
+
   return (
-    <Container background={background} padding={padding}>
+    <Container
+      background={background}
+      padding={padding}
+      outline={isDraggedOver ? '2px dashed blue' : undefined}
+    >
       <Element canvas id="text" is={CardTop}>
         <Text text="Only texts" fontSize={20} />
         <Text text="are allowed up here" fontSize={15} />
