@@ -150,6 +150,8 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
               return;
             }
 
+            store.actions.setNodeEvent('draggedOver', [targetId]);
+
             let node = (draggedElement as unknown) as Node;
 
             if ((draggedElement as NodeTree).rootNodeId) {
@@ -303,5 +305,6 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
     store.actions.setIndicator(null);
     store.actions.setNodeEvent('dragged', null);
+    store.actions.setNodeEvent('draggedOver', null);
   }
 }
