@@ -31,6 +31,7 @@ export type Element<T extends React.ElementType> = {
 export function Element<T extends React.ElementType>({
   id,
   children,
+  nodeTree,
   ...elementProps
 }: Element<T>) {
   const { is, custom, canvas, ...otherProps } = {
@@ -78,14 +79,19 @@ export function Element<T extends React.ElementType>({
             )
           );
       } else {
+        let tree;
         // otherwise, create and render a new linked Node
-        const linkedElement = React.createElement(
-          Element,
-          elementProps,
-          children
-        );
+        if (!nodeTree) {
+          const linkedElement = React.createElement(
+            Element,
+            elementProps,
+            children
+          );
 
-        const tree = query.parseReactElement(linkedElement).toNodeTree();
+          tree = query.parseReactElement(linkedElement).toNodeTree();
+        } else {
+          tree = nodeTree;
+        }
 
         linkedNodeId = tree.rootNodeId;
         actions.history.ignore().addLinkedNodeFromTree(tree, nodeId, id);

@@ -2,6 +2,7 @@ import { CoreEventHandlers } from './CoreEventHandlers';
 import { createShadow } from './createShadow';
 
 import { Indicator, NodeId, NodeTree, Node } from '../interfaces';
+import { parseFreshTree } from '../utils/parseFreshTree';
 
 type DraggedElement = NodeId[] | NodeTree;
 
@@ -232,9 +233,20 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           'dragstart',
           (e) => {
             e.craft.stopPropagation();
-            const tree = store.query
-              .parseReactElement(userElement)
-              .toNodeTree();
+
+            let tree;
+            if (userElement.props && userElement.props.nodeTree) {
+              // generate fresh tree
+              const { query } = store;
+              const freshTree = parseFreshTree(
+                userElement.props.nodeTree,
+                query
+              );
+
+              tree = freshTree;
+            } else {
+              tree = store.query.parseReactElement(userElement).toNodeTree();
+            }
 
             const dom = e.currentTarget as HTMLElement;
 
