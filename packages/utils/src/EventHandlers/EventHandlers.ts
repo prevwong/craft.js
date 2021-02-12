@@ -77,11 +77,11 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
     return Object.keys(connectors).reduce(
       (accum, connectorName) => ({
         ...accum,
-        [connectorName]: (el, opts, ...args) => {
+        [connectorName]: (el, required, options) => {
           this.registry.register(el, {
-            opts,
+            required,
             name: connectorName,
-            additionalArguments: args,
+            options,
             connector: connectors[connectorName],
           });
           return el;

@@ -1,6 +1,6 @@
 import { isFunction } from 'lodash';
 
-import { CoreEventHandlers } from './CoreEventHandlers';
+import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
 import { createShadow } from './createShadow';
 
 import { Indicator, NodeId, NodeTree, Node } from '../interfaces';
@@ -226,7 +226,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
       create: (
         el: HTMLElement,
         userElement: React.ReactElement,
-        callbackFunction?: (nodeTree: NodeTree) => void
+        options?: Partial<CreateHandlerOptions>
       ) => {
         el.setAttribute('draggable', 'true');
 
@@ -259,8 +259,8 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
               index
             );
 
-            if (isFunction(callbackFunction)) {
-              callbackFunction(draggedElement);
+            if (options && isFunction(options.onCreate)) {
+              options.onCreate(draggedElement);
             }
           };
           this.dropElement(onDropElement);
