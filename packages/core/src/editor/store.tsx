@@ -16,7 +16,6 @@ export const editorInitialState: EditorState = {
     dragged: new Set<NodeId>(),
     selected: new Set<NodeId>(),
     hovered: new Set<NodeId>(),
-    draggedOver: new Set<NodeId>(),
   },
   indicator: null,
   handlers: null,
