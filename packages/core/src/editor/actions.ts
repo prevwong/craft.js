@@ -278,7 +278,6 @@ const Methods = (
       this.setNodeEvent('selected', null);
       this.setNodeEvent('hovered', null);
       this.setNodeEvent('dragged', null);
-      this.setNodeEvent('draggedOver', null);
       this.setIndicator(null);
     },
 
