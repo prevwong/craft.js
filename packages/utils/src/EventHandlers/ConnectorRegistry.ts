@@ -5,13 +5,13 @@ import { Connector } from './interfaces';
 
 type ConnectorToRegister = {
   name: string;
-  required: Record<string, any>;
+  required: any;
   options?: Record<string, any>;
   connector: Connector;
 };
 
 type RegisteredConnector = {
-  required: Record<string, any>;
+  required: any;
   enable: () => void;
   disable: () => void;
 };
