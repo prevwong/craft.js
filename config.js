@@ -8,7 +8,7 @@ module.exports = {
     staging: {
       LANDING: 'https://craftjs.netlify.com/',
       DOCUMENTATION: 'https://craftjs.netlify.com/r/docs/overview/',
-      BASIC_EXAMPLE: 'https://craftjs.netlify.com/examples/basic/',
+      BASIC_EXAMPLE: '/examples/basic/',
     },
     development: {
       LANDING: 'http://localhost:3001/',
