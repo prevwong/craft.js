@@ -6,6 +6,7 @@ import { Connector } from './interfaces';
 type ConnectorToRegister = {
   name: string;
   opts: Record<string, any>;
+  additionalArguments: any[];
   connector: Connector;
 };
 
@@ -53,7 +54,11 @@ export class ConnectorRegistry {
     this.registry.set(this.getConnectorId(element, toRegister.name), {
       opts: toRegister.opts,
       enable: () => {
-        cleanup = toRegister.connector(element, toRegister.opts);
+        cleanup = toRegister.connector(
+          element,
+          toRegister.opts,
+          ...toRegister.additionalArguments
+        );
       },
       disable: () => {
         if (!cleanup) {

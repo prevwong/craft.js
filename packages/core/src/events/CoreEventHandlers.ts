@@ -1,7 +1,7 @@
 import { DerivedEventHandlers, EventHandlers } from '@craftjs/utils';
 
 import { EditorStore } from '../editor/store';
-import { NodeId } from '../interfaces/nodes';
+import { NodeId, NodeTree } from '../interfaces/nodes';
 
 export class CoreEventHandlers<O = {}> extends EventHandlers<
   { store: EditorStore } & O
@@ -13,7 +13,11 @@ export class CoreEventHandlers<O = {}> extends EventHandlers<
       hover: (el: HTMLElement, id: NodeId) => {},
       drag: (el: HTMLElement, id: NodeId) => {},
       drop: (el: HTMLElement, id: NodeId) => {},
-      create: (el: HTMLElement, UserElement: React.ReactElement) => {},
+      create: (
+        el: HTMLElement,
+        UserElement: React.ReactElement,
+        callbackFunction?: (nodeTree: NodeTree) => void
+      ) => {},
     };
   }
 }
