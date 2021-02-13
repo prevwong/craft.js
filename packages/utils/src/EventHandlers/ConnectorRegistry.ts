@@ -53,6 +53,10 @@ export class ConnectorRegistry {
     this.registry.set(this.getConnectorId(element, toRegister.name), {
       opts: toRegister.opts,
       enable: () => {
+        if (cleanup) {
+          cleanup();
+        }
+
         cleanup = toRegister.connector(element, toRegister.opts);
       },
       disable: () => {
