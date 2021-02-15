@@ -5,12 +5,13 @@ import { Connector } from './interfaces';
 
 type ConnectorToRegister = {
   name: string;
-  opts: Record<string, any>;
+  required: any;
+  options?: Record<string, any>;
   connector: Connector;
 };
 
 type RegisteredConnector = {
-  opts: Record<string, any>;
+  required: any;
   enable: () => void;
   disable: () => void;
 };
@@ -41,7 +42,12 @@ export class ConnectorRegistry {
 
   register(element: HTMLElement, toRegister: ConnectorToRegister) {
     if (this.get(element, toRegister.name)) {
-      if (isEqual(toRegister.opts, this.get(element, toRegister.name).opts)) {
+      if (
+        isEqual(
+          toRegister.required,
+          this.get(element, toRegister.name).required
+        )
+      ) {
         return;
       }
 
@@ -51,9 +57,13 @@ export class ConnectorRegistry {
     let cleanup: () => void | null = null;
 
     this.registry.set(this.getConnectorId(element, toRegister.name), {
-      opts: toRegister.opts,
+      required: toRegister.required,
       enable: () => {
-        cleanup = toRegister.connector(element, toRegister.opts);
+        cleanup = toRegister.connector(
+          element,
+          toRegister.required,
+          toRegister.options
+        );
       },
       disable: () => {
         if (!cleanup) {
