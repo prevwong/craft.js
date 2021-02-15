@@ -70,7 +70,8 @@ describe('EventHandlers', () => {
           expect(handlers.select.init).toHaveBeenNthCalledWith(
             1,
             dom,
-            'node-a'
+            'node-a',
+            undefined
           );
         });
       });
