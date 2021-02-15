@@ -59,6 +59,10 @@ export class ConnectorRegistry {
     this.registry.set(this.getConnectorId(element, toRegister.name), {
       required: toRegister.required,
       enable: () => {
+        if (cleanup) {
+          cleanup();
+        }
+
         cleanup = toRegister.connector(
           element,
           toRegister.required,
