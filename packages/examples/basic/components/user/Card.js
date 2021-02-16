@@ -9,12 +9,13 @@ import {
 } from './Container';
 import { Text } from './Text';
 
-export const CardTop = ({ children }) => {
+export const CardTop = ({ children, ...props }) => {
   const {
     connectors: { connect },
   } = useNode();
   return (
     <div
+      {...props}
       ref={connect}
       className="text-only"
       style={{
@@ -38,12 +39,12 @@ CardTop.craft = {
   },
 };
 
-export const CardBottom = ({ children }) => {
+export const CardBottom = ({ children, ...props }) => {
   const {
     connectors: { connect },
   } = useNode();
   return (
-    <div style={{ padding: '10px 0' }} ref={connect}>
+    <div {...props} style={{ padding: '10px 0' }} ref={connect}>
       {children}
     </div>
   );
@@ -56,15 +57,23 @@ CardBottom.craft = {
   },
 };
 
-export const Card = ({ background, padding = 20 }) => {
+export const Card = ({ background, padding = 20, ...props }) => {
   return (
-    <Container background={background} padding={padding}>
-      <Element canvas id="text" is={CardTop}>
-        <Text text="Only texts" fontSize={20} />
-        <Text text="are allowed up here" fontSize={15} />
+    <Container {...props} background={background} padding={padding}>
+      <Element canvas id="text" is={CardTop} data-cy="card-top">
+        <Text text="Only texts" fontSize={20} data-cy="card-top-text-1" />
+        <Text
+          text="are allowed up here"
+          fontSize={15}
+          data-cy="card-top-text-2"
+        />
       </Element>
-      <Element canvas id="buttons" is={CardBottom}>
-        <Button size="small" text="Only buttons down here" />
+      <Element canvas id="buttons" is={CardBottom} data-cy="card-bottom">
+        <Button
+          size="small"
+          text="Only buttons down here"
+          data-cy="card-bottom-button"
+        />
       </Element>
     </Container>
   );

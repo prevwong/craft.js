@@ -9,7 +9,7 @@ import {
 import React from 'react';
 
 export const SettingsPanel = () => {
-  const { actions, selected } = useEditor((state, query) => {
+  const { actions, selected, isEnabled } = useEditor((state, query) => {
     const currentNodeId = query.getEvent('selected').last();
     let selected;
 
@@ -26,10 +26,11 @@ export const SettingsPanel = () => {
 
     return {
       selected,
+      isEnabled: state.options.enabled,
     };
   });
 
-  return selected ? (
+  return isEnabled && selected ? (
     <Box bgcolor="rgba(0, 0, 0, 0.06)" mt={2} px={2} py={2}>
       <Grid container direction="column" spacing={0}>
         <Grid item>
@@ -39,12 +40,19 @@ export const SettingsPanel = () => {
                 <Typography variant="subtitle1">Selected</Typography>
               </Grid>
               <Grid item>
-                <Chip size="small" color="primary" label={selected.name} />
+                <Chip
+                  size="small"
+                  color="primary"
+                  label={selected.name}
+                  data-cy="chip-selected"
+                />
               </Grid>
             </Grid>
           </Box>
         </Grid>
-        {selected.settings && React.createElement(selected.settings)}
+        <div data-cy="settings-panel">
+          {selected.settings && React.createElement(selected.settings)}
+        </div>
         {selected.isDeletable ? (
           <MaterialButton
             variant="contained"

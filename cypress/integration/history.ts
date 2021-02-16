@@ -1,5 +1,3 @@
-import { util } from 'chai';
-
 describe('Test History', () => {
   beforeEach(() => {
     cy.visit('/');
