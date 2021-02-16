@@ -9,5 +9,6 @@ lib
 .now
 .vscode
 .idea
+.DS_Store
 cypress/videos/*
 cypress/screenshots/*
