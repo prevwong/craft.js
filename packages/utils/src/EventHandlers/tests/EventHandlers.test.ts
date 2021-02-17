@@ -70,7 +70,8 @@ describe('EventHandlers', () => {
           expect(handlers.select.init).toHaveBeenNthCalledWith(
             1,
             dom,
-            'node-a'
+            'node-a',
+            undefined
           );
         });
       });
@@ -114,9 +115,9 @@ describe('EventHandlers', () => {
       instance.enable();
     });
 
-    it('should only re-attach init', () => {
+    it('should cleanup existing and re-attach init', () => {
       Object.keys(instance.connectors).forEach((key) => {
-        expect(handlers[key].cleanup).toHaveBeenCalledTimes(0);
+        expect(handlers[key].cleanup).toHaveBeenCalledTimes(1);
         expect(handlers[key].init).toHaveBeenCalledTimes(1);
       });
     });
