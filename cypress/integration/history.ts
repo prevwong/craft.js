@@ -39,18 +39,27 @@ describe('Test History', () => {
   });
 
   it('should be possible to undo and redo changes made via drag and drop', () => {
+    cy.getByTestId('root-container')
+      .as('root')
+      .children()
+      .should('have.length', 4);
+
     // The first plan is to drag every component into the frame-container component
     cy.getByTestId('frame-container')
       .as('container')
       .children()
       .should('have.length', 1);
 
+    // TODO currently I do not know why but without the wait. test gets flaky
+    //      and fails randomly because cypress is not able to drag the card into the container 
+    cy.wait(100);
     cy.getByTestId('frame-card')
       .as('card')
       .dragAndDrop('@container', { position: 'inside' });
     cy.getByTestId('frame-button')
       .as('button')
       .dragAndDrop('@container', { position: 'inside' });
+
     cy.getByTestId('frame-text')
       .as('text')
       .dragAndDrop('@container', { position: 'inside' });
