@@ -4,12 +4,13 @@ import { Paper, FormControl, FormLabel } from '@material-ui/core';
 import ColorPicker from 'material-ui-color-picker';
 import React from 'react';
 
-export const Container = ({ background, padding, children }) => {
+export const Container = ({ background, padding, children, ...props }) => {
   const {
     connectors: { connect, drag },
   } = useNode();
   return (
     <Paper
+      {...props}
       ref={(ref) => connect(drag(ref))}
       style={{ margin: '5px 0', background, padding: `${padding}px` }}
     >
@@ -33,6 +34,7 @@ export const ContainerSettings = () => {
       <FormControl fullWidth={true} margin="normal" component="fieldset">
         <FormLabel component="legend">Background</FormLabel>
         <ColorPicker
+          name="background-color"
           value={background}
           onChange={(color) => {
             setProp((props) => (props.background = color), 500);

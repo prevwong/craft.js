@@ -20,8 +20,8 @@ export const Topbar = () => {
   const { actions, query, enabled, canUndo, canRedo } = useEditor(
     (state, query) => ({
       enabled: state.options.enabled,
-      canUndo: query.history.canUndo(),
-      canRedo: query.history.canRedo(),
+      canUndo: state.options.enabled && query.history.canUndo(),
+      canRedo: state.options.enabled && query.history.canRedo(),
     })
   );
 

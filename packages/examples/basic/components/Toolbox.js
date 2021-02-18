@@ -33,6 +33,7 @@ export const Toolbox = () => {
               connectors.create(ref, <Button text="Click me" size="small" />)
             }
             variant="contained"
+            data-cy="toolbox-button"
           >
             Button
           </MaterialButton>
@@ -41,6 +42,7 @@ export const Toolbox = () => {
           <MaterialButton
             ref={(ref) => connectors.create(ref, <Text text="Hi world" />)}
             variant="contained"
+            data-cy="toolbox-text"
           >
             Text
           </MaterialButton>
@@ -54,6 +56,7 @@ export const Toolbox = () => {
               )
             }
             variant="contained"
+            data-cy="toolbox-container"
           >
             Container
           </MaterialButton>
@@ -62,6 +65,7 @@ export const Toolbox = () => {
           <MaterialButton
             ref={(ref) => connectors.create(ref, <Card />)}
             variant="contained"
+            data-cy="toolbox-card"
           >
             Card
           </MaterialButton>
