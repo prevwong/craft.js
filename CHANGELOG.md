@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-alpha.16 (2021-02-18)
+
+
+### Bug Fixes
+
+* handlers not being disabled ([#189](https://github.com/prevwong/craft.js/issues/189)) ([f9c2274](https://github.com/prevwong/craft.js/commit/f9c227415d3bc4ef0490437b16a862234c15d7f7))
+
+
+
+
+
 # 0.2.0-alpha.15 (2021-02-11)
 
 **Note:** Version bump only for package craft.js
