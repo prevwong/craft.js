@@ -11,7 +11,6 @@ import { Button } from '../components/selectors/Button';
 import { Video } from '../components/selectors/Video';
 import { Viewport, RenderNode } from '../components/editor';
 import lz from 'lzutf8';
-import '../styles/app.css';
 
 const theme = createMuiTheme({
   typography: {

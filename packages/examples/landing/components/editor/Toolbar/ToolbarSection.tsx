@@ -1,8 +1,7 @@
-import React from 'react';
 import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Grid,
   Divider,
 } from '@material-ui/core';
@@ -50,8 +49,8 @@ export const ToolbarSection = ({ title, props, summary, children }: any) => {
       }, {}),
   }));
   return (
-    <ExpansionPanel classes={panelClasses}>
-      <ExpansionPanelSummary classes={summaryClasses}>
+    <Accordion classes={panelClasses}>
+      <AccordionSummary classes={summaryClasses}>
         <div className="px-6 w-full">
           <Grid container direction="row" alignItems="center" spacing={3}>
             <Grid item xs={4}>
@@ -73,13 +72,13 @@ export const ToolbarSection = ({ title, props, summary, children }: any) => {
             ) : null}
           </Grid>
         </div>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails style={{ padding: '0px 24px 20px' }}>
+      </AccordionSummary>
+      <AccordionDetails style={{ padding: '0px 24px 20px' }}>
         <Divider />
         <Grid container spacing={1}>
           {children}
         </Grid>
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+      </AccordionDetails>
+    </Accordion>
   );
 };
