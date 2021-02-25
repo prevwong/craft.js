@@ -1,7 +1,7 @@
 /* purgecss start ignore */
+@import url('https://use.typekit.net/mpa1wkh.css');
 @tailwind base;
 @tailwind components;
-@import url('https://use.typekit.net/mpa1wkh.css');
 html,
 body {
   font-family: 'acumin-pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
