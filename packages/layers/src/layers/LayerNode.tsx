@@ -46,10 +46,12 @@ export const LayerNode: React.FC = () => {
 
   const initRef = useRef<boolean>(false);
 
-  if (!initRef.current) {
-    actions.registerLayer(id);
-    initRef.current = true;
-  }
+  useEffect(() => {
+    if (!initRef.current) {
+      actions.registerLayer(id);
+      initRef.current = true;
+    }
+  }, [initRef, actions, id]);
 
   return data ? (
     <div className={`craft-layer-node ${id}`}>
