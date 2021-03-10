@@ -3,7 +3,8 @@ import { DropAction, DOMInfo } from '../interfaces';
 export default function movePlaceholder(
   pos: DropAction,
   canvasDOMInfo: DOMInfo, // which canvas is cursor at
-  bestTargetDomInfo: DOMInfo | null // closest element in canvas (null if canvas is empty)
+  bestTargetDomInfo: DOMInfo | null, // closest element in canvas (null if canvas is empty)
+  thickness: number = 2
 ) {
   let t = 0,
     l = 0,
@@ -16,13 +17,13 @@ export default function movePlaceholder(
   if (elDim) {
     // If it's not in flow (like 'float' element)
     if (!elDim.inFlow) {
-      w = 2;
+      w = thickness;
       h = elDim.outerHeight;
       t = elDim.top;
       l = where === 'before' ? elDim.left : elDim.left + elDim.outerWidth;
     } else {
       w = elDim.outerWidth;
-      h = 2;
+      h = thickness;
       t = where === 'before' ? elDim.top : elDim.bottom;
       l = elDim.left;
     }
@@ -36,7 +37,7 @@ export default function movePlaceholder(
         canvasDOMInfo.padding.left -
         canvasDOMInfo.margin.left -
         canvasDOMInfo.margin.right;
-      h = 2;
+      h = thickness;
     }
   }
   return {
