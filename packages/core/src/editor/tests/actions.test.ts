@@ -1,5 +1,3 @@
-import { EditorState } from '@craftjs/core';
-import { produce } from 'immer';
 import mapValues from 'lodash/mapValues';
 
 import { QueryMethods } from '../../editor/query';
@@ -11,10 +9,12 @@ import {
 } from '../../utils/testHelpers';
 import { ActionMethods } from '../actions';
 
-const Actions = (state) => (cb) =>
-  produce<EditorState>(state, (draft) =>
-    cb(ActionMethods(draft as any, QueryMethods(state) as any))
-  );
+// TODO: create a cleaner way to test Action methods
+const Actions = (state) => (cb) => {
+  const methods = ActionMethods(state as any, QueryMethods(state) as any);
+  cb(methods);
+  return state;
+};
 
 describe('actions.add', () => {
   let state, rootNode;
