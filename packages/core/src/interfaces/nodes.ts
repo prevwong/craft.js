@@ -3,7 +3,7 @@ import React from 'react';
 
 import { QueryMethods } from '../editor/query';
 
-export type UserComponentConfig<T> = {
+type UserComponentConfig<T> = {
   displayName: string;
   rules: Partial<NodeRules>;
   related: Partial<NodeRelated>;

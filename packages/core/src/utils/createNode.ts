@@ -2,7 +2,7 @@ import React from 'react';
 
 import { getRandomNodeId } from './getRandomNodeId';
 
-import { Node, FreshNode, UserComponentConfig } from '../interfaces';
+import { Node, FreshNode } from '../interfaces';
 import {
   defaultElementProps,
   Element,
@@ -23,7 +23,6 @@ export function createNode(
   let id = newNode.id || getRandomNodeId();
 
   const node: Node = {
-    ...newNode,
     id,
     _hydrationTimestamp: Date.now(),
     data: {
@@ -89,7 +88,8 @@ export function createNode(
     normalize(node);
   }
 
-  const userComponentConfig: UserComponentConfig<any> = actualType.craft;
+  // TODO: use UserComponentConfig type
+  const userComponentConfig = actualType.craft as any;
 
   if (userComponentConfig) {
     node.data.displayName =
