@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-alpha.17 (2021-03-11)
+
+
+### Bug Fixes
+
+* lint ([3750b11](https://github.com/prevwong/craft.js/commit/3750b11dbe27b477820dac8c940bcb46981e6956))
+
+
+
+
+
 # 0.2.0-alpha.16 (2021-02-18)
 
 
