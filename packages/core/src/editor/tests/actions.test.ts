@@ -1,6 +1,7 @@
 import mapValues from 'lodash/mapValues';
 
 import { QueryMethods } from '../../editor/query';
+import { EditorState } from '../../interfaces';
 import { createNode } from '../../utils/createNode';
 import {
   createTestState,
@@ -10,8 +11,8 @@ import {
 import { ActionMethods } from '../actions';
 
 // TODO: create a cleaner way to test Action methods
-const Actions = (state) => (cb) => {
-  const methods = ActionMethods(state as any, QueryMethods(state) as any);
+const Actions = (state: EditorState) => (cb) => {
+  const methods = ActionMethods(state, QueryMethods(state) as any);
   cb(methods);
   return state;
 };

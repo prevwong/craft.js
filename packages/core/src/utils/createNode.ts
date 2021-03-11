@@ -30,7 +30,7 @@ export function createNode(
       name: getNodeTypeName(actualType),
       displayName: getNodeTypeName(actualType),
       props: {},
-      custom: newNode.data.custom || {},
+      custom: {},
       parent: null,
       isCanvas: false,
       hidden: false,
@@ -97,11 +97,22 @@ export function createNode(
       userComponentConfig.name ||
       node.data.displayName;
 
-    node.data.isCanvas =
+    node.data.props = {
+      ...(userComponentConfig.props || userComponentConfig.defaultProps || {}),
+      ...node.data.props,
+    };
+
+    node.data.custom = {
+      ...(userComponentConfig.custom || {}),
+      ...node.data.custom,
+    };
+
+    if (
       userComponentConfig.isCanvas !== undefined &&
       userComponentConfig.isCanvas !== null
-        ? userComponentConfig.isCanvas
-        : node.data.isCanvas;
+    ) {
+      node.data.isCanvas = userComponentConfig.isCanvas;
+    }
 
     if (userComponentConfig.rules) {
       Object.keys(userComponentConfig.rules).forEach((key) => {
@@ -110,19 +121,6 @@ export function createNode(
         }
       });
     }
-
-    node.data.props = {
-      ...(userComponentConfig.props ||
-        userComponentConfig.defaultProps ||
-        actualType.craft.defaultProps ||
-        {}),
-      ...node.data.props,
-    };
-
-    node.data.custom = {
-      ...(userComponentConfig.custom || {}),
-      ...node.data.custom,
-    };
 
     if (userComponentConfig.related) {
       const relatedNodeContext = {
