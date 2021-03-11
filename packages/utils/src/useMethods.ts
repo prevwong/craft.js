@@ -1,10 +1,18 @@
 // https://github.com/pelotom/use-methods
-import produce, { Patch, produceWithPatches } from 'immer';
+import produce, {
+  Patch,
+  produceWithPatches,
+  enableMapSet,
+  enablePatches,
+} from 'immer';
 import isEqualWith from 'lodash/isEqualWith';
 import { useMemo, useEffect, useRef, useReducer, useCallback } from 'react';
 
 import { History, HISTORY_ACTIONS } from './History';
 import { Delete } from './utilityTypes';
+
+enableMapSet();
+enablePatches();
 
 export type SubscriberAndCallbacksFor<
   M extends MethodsOrOptions,
