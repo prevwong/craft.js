@@ -12,8 +12,8 @@ import {
 } from '../nodes';
 import { NodeProvider } from '../nodes/NodeContext';
 
-const getNodeTypeName = (type: any) =>
-  typeof type == 'string' ? type : (type as any).name;
+const getNodeTypeName = (type: string | { name: string }) =>
+  typeof type == 'string' ? type : type.name;
 
 export function createNode(
   newNode: FreshNode,
