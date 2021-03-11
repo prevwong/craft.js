@@ -51,7 +51,7 @@ describe('Test History', () => {
       .should('have.length', 1);
 
     // TODO currently I do not know why but without the wait. test gets flaky
-    //      and fails randomly because cypress is not able to drag the card into the container 
+    //      and fails randomly because cypress is not able to drag the card into the container
     cy.wait(100);
     cy.getByTestId('frame-card')
       .as('card')
