@@ -3,7 +3,13 @@ import React from 'react';
 import { getRandomNodeId } from './getRandomNodeId';
 
 import { Node, FreshNode, UserComponentConfig } from '../interfaces';
-import { defaultElementProps, Element, elementPropToNodeData } from '../nodes';
+import {
+  defaultElementProps,
+  Element,
+  Canvas,
+  elementPropToNodeData,
+  deprecateCanvasComponent,
+} from '../nodes';
 import { NodeProvider } from '../nodes/NodeContext';
 
 const getNodeTypeName = (type: any) =>
@@ -49,7 +55,7 @@ export function createNode(
   };
 
   // @ts-ignore
-  if (node.data.type === Element) {
+  if (node.data.type === Element || node.data.type === Canvas) {
     const mergedProps = {
       ...defaultElementProps,
       ...node.data.props,
@@ -71,6 +77,12 @@ export function createNode(
     actualType = node.data.type;
     node.data.name = getNodeTypeName(actualType);
     node.data.displayName = getNodeTypeName(actualType);
+
+    const usingDeprecatedCanvas = node.data.type === Canvas;
+    if (usingDeprecatedCanvas) {
+      node.data.isCanvas = true;
+      deprecateCanvasComponent();
+    }
   }
 
   if (normalize) {
@@ -78,9 +90,12 @@ export function createNode(
   }
 
   const userComponentConfig: UserComponentConfig<any> = actualType.craft;
+
   if (userComponentConfig) {
     node.data.displayName =
-      userComponentConfig.displayName || node.data.displayName;
+      userComponentConfig.displayName ||
+      userComponentConfig.name ||
+      node.data.displayName;
 
     node.data.isCanvas =
       userComponentConfig.isCanvas !== undefined &&
@@ -97,7 +112,10 @@ export function createNode(
     }
 
     node.data.props = {
-      ...(userComponentConfig.props || {}),
+      ...(userComponentConfig.props ||
+        userComponentConfig.defaultProps ||
+        actualType.craft.defaultProps ||
+        {}),
       ...node.data.props,
     };
 
