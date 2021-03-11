@@ -1,4 +1,4 @@
-import { Patch, applyPatches, enablePatches } from 'immer';
+import { Patch, applyPatches } from 'immer';
 
 type Timeline = Array<{
   patches: Patch[];
@@ -15,9 +15,6 @@ export const HISTORY_ACTIONS = {
 };
 
 export class History {
-  constructor() {
-    enablePatches();
-  }
   timeline: Timeline = [];
   pointer = -1;
 
