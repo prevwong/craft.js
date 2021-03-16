@@ -73,12 +73,13 @@ export const Events: React.FC = ({ children }) => {
               indicator.placement,
               getDOMInfo(indicator.placement.parent.dom),
               indicator.placement.currentNode &&
-                getDOMInfo(indicator.placement.currentNode.dom)
+                getDOMInfo(indicator.placement.currentNode.dom),
+              indicatorOptions.thickness
             ),
             backgroundColor: indicator.error
               ? indicatorOptions.error
               : indicatorOptions.success,
-            transition: '0.2s ease-in',
+            transition: indicatorOptions.transition || '0.2s ease-in',
           },
           parentDom: indicator.placement.parent.dom,
         })}
