@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-alpha.19 (2021-03-16)
+
+
+### Features
+
+* additional indicator options ([#212](https://github.com/prevwong/craft.js/issues/212)) ([0d9c6e5](https://github.com/prevwong/craft.js/commit/0d9c6e59a8725ba600d177ad5a9beec0434e640c))
+
+
+
+
+
 # 0.2.0-alpha.18 (2021-03-11)
 
 **Note:** Version bump only for package docs
