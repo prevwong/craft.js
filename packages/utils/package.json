@@ -20,6 +20,7 @@
     "lodash": "^4.17.20",
     "tiny-invariant": "^1.0.6"
   },
+  "nohoist": ["immer", "immer/**"],
   "peerDependencies": {
     "react": "^16.11.0"
   }

@@ -14,7 +14,7 @@
     "slate-react": "^0.57.0"
   },
   "peerDependencies": {
-    "@craftjs/core": "^0.2.0-alpha.0",
+    "@craftjs/core": "^0.2.0-alpha.19",
     "react": "^16.8.0",
     "slate": "^0.57.0",
     "slate-react": "^0.57.0"
