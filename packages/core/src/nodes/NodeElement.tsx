@@ -9,10 +9,12 @@ export type NodeElement = {
   id: NodeId;
 };
 
-export const NodeElement: React.FC<NodeElement> = React.memo(({ id }) => {
-  return (
-    <NodeProvider id={id}>
-      <RenderNodeToElement />
-    </NodeProvider>
-  );
-});
+export const NodeElement: React.FC<NodeElement> = React.memo(
+  ({ id, ...otherProps }) => {
+    return (
+      <NodeProvider id={id}>
+        <RenderNodeToElement {...otherProps} />
+      </NodeProvider>
+    );
+  }
+);

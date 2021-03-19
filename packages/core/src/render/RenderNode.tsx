@@ -7,8 +7,8 @@ import { NodeId } from '../interfaces';
 import { NodeElement } from '../nodes/NodeElement';
 import { useInternalNode } from '../nodes/useInternalNode';
 
-const Render = () => {
-  const { type, props, nodes, hydrationTimestamp } = useInternalNode(
+const Render = (otherProps: any) => {
+  const { type, props: nodeProps, nodes, hydrationTimestamp } = useInternalNode(
     (node) => ({
       type: node.data.type,
       props: node.data.props,
@@ -16,6 +16,11 @@ const Render = () => {
       hydrationTimestamp: node._hydrationTimestamp,
     })
   );
+
+  const props = {
+    ...nodeProps,
+    ...otherProps,
+  };
 
   return useMemo(() => {
     let children = props.children;
@@ -41,7 +46,7 @@ const Render = () => {
   }, [type, props, hydrationTimestamp, nodes]);
 };
 
-export const RenderNodeToElement: React.FC<any> = () => {
+export const RenderNodeToElement: React.FC<any> = (props) => {
   const { hidden } = useInternalNode((node) => ({
     hidden: node.data.hidden,
   }));
@@ -55,5 +60,5 @@ export const RenderNodeToElement: React.FC<any> = () => {
     return null;
   }
 
-  return React.createElement(onRender, { render: <Render /> });
+  return React.createElement(onRender, { render: <Render {...props} /> });
 };
