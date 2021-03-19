@@ -15,6 +15,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
   static draggedElementShadow: HTMLElement;
   static draggedElement: DraggedElement;
   static indicator: Indicator = null;
+  static lastDragPosition: { x: number; y: number } = null;
 
   // Safely run handler if Node Id exists
   defineNodeEventListener(
@@ -74,10 +75,46 @@ export class DefaultEventHandlers extends CoreEventHandlers {
       },
       drop: {
         events: [
-          defineEventListener('dragover', (e: CraftDOMEvent<MouseEvent>) => {
-            e.craft.stopPropagation();
-            e.preventDefault();
-          }),
+          this.defineNodeEventListener(
+            'dragover',
+            (e: CraftDOMEvent<MouseEvent>, targetId: NodeId) => {
+              e.craft.stopPropagation();
+              e.preventDefault();
+              const { clientX: x, clientY: y } = e;
+              if (
+                DefaultEventHandlers.lastDragPosition &&
+                DefaultEventHandlers.lastDragPosition.x === x &&
+                DefaultEventHandlers.lastDragPosition.y === y
+              ) {
+                return;
+              }
+              DefaultEventHandlers.lastDragPosition = { x, y };
+
+              const draggedElement = DefaultEventHandlers.draggedElement;
+              if (!draggedElement) {
+                return;
+              }
+
+              let node = (draggedElement as unknown) as Node;
+
+              if ((draggedElement as NodeTree).rootNodeId) {
+                const nodeTree = draggedElement as NodeTree;
+                node = nodeTree.nodes[nodeTree.rootNodeId];
+              }
+
+              const indicator = this.store.query.getDropPlaceholder(
+                node,
+                targetId,
+                { x, y }
+              );
+
+              if (!indicator) {
+                return;
+              }
+              this.store.actions.setIndicator(indicator);
+              DefaultEventHandlers.indicator = indicator;
+            }
+          ),
           this.defineNodeEventListener(
             'dragenter',
             (e: CraftDOMEvent<MouseEvent>, targetId: NodeId) => {
@@ -102,6 +139,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
                 targetId,
                 { x, y }
               );
+              DefaultEventHandlers.lastDragPosition = { x, y };
 
               if (!indicator) {
                 return;
