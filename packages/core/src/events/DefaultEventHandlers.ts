@@ -1,3 +1,5 @@
+import throttle from 'lodash/throttle';
+
 import { CoreEventHandlers } from './CoreEventHandlers';
 import { createShadow } from './createShadow';
 
@@ -16,6 +18,40 @@ export class DefaultEventHandlers extends CoreEventHandlers {
   static draggedElement: DraggedElement;
   static indicator: Indicator = null;
   static lastDragPosition: { x: number; y: number } = null;
+
+  onDragOver(x: number, y: number, targetId: NodeId) {
+    const draggedElement = DefaultEventHandlers.draggedElement;
+    if (!draggedElement) {
+      return;
+    }
+
+    if (targetId) {
+      const node = this.store.query.node(targetId).get();
+      if (!node) {
+        return;
+      }
+    }
+
+    let node = (draggedElement as unknown) as Node;
+
+    if ((draggedElement as NodeTree).rootNodeId) {
+      const nodeTree = draggedElement as NodeTree;
+      node = nodeTree.nodes[nodeTree.rootNodeId];
+    }
+
+    const indicator = this.store.query.getDropPlaceholder(node, targetId, {
+      x,
+      y,
+    });
+
+    if (!indicator) {
+      return;
+    }
+    this.store.actions.setIndicator(indicator);
+    DefaultEventHandlers.indicator = indicator;
+  }
+
+  throttledDragOver = throttle(this.onDragOver, 200, { leading: false });
 
   // Safely run handler if Node Id exists
   defineNodeEventListener(
@@ -75,11 +111,12 @@ export class DefaultEventHandlers extends CoreEventHandlers {
       },
       drop: {
         events: [
-          this.defineNodeEventListener(
+          defineEventListener(
             'dragover',
             (e: CraftDOMEvent<MouseEvent>, targetId: NodeId) => {
               e.craft.stopPropagation();
               e.preventDefault();
+
               const { clientX: x, clientY: y } = e;
               if (
                 DefaultEventHandlers.lastDragPosition &&
@@ -95,24 +132,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
                 return;
               }
 
-              let node = (draggedElement as unknown) as Node;
-
-              if ((draggedElement as NodeTree).rootNodeId) {
-                const nodeTree = draggedElement as NodeTree;
-                node = nodeTree.nodes[nodeTree.rootNodeId];
-              }
-
-              const indicator = this.store.query.getDropPlaceholder(
-                node,
-                targetId,
-                { x, y }
-              );
-
-              if (!indicator) {
-                return;
-              }
-              this.store.actions.setIndicator(indicator);
-              DefaultEventHandlers.indicator = indicator;
+              this.throttledDragOver(x, y, targetId);
             }
           ),
           this.defineNodeEventListener(
