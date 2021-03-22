@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-alpha.20 (2021-03-22)
+
+
+### Bug Fixes
+
+* remove slate node ([#217](https://github.com/prevwong/craft.js/issues/217)) ([9f7ec97](https://github.com/prevwong/craft.js/commit/9f7ec97e88825460054f8880bb4b5900c2776721))
+
+
+
+
+
 # 0.2.0-alpha.19 (2021-03-16)
 
 

@@ -2,7 +2,7 @@
   "name": "@craftjs/utils",
   "description": "Utilities used internally across the craft.js monorepo",
   "private": false,
-  "version": "0.2.0-alpha.19",
+  "version": "0.2.0-alpha.20",
   "author": "Prev Wong <prevwong@gmail.com>",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
@@ -20,7 +20,10 @@
     "lodash": "^4.17.20",
     "tiny-invariant": "^1.0.6"
   },
-  "nohoist": ["immer", "immer/**"],
+  "nohoist": [
+    "immer",
+    "immer/**"
+  ],
   "peerDependencies": {
     "react": "^16.11.0"
   }
