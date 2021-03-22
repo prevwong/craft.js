@@ -30,7 +30,7 @@ export const useCraftStateSync = () => {
   const slateSelectionRef = useRef(null);
   const isCraftOverriding = useRef(false);
 
-  const { actions, craftSlateState } = useEditor((state, query) => ({
+  const { query, actions, craftSlateState } = useEditor((state, query) => ({
     craftSlateState: getSlateStateFromCraft(id, query),
   }));
 
@@ -146,6 +146,10 @@ export const useCraftStateSync = () => {
             if (!state.nodes[op.node.id]) {
               return;
             }
+
+            const descendants = query.node(op.node.id).descendants(true);
+
+            descendants.forEach((nodeId) => delete state.nodes[nodeId]);
 
             delete state.nodes[op.node.id];
           });
