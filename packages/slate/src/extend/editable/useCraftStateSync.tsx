@@ -2,7 +2,7 @@
 import { useEditor } from '@craftjs/core';
 import isEqual from 'lodash/isEqual';
 import { useEffect, useRef } from 'react';
-import { Editor } from 'slate';
+import { Editor, Node } from 'slate';
 import { useSlate } from 'slate-react';
 
 import { SlateElement } from '../../interfaces';
@@ -114,6 +114,16 @@ export const useCraftStateSync = () => {
         actionCreator = actions.history.merge();
       }
 
+      const slateNodeIds = Array.from(Node.descendants(slateEditor)).map(
+        ([nodeId]) => nodeId.id
+      );
+      const currentSlateNodeIds = query.node(id).descendants(true);
+
+      // Get deleted slate node ids
+      const deletedNodeIds = currentSlateNodeIds.filter(
+        (id) => slateNodeIds.includes(id) === false
+      );
+
       actionCreator.setState((state) => {
         const slateState = slateEditor.children;
 
@@ -136,23 +146,9 @@ export const useCraftStateSync = () => {
         state.nodes[id].data.custom.selection = slateSelection;
 
         // Remove any deleted Slate nodes from the Craft state
-        slateEditor.operations
-          .filter((op) => op.type === 'remove_node')
-          .forEach((op) => {
-            if (!op.node) {
-              return;
-            }
-
-            if (!state.nodes[op.node.id]) {
-              return;
-            }
-
-            const descendants = query.node(op.node.id).descendants(true);
-
-            descendants.forEach((nodeId) => delete state.nodes[nodeId]);
-
-            delete state.nodes[op.node.id];
-          });
+        deletedNodeIds.forEach(
+          (deletedNodeId) => delete state.nodes[deletedNodeId]
+        );
       });
     };
 
