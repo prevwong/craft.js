@@ -12,10 +12,9 @@ export const Container = ({ background, padding, children, outline }) => {
 
   const { isDraggedOver } = useEditor((state, query) => {
     // we have to look through all the ancestors of the element that the user currently drags over
-    const { draggedOver: draggedOverNodes } = state.events;
     let isDraggedOver = false;
 
-    for (const nodeId of draggedOverNodes) {
+    for (const nodeId of query.getDraggedOverNodes()) {
       // we are looking for the first canvas element
       if (query.node(nodeId).isCanvas()) {
         // if the id of first canvas element is the same as this Container's id we know that the user is dragging over this Container

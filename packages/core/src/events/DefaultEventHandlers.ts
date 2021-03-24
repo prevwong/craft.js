@@ -148,8 +148,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
               return;
             }
 
-            const ancestors = store.query.node(targetId).ancestors();
-            store.actions.setNodeEvent('draggedOver', [targetId, ...ancestors]);
+            store.actions.setNodeEvent('draggedOver', targetId);
 
             let node = (draggedElement as unknown) as Node;
 

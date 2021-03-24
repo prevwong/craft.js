@@ -115,6 +115,18 @@ export function QueryMethods(state: EditorState) {
       return output;
     },
 
+    getDraggedOverNodes(): Set<NodeId> {
+      const draggedOverNodeId = Array.from(state.events.draggedOver)[0];
+      if (draggedOverNodeId) {
+        return new Set([
+          draggedOverNodeId,
+          ..._().node(draggedOverNodeId).ancestors(),
+        ]);
+      } else {
+        return new Set();
+      }
+    },
+
     /**
      * Get the current Editor options
      */
