@@ -116,11 +116,11 @@ export function createNode(
           related: true,
         };
         Object.keys(actualType.craft.related).forEach((comp) => {
-          node.related[comp] = () =>
+          node.related[comp] = (props) =>
             React.createElement(
               NodeProvider,
               relatedNodeContext,
-              React.createElement(actualType.craft.related[comp])
+              React.createElement(actualType.craft.related[comp], props)
             );
         });
       }
