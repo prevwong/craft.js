@@ -128,7 +128,7 @@ Nodes that are referenced in the parent Node's `data.nodes` property. These node
 
 ### Linked nodes
 
-Nodes that are linked to a parent Node via an arbitary `id`
+Nodes that are linked to a parent Node via an arbitrary `id`
 
 ```jsx
 // Definition

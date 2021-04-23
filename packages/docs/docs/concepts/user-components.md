@@ -255,7 +255,7 @@ const Hero = ({background}) => {
 
 > You must specify the `id` prop of `<Element />` when used inside a User Component
 
-In the above example, we used `<Element />` to create and configure a new Node inside our User Component. We call these Linked Nodes since they are linked to a parent Node via an arbitary `id`. In this case, the `Text` node is linked to the `Hero` node via its "title_text" id.
+In the above example, we used `<Element />` to create and configure a new Node inside our User Component. We call these Linked Nodes since they are linked to a parent Node via an arbitrary `id`. In this case, the `Text` node is linked to the `Hero` node via its "title_text" id.
 
 Similarly, we could also create a droppable region inside a User Component via a Canvas Node:
 

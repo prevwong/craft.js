@@ -54,7 +54,7 @@ const App = () => {
 
 ### Defining Linked Nodes
 
-When used inside a User Component, `<Element />` works identically as used inside `<Frame />` but because there isn't a Node in-place, thus it has to create a new Linked Node - which is essentially a Node that is linked to the Node of the containing User Component via an arbitary `id`:
+When used inside a User Component, `<Element />` works identically as used inside `<Frame />` but because there isn't a Node in-place, thus it has to create a new Linked Node - which is essentially a Node that is linked to the Node of the containing User Component via an arbitrary `id`:
 
 ```jsx {5}
 const Hero = () => {

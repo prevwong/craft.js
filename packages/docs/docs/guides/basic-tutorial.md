@@ -551,7 +551,7 @@ export default function App() {
 ### Implementing the Toolbox
 Let's go back to our Toolbox component and modify it so that dragging those buttons into the editor will create new instances of the user components they represent. Just as `useNode` provides methods and information related to a specific `Node`, `useEditor` specifies methods and information related to the entire editor's state.
 
-The `useEditor` also provides `connectors`; the one we are interested in right now is `create` which attaches a drag handler to the  DOM specified in its first argument and creates the element specified in its second arguement.
+The `useEditor` also provides `connectors`; the one we are interested in right now is `create` which attaches a drag handler to the  DOM specified in its first argument and creates the element specified in its second argument.
 
 ```jsx {20,23,26}
 // components/Toolbox.js
