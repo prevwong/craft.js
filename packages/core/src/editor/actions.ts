@@ -99,7 +99,7 @@ const Methods = (
     return parent;
   };
 
-  const deleteNode = (id: NodeId, isLinkedNode: boolean = false) => {
+  const deleteNode = (id: NodeId) => {
     const targetNode = state.nodes[id],
       parentNode = state.nodes[targetNode.data.parent];
 
@@ -109,16 +109,24 @@ const Methods = (
       [...targetNode.data.nodes].forEach((childId) => deleteNode(childId));
     }
 
-    if (isLinkedNode && parentNode.data.linkedNodes) {
-      const linkedId = Object.keys(parentNode.data.linkedNodes).filter(
+    if (targetNode.data.linkedNodes) {
+      Object.values(targetNode.data.linkedNodes).map((linkedNodeId) =>
+        deleteNode(linkedNodeId)
+      );
+    }
+
+    const isChildNode = parentNode.data.nodes.includes(id);
+
+    if (isChildNode) {
+      const parentChildren = parentNode.data.nodes;
+      parentChildren.splice(parentChildren.indexOf(id), 1);
+    } else {
+      const linkedId = Object.keys(parentNode.data.linkedNodes).find(
         (id) => parentNode.data.linkedNodes[id] === id
-      )[0];
+      );
       if (linkedId) {
         delete parentNode.data.linkedNodes[linkedId];
       }
-    } else {
-      const parentChildren = parentNode.data.nodes;
-      parentChildren.splice(parentChildren.indexOf(id), 1);
     }
 
     removeNodeFromEvents(state, id);
@@ -143,7 +151,7 @@ const Methods = (
 
       const existingLinkedNode = parent.data.linkedNodes[id];
       if (existingLinkedNode) {
-        deleteNode(existingLinkedNode, true);
+        deleteNode(existingLinkedNode);
       }
 
       parent.data.linkedNodes[id] = tree.rootNodeId;
