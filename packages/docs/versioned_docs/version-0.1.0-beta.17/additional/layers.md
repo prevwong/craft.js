@@ -82,7 +82,7 @@ export default function App() {
 
 
 ## Default components
-These following components are available for you to extend upon if you wish to design your own component to render the layers (which can be specified in the `renderLayer` prop).
+The following components are available for you to extend if you wish to design your own component to render the layers (which can be specified in the `renderLayer` prop).
 
 - `<DefaultLayer />` 
   - `<DefaultLayerHeader />` 

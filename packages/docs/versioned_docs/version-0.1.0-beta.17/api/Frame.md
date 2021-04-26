@@ -54,7 +54,7 @@ const App = () => {
 }
 ```
 
-### Loading from serialised Nodes
+### Loading from serialized Nodes
 ```tsx {10}
 import {Editor, Frame, Element} from "@craftjs/core";
 
