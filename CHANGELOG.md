@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-alpha.22 (2021-04-26)
+
+
+### Bug Fixes
+
+* orphaned linked nodes ([#236](https://github.com/prevwong/craft.js/issues/236)) ([65450ea](https://github.com/prevwong/craft.js/commit/65450ea97a0bbac4efc51d0306025bd07a5165bb))
+
+
+
+
+
 # 0.2.0-alpha.21 (2021-03-22)
 
 **Note:** Version bump only for package craft.js
