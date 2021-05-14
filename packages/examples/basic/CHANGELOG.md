@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-alpha.23 (2021-05-14)
+
+
+### Features
+
+* **slate:** improve speed of slate/craft integration ([#241](https://github.com/prevwong/craft.js/issues/241)) ([763274c](https://github.com/prevwong/craft.js/commit/763274c4787130675127703d333ea63ee8482fb1))
+
+
+
+
+
 # 0.2.0-alpha.22 (2021-04-26)
 
 
