@@ -98,16 +98,9 @@ export const useCraftStateSync = () => {
   }, [slateSelection]);
 
   useEffect(() => {
-    const { apply, onChange } = slateEditor;
+    const { apply } = slateEditor;
 
     slateEditor.onChange = () => {
-      onChange();
-
-      // Don't update Craft state if only selection operations had been performed
-      if (slateEditor.operations.every((op) => op.type === 'set_selection')) {
-        return;
-      }
-
       let actionCreator = actions.history.throttle(500);
 
       if (isCraftOverriding.current) {

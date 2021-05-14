@@ -310,12 +310,11 @@ const Methods = (
       eventType: NodeEventTypes,
       nodeIdSelector: NodeSelector<NodeSelectorType.Id>
     ) {
-      const current = state.events[eventType];
-      if (current.size > 0) {
-        current.forEach((id) => {
+      state.events[eventType].forEach((id) => {
+        if (state.nodes[id]) {
           state.nodes[id].events[eventType] = false;
-        });
-      }
+        }
+      });
 
       state.events[eventType] = new Set();
 
@@ -329,13 +328,10 @@ const Methods = (
       });
 
       const nodeIds: Set<NodeId> = new Set(targets.map(({ node }) => node.id));
-
-      if (nodeIds) {
-        nodeIds.forEach((id) => {
-          state.nodes[id].events[eventType] = true;
-        });
-        state.events[eventType] = nodeIds;
-      }
+      nodeIds.forEach((id) => {
+        state.nodes[id].events[eventType] = true;
+      });
+      state.events[eventType] = nodeIds;
     },
 
     /**
