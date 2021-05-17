@@ -44,6 +44,7 @@ export function createNode(
       selected: false,
       dragged: false,
       hovered: false,
+      draggedOver: null,
     };
 
     node.rules = {

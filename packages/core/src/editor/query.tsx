@@ -115,6 +115,27 @@ export function QueryMethods(state: EditorState) {
       return output;
     },
 
+    /**
+     * Helper to get ids of the nodes the user is currently dragging a node over
+     *
+     * @example
+     * ```
+     * <div data-nodeid="ROOT">
+     *   <div data-nodeid="node-1-1">
+     *      <div data-nodeid="node-2-1">A</div>
+     *      <div data-nodeid="node-2-2">B</div>
+     *   </div>
+     *   <div data-nodeid="node-1-2">C</div>
+     * </div>
+     * ```
+     *
+     * Let's use the code above as an example. Imagine a user would drag a node over the div with content A. The list that getDraggedOverNodes will return
+     * would be `['node-2-1', 'node-1-1', 'ROOT']`
+     *
+     * @returns The list of the node ids the user is currently dragging a node over. Ordered "descending" by the depth in the node tree.
+     * The lowest node the "ROOT" will be last element and deepest element (the one we are dragging over) will be first. In between we have the ancestors of the first element
+     * ordered by their depth accordingly.
+     */
     getDraggedOverNodes(): Set<NodeId> {
       const draggedOverNodeId = Array.from(state.events.draggedOver)[0];
       if (draggedOverNodeId) {

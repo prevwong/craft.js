@@ -58,12 +58,14 @@ CardBottom.craft = {
 
 export const Card = ({ background, padding = 20 }) => {
   const { id } = useNode();
-  const { isDraggedOver } = useEditor((state, query) => {
+  const { isBeingDraggedOver } = useEditor((state, query) => {
     return {
       // we consider the card as being dragged over if one of its ancestors (CardTop or CardBottom)
-      // is being dragged over. This only works because neither CardTop nor CardBottom accept other canvases (Card or Container)
+      // is being dragged over. Attention: This only works because neither CardTop nor CardBottom accept other canvases (Card or Container)
       // as their children.
-      isDraggedOver: query.getDraggedOverNodes().has(id),
+      //
+      // Tip: for a more complex scenario have a look at the Container
+      isBeingDraggedOver: query.getDraggedOverNodes().has(id),
     };
   });
 
@@ -71,7 +73,7 @@ export const Card = ({ background, padding = 20 }) => {
     <Container
       background={background}
       padding={padding}
-      outline={isDraggedOver ? '2px dashed blue' : undefined}
+      outline={isBeingDraggedOver ? '2px dashed blue' : undefined}
     >
       <Element canvas id="text" is={CardTop}>
         <Text text="Only texts" fontSize={20} />
