@@ -70,17 +70,19 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
                   currentCanvasHovered.data.nodes[
                     currentCanvasHovered.data.nodes.length - 1
                   ];
-                if (!currNode) return;
-                indicator.placement.currentNode = editorStore.query
-                  .node(currNode)
-                  .get();
-                indicator.placement.index =
-                  currentCanvasHovered.data.nodes.length;
-                indicator.placement.where = 'after';
-                indicator.placement.parent = currentCanvasHovered;
+
+                if (!currNode) {
+                  return;
+                }
 
                 LayerHandlers.events.indicator = {
                   ...indicator,
+                  placement: {
+                    currentNode: editorStore.query.node(currNode).get(),
+                    index: currentCanvasHovered.data.nodes.length,
+                    where: 'after',
+                    parent: currentCanvasHovered,
+                  },
                   onCanvas: true,
                 };
 

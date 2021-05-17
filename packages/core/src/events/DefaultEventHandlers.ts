@@ -1,4 +1,6 @@
-import { CoreEventHandlers } from './CoreEventHandlers';
+import { isFunction } from 'lodash';
+
+import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
 import { createShadow } from './createShadow';
 
 import { Indicator, NodeId, NodeTree, Node } from '../interfaces';
@@ -223,7 +225,11 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           unbindDragEnd();
         };
       },
-      create: (el: HTMLElement, userElement: React.ReactElement) => {
+      create: (
+        el: HTMLElement,
+        userElement: React.ReactElement,
+        options?: Partial<CreateHandlerOptions>
+      ) => {
         el.setAttribute('draggable', 'true');
 
         const unbindDragStart = this.addCraftEventListener(
@@ -254,6 +260,10 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
               placement.parent.id,
               index
             );
+
+            if (options && isFunction(options.onCreate)) {
+              options.onCreate(draggedElement);
+            }
           };
           this.dropElement(onDropElement);
         });

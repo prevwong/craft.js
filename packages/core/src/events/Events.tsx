@@ -52,17 +52,17 @@ export const Events: React.FC = ({ children }) => {
 
   // Disable/Enable handlers when the enabled state is toggled
   useEffect(() => {
-    if (!handlersRef.current) {
+    if (!handlers) {
       return;
     }
 
     if (!enabled) {
-      handlersRef.current.disable();
+      handlers.disable();
       return;
     }
 
-    handlersRef.current.enable();
-  }, [enabled]);
+    handlers.enable();
+  }, [enabled, handlers]);
 
   return handlers ? (
     <EventHandlerContext.Provider value={handlers}>
@@ -73,12 +73,13 @@ export const Events: React.FC = ({ children }) => {
               indicator.placement,
               getDOMInfo(indicator.placement.parent.dom),
               indicator.placement.currentNode &&
-                getDOMInfo(indicator.placement.currentNode.dom)
+                getDOMInfo(indicator.placement.currentNode.dom),
+              indicatorOptions.thickness
             ),
             backgroundColor: indicator.error
               ? indicatorOptions.error
               : indicatorOptions.success,
-            transition: '0.2s ease-in',
+            transition: indicatorOptions.transition || '0.2s ease-in',
           },
           parentDom: indicator.placement.parent.dom,
         })}

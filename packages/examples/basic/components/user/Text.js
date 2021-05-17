@@ -3,7 +3,7 @@ import { Slider, FormControl, FormLabel } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import ContentEditable from 'react-contenteditable';
 
-export const Text = ({ text, fontSize, textAlign }) => {
+export const Text = ({ text, fontSize, textAlign, ...props }) => {
   const {
     connectors: { connect, drag },
     selected,
@@ -25,6 +25,7 @@ export const Text = ({ text, fontSize, textAlign }) => {
 
   return (
     <div
+      {...props}
       ref={(ref) => connect(drag(ref))}
       onClick={() => selected && setEditable(true)}
     >

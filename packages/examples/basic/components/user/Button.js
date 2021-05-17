@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import React from 'react';
 
-export const Button = ({ size, variant, color, text }) => {
+export const Button = ({ size, variant, color, text, ...props }) => {
   const {
     connectors: { connect, drag },
   } = useNode();
@@ -20,6 +20,7 @@ export const Button = ({ size, variant, color, text }) => {
       size={size}
       variant={variant}
       color={color}
+      {...props}
     >
       {text}
     </MaterialButton>
@@ -99,7 +100,7 @@ export const ButtonSettings = () => {
             control={<Radio size="small" color="primary" />}
           />
           <FormControlLabel
-            label="Seconday"
+            label="Secondary"
             value="secondary"
             control={<Radio size="small" color="primary" />}
           />
