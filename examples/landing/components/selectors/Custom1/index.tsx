@@ -1,7 +1,8 @@
-import React from 'react';
-import { Container } from '../Container';
 import { Element, useNode } from '@craftjs/core';
+import React from 'react';
+
 import { Button } from '../Button';
+import { Container } from '../Container';
 
 export const OnlyButtons = ({ children, ...props }) => {
   const {
@@ -16,7 +17,7 @@ export const OnlyButtons = ({ children, ...props }) => {
 
 OnlyButtons.craft = {
   rules: {
-    canMoveIn: (node) => node.data.type == Button,
+    canMoveIn: (node) => node.data.type === Button,
   },
 };
 

@@ -1,7 +1,7 @@
-import React from 'react';
 import { FormControlLabel, Radio } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import classnames from 'classnames';
+import React from 'react';
 
 const useStyles = makeStyles({
   icon: {

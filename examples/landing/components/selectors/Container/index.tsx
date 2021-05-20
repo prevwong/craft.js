@@ -1,8 +1,10 @@
 import React from 'react';
-import { Resizer } from '../Resizer';
+
 import { ContainerSettings } from './ContainerSettings';
 
-export type Container = {
+import { Resizer } from '../Resizer';
+
+export type ContainerProps = {
   background: Record<'r' | 'g' | 'b' | 'a', number>;
   color: Record<'r' | 'g' | 'b' | 'a', number>;
   flexDirection: string;
@@ -37,7 +39,7 @@ const defaultProps = {
   height: 'auto',
 };
 
-export const Container = (props: Partial<Container>) => {
+export const Container = (props: Partial<ContainerProps>) => {
   props = {
     ...defaultProps,
     ...props,
@@ -67,11 +69,11 @@ export const Container = (props: Partial<Container>) => {
         padding: `${padding[0]}px ${padding[1]}px ${padding[2]}px ${padding[3]}px`,
         margin: `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`,
         boxShadow:
-          shadow == 0
+          shadow === 0
             ? 'none'
             : `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
         borderRadius: `${radius}px`,
-        flex: fillSpace == 'yes' ? 1 : 'unset',
+        flex: fillSpace === 'yes' ? 1 : 'unset',
       }}
     >
       {children}

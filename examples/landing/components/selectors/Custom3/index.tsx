@@ -1,7 +1,8 @@
-import React from 'react';
-import { Container } from '../Container';
 import { Element, useNode } from '@craftjs/core';
+import React from 'react';
+
 import { Button } from '../Button';
+import { Container } from '../Container';
 
 export const Custom3BtnDrop = ({ children }) => {
   const {
@@ -21,9 +22,9 @@ Custom3BtnDrop.craft = {
         data: { nodes },
       } = self;
       const btnNodes = nodes.filter(
-        (id) => helpers(id).get().data.type == Button
+        (id) => helpers(id).get().data.type === Button
       );
-      if (target.data.type == Button && btnNodes.length == 1) return false;
+      if (target.data.type === Button && btnNodes.length === 1) return false;
       return true;
     },
   },

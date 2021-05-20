@@ -1,6 +1,7 @@
-import React from 'react';
-import { Container } from '../Container';
 import { Element, useNode } from '@craftjs/core';
+import React from 'react';
+
+import { Container } from '../Container';
 import { Video } from '../Video';
 
 export const Custom2VideoDrop = ({ children }) => {
@@ -17,7 +18,8 @@ Custom2VideoDrop.craft = {
   rules: {
     canMoveIn: (incoming, self, helper) => {
       return (
-        incoming.data.type == Video && helper(self.id).decendants().length == 0
+        incoming.data.type === Video &&
+        helper(self.id).decendants().length === 0
       );
     },
   },

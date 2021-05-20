@@ -1,14 +1,13 @@
 export const isPercentage = (val: string) =>
-  typeof val == 'string' && val.indexOf('%') > -1;
+  typeof val === 'string' && val.indexOf('%') > -1;
 
 export const percentToPx = (value: any, comparativeValue: number) => {
-  if (value.indexOf('px') > -1 || value == 'auto' || !comparativeValue)
+  if (value.indexOf('px') > -1 || value === 'auto' || !comparativeValue)
     return value;
   const percent = parseInt(value);
   return (percent / 100) * comparativeValue + 'px';
 };
 export const pxToPercent = (value: any, comparativeValue: number) => {
-  // if ( typeof value == 'number' ) return;
   const val = (Math.abs(value) / comparativeValue) * 100;
   if (value < 0) return -1 * val;
   else return Math.round(val);

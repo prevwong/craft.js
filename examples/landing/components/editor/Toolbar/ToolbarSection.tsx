@@ -1,4 +1,4 @@
-import React from 'react';
+import { useNode } from '@craftjs/core';
 import {
   ExpansionPanel,
   ExpansionPanelDetails,
@@ -6,8 +6,8 @@ import {
   Grid,
   Divider,
 } from '@material-ui/core';
-import { useNode } from '@craftjs/core';
 import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 const usePanelStyles = makeStyles((_) => ({
   root: {
     background: 'transparent',

@@ -1,20 +1,16 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-import styled from 'styled-components';
-import { Resizable } from 're-resizable';
 import { useNode, useEditor } from '@craftjs/core';
 import cx from 'classnames';
+import { debounce } from 'debounce';
+import { Resizable } from 're-resizable';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import styled from 'styled-components';
+
 import {
   isPercentage,
   pxToPercent,
   percentToPx,
   getElementDimensions,
 } from '../../utils/numToMeasurement';
-import { debounce } from 'debounce';
-
-export type Resizer = {
-  propKey: Record<'width' | 'height', string>;
-  children: React.ReactNode;
-};
 
 const Indicators = styled.div<{ bound?: 'row' | 'column' }>`
   position: absolute;
@@ -37,7 +33,7 @@ const Indicators = styled.div<{ bound?: 'row' | 'column' }>`
     &:nth-child(1) {
       ${(props) =>
         props.bound
-          ? props.bound == 'row'
+          ? props.bound === 'row'
             ? `
                 left: 50%;
                 top: -5px;
@@ -61,7 +57,7 @@ const Indicators = styled.div<{ bound?: 'row' | 'column' }>`
     &:nth-child(3) {
       ${(props) =>
         props.bound
-          ? props.bound == 'row'
+          ? props.bound === 'row'
             ? `
                 left: 50%;
                 bottom: -5px;
@@ -113,8 +109,6 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
       isRootNode: query.node(id).isRoot(),
     };
   });
-
-  // const { parentWidth, parentHeight } = useEditor((state) => ({ parentWidth: parent && state.nodes[parent].data.props.width, parentHeight: parent && state.nodes[parent].data.props.height }))
 
   const resizable = useRef<Resizable>(null);
   const isResizing = useRef<Boolean>(false);
@@ -174,7 +168,7 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
 
   useEffect(() => {
     if (!isResizing.current) updateInternalDimensionsWithOriginal();
-  }, [nodeWidth, nodeHeight]);
+  }, [nodeWidth, nodeHeight, updateInternalDimensionsWithOriginal]);
 
   useEffect(() => {
     const listener = debounce(updateInternalDimensionsWithOriginal, 1);
@@ -183,7 +177,7 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
     return () => {
       window.removeEventListener('resize', listener);
     };
-  }, []);
+  }, [updateInternalDimensionsWithOriginal]);
 
   return (
     <Resizable
@@ -242,11 +236,11 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
             ) + '%';
         else height = `${height}px`;
 
-        if (isPercentage(width) && dom.parentElement.style.width == 'auto') {
+        if (isPercentage(width) && dom.parentElement.style.width === 'auto') {
           width = editingDimensions.current.width + d.width + 'px';
         }
 
-        if (isPercentage(height) && dom.parentElement.style.height == 'auto') {
+        if (isPercentage(height) && dom.parentElement.style.height === 'auto') {
           height = editingDimensions.current.height + d.height + 'px';
         }
 
@@ -263,7 +257,7 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
     >
       {children}
       {active && (
-        <Indicators bound={fillSpace == 'yes' ? parentDirection : false}>
+        <Indicators bound={fillSpace === 'yes' ? parentDirection : false}>
           <span></span>
           <span></span>
           <span></span>

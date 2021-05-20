@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import { useEditor } from '@craftjs/core';
 import { Layers } from '@craftjs/layers';
-import { Toolbar } from '../../Toolbar';
-import { SidebarItem } from './SidebarItem';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+
+import { SidebarItem } from './SidebarItem';
+
 import CustomizeIcon from '../../../../public/icons/customize.svg';
 import LayerIcon from '../../../../public/icons/layers.svg';
-import { useEditor } from '@craftjs/core';
+import { Toolbar } from '../../Toolbar';
 
 export const SidebarDiv = styled.div<{ enabled: boolean }>`
   width: 280px;

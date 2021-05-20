@@ -1,13 +1,13 @@
-import React from 'react';
 import { useEditor } from '@craftjs/core';
 import { Tooltip } from '@material-ui/core';
-
+import cx from 'classnames';
+import React from 'react';
 import styled from 'styled-components';
+
 import Checkmark from '../../../public/icons/check.svg';
 import Customize from '../../../public/icons/customize.svg';
-import UndoSvg from '../../../public/icons/toolbox/undo.svg';
 import RedoSvg from '../../../public/icons/toolbox/redo.svg';
-import cx from 'classnames';
+import UndoSvg from '../../../public/icons/toolbox/undo.svg';
 
 const HeaderDiv = styled.div`
   width: 100%;

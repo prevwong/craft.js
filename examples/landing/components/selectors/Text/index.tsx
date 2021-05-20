@@ -1,9 +1,10 @@
-import React from 'react';
 import { useNode, useEditor } from '@craftjs/core';
-import { TextSettings } from './TextSettings';
+import React from 'react';
 import ContentEditable from 'react-contenteditable';
 
-export type Text = {
+import { TextSettings } from './TextSettings';
+
+export type TextProps = {
   fontSize: string;
   textAlign: string;
   fontWeight: string;
@@ -21,7 +22,7 @@ export const Text = ({
   shadow,
   text,
   margin,
-}: Partial<Text>) => {
+}: Partial<TextProps>) => {
   const {
     connectors: { connect },
     setProp,

@@ -1,9 +1,11 @@
-import React from 'react';
 import { UserComponent, useNode } from '@craftjs/core';
-import { Text } from '../Text';
-import { ButtonSettings } from './ButtonSettings';
-import styled from 'styled-components';
 import cx from 'classnames';
+import React from 'react';
+import styled from 'styled-components';
+
+import { ButtonSettings } from './ButtonSettings';
+
+import { Text } from '../Text';
 
 type ButtonProps = {
   background?: Record<'r' | 'g' | 'b' | 'a', number>;
@@ -16,12 +18,12 @@ type ButtonProps = {
 
 const StyledButton = styled.button<ButtonProps>`
   background: ${(props) =>
-    props.buttonStyle == 'full'
+    props.buttonStyle === 'full'
       ? `rgba(${Object.values(props.background)})`
       : 'transparent'};
   border: 2px solid transparent;
   border-color: ${(props) =>
-    props.buttonStyle == 'outline'
+    props.buttonStyle === 'outline'
       ? `rgba(${Object.values(props.background)})`
       : 'transparent'};
   margin: ${({ margin }) =>
@@ -42,7 +44,7 @@ export const Button: UserComponent<ButtonProps> = (props: any) => {
       className={cx([
         'rounded w-full px-4 py-2',
         {
-          'shadow-lg': props.buttonStyle == 'full',
+          'shadow-lg': props.buttonStyle === 'full',
         },
       ])}
       {...otherProps}

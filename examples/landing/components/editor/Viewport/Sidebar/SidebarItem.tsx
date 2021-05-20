@@ -1,6 +1,7 @@
 import React from 'react';
-import Arrow from '../../../../public/icons/arrow.svg';
 import styled from 'styled-components';
+
+import Arrow from '../../../../public/icons/arrow.svg';
 
 const SidebarItemDiv = styled.div<{ visible?: boolean; height?: string }>`
   height: ${(props) =>
@@ -8,7 +9,7 @@ const SidebarItemDiv = styled.div<{ visible?: boolean; height?: string }>`
       ? `${props.height}`
       : 'auto'};
   flex: ${(props) =>
-    props.visible && props.height && props.height == 'full' ? `1` : 'unset'};
+    props.visible && props.height && props.height === 'full' ? `1` : 'unset'};
   color: #545454;
 `;
 
@@ -20,7 +21,7 @@ const Chevron = styled.a<{ visible: boolean }>`
   }
 `;
 
-export type SidebarItem = {
+export type SidebarItemProps = {
   title: string;
   height?: string;
   icon: string;
@@ -36,7 +37,7 @@ const HeaderDiv = styled.div`
   }
 `;
 
-export const SidebarItem: React.FC<SidebarItem> = ({
+export const SidebarItem: React.FC<SidebarItemProps> = ({
   visible,
   icon,
   title,

@@ -1,8 +1,10 @@
-import React from 'react';
 import { useNode, useEditor } from '@craftjs/core';
-import { VideoSettings } from './VideoSettings';
-import styled from 'styled-components';
+import React from 'react';
 import YouTube from 'react-youtube';
+import styled from 'styled-components';
+
+import { VideoSettings } from './VideoSettings';
+
 const YoutubeDiv = styled.div<any>`
   width: 100%;
   height: 100%;

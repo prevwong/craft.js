@@ -1,7 +1,7 @@
+import { TextField, makeStyles, InputAdornment } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { ChromePicker } from 'react-color';
-import { TextField, makeStyles, InputAdornment } from '@material-ui/core';
 
 const useStyles = makeStyles({
   root: {
@@ -44,7 +44,7 @@ const useLabelStyles = makeStyles({
   }, // a style rule
 });
 
-export type ToolbarTextInput = {
+export type ToolbarTextInputProps = {
   prefix?: string;
   label?: string;
   type: string;
@@ -58,18 +58,17 @@ export const ToolbarTextInput = ({
   label,
   type,
   ...props
-}: ToolbarTextInput) => {
+}: ToolbarTextInputProps) => {
   const [internalValue, setInternalValue] = useState(value);
   const [active, setActive] = useState(false);
   const classes = useStyles({});
   const labelClasses = useLabelStyles({});
   useEffect(() => {
-    // if (value !== internalValue) {
     let val = value;
-    if (type == 'color' || type == 'bg') val = `rgba(${Object.values(value)})`;
+    if (type === 'color' || type === 'bg')
+      val = `rgba(${Object.values(value)})`;
     setInternalValue(val);
-    // }
-  }, [value]);
+  }, [value, type]);
 
   return (
     <div
@@ -78,7 +77,7 @@ export const ToolbarTextInput = ({
         setActive(true);
       }}
     >
-      {(type == 'color' || type == 'bg') && active ? (
+      {(type === 'color' || type === 'bg') && active ? (
         <div
           className="absolute"
           style={{
@@ -108,7 +107,7 @@ export const ToolbarTextInput = ({
         style={{ margin: 0, width: '100%' }}
         value={internalValue || ''}
         onKeyDown={(e) => {
-          if (e.key == 'Enter') {
+          if (e.key === 'Enter') {
             onChange((e.target as any).value);
           }
         }}

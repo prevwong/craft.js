@@ -1,17 +1,16 @@
-import React from 'react';
 import { Element, useEditor } from '@craftjs/core';
 import { Tooltip } from '@material-ui/core';
-import { Container } from '../../selectors/Container';
-import { Text } from '../../selectors/Text';
-import { Video } from '../../selectors/Video';
-import { Button } from '../../selectors/Button';
+import React from 'react';
+import styled from 'styled-components';
 
+import ButtonSvg from '../../../public/icons/toolbox/button.svg';
 import SquareSvg from '../../../public/icons/toolbox/rectangle.svg';
 import TypeSvg from '../../../public/icons/toolbox/text.svg';
 import YoutubeSvg from '../../../public/icons/toolbox/video-line.svg';
-import ButtonSvg from '../../../public/icons/toolbox/button.svg';
-
-import styled from 'styled-components';
+import { Button } from '../../selectors/Button';
+import { Container } from '../../selectors/Container';
+import { Text } from '../../selectors/Text';
+import { Video } from '../../selectors/Video';
 
 const ToolboxDiv = styled.div<{ enabled: boolean }>`
   transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
