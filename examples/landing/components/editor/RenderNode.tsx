@@ -137,7 +137,7 @@ export const RenderNode = ({ render }) => {
                 </Btn>
               ) : null}
             </IndicatorDiv>,
-            document.querySelector('.craftjs-renderer')
+            document.querySelector('.page-container')
           )
         : null}
       {render}

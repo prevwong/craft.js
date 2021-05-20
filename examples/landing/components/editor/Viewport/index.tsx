@@ -38,9 +38,8 @@ export const Viewport: React.FC = ({ children }) => {
         className={cx(['flex h-full overflow-hidden flex-row w-full fixed'])}
       >
         <Toolbox />
-        <div className="flex flex-1 h-full flex-col">
+        <div className="page-container flex flex-1 h-full flex-col">
           <Header />
-
           <div
             className={cx([
               'craftjs-renderer flex-1 h-full w-full transition pb-8 overflow-auto',
