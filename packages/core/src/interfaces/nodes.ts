@@ -3,11 +3,12 @@ import React from 'react';
 
 import { QueryMethods } from '../editor/query';
 
-type UserComponentConfig<T> = {
+export type UserComponentConfig<T> = {
   displayName: string;
   rules: Partial<NodeRules>;
   related: Partial<NodeRelated>;
   props: Partial<T>;
+  custom: Record<string, any>;
   isCanvas: boolean;
 
   // TODO: Deprecate

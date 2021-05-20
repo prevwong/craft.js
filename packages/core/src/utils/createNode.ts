@@ -2,7 +2,7 @@ import React from 'react';
 
 import { getRandomNodeId } from './getRandomNodeId';
 
-import { Node, FreshNode } from '../interfaces';
+import { Node, FreshNode, UserComponentConfig } from '../interfaces';
 import {
   defaultElementProps,
   Element,
@@ -89,7 +89,7 @@ export function createNode(
   }
 
   // TODO: use UserComponentConfig type
-  const userComponentConfig = actualType.craft as any;
+  const userComponentConfig = actualType.craft as UserComponentConfig<any>;
 
   if (userComponentConfig) {
     node.data.displayName =
