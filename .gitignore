@@ -9,7 +9,16 @@ lib
 .now
 .vscode
 .idea
+build
 
 .DS_Store
 cypress/videos/*
 cypress/screenshots/*
+
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
