@@ -11,6 +11,6 @@ mkdir build/examples
 cp -r ./examples/basic/out/ build/examples/basic
 cp -r ./examples/landing/out/ build/examples/landing
 
-touch site/.nojekyll
-touch site/CNAME
-echo "craft.js.org" >> site/CNAME
+touch build/.nojekyll
+touch build/CNAME
+echo "craft.js.org" >> build/CNAME
