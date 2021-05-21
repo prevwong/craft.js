@@ -167,12 +167,12 @@ export function QueryMethods(state: EditorState) {
           }
         });
 
-        let childrenNodes = [];
+        let childrenNodes: NodeTree[] = [];
 
         if (reactElement.props && reactElement.props.children) {
           childrenNodes = React.Children.toArray(
             reactElement.props.children
-          ).reduce((accum, child) => {
+          ).reduce<NodeTree[]>((accum, child: any) => {
             if (React.isValidElement(child)) {
               accum.push(_().parseReactElement(child).toNodeTree(normalize));
             }

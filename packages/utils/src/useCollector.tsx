@@ -1,53 +1,33 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 
-import {
-  CallbacksFor,
-  MethodsOrOptions,
-  StateFor,
-  QueryCallbacksFor,
-  QueryMethods,
-  SubscriberAndCallbacksFor,
-} from './useMethods';
+import { SubscriberAndCallbacksFor } from './useMethods';
+import { ConditionallyMergeRecordTypes } from './utilityTypes';
 
-type Actions<M extends MethodsOrOptions, Q extends QueryMethods> = {
-  actions: CallbacksFor<M>;
-  query: QueryCallbacksFor<Q>;
+type CollectorMethods<S extends SubscriberAndCallbacksFor<any, any>> = {
+  actions: S['actions'];
+  query: S['query'];
 };
 
-export type useCollector<
-  M extends MethodsOrOptions,
-  Q extends QueryMethods | null,
+export type useCollectorReturnType<
+  S extends SubscriberAndCallbacksFor<any, any>,
   C = null
-> = C extends null ? Actions<M, Q> : C & Actions<M, Q>;
-
-export function useCollector<
-  M extends MethodsOrOptions,
-  Q extends QueryMethods | null
->(store: SubscriberAndCallbacksFor<M, Q>): useCollector<M, Q>;
-
-export function useCollector<
-  M extends MethodsOrOptions,
-  Q extends QueryMethods | null,
-  C
->(
-  store: SubscriberAndCallbacksFor<M, Q>,
-  collector: (state: StateFor<M>, query: Q) => C
-): useCollector<M, Q, C>;
-
-export function useCollector<
-  M extends MethodsOrOptions,
-  Q extends QueryMethods | null,
-  C
->(store: SubscriberAndCallbacksFor<M, Q>, collector?: any) {
+> = ConditionallyMergeRecordTypes<C, CollectorMethods<S>>;
+export function useCollector<S extends SubscriberAndCallbacksFor<any, any>, C>(
+  store: S,
+  collector?: (
+    state: ReturnType<S['getState']>['current'],
+    query: S['query']
+  ) => C
+): useCollectorReturnType<S, C> {
   const { subscribe, getState, actions, query } = store;
 
   const initial = useRef(true);
-  const collected = useRef<C | null>(null);
+  const collected = useRef<any>(null);
   const collectorRef = useRef(collector);
   collectorRef.current = collector;
 
   const onCollect = useCallback(
-    (collected): useCollector<M, Q, C> => {
+    (collected) => {
       return { ...collected, actions, query };
     },
     [actions, query]

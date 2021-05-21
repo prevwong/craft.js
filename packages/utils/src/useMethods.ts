@@ -71,7 +71,7 @@ export type CallbacksFor<
         >;
       };
     }
-  : never;
+  : {};
 
 export type Methods<S = any, R extends MethodRecordBase<S> = any, Q = any> = (
   state: S,
@@ -131,7 +131,7 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<
         canRedo: () => boolean;
       };
     }
-  : never;
+  : {};
 
 export type PatchListenerAction<S, M extends MethodsOrOptions> = {
   type: keyof CallbacksFor<M>;

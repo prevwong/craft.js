@@ -4,6 +4,7 @@ import {
   CraftEventListener,
   EventHandlerConnectors,
   CraftDOMEvent,
+  Connector,
 } from './interfaces';
 import { isEventBlockedByDescendant } from './isEventBlockedByDescendant';
 
@@ -74,7 +75,7 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
 
   get connectors(): EventHandlerConnectors<this> {
     const connectors = this.handlers();
-    return Object.keys(connectors).reduce(
+    return Object.keys(connectors).reduce<Record<string, Connector>>(
       (accum, connectorName) => ({
         ...accum,
         [connectorName]: (el, required, options) => {

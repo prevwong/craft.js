@@ -28,8 +28,8 @@ export const SlateNodeContextProvider: React.FC<SlateNodeContextProviderProps> =
   enabled: initialEnabledValue,
 }) => {
   const { id } = useNode();
-  const [value, setValue] = useState([]);
-  const [enabled, setEnabled] = useState(initialEnabledValue || true);
+  const [value, setValue] = useState<Node[]>([]);
+  const [enabled, setEnabled] = useState<boolean>(initialEnabledValue || true);
 
   const currentEditorSelectionRef = useRef(editor.selection);
   currentEditorSelectionRef.current = editor.selection;

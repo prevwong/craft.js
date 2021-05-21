@@ -95,6 +95,7 @@ export const useEditorStore = (
     typeof QueryMethods
   >
 ): EditorStore => {
+  // TODO: fix type
   return useMethods(
     ActionMethodsWithConfig,
     {
