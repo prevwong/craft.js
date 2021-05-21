@@ -7,7 +7,11 @@ import { Sidebar } from './Sidebar';
 import { Toolbox } from './Toolbox';
 
 export const Viewport: React.FC = ({ children }) => {
-  const { enabled, connectors, actions } = useEditor((state) => ({
+  const {
+    enabled,
+    connectors,
+    actions: { setOptions },
+  } = useEditor((state) => ({
     enabled: state.options.enabled,
   }));
 
@@ -26,12 +30,12 @@ export const Viewport: React.FC = ({ children }) => {
       );
 
       setTimeout(() => {
-        actions.setOptions((options) => {
+        setOptions((options) => {
           options.enabled = true;
         });
       }, 200);
     });
-  }, []);
+  }, [setOptions]);
 
   return (
     <div className="viewport">

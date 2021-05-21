@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useLayoutEffect } from 'react';
 import { Route, Redirect, useLocation } from '@docusaurus/router';
 
 import clsx from 'classnames';
@@ -26,7 +26,7 @@ function Root({ children }) {
     });
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (location.pathname !== '/') {
       return;
     }
