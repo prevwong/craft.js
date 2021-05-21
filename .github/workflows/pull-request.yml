@@ -27,11 +27,8 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
-
-      - name: Symlink
-        run: yarn scaffold
-
+        run: yarn install --immutable
+        
       - name: Build
         run: yarn build
 
