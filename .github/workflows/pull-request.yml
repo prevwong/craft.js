@@ -28,10 +28,7 @@ jobs:
       - name: Install dependencies
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: yarn install --immutable
-
-      - name: Symlink
-        run: yarn scaffold
-
+        
       - name: Build
         run: yarn build
 
