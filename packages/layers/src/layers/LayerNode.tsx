@@ -1,5 +1,5 @@
 import { useEditor, ROOT_NODE } from '@craftjs/core';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useLayoutEffect, useState } from 'react';
 
 import { LayerContextProvider } from './LayerContextProvider';
 import { useLayer } from './useLayer';
@@ -22,12 +22,21 @@ export const LayerNode: React.FC = () => {
     };
   });
 
-  const { actions, renderLayer, expandRootOnLoad } = useLayerManager(
-    (state) => ({
-      renderLayer: state.options.renderLayer,
-      expandRootOnLoad: state.options.expandRootOnLoad,
-    })
-  );
+  const {
+    actions: { registerLayer, toggleLayer },
+    renderLayer,
+    expandRootOnLoad,
+  } = useLayerManager((state) => ({
+    renderLayer: state.options.renderLayer,
+    expandRootOnLoad: state.options.expandRootOnLoad,
+  }));
+
+  const [isRegistered, setRegistered] = useState(false);
+
+  useLayoutEffect(() => {
+    registerLayer(id);
+    setRegistered(true);
+  }, [registerLayer, id]);
 
   const expandedRef = useRef<boolean>(expanded);
   expandedRef.current = expanded;
@@ -38,24 +47,17 @@ export const LayerNode: React.FC = () => {
 
   useEffect(() => {
     if (!expandedRef.current && shouldBeExpanded) {
-      actions.toggleLayer(id);
+      toggleLayer(id);
     }
-  }, [actions, id, shouldBeExpanded]);
+  }, [toggleLayer, id, shouldBeExpanded]);
 
   useEffect(() => {
     if (shouldBeExpandedOnLoad.current) {
-      actions.toggleLayer(id);
+      toggleLayer(id);
     }
-  }, [actions, id]);
+  }, [toggleLayer, id]);
 
-  const initRef = useRef<boolean>(false);
-
-  if (!initRef.current) {
-    actions.registerLayer(id);
-    initRef.current = true;
-  }
-
-  return data ? (
+  return data && isRegistered ? (
     <div className={`craft-layer-node ${id}`}>
       {React.createElement(
         renderLayer,
