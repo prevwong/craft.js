@@ -13,7 +13,6 @@ let toNodeTree = jest.fn().mockImplementation(() => ({
 }));
 
 let addLinkedNodeFromTree = jest.fn();
-let setProp = jest.fn();
 let parseReactElement = jest.fn().mockImplementation(() => ({
   toNodeTree,
 }));
@@ -24,7 +23,6 @@ jest.mock('../../editor/useInternalEditor', () => ({
       history: {
         ignore: jest.fn().mockImplementation(() => ({
           addLinkedNodeFromTree,
-          setProp,
         })),
       },
     },
@@ -98,6 +96,10 @@ describe('<Element />', () => {
     beforeEach(() => {
       existingLinkedNode = createTestNode('existing-linked-node', {
         type: 'div',
+        props: {
+          background: '#000',
+          color: '#fff',
+        },
       });
 
       parentNode = createTestNode('parent-node', {
@@ -105,27 +107,12 @@ describe('<Element />', () => {
           test: existingLinkedNode.id,
         },
       });
-    });
-    describe('when type is the same as JSX', () => {
-      beforeEach(() => {
-        mount(<Element id="test" />);
-      });
 
-      it('should render existing Node', () => {
-        expect(NodeElementTest).toHaveBeenCalledWith({
-          id: existingLinkedNode.id,
-        });
-      });
+      mount(<Element id="test" color="#000" />);
     });
-    describe('when type is the different from JSX', () => {
-      beforeEach(() => {
-        mount(<Element id="test" is="h1" />);
-      });
-
-      it('should render a new linked Node', () => {
-        expect(NodeElementTest).toHaveBeenCalledWith({
-          id: newLinkedNode.id,
-        });
+    it('should render existing Node', () => {
+      expect(NodeElementTest).toHaveBeenCalledWith({
+        id: existingLinkedNode.id,
       });
     });
   });

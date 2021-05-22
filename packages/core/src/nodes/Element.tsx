@@ -33,7 +33,7 @@ export function Element<T extends React.ElementType>({
   children,
   ...elementProps
 }: Element<T>) {
-  const { is, custom, canvas, ...otherProps } = {
+  const { is } = {
     ...defaultElementProps,
     ...elementProps,
   };
@@ -63,20 +63,6 @@ export function Element<T extends React.ElementType>({
       // Render existing linked Node if it already exists (and is the same type as the JSX)
       if (existingNode && existingNode.data.type === is) {
         linkedNodeId = existingNode.id;
-
-        // Merge JSX and existing props
-        const mergedProps = {
-          ...existingNode.data.props,
-          ...otherProps,
-        };
-
-        actions.history
-          .ignore()
-          .setProp(linkedNodeId, (props) =>
-            Object.keys(mergedProps).forEach(
-              (key) => (props[key] = mergedProps[key])
-            )
-          );
       } else {
         // otherwise, create and render a new linked Node
         const linkedElement = React.createElement(
