@@ -39,7 +39,7 @@
     "@svgr/rollup": "^4.3.3"
   },
   "peerDependencies": {
-    "@craftjs/core": "^0.1.0-alpha.1",
+    "@craftjs/core": "^0.2.0-alpha.19",
     "react": "^16.8.0"
   }
 }

@@ -1,0 +1,27 @@
+/* purgecss start ignore */
+@tailwind base;
+@tailwind components;
+@import url('https://use.typekit.net/mpa1wkh.css');
+html,
+body {
+  font-family: 'acumin-pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+  color: rgb(75, 75, 75);
+  background: #e0e0e0;
+}
+/* purgecss end ignore */
+
+@tailwind utilities;
+
+.component-selected {
+  @apply relative;
+}
+.component-selected::after {
+  content: ' ';
+  @apply border-primary border border-dashed w-full h-full absolute left-0 top-0 pointer-events-none block;
+}
+
+.transition {
+  transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}

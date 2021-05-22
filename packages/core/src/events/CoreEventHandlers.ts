@@ -1,40 +1,31 @@
+import { DerivedEventHandlers, EventHandlers } from '@craftjs/utils';
+
 import { EditorStore } from '../editor/store';
-import { ConnectorsForHandlers, Handlers } from '../utils/Handlers';
+import { NodeId, NodeTree } from '../interfaces/nodes';
 
-/**
- * Craft's core event handlers
- * Connectors are created from the handlers defined here
- */
-export abstract class CoreEventHandlers extends Handlers<
-  'select' | 'hover' | 'drag' | 'drop' | 'create' | 'connect'
+export interface CreateHandlerOptions {
+  onCreate: (nodeTree: NodeTree) => void;
+}
+
+export class CoreEventHandlers<O = {}> extends EventHandlers<
+  { store: EditorStore } & O
 > {
-  /**
-   * Create a new instance of Handlers with reference to the current EventHandlers
-   * @param type A class that extends DerivedEventHandlers
-   * @param args Additional arguments to pass to the constructor
-   */
-  derive<T extends DerivedEventHandlers<any>, U extends any[]>(
-    type: {
-      new (store: EditorStore, derived: CoreEventHandlers, ...args: U): T;
-    },
-    ...args: U
-  ): T {
-    return new type(this.store, this, ...args);
+  handlers() {
+    return {
+      connect: (el: HTMLElement, id: NodeId) => {},
+      select: (el: HTMLElement, id: NodeId) => {},
+      hover: (el: HTMLElement, id: NodeId) => {},
+      drag: (el: HTMLElement, id: NodeId) => {},
+      drop: (el: HTMLElement, id: NodeId) => {},
+      create: (
+        el: HTMLElement,
+        UserElement: React.ReactElement,
+        options?: Partial<CreateHandlerOptions>
+      ) => {},
+    };
   }
 }
 
-/**
- *  Allows for external packages to easily extend and derive the CoreEventHandlers
- */
-export abstract class DerivedEventHandlers<T extends string> extends Handlers<
-  T
-> {
-  derived: CoreEventHandlers;
-
-  protected constructor(store: EditorStore, derived: CoreEventHandlers) {
-    super(store);
-    this.derived = derived;
-  }
-}
-
-export type EventConnectors = ConnectorsForHandlers<CoreEventHandlers>;
+export abstract class DerivedCoreEventHandlers<
+  O = {}
+> extends DerivedEventHandlers<CoreEventHandlers, O> {}

@@ -232,6 +232,7 @@ const Methods = (
 
       this.replaceNodes(fromEntries(nodePairs));
     },
+
     /**
      * Move a target Node to a new Parent at a given index
      * @param targetId

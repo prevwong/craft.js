@@ -27,3 +27,16 @@ then
 else
   echo "Did not publish packages"
 fi
+
+if [[ $(git describe --exact-match 2> /dev/null || :) =~ -alpha ]];
+then
+  echo "Publishing alpha"
+  yarn run lerna publish from-git --npm-tag next --yes
+
+  # Make sure to exit script with code 1 if publish failed
+  if [[ ! $? -eq 0 ]];then
+    exit 1;
+  fi
+else
+  echo "Did not publish alpha"
+fi

@@ -1,16 +1,19 @@
-import { produce } from 'immer';
 import React from 'react';
 
 import { getRandomNodeId } from './getRandomNodeId';
 
-import { NodeData, Node, FreshNode } from '../interfaces';
-import { Canvas, deprecateCanvasComponent } from '../nodes/Canvas';
+import { Node, FreshNode, UserComponentConfig } from '../interfaces';
 import {
   defaultElementProps,
   Element,
+  Canvas,
   elementPropToNodeData,
-} from '../nodes/Element';
+  deprecateCanvasComponent,
+} from '../nodes';
 import { NodeProvider } from '../nodes/NodeContext';
+
+const getNodeTypeName = (type: string | { name: string }) =>
+  typeof type == 'string' ? type : type.name;
 
 export function createNode(
   newNode: FreshNode,
@@ -19,111 +22,122 @@ export function createNode(
   let actualType = newNode.data.type as any;
   let id = newNode.id || getRandomNodeId();
 
-  return produce({}, (node: Node) => {
-    node.id = id;
-    node._hydrationTimestamp = Date.now();
-
-    node.data = {
+  const node: Node = {
+    id,
+    _hydrationTimestamp: Date.now(),
+    data: {
       type: actualType,
-      props: { ...newNode.data.props },
-      name:
-        typeof actualType == 'string' ? actualType : (actualType as any).name,
-      displayName:
-        typeof actualType == 'string' ? actualType : (actualType as any).name,
+      name: getNodeTypeName(actualType),
+      displayName: getNodeTypeName(actualType),
+      props: {},
       custom: {},
+      parent: null,
       isCanvas: false,
       hidden: false,
       nodes: [],
       linkedNodes: {},
       ...newNode.data,
-    } as NodeData;
-
-    node.related = {};
-
-    node.events = {
+    },
+    related: {},
+    events: {
       selected: false,
       dragged: false,
       hovered: false,
-    };
-
-    node.rules = {
+    },
+    rules: {
       canDrag: () => true,
       canDrop: () => true,
       canMoveIn: () => true,
       canMoveOut: () => true,
-      ...((actualType.craft && actualType.craft.rules) || {}),
+    },
+    dom: null,
+  };
+
+  // @ts-ignore
+  if (node.data.type === Element || node.data.type === Canvas) {
+    const mergedProps = {
+      ...defaultElementProps,
+      ...node.data.props,
     };
 
-    // @ts-ignore
-    if (node.data.type === Element || node.data.type === Canvas) {
-      let usingDeprecatedCanvas = node.data.type === Canvas;
-      const mergedProps = {
-        ...defaultElementProps,
-        ...node.data.props,
-      };
-
-      Object.keys(defaultElementProps).forEach((key) => {
+    node.data.props = Object.keys(node.data.props).reduce((props, key) => {
+      if (Object.keys(defaultElementProps).includes(key)) {
+        // If a <Element /> specific props is found (ie: "is", "canvas")
+        // Replace the node.data with the value specified in the prop
         node.data[elementPropToNodeData[key] || key] = mergedProps[key];
-        delete node.data.props[key];
-      });
-
-      actualType = node.data.type;
-
-      if (usingDeprecatedCanvas) {
-        node.data.isCanvas = true;
-        deprecateCanvasComponent();
+      } else {
+        // Otherwise include the props in the node as usual
+        props[key] = node.data.props[key];
       }
+
+      return props;
+    }, {});
+
+    actualType = node.data.type;
+    node.data.name = getNodeTypeName(actualType);
+    node.data.displayName = getNodeTypeName(actualType);
+
+    const usingDeprecatedCanvas = node.data.type === Canvas;
+    if (usingDeprecatedCanvas) {
+      node.data.isCanvas = true;
+      deprecateCanvasComponent();
+    }
+  }
+
+  if (normalize) {
+    normalize(node);
+  }
+
+  // TODO: use UserComponentConfig type
+  const userComponentConfig = actualType.craft as UserComponentConfig<any>;
+
+  if (userComponentConfig) {
+    node.data.displayName =
+      userComponentConfig.displayName ||
+      userComponentConfig.name ||
+      node.data.displayName;
+
+    node.data.props = {
+      ...(userComponentConfig.props || userComponentConfig.defaultProps || {}),
+      ...node.data.props,
+    };
+
+    node.data.custom = {
+      ...(userComponentConfig.custom || {}),
+      ...node.data.custom,
+    };
+
+    if (
+      userComponentConfig.isCanvas !== undefined &&
+      userComponentConfig.isCanvas !== null
+    ) {
+      node.data.isCanvas = userComponentConfig.isCanvas;
     }
 
-    if (normalize) {
-      normalize(node);
+    if (userComponentConfig.rules) {
+      Object.keys(userComponentConfig.rules).forEach((key) => {
+        if (['canDrag', 'canDrop', 'canMoveIn', 'canMoveOut'].includes(key)) {
+          node.rules[key] = userComponentConfig.rules[key];
+        }
+      });
     }
 
-    if (actualType.craft) {
-      node.data.props = {
-        ...(actualType.craft.props || actualType.craft.defaultProps || {}),
-        ...node.data.props,
+    if (userComponentConfig.related) {
+      const relatedNodeContext = {
+        id: node.id,
+        related: true,
       };
 
-      const displayName = actualType.craft.displayName || actualType.craft.name;
-      if (displayName) {
-        node.data.displayName = displayName;
-      }
-
-      if (actualType.craft.isCanvas) {
-        node.data.isCanvas = node.data.isCanvas || actualType.craft.isCanvas;
-      }
-
-      if (actualType.craft.rules) {
-        Object.keys(actualType.craft.rules).forEach((key) => {
-          if (['canDrag', 'canDrop', 'canMoveIn', 'canMoveOut'].includes(key)) {
-            node.rules[key] = actualType.craft.rules[key];
-          }
-        });
-      }
-
-      if (actualType.craft.custom) {
-        node.data.custom = {
-          ...actualType.craft.custom,
-          ...node.data.custom,
-        };
-      }
-
-      if (actualType.craft.related) {
-        node.related = {};
-        const relatedNodeContext = {
-          id: node.id,
-          related: true,
-        };
-        Object.keys(actualType.craft.related).forEach((comp) => {
-          node.related[comp] = () =>
-            React.createElement(
-              NodeProvider,
-              relatedNodeContext,
-              React.createElement(actualType.craft.related[comp])
-            );
-        });
-      }
+      Object.keys(userComponentConfig.related).forEach((comp) => {
+        node.related[comp] = () =>
+          React.createElement(
+            NodeProvider,
+            relatedNodeContext,
+            React.createElement(userComponentConfig.related[comp])
+          );
+      });
     }
-  }) as Node;
+  }
+
+  return node;
 }
