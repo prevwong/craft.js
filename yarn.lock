@@ -9424,20 +9424,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"craftjs-site@workspace:site":
-  version: 0.0.0-use.local
-  resolution: "craftjs-site@workspace:site"
-  dependencies:
-    "@docusaurus/core": ^2.0.0-beta.0
-    "@docusaurus/plugin-client-redirects": ^2.0.0-beta.0
-    "@docusaurus/preset-classic": ^2.0.0-beta.0
-    classnames: ^2.3.1
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    semver: ^7.3.5
-  languageName: unknown
-  linkType: soft
-
 "create-ecdh@npm:^4.0.0":
   version: 4.0.3
   resolution: "create-ecdh@npm:4.0.3"
@@ -23596,6 +23582,20 @@ resolve@^1.17.0:
   checksum: 6554debe10fa4c6a7e8d58531313fdb61c39bb435ba420f8d7a01d8aaffecc654cca846b586e33f3c904350e24f229d5bbd8069abdb583c93252849a0f73e933
   languageName: node
   linkType: hard
+
+"site@workspace:site":
+  version: 0.0.0-use.local
+  resolution: "site@workspace:site"
+  dependencies:
+    "@docusaurus/core": ^2.0.0-beta.0
+    "@docusaurus/plugin-client-redirects": ^2.0.0-beta.0
+    "@docusaurus/preset-classic": ^2.0.0-beta.0
+    classnames: ^2.3.1
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    semver: ^7.3.5
+  languageName: unknown
+  linkType: soft
 
 "sitemap@npm:^6.3.6":
   version: 6.4.0
