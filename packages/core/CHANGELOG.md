@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-alpha.24](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.23...v0.2.0-alpha.24) (2021-05-22)
+
+
+### Bug Fixes
+
+* linked node props ([#245](https://github.com/prevwong/craft.js/issues/245)) ([452ea48](https://github.com/prevwong/craft.js/commit/452ea484f20f2d9536404f9e831cd7ee6629a4f6))
+* missing type in UserComponentConfig ([3da530a](https://github.com/prevwong/craft.js/commit/3da530ad61bb362fe36272a43213f6cafbafedd1))
+* types ([bd726c7](https://github.com/prevwong/craft.js/commit/bd726c7ddb43a26381785687ff5ce11c222b2033))
+
+
+
+
+
 # 0.2.0-alpha.23 (2021-05-14)
 
 

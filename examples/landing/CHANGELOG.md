@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-alpha.24](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.23...v0.2.0-alpha.24) (2021-05-22)
+
+
+### Bug Fixes
+
+* **landing:** hover indicator ([0a126ac](https://github.com/prevwong/craft.js/commit/0a126ac6116a980184c3ba88f115b1b44229fa8a))
+
+
+
+
+
 # 0.2.0-alpha.23 (2021-05-14)
 
 

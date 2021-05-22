@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-alpha.24](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.23...v0.2.0-alpha.24) (2021-05-22)
+
+
+### Bug Fixes
+
+* layer node console warning ([#246](https://github.com/prevwong/craft.js/issues/246)) ([d882ea6](https://github.com/prevwong/craft.js/commit/d882ea6b4d90b20014f34d95413d5c2e8e2c23c9))
+* **layers:** layer node type ([f228f48](https://github.com/prevwong/craft.js/commit/f228f48cb84152edeaa60e83d3cea0c82caa0ff8))
+* types ([bd726c7](https://github.com/prevwong/craft.js/commit/bd726c7ddb43a26381785687ff5ce11c222b2033))
+
+
+
+
+
 # 0.2.0-alpha.23 (2021-05-14)
 
 
