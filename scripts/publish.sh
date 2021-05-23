@@ -2,6 +2,14 @@
 
 # https://github.com/vercel/next.js/blob/canary/publish-release.sh
 
+set -e 
+
+yarn clean
+
+yarn build 
+
+yarn test 
+
 git describe --exact-match
 
 if [[ ! $? -eq 0 ]];then
