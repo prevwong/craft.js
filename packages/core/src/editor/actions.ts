@@ -3,10 +3,8 @@ import {
   ERROR_INVALID_NODEID,
   ROOT_NODE,
   DEPRECATED_ROOT_NODE,
-  QueryCallbacksFor,
   ERROR_NOPARENT,
   ERROR_DELETE_TOP_LEVEL_NODE,
-  CallbacksFor,
   Delete,
 } from '@craftjs/utils';
 import invariant from 'tiny-invariant';
@@ -32,7 +30,7 @@ import { removeNodeFromEvents } from '../utils/removeNodeFromEvents';
 
 const Methods = (
   state: EditorState,
-  query: QueryCallbacksFor<typeof QueryMethods>
+  query: ReturnType<typeof QueryMethods>
 ) => {
   /** Helper functions */
   const addNodeToParentAtIndex = (
@@ -424,7 +422,7 @@ const Methods = (
 
 export const ActionMethods = (
   state: EditorState,
-  query: QueryCallbacksFor<typeof QueryMethods>
+  query: ReturnType<typeof QueryMethods>
 ) => {
   return {
     ...Methods(state, query),
@@ -433,7 +431,7 @@ export const ActionMethods = (
     setState(
       cb: (
         state: EditorState,
-        actions: Delete<CallbacksFor<typeof Methods>, 'history'>
+        actions: Delete<ReturnType<typeof Methods>, 'history'>
       ) => void
     ) {
       const { history, ...actions } = this;

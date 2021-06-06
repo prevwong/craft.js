@@ -1,4 +1,4 @@
 export * from './Editor';
-export * from './store';
+export * from './EditorStore';
 export * from './query';
 export * from './NodeHelpers';

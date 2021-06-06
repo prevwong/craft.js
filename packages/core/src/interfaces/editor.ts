@@ -1,16 +1,14 @@
-import { QueryCallbacksFor, Delete, PatchListenerAction } from '@craftjs/utils';
-
 import { Placement } from './events';
 import { Nodes, NodeEventTypes, NodeId } from './nodes';
 
+import { EditorStore } from '../editor/EditorStore';
 import { QueryMethods } from '../editor/query';
-import { EditorStore, ActionMethodsWithConfig } from '../editor/store';
-import { useInternalEditorReturnType } from '../editor/useInternalEditor';
+import { useInternalEditor } from '../editor/useInternalEditor';
 import { CoreEventHandlers } from '../events';
 
 export type Options = {
   onRender: React.ComponentType<{ render: React.ReactElement }>;
-  onNodesChange: (query: QueryCallbacksFor<typeof QueryMethods>) => void;
+  onNodesChange: (query: ReturnType<typeof QueryMethods>) => void;
   resolver: Resolver;
   enabled: boolean;
   indicator: Partial<{
@@ -26,11 +24,7 @@ export type Options = {
   normalizeNodes: (
     state: EditorState,
     previousState: EditorState,
-    actionPerformed: Delete<
-      PatchListenerAction<EditorState, typeof ActionMethodsWithConfig>,
-      'patches'
-    >,
-    query: QueryCallbacksFor<typeof QueryMethods>
+    actionPerformed: any
   ) => void;
 };
 
@@ -51,4 +45,4 @@ export type EditorState = {
   indicator: Indicator;
 };
 
-export type ConnectedEditor<S = null> = useInternalEditorReturnType<S>;
+export type ConnectedEditor = ReturnType<typeof useInternalEditor>;

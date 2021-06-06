@@ -1,9 +1,9 @@
-import { ERROR_RESOLVER_NOT_AN_OBJECT, HISTORY_ACTIONS } from '@craftjs/utils';
-import React, { useEffect } from 'react';
+import { ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
+import React, { useEffect, useMemo } from 'react';
 import invariant from 'tiny-invariant';
 
 import { EditorContext } from './EditorContext';
-import { useEditorStore } from './store';
+import { EditorStore, editorInitialState } from './EditorStore';
 
 import { Events } from '../events';
 import { Options } from '../interfaces';
@@ -23,72 +23,36 @@ export const Editor: React.FC<Partial<Options>> = ({
     );
   }
 
-  const context = useEditorStore(
-    options,
-    (state, previousState, actionPerformedWithPatches, query, normalizer) => {
-      if (!actionPerformedWithPatches) {
-        return;
-      }
-
-      const { patches, ...actionPerformed } = actionPerformedWithPatches;
-
-      for (let i = 0; i < patches.length; i++) {
-        const { path } = patches[i];
-        const isModifyingNodeData =
-          path.length > 2 && path[0] === 'nodes' && path[2] === 'data';
-
-        let actionType = actionPerformed.type;
-
-        if (
-          [HISTORY_ACTIONS.IGNORE, HISTORY_ACTIONS.THROTTLE].includes(
-            actionType
-          ) &&
-          actionPerformed.params
-        ) {
-          actionPerformed.type = actionPerformed.params[0];
-        }
-
-        if (
-          ['setState', 'deserialize'].includes(actionPerformed.type) ||
-          isModifyingNodeData
-        ) {
-          normalizer((draft) => {
-            if (state.options.normalizeNodes) {
-              state.options.normalizeNodes(
-                draft,
-                previousState,
-                actionPerformed,
-                query
-              );
-            }
-          });
-          break; // we exit the loop as soon as we find a change in node.data
-        }
-      }
-    }
+  const store = useMemo(
+    () =>
+      new EditorStore({
+        ...editorInitialState,
+        options: {
+          ...editorInitialState.options,
+          ...options,
+        },
+      }),
+    [options]
   );
 
   useEffect(() => {
-    if (context && options)
-      context.actions.setOptions((editorOptions) => {
-        editorOptions = options;
-      });
-  }, [context, options]);
-
-  useEffect(() => {
-    context.subscribe(
+    store.subscribe(
       (_) => ({
-        json: context.query.serialize(),
+        json: store.query.serialize(),
       }),
       () => {
-        context.query.getOptions().onNodesChange(context.query);
+        store.query.getOptions().onNodesChange(store.query);
       }
     );
-  }, [context]);
+  }, [store]);
 
-  return context ? (
-    <EditorContext.Provider value={context}>
+  if (!store) {
+    return null;
+  }
+
+  return (
+    <EditorContext.Provider value={{ store }}>
       <Events>{children}</Events>
     </EditorContext.Provider>
-  ) : null;
+  );
 };
