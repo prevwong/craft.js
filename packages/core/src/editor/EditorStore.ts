@@ -67,13 +67,13 @@ const normalizeStateOnUndoRedo = (state: EditorState) => {
   });
 };
 
-const shouldNormalize = (patches, action) => {
+const shouldNormalize = (patches) => {
   for (let i = 0; i < patches.length; i++) {
     const { path } = patches[i];
     const isModifyingNodeData =
       path.length > 2 && path[0] === 'nodes' && path[2] === 'data';
 
-    if (['setState', 'deserialize'].includes(action) || isModifyingNodeData) {
+    if (isModifyingNodeData) {
       return true; // we exit the loop as soon as we find a change in node.data
     }
   }
@@ -89,84 +89,96 @@ export class EditorStore extends Store<EditorState> {
     this.history = new History();
   }
 
+  // Legacy method to support normalization
+  // Will be removed in a future release
+  private setStateAndNormalize(
+    cb: (state: EditorState) => void,
+    opts: Partial<{ forceNormalize: boolean; onPatch; test: any }> = {}
+  ) {
+    const { forceNormalize, onPatch } = {
+      forceNormalize: false,
+      onPatch: null,
+      ...(opts || {}),
+    };
+
+    const currentState = this.getState();
+    this.setState(cb, (patches, inversePatches) => {
+      const isNormalizing = forceNormalize || shouldNormalize(patches);
+      if (isNormalizing && currentState.options.normalizeNodes) {
+        this.setState(
+          (state) => currentState.options.normalizeNodes(state, currentState),
+          (newPatches, newInversePatches) => {
+            patches = [...patches, ...newPatches];
+            inversePatches = [...newInversePatches, ...inversePatches];
+          },
+          true
+        );
+      }
+
+      if (!onPatch) {
+        return;
+      }
+
+      onPatch(patches, inversePatches);
+    });
+  }
+
   // TODO: The actions api will be updated to use an operations-like model, we're keeping this here for now
   get actions() {
     const methods = ActionMethods(null, null);
 
     const getBaseActions = (
-      patchCallback?: (patches, inversePatches, type: string) => void
+      historyCallback?: (patches, inversePatches, type: string) => void
     ) =>
       Object.keys(methods).reduce((accum, actionKey) => {
         return {
           ...accum,
-          [actionKey]: (...args) =>
-            this.setState(
+          [actionKey]: (...args) => {
+            return this.setStateAndNormalize(
               (state) => ActionMethods(state, this.query)[actionKey](...args),
-              (patches, inversePatches) => {
-                if (!patchCallback) {
-                  return;
-                }
+              {
+                onPatch: (patches, inversePatches) => {
+                  if (
+                    [
+                      'setDOM',
+                      'setNodeEvent',
+                      'selectNode',
+                      'clearEvents',
+                      'setOptions',
+                      'setIndicator',
+                    ].includes(actionKey) ||
+                    !historyCallback
+                  ) {
+                    return;
+                  }
 
-                if (
-                  [
-                    'setDOM',
-                    'setNodeEvent',
-                    'selectNode',
-                    'clearEvents',
-                    'setOptions',
-                    'setIndicator',
-                  ].includes(actionKey)
-                ) {
-                  return;
-                }
-
-                if (
-                  shouldNormalize(patches, actionKey) &&
-                  this.getState().options.normalizeNodes
-                ) {
-                  const currentState = this.getState();
-                  this.setState(
-                    (state) =>
-                      this.getState().options.normalizeNodes(
-                        state,
-                        currentState,
-                        {
-                          type: actionKey,
-                          params: args,
-                        }
-                      ),
-                    (newPatches, newInversePatches) => {
-                      patches = [...patches, ...newPatches];
-                      inversePatches = [
-                        ...newInversePatches,
-                        ...inversePatches,
-                      ];
-                    },
-                    true
-                  );
-                }
-
-                patchCallback(patches, inversePatches, actionKey);
+                  historyCallback(patches, inversePatches, actionKey);
+                },
               }
-            ),
+            );
+          },
         };
       }, {} as ReturnType<typeof ActionMethods>);
 
     const history = {
       undo: () =>
-        this.setState((state) => {
-          normalizeStateOnUndoRedo(state);
+        this.setStateAndNormalize((state) => {
           this.history.undo(state);
+          normalizeStateOnUndoRedo(state);
         }),
       redo: () =>
         this.setState((state) => {
-          normalizeStateOnUndoRedo(state);
           this.history.redo(state);
+          normalizeStateOnUndoRedo(state);
         }),
       ignore: () => getBaseActions(),
       throttle: (rate: number = 500) =>
         getBaseActions((patch, inversePatch) =>
           this.history.throttleAdd(patch, inversePatch, rate)
+        ),
+      merge: () =>
+        getBaseActions((patch, inversePatch) =>
+          this.history.merge(patch, inversePatch)
         ),
     };
 
