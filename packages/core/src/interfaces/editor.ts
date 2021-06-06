@@ -21,11 +21,7 @@ export type Options = {
     thickness: number;
   }>;
   handlers: (store: EditorStore) => CoreEventHandlers;
-  normalizeNodes: (
-    state: EditorState,
-    previousState: EditorState,
-    actionPerformed: any
-  ) => void;
+  normalizeNodes: (state: EditorState, previousState: EditorState) => void;
 };
 
 export type Resolver = Record<string, string | React.ElementType>;
