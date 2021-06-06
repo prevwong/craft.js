@@ -1,459 +1,340 @@
-import mapValues from 'lodash/mapValues';
+import { mapValues } from 'lodash';
 
-import { QueryMethods } from '../../editor/query';
 import { EditorState } from '../../interfaces';
-import { createNode } from '../../utils/createNode';
 import {
-  createTestState,
+  createTestNode,
   createTestNodes,
+  createTestState,
   expectEditorState,
 } from '../../utils/testHelpers';
 import { ActionMethods } from '../actions';
+import { QueryMethods } from '../query';
 
-// TODO: create a cleaner way to test Action methods
-const Actions = (state: EditorState) => (cb) => {
-  const methods = ActionMethods(state, QueryMethods(state) as any);
-  cb(methods);
-  return state;
-};
+describe('actions', () => {
+  let state: EditorState, actions: ReturnType<typeof ActionMethods>;
 
-describe('actions.add', () => {
-  let state, rootNode;
   beforeEach(() => {
-    rootNode = {
-      id: 'node-root',
-      data: {
-        type: 'div',
-      },
-    };
-
     state = createTestState({
-      nodes: rootNode,
+      nodes: {
+        id: 'ROOT',
+        data: {
+          type: 'div',
+        },
+      },
     });
+
+    actions = ActionMethods(state, QueryMethods(state));
   });
-  it('should throw if we give a parentId that doesnt exist', () => {
-    expect(() =>
-      Actions(createTestState())((actions) =>
+  describe('add', () => {
+    it('should be able to add node', () => {
+      const node = createTestNode({
+        id: 'node-test',
+        data: {
+          type: 'span',
+          parent: 'ROOT',
+        },
+      });
+      actions.add(node, 'ROOT');
+
+      const node2 = createTestNode({
+        id: 'node-test2',
+        data: {
+          type: 'button',
+          parent: 'ROOT',
+        },
+      });
+      actions.add(node2, 'ROOT', 0);
+
+      expect(state.nodes['node-test']).toEqual(node);
+      expect(state.nodes['node-test2']).toEqual(node2);
+      expect(state.nodes['ROOT'].data.nodes).toEqual([
+        'node-test2',
+        'node-test',
+      ]);
+    });
+    it('should throw if invalid parentId', () => {
+      expect(() =>
         actions.add(
-          createNode({
+          createTestNode({
             id: 'node-test',
             data: {
               type: 'span',
             },
-          })
+          }),
+          null
         )
-      )
-    ).toThrow();
-  });
-  it('should throw if we create a node that doesnt have a parent and we dont provide a parent ', () => {
-    expect(() =>
-      Actions(createTestState())((actions) =>
-        actions.add(rootNode, rootNode.id)
-      )
-    ).toThrow();
-  });
-  it('should be able to add leaf to the document', () => {
-    const node = createNode({
-      id: 'node-btn',
-      data: {
-        type: 'button',
-      },
-    });
-
-    const newState = Actions(state)((actions) =>
-      actions.add(node, rootNode.id)
-    );
-
-    rootNode.data.nodes = [node];
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: rootNode,
-      })
-    );
-  });
-  it('should be able to add two nodes', () => {
-    const primaryButton = createNode({
-      id: 'primary-button',
-      data: {
-        type: 'button',
-      },
-    });
-
-    const secondaryButton = createNode({
-      id: 'secondary-button',
-      data: {
-        type: 'button',
-      },
-    });
-
-    const newState = Actions(state)((actions) =>
-      actions.add([primaryButton, secondaryButton], rootNode.id)
-    );
-
-    rootNode.data.nodes = [primaryButton, secondaryButton];
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: rootNode,
-      })
-    );
-  });
-});
-
-describe('actions.addNodeTree', () => {
-  let state, rootNode;
-
-  beforeEach(() => {
-    rootNode = {
-      id: 'node-root',
-      data: {
-        type: 'div',
-      },
-    };
-
-    state = createTestState({
-      nodes: rootNode,
+      ).toThrow();
     });
   });
-
-  it('should be able to add a single node at 0', () => {
-    const node = createNode({
-      data: {
-        type: 'button',
-      },
-    });
-
-    const newState = Actions(state)((actions) =>
-      actions.addNodeTree(
-        {
-          rootNodeId: node.id,
-          nodes: { [node.id]: node },
-        },
-        rootNode.id
-      )
-    );
-
-    rootNode.data.nodes = [node];
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: rootNode,
-      })
-    );
-  });
-  it('should be able to add a larger tree', () => {
-    const card = {
-      id: 'card',
-      data: {
-        type: 'section',
-        nodes: [
-          {
-            id: 'card-child',
-            data: {
-              type: 'h1',
-            },
-          },
-        ],
-      },
-    };
-
-    const newState = Actions(state)((actions) =>
+  describe('addNodeTree', () => {
+    it('should be able to add NodeTree', () => {
+      const cardNode = createTestNode({
+        id: 'card',
+        data: { type: 'div', parent: 'ROOT', nodes: ['child'] },
+      });
+      const cardChildNode = createTestNode({
+        id: 'child',
+        data: { type: 'button', parent: 'card' },
+      });
+      const nodes = {
+        card: cardNode,
+        child: cardChildNode,
+      };
       actions.addNodeTree(
         {
           rootNodeId: 'card',
-          nodes: createTestNodes(card),
+          nodes,
         },
-        rootNode.id
-      )
-    );
+        'ROOT'
+      );
 
-    rootNode.data.nodes = [card];
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: rootNode,
-      })
-    );
-  });
-});
-
-describe('actions.delete', () => {
-  let state, rootNode;
-
-  beforeEach(() => {
-    rootNode = {
-      id: 'node-root',
-      data: {
-        type: 'div',
-      },
-    };
-
-    state = createTestState({
-      nodes: rootNode,
+      expect(state.nodes.ROOT.data.nodes).toEqual(['card']);
+      expect(state.nodes.card).toEqual(cardNode);
+      expect(state.nodes.child).toEqual(cardChildNode);
     });
   });
-
-  it('should throw if you try to a non existing node', () => {
-    expect(() =>
-      Actions(createTestState())((actions) => actions.delete(rootNode.id))
-    ).toThrow();
-  });
-  it('should throw if you try to delete the root', () => {
-    expect(() =>
-      Actions(state)((actions) => actions.add(rootNode.id))
-    ).toThrow();
-  });
-  it('should be able to delete node', () => {
-    const node = {
-      id: 'node-test',
-      data: {
-        type: 'button',
-      },
-    };
-    const state = createTestState({
-      nodes: {
-        ...rootNode,
-        data: {
-          ...rootNode.data,
-          nodes: [node],
-        },
-      },
-    });
-
-    const newState = Actions(state)((actions) => actions.delete(node.id));
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: rootNode,
-      })
-    );
-  });
-  it('should be able to delete nodes with children', () => {
-    const card = {
-      id: 'card',
-      data: {
-        type: 'div',
-        nodes: [
-          {
-            id: 'card-child',
-            data: {
-              type: 'h1',
-            },
-          },
-        ],
-      },
-    };
-
-    const state = createTestState({
-      nodes: {
-        ...rootNode,
-        data: {
-          ...rootNode.data,
-          nodes: [card],
-        },
-      },
-    });
-
-    const newState = Actions(state)((actions) => actions.delete(card.id));
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: rootNode,
-      })
-    );
-  });
-});
-
-describe('actions.clearEvents', () => {
-  it('should be able to reset the events', () => {
-    const nodes = {
-      id: 'node-a',
-      data: {
-        type: 'div',
-        nodes: [
-          {
-            id: 'node-b',
-            data: {
-              type: 'span',
-            },
-          },
-        ],
-      },
-    };
-
-    const state = createTestState({
-      nodes,
-      events: {
-        selected: new Set(['node-a']),
-        hovered: new Set(['node-b']),
-      },
-    });
-
-    const newState = Actions(state)((actions) => actions.clearEvents());
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes,
-      })
-    );
-  });
-});
-
-describe('actions.replaceNodes', () => {
-  it('should be able to replace the nodes', () => {
-    const newNodes = {
-      id: 'Test',
-      data: {
-        type: 'div',
-        nodes: [
-          {
-            id: 'node-btn',
-            data: {
-              type: 'button',
-            },
-          },
-        ],
-      },
-    };
-
-    const newState = Actions(createTestState())((actions) =>
-      actions.replaceNodes(createTestNodes(newNodes))
-    );
-
-    expectEditorState(newState, createTestState({ nodes: newNodes }));
-  });
-});
-
-describe('actions.reset', () => {
-  it('should reset the entire state', () => {
-    const state = createTestState({
-      nodes: {
-        id: 'node',
-        data: {
-          type: 'div',
-          linkedNodes: {
-            header: {
-              id: 'node-header',
-              data: {
-                type: 'section',
+  describe('delete', () => {
+    beforeEach(() => {
+      state = createTestState({
+        nodes: {
+          id: 'ROOT',
+          data: {
+            type: 'div',
+            nodes: [
+              {
+                id: 'non-target',
+                data: {
+                  type: 'button',
+                },
               },
-            },
-          },
-        },
-      },
-      events: {
-        selected: new Set(['node-header']),
-      },
-    });
-
-    const newState = Actions(state)((actions) => actions.reset());
-
-    expectEditorState(newState, createTestState());
-  });
-});
-
-describe('actions.deserialize', () => {
-  it('should be able to set the state correctly', () => {
-    const nodes = {
-      id: 'node-root',
-      data: {
-        type: 'h1',
-        nodes: [
-          {
-            id: 'btn',
-            data: {
-              type: 'button',
-            },
-          },
-          {
-            id: 'container',
-            data: {
-              type: 'div',
-              linkedNodes: {
-                header: {
-                  id: 'header',
-                  data: {
-                    type: 'div',
+              {
+                id: 'target',
+                data: {
+                  type: 'div',
+                  nodes: [
+                    {
+                      id: 'child',
+                      data: {
+                        type: 'button',
+                      },
+                    },
+                    {
+                      id: 'child-2',
+                      data: {
+                        type: 'button',
+                      },
+                    },
+                  ],
+                  linkedNodes: {
+                    linkedChild: {
+                      id: 'linked-child',
+                      data: {
+                        type: 'button',
+                      },
+                    },
+                    linkedChild2: {
+                      id: 'linked-child-2',
+                      data: {
+                        type: 'button',
+                      },
+                    },
                   },
                 },
               },
-            },
+            ],
           },
-        ],
-      },
-    };
-
-    const serialized = mapValues(createTestNodes(nodes), ({ data }) => ({
-      ...data,
-    }));
-
-    const newState = Actions(createTestState())((actions) =>
-      actions.deserialize(serialized)
-    );
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes,
-      })
-    );
+        },
+      });
+      actions = ActionMethods(state, QueryMethods(state));
+    });
+    it('should be able to delete node', () => {
+      expect(Object.keys(state.nodes)).toEqual([
+        'ROOT',
+        'non-target',
+        'target',
+        'child',
+        'child-2',
+        'linked-child',
+        'linked-child-2',
+      ]);
+      actions.delete('target');
+      expect(state.nodes.ROOT.data.nodes).toEqual(['non-target']);
+      expect(Object.keys(state.nodes)).toEqual(['ROOT', 'non-target']);
+    });
   });
-});
-
-describe('actions.move', () => {
-  let state;
-  beforeEach(() => {
-    state = createTestState({
-      nodes: {
-        id: 'root',
+  describe('deserialize', () => {
+    it('should be able the state correctly', () => {
+      const nodes = {
+        id: 'ROOT',
         data: {
-          type: 'div',
-          isCanvas: true,
+          type: 'h1',
           nodes: [
             {
-              id: 'node-a',
+              id: 'btn',
               data: {
                 type: 'button',
               },
             },
             {
-              id: 'node-b',
+              id: 'container',
               data: {
                 type: 'div',
-                isCanvas: true,
-                nodes: [
-                  {
-                    id: 'node-c',
+                linkedNodes: {
+                  header: {
+                    id: 'header',
                     data: {
-                      type: 'button',
+                      type: 'div',
                     },
                   },
-                ],
+                },
               },
             },
           ],
         },
-      },
+      };
+
+      const serialized = mapValues(createTestNodes(nodes), ({ data }) => ({
+        ...data,
+      }));
+
+      actions.deserialize(serialized as any);
+
+      expectEditorState(
+        state,
+        createTestState({
+          nodes,
+        })
+      );
     });
   });
-  it('should be able to move node', () => {
-    const newState = Actions(state)((actions) =>
-      actions.move('node-c', 'root', 2)
-    );
-
-    expectEditorState(
-      newState,
-      createTestState({
+  describe('setNodeEvent', () => {
+    it('should be able to change event state', () => {
+      actions.add(
+        createTestNode({
+          id: 'test',
+          data: {
+            type: 'button',
+          },
+        }),
+        'ROOT'
+      );
+      ['selected', 'hovered', 'dragged'].forEach((eventType) => {
+        actions.setNodeEvent(eventType as any, ['ROOT', 'test']);
+        expect(Array.from(state.events[eventType])).toEqual(['ROOT', 'test']);
+        expect(state.nodes['ROOT'].events[eventType]).toEqual(true);
+        expect(state.nodes['test'].events[eventType]).toEqual(true);
+      });
+    });
+  });
+  describe('clearEvents', () => {
+    beforeEach(() => {
+      state = createTestState({
         nodes: {
-          id: 'root',
+          id: 'ROOT',
+          data: {
+            type: 'div',
+          },
+        },
+        events: {
+          selected: ['ROOT'],
+          hovered: ['ROOT'],
+          dragged: ['ROOT'],
+        },
+      });
+      actions = ActionMethods(state, QueryMethods(state));
+    });
+    it('should be able to remove all events', () => {
+      actions.clearEvents();
+      expect(state.events).toEqual({
+        selected: new Set(),
+        hovered: new Set(),
+        dragged: new Set(),
+      });
+      ['selected', 'hovered', 'dragged'].forEach((eventType: any) => {
+        expect(state.nodes['ROOT'].events[eventType]).toEqual(false);
+      });
+    });
+  });
+  describe('setProp', () => {
+    it('should be able to set component prop on Node', () => {
+      actions.setProp('ROOT', (props) => {
+        props.color = '#333';
+      });
+
+      expect(state.nodes.ROOT.data.props).toEqual({
+        color: '#333',
+      });
+    });
+  });
+  describe('setCustom', () => {
+    it('should be able to set custom properties on Node', () => {
+      actions.setCustom('ROOT', (custom) => {
+        custom.color = '#333';
+      });
+
+      expect(state.nodes.ROOT.data.custom).toEqual({
+        color: '#333',
+      });
+    });
+  });
+  describe('setHidden', () => {
+    it('should be able to set hidden property on node', () => {
+      actions.setHidden('ROOT', true);
+      expect(state.nodes['ROOT'].data.hidden).toEqual(true);
+      actions.setHidden('ROOT', false);
+      expect(state.nodes['ROOT'].data.hidden).toEqual(false);
+    });
+  });
+  describe('setIndicator', () => {
+    beforeEach(() => {
+      state = createTestState({
+        nodes: {
+          id: 'ROOT',
+          data: {
+            type: 'div',
+            isCanvas: true,
+            nodes: [
+              {
+                id: 'node-a',
+                data: {
+                  type: 'button',
+                },
+                dom: document.createElement('button'),
+              },
+            ],
+          },
+          dom: document.createElement('div'),
+        },
+      });
+      actions = ActionMethods(state, QueryMethods(state));
+    });
+    it('should be able to set indicator state', () => {
+      const indicator = {
+        placement: {
+          currentNode: state.nodes['node-a'],
+          parent: state.nodes['ROOT'],
+          index: 0,
+          where: 'after',
+        },
+        error: null,
+      };
+
+      actions.setIndicator(indicator);
+      expect(state.indicator).toEqual(indicator);
+    });
+  });
+  describe('setDOM', () => {
+    it('should be able to set the dom property of a Node', () => {
+      const element = document.createElement('div');
+      actions.setDOM('ROOT', element);
+      expect(state.nodes.ROOT.dom).toEqual(element);
+    });
+  });
+  describe('move', () => {
+    beforeEach(() => {
+      state = createTestState({
+        nodes: {
+          id: 'ROOT',
           data: {
             type: 'div',
             isCanvas: true,
@@ -469,381 +350,31 @@ describe('actions.move', () => {
                 data: {
                   type: 'div',
                   isCanvas: true,
-                },
-              },
-              {
-                id: 'node-c',
-                data: {
-                  type: 'button',
+                  nodes: [
+                    {
+                      id: 'node-c',
+                      data: {
+                        type: 'button',
+                      },
+                    },
+                  ],
                 },
               },
             ],
           },
         },
-      })
-    );
-  });
-});
-
-describe('actions.setOptions', () => {
-  it('should be able to change options state', () => {
-    const state = createTestState();
-    const newState = Actions(state)((actions) =>
-      actions.setOptions((options) => {
-        options.enabled = false;
-      })
-    );
-
-    expectEditorState(
-      newState,
-      createTestState({
-        options: {
-          ...state.options,
-          enabled: false,
-        },
-      })
-    );
-  });
-});
-
-describe('actions.setNodeEvent', () => {
-  let state, nodeA, nodeB;
-  beforeEach(() => {
-    nodeA = {
-      id: 'node-a',
-      data: {
-        type: 'button',
-      },
-    };
-
-    nodeB = {
-      id: 'node-b',
-      data: {
-        type: 'button',
-      },
-    };
-
-    state = createTestState({
-      nodes: {
-        id: 'root',
-        data: {
-          type: 'div',
-          nodes: [nodeA, nodeB],
-        },
-      },
+      });
+      actions = ActionMethods(state, QueryMethods(state));
     });
-  });
-
-  it('should be able to change events state', () => {
-    const newState = Actions(state)((actions) =>
-      actions.setNodeEvent('selected', ['node-a', 'node-b'])
-    );
-
-    nodeA.events = {
-      selected: true,
-    };
-    nodeB.events = {
-      selected: true,
-    };
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: {
-          id: 'root',
-          data: {
-            type: 'div',
-            nodes: [nodeA, nodeB],
-          },
-        },
-        events: {
-          selected: new Set(['node-a', 'node-b']),
-        },
-      })
-    );
-  });
-});
-
-describe('actions.setProp', () => {
-  let state, nodeA;
-  beforeEach(() => {
-    nodeA = {
-      id: 'node-a',
-      data: {
-        type: 'button',
-        props: {
-          color: '#fff',
-        },
-      },
-    };
-
-    state = createTestState({
-      nodes: {
-        id: 'root',
-        data: {
-          type: 'div',
-          nodes: [nodeA],
-        },
-      },
+    it('should be able to move node', () => {
+      actions.move('node-c', 'ROOT', 2);
+      expect(state.nodes.ROOT.data.nodes).toEqual([
+        'node-a',
+        'node-b',
+        'node-c',
+      ]);
+      expect(state.nodes['node-b'].data.nodes).toEqual([]);
+      expect(state.nodes['node-c'].data.parent).toEqual('ROOT');
     });
-  });
-
-  it('should update props', () => {
-    const newState = Actions(state)((actions) =>
-      actions.setProp('node-a', (props) => (props.color = '#000'))
-    );
-
-    nodeA.data.props.color = '#000';
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: {
-          id: 'root',
-          data: {
-            type: 'div',
-            nodes: [nodeA],
-          },
-        },
-      })
-    );
-  });
-});
-
-describe('actions.setCustom', () => {
-  let state, nodeA;
-  beforeEach(() => {
-    nodeA = {
-      id: 'node-a',
-      data: {
-        type: 'button',
-        custom: {
-          css: {
-            color: '#fff',
-          },
-        },
-      },
-    };
-
-    state = createTestState({
-      nodes: {
-        id: 'root',
-        data: {
-          type: 'div',
-          nodes: [nodeA],
-        },
-      },
-    });
-  });
-
-  it('should update custom properties', () => {
-    const newState = Actions(state)((actions) =>
-      actions.setCustom('node-a', (custom) => (custom.css.color = '#000'))
-    );
-
-    nodeA.data.custom.css.color = '#000';
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: {
-          id: 'root',
-          data: {
-            type: 'div',
-            nodes: [nodeA],
-          },
-        },
-      })
-    );
-  });
-});
-
-describe('actions.setHidden', () => {
-  let state, nodeA;
-  beforeEach(() => {
-    nodeA = {
-      id: 'node-a',
-      data: {
-        type: 'button',
-      },
-    };
-
-    state = createTestState({
-      nodes: {
-        id: 'root',
-        data: {
-          type: 'div',
-          nodes: [nodeA],
-        },
-      },
-    });
-  });
-
-  it('should hide node', () => {
-    const newState = Actions(state)((actions) =>
-      actions.setHidden('node-a', true)
-    );
-
-    nodeA.data.hidden = true;
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: {
-          id: 'root',
-          data: {
-            type: 'div',
-            nodes: [nodeA],
-          },
-        },
-      })
-    );
-  });
-});
-
-describe('actions.setDOM', () => {
-  let state, nodeA;
-  beforeEach(() => {
-    nodeA = {
-      id: 'node-a',
-      data: {
-        type: 'button',
-      },
-    };
-
-    state = createTestState({
-      nodes: {
-        id: 'root',
-        data: {
-          type: 'div',
-          nodes: [nodeA],
-        },
-      },
-    });
-  });
-
-  it('should set DOM', () => {
-    const dom = document.createElement('button');
-
-    const newState = Actions(state)((actions) => actions.setDOM('node-a', dom));
-
-    nodeA.dom = dom;
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: {
-          id: 'root',
-          data: {
-            type: 'div',
-            nodes: [nodeA],
-          },
-        },
-      })
-    );
-  });
-});
-
-describe('actions.setIndicator', () => {
-  let state, root, nodeA;
-  beforeEach(() => {
-    nodeA = {
-      id: 'node-a',
-      data: {
-        type: 'button',
-      },
-      dom: document.createElement('button'),
-    };
-
-    root = {
-      id: 'root',
-      dom: document.createElement('div'),
-      data: {
-        type: 'div',
-        nodes: [nodeA],
-      },
-    };
-
-    state = createTestState({
-      nodes: root,
-    });
-  });
-
-  it('should set indicator', () => {
-    const indicator = {
-      placement: {
-        currentNode: nodeA,
-        parent: root,
-        index: 0,
-        where: 'after',
-      },
-    };
-
-    const newState = Actions(state)((actions) =>
-      actions.setIndicator(indicator)
-    );
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: root,
-        indicator,
-      })
-    );
-  });
-});
-
-describe('actions.setState', () => {
-  let state, root;
-  beforeEach(() => {
-    root = {
-      id: 'root',
-      dom: document.createElement('div'),
-      data: {
-        type: 'div',
-        nodes: [],
-      },
-    };
-
-    state = createTestState({
-      nodes: root,
-    });
-  });
-  it('should be able to manipulate state', () => {
-    const newDOM = document.createElement('h1');
-
-    const newState = Actions(state)((actions) =>
-      actions.setState((state) => {
-        state.nodes['root'].dom = newDOM;
-      })
-    );
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: {
-          ...root,
-          dom: newDOM,
-        },
-      })
-    );
-  });
-  it('should be able to chain action', () => {
-    const newDOM = document.createElement('h1');
-
-    const newState = Actions(state)((actions) =>
-      actions.setState((_, methods) => {
-        methods.setDOM('root', newDOM);
-      })
-    );
-
-    expectEditorState(
-      newState,
-      createTestState({
-        nodes: {
-          ...root,
-          dom: newDOM,
-        },
-      })
-    );
   });
 });
