@@ -85,7 +85,7 @@ function App() {
                     <Text
                       fontSize="23"
                       fontWeight="400"
-                      text="Craft.js is a React framework for building powerful &amp; feature-rich drag-n-drop page editors."
+                      text="Текст который должен был поменятся."
                     ></Text>
                   </Element>
                   <Element
