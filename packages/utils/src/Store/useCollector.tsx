@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 
 import { Store, StateForStore } from './Store';
 
@@ -12,18 +12,20 @@ export function useCollector<S extends Store, C>(
     collector ? collector(store.getState()) : ({} as C)
   );
 
-  const unsubscribe = useMemo(
-    () =>
-      collector
-        ? store.subscribe(
-            (state) => collector(state),
-            (collected) => {
-              setCollected(collected);
-            }
-          )
-        : null,
-    [collector, store]
-  );
+  const collectorRef = useRef(collector);
+  collectorRef.current = collector;
+
+  const unsubscribe = useMemo(() => {
+    const { current: collector } = collectorRef;
+
+    if (!collector) {
+      return;
+    }
+
+    return store.subscribe(collectorRef.current, (collected) =>
+      setCollected(collected)
+    );
+  }, [store]);
 
   // Collect state on state change
   useEffect(() => {
@@ -34,7 +36,7 @@ export function useCollector<S extends Store, C>(
 
       unsubscribe();
     };
-  }, [store, unsubscribe]);
+  }, [unsubscribe]);
 
   return collected;
 }

@@ -67,20 +67,6 @@ const normalizeStateOnUndoRedo = (state: EditorState) => {
   });
 };
 
-const shouldNormalize = (patches) => {
-  for (let i = 0; i < patches.length; i++) {
-    const { path } = patches[i];
-    const isModifyingNodeData =
-      path.length > 2 && path[0] === 'nodes' && path[2] === 'data';
-
-    if (isModifyingNodeData) {
-      return true; // we exit the loop as soon as we find a change in node.data
-    }
-  }
-
-  return false;
-};
-
 export class EditorStore extends Store<EditorState> {
   private history: History;
 
@@ -89,43 +75,10 @@ export class EditorStore extends Store<EditorState> {
     this.history = new History();
   }
 
-  // Legacy method to support normalization
-  // Will be removed in a future release
-  private setStateAndNormalize(
-    cb: (state: EditorState) => void,
-    opts: Partial<{ forceNormalize: boolean; onPatch; test: any }> = {}
-  ) {
-    const { forceNormalize, onPatch } = {
-      forceNormalize: false,
-      onPatch: null,
-      ...(opts || {}),
-    };
-
-    const currentState = this.getState();
-    this.setState(cb, (patches, inversePatches) => {
-      const isNormalizing = forceNormalize || shouldNormalize(patches);
-      if (isNormalizing && currentState.options.normalizeNodes) {
-        this.setState(
-          (state) => currentState.options.normalizeNodes(state, currentState),
-          (newPatches, newInversePatches) => {
-            patches = [...patches, ...newPatches];
-            inversePatches = [...newInversePatches, ...inversePatches];
-          },
-          true
-        );
-      }
-
-      if (!onPatch) {
-        return;
-      }
-
-      onPatch(patches, inversePatches);
-    });
-  }
-
   // TODO: The actions api will be updated to use an operations-like model, we're keeping this here for now
   get actions() {
     const methods = ActionMethods(null, null);
+    const currentState = this.getState();
 
     const getBaseActions = (
       historyCallback?: (patches, inversePatches, type: string) => void
@@ -134,10 +87,17 @@ export class EditorStore extends Store<EditorState> {
         return {
           ...accum,
           [actionKey]: (...args) => {
-            return this.setStateAndNormalize(
+            return this.setState(
               (state) => ActionMethods(state, this.query)[actionKey](...args),
               {
                 onPatch: (patches, inversePatches) => {
+                  // TODO: this will be deprecated
+                  // Keeping it here until we improve the actions API
+                  if (currentState.options.normalizeNodes) {
+                    this.setState((state) =>
+                      currentState.options.normalizeNodes(state, currentState)
+                    );
+                  }
                   if (
                     [
                       'setDOM',
@@ -162,7 +122,7 @@ export class EditorStore extends Store<EditorState> {
 
     const history = {
       undo: () =>
-        this.setStateAndNormalize((state) => {
+        this.setState((state) => {
           this.history.undo(state);
           normalizeStateOnUndoRedo(state);
         }),

@@ -1,13 +1,18 @@
-import { produceWithPatches, Patch, enableMapSet, enablePatches } from 'immer';
-import isEqualWith from 'lodash/isEqualWith';
+import {
+  createDraft,
+  finishDraft,
+  Patch,
+  enableMapSet,
+  enablePatches,
+} from 'immer';
+import isEqual from 'lodash/isEqual';
 
 enableMapSet();
 enablePatches();
 
-type Subscriber<S> = (state: S) => void;
 // A Generic Store class to hold stateful values
 export class Store<S = any> {
-  private subscribers: Subscriber<S>[] = [];
+  private subscribers: Set<(state: S) => void> = new Set();
   private state: S;
 
   constructor(initialState: S) {
@@ -19,27 +24,33 @@ export class Store<S = any> {
     onChange: (collected: C) => void,
     init: boolean = false
   ) {
-    let collected = collector(this.getState());
+    let current = collector(this.getState());
+    let isInvalidated = false;
 
     const subscriber = (state: S) => {
-      const newCollectedValues = collector(state);
-
-      if (isEqualWith(collected, newCollectedValues)) {
+      if (isInvalidated) {
         return;
       }
 
-      collected = newCollectedValues;
-      onChange(collected);
+      const newCollectedValues = collector(state);
+      if (isEqual(newCollectedValues, current)) {
+        return;
+      }
+
+      current = newCollectedValues;
+      onChange(current);
     };
 
     if (init) {
       subscriber(this.getState());
     }
 
-    this.subscribers.push(subscriber);
+    this.subscribers.add(subscriber);
 
-    return () =>
-      this.subscribers.splice(this.subscribers.indexOf(subscriber), 1);
+    return () => {
+      isInvalidated = true;
+      this.subscribers.delete(subscriber);
+    };
   }
 
   getState() {
@@ -48,27 +59,25 @@ export class Store<S = any> {
 
   setState(
     setter: (state: S) => void,
-    onPatch?: (patches: Patch[], inversePatches: Patch[]) => void,
-    silent?: boolean
+    opts: Partial<{
+      onPatch: (patches: Patch[], inversePatches: Patch[]) => void;
+    }> = {}
   ) {
-    const [newState, patches, inversePatches] = produceWithPatches(
-      this.state,
-      setter
-    );
-    this.state = newState;
-    if (onPatch) {
-      onPatch(patches, inversePatches);
-    }
+    const { onPatch } = {
+      onPatch: null,
+      ...opts,
+    };
 
-    if (silent) {
-      return;
-    }
+    const draft = createDraft(this.state);
+    setter(draft as S);
+
+    this.state = finishDraft(draft, onPatch) as S;
 
     this.notify();
   }
 
   private notify() {
-    this.subscribers.forEach((subscriber) => subscriber(this.state));
+    this.subscribers.forEach((subscriber) => subscriber(this.getState()));
   }
 }
 
