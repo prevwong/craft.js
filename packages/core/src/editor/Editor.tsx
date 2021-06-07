@@ -36,7 +36,7 @@ export const Editor: React.FC<Partial<Options>> = ({
   );
 
   useEffect(() => {
-    store.subscribe(
+    const unsubscribe = store.subscribe(
       (_) => ({
         json: store.query.serialize(),
       }),
@@ -44,6 +44,10 @@ export const Editor: React.FC<Partial<Options>> = ({
         store.query.getOptions().onNodesChange(store.query);
       }
     );
+
+    return () => {
+      unsubscribe();
+    };
   }, [store]);
 
   if (!store) {
