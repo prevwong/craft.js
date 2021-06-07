@@ -11,52 +11,52 @@ import { Options } from '../interfaces';
 /**
  * A React Component that provides the Editor context
  */
-export const Editor: React.FC<Partial<Options>> = ({
-  children,
-  ...options
-}) => {
-  // we do not want to warn the user if no resolver was supplied
-  if (options.resolver !== undefined) {
-    invariant(
-      typeof options.resolver === 'object' && !Array.isArray(options.resolver),
-      ERROR_RESOLVER_NOT_AN_OBJECT
-    );
-  }
+export const Editor: React.FC<Partial<Options>> = React.memo(
+  ({ children, ...options }) => {
+    // we do not want to warn the user if no resolver was supplied
+    if (options.resolver !== undefined) {
+      invariant(
+        typeof options.resolver === 'object' &&
+          !Array.isArray(options.resolver),
+        ERROR_RESOLVER_NOT_AN_OBJECT
+      );
+    }
 
-  const store = useMemo(
-    () =>
-      new EditorStore({
-        ...editorInitialState,
-        options: {
-          ...editorInitialState.options,
-          ...options,
-        },
-      }),
-    [options]
-  );
-
-  useEffect(() => {
-    const unsubscribe = store.subscribe(
-      (_) => ({
-        json: store.query.serialize(),
-      }),
-      () => {
-        store.query.getOptions().onNodesChange(store.query);
-      }
+    const store = useMemo(
+      () =>
+        new EditorStore({
+          ...editorInitialState,
+          options: {
+            ...editorInitialState.options,
+            ...options,
+          },
+        }),
+      [options]
     );
 
-    return () => {
-      unsubscribe();
-    };
-  }, [store]);
+    useEffect(() => {
+      const unsubscribe = store.subscribe(
+        (_) => ({
+          json: store.query.serialize(),
+        }),
+        () => {
+          store.query.getOptions().onNodesChange(store.query);
+        }
+      );
 
-  if (!store) {
-    return null;
+      return () => {
+        unsubscribe();
+      };
+    }, [store]);
+
+    if (!store) {
+      return null;
+    }
+
+    return (
+      <EditorContext.Provider value={{ store }}>
+        <Events>{children}</Events>
+      </EditorContext.Provider>
+    );
   }
-
-  return (
-    <EditorContext.Provider value={{ store }}>
-      <Events>{children}</Events>
-    </EditorContext.Provider>
-  );
-};
+);
