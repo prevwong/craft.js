@@ -16,7 +16,7 @@
   "dependencies": {
     "@types/react": "^17.0.5",
     "immer": "^8.0.1",
-    "lodash": "^4.17.20",
+    "lodash-es": "^4.17.20",
     "shallowequal": "^1.1.0",
     "tiny-invariant": "^1.0.6"
   },
@@ -26,5 +26,8 @@
   ],
   "peerDependencies": {
     "react": "^16.8.0"
+  },
+  "devDependencies": {
+    "lodash": "^4.17.20"
   }
 }

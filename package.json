@@ -90,6 +90,9 @@
       "tsx",
       "js"
     ],
+    "moduleNameMapper": {
+      "^lodash-es$": "lodash"
+    },
     "modulePaths": [
       "<rootDir>/packages/core/"
     ],

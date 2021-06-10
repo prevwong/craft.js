@@ -1,4 +1,4 @@
-import { isFunction } from 'lodash';
+import { isFunction } from 'lodash-es';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
 import { createShadow } from './createShadow';

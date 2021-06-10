@@ -38,11 +38,12 @@
     "@craftjs/utils": "^0.1.0-beta.19",
     "@types/react": "^17.0.5",
     "debounce": "^1.2.0",
-    "lodash": "^4.17.20",
+    "lodash-es": "^4.17.20",
     "shortid": "^2.2.15",
     "tiny-invariant": "^1.0.6"
   },
   "devDependencies": {
+    "lodash": "^4.17.20",
     "react": "^17.0.2"
   },
   "peerDependencies": {

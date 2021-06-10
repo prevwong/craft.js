@@ -1,5 +1,5 @@
 import { mount } from 'enzyme';
-import identity from 'lodash/identity';
+import { identity } from 'lodash';
 import React from 'react';
 
 import { NodeElement } from '../../nodes/NodeElement';
