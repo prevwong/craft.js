@@ -2,14 +2,14 @@ import { useCollector, wrapConnectorHooks } from '@craftjs/utils';
 import { useContext, useMemo } from 'react';
 
 import { EditorContext } from './EditorContext';
-import { QueryMethods } from './query';
+import { EditorStore } from './EditorStore';
 
 import { useEventHandler } from '../events/EventContext';
 import { EditorState } from '../interfaces';
 
 export type EditorCollector<C> = (
   state: EditorState,
-  query: ReturnType<typeof QueryMethods>
+  query: EditorStore['query']
 ) => C;
 
 export function useInternalEditor<C>(collector?: EditorCollector<C>) {

@@ -25,7 +25,7 @@ export const Text = ({
 }: Partial<TextProps>) => {
   const {
     connectors: { connect },
-    setProp,
+    actions: { setProp },
   } = useNode();
   const { enabled } = useEditor((state) => ({
     enabled: state.options.enabled,
