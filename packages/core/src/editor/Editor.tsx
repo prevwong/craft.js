@@ -32,7 +32,7 @@ export const Editor: React.FC<Partial<EditorProps>> = React.memo(
           },
           config
         ),
-      [config]
+      [config, enabled, resolver]
     );
 
     if (!store) {

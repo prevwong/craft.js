@@ -1,7 +1,7 @@
 import { ChainableConnectors, wrapConnectorHooks } from '@craftjs/utils';
-import { useEditor } from '../hooks';
 import React, { useMemo } from 'react';
 
+import { useEditor } from '../hooks';
 import { NodeId } from '../interfaces';
 
 export type NodeContextType = {

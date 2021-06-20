@@ -1,4 +1,4 @@
-import { useEditor, useEventHandler } from '@craftjs/core';
+import { useEditor } from '@craftjs/core';
 import { wrapConnectorHooks } from '@craftjs/utils';
 import React, { useMemo, useContext, useRef } from 'react';
 
