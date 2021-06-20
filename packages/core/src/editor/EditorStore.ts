@@ -3,35 +3,8 @@ import { Store, History } from '@craftjs/utils';
 import { ActionMethods } from './actions';
 import { QueryMethods } from './query';
 
-import { DefaultEventHandlers } from '../events';
-import { EditorState, NodeId } from '../interfaces';
-
-export const editorInitialState: EditorState = {
-  nodes: {},
-  events: {
-    dragged: new Set<NodeId>(),
-    selected: new Set<NodeId>(),
-    hovered: new Set<NodeId>(),
-  },
-  indicator: null,
-  handlers: null,
-  options: {
-    onNodesChange: () => null,
-    onRender: ({ render }) => render,
-    resolver: {},
-    enabled: true,
-    indicator: {
-      error: 'red',
-      success: 'rgb(98, 196, 98)',
-    },
-    handlers: (store) =>
-      new DefaultEventHandlers({
-        store,
-        isMultiSelectEnabled: (e: MouseEvent) => !!e.metaKey,
-      }),
-    normalizeNodes: () => {},
-  },
-};
+import { CoreEventHandlers, DefaultEventHandlers } from '../events';
+import { EditorState, NodeId, Options } from '../interfaces';
 
 const normalizeStateOnUndoRedo = (state: EditorState) => {
   /**
@@ -67,12 +40,76 @@ const normalizeStateOnUndoRedo = (state: EditorState) => {
   });
 };
 
+export type EditorStoreConfig = {
+  onRender: React.ComponentType<{ render: React.ReactElement }>;
+  onNodesChange: (query: ReturnType<typeof QueryMethods>) => void;
+  indicator: Partial<{
+    success: string;
+    error: string;
+    transition: string;
+    thickness: number;
+  }>;
+  handlers: (store: EditorStore) => CoreEventHandlers;
+  normalizeNodes: (state: EditorState, previousState: EditorState) => void;
+};
+
+export const editorInitialState = {
+  nodes: {},
+  events: {
+    dragged: new Set<NodeId>(),
+    selected: new Set<NodeId>(),
+    hovered: new Set<NodeId>(),
+  },
+  indicator: null,
+  options: {
+    resolver: {},
+    enabled: true,
+  },
+};
+
 export class EditorStore extends Store<EditorState> {
   private history: History;
+  config: EditorStoreConfig;
+  handlers: CoreEventHandlers;
 
-  constructor(initialState: EditorState) {
-    super(initialState);
+  constructor(options?: Partial<Options>, config?: Partial<EditorStoreConfig>) {
+    super({
+      ...editorInitialState,
+      options: {
+        ...editorInitialState.options,
+        ...(options || {}),
+      },
+    });
+
+    this.config = {
+      onNodesChange: () => null,
+      onRender: ({ render }) => render,
+      indicator: {
+        error: 'red',
+        success: 'rgb(98, 196, 98)',
+      },
+      handlers: (store) =>
+        new DefaultEventHandlers({
+          store,
+          isMultiSelectEnabled: (e: MouseEvent) => !!e.metaKey,
+        }),
+      normalizeNodes: () => {},
+      ...(config || {}),
+    };
     this.history = new History();
+    this.handlers = this.config.handlers(this);
+
+    this.subscribe(
+      (state) => ({ enabled: state.options.enabled }),
+      ({ enabled }) => {
+        if (!enabled) {
+          this.handlers.disable();
+          return;
+        }
+
+        this.handlers.enable();
+      }
+    );
   }
 
   // TODO: The actions api will be updated to use an operations-like model, we're keeping this here for now
@@ -93,9 +130,9 @@ export class EditorStore extends Store<EditorState> {
                 onPatch: (patches, inversePatches) => {
                   // TODO: this will be deprecated
                   // Keeping it here until we improve the actions API
-                  if (currentState.options.normalizeNodes) {
+                  if (this.config.normalizeNodes) {
                     this.setState((state) =>
-                      currentState.options.normalizeNodes(state, currentState)
+                      this.config.normalizeNodes(state, currentState)
                     );
                   }
                   if (
@@ -110,6 +147,16 @@ export class EditorStore extends Store<EditorState> {
                     !historyCallback
                   ) {
                     return;
+                  }
+
+                  if (this.config.onNodesChange) {
+                    this.config.onNodesChange(this.query);
+                  }
+
+                  // When deserialize, make sure to cleanup any existing connectors
+                  // Otherwise, connectors with existing Node ids won't get created correctly
+                  if (actionKey === 'deserialize') {
+                    this.handlers.cleanup();
                   }
 
                   historyCallback(patches, inversePatches, actionKey);

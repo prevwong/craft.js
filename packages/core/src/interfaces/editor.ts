@@ -1,27 +1,12 @@
 import { Placement } from './events';
 import { Nodes, NodeEventTypes, NodeId } from './nodes';
 
-import { EditorStore } from '../editor/EditorStore';
-import { QueryMethods } from '../editor/query';
 import { useInternalEditor } from '../editor/useInternalEditor';
-import { CoreEventHandlers } from '../events';
 
+// TODO: remove options from state
 export type Options = {
-  onRender: React.ComponentType<{ render: React.ReactElement }>;
-  onNodesChange: (query: ReturnType<typeof QueryMethods>) => void;
   resolver: Resolver;
   enabled: boolean;
-  indicator: Partial<{
-    success: string;
-    error: string;
-    transition: string;
-    /**
-     * height & width of the rendered indicator
-     */
-    thickness: number;
-  }>;
-  handlers: (store: EditorStore) => CoreEventHandlers;
-  normalizeNodes: (state: EditorState, previousState: EditorState) => void;
 };
 
 export type Resolver = Record<string, string | React.ElementType>;
@@ -37,7 +22,6 @@ export type EditorState = {
   nodes: Nodes;
   events: EditorEvents;
   options: Options;
-  handlers: CoreEventHandlers;
   indicator: Indicator;
 };
 

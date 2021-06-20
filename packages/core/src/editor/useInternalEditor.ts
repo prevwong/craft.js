@@ -4,7 +4,6 @@ import { useContext, useMemo } from 'react';
 import { EditorContext } from './EditorContext';
 import { EditorStore } from './EditorStore';
 
-import { useEventHandler } from '../events/EventContext';
 import { EditorState } from '../interfaces';
 
 export type EditorCollector<C> = (
@@ -13,8 +12,8 @@ export type EditorCollector<C> = (
 ) => C;
 
 export function useInternalEditor<C>(collector?: EditorCollector<C>) {
-  const handlers = useEventHandler();
   const { store } = useContext(EditorContext);
+  const handlers = store.handlers;
 
   const collectorCallback = !collector
     ? null
