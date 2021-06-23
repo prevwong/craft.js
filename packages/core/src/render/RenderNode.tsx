@@ -15,7 +15,7 @@ export const RenderNodeToElement: React.FC<RenderNodeToElementType> = ({
     hidden: node.data.hidden,
   }));
 
-  const { store } = useInternalEditor((state) => ({}));
+  const { store } = useInternalEditor();
 
   // don't display the node since it's hidden
   if (hidden) {

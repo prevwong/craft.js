@@ -11,15 +11,14 @@ export type EditorCollector<C> = (
   query: EditorStore['query']
 ) => C;
 
-export function useInternalEditor<C>(collector?: EditorCollector<C>) {
+export function useInternalEditor<C = null>(collector?: EditorCollector<C>) {
   const { store } = useContext(EditorContext);
   const handlers = store.handlers;
 
-  const collectorCallback = !collector
-    ? null
-    : (state) => collector(state, store.query);
-
-  const collected = useCollector(store, collectorCallback);
+  const collected = useCollector(
+    store,
+    collector ? (state: EditorState) => collector(state, store.query) : null
+  );
 
   const connectors = useMemo(
     () => handlers && wrapConnectorHooks(handlers.connectors),

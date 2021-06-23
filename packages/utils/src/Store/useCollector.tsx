@@ -2,12 +2,10 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 
 import { Store, StateForStore } from './Store';
 
-export type useCollectorReturnType<C = null> = C extends null ? {} : C;
-
-export function useCollector<S extends Store, C>(
+export function useCollector<S extends Store, C = null>(
   store: S,
   collector?: (state: StateForStore<S>) => C
-): useCollectorReturnType<C> {
+) {
   const [collected, setCollected] = useState<any>(
     collector ? collector(store.getState()) : ({} as C)
   );
@@ -38,5 +36,5 @@ export function useCollector<S extends Store, C>(
     };
   }, [unsubscribe]);
 
-  return collected;
+  return collected as C extends null ? {} : C;
 }
