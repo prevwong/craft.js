@@ -3,10 +3,10 @@ import React, { useMemo } from 'react';
 import invariant from 'tiny-invariant';
 
 import { EditorContext } from './EditorContext';
-import { EditorStore, EditorStoreConfig } from './EditorStore';
 
 import { Events } from '../events';
 import { Options } from '../interfaces';
+import { EditorStoreImpl, EditorStoreConfig } from '../store';
 
 type EditorProps = EditorStoreConfig & Options;
 
@@ -25,7 +25,7 @@ export const Editor: React.FC<Partial<EditorProps>> = React.memo(
 
     const store = useMemo(
       () =>
-        new EditorStore(
+        new EditorStoreImpl(
           {
             enabled: enabled !== undefined ? enabled : true,
             resolver: resolver !== undefined ? resolver : {},

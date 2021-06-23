@@ -2,8 +2,8 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { createNode } from './createNode';
 
-import { editorInitialState } from '../editor/EditorStore';
 import { Nodes } from '../interfaces';
+import { editorInitialState } from '../store';
 
 const getTestNode = (node) => {
   const {

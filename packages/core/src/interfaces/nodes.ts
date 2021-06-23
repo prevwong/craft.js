@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { QueryMethods } from '../editor/query';
+import { QueryMethods } from '../store';
 
 export type UserComponentConfig<T> = {
   displayName: string;

@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import { EditorStore } from './EditorStore';
+import { EditorStore } from '../store';
 
 export type EditorContext = {
   store: EditorStore;

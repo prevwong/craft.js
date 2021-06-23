@@ -1,5 +1,6 @@
 import { Store, History } from '@craftjs/utils';
 
+import { EditorStore, EditorStoreConfig } from './EditorStore';
 import { ActionMethods } from './actions';
 import { QueryMethods } from './query';
 
@@ -40,20 +41,7 @@ const normalizeStateOnUndoRedo = (state: EditorState) => {
   });
 };
 
-export type EditorStoreConfig = {
-  onRender: React.ComponentType<{ render: React.ReactElement }>;
-  onNodesChange: (query: ReturnType<typeof QueryMethods>) => void;
-  indicator: Partial<{
-    success: string;
-    error: string;
-    transition: string;
-    thickness: number;
-  }>;
-  handlers: (store: EditorStore) => CoreEventHandlers;
-  normalizeNodes: (state: EditorState, previousState: EditorState) => void;
-};
-
-export const editorInitialState = {
+export const editorInitialState: EditorState = {
   nodes: {},
   events: {
     dragged: new Set<NodeId>(),
@@ -67,8 +55,8 @@ export const editorInitialState = {
   },
 };
 
-export class EditorStore extends Store<EditorState> {
-  private history: History;
+export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
+  history: History;
   config: EditorStoreConfig;
   handlers: CoreEventHandlers;
 

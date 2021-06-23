@@ -2,9 +2,9 @@ import { useCollector, wrapConnectorHooks } from '@craftjs/utils';
 import { useContext, useMemo } from 'react';
 
 import { EditorContext } from './EditorContext';
-import { EditorStore } from './EditorStore';
 
 import { EditorState } from '../interfaces';
+import { EditorStore } from '../store';
 
 export type EditorCollector<C> = (
   state: EditorState,
