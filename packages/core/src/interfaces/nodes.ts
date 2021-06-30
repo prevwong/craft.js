@@ -1,7 +1,6 @@
-import { QueryCallbacksFor } from '@craftjs/utils';
 import React from 'react';
 
-import { QueryMethods } from '../editor/query';
+import { QueryMethods } from '../store';
 
 export type UserComponentConfig<T> = {
   displayName: string;
@@ -33,7 +32,7 @@ export type Node = {
   _hydrationTimestamp: number;
 };
 
-export type NodeHelpersType = QueryCallbacksFor<typeof QueryMethods>['node'];
+export type NodeHelpersType = ReturnType<typeof QueryMethods>['node'];
 export type NodeRules = {
   canDrag(node: Node, helpers: NodeHelpersType): boolean;
   canDrop(dropTarget: Node, self: Node, helpers: NodeHelpersType): boolean;

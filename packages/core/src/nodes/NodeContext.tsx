@@ -1,7 +1,7 @@
 import { ChainableConnectors, wrapConnectorHooks } from '@craftjs/utils';
 import React, { useMemo } from 'react';
 
-import { useEventHandler } from '../events';
+import { useEditor } from '../hooks';
 import { NodeId } from '../interfaces';
 
 export type NodeContextType = {
@@ -25,7 +25,8 @@ export const NodeProvider: React.FC<NodeProviderProps> = ({
   related = false,
   children,
 }) => {
-  const handlers = useEventHandler();
+  const { store } = useEditor(() => ({}));
+  const handlers = store.handlers;
 
   const connectors = useMemo(
     () =>

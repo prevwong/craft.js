@@ -15,7 +15,7 @@ let node = {};
 let onRender = jest.fn();
 
 jest.mock('../../editor/useInternalEditor', () => ({
-  useInternalEditor: () => ({ onRender }),
+  useInternalEditor: () => ({ store: { config: { onRender } } }),
 }));
 
 jest.mock('../../nodes/useInternalNode', () => ({

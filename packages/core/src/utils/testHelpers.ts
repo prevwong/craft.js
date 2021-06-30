@@ -2,28 +2,34 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { createNode } from './createNode';
 
-import { editorInitialState } from '../editor/store';
 import { Nodes } from '../interfaces';
+import { editorInitialState } from '../store';
 
-const getTestNode = (parentNode) => {
+const getTestNode = (node) => {
   const {
     events,
     data: { nodes: childNodes, linkedNodes },
-    ...restParentNode
-  } = parentNode;
-  const validParentNode = createNode(cloneDeep(parentNode));
-  parentNode = {
-    ...validParentNode,
-    ...restParentNode,
+    ...restNode
+  } = node;
+  const validNode = createNode(cloneDeep(node));
+
+  node = {
+    ...validNode,
+    ...restNode,
+    data: {
+      type: 'div',
+      ...validNode.data,
+      ...restNode.data,
+    },
     events: {
-      ...validParentNode.events,
+      ...validNode.events,
       ...events,
     },
-    dom: parentNode.dom || validParentNode.dom,
+    dom: node.dom || validNode.dom,
   };
 
   return {
-    node: parentNode,
+    node,
     childNodes,
     linkedNodes,
   };
@@ -47,6 +53,10 @@ export const expectEditorState = (lhs, rhs) => {
   }, {});
 
   expect(nodesLhsSimplified).toEqual(nodesRhsSimplified);
+};
+
+export const createTestNode = (node) => {
+  return getTestNode(node).node;
 };
 
 export const createTestNodes = (rootNode): Nodes => {

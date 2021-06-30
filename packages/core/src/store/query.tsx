@@ -1,5 +1,4 @@
 import {
-  QueryCallbacksFor,
   ERROR_NOT_IN_RESOLVER,
   getDOMInfo,
   deprecationWarning,
@@ -38,7 +37,7 @@ import { resolveComponent } from '../utils/resolveComponent';
 export function QueryMethods(state: EditorState) {
   const options = state && state.options;
 
-  const _: () => QueryCallbacksFor<typeof QueryMethods> = () =>
+  const _: () => ReturnType<typeof QueryMethods> = () =>
     QueryMethods(state) as any;
 
   return {

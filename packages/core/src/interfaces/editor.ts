@@ -1,37 +1,12 @@
-import { QueryCallbacksFor, Delete, PatchListenerAction } from '@craftjs/utils';
-
 import { Placement } from './events';
 import { Nodes, NodeEventTypes, NodeId } from './nodes';
 
-import { QueryMethods } from '../editor/query';
-import { EditorStore, ActionMethodsWithConfig } from '../editor/store';
-import { useInternalEditorReturnType } from '../editor/useInternalEditor';
-import { CoreEventHandlers } from '../events';
+import { useInternalEditor } from '../editor/useInternalEditor';
 
+// TODO: remove options from state
 export type Options = {
-  onRender: React.ComponentType<{ render: React.ReactElement }>;
-  onNodesChange: (query: QueryCallbacksFor<typeof QueryMethods>) => void;
   resolver: Resolver;
   enabled: boolean;
-  indicator: Partial<{
-    success: string;
-    error: string;
-    transition: string;
-    /**
-     * height & width of the rendered indicator
-     */
-    thickness: number;
-  }>;
-  handlers: (store: EditorStore) => CoreEventHandlers;
-  normalizeNodes: (
-    state: EditorState,
-    previousState: EditorState,
-    actionPerformed: Delete<
-      PatchListenerAction<EditorState, typeof ActionMethodsWithConfig>,
-      'patches'
-    >,
-    query: QueryCallbacksFor<typeof QueryMethods>
-  ) => void;
 };
 
 export type Resolver = Record<string, string | React.ElementType>;
@@ -47,8 +22,7 @@ export type EditorState = {
   nodes: Nodes;
   events: EditorEvents;
   options: Options;
-  handlers: CoreEventHandlers;
   indicator: Indicator;
 };
 
-export type ConnectedEditor<S = null> = useInternalEditorReturnType<S>;
+export type ConnectedEditor = ReturnType<typeof useInternalEditor>;

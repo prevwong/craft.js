@@ -1,51 +1,37 @@
-import {
-  useCollector,
-  useCollectorReturnType,
-  QueryCallbacksFor,
-  wrapConnectorHooks,
-  ChainableConnectors,
-} from '@craftjs/utils';
+import { useCollector, wrapConnectorHooks } from '@craftjs/utils';
 import { useContext, useMemo } from 'react';
 
 import { EditorContext } from './EditorContext';
-import { QueryMethods } from './query';
-import { EditorStore } from './store';
 
-import { CoreEventHandlers } from '../events/CoreEventHandlers';
-import { useEventHandler } from '../events/EventContext';
 import { EditorState } from '../interfaces';
+import { EditorStore } from '../store';
 
 export type EditorCollector<C> = (
   state: EditorState,
-  query: QueryCallbacksFor<typeof QueryMethods>
+  query: EditorStore['query']
 ) => C;
 
-export type useInternalEditorReturnType<C = null> = useCollectorReturnType<
-  EditorStore,
-  C
-> & {
-  inContext: boolean;
-  store: EditorStore;
-  connectors: ChainableConnectors<
-    CoreEventHandlers['connectors'],
-    React.ReactElement
-  >;
-};
+export function useInternalEditor<C = null>(collector?: EditorCollector<C>) {
+  const { store } = useContext(EditorContext);
+  const handlers = store.handlers;
 
-export function useInternalEditor<C>(
-  collector?: EditorCollector<C>
-): useInternalEditorReturnType<C> {
-  const handlers = useEventHandler();
-  const store = useContext(EditorContext);
-  const collected = useCollector(store, collector);
+  const collected = useCollector(
+    store,
+    collector ? (state: EditorState) => collector(state, store.query) : null
+  );
 
   const connectors = useMemo(
     () => handlers && wrapConnectorHooks(handlers.connectors),
     [handlers]
   );
 
+  const actions = useMemo(() => store.actions, [store]);
+  const query = useMemo(() => store.query, [store]);
+
   return {
     ...collected,
+    actions,
+    query,
     connectors,
     inContext: !!store,
     store,

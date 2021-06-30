@@ -1,4 +1,4 @@
-import { useEditor, useEventHandler } from '@craftjs/core';
+import { useEditor } from '@craftjs/core';
 import { wrapConnectorHooks } from '@craftjs/utils';
 import React, { useMemo, useContext, useRef } from 'react';
 
@@ -12,7 +12,11 @@ export const LayerContextProvider: React.FC<Omit<
   LayerContext,
   'connectors'
 >> = ({ id, depth }) => {
-  const coreEventHandlers = useEventHandler();
+  const { exists, store: editorStore } = useEditor((state) => ({
+    exists: !!state.nodes[id],
+  }));
+
+  const coreEventHandlers = editorStore.handlers;
 
   const { store } = useContext(LayerManagerContext);
   const storeRef = useRef(store);
@@ -30,10 +34,6 @@ export const LayerContextProvider: React.FC<Omit<
   const connectors = useMemo(() => wrapConnectorHooks(handlers.connectors), [
     handlers,
   ]);
-
-  const { exists } = useEditor((state) => ({
-    exists: !!state.nodes[id],
-  }));
 
   if (!exists) {
     return null;

@@ -1,7 +1,7 @@
 import { DerivedEventHandlers, EventHandlers } from '@craftjs/utils';
 
-import { EditorStore } from '../editor/store';
 import { NodeId, NodeTree } from '../interfaces/nodes';
+import { EditorStore } from '../store';
 
 export interface CreateHandlerOptions {
   onCreate: (nodeTree: NodeTree) => void;

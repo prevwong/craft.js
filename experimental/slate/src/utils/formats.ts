@@ -1,5 +1,4 @@
 import { EditorState, QueryMethods } from '@craftjs/core';
-import { QueryCallbacksFor } from '@craftjs/utils';
 import flatten from 'lodash/flatten';
 import { Text } from 'slate';
 
@@ -7,7 +6,7 @@ import { SlateResolvers, SlateElement } from '../interfaces';
 
 // Convert a Craft node to Slate node
 export const craftNodeToSlateNode = (
-  query: QueryCallbacksFor<typeof QueryMethods>,
+  query: ReturnType<typeof QueryMethods>,
   nodeId: string
 ) => {
   const craftNode = query.node(nodeId).get();

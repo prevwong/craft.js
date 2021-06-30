@@ -15,14 +15,14 @@ export const RenderNodeToElement: React.FC<RenderNodeToElementType> = ({
     hidden: node.data.hidden,
   }));
 
-  const { onRender } = useInternalEditor((state) => ({
-    onRender: state.options.onRender,
-  }));
+  const { store } = useInternalEditor();
 
   // don't display the node since it's hidden
   if (hidden) {
     return null;
   }
 
-  return React.createElement(onRender, { render: render || <DefaultRender /> });
+  return React.createElement(store.config.onRender, {
+    render: render || <DefaultRender />,
+  });
 };

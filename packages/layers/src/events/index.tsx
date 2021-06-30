@@ -6,8 +6,11 @@ import { useLayerManager } from '../manager/useLayerManager';
 
 export const EventManager: React.FC<any> = ({ children }) => {
   const { layers, events } = useLayerManager((state) => state);
-  const { query } = useEditor((state) => ({ enabled: state.options.enabled }));
-  const { indicator: indicatorStyles } = query.getOptions();
+  const { store } = useEditor((state) => ({
+    enabled: state.options.enabled,
+  }));
+
+  const indicatorStyles = store.config.indicator;
 
   const indicatorPosition = useMemo(() => {
     const { indicator } = events;
