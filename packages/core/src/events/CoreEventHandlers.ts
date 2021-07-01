@@ -1,5 +1,7 @@
 import { DerivedEventHandlers, EventHandlers } from '@craftjs/utils';
 
+import { DOMRegistry } from './DOMRegistry';
+
 import { NodeId, NodeTree } from '../interfaces/nodes';
 import { EditorStore } from '../store';
 
@@ -10,6 +12,8 @@ export interface CreateHandlerOptions {
 export class CoreEventHandlers<O = {}> extends EventHandlers<
   { store: EditorStore } & O
 > {
+  dom: DOMRegistry = new DOMRegistry();
+
   handlers() {
     return {
       connect: (el: HTMLElement, id: NodeId) => {},

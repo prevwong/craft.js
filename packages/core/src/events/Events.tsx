@@ -6,7 +6,7 @@ import movePlaceholder from './movePlaceholder';
 import { useInternalEditor } from '../editor/useInternalEditor';
 
 export const Events: React.FC = ({ children }) => {
-  const { indicator, store } = useInternalEditor((state) => ({
+  const { indicator, store, query } = useInternalEditor((state) => ({
     indicator: state.indicator,
   }));
 
@@ -19,9 +19,9 @@ export const Events: React.FC = ({ children }) => {
           style: {
             ...movePlaceholder(
               indicator.placement,
-              getDOMInfo(indicator.placement.parent.dom),
+              getDOMInfo(query.node(indicator.placement.parent.id).dom),
               indicator.placement.currentNode &&
-                getDOMInfo(indicator.placement.currentNode.dom),
+                getDOMInfo(query.node(indicator.placement.currentNode.id).dom),
               indicatorOptions.thickness
             ),
             backgroundColor: indicator.error
@@ -29,7 +29,7 @@ export const Events: React.FC = ({ children }) => {
               : indicatorOptions.success,
             transition: indicatorOptions.transition || '0.2s ease-in',
           },
-          parentDom: indicator.placement.parent.dom,
+          parentDom: query.node(indicator.placement.parent.id).dom,
         })}
       {children}
     </Fragment>

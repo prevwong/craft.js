@@ -3,13 +3,9 @@ import { useContext, useMemo } from 'react';
 
 import { EditorContext } from './EditorContext';
 
-import { EditorState } from '../interfaces';
-import { EditorStore } from '../store';
+import { EditorQuery } from '../store';
 
-export type EditorCollector<C> = (
-  state: EditorState,
-  query: EditorStore['query']
-) => C;
+export type EditorCollector<C> = (state: EditorQuery, query: EditorQuery) => C;
 
 export function useInternalEditor<C = null>(collector?: EditorCollector<C>) {
   const { store } = useContext(EditorContext);
@@ -17,7 +13,9 @@ export function useInternalEditor<C = null>(collector?: EditorCollector<C>) {
 
   const collected = useCollector(
     store,
-    collector ? (state: EditorState) => collector(state, store.query) : null
+    collector
+      ? () => collector(new EditorQuery(store), new EditorQuery(store))
+      : null
   );
 
   const connectors = useMemo(

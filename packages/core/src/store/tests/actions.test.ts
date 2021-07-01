@@ -1,14 +1,14 @@
 import { mapValues } from 'lodash';
 
 import { EditorState } from '../../interfaces';
+import { createNode } from '../../utils/createNode';
 import {
-  createTestNode,
   createTestNodes,
   createTestState,
   expectEditorState,
 } from '../../utils/testHelpers';
 import { ActionMethods } from '../actions';
-import { QueryMethods } from '../query';
+import { EditorQuery } from '../query';
 
 describe('actions', () => {
   let state: EditorState, actions: ReturnType<typeof ActionMethods>;
@@ -23,43 +23,35 @@ describe('actions', () => {
       },
     });
 
-    actions = ActionMethods(state, QueryMethods(state));
+    actions = ActionMethods(state, new EditorQuery(state));
   });
   describe('add', () => {
     it('should be able to add node', () => {
-      const node = createTestNode({
+      const node = createNode({
         id: 'node-test',
-        data: {
-          type: 'span',
-          parent: 'ROOT',
-        },
+        type: 'span',
+        parent: 'ROOT',
       });
       actions.add(node, 'ROOT');
 
-      const node2 = createTestNode({
+      const node2 = createNode({
         id: 'node-test2',
-        data: {
-          type: 'button',
-          parent: 'ROOT',
-        },
+        type: 'button',
+        parent: 'ROOT',
       });
+
       actions.add(node2, 'ROOT', 0);
 
       expect(state.nodes['node-test']).toEqual(node);
       expect(state.nodes['node-test2']).toEqual(node2);
-      expect(state.nodes['ROOT'].data.nodes).toEqual([
-        'node-test2',
-        'node-test',
-      ]);
+      expect(state.nodes['ROOT'].nodes).toEqual(['node-test2', 'node-test']);
     });
     it('should throw if invalid parentId', () => {
       expect(() =>
         actions.add(
-          createTestNode({
+          createNode({
             id: 'node-test',
-            data: {
-              type: 'span',
-            },
+            type: 'span',
           }),
           null
         )
@@ -68,13 +60,16 @@ describe('actions', () => {
   });
   describe('addNodeTree', () => {
     it('should be able to add NodeTree', () => {
-      const cardNode = createTestNode({
+      const cardNode = createNode({
         id: 'card',
-        data: { type: 'div', parent: 'ROOT', nodes: ['child'] },
+        type: 'div',
+        parent: 'ROOT',
+        nodes: ['child'],
       });
-      const cardChildNode = createTestNode({
+      const cardChildNode = createNode({
         id: 'child',
-        data: { type: 'button', parent: 'card' },
+        type: 'button',
+        parent: 'card',
       });
       const nodes = {
         card: cardNode,
@@ -88,7 +83,7 @@ describe('actions', () => {
         'ROOT'
       );
 
-      expect(state.nodes.ROOT.data.nodes).toEqual(['card']);
+      expect(state.nodes.ROOT.nodes).toEqual(['card']);
       expect(state.nodes.card).toEqual(cardNode);
       expect(state.nodes.child).toEqual(cardChildNode);
     });
@@ -210,19 +205,15 @@ describe('actions', () => {
   describe('setNodeEvent', () => {
     it('should be able to change event state', () => {
       actions.add(
-        createTestNode({
+        createNode({
           id: 'test',
-          data: {
-            type: 'button',
-          },
+          type: 'button',
         }),
         'ROOT'
       );
       ['selected', 'hovered', 'dragged'].forEach((eventType) => {
         actions.setNodeEvent(eventType as any, ['ROOT', 'test']);
         expect(Array.from(state.events[eventType])).toEqual(['ROOT', 'test']);
-        expect(state.nodes['ROOT'].events[eventType]).toEqual(true);
-        expect(state.nodes['test'].events[eventType]).toEqual(true);
       });
     });
   });
@@ -250,9 +241,6 @@ describe('actions', () => {
         hovered: new Set(),
         dragged: new Set(),
       });
-      ['selected', 'hovered', 'dragged'].forEach((eventType: any) => {
-        expect(state.nodes['ROOT'].events[eventType]).toEqual(false);
-      });
     });
   });
   describe('setProp', () => {
@@ -261,7 +249,7 @@ describe('actions', () => {
         props.color = '#333';
       });
 
-      expect(state.nodes.ROOT.data.props).toEqual({
+      expect(state.nodes.ROOT.props).toEqual({
         color: '#333',
       });
     });
@@ -272,7 +260,7 @@ describe('actions', () => {
         custom.color = '#333';
       });
 
-      expect(state.nodes.ROOT.data.custom).toEqual({
+      expect(state.nodes.ROOT.custom).toEqual({
         color: '#333',
       });
     });
@@ -280,9 +268,9 @@ describe('actions', () => {
   describe('setHidden', () => {
     it('should be able to set hidden property on node', () => {
       actions.setHidden('ROOT', true);
-      expect(state.nodes['ROOT'].data.hidden).toEqual(true);
+      expect(state.nodes['ROOT'].hidden).toEqual(true);
       actions.setHidden('ROOT', false);
-      expect(state.nodes['ROOT'].data.hidden).toEqual(false);
+      expect(state.nodes['ROOT'].hidden).toEqual(false);
     });
   });
   describe('setIndicator', () => {
@@ -290,20 +278,14 @@ describe('actions', () => {
       state = createTestState({
         nodes: {
           id: 'ROOT',
-          data: {
-            type: 'div',
-            isCanvas: true,
-            nodes: [
-              {
-                id: 'node-a',
-                data: {
-                  type: 'button',
-                },
-                dom: document.createElement('button'),
-              },
-            ],
-          },
-          dom: document.createElement('div'),
+          type: 'div',
+          isCanvas: true,
+          nodes: [
+            {
+              id: 'node-a',
+              type: 'button',
+            },
+          ],
         },
       });
       actions = ActionMethods(state, QueryMethods(state));
@@ -321,13 +303,6 @@ describe('actions', () => {
 
       actions.setIndicator(indicator);
       expect(state.indicator).toEqual(indicator);
-    });
-  });
-  describe('setDOM', () => {
-    it('should be able to set the dom property of a Node', () => {
-      const element = document.createElement('div');
-      actions.setDOM('ROOT', element);
-      expect(state.nodes.ROOT.dom).toEqual(element);
     });
   });
   describe('move', () => {

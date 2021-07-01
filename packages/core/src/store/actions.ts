@@ -5,11 +5,8 @@ import {
   DEPRECATED_ROOT_NODE,
   ERROR_NOPARENT,
   ERROR_DELETE_TOP_LEVEL_NODE,
-  Delete,
 } from '@craftjs/utils';
 import invariant from 'tiny-invariant';
-
-import { QueryMethods } from './query';
 
 import {
   EditorState,
@@ -17,7 +14,7 @@ import {
   NodeId,
   Node,
   Nodes,
-  Options,
+  LegacyStateOptions,
   NodeEventTypes,
   NodeTree,
   SerializedNodes,
@@ -27,11 +24,9 @@ import {
 import { fromEntries } from '../utils/fromEntries';
 import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 import { removeNodeFromEvents } from '../utils/removeNodeFromEvents';
+import { EditorQuery } from './query/EditorQuery';
 
-const Methods = (
-  state: EditorState,
-  query: ReturnType<typeof QueryMethods>
-) => {
+export const ActionMethods = (state: EditorState, query: EditorQuery) => {
   /** Helper functions */
   const addNodeToParentAtIndex = (
     node: Node,
@@ -40,21 +35,21 @@ const Methods = (
   ) => {
     const parent = getParentAndValidate(parentId);
     // reset the parent node ids
-    if (!parent.data.nodes) {
-      parent.data.nodes = [];
+    if (!parent.nodes) {
+      parent.nodes = [];
     }
 
-    if (parent.data.props.children) {
-      delete parent.data.props['children'];
+    if (parent.props.children) {
+      delete parent.props['children'];
     }
 
     if (index != null) {
-      parent.data.nodes.splice(index, 0, node.id);
+      parent.nodes.splice(index, 0, node.id);
     } else {
-      parent.data.nodes.push(node.id);
+      parent.nodes.push(node.id);
     }
 
-    node.data.parent = parent.id;
+    node.parent = parent.id;
     state.nodes[node.id] = node;
   };
 
@@ -69,9 +64,9 @@ const Methods = (
       addNodeToParentAtIndex(node, parentId, index);
     }
 
-    if (node.data.nodes) {
-      const childToAdd = [...node.data.nodes];
-      node.data.nodes = [];
+    if (node.nodes) {
+      const childToAdd = [...node.nodes];
+      node.nodes = [];
       childToAdd.forEach((childId, index) =>
         addTreeToParentAtIndex(
           { rootNodeId: childId, nodes: tree.nodes },
@@ -81,9 +76,9 @@ const Methods = (
       );
     }
 
-    if (node.data.linkedNodes) {
-      Object.keys(node.data.linkedNodes).forEach((linkedId) => {
-        const nodeId = node.data.linkedNodes[linkedId];
+    if (node.linkedNodes) {
+      Object.keys(node.linkedNodes).forEach((linkedId) => {
+        const nodeId = node.linkedNodes[linkedId];
         state.nodes[nodeId] = tree.nodes[nodeId];
         addTreeToParentAtIndex({ rootNodeId: nodeId, nodes: tree.nodes });
       });
@@ -99,31 +94,31 @@ const Methods = (
 
   const deleteNode = (id: NodeId) => {
     const targetNode = state.nodes[id],
-      parentNode = state.nodes[targetNode.data.parent];
+      parentNode = state.nodes[targetNode.parent];
 
-    if (targetNode.data.nodes) {
+    if (targetNode.nodes) {
       // we deep clone here because otherwise immer will mutate the node
       // object as we remove nodes
-      [...targetNode.data.nodes].forEach((childId) => deleteNode(childId));
+      [...targetNode.nodes].forEach((childId) => deleteNode(childId));
     }
 
-    if (targetNode.data.linkedNodes) {
-      Object.values(targetNode.data.linkedNodes).map((linkedNodeId) =>
+    if (targetNode.linkedNodes) {
+      Object.values(targetNode.linkedNodes).map((linkedNodeId) =>
         deleteNode(linkedNodeId)
       );
     }
 
-    const isChildNode = parentNode.data.nodes.includes(id);
+    const isChildNode = parentNode.nodes.includes(id);
 
     if (isChildNode) {
-      const parentChildren = parentNode.data.nodes;
+      const parentChildren = parentNode.nodes;
       parentChildren.splice(parentChildren.indexOf(id), 1);
     } else {
-      const linkedId = Object.keys(parentNode.data.linkedNodes).find(
-        (id) => parentNode.data.linkedNodes[id] === id
+      const linkedId = Object.keys(parentNode.linkedNodes).find(
+        (id) => parentNode.linkedNodes[id] === id
       );
       if (linkedId) {
-        delete parentNode.data.linkedNodes[linkedId];
+        delete parentNode.linkedNodes[linkedId];
       }
     }
 
@@ -143,18 +138,18 @@ const Methods = (
      */
     addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id: string) {
       const parent = getParentAndValidate(parentId);
-      if (!parent.data.linkedNodes) {
-        parent.data.linkedNodes = {};
+      if (!parent.linkedNodes) {
+        parent.linkedNodes = {};
       }
 
-      const existingLinkedNode = parent.data.linkedNodes[id];
+      const existingLinkedNode = parent.linkedNodes[id];
       if (existingLinkedNode) {
         deleteNode(existingLinkedNode);
       }
 
-      parent.data.linkedNodes[id] = tree.rootNodeId;
+      parent.linkedNodes[id] = tree.rootNodeId;
 
-      tree.nodes[tree.rootNodeId].data.parent = parentId;
+      tree.nodes[tree.rootNodeId].parent = parentId;
       state.nodes[tree.rootNodeId] = tree.nodes[tree.rootNodeId];
 
       addTreeToParentAtIndex(tree);
@@ -257,20 +252,20 @@ const Methods = (
       const newParent = state.nodes[newParentId];
       targets.forEach(({ node: targetNode }, i) => {
         const targetId = targetNode.id;
-        const currentParentId = targetNode.data.parent;
+        const currentParentId = targetNode.parent;
 
         query.node(newParentId).isDroppable([targetId], (err) => {
           throw new Error(err);
         });
 
         const currentParent = state.nodes[currentParentId];
-        const currentParentNodes = currentParent.data.nodes;
+        const currentParentNodes = currentParent.nodes;
 
         currentParentNodes[currentParentNodes.indexOf(targetId)] = 'marked';
 
-        newParent.data.nodes.splice(index + i, 0, targetId);
+        newParent.nodes.splice(index + i, 0, targetId);
 
-        state.nodes[targetId].data.parent = newParentId;
+        state.nodes[targetId].parent = newParentId;
         currentParentNodes.splice(currentParentNodes.indexOf('marked'), 1);
       });
     },
@@ -278,6 +273,7 @@ const Methods = (
     replaceNodes(nodes: Nodes) {
       this.clearEvents();
       state.nodes = nodes;
+      state.timestamp = Date.now();
     },
 
     clearEvents() {
@@ -295,25 +291,25 @@ const Methods = (
       this.replaceNodes({});
     },
 
+    setEnabled(enabled: boolean) {
+      state.enabled = enabled;
+    },
+
     /**
      * Set editor options via a callback function
-     *
+     * @deprecated
      * @param cb: function used to set the options.
      */
-    setOptions(cb: (options: Partial<Options>) => void) {
-      cb(state.options);
+    setOptions(cb: (options: Partial<LegacyStateOptions>) => void) {
+      const opts = { enabled: state.enabled };
+      cb(opts);
+      state.enabled = opts.enabled;
     },
 
     setNodeEvent(
       eventType: NodeEventTypes,
       nodeIdSelector: NodeSelector<NodeSelectorType.Id>
     ) {
-      state.events[eventType].forEach((id) => {
-        if (state.nodes[id]) {
-          state.nodes[id].events[eventType] = false;
-        }
-      });
-
       state.events[eventType] = new Set();
 
       if (!nodeIdSelector) {
@@ -326,9 +322,6 @@ const Methods = (
       });
 
       const nodeIds: Set<NodeId> = new Set(targets.map(({ node }) => node.id));
-      nodeIds.forEach((id) => {
-        state.nodes[id].events[eventType] = true;
-      });
       state.events[eventType] = nodeIds;
     },
 
@@ -339,38 +332,17 @@ const Methods = (
      */
     setCustom<T extends NodeId>(
       selector: NodeSelector<NodeSelectorType.Id>,
-      cb: (data: EditorState['nodes'][T]['data']['custom']) => void
+      cb: (data: EditorState['nodes'][T]['custom']) => void
     ) {
       const targets = getNodesFromSelector(state.nodes, selector, {
         idOnly: true,
         existOnly: true,
       });
 
-      targets.forEach(({ node }) => cb(state.nodes[node.id].data.custom));
-    },
-
-    /**
-     * Given a `id`, it will set the `dom` porperty of that node.
-     *
-     * @param id of the node we want to set
-     * @param dom
-     */
-    setDOM(id: NodeId, dom: HTMLElement) {
-      if (!state.nodes[id]) {
-        return;
-      }
-
-      state.nodes[id].dom = dom;
+      targets.forEach(({ node }) => cb(state.nodes[node.id].custom));
     },
 
     setIndicator(indicator: Indicator | null) {
-      if (
-        indicator &&
-        (!indicator.placement.parent.dom ||
-          (indicator.placement.currentNode &&
-            !indicator.placement.currentNode.dom))
-      )
-        return;
       state.indicator = indicator;
     },
 
@@ -380,7 +352,7 @@ const Methods = (
      * @param bool
      */
     setHidden(id: NodeId, bool: boolean) {
-      state.nodes[id].data.hidden = bool;
+      state.nodes[id].hidden = bool;
     },
 
     /**
@@ -397,7 +369,7 @@ const Methods = (
         existOnly: true,
       });
 
-      targets.forEach(({ node }) => cb(state.nodes[node.id].data.props));
+      targets.forEach(({ node }) => cb(state.nodes[node.id].props));
     },
 
     selectNode(nodeIdSelector?: NodeSelector<NodeSelectorType.Id>) {
@@ -416,28 +388,6 @@ const Methods = (
       }
 
       this.setNodeEvent('hovered', null);
-    },
-  };
-};
-
-export const ActionMethods = (
-  state: EditorState,
-  query: ReturnType<typeof QueryMethods>
-) => {
-  return {
-    ...Methods(state, query),
-    // Note: Beware: advanced method! You most likely don't need to use this
-    // TODO: fix parameter types and cleanup the method
-    setState(
-      cb: (
-        state: EditorState,
-        actions: Delete<ReturnType<typeof Methods>, 'history'>
-      ) => void
-    ) {
-      const { history, ...actions } = this;
-
-      // We pass the other actions as the second parameter, so that devs could still make use of the predefined actions
-      cb(state, actions);
     },
   };
 };

@@ -27,7 +27,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
     return {
       connect: (el: HTMLElement, id: NodeId) => {
-        store.actions.setDOM(id, el);
+        this.dom.register(id, el);
 
         return this.reflect((connectors) => {
           connectors.select(el, id);
@@ -59,10 +59,8 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
               if (isMultiSelect || selectedElementIds.includes(id)) {
                 newSelectedElementIds = selectedElementIds.filter(
                   (selectedId) => {
-                    const descendants = query
-                      .node(selectedId)
-                      .descendants(true);
-                    const ancestors = query.node(selectedId).ancestors(true);
+                    const descendants = query.node(selectedId).descendants();
+                    const ancestors = query.node(selectedId).ancestors();
 
                     // Deselect ancestors/descendants
                     if (descendants.includes(id) || ancestors.includes(id)) {

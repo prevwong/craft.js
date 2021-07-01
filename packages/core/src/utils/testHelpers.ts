@@ -1,39 +1,10 @@
-import cloneDeep from 'lodash/cloneDeep';
-
-import { createNode } from './createNode';
-
-import { Nodes } from '../interfaces';
-import { editorInitialState } from '../store';
-
-const getTestNode = (node) => {
-  const {
-    events,
-    data: { nodes: childNodes, linkedNodes },
-    ...restNode
-  } = node;
-  const validNode = createNode(cloneDeep(node));
-
-  node = {
-    ...validNode,
-    ...restNode,
-    data: {
-      type: 'div',
-      ...validNode.data,
-      ...restNode.data,
-    },
-    events: {
-      ...validNode.events,
-      ...events,
-    },
-    dom: node.dom || validNode.dom,
-  };
-
-  return {
-    node,
-    childNodes,
-    linkedNodes,
-  };
-};
+import { Node, NodeId, Nodes } from '../interfaces';
+import {
+  EditorStoreConfig,
+  EditorStoreImpl,
+  editorInitialState,
+} from '../store';
+import { getRandomNodeId } from '../utils/getRandomNodeId';
 
 export const expectEditorState = (lhs, rhs) => {
   const { nodes: nodesRhs, ...restRhs } = rhs;
@@ -55,63 +26,53 @@ export const expectEditorState = (lhs, rhs) => {
   expect(nodesLhsSimplified).toEqual(nodesRhsSimplified);
 };
 
-export const createTestNode = (node) => {
-  return getTestNode(node).node;
+type NestedNode = Omit<Node, 'nodes' | 'linkedNodes' | 'parent'> & {
+  nodes: NestedNode[];
+  linkedNodes: Record<NodeId, NestedNode>;
 };
 
-export const createTestNodes = (rootNode): Nodes => {
-  const nodes = {};
-  const iterateNodes = (testNode) => {
-    const { node: parentNode, childNodes, linkedNodes } = getTestNode(testNode);
-    nodes[parentNode.id] = parentNode;
+type PartialNestedNode = Partial<
+  Omit<NestedNode, 'nodes' | 'linkedNodes'> & {
+    nodes: PartialNestedNode[];
+    linkedNodes: Record<NodeId, PartialNestedNode>;
+  }
+>;
 
-    if (childNodes) {
-      childNodes.forEach((childTestNode, i) => {
-        const {
-          node: childNode,
-          childNodes: grandChildNodes,
-          linkedNodes: grandChildLinkedNodes,
-        } = getTestNode(childTestNode);
-        childNode.data.parent = parentNode.id;
-        nodes[childNode.id] = childNode;
-        parentNode.data.nodes[i] = childNode.id;
-        iterateNodes({
-          ...childNode,
-          data: {
-            ...childNode.data,
-            nodes: grandChildNodes || [],
-            linkedNodes: grandChildLinkedNodes || {},
-          },
-        });
-      });
-    }
+export const createTestNodes = (node: PartialNestedNode) => {
+  const flattenNodes: Nodes = {};
+  const flattenNode = (partialNode: PartialNestedNode, parent = null) => {
+    const node = {
+      id: getRandomNodeId(),
+      nodes: [],
+      linkedNodes: {},
+      props: {},
+      custom: {},
+      type: 'div',
+      displayName: 'div',
+      isCanvas: false,
+      hidden: false,
+      ...partialNode,
+    };
 
-    if (linkedNodes) {
-      Object.keys(linkedNodes).forEach((linkedId) => {
-        const {
-          node: childNode,
-          childNodes: grandChildNodes,
-          linkedNodes: grandChildLinkedNodes,
-        } = getTestNode(linkedNodes[linkedId]);
-        parentNode.data.linkedNodes[linkedId] = childNode.id;
+    flattenNodes[node.id] = {
+      ...node,
+      parent,
+      nodes: node.nodes.map((childNode) => flattenNode(childNode, node.id)),
+      linkedNodes: Object.entries(node.linkedNodes).reduce(
+        (accum, [id, linkedNode]) => ({
+          ...accum,
+          [id]: flattenNode(linkedNode, node.id),
+        }),
+        {}
+      ),
+    };
 
-        childNode.data.parent = parentNode.id;
-        nodes[childNode.id] = childNode;
-        iterateNodes({
-          ...childNode,
-          data: {
-            ...childNode.data,
-            nodes: grandChildNodes || [],
-            linkedNodes: grandChildLinkedNodes || {},
-          },
-        });
-      });
-    }
+    return node.id;
   };
 
-  iterateNodes(rootNode);
+  flattenNode(node);
 
-  return nodes;
+  return flattenNodes;
 };
 
 export const createTestState = (state = {} as any) => {
@@ -126,4 +87,15 @@ export const createTestState = (state = {} as any) => {
       ...(events || {}),
     },
   };
+};
+
+export const createTestEditorStore = (
+  config: Partial<EditorStoreConfig & { state: { nodes: PartialNestedNode } }>
+) => {
+  const { state, ...otherConfig } = config;
+
+  return new EditorStoreImpl({
+    ...otherConfig,
+    state: createTestState(state),
+  });
 };

@@ -1,13 +1,14 @@
 import { History, Store } from '@craftjs/utils';
 
 import { CoreEventHandlers } from '../events';
-import { EditorState } from '../interfaces';
-import { QueryMethods } from '../store';
+import { EditorState, Resolver } from '../interfaces';
 import { ActionMethods } from '../store/actions';
+import { EditorQuery } from './query';
+import { RelatedComponents } from './RelatedComponents';
 
 export type EditorStoreConfig = {
   onRender: React.ComponentType<{ render: React.ReactElement }>;
-  onNodesChange: (query: ReturnType<typeof QueryMethods>) => void;
+  onNodesChange: (query: EditorQuery) => void;
   indicator: Partial<{
     success: string;
     error: string;
@@ -16,6 +17,7 @@ export type EditorStoreConfig = {
   }>;
   handlers: (store: EditorStore) => CoreEventHandlers;
   normalizeNodes: (state: EditorState, previousState: EditorState) => void;
+  resolver: Resolver;
 };
 
 type Actions = ReturnType<typeof ActionMethods>;
@@ -23,6 +25,8 @@ export interface EditorStore extends Store<EditorState> {
   history: History;
   config: EditorStoreConfig;
   handlers: CoreEventHandlers;
+  related: RelatedComponents;
+  resolver: Resolver;
 
   actions: Actions & {
     history: {
@@ -33,10 +37,5 @@ export interface EditorStore extends Store<EditorState> {
       merge: () => Actions;
     };
   };
-  query: ReturnType<typeof QueryMethods> & {
-    history: {
-      canUndo: () => boolean;
-      canRedo: () => boolean;
-    };
-  };
+  query: EditorQuery;
 }
