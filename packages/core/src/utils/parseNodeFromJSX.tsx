@@ -8,13 +8,12 @@ import { resolveComponent } from './resolveComponent';
 import invariant from 'tiny-invariant';
 
 export function parseNodeFromJSX(
-  jsx: React.ReactElement | string,
+  element: React.ReactElement,
   resolver: Resolver
 ): Node {
-  let element = jsx as React.ReactElement;
-  let componentType = element.type as any;
-
-  let node: Node = createNode();
+  const { type, props } = element;
+  let componentType = type;
+  let node: Node = createNode({ props });
 
   if (componentType === Element) {
     const mergedProps = {
@@ -39,11 +38,14 @@ export function parseNodeFromJSX(
   }
 
   node.type = resolveComponent(resolver, componentType);
+
   invariant(node.type, ERROR_NOT_IN_RESOLVER);
 
   node.displayName = node.type;
 
-  const userComponentConfig = componentType.craft as UserComponentConfig<any>;
+  const userComponentConfig = componentType['craft'] as UserComponentConfig<
+    any
+  >;
 
   if (userComponentConfig) {
     node.displayName = userComponentConfig.displayName || node.displayName;

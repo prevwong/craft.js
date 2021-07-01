@@ -1,10 +1,23 @@
-import { documentWithVariousNodes } from '../../tests/fixtures';
+import { createNode } from '../createNode';
 import { getNodesFromSelector } from '../getNodesFromSelector';
+import { createTestNodes } from '../testHelpers';
 
-const {
-  'linked-node': linkedNode,
-  ...nodes
-} = documentWithVariousNodes.nodes as any;
+const nodes = createTestNodes({
+  id: 'ROOT',
+  linkedNodes: {
+    heading: {
+      id: 'linked-node',
+      type: 'button',
+    },
+  },
+  nodes: [
+    {
+      id: 'canvas-node',
+      type: 'div',
+      isCanvas: true,
+    },
+  ],
+});
 
 const getSelector = (node, exists) => ({ node, exists });
 
@@ -29,8 +42,12 @@ describe('getNodesFromSelector', () => {
       ]);
     });
     it('should pass exist=false if Node is non-existent in state', () => {
-      expect(getNodesFromSelector(nodes, linkedNode)).toMatchObject([
-        getSelector(linkedNode, false),
+      const node = createNode({
+        id: 'some-node',
+        type: 'button',
+      });
+      expect(getNodesFromSelector(nodes, node)).toMatchObject([
+        getSelector(node, false),
       ]);
     });
   });
@@ -38,7 +55,7 @@ describe('getNodesFromSelector', () => {
   describe('when existOnly=true', () => {
     it('should throw if contains non-existing Node', () => {
       expect(() =>
-        getNodesFromSelector(nodes, linkedNode, { existOnly: true })
+        getNodesFromSelector(nodes, ['canvas-node2'], { existOnly: true })
       ).toThrow();
     });
   });

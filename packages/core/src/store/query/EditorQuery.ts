@@ -286,7 +286,7 @@ export class EditorQuery extends Query implements LegacyEditorQuery {
           this.store.resolver
         );
 
-        const { type, ...data } = freshNode.data;
+        const { type, name, ...data } = freshNode.data;
 
         node = {
           ...node,

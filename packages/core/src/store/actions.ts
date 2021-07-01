@@ -216,28 +216,6 @@ export const ActionMethods = (state: EditorState, query: EditorQuery) => {
       });
     },
 
-    deserialize(input: SerializedNodes | string) {
-      const dehydratedNodes =
-        typeof input == 'string' ? JSON.parse(input) : input;
-
-      const nodePairs = Object.keys(dehydratedNodes).map((id) => {
-        let nodeId = id;
-
-        if (id === DEPRECATED_ROOT_NODE) {
-          nodeId = ROOT_NODE;
-        }
-
-        return [
-          nodeId,
-          query
-            .parseSerializedNode(dehydratedNodes[id])
-            .toNode((node) => (node.id = nodeId)),
-        ];
-      });
-
-      this.replaceNodes(fromEntries(nodePairs));
-    },
-
     /**
      * Move a target Node to a new Parent at a given index
      * @param targetId
@@ -388,6 +366,32 @@ export const ActionMethods = (state: EditorState, query: EditorQuery) => {
       }
 
       this.setNodeEvent('hovered', null);
+    },
+
+    /**
+     * @deprecated
+     * @param input
+     */
+    deserialize(input: SerializedNodes | string) {
+      const dehydratedNodes =
+        typeof input == 'string' ? JSON.parse(input) : input;
+
+      const nodePairs = Object.keys(dehydratedNodes).map((id) => {
+        let nodeId = id;
+
+        if (id === DEPRECATED_ROOT_NODE) {
+          nodeId = ROOT_NODE;
+        }
+
+        return [
+          nodeId,
+          query
+            .parseSerializedNode(dehydratedNodes[id])
+            .toNode((node) => (node.id = nodeId)),
+        ];
+      });
+
+      this.replaceNodes(fromEntries(nodePairs));
     },
   };
 };

@@ -1,30 +1,10 @@
-import { Node, NodeId, Nodes } from '../interfaces';
+import { Node, NodeEventTypes, NodeId, Nodes } from '../interfaces';
 import {
   EditorStoreConfig,
   EditorStoreImpl,
   editorInitialState,
 } from '../store';
 import { getRandomNodeId } from '../utils/getRandomNodeId';
-
-export const expectEditorState = (lhs, rhs) => {
-  const { nodes: nodesRhs, ...restRhs } = rhs;
-  const { nodes: nodesLhs, ...restLhs } = lhs;
-  expect(restLhs).toEqual(restRhs);
-
-  const nodesRhsSimplified = Object.keys(nodesRhs).reduce((accum, id) => {
-    const { _hydrationTimestamp, rules, ...node } = nodesRhs[id];
-    accum[id] = node;
-    return accum;
-  }, {});
-
-  const nodesLhsSimplified = Object.keys(nodesLhs).reduce((accum, id) => {
-    const { _hydrationTimestamp, rules, ...node } = nodesLhs[id];
-    accum[id] = node;
-    return accum;
-  }, {});
-
-  expect(nodesLhsSimplified).toEqual(nodesRhsSimplified);
-};
 
 type NestedNode = Omit<Node, 'nodes' | 'linkedNodes' | 'parent'> & {
   nodes: NestedNode[];
@@ -57,15 +37,20 @@ export const createTestNodes = (node: PartialNestedNode) => {
     flattenNodes[node.id] = {
       ...node,
       parent,
-      nodes: node.nodes.map((childNode) => flattenNode(childNode, node.id)),
-      linkedNodes: Object.entries(node.linkedNodes).reduce(
-        (accum, [id, linkedNode]) => ({
-          ...accum,
-          [id]: flattenNode(linkedNode, node.id),
-        }),
-        {}
-      ),
+      nodes: [],
+      linkedNodes: {},
     };
+
+    flattenNodes[node.id].nodes = node.nodes.map((childNode) =>
+      flattenNode(childNode, node.id)
+    );
+    flattenNodes[node.id].linkedNodes = Object.entries(node.linkedNodes).reduce(
+      (accum, [id, linkedNode]) => ({
+        ...accum,
+        [id]: flattenNode(linkedNode, node.id),
+      }),
+      {}
+    );
 
     return node.id;
   };
@@ -75,7 +60,12 @@ export const createTestNodes = (node: PartialNestedNode) => {
   return flattenNodes;
 };
 
-export const createTestState = (state = {} as any) => {
+type TestEditorState = {
+  nodes: PartialNestedNode;
+  events: Record<NodeEventTypes, NodeId[]>;
+};
+
+export const createTestState = (state: Partial<TestEditorState> = {}) => {
   const { nodes: rootNode, events } = state;
 
   return {
@@ -84,13 +74,21 @@ export const createTestState = (state = {} as any) => {
     nodes: rootNode ? createTestNodes(rootNode) : {},
     events: {
       ...editorInitialState.events,
-      ...(events || {}),
+      ...(!events
+        ? {}
+        : Object.entries(events).reduce(
+            (accum, [eventType, array]) => ({
+              ...accum,
+              [eventType]: new Set(array),
+            }),
+            {}
+          )),
     },
   };
 };
 
 export const createTestEditorStore = (
-  config: Partial<EditorStoreConfig & { state: { nodes: PartialNestedNode } }>
+  config: Partial<EditorStoreConfig & { state: Partial<TestEditorState> }>
 ) => {
   const { state, ...otherConfig } = config;
 
