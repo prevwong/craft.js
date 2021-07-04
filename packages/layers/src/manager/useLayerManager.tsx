@@ -5,13 +5,7 @@ import { LayerManagerContext, LayerStore } from './context';
 
 import { LayerState } from '../interfaces';
 
-export function useLayerManager(): useCollectorReturnType<LayerStore>;
-export function useLayerManager<C>(
-  collector?: (state: LayerState) => C
-): useCollectorReturnType<LayerStore, C>;
-export function useLayerManager<C>(
-  collector?: (state: LayerState) => C
-): useCollectorReturnType<LayerStore> {
+export function useLayerManager<C>(collector?: (state: LayerState) => C) {
   const { store } = useContext(LayerManagerContext);
   return useCollector(store, collector);
 }
