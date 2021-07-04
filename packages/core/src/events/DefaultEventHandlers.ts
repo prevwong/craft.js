@@ -210,7 +210,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           const onDropElement = (draggedElement, placement) => {
             const index =
               placement.index + (placement.where === 'after' ? 1 : 0);
-            store.actions.move(draggedElement, placement.parent.id, index);
+            store.actions.move(draggedElement, placement.parent, index);
           };
           this.dropElement(onDropElement);
         });
@@ -251,11 +251,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           const onDropElement = (draggedElement, placement) => {
             const index =
               placement.index + (placement.where === 'after' ? 1 : 0);
-            store.actions.addNodeTree(
-              draggedElement,
-              placement.parent.id,
-              index
-            );
+            store.actions.addNodeTree(draggedElement, placement.parent, index);
 
             if (options && isFunction(options.onCreate)) {
               options.onCreate(draggedElement);

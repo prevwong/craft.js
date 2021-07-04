@@ -24,6 +24,13 @@ export type LegacyNode = {
   dom: HTMLElement;
 };
 
+export type LegacyNodes = Record<NodeId, LegacyNode>;
+
+export type LegacyNodeTree = {
+  rootNodeId: NodeId;
+  nodes: LegacyNodes;
+};
+
 export interface LegacyNodeQuery extends LegacyNode {
   get: () => LegacyNode;
   toSerializedNode: () => SerializedNode;

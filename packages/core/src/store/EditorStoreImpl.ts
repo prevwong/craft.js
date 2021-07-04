@@ -1,13 +1,14 @@
 import { Store, History, ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
+import invariant from 'tiny-invariant';
 
-import { ActionMethods } from './actions';
+import { EditorStore, EditorStoreConfig } from './EditorStore';
 import { RelatedComponents } from './RelatedComponents';
+import { ActionMethods } from './actions';
 import { EditorQuery } from './query';
 
-import { CoreEventHandlers, DefaultEventHandlers } from '../events';
+import { CoreEventHandlers } from '../events/CoreEventHandlers';
+import { DefaultEventHandlers } from '../events/DefaultEventHandlers';
 import { EditorState, NodeId, Resolver } from '../interfaces';
-import { EditorStore, EditorStoreConfig } from './EditorStore';
-import invariant from 'tiny-invariant';
 
 const normalizeStateOnUndoRedo = (state: EditorState) => {
   /**
@@ -98,7 +99,7 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
 
   // TODO: The actions api will be updated to use an operations-like model, we're keeping this here for now
   get actions() {
-    const methods = ActionMethods(null, null);
+    const methods = ActionMethods(null, this);
     const currentState = this.getState();
 
     const getBaseActions = (
@@ -109,7 +110,7 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
           ...accum,
           [actionKey]: (...args) => {
             return this.setState(
-              (state) => ActionMethods(state, this.query)[actionKey](...args),
+              (state) => ActionMethods(state, this)[actionKey](...args),
               {
                 onPatch: (patches, inversePatches) => {
                   // TODO: this will be deprecated

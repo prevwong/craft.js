@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { EditorState } from '../../interfaces';
+import { EditorQuery } from '../../store';
 import { useEditor } from '../useEditor';
 
-export function connectEditor<C>(collect?: (state: EditorState) => C) {
+export function connectEditor<C>(collect?: (query: EditorQuery) => C) {
   return (WrappedComponent: React.ElementType) => {
     return (props: any) => {
       const Editor = collect ? useEditor(collect) : useEditor();

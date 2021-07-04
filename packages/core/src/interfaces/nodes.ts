@@ -1,5 +1,6 @@
-import { NodeQuery } from '../store';
 import React from 'react';
+
+import { LegacyNode, LegacyNodeQuery } from './legacy/nodes';
 
 export type UserComponentConfig<T> = {
   displayName: string;
@@ -30,22 +31,24 @@ export type Node = {
   custom?: any;
 };
 
-export type NodeHelpersType = (id: NodeId) => NodeQuery;
+export type BackwardsCompatibleNode = Node & LegacyNode;
+
+export type NodeHelpersType = (id: NodeId) => LegacyNodeQuery;
 export type NodeRules = {
-  canDrag(node: NodeQuery, helpers: NodeHelpersType): boolean;
+  canDrag(node: BackwardsCompatibleNode, helpers: NodeHelpersType): boolean;
   canDrop(
-    dropTarget: NodeQuery,
-    self: NodeQuery,
+    dropTarget: BackwardsCompatibleNode,
+    self: BackwardsCompatibleNode,
     helpers: NodeHelpersType
   ): boolean;
   canMoveIn(
-    canMoveIn: NodeQuery[],
-    self: NodeQuery,
+    canMoveIn: BackwardsCompatibleNode[],
+    self: BackwardsCompatibleNode,
     helpers: NodeHelpersType
   ): boolean;
   canMoveOut(
-    canMoveOut: NodeQuery[],
-    self: NodeQuery,
+    canMoveOut: BackwardsCompatibleNode[],
+    self: BackwardsCompatibleNode,
     helpers: NodeHelpersType
   ): boolean;
 };

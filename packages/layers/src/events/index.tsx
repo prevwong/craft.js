@@ -20,15 +20,15 @@ export const EventManager: React.FC<any> = ({ children }) => {
         placement: { where, parent, currentNode },
         error,
       } = indicator;
-      const layerId = currentNode ? currentNode.id : parent.id;
+      const layerId = currentNode || parent;
 
       let top;
       const color = error ? indicatorStyles.error : indicatorStyles.success;
 
-      if (indicator.onCanvas && layers[parent.id].dom != null) {
-        const parentPos = layers[parent.id].dom.getBoundingClientRect();
+      if (indicator.onCanvas && layers[parent].dom != null) {
+        const parentPos = layers[parent].dom.getBoundingClientRect();
         const parentHeadingPos = layers[
-          parent.id
+          parent
         ].headingDom.getBoundingClientRect();
         return {
           top: parentHeadingPos.top,

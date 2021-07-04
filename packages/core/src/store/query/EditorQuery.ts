@@ -2,14 +2,14 @@ import {
   deprecationWarning,
   ERROR_NOT_IN_RESOLVER,
   getDOMInfo,
+  ROOT_NODE,
 } from '@craftjs/utils';
 import React from 'react';
 import invariant from 'tiny-invariant';
 
-import { Query } from './Query';
 import { NodeQuery } from './NodeQuery';
+
 import findPosition from '../../events/findPosition';
-import { getNodesFromSelector } from '../../utils/getNodesFromSelector';
 import {
   FreshNode,
   Indicator,
@@ -23,40 +23,40 @@ import {
   SerializedNode,
   SerializedNodes,
 } from '../../interfaces';
-import { EventHelpers } from '../EventHelpers';
-import { parseNodeFromJSX } from '../../utils/parseNodeFromJSX';
-import { mergeTrees } from '../../utils/mergeTrees';
 import { deserializeNode } from '../../utils/deserializeNode';
+import { getNodesFromSelector } from '../../utils/getNodesFromSelector';
+import { parseNodeFromJSX } from '../../utils/parseNodeFromJSX';
+import { adaptLegacyNode } from '../../utils/types';
+import { EditorStore } from '../EditorStore';
+import { EventHelpers } from '../EventHelpers';
 
-export class EditorQuery extends Query implements LegacyEditorQuery {
+export class EditorQuery implements LegacyEditorQuery {
+  constructor(private readonly store: EditorStore) {
+    this.store = store;
+  }
+
   protected get state() {
     return this.store.getState();
+  }
+
+  get root() {
+    return this.node(ROOT_NODE);
   }
 
   isEnabled() {
     return this.state.enabled;
   }
 
-  getNodes() {
-    return Object.keys(this.state.nodes).reduce(
-      (accum, nodeId) => ({
-        ...accum,
-        [nodeId]: new NodeQuery(this.store, { id: nodeId }),
-      }),
-      {}
-    );
-  }
-
-  getNode(id: NodeId) {
+  node(id: NodeId) {
     const node = this.state.nodes[id];
     if (!node) {
       return null;
     }
 
-    return new NodeQuery(this.store, { id });
+    return new NodeQuery(this.store, id);
   }
 
-  getEvent(eventType: NodeEventTypes) {
+  event(eventType: NodeEventTypes) {
     return EventHelpers(this.state, eventType);
   }
 
@@ -68,7 +68,7 @@ export class EditorQuery extends Query implements LegacyEditorQuery {
   ) {
     const state = this.state;
     const targetNode = state.nodes[target],
-      isTargetCanvas = this.getNode(target).isCanvas();
+      isTargetCanvas = this.node(target).isCanvas();
 
     const targetParent = isTargetCanvas
       ? targetNode
@@ -80,7 +80,7 @@ export class EditorQuery extends Query implements LegacyEditorQuery {
 
     const dimensionsInContainer = targetParentNodes
       ? targetParentNodes.reduce((result, id: NodeId) => {
-          const dom = nodeIdToDOM ? nodeIdToDOM(id) : this.getNode(id).getDOM();
+          const dom = nodeIdToDOM ? nodeIdToDOM(id) : this.node(id).getDOM();
 
           if (dom) {
             const info: NodeInfo = {
@@ -95,7 +95,7 @@ export class EditorQuery extends Query implements LegacyEditorQuery {
       : [];
 
     const dropAction = findPosition(
-      targetParent,
+      targetParent.id,
       dimensionsInContainer,
       pos.x,
       pos.y
@@ -107,12 +107,12 @@ export class EditorQuery extends Query implements LegacyEditorQuery {
     const output: Indicator = {
       placement: {
         ...dropAction,
-        currentNode,
+        currentNode: currentNode.id,
       },
       error: false,
     };
 
-    const sourceNodes = getNodesFromSelector(state.nodes, source);
+    const sourceNodes = getNodesFromSelector(this.store, source);
 
     sourceNodes.forEach(({ node, exists }) => {
       if (!exists) {
@@ -120,11 +120,11 @@ export class EditorQuery extends Query implements LegacyEditorQuery {
       }
 
       // If source Node is already in the editor, check if it's draggable
-      this.getNode(node.id).isDraggable((err) => (output.error = err));
+      this.node(node.id).isDraggable((err) => (output.error = err));
     });
 
     // Check if source Node is droppable in target
-    this.getNode(targetParent.id).isDroppable(
+    this.node(targetParent.id).isDroppable(
       source,
       (err) => (output.error = err)
     );
@@ -136,31 +136,17 @@ export class EditorQuery extends Query implements LegacyEditorQuery {
     return this.state;
   }
 
+  /**
+   * @deprecated
+   * @param reactElement
+   * @returns
+   */
   parseReactElement(reactElement: React.ReactElement) {
     return {
       toNodeTree: (
         normalize?: (node: Node, jsx: React.ReactElement) => void
       ): NodeTree => {
-        let node = parseNodeFromJSX(reactElement, this.store.resolver);
-
-        if (normalize) {
-          normalize(node, reactElement);
-        }
-
-        let childrenNodes: NodeTree[] = [];
-
-        if (reactElement.props && reactElement.props.children) {
-          childrenNodes = React.Children.toArray(
-            reactElement.props.children
-          ).reduce<NodeTree[]>((accum, child: any) => {
-            if (React.isValidElement(child)) {
-              accum.push(this.parseReactElement(child).toNodeTree(normalize));
-            }
-            return accum;
-          }, []);
-        }
-
-        return mergeTrees(node, childrenNodes);
+        return parseNodeFromJSX(reactElement, this.store.resolver, normalize);
       },
     };
   }
@@ -186,7 +172,7 @@ export class EditorQuery extends Query implements LegacyEditorQuery {
     return Object.keys(this.state.nodes).reduce(
       (accum, nodeId) => ({
         ...accum,
-        [nodeId]: new NodeQuery(this.store, { id: nodeId }),
+        [nodeId]: new NodeQuery(this.store, nodeId),
       }),
       {}
     );
@@ -219,8 +205,8 @@ export class EditorQuery extends Query implements LegacyEditorQuery {
   /**
    * @deprecated
    */
-  node(id: NodeId) {
-    return new NodeQuery(this.store, { id });
+  getEvent(eventType: NodeEventTypes) {
+    return this.event(eventType);
   }
 
   /**
@@ -237,7 +223,7 @@ export class EditorQuery extends Query implements LegacyEditorQuery {
     return Object.keys(this.state.nodes).reduce(
       (accum, id) => ({
         ...accum,
-        [id]: this.getNode(id).toSerializedNode(),
+        [id]: this.node(id).toSerializedNode(),
       }),
       {}
     );
@@ -281,10 +267,7 @@ export class EditorQuery extends Query implements LegacyEditorQuery {
   parseFreshNode(freshNode: FreshNode) {
     return {
       toNode: (normalize?: (node: Node) => void): Node => {
-        let node = parseNodeFromJSX(
-          React.createElement(freshNode.data.type, freshNode.data.props || {}),
-          this.store.resolver
-        );
+        let node = adaptLegacyNode(freshNode, this.store.resolver);
 
         const { type, name, ...data } = freshNode.data;
 

@@ -1,6 +1,6 @@
 import { NodeId } from '../../../interfaces';
-import { NodeQuery } from '../NodeQuery';
 import { createTestEditorStore } from '../../../utils/testHelpers';
+import { NodeQuery } from '../NodeQuery';
 
 let helper: (id: NodeId) => NodeQuery;
 
@@ -121,7 +121,7 @@ describe('NodeQuery', () => {
             },
           },
         }),
-        { id }
+        id
       );
   });
 
@@ -256,7 +256,7 @@ describe('NodeQuery', () => {
       );
       expect(
         helper('drop-button-reject-node').isDroppable('linked-node-child')
-      ).toEqual(true);
+      ).toEqual(false);
     });
     it("should return false if node's rule rejects outgoing target", () => {
       expect(helper('ROOT').isDroppable('rejecting-parent')).toEqual(false);

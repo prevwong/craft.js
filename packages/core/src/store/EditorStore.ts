@@ -1,10 +1,11 @@
 import { History, Store } from '@craftjs/utils';
 
+import { RelatedComponents } from './RelatedComponents';
+import { EditorQuery } from './query';
+
 import { CoreEventHandlers } from '../events';
 import { EditorState, Resolver } from '../interfaces';
 import { ActionMethods } from '../store/actions';
-import { EditorQuery } from './query';
-import { RelatedComponents } from './RelatedComponents';
 
 export type EditorStoreConfig = {
   onRender: React.ComponentType<{ render: React.ReactElement }>;

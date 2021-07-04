@@ -1,12 +1,13 @@
-import { NodeId } from '../nodes';
-import { EditorEvents, Indicator } from '../editor';
 import {
   FreshNode,
   LegacyNodeQuery,
   SerializedNode,
   SerializedNodes,
 } from './nodes';
+
 import { EditorStoreConfig } from '../../store';
+import { EditorEvents, Indicator } from '../editor';
+import { NodeId } from '../nodes';
 
 export interface LegacyStateOptions extends EditorStoreConfig {
   enabled: boolean;

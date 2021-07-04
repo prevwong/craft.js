@@ -1,22 +1,26 @@
-import { createNode } from '../createNode';
 import { getNodesFromSelector } from '../getNodesFromSelector';
-import { createTestNodes } from '../testHelpers';
+import { createTestEditorStore } from '../testHelpers';
+import { createNode } from '../types';
 
-const nodes = createTestNodes({
-  id: 'ROOT',
-  linkedNodes: {
-    heading: {
-      id: 'linked-node',
-      type: 'button',
+const store = createTestEditorStore({
+  state: {
+    nodes: {
+      id: 'ROOT',
+      linkedNodes: {
+        heading: {
+          id: 'linked-node',
+          type: 'button',
+        },
+      },
+      nodes: [
+        {
+          id: 'canvas-node',
+          type: 'div',
+          isCanvas: true,
+        },
+      ],
     },
   },
-  nodes: [
-    {
-      id: 'canvas-node',
-      type: 'div',
-      isCanvas: true,
-    },
-  ],
 });
 
 const getSelector = (node, exists) => ({ node, exists });
@@ -24,12 +28,12 @@ const getSelector = (node, exists) => ({ node, exists });
 describe('getNodesFromSelector', () => {
   describe('when a NodeId is passed', () => {
     it('should return Node from state', () => {
-      expect(getNodesFromSelector(nodes, 'canvas-node')).toMatchObject([
-        getSelector(nodes['canvas-node'], true),
+      expect(getNodesFromSelector(store, 'canvas-node')).toMatchObject([
+        getSelector(store.getState().nodes['canvas-node'], true),
       ]);
     });
     it('should pass exist=false if NodeId is non-existent in state', () => {
-      expect(getNodesFromSelector(nodes, 'canvas-node2')).toMatchObject([
+      expect(getNodesFromSelector(store, 'canvas-node2')).toMatchObject([
         getSelector(undefined, false),
       ]);
     });
@@ -37,8 +41,10 @@ describe('getNodesFromSelector', () => {
 
   describe('when a Node is passed', () => {
     it('should return Node from state if exist', () => {
-      expect(getNodesFromSelector(nodes, nodes['canvas-node'])).toMatchObject([
-        getSelector(nodes['canvas-node'], true),
+      expect(
+        getNodesFromSelector(store, store.getState().nodes['canvas-node'])
+      ).toMatchObject([
+        getSelector(store.getState().nodes['canvas-node'], true),
       ]);
     });
     it('should pass exist=false if Node is non-existent in state', () => {
@@ -46,7 +52,7 @@ describe('getNodesFromSelector', () => {
         id: 'some-node',
         type: 'button',
       });
-      expect(getNodesFromSelector(nodes, node)).toMatchObject([
+      expect(getNodesFromSelector(store, node)).toMatchObject([
         getSelector(node, false),
       ]);
     });
@@ -55,7 +61,7 @@ describe('getNodesFromSelector', () => {
   describe('when existOnly=true', () => {
     it('should throw if contains non-existing Node', () => {
       expect(() =>
-        getNodesFromSelector(nodes, ['canvas-node2'], { existOnly: true })
+        getNodesFromSelector(store, ['canvas-node2'], { existOnly: true })
       ).toThrow();
     });
   });

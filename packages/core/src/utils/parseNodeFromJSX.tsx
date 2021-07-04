@@ -1,72 +1,74 @@
 import { ERROR_NOT_IN_RESOLVER } from '@craftjs/utils';
 import React from 'react';
-
-import { Node, Resolver, UserComponentConfig } from '../interfaces';
-import { createNode } from './createNode';
-import { defaultElementProps, Element, elementPropToNodeData } from '../nodes';
-import { resolveComponent } from './resolveComponent';
 import invariant from 'tiny-invariant';
+
+import { mergeTrees } from './mergeTrees';
+import { resolveComponent } from './resolveComponent';
+import { createNodeWithResolverConfig } from './types';
+
+import { Node, NodeTree, Resolver } from '../interfaces';
+import { defaultElementProps, Element } from '../nodes/Element';
 
 export function parseNodeFromJSX(
   element: React.ReactElement,
-  resolver: Resolver
-): Node {
-  const { type, props } = element;
-  let componentType = type;
-  let node: Node = createNode({ props });
+  resolver: Resolver,
+  normalize?: any
+): NodeTree {
+  let { type: componentType, props: componentProps } = element;
+
+  const nodeConfig: Partial<Node> = {
+    type: 'div',
+    displayName: 'div',
+    props: {},
+    isCanvas: false,
+    hidden: false,
+    custom: {},
+  };
 
   if (componentType === Element) {
-    const mergedProps = {
+    const { is, canvas, custom, hidden, ...props } = {
       ...defaultElementProps,
-      ...node.props,
+      ...componentProps,
+    } as React.ComponentProps<typeof Element>;
+
+    componentType = is;
+    nodeConfig.isCanvas = canvas;
+    nodeConfig.custom = custom;
+    nodeConfig.hidden = hidden;
+    nodeConfig.props = {
+      ...nodeConfig.props,
+      ...props,
     };
-
-    node.props = Object.keys(node.props).reduce((props, key) => {
-      if (Object.keys(defaultElementProps).includes(key)) {
-        // If a <Element /> specific props is found (ie: "is", "canvas")
-        // Replace the node.data with the value specified in the prop
-        node[elementPropToNodeData[key] || key] = mergedProps[key];
-      } else {
-        // Otherwise include the props in the node as usual
-        props[key] = node.props[key];
-      }
-
-      return props;
-    }, {});
-
-    componentType = node.type;
+  } else {
+    nodeConfig.props = componentProps;
   }
 
-  node.type = resolveComponent(resolver, componentType);
+  nodeConfig.type = resolveComponent(resolver, componentType);
+  nodeConfig.displayName = nodeConfig.type;
 
-  invariant(node.type, ERROR_NOT_IN_RESOLVER);
+  invariant(nodeConfig.type, ERROR_NOT_IN_RESOLVER);
 
-  node.displayName = node.type;
+  const node = createNodeWithResolverConfig(nodeConfig, resolver);
 
-  const userComponentConfig = componentType['craft'] as UserComponentConfig<
-    any
-  >;
+  if (normalize) {
+    normalize(node, element);
+  }
 
-  if (userComponentConfig) {
-    node.displayName = userComponentConfig.displayName || node.displayName;
+  let childrenNodes = [];
 
-    node.props = {
-      ...(userComponentConfig.props || {}),
-      ...node.props,
-    };
-
-    node.custom = {
-      ...(userComponentConfig.custom || {}),
-      ...node.custom,
-    };
-
-    if (
-      userComponentConfig.isCanvas !== undefined &&
-      userComponentConfig.isCanvas !== null
-    ) {
-      node.isCanvas = userComponentConfig.isCanvas;
+  if (node.props.children) {
+    childrenNodes = React.Children.toArray(node.props.children).reduce<
+      NodeTree[]
+    >((accum, child: any) => {
+      if (React.isValidElement(child)) {
+        accum.push(parseNodeFromJSX(child, resolver));
+      }
+      return accum;
+    }, []);
+    if (childrenNodes.length > 0) {
+      delete node.props.children;
     }
   }
 
-  return node;
+  return mergeTrees(node, childrenNodes);
 }

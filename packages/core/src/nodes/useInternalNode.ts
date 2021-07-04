@@ -18,7 +18,7 @@ export function useInternalNode<C = null>(collect?: NodeCollector<C>) {
   const collectorCallback = !collect
     ? null
     : (state: EditorState) =>
-        state.nodes[id] && collect(new NodeQuery(store, { id }));
+        state.nodes[id] && collect(new NodeQuery(store, id));
 
   const collected = useCollector(store, collectorCallback);
 

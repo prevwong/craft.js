@@ -1,4 +1,4 @@
-import { NodeId, Node, DerivedCoreEventHandlers } from '@craftjs/core';
+import { NodeId, DerivedCoreEventHandlers } from '@craftjs/core';
 
 import { LayerIndicator } from '../interfaces';
 
@@ -9,7 +9,7 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
   static draggedElement;
   static events: {
     indicator: LayerIndicator;
-    currentCanvasHovered: Node;
+    currentCanvasHovered: NodeId;
   } = {
     indicator: null,
     currentCanvasHovered: null,
@@ -53,24 +53,20 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
 
             const { indicator, currentCanvasHovered } = LayerHandlers.events;
 
-            if (
-              currentCanvasHovered &&
-              indicator &&
-              currentCanvasHovered.data.nodes
-            ) {
+            const canvasNode = editorStore.query.node(currentCanvasHovered);
+
+            if (currentCanvasHovered && indicator) {
               const heading = this.getLayer(
-                currentCanvasHovered.id
+                canvasNode.id
               ).headingDom.getBoundingClientRect();
 
               if (
                 e.clientY > heading.top + 10 &&
                 e.clientY < heading.bottom - 10
               ) {
-                const currNode =
-                  currentCanvasHovered.data.nodes[
-                    currentCanvasHovered.data.nodes.length - 1
-                  ];
-
+                const currNode = canvasNode.getChildAtIndex(
+                  canvasNode.getChildNodes().length
+                );
                 if (!currNode) {
                   return;
                 }
@@ -78,10 +74,10 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
                 LayerHandlers.events.indicator = {
                   ...indicator,
                   placement: {
-                    currentNode: editorStore.query.node(currNode).get(),
-                    index: currentCanvasHovered.data.nodes.length,
+                    currentNode: currNode.id,
+                    index: canvasNode.getChildNodes().length,
                     where: 'after',
-                    parent: currentCanvasHovered,
+                    parent: canvasNode.id,
                   },
                   onCanvas: true,
                 };
@@ -110,7 +106,7 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
               target,
               { x: e.clientX, y: e.clientY },
               (node) => {
-                const layer = this.getLayer(node.id);
+                const layer = this.getLayer(node);
                 return layer && layer.dom;
               }
             );
@@ -119,31 +115,34 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
               const {
                 placement: { parent },
               } = indicatorInfo;
+
+              const parentNode = editorStore.query.node(parent);
+
               const parentHeadingInfo = this.getLayer(
-                parent.id
+                parentNode.id
               ).headingDom.getBoundingClientRect();
 
               LayerHandlers.events.currentCanvasHovered = null;
-              if (editorStore.query.node(parent.id).isCanvas()) {
-                if (parent.data.parent) {
-                  const grandparent = editorStore.query
-                    .node(parent.data.parent)
-                    .get();
-                  if (editorStore.query.node(grandparent.id).isCanvas()) {
-                    LayerHandlers.events.currentCanvasHovered = parent;
+              if (editorStore.query.node(parent).isCanvas()) {
+                if (parentNode.getParent()) {
+                  const grandparentNode = parentNode.getParent();
+
+                  if (editorStore.query.node(grandparentNode.id).isCanvas()) {
+                    LayerHandlers.events.currentCanvasHovered = parentNode.id;
                     if (
                       (e.clientY > parentHeadingInfo.bottom - 10 &&
-                        !this.getLayer(parent.id).expanded) ||
+                        !this.getLayer(parentNode.id).expanded) ||
                       e.clientY < parentHeadingInfo.top + 10
                     ) {
-                      indicatorInfo.placement.parent = grandparent;
-                      indicatorInfo.placement.currentNode = parent;
-                      indicatorInfo.placement.index = grandparent.data.nodes
-                        ? grandparent.data.nodes.indexOf(parent.id)
-                        : 0;
+                      indicatorInfo.placement.parent = grandparentNode.id;
+                      indicatorInfo.placement.currentNode = parentNode.id;
+                      indicatorInfo.placement.index = grandparentNode
+                        .getChildNodes()
+                        .map((node) => node.id)
+                        .indexOf(parentNode.id);
                       if (
                         e.clientY > parentHeadingInfo.bottom - 10 &&
-                        !this.getLayer(parent.id).expanded
+                        !this.getLayer(parentNode.id).expanded
                       ) {
                         indicatorInfo.placement.where = 'after';
                       } else if (e.clientY < parentHeadingInfo.top + 10) {
@@ -195,11 +194,10 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
           if (events.indicator && !events.indicator.error) {
             const { placement } = events.indicator;
             const { parent, index, where } = placement;
-            const { id: parentId } = parent;
 
             editorStore.actions.move(
               LayerHandlers.draggedElement as NodeId,
-              parentId,
+              parent,
               index + (where === 'after' ? 1 : 0)
             );
           }

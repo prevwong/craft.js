@@ -1,14 +1,18 @@
 import { ERROR_INVALID_NODEID } from '@craftjs/utils';
 import invariant from 'tiny-invariant';
 
-import { Nodes, Node, NodeSelectorWrapper, NodeSelector } from '../interfaces';
+import { adaptLegacyNode } from './types';
+
+import { NodeSelectorWrapper, NodeSelector } from '../interfaces';
+import { EditorStore } from '../store';
 
 type config = { existOnly: boolean; idOnly: boolean };
 export const getNodesFromSelector = (
-  nodes: Nodes,
+  store: EditorStore,
   selector: NodeSelector,
   config?: Partial<config>
 ): NodeSelectorWrapper[] => {
+  const nodes = store.getState().nodes;
   const items = Array.isArray(selector) ? selector : [selector];
 
   const mergedConfig = {
@@ -28,7 +32,7 @@ export const getNodesFromSelector = (
       }
 
       if (typeof item === 'object' && !mergedConfig.idOnly) {
-        const node = item as Node;
+        const node = adaptLegacyNode(item, store.resolver);
         return {
           node,
           exists: !!nodes[node.id],

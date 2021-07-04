@@ -8,71 +8,157 @@ import {
   ERROR_MOVE_TOP_LEVEL_NODE,
   ERROR_MOVE_TO_DESCENDANT,
   ERROR_MOVE_TO_NONCANVAS_PARENT,
+  ERROR_NOT_IN_RESOLVER,
   ROOT_NODE,
 } from '@craftjs/utils';
-import invariant from 'tiny-invariant';
 import { createElement } from 'react';
+import invariant from 'tiny-invariant';
 
-import { Query } from './Query';
-import { NodeProvider } from '../../nodes';
 import {
   LegacyNode,
   LegacyNodeData,
   LegacyNodeQuery,
   NodeEventTypes,
   NodeId,
+  Node,
   NodeRules,
   NodeSelector,
+  BackwardsCompatibleNode,
 } from '../../interfaces';
+import { NodeProvider } from '../../nodes';
 import { getNodesFromSelector } from '../../utils/getNodesFromSelector';
+import { getResolverConfig } from '../../utils/resolveNode';
 import { serializeNode } from '../../utils/serializeNode';
+import { EditorStore } from '../EditorStore';
 
-type NodeQueryParams = {
-  id: NodeId;
-};
-// A utility class to describe a Craft Node
-export class NodeQuery extends Query<NodeQueryParams>
-  implements LegacyNodeQuery {
-  protected setup() {
-    invariant(this.node, 'Node not found');
+/**
+ * NodeQuery helps define a Node in the EditorState
+ */
+export class NodeQuery implements LegacyNodeQuery {
+  node: Node;
+
+  constructor(private readonly store: EditorStore, readonly id: NodeId) {
+    this.node = this.store.getState().nodes[this.id];
   }
 
-  protected get node() {
-    return this.store.getState().nodes[this.params.id];
+  /**
+   * Returns an object with all the properties from both Node and LegacyNode
+   * This is primarily used in places such as NodeRules where the Node is exposed to the APIs
+   * Hence, we need to consider all existing codebases that're still using the LegacyNode
+   * @param node
+   * @returns BackwardsCompatibleNode
+   */
+  private _createBackwardsCompatibleNode(node: Node): BackwardsCompatibleNode {
+    const existingNode = this.find(node.id);
+    if (existingNode) {
+      return {
+        id: existingNode.id,
+        data: existingNode.data,
+        related: existingNode.related,
+        dom: existingNode.dom,
+        rules: existingNode.rules,
+        events: existingNode.events,
+        ...node,
+      };
+    }
+
+    const config = getResolverConfig(node.type, this.store.resolver);
+
+    return {
+      id: node.id,
+      data: {
+        ...node,
+        type: config.component,
+        name: node.type,
+      },
+      related: config.related,
+      dom: null,
+      rules: config.rules,
+      events: {
+        selected: false,
+        hovered: false,
+        dragged: false,
+      },
+      ...node,
+    };
   }
 
-  getId() {
-    return this.node.id;
+  private getConfig() {
+    const config = getResolverConfig(this.type, this.store.resolver);
+    invariant(config, ERROR_NOT_IN_RESOLVER);
+    return config;
   }
 
-  getParent() {
-    return this.node.parent;
-  }
-  getType() {
+  get type() {
     return this.node.type;
   }
 
-  getComponent() {
-    return this.store.resolver[this.getType()] || this.getType();
+  get props() {
+    return this.node.props;
   }
 
-  getConfig() {
-    const component = this.getComponent();
-    const craftConfig =
-      typeof component === 'function' ? component['craft'] || {} : {};
+  get custom() {
+    return this.node.custom;
+  }
 
-    return {
-      rules: {
-        canDrag: () => true,
-        canDrop: () => true,
-        canMoveIn: () => true,
-        canMoveOut: () => true,
-        ...(craftConfig['rules'] || {}),
-      },
-      related: {
-        ...(craftConfig['related'] || {}),
-      },
+  getParent() {
+    return this.node.parent ? this.find(this.node.parent) : null;
+  }
+
+  getAncestors() {
+    const appendParentNode = (
+      id: NodeId,
+      ancestors: NodeQuery[] = [],
+      depth: number = 0
+    ): NodeQuery[] => {
+      const node = this.find(id);
+
+      if (!node) {
+        return ancestors;
+      }
+
+      ancestors.push(node);
+
+      if (!node.getParent()) {
+        return ancestors;
+      }
+
+      return appendParentNode(node.getParent().id, ancestors, depth + 1);
     };
+
+    return appendParentNode(this.node.parent);
+  }
+
+  getDescendants() {
+    const appendChildNode = (
+      id: NodeId,
+      descendants: NodeQuery[] = [],
+      depth: number = 0
+    ): NodeQuery[] => {
+      const node = this.find(id);
+
+      if (!node) {
+        return descendants;
+      }
+
+      // Include linkedNodes if any
+      const linkedNodes = this.find(id)
+        .getLinkedNodes()
+        .map((linkedNodes) => linkedNodes.node);
+      const childNodes = this.find(id).getChildNodes();
+
+      [...linkedNodes, ...childNodes].forEach((node) => {
+        descendants.push(node);
+        descendants = appendChildNode(node.id, descendants, depth + 1);
+      });
+
+      return descendants;
+    };
+    return appendChildNode(this.id);
+  }
+
+  getComponent() {
+    return this.getConfig().component;
   }
 
   getDOM() {
@@ -83,22 +169,23 @@ export class NodeQuery extends Query<NodeQueryParams>
     return this.getConfig().rules;
   }
 
+  // TODO: Related Components are difficult to maintain; might need to find an alternative
   getRelated() {
     const related = this.getConfig().related;
 
     const relatedNodeContext = {
-      id: this.getId(),
+      id: this.id,
       related: true,
     };
 
     return Object.keys(related).reduce((accum, comp) => {
-      const relatedType = this.store.related.get(this.getId(), comp);
+      const relatedType = this.store.related.get(this.id, comp);
 
       return {
         ...accum,
         [comp]:
           relatedType ||
-          this.store.related.add(this.getId(), comp, () =>
+          this.store.related.add(this.id, comp, () =>
             createElement(
               NodeProvider,
               relatedNodeContext,
@@ -109,12 +196,29 @@ export class NodeQuery extends Query<NodeQueryParams>
     }, {});
   }
 
-  linkedNodes() {
-    return Object.values(this.node.linkedNodes || {});
+  getLinkedNodes() {
+    return Object.entries(this.node.linkedNodes).reduce<
+      { id: string; node: NodeQuery }[]
+    >(
+      (accum, [linkedId, nodeId]) => [
+        ...accum,
+        { id: linkedId, node: this.find(nodeId) },
+      ],
+      []
+    );
   }
 
-  childNodes() {
-    return this.node.nodes || [];
+  getChildNodes() {
+    return this.node.nodes.map((childNodeId) => this.find(childNodeId));
+  }
+
+  indexOf(childNodeId: NodeId) {
+    return this.node.nodes.indexOf(childNodeId);
+  }
+
+  getChildAtIndex(index) {
+    const childIdAtIndex = this.node.nodes[index];
+    return this.find(childIdAtIndex);
   }
 
   isCanvas() {
@@ -128,7 +232,10 @@ export class NodeQuery extends Query<NodeQueryParams>
   isLinkedNode() {
     return (
       this.node.parent &&
-      this.find({ id: this.node.parent }).linkedNodes().includes(this.node.id)
+      this.getParent()
+        .getLinkedNodes()
+        .map((linkedNodes) => linkedNodes.node.id)
+        .includes(this.node.id)
     );
   }
 
@@ -141,94 +248,42 @@ export class NodeQuery extends Query<NodeQueryParams>
   }
 
   isParentOfTopLevelNodes() {
-    return this.linkedNodes() && this.linkedNodes().length > 0;
+    return this.getLinkedNodes().length > 0;
   }
 
-  isParentOfLinkedNodes() {
-    return this.linkedNodes.length > 0;
+  isParentOfTopLevelCanvas() {
+    deprecationWarning('query.node(id).isParentOfTopLevelCanvas', {
+      suggest: 'query.node(id).isParentOfTopLevelNodes',
+    });
+    return this.isParentOfTopLevelNodes();
   }
 
   isSelected() {
     const { events } = this.store.getState();
-    return events.selected.has(this.getId());
+    return events.selected.has(this.id);
   }
 
   isHovered() {
     const { events } = this.store.getState();
-    return events.hovered.has(this.getId());
+    return events.hovered.has(this.id);
   }
 
   isDragged() {
     const { events } = this.store.getState();
-    return events.dragged.has(this.getId());
-  }
-
-  ancestors() {
-    const appendParentNode = (
-      id: NodeId,
-      ancestors: NodeId[] = [],
-      depth: number = 0
-    ) => {
-      const node = this.find({ id });
-
-      if (!node) {
-        return ancestors;
-      }
-
-      ancestors.push(id);
-
-      if (!node.getParent()) {
-        return ancestors;
-      }
-
-      return appendParentNode(node.getParent(), ancestors, depth + 1);
-    };
-
-    return appendParentNode(this.getParent());
-  }
-
-  descendants(): NodeId[] {
-    const appendChildNode = (
-      id: NodeId,
-      descendants: NodeId[] = [],
-      depth: number = 0
-    ) => {
-      const node = this.find({ id });
-
-      if (!node) {
-        return descendants;
-      }
-
-      // Include linkedNodes if any
-      const linkedNodes = this.find({ id }).linkedNodes();
-
-      linkedNodes.forEach((nodeId) => {
-        descendants.push(nodeId);
-        descendants = appendChildNode(nodeId, descendants, depth + 1);
-      });
-
-      const childNodes = this.find({ id }).childNodes();
-
-      childNodes.forEach((nodeId) => {
-        descendants.push(nodeId);
-        descendants = appendChildNode(nodeId, descendants, depth + 1);
-      });
-
-      return descendants;
-    };
-    return appendChildNode(this.getId());
+    return events.dragged.has(this.id);
   }
 
   isDraggable(onError?: (err: string) => void) {
     try {
       invariant(!this.isTopLevelNode(), ERROR_MOVE_TOP_LEVEL_NODE);
       invariant(
-        this.find({ id: this.node.parent }).isCanvas(),
+        this.find(this.node.parent).isCanvas(),
         ERROR_MOVE_NONCANVAS_CHILD
       );
       invariant(
-        this.getRules().canDrag(this.find({ id: this.getId() }), (id: NodeId) =>
-          this.find({ id })
+        this.getRules().canDrag(
+          this._createBackwardsCompatibleNode(this.node),
+          (id: NodeId) => this.find(id)
         ),
         ERROR_CANNOT_DRAG
       );
@@ -242,26 +297,30 @@ export class NodeQuery extends Query<NodeQueryParams>
   }
 
   isDroppable(selector: NodeSelector, onError?: (err: string) => void) {
-    const targets = getNodesFromSelector(this.store.getState().nodes, selector);
+    const targets = getNodesFromSelector(this.store, selector);
     try {
       invariant(this.isCanvas(), ERROR_MOVE_TO_NONCANVAS_PARENT);
       invariant(
         this.getRules().canMoveIn(
-          targets.map((selector) => this.find({ id: selector.node.id })),
-          this,
-          (id: NodeId) => this.find({ id })
+          targets.map((selector) =>
+            this._createBackwardsCompatibleNode(selector.node)
+          ),
+          this._createBackwardsCompatibleNode(this.node),
+          (id: NodeId) => this.find(id)
         ),
         ERROR_MOVE_INCOMING_PARENT
       );
 
-      const parentNodes = {};
+      const parentNodes: Record<NodeId, Node[]> = {};
 
       targets.forEach(({ node: targetNode, exists }) => {
         const rules = this.getRules();
 
         invariant(
-          rules.canDrop(this, this.find({ id: targetNode.id }), (id: NodeId) =>
-            this.find({ id })
+          rules.canDrop(
+            this._createBackwardsCompatibleNode(this.node),
+            this._createBackwardsCompatibleNode(targetNode),
+            (id: NodeId) => this.find(id)
           ),
           ERROR_MOVE_CANNOT_DROP
         );
@@ -273,33 +332,32 @@ export class NodeQuery extends Query<NodeQueryParams>
         const targetDeepNodes = this.descendants();
 
         invariant(
-          !targetDeepNodes.includes(this.getId()) &&
-            this.getId() !== targetNode.id,
+          !targetDeepNodes.includes(this.id) && this.id !== targetNode.id,
           ERROR_MOVE_TO_DESCENDANT
         );
 
-        const currentParentNode = this.find({ id: targetNode.parent });
+        const currentParentNode = this.find(targetNode.parent);
 
         invariant(currentParentNode.isCanvas(), ERROR_MOVE_NONCANVAS_CHILD);
 
-        if (currentParentNode.getId() !== this.getId()) {
-          if (!parentNodes[currentParentNode.getId()]) {
-            parentNodes[currentParentNode.getId()] = [];
+        if (currentParentNode.id !== this.id) {
+          if (!parentNodes[currentParentNode.id]) {
+            parentNodes[currentParentNode.id] = [];
           }
 
-          parentNodes[currentParentNode.getId()].push(targetNode);
+          parentNodes[currentParentNode.id].push(targetNode);
         }
       });
 
       Object.keys(parentNodes).forEach((parentNodeId) => {
         const childNodes = parentNodes[parentNodeId];
-        const parentNode = this.find({ id: parentNodeId });
+        const parentNode = this.find(parentNodeId);
 
         invariant(
           parentNode.getRules().canMoveOut(
-            childNodes.map((node) => this.find({ id: node.id })),
-            parentNode,
-            (id: NodeId) => this.find({ id })
+            childNodes.map((node) => this._createBackwardsCompatibleNode(node)),
+            this._createBackwardsCompatibleNode(parentNode.node),
+            (id: NodeId) => this.find(id)
           ),
           ERROR_MOVE_OUTGOING_PARENT
         );
@@ -315,25 +373,24 @@ export class NodeQuery extends Query<NodeQueryParams>
   }
 
   toNodeTree() {
-    const nodes = [this.getId(), ...this.descendants()].reduce(
-      (accum, descendantId) => {
-        accum[descendantId] = this.find({ id: descendantId }).get();
-        return accum;
-      },
-      {}
-    );
+    const nodes = [this, ...this.getDescendants()].reduce((accum, node) => {
+      accum[node.id] = node.get();
+      return accum;
+    }, {});
 
     return {
-      rootNodeId: this.getId(),
+      rootNodeId: this.id,
       nodes,
     };
   }
 
-  /**
-   * @deprecated
-   */
-  get id() {
-    return this.node.id;
+  private find(id: NodeId) {
+    const node = this.store.getState().nodes[id];
+    if (!node) {
+      return null;
+    }
+
+    return new NodeQuery(this.store, id);
   }
 
   /**
@@ -342,8 +399,8 @@ export class NodeQuery extends Query<NodeQueryParams>
   get data(): LegacyNodeData {
     return {
       type: this.getComponent(),
-      name: this.getType(),
-      displayName: this.getType(),
+      name: this.type,
+      displayName: this.type,
       custom: this.node.custom,
       props: this.node.props,
       linkedNodes: this.node.linkedNodes,
@@ -399,10 +456,113 @@ export class NodeQuery extends Query<NodeQueryParams>
 
   /**
    * @deprecated
+   * @returns
+   */
+  linkedNodes() {
+    return Object.values(this.node.linkedNodes);
+  }
+
+  /**
+   * @deprecated
+   * @returns
+   */
+  childNodes() {
+    return this.node.nodes;
+  }
+
+  /**
+   * @deprecated
+   * @returns
+   */
+  isTopLevelCanvas() {
+    return !this.isRoot() && !this.getParent();
+  }
+
+  /**
+   * @deprecated
+   * @param deep
+   * @returns
+   */
+  ancestors(deep = false): NodeId[] {
+    const appendParentNode = (
+      id: NodeId,
+      ancestors: NodeId[] = [],
+      depth: number = 0
+    ) => {
+      const node = this.store.getState().nodes[id];
+      if (!node) {
+        return ancestors;
+      }
+
+      ancestors.push(id);
+
+      if (!node.parent) {
+        return ancestors;
+      }
+
+      if (deep || (!deep && depth === 0)) {
+        ancestors = appendParentNode(node.parent, ancestors, depth + 1);
+      }
+      return ancestors;
+    };
+    return appendParentNode(this.node.parent);
+  }
+
+  /**
+   * @deprecated
+   * @param deep
+   * @param includeOnly
+   * @returns
+   */
+  descendants(
+    deep = false,
+    includeOnly?: 'linkedNodes' | 'childNodes'
+  ): NodeId[] {
+    const appendChildNode = (
+      id: NodeId,
+      descendants: NodeId[] = [],
+      depth: number = 0
+    ) => {
+      if (deep || (!deep && depth === 0)) {
+        const node = this.store.getState().nodes[id];
+
+        if (!node) {
+          return descendants;
+        }
+
+        if (includeOnly !== 'childNodes') {
+          // Include linkedNodes if any
+          const linkedNodes = this.find(id).linkedNodes();
+
+          linkedNodes.forEach((nodeId) => {
+            descendants.push(nodeId);
+            descendants = appendChildNode(nodeId, descendants, depth + 1);
+          });
+        }
+
+        if (includeOnly !== 'linkedNodes') {
+          const childNodes = this.find(id).childNodes();
+
+          childNodes.forEach((nodeId) => {
+            descendants.push(nodeId);
+            descendants = appendChildNode(nodeId, descendants, depth + 1);
+          });
+        }
+
+        return descendants;
+      }
+      return descendants;
+    };
+
+    return appendChildNode(this.id);
+  }
+
+  /**
+   * @deprecated
    */
   get(): LegacyNode {
     return {
-      id: this.getId(),
+      id: this.id,
       data: this.data,
       rules: this.rules,
       related: this.related,

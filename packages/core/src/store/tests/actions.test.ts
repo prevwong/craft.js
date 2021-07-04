@@ -1,7 +1,9 @@
-import { SerializedNodes } from '../../interfaces';
-import { createNode } from '../../utils/createNode';
+import { LegacyNode, SerializedNodes } from '../../interfaces';
 import { createTestEditorStore } from '../../utils/testHelpers';
+import { createNode } from '../../utils/types';
 import { EditorStore } from '../EditorStore';
+
+const ButtonComponent = () => null;
 
 describe('actions', () => {
   let store: EditorStore;
@@ -13,6 +15,9 @@ describe('actions', () => {
           id: 'ROOT',
           type: 'div',
         },
+      },
+      resolver: {
+        ButtonComponent,
       },
     });
   });
@@ -39,16 +44,40 @@ describe('actions', () => {
         'node-test',
       ]);
     });
-    it('should throw if invalid parentId', () => {
-      expect(() =>
-        store.actions.add(
-          createNode({
-            id: 'node-test',
-            type: 'span',
-          }),
-          null
-        )
-      ).toThrow();
+    it('should be able to add legacy node', () => {
+      const node: LegacyNode = {
+        id: 'node-legacy',
+        data: {
+          type: ButtonComponent,
+          name: 'ButtonComponent',
+          displayName: 'ButtonComponent',
+          props: { color: '#fff' },
+          parent: 'ROOT',
+          isCanvas: false,
+          hidden: false,
+          custom: {},
+          nodes: [],
+          linkedNodes: {},
+        },
+        dom: null,
+        related: {},
+        rules: {} as any,
+        events: {} as any,
+      };
+
+      store.actions.add(node, 'ROOT');
+      expect(store.getState().nodes['node-legacy']).toEqual({
+        id: 'node-legacy',
+        type: 'ButtonComponent',
+        displayName: 'ButtonComponent',
+        props: { color: '#fff' },
+        parent: 'ROOT',
+        isCanvas: false,
+        hidden: false,
+        custom: {},
+        nodes: [],
+        linkedNodes: {},
+      });
     });
   });
   describe('addNodeTree', () => {
@@ -332,8 +361,8 @@ describe('actions', () => {
     it('should be able to set indicator state', () => {
       const indicator = {
         placement: {
-          currentNode: store.getState().nodes['node-a'],
-          parent: store.getState().nodes['ROOT'],
+          currentNode: 'node-a',
+          parent: 'ROOT',
           index: 0,
           where: 'after',
         },

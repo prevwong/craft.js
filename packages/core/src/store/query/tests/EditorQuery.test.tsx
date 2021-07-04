@@ -1,3 +1,4 @@
+import { ROOT_NODE } from '@craftjs/utils';
 import React from 'react';
 
 import { EditorStoreImpl } from '../../EditorStoreImpl';
@@ -67,32 +68,25 @@ describe('EditorQuery', () => {
     });
   });
 
-  describe('getNodes', () => {
-    it('should return a record of NodeQuery', () => {
-      expect(query.getNodes()).toEqual(
-        Object.keys(nodes).reduce(
-          (accum, id) => ({
-            ...accum,
-            [id]: expect.any(NodeQuery),
-          }),
-          {}
-        )
-      );
+  describe('root', () => {
+    it('should return a record of the ROOT NodeQuery', () => {
+      expect(query.root instanceof NodeQuery).toEqual(true);
+      expect(query.root.id).toEqual(ROOT_NODE);
     });
   });
 
-  describe('getNode', () => {
+  describe('node', () => {
     it('should return an instance of NodeQuery', () => {
-      expect(query.getNode('ROOT') instanceof NodeQuery).toEqual(true);
+      expect(query.node('ROOT') instanceof NodeQuery).toEqual(true);
     });
     it('should return null if non-existing node', () => {
-      expect(query.getNode('node-non-existing')).toEqual(null);
+      expect(query.node('node-non-existing')).toEqual(null);
     });
   });
 
-  describe.skip('getEvent', () => {
+  describe.skip('event', () => {
     ['selected', 'hovered', 'dragged'].forEach((eventType: any) => {
-      expect(query.getEvent(eventType)).toEqual(
+      expect(query.event(eventType)).toEqual(
         EventHelpers(store.getState(), eventType)
       );
     });
@@ -127,10 +121,14 @@ describe('EditorQuery', () => {
 
         const validateTree = (id, element, parent = null) => {
           const { nodes, ...restNode } = tree.nodes[id];
+          const { children, ...props } = element.props;
 
           expect(restNode).toEqual({
             id: expect.any(String),
-            props: element.props,
+            props: {
+              ...props,
+              ...(nodes.length === 0 ? { children } : {}),
+            },
             type:
               typeof element.type === 'string'
                 ? element.type
@@ -202,7 +200,7 @@ describe('EditorQuery', () => {
           Object.keys(store.getState().nodes).reduce(
             (accum, id) => ({
               ...accum,
-              [id]: new NodeQuery(store, { id }).toSerializedNode(),
+              [id]: new NodeQuery(store, id).toSerializedNode(),
             }),
             {}
           )
@@ -236,7 +234,7 @@ describe('EditorQuery', () => {
                 custom: { value: 0 },
               },
             },
-          ].map((input) => {
+          ].forEach((input) => {
             expect(query.parseFreshNode(input).toNode()).toEqual({
               isCanvas: false,
               linkedNodes: {},

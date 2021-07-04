@@ -1,4 +1,4 @@
-import { NodeId, Node } from './nodes';
+import { NodeId } from './nodes';
 
 export type NodeInfo = {
   id?: NodeId;
@@ -23,11 +23,11 @@ export type DOMInfo = Record<
 };
 
 export interface DropAction {
-  parent: Node;
+  parent: NodeId;
   index: number;
   where: string;
 }
 
 export type Placement = DropAction & {
-  currentNode: Node | null;
+  currentNode: NodeId | null;
 };
