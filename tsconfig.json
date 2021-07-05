@@ -11,8 +11,6 @@
       "@craftjs/layers": ["packages/layers/src/index"],
       "@craftjs/utils": ["packages/utils/src/index"],
       "@craftjs/utils/*": ["packages/utils/src/*"],
-      "@craftjs/slate": ["packages/slate/src/*"],
-      "@craftjs/slate/*": ["packages/slate/src/*"]
     }
   },
   "exclude": ["**/node_modules/**"]
