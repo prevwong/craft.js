@@ -1,14 +1,14 @@
 import { Store, History, ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
 import invariant from 'tiny-invariant';
 
-import { EditorStore, EditorStoreConfig } from './EditorStore';
-import { RelatedComponents } from './RelatedComponents';
 import { ActionMethods } from './actions';
-import { EditorQuery } from './query';
+import { EditorQueryImpl } from './query';
 
 import { CoreEventHandlers } from '../events/CoreEventHandlers';
 import { DefaultEventHandlers } from '../events/DefaultEventHandlers';
+import { EditorStore, EditorStoreConfig } from '../interfaces';
 import { EditorState, NodeId, Resolver } from '../interfaces';
+import { RelatedComponents } from '../nodes/RelatedComponents';
 
 const normalizeStateOnUndoRedo = (state: EditorState) => {
   /**
@@ -184,6 +184,6 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
 
   // TODO: move to useEditor/useInternalEditor hook
   get query() {
-    return new EditorQuery(this);
+    return new EditorQueryImpl(this);
   }
 }

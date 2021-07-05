@@ -7,13 +7,13 @@ import {
 import React from 'react';
 import invariant from 'tiny-invariant';
 
-import { NodeQuery } from './NodeQuery';
+import { EventQueryImpl } from './EventQueryImpl';
+import { NodeQueryImpl } from './NodeQueryImpl';
 
 import findPosition from '../../events/findPosition';
 import {
   FreshNode,
   Indicator,
-  LegacyEditorQuery,
   Node,
   NodeEventTypes,
   NodeId,
@@ -22,15 +22,16 @@ import {
   NodeTree,
   SerializedNode,
   SerializedNodes,
+  EditorStore,
+  EditorQuery,
+  NodeQuery,
 } from '../../interfaces';
 import { deserializeNode } from '../../utils/deserializeNode';
 import { getNodesFromSelector } from '../../utils/getNodesFromSelector';
 import { parseNodeFromJSX } from '../../utils/parseNodeFromJSX';
 import { adaptLegacyNode } from '../../utils/types';
-import { EditorStore } from '../EditorStore';
-import { EventHelpers } from '../EventHelpers';
 
-export class EditorQuery implements LegacyEditorQuery {
+export class EditorQueryImpl implements EditorQuery {
   constructor(private readonly store: EditorStore) {
     this.store = store;
   }
@@ -53,11 +54,11 @@ export class EditorQuery implements LegacyEditorQuery {
       return null;
     }
 
-    return new NodeQuery(this.store, id);
+    return new NodeQueryImpl(this.store, id);
   }
 
   event(eventType: NodeEventTypes) {
-    return EventHelpers(this.state, eventType);
+    return new EventQueryImpl(this.store, eventType);
   }
 
   getDropPlaceholder(
@@ -136,11 +137,7 @@ export class EditorQuery implements LegacyEditorQuery {
     return this.state;
   }
 
-  /**
-   * @deprecated
-   * @param reactElement
-   * @returns
-   */
+  // ::Deprecated methods below:: //
   parseReactElement(reactElement: React.ReactElement) {
     return {
       toNodeTree: (
@@ -158,29 +155,20 @@ export class EditorQuery implements LegacyEditorQuery {
     };
   }
 
-  /**
-   * @deprecated
-   */
   get events() {
     return this.state.events;
   }
 
-  /**
-   * @deprecated
-   */
   get nodes(): Record<string, NodeQuery> {
     return Object.keys(this.state.nodes).reduce(
       (accum, nodeId) => ({
         ...accum,
-        [nodeId]: new NodeQuery(this.store, nodeId),
+        [nodeId]: new NodeQueryImpl(this.store, nodeId),
       }),
       {}
     );
   }
 
-  /**
-   * @deprecated
-   */
   get options() {
     return {
       ...this.store.config,
@@ -188,37 +176,22 @@ export class EditorQuery implements LegacyEditorQuery {
     };
   }
 
-  /**
-   * @deprecated
-   */
   get indicator() {
     return this.state.indicator;
   }
 
-  /**
-   * @deprecated
-   */
   get timestamp() {
     return this.state.timestamp;
   }
 
-  /**
-   * @deprecated
-   */
   getEvent(eventType: NodeEventTypes) {
     return this.event(eventType);
   }
 
-  /**
-   * @deprecated
-   */
   getOptions() {
     return this.options;
   }
 
-  /**
-   * @deprecated
-   */
   getSerializedNodes(): SerializedNodes {
     return Object.keys(this.state.nodes).reduce(
       (accum, id) => ({
@@ -229,17 +202,10 @@ export class EditorQuery implements LegacyEditorQuery {
     );
   }
 
-  /**
-   * @deprecated
-   */
   serialize(): string {
     return JSON.stringify(this.getSerializedNodes());
   }
 
-  /**
-   * @deprecated
-   * @param serializedNode
-   */
   parseSerializedNode(serializedNode: SerializedNode) {
     return {
       toNode: (normalize?: (node: Node) => void) => {
@@ -260,10 +226,6 @@ export class EditorQuery implements LegacyEditorQuery {
     };
   }
 
-  /**
-   * @deprecated
-   * @param freshNode
-   */
   parseFreshNode(freshNode: FreshNode) {
     return {
       toNode: (normalize?: (node: Node) => void): Node => {

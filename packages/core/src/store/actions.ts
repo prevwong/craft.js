@@ -7,9 +7,8 @@ import {
 } from '@craftjs/utils';
 import invariant from 'tiny-invariant';
 
-import { EditorStore } from './EditorStore';
-
 import {
+  EditorStore,
   EditorState,
   Indicator,
   NodeId,

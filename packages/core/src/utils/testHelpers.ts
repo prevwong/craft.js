@@ -1,9 +1,11 @@
-import { Node, NodeEventTypes, NodeId, Nodes } from '../interfaces';
 import {
   EditorStoreConfig,
-  EditorStoreImpl,
-  editorInitialState,
-} from '../store';
+  Node,
+  NodeEventTypes,
+  NodeId,
+  Nodes,
+} from '../interfaces';
+import { EditorStoreImpl, editorInitialState } from '../store';
 import { getRandomNodeId } from '../utils/getRandomNodeId';
 
 type NestedNode = Omit<Node, 'nodes' | 'linkedNodes' | 'parent'> & {

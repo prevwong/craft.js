@@ -1,2 +1,2 @@
-export * from './EditorQuery';
-export * from './NodeQuery';
+export * from './EditorQueryImpl';
+export * from './NodeQueryImpl';

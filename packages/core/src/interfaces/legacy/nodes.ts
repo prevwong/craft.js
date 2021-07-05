@@ -17,10 +17,25 @@ export type LegacyNodeData = {
 
 export type LegacyNode = {
   id: NodeId;
+  /**
+   * @deprecated
+   */
   data: LegacyNodeData;
+  /**
+   * @deprecated
+   */
   rules: NodeRules;
+  /**
+   * @deprecated
+   */
   events: Record<NodeEventTypes, boolean>;
+  /**
+   * @deprecated
+   */
   related: NodeRelated;
+  /**
+   * @deprecated
+   */
   dom: HTMLElement;
 };
 
@@ -30,11 +45,6 @@ export type LegacyNodeTree = {
   rootNodeId: NodeId;
   nodes: LegacyNodes;
 };
-
-export interface LegacyNodeQuery extends LegacyNode {
-  get: () => LegacyNode;
-  toSerializedNode: () => SerializedNode;
-}
 
 export type FreshNode = {
   id?: NodeId;

@@ -1,8 +1,8 @@
 import { NodeId } from '../../../interfaces';
 import { createTestEditorStore } from '../../../utils/testHelpers';
-import { NodeQuery } from '../NodeQuery';
+import { NodeQueryImpl } from '../NodeQueryImpl';
 
-let helper: (id: NodeId) => NodeQuery;
+let helper: (id: NodeId) => NodeQueryImpl;
 
 const RandomComponent = () => null;
 
@@ -34,7 +34,7 @@ RejectDragOutgoingComponent.craft = {
 describe('NodeQuery', () => {
   beforeEach(() => {
     helper = (id) =>
-      new NodeQuery(
+      new NodeQueryImpl(
         createTestEditorStore({
           resolver: {
             RandomComponent,
@@ -202,9 +202,13 @@ describe('NodeQuery', () => {
     });
   });
 
-  describe('descendants', () => {
-    it('should return all child and linked nodes', () => {
-      expect(helper('node-card').descendants()).toEqual([
+  describe('getDescendants', () => {
+    it('should return descendant node id', () => {
+      expect(
+        helper('node-card')
+          .getDescendants()
+          .map((node) => node.id)
+      ).toEqual([
         'linked-node',
         'linked-node-child',
         'linked-node-grandchild',
@@ -214,13 +218,13 @@ describe('NodeQuery', () => {
     });
   });
 
-  describe('ancestors', () => {
-    it('should return parent node id', () => {
-      expect(helper('linked-node-child').ancestors()).toEqual([
-        'linked-node',
-        'node-card',
-        'ROOT',
-      ]);
+  describe('getAncestors', () => {
+    it('should return ancestor node query', () => {
+      expect(
+        helper('linked-node-child')
+          .getAncestors()
+          .map((node) => node.id)
+      ).toEqual(['linked-node', 'node-card', 'ROOT']);
     });
   });
 

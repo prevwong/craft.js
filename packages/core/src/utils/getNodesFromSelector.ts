@@ -3,8 +3,7 @@ import invariant from 'tiny-invariant';
 
 import { adaptLegacyNode } from './types';
 
-import { NodeSelectorWrapper, NodeSelector } from '../interfaces';
-import { EditorStore } from '../store';
+import { EditorStore, NodeSelectorWrapper, NodeSelector } from '../interfaces';
 
 type config = { existOnly: boolean; idOnly: boolean };
 export const getNodesFromSelector = (

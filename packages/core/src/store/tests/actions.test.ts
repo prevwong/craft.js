@@ -1,7 +1,6 @@
-import { LegacyNode, SerializedNodes } from '../../interfaces';
+import { LegacyNode, SerializedNodes, EditorStore } from '../../interfaces';
 import { createTestEditorStore } from '../../utils/testHelpers';
 import { createNode } from '../../utils/types';
-import { EditorStore } from '../EditorStore';
 
 const ButtonComponent = () => null;
 

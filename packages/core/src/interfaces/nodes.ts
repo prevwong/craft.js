@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { LegacyNode, LegacyNodeQuery } from './legacy/nodes';
+import { LegacyNode } from './legacy/nodes';
+import { NodeQuery } from './store';
 
 export type UserComponentConfig<T> = {
   displayName: string;
@@ -33,7 +34,7 @@ export type Node = {
 
 export type BackwardsCompatibleNode = Node & LegacyNode;
 
-export type NodeHelpersType = (id: NodeId) => LegacyNodeQuery;
+export type NodeHelpersType = (id: NodeId) => NodeQuery;
 export type NodeRules = {
   canDrag(node: BackwardsCompatibleNode, helpers: NodeHelpersType): boolean;
   canDrop(

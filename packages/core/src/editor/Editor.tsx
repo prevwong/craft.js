@@ -3,8 +3,8 @@ import React, { useMemo } from 'react';
 import { EditorContext } from './EditorContext';
 
 import { Events } from '../events';
-import { EditorState } from '../interfaces';
-import { EditorStoreImpl, EditorStoreConfig } from '../store';
+import { EditorState, EditorStoreConfig } from '../interfaces';
+import { EditorStoreImpl } from '../store';
 
 type EditorProps = EditorStoreConfig & Partial<EditorState>;
 

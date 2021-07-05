@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NodeQuery } from '../../store';
+import { NodeQuery } from '../../interfaces';
 import { useNode } from '../useNode';
 
 export function connectNode<C>(collect?: (state: NodeQuery) => C) {

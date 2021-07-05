@@ -4,8 +4,7 @@ import { useMemo, useContext } from 'react';
 import { NodeContext } from './NodeContext';
 
 import { useInternalEditor } from '../editor/useInternalEditor';
-import { EditorState } from '../interfaces';
-import { NodeQuery } from '../store';
+import { EditorState, NodeQuery } from '../interfaces';
 
 export type NodeCollector<C> = (node: NodeQuery) => C;
 
@@ -17,8 +16,7 @@ export function useInternalNode<C = null>(collect?: NodeCollector<C>) {
 
   const collectorCallback = !collect
     ? null
-    : (state: EditorState) =>
-        state.nodes[id] && collect(new NodeQuery(store, id));
+    : (state: EditorState) => state.nodes[id] && collect(store.query.node(id));
 
   const collected = useCollector(store, collectorCallback);
 

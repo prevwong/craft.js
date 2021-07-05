@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EditorQuery } from '../../store';
+import { EditorQuery } from '../../interfaces';
 import { useEditor } from '../useEditor';
 
 export function connectEditor<C>(collect?: (query: EditorQuery) => C) {

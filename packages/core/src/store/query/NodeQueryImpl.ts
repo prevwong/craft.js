@@ -1,6 +1,7 @@
 import {
   deprecationWarning,
   ERROR_CANNOT_DRAG,
+  ERROR_INVALID_NODE_ID,
   ERROR_MOVE_CANNOT_DROP,
   ERROR_MOVE_INCOMING_PARENT,
   ERROR_MOVE_NONCANVAS_CHILD,
@@ -15,30 +16,31 @@ import { createElement } from 'react';
 import invariant from 'tiny-invariant';
 
 import {
-  LegacyNode,
   LegacyNodeData,
-  LegacyNodeQuery,
   NodeEventTypes,
   NodeId,
   Node,
   NodeRules,
   NodeSelector,
   BackwardsCompatibleNode,
+  EditorStore,
+  NodeQuery,
+  LegacyNode,
 } from '../../interfaces';
 import { NodeProvider } from '../../nodes';
 import { getNodesFromSelector } from '../../utils/getNodesFromSelector';
 import { getResolverConfig } from '../../utils/resolveNode';
 import { serializeNode } from '../../utils/serializeNode';
-import { EditorStore } from '../EditorStore';
 
 /**
- * NodeQuery helps define a Node in the EditorState
+ * NodeQuery helpes define a Node in the EditorState
  */
-export class NodeQuery implements LegacyNodeQuery {
+export class NodeQueryImpl implements NodeQuery {
   node: Node;
 
   constructor(private readonly store: EditorStore, readonly id: NodeId) {
     this.node = this.store.getState().nodes[this.id];
+    invariant(this.node, ERROR_INVALID_NODE_ID);
   }
 
   /**
@@ -99,6 +101,10 @@ export class NodeQuery implements LegacyNodeQuery {
 
   get custom() {
     return this.node.custom;
+  }
+
+  getState() {
+    return this.node;
   }
 
   getParent() {
@@ -390,12 +396,21 @@ export class NodeQuery implements LegacyNodeQuery {
       return null;
     }
 
-    return new NodeQuery(this.store, id);
+    return new NodeQueryImpl(this.store, id);
   }
 
-  /**
-   * @deprecated
-   */
+  // ::Deprecated methods below:: //
+  get(): LegacyNode {
+    return {
+      id: this.id,
+      data: this.data,
+      rules: this.rules,
+      related: this.related,
+      dom: this.dom,
+      events: this.events,
+    };
+  }
+
   get data(): LegacyNodeData {
     return {
       type: this.getComponent(),
@@ -411,9 +426,6 @@ export class NodeQuery implements LegacyNodeQuery {
     };
   }
 
-  /**
-   * @deprecated
-   */
   get events(): Record<NodeEventTypes, boolean> {
     return {
       selected: this.isSelected(),
@@ -422,30 +434,18 @@ export class NodeQuery implements LegacyNodeQuery {
     };
   }
 
-  /**
-   * @deprecated
-   */
   get dom() {
     return this.getDOM();
   }
 
-  /**
-   * @deprecated
-   */
   get related() {
     return this.getRelated();
   }
 
-  /**
-   * @deprecated
-   */
   get rules() {
     return this.getRules();
   }
 
-  /**
-   * @deprecated
-   */
   get _hydrationTimestamp() {
     deprecationWarning('Node._hydrationTimestamp', {
       suggest: 'EditorState.timestamp',
@@ -557,23 +557,6 @@ export class NodeQuery implements LegacyNodeQuery {
     return appendChildNode(this.id);
   }
 
-  /**
-   * @deprecated
-   */
-  get(): LegacyNode {
-    return {
-      id: this.id,
-      data: this.data,
-      rules: this.rules,
-      related: this.related,
-      dom: this.dom,
-      events: this.events,
-    };
-  }
-
-  /**
-   * @deprecated
-   */
   toSerializedNode() {
     return serializeNode(this.data, this.store.resolver);
   }
