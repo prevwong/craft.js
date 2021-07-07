@@ -28,7 +28,7 @@ export const Editor: React.FC<Partial<Options>> = ({
   useEffect(() => {
     if (context && options)
       context.actions.setOptions((editorOptions) => {
-        editorOptions = options;
+        Object.assign(editorOptions, options);
       });
   }, [context, options]);
 
