@@ -138,12 +138,6 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
                     this.config.onNodesChange(this.query);
                   }
 
-                  // When deserialize, make sure to cleanup any existing connectors
-                  // Otherwise, connectors with existing Node ids won't get created correctly
-                  if (actionKey === 'deserialize') {
-                    this.handlers.cleanup();
-                  }
-
                   historyCallback(patches, inversePatches, actionKey);
                 },
               }

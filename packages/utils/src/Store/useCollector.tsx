@@ -20,9 +20,13 @@ export function useCollector<S extends Store, C = null>(
       return;
     }
 
-    return store.subscribe(collectorRef.current, (collected) =>
-      setCollected(collected)
-    );
+    return store.subscribe(collectorRef.current, (collected) => {
+      if (!collected) {
+        return;
+      }
+
+      setCollected(collected);
+    });
   }, [store]);
 
   // Collect state on state change
