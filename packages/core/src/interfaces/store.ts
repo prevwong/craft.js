@@ -176,6 +176,10 @@ export interface EditorQuery extends LegacyEditorQuery {
     pos: { x: number; y: number },
     nodeIdToDOM?: (id: NodeId) => HTMLElement
   ) => Indicator;
+  history: {
+    canUndo: () => boolean;
+    canRedo: () => boolean;
+  };
 }
 
 export type EditorStoreConfig = {
