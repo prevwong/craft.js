@@ -1,7 +1,9 @@
 import { History, Store } from '@craftjs/utils';
 
-import { EditorEvents, Indicator } from './editor';
+import { EditorEvents } from './editor';
+import { Indicator } from './events';
 import { LegacyStateOptions } from './legacy/editor';
+import { LegacyIndicator } from './legacy/events';
 import {
   FreshNode,
   LegacyNode,
@@ -131,7 +133,7 @@ export interface LegacyEditorQuery {
   /**
    * @deprecated
    */
-  indicator: Indicator;
+  indicator: LegacyIndicator;
 
   /**
    * @deprecated

@@ -19,9 +19,9 @@ export const Events: React.FC = ({ children }) => {
           style: {
             ...movePlaceholder(
               indicator.placement,
-              getDOMInfo(query.node(indicator.placement.parent).dom),
+              getDOMInfo(query.node(indicator.placement.parentNodeId).dom),
               indicator.placement.currentNode &&
-                getDOMInfo(query.node(indicator.placement.currentNode).dom),
+                getDOMInfo(query.node(indicator.placement.currentNodeId).dom),
               indicatorOptions.thickness
             ),
             backgroundColor: indicator.error
@@ -29,7 +29,7 @@ export const Events: React.FC = ({ children }) => {
               : indicatorOptions.success,
             transition: indicatorOptions.transition || '0.2s ease-in',
           },
-          parentDom: query.node(indicator.placement.parent).dom,
+          parentDom: query.node(indicator.placement.parentNodeId).dom,
         })}
       {children}
     </Fragment>

@@ -1,9 +1,5 @@
 import { NodeId } from './nodes';
 
-export type NodeInfo = {
-  id?: NodeId;
-} & DOMInfo;
-
 export type DOMInfo = Record<
   | 'x'
   | 'y'
@@ -23,11 +19,15 @@ export type DOMInfo = Record<
 };
 
 export interface DropAction {
-  parent: NodeId;
+  parentNodeId: NodeId;
   index: number;
   where: string;
 }
 
 export type Placement = DropAction & {
-  currentNode: NodeId | null;
+  currentNodeId: NodeId | null;
 };
+export interface Indicator {
+  placement: Placement;
+  error: string | false;
+}

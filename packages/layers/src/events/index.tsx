@@ -17,18 +17,18 @@ export const EventManager: React.FC<any> = ({ children }) => {
 
     if (indicator) {
       const {
-        placement: { where, parent, currentNode },
+        placement: { where, parentNodeId, currentNodeId },
         error,
       } = indicator;
-      const layerId = currentNode || parent;
+      const layerId = currentNodeId || parentNodeId;
 
       let top;
       const color = error ? indicatorStyles.error : indicatorStyles.success;
 
-      if (indicator.onCanvas && layers[parent].dom != null) {
-        const parentPos = layers[parent].dom.getBoundingClientRect();
+      if (indicator.onCanvas && layers[parentNodeId].dom != null) {
+        const parentPos = layers[parentNodeId].dom.getBoundingClientRect();
         const parentHeadingPos = layers[
-          parent
+          parentNodeId
         ].headingDom.getBoundingClientRect();
         return {
           top: parentHeadingPos.top,
@@ -44,7 +44,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
         const headingPos = layers[layerId].headingDom.getBoundingClientRect();
         const pos = layers[layerId].dom.getBoundingClientRect();
 
-        if (where === 'after' || !currentNode) {
+        if (where === 'after' || !currentNodeId) {
           top = pos.top + pos.height;
         } else {
           top = pos.top;
@@ -53,7 +53,7 @@ export const EventManager: React.FC<any> = ({ children }) => {
         return {
           top,
           left: headingPos.left,
-          width: pos.width - headingPos.left,
+          width: pos.width - (headingPos.left - pos.left),
           height: 2,
           borderWidth: 0,
           background: color,

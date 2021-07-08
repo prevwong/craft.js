@@ -17,7 +17,6 @@ import {
   Node,
   NodeEventTypes,
   NodeId,
-  NodeInfo,
   NodeSelector,
   NodeTree,
   SerializedNode,
@@ -25,6 +24,7 @@ import {
   EditorStore,
   EditorQuery,
   NodeQuery,
+  DOMInfo,
 } from '../../interfaces';
 import { deserializeNode } from '../../utils/deserializeNode';
 import { getNodesFromSelector } from '../../utils/getNodesFromSelector';
@@ -84,15 +84,12 @@ export class EditorQueryImpl implements EditorQuery {
           const dom = nodeIdToDOM ? nodeIdToDOM(id) : this.node(id).getDOM();
 
           if (dom) {
-            const info: NodeInfo = {
-              id,
-              ...getDOMInfo(dom),
-            };
+            const info: DOMInfo = getDOMInfo(dom);
 
             result.push(info);
           }
           return result;
-        }, [] as NodeInfo[])
+        }, [] as DOMInfo[])
       : [];
 
     const dropAction = findPosition(
@@ -108,7 +105,7 @@ export class EditorQueryImpl implements EditorQuery {
     const output: Indicator = {
       placement: {
         ...dropAction,
-        currentNode: currentNode.id,
+        currentNodeId: currentNode.id,
       },
       error: false,
     };
@@ -177,7 +174,23 @@ export class EditorQueryImpl implements EditorQuery {
   }
 
   get indicator() {
-    return this.state.indicator;
+    if (!this.state.indicator) {
+      return null;
+    }
+
+    const { placement, error } = this.state.indicator;
+
+    return {
+      error,
+      placement: {
+        ...placement,
+        // The following are needed for backwards compatibility:
+        parent: this.node(placement.parentNodeId),
+        currentNode: placement.currentNodeId
+          ? this.node(placement.currentNodeId)
+          : null,
+      },
+    };
   }
 
   get timestamp() {

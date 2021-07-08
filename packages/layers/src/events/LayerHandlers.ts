@@ -74,10 +74,10 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
                 LayerHandlers.events.indicator = {
                   ...indicator,
                   placement: {
-                    currentNode: currNode.id,
+                    currentNodeId: currNode.id,
                     index: canvasNode.getChildNodes().length,
                     where: 'after',
-                    parent: canvasNode.id,
+                    parentNodeId: canvasNode.id,
                   },
                   onCanvas: true,
                 };
@@ -113,17 +113,17 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
 
             if (indicatorInfo) {
               const {
-                placement: { parent },
+                placement: { parentNodeId },
               } = indicatorInfo;
 
-              const parentNode = editorStore.query.node(parent);
+              const parentNode = editorStore.query.node(parentNodeId);
 
               const parentHeadingInfo = this.getLayer(
                 parentNode.id
               ).headingDom.getBoundingClientRect();
 
               LayerHandlers.events.currentCanvasHovered = null;
-              if (editorStore.query.node(parent).isCanvas()) {
+              if (editorStore.query.node(parentNodeId).isCanvas()) {
                 if (parentNode.getParent()) {
                   const grandparentNode = parentNode.getParent();
 
@@ -134,8 +134,8 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
                         !this.getLayer(parentNode.id).expanded) ||
                       e.clientY < parentHeadingInfo.top + 10
                     ) {
-                      indicatorInfo.placement.parent = grandparentNode.id;
-                      indicatorInfo.placement.currentNode = parentNode.id;
+                      indicatorInfo.placement.parentNodeId = grandparentNode.id;
+                      indicatorInfo.placement.currentNodeId = parentNode.id;
                       indicatorInfo.placement.index = grandparentNode
                         .getChildNodes()
                         .map((node) => node.id)
@@ -193,11 +193,11 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
 
           if (events.indicator && !events.indicator.error) {
             const { placement } = events.indicator;
-            const { parent, index, where } = placement;
+            const { parentNodeId, index, where } = placement;
 
             editorStore.actions.move(
               LayerHandlers.draggedElement as NodeId,
-              parent,
+              parentNodeId,
               index + (where === 'after' ? 1 : 0)
             );
           }
