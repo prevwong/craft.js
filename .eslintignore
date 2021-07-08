@@ -3,6 +3,7 @@
 **/dist/
 **/public/
 **/static/
+**/experimental/
 *-cache
 packages/docs
 packages/examples/landing
