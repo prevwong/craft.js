@@ -57,6 +57,15 @@ describe('EditorQuery', () => {
       resolver,
       state: {
         nodes,
+        indicator: {
+          error: null,
+          placement: {
+            parentNodeId: 'ROOT',
+            currentNodeId: null,
+            index: 0,
+            where: 'after',
+          },
+        },
       },
     });
     query = new EditorQueryImpl(store);
@@ -84,9 +93,11 @@ describe('EditorQuery', () => {
     });
   });
 
-  describe.skip('event', () => {
-    ['selected', 'hovered', 'dragged'].forEach((eventType: any) => {
-      expect(query.event(eventType) instanceof EventQueryImpl).toEqual(true);
+  describe('event', () => {
+    it('should returnan instance of EventQuery', () => {
+      ['selected', 'hovered', 'dragged'].forEach((eventType: any) => {
+        expect(query.event(eventType) instanceof EventQueryImpl).toEqual(true);
+      });
     });
   });
 
@@ -116,7 +127,14 @@ describe('EditorQuery', () => {
           ...store.config,
           enabled: store.getState().enabled,
         },
-        indicator: store.getState().indicator,
+        indicator: {
+          ...store.getState().indicator,
+          placement: {
+            ...store.getState().indicator.placement,
+            currentNode: null,
+            parent: expect.any(NodeQueryImpl),
+          },
+        },
       });
     });
   });

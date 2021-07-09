@@ -2,16 +2,49 @@ import { NodeEventTypes, NodeRelated, NodeRules } from '..';
 import { NodeId } from '../nodes';
 
 export type LegacyNodeData = {
+  /**
+   * @deprecated
+   */
   props: Record<string, any>;
+  /**
+   * @deprecated
+   */
   type: string | React.ElementType;
+  /**
+   * @deprecated
+   */
   name: string;
+  /**
+   * @deprecated
+   */
   displayName: string;
+  /**
+   * @deprecated
+   */
   isCanvas: boolean;
+  /**
+   * @deprecated
+   */
   parent: NodeId;
+  /**
+   * @deprecated
+   */
   linkedNodes: Record<string, NodeId>;
+  /**
+   * @deprecated
+   */
   nodes: NodeId[];
+  /**
+   * @deprecated
+   */
   hidden: boolean;
+  /**
+   * @deprecated
+   */
   custom?: any;
+  /**
+   * @deprecated
+   */
   _childCanvas?: Record<string, NodeId>; // TODO: Deprecate in favour of linkedNodes
 };
 

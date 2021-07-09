@@ -16,7 +16,7 @@ export class EventQueryImpl implements EventQuery {
     return this.event.has(id);
   }
 
-  get() {
+  getState() {
     return this.event;
   }
 

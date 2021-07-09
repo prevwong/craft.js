@@ -111,6 +111,31 @@ export class NodeQueryImpl implements NodeQuery {
     return this.node.parent ? this.find(this.node.parent) : null;
   }
 
+  getLinkedNodes() {
+    return Object.entries(this.node.linkedNodes).reduce<
+      { id: string; node: NodeQuery }[]
+    >(
+      (accum, [linkedId, nodeId]) => [
+        ...accum,
+        { id: linkedId, node: this.find(nodeId) },
+      ],
+      []
+    );
+  }
+
+  getChildNodes() {
+    return this.node.nodes.map((childNodeId) => this.find(childNodeId));
+  }
+
+  indexOf(childNodeId: NodeId) {
+    return this.node.nodes.indexOf(childNodeId);
+  }
+
+  getChildAtIndex(index) {
+    const childIdAtIndex = this.node.nodes[index];
+    return this.find(childIdAtIndex);
+  }
+
   getAncestors() {
     const appendParentNode = (
       id: NodeId,
@@ -176,55 +201,8 @@ export class NodeQueryImpl implements NodeQuery {
   }
 
   // TODO: Related Components are difficult to maintain; might need to find an alternative
-  getRelated() {
-    const related = this.getConfig().related;
-
-    const relatedNodeContext = {
-      id: this.id,
-      related: true,
-    };
-
-    return Object.keys(related).reduce((accum, comp) => {
-      const relatedType = this.store.related.get(this.id, comp);
-
-      return {
-        ...accum,
-        [comp]:
-          relatedType ||
-          this.store.related.add(this.id, comp, () =>
-            createElement(
-              NodeProvider,
-              relatedNodeContext,
-              createElement(related[comp])
-            )
-          ),
-      };
-    }, {});
-  }
-
-  getLinkedNodes() {
-    return Object.entries(this.node.linkedNodes).reduce<
-      { id: string; node: NodeQuery }[]
-    >(
-      (accum, [linkedId, nodeId]) => [
-        ...accum,
-        { id: linkedId, node: this.find(nodeId) },
-      ],
-      []
-    );
-  }
-
-  getChildNodes() {
-    return this.node.nodes.map((childNodeId) => this.find(childNodeId));
-  }
-
-  indexOf(childNodeId: NodeId) {
-    return this.node.nodes.indexOf(childNodeId);
-  }
-
-  getChildAtIndex(index) {
-    const childIdAtIndex = this.node.nodes[index];
-    return this.find(childIdAtIndex);
+  getRelated(id: string) {
+    return this.related[id];
   }
 
   isCanvas() {
@@ -439,7 +417,29 @@ export class NodeQueryImpl implements NodeQuery {
   }
 
   get related() {
-    return this.getRelated();
+    const related = this.getConfig().related;
+
+    const relatedNodeContext = {
+      id: this.id,
+      related: true,
+    };
+
+    return Object.keys(related).reduce((accum, comp) => {
+      const relatedType = this.store.related.get(this.id, comp);
+
+      return {
+        ...accum,
+        [comp]:
+          relatedType ||
+          this.store.related.add(this.id, comp, () =>
+            createElement(
+              NodeProvider,
+              relatedNodeContext,
+              createElement(related[comp])
+            )
+          ),
+      };
+    }, {});
   }
 
   get rules() {

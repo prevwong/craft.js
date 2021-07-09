@@ -67,7 +67,7 @@ export interface NodeQuery extends LegacyNodeQuery {
   getComponent: () => React.ElementType;
   getDOM: () => HTMLElement;
   getRules: () => NodeRules;
-  getRelated: () => Record<string, React.ElementType>;
+  getRelated: (id: string) => Record<string, React.ElementType>;
   getLinkedNodes: () => { id: string; node: NodeQuery }[];
   getChildNodes: () => NodeQuery[];
   getChildAtIndex: (index: number) => NodeQuery;
@@ -108,7 +108,7 @@ export interface LegacyEventQuery {
 }
 
 export interface EventQuery extends LegacyEventQuery {
-  get: () => Set<NodeId>;
+  getState: () => Set<NodeId>;
   contains: (id: NodeId) => boolean;
   isEmpty: () => boolean;
   size: () => number;
