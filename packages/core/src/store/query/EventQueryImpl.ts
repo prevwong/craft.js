@@ -27,7 +27,13 @@ export class EventQueryImpl implements EventQuery {
 
   getNodeAtIndex(index: number) {
     const nodes = this.getNodes();
-    return nodes[index];
+    const node = nodes[index];
+
+    if (!node) {
+      return null;
+    }
+
+    return node;
   }
 
   getFirst() {
@@ -35,7 +41,7 @@ export class EventQueryImpl implements EventQuery {
   }
 
   getLast() {
-    return this.getNodeAtIndex(this.event.size - 1);
+    return this.getNodeAtIndex(this.event.size > 0 ? this.event.size - 1 : 0);
   }
 
   isEmpty() {

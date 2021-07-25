@@ -22,14 +22,14 @@ export type NodeEventTypes = 'selected' | 'dragged' | 'hovered';
 export type Node = {
   id: NodeId;
   type: string;
-  props: Record<string, any>;
   displayName: string;
-  isCanvas: boolean;
-  parent: NodeId;
-  linkedNodes: Record<string, NodeId>;
+  parent: NodeId | null;
   nodes: NodeId[];
+  linkedNodes: Record<string, NodeId>;
+  props: Record<string, any>;
+  custom: Record<string, any>;
   hidden: boolean;
-  custom?: any;
+  isCanvas: boolean;
 };
 
 export type BackwardsCompatibleNode = Node & LegacyNode;

@@ -72,6 +72,7 @@ export class NodeQueryImpl implements NodeQuery {
         ...node,
         type: config.component,
         name: node.type,
+        displayName: config.displayName,
       },
       related: config.related,
       dom: null,
