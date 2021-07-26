@@ -1,5 +1,6 @@
 import { ERROR_RESOLVER_NOT_AN_OBJECT, HISTORY_ACTIONS } from '@craftjs/utils';
-import React, { useEffect } from 'react';
+import { pickBy } from 'lodash';
+import React, { useEffect, useMemo } from 'react';
 import invariant from 'tiny-invariant';
 
 import { EditorContext } from './EditorContext';
@@ -13,15 +14,26 @@ import { Options } from '../interfaces';
  */
 export const Editor: React.FC<Partial<Options>> = ({
   children,
-  ...options
+  onRender,
+  onNodesChange,
+  resolver,
+  enabled,
+  indicator,
 }) => {
   // we do not want to warn the user if no resolver was supplied
-  if (options.resolver !== undefined) {
+  if (resolver !== undefined) {
     invariant(
-      typeof options.resolver === 'object' && !Array.isArray(options.resolver),
+      typeof resolver === 'object' && !Array.isArray(resolver),
       ERROR_RESOLVER_NOT_AN_OBJECT
     );
   }
+
+  const options = useMemo(() => {
+    return pickBy(
+      { onRender, onNodesChange, resolver, enabled, indicator },
+      (value) => value !== undefined
+    );
+  }, [enabled, indicator, onNodesChange, onRender, resolver]);
 
   const context = useEditorStore(
     options,
@@ -69,10 +81,11 @@ export const Editor: React.FC<Partial<Options>> = ({
   );
 
   useEffect(() => {
-    if (context && options)
+    if (context && options) {
       context.actions.setOptions((editorOptions) => {
-        editorOptions = options;
+        Object.assign(editorOptions, options);
       });
+    }
   }, [context, options]);
 
   useEffect(() => {
