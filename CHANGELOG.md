@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-alpha.25](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.23...v0.2.0-alpha.25) (2021-07-26)
+
+
+### Bug Fixes
+
+* layer node console warning ([#246](https://github.com/prevwong/craft.js/issues/246)) ([d882ea6](https://github.com/prevwong/craft.js/commit/d882ea6b4d90b20014f34d95413d5c2e8e2c23c9))
+* linked node props ([#245](https://github.com/prevwong/craft.js/issues/245)) ([452ea48](https://github.com/prevwong/craft.js/commit/452ea484f20f2d9536404f9e831cd7ee6629a4f6))
+* missing type in UserComponentConfig ([3da530a](https://github.com/prevwong/craft.js/commit/3da530ad61bb362fe36272a43213f6cafbafedd1))
+* types ([bd726c7](https://github.com/prevwong/craft.js/commit/bd726c7ddb43a26381785687ff5ce11c222b2033))
+* useLayerManager collector type ([bc46dd4](https://github.com/prevwong/craft.js/commit/bc46dd424d245bc8377085f7686ee313449ef273))
+* **landing:** hover indicator ([0a126ac](https://github.com/prevwong/craft.js/commit/0a126ac6116a980184c3ba88f115b1b44229fa8a))
+* **layers:** layer node type ([f228f48](https://github.com/prevwong/craft.js/commit/f228f48cb84152edeaa60e83d3cea0c82caa0ff8))
+
+
+### Features
+
+* clear history ([#281](https://github.com/prevwong/craft.js/issues/281)) ([3117ba4](https://github.com/prevwong/craft.js/commit/3117ba47a8cc4c7c813bd009b40a3421a362321f))
+
+
+
+
+
 # [0.2.0-alpha.24](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.23...v0.2.0-alpha.24) (2021-05-22)
 
 
