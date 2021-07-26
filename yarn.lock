@@ -3014,6 +3014,7 @@ __metadata:
     "@craftjs/utils": ^0.2.0-alpha.24
     "@types/react": ^17.0.5
     debounce: ^1.2.0
+    html-tags: ^3.1.0
     lodash: ^4.17.20
     react: ^17.0.2
     shortid: ^2.2.15

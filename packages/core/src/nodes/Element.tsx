@@ -39,26 +39,22 @@ export function Element<T extends React.ElementType>({
   };
 
   const { query, actions } = useInternalEditor();
-  const { node, inNodeContext } = useInternalNode((node) => ({
-    node: {
-      id: node.id,
-      data: node.data,
-    },
-  }));
+  const { id: nodeId, linkedNodes, inNodeContext } = useInternalNode(
+    (node) => ({
+      linkedNodes: node.linkedNodes(),
+    })
+  );
 
   const [linkedNodeId, setLinkedNodeId] = useState<NodeId | null>(null);
 
   useEffectOnce(() => {
     invariant(!!id, ERROR_TOP_LEVEL_ELEMENT_NO_ID);
-    const { id: nodeId, data } = node;
 
     if (inNodeContext) {
       let linkedNodeId;
 
       const existingNode =
-        data.linkedNodes &&
-        data.linkedNodes[id] &&
-        query.node(data.linkedNodes[id]).get();
+        linkedNodes && linkedNodes[id] && query.node(linkedNodes[id]).get();
 
       // Render existing linked Node if it already exists (and is the same type as the JSX)
       if (existingNode && existingNode.data.type === is) {

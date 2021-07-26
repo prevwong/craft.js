@@ -1,32 +1,74 @@
-import React, { Fragment } from 'react';
+import { ERROR_NOT_IN_RESOLVER } from '@craftjs/utils';
+import React from 'react';
+import invariant from 'tiny-invariant';
 
-import { createNode } from './createNode';
+import { mergeTrees } from './mergeTrees';
+import { resolveComponent } from './resolveComponent';
+import { createNodeWithResolverConfig } from './types';
 
-import { Node } from '../interfaces';
+import { Node, NodeTree, Resolver } from '../interfaces';
+import { defaultElementProps, Element } from '../nodes/Element';
 
 export function parseNodeFromJSX(
-  jsx: React.ReactElement | string,
-  normalize?: (node: Node, jsx: React.ReactElement) => void
-) {
-  let element = jsx as React.ReactElement;
+  element: React.ReactElement,
+  resolver: Resolver,
+  normalize?: any
+): NodeTree {
+  let { type: componentType, props: componentProps } = element;
 
-  if (typeof element === 'string') {
-    element = React.createElement(Fragment, {}, element) as React.ReactElement;
+  const nodeConfig: Partial<Node> = {
+    type: 'div',
+    displayName: 'div',
+    props: {},
+    isCanvas: false,
+    hidden: false,
+    custom: {},
+  };
+
+  if (componentType === Element) {
+    const { is, canvas, custom, hidden, ...props } = {
+      ...defaultElementProps,
+      ...componentProps,
+    } as React.ComponentProps<typeof Element>;
+
+    componentType = is;
+    nodeConfig.isCanvas = canvas;
+    nodeConfig.custom = custom;
+    nodeConfig.hidden = hidden;
+    nodeConfig.props = {
+      ...nodeConfig.props,
+      ...props,
+    };
+  } else {
+    nodeConfig.props = componentProps;
   }
 
-  let actualType = element.type as any;
+  nodeConfig.type = resolveComponent(resolver, componentType);
+  nodeConfig.displayName = nodeConfig.type;
 
-  return createNode(
-    {
-      data: {
-        type: actualType,
-        props: { ...element.props },
-      },
-    },
-    (node) => {
-      if (normalize) {
-        normalize(node, element);
+  invariant(nodeConfig.type, ERROR_NOT_IN_RESOLVER);
+
+  const node = createNodeWithResolverConfig(nodeConfig, resolver);
+
+  if (normalize) {
+    normalize(node, element);
+  }
+
+  let childrenNodes = [];
+
+  if (node.props.children) {
+    childrenNodes = React.Children.toArray(node.props.children).reduce<
+      NodeTree[]
+    >((accum, child: any) => {
+      if (React.isValidElement(child)) {
+        accum.push(parseNodeFromJSX(child, resolver));
       }
+      return accum;
+    }, []);
+    if (childrenNodes.length > 0) {
+      delete node.props.children;
     }
-  );
+  }
+
+  return mergeTrees(node, childrenNodes);
 }

@@ -5,7 +5,7 @@ const mergeNodes = (rootNode: Node, childrenNodes: NodeTree[]) => {
     return { [rootNode.id]: rootNode };
   }
   const nodes = childrenNodes.map(({ rootNodeId }) => rootNodeId);
-  const nodeWithChildren = { ...rootNode, data: { ...rootNode.data, nodes } };
+  const nodeWithChildren = { ...rootNode, nodes };
   const rootNodes = { [rootNode.id]: nodeWithChildren };
   return childrenNodes.reduce((accum, tree) => {
     const currentNode = tree.nodes[tree.rootNodeId];
@@ -15,10 +15,7 @@ const mergeNodes = (rootNode: Node, childrenNodes: NodeTree[]) => {
       // set the parent id for the current node
       [currentNode.id]: {
         ...currentNode,
-        data: {
-          ...currentNode.data,
-          parent: rootNode.id,
-        },
+        parent: rootNode.id,
       },
     };
   }, rootNodes);

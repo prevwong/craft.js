@@ -27,7 +27,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
     return {
       connect: (el: HTMLElement, id: NodeId) => {
-        store.actions.setDOM(id, el);
+        this.dom.register(id, el);
 
         return this.reflect((connectors) => {
           connectors.select(el, id);
@@ -59,10 +59,8 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
               if (isMultiSelect || selectedElementIds.includes(id)) {
                 newSelectedElementIds = selectedElementIds.filter(
                   (selectedId) => {
-                    const descendants = query
-                      .node(selectedId)
-                      .descendants(true);
-                    const ancestors = query.node(selectedId).ancestors(true);
+                    const descendants = query.node(selectedId).descendants();
+                    const ancestors = query.node(selectedId).ancestors();
 
                     // Deselect ancestors/descendants
                     if (descendants.includes(id) || ancestors.includes(id)) {
@@ -209,12 +207,13 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
         const unbindDragEnd = this.addCraftEventListener(el, 'dragend', (e) => {
           e.craft.stopPropagation();
-          const onDropElement = (draggedElement, placement) => {
-            const index =
-              placement.index + (placement.where === 'after' ? 1 : 0);
-            store.actions.move(draggedElement, placement.parent.id, index);
-          };
-          this.dropElement(onDropElement);
+          this.dropElement((draggedElement, placement) => {
+            store.actions.move(
+              draggedElement as NodeId[],
+              placement.parentNodeId,
+              placement.index + (placement.where === 'after' ? 1 : 0)
+            );
+          });
         });
 
         return () => {
@@ -250,20 +249,18 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
         const unbindDragEnd = this.addCraftEventListener(el, 'dragend', (e) => {
           e.craft.stopPropagation();
-          const onDropElement = (draggedElement, placement) => {
-            const index =
-              placement.index + (placement.where === 'after' ? 1 : 0);
+
+          this.dropElement((draggedElement, placement) => {
             store.actions.addNodeTree(
-              draggedElement,
-              placement.parent.id,
-              index
+              draggedElement as NodeTree,
+              placement.parentNodeId,
+              placement.index + (placement.where === 'after' ? 1 : 0)
             );
 
             if (options && isFunction(options.onCreate)) {
-              options.onCreate(draggedElement);
+              options.onCreate(draggedElement as NodeTree);
             }
-          };
-          this.dropElement(onDropElement);
+          });
         });
 
         return () => {

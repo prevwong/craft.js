@@ -1,5 +1,4 @@
 import { Resolver } from '../interfaces';
-import { Canvas } from '../nodes/Canvas';
 
 export const resolveComponent = (
   resolver: Resolver,
@@ -7,8 +6,6 @@ export const resolveComponent = (
 ) => {
   let Comp: string;
   const name = (comp as any).name || (comp as any).displayName;
-
-  if (comp === Canvas) return 'Canvas';
 
   if (resolver[name]) return name;
 

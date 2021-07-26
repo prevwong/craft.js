@@ -1,11 +1,14 @@
-import { Store, History } from '@craftjs/utils';
+import { Store, History, ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
+import invariant from 'tiny-invariant';
 
-import { EditorStore, EditorStoreConfig } from './EditorStore';
 import { ActionMethods } from './actions';
-import { QueryMethods } from './query';
+import { EditorQueryImpl } from './query';
 
-import { CoreEventHandlers, DefaultEventHandlers } from '../events';
-import { EditorState, NodeId, Options } from '../interfaces';
+import { CoreEventHandlers } from '../events/CoreEventHandlers';
+import { DefaultEventHandlers } from '../events/DefaultEventHandlers';
+import { EditorStore, EditorStoreConfig } from '../interfaces';
+import { EditorState, NodeId, Resolver } from '../interfaces';
+import { RelatedComponents } from '../nodes/RelatedComponents';
 
 const normalizeStateOnUndoRedo = (state: EditorState) => {
   /**
@@ -20,53 +23,34 @@ const normalizeStateOnUndoRedo = (state: EditorState) => {
       }
     });
   });
-
-  // Remove any invalid node[nodeId].events
-  // TODO(prev): it's really cumbersome to have to ensure state.events and state.nodes[nodeId].events are in sync
-  // Find a way to make it so that once state.events is set, state.nodes[nodeId] automatically reflects that (maybe using proxies?)
-  Object.keys(state.nodes).forEach((id) => {
-    const node = state.nodes[id];
-
-    Object.keys(node.events).forEach((eventName) => {
-      const isEventActive = !!node.events[eventName];
-
-      if (
-        isEventActive &&
-        state.events[eventName] &&
-        !state.events[eventName].has(node.id)
-      ) {
-        node.events[eventName] = false;
-      }
-    });
-  });
 };
 
 export const editorInitialState: EditorState = {
   nodes: {},
+  enabled: true,
   events: {
     dragged: new Set<NodeId>(),
     selected: new Set<NodeId>(),
     hovered: new Set<NodeId>(),
   },
   indicator: null,
-  options: {
-    resolver: {},
-    enabled: true,
-  },
+  timestamp: Date.now(),
 };
 
 export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
   history: History;
   config: EditorStoreConfig;
   handlers: CoreEventHandlers;
+  related: RelatedComponents;
+  resolver: Resolver;
 
-  constructor(options?: Partial<Options>, config?: Partial<EditorStoreConfig>) {
+  constructor(
+    config?: Partial<EditorStoreConfig & { state: Partial<EditorState> }>
+  ) {
+    const { state, ...storeConfig } = config;
     super({
       ...editorInitialState,
-      options: {
-        ...editorInitialState.options,
-        ...(options || {}),
-      },
+      ...state,
     });
 
     this.config = {
@@ -82,13 +66,26 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
           isMultiSelectEnabled: (e: MouseEvent) => !!e.metaKey,
         }),
       normalizeNodes: () => {},
-      ...(config || {}),
+      resolver: {},
+      ...(storeConfig || {}),
     };
+
+    // we do not want to warn the user if no resolver was supplied
+    if (this.config.resolver !== undefined) {
+      invariant(
+        typeof this.config.resolver === 'object' &&
+          !Array.isArray(this.config.resolver),
+        ERROR_RESOLVER_NOT_AN_OBJECT
+      );
+    }
+
     this.history = new History();
+    this.related = new RelatedComponents();
+    this.resolver = this.config.resolver;
     this.handlers = this.config.handlers(this);
 
     this.subscribe(
-      (state) => ({ enabled: state.options.enabled }),
+      (state) => ({ enabled: state.enabled }),
       ({ enabled }) => {
         if (!enabled) {
           this.handlers.disable();
@@ -102,7 +99,7 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
 
   // TODO: The actions api will be updated to use an operations-like model, we're keeping this here for now
   get actions() {
-    const methods = ActionMethods(null, null);
+    const methods = ActionMethods(null, this);
     const currentState = this.getState();
 
     const getBaseActions = (
@@ -113,7 +110,7 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
           ...accum,
           [actionKey]: (...args) => {
             return this.setState(
-              (state) => ActionMethods(state, this.query)[actionKey](...args),
+              (state) => ActionMethods(state, this)[actionKey](...args),
               {
                 onPatch: (patches, inversePatches) => {
                   // TODO: this will be deprecated
@@ -139,12 +136,6 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
 
                   if (this.config.onNodesChange) {
                     this.config.onNodesChange(this.query);
-                  }
-
-                  // When deserialize, make sure to cleanup any existing connectors
-                  // Otherwise, connectors with existing Node ids won't get created correctly
-                  if (actionKey === 'deserialize') {
-                    this.handlers.cleanup();
                   }
 
                   historyCallback(patches, inversePatches, actionKey);
@@ -185,22 +176,8 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
     };
   }
 
+  // TODO: move to useEditor/useInternalEditor hook
   get query() {
-    const baseQueries = Object.keys(QueryMethods(null)).reduce((accum, key) => {
-      return {
-        ...accum,
-        [key]: (...args) => QueryMethods(this.getState())[key](...args),
-      };
-    }, {} as ReturnType<typeof QueryMethods>);
-
-    const history = {
-      canUndo: () => this.history.canUndo(),
-      canRedo: () => this.history.canRedo(),
-    };
-
-    return {
-      ...baseQueries,
-      history,
-    };
+    return new EditorQueryImpl(this);
   }
 }
