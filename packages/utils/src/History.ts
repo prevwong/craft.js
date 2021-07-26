@@ -12,6 +12,7 @@ export const HISTORY_ACTIONS = {
   THROTTLE: 'HISTORY_THROTTLE',
   IGNORE: 'HISTORY_IGNORE',
   MERGE: 'HISTORY_MERGE',
+  CLEAR: 'HISTORY_CLEAR',
 };
 
 export class History {
@@ -85,6 +86,11 @@ export class History {
     }
 
     this.add(patches, inversePatches);
+  }
+
+  clear() {
+    this.timeline = [];
+    this.pointer = -1;
   }
 
   canUndo() {

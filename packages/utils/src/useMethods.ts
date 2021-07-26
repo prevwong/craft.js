@@ -43,6 +43,7 @@ export type CallbacksFor<
       history: {
         undo: () => void;
         redo: () => void;
+        clear: () => void;
         throttle: (
           rate?: number
         ) => Delete<
@@ -229,6 +230,12 @@ export function useMethods<
               case HISTORY_ACTIONS.REDO: {
                 return history.redo(draft);
               }
+              case HISTORY_ACTIONS.CLEAR: {
+                history.clear();
+                return {
+                  ...draft,
+                };
+              }
 
               // TODO: Simplify History API
               case HISTORY_ACTIONS.IGNORE:
@@ -277,6 +284,7 @@ export function useMethods<
             HISTORY_ACTIONS.UNDO,
             HISTORY_ACTIONS.REDO,
             HISTORY_ACTIONS.IGNORE,
+            HISTORY_ACTIONS.CLEAR,
           ].includes(action.type as any)
         ) {
           if (action.type === HISTORY_ACTIONS.THROTTLE) {
@@ -331,6 +339,11 @@ export function useMethods<
         redo() {
           return dispatch({
             type: HISTORY_ACTIONS.REDO,
+          });
+        },
+        clear: () => {
+          return dispatch({
+            type: HISTORY_ACTIONS.CLEAR,
           });
         },
         throttle: (rate) => {
