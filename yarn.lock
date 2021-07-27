@@ -3015,6 +3015,7 @@ __metadata:
     "@types/react": ^17.0.5
     debounce: ^1.2.0
     lodash: ^4.17.20
+    lodash-es: ^4.17.20
     react: ^17.0.2
     shortid: ^2.2.15
     tiny-invariant: ^1.0.6
@@ -3044,6 +3045,7 @@ __metadata:
     "@types/react": ^17.0.5
     immer: ^8.0.1
     lodash: ^4.17.20
+    lodash-es: ^4.17.20
     shallowequal: ^1.1.0
     tiny-invariant: ^1.0.6
   peerDependencies:
@@ -16341,6 +16343,13 @@ fsevents@~2.3.1:
   dependencies:
     p-locate: ^5.0.0
   checksum: 4c379638152e0e5fda9a8cc07005702f81fcb9899db0f66d691ac1e64193dea670af14e96c50f14d82d45959daa4c400cb712c158cffe22ae265bfc1b1e3a221
+  languageName: node
+  linkType: hard
+
+"lodash-es@npm:^4.17.20":
+  version: 4.17.21
+  resolution: "lodash-es@npm:4.17.21"
+  checksum: ff0e7bb9595594d8b9c32fbe15912eaeefd83266f6e6872fbc498533cf8c2f039d12d37034b33965f1c04ef66ec1d6da83377c77e84e14c51a137901bb50865e
   languageName: node
   linkType: hard
 

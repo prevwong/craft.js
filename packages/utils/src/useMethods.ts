@@ -5,7 +5,7 @@ import produce, {
   enableMapSet,
   enablePatches,
 } from 'immer';
-import isEqualWith from 'lodash/isEqualWith';
+import { isEqualWith } from 'lodash-es';
 import { useMemo, useEffect, useRef, useReducer, useCallback } from 'react';
 
 import { History, HISTORY_ACTIONS } from './History';
