@@ -1,4 +1,6 @@
+import { ERROR_USE_NODE_OUTSIDE_OF_EDITOR_CONTEXT } from '@craftjs/utils';
 import { useMemo, useContext } from 'react';
+import invariant from 'tiny-invariant';
 
 import { NodeContext, NodeContextType } from './NodeContext';
 
@@ -26,6 +28,8 @@ export function useInternalNode<S = null>(
   collect?: (node: Node) => S
 ): useInternalNodeReturnType<S> {
   const context = useContext(NodeContext);
+  invariant(context, ERROR_USE_NODE_OUTSIDE_OF_EDITOR_CONTEXT);
+
   const { id, related, connectors } = context;
 
   const { actions: EditorActions, query, ...collected } = useInternalEditor(

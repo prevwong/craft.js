@@ -4,8 +4,10 @@ import {
   QueryCallbacksFor,
   wrapConnectorHooks,
   ChainableConnectors,
+  ERROR_USE_EDITOR_OUTSIDE_OF_EDITOR_CONTEXT,
 } from '@craftjs/utils';
 import { useContext, useMemo } from 'react';
+import invariant from 'tiny-invariant';
 
 import { EditorContext } from './EditorContext';
 import { QueryMethods } from './query';
@@ -35,8 +37,13 @@ export type useInternalEditorReturnType<C = null> = useCollectorReturnType<
 export function useInternalEditor<C>(
   collector?: EditorCollector<C>
 ): useInternalEditorReturnType<C> {
-  const handlers = useEventHandler();
   const store = useContext(EditorContext);
+  invariant(
+    Object.keys(store).length > 0,
+    ERROR_USE_EDITOR_OUTSIDE_OF_EDITOR_CONTEXT
+  );
+
+  const handlers = useEventHandler();
   const collected = useCollector(store, collector);
 
   const connectors = useMemo(
