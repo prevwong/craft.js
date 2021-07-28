@@ -1,3 +1,3 @@
-import shortid from 'shortid';
+import { nanoid } from 'nanoid';
 
-export const getRandomNodeId = shortid;
+export const getRandomNodeId = nanoid;

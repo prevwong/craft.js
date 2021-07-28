@@ -3015,8 +3015,8 @@ __metadata:
     "@types/react": ^17.0.5
     debounce: ^1.2.0
     lodash: ^4.17.20
+    nanoid: ^3.1.23
     react: ^17.0.2
-    shortid: ^2.2.15
     tiny-invariant: ^1.0.6
   peerDependencies:
     react: ^16.8.0
@@ -17605,13 +17605,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^2.1.0":
-  version: 2.1.6
-  resolution: "nanoid@npm:2.1.6"
-  checksum: b34d842ce85feeacd12275dc79728802e8b08f1466b66d00cf46f0883fcf9e40caceb504ea9f67c6921c0246a063f62c29ccd76a32bc7472cc699480a4831358
-  languageName: node
-  linkType: hard
-
 "nanoid@npm:^3.1.22, nanoid@npm:^3.1.23":
   version: 3.1.23
   resolution: "nanoid@npm:3.1.23"
@@ -23416,15 +23409,6 @@ resolve@^1.17.0:
   version: 0.1.1
   resolution: "shellwords@npm:0.1.1"
   checksum: 3559ff550917ece921d252edf42eb54827540e9676e537137ace236df8f9b78e48c542ae0b3f8876fea0faf5826c97629d5b8cb9ac7dee287260e9804fb8132c
-  languageName: node
-  linkType: hard
-
-"shortid@npm:^2.2.15":
-  version: 2.2.15
-  resolution: "shortid@npm:2.2.15"
-  dependencies:
-    nanoid: ^2.1.0
-  checksum: 0b657c406153029ba5fe3df357115d31c53929b6e603cbd2ff2aae7ddc016290179dfaa49625a3abc8967df8d53d04bd2c07a617562c1057ace8558f67558235
   languageName: node
   linkType: hard
 

@@ -1,5 +1,5 @@
+import { nanoid } from 'nanoid';
 import isEqual from 'shallowequal';
-import shortid from 'shortid';
 
 import { Connector } from './interfaces';
 
@@ -30,7 +30,7 @@ export class ConnectorRegistry {
       return existingId;
     }
 
-    const newId = shortid();
+    const newId = nanoid();
     this.elementIdMap.set(element, newId);
     return newId;
   }
