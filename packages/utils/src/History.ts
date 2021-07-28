@@ -11,6 +11,7 @@ export const HISTORY_ACTIONS = {
   REDO: 'HISTORY_REDO',
   THROTTLE: 'HISTORY_THROTTLE',
   IGNORE: 'HISTORY_IGNORE',
+  MERGE: 'HISTORY_MERGE',
 };
 
 export class History {
@@ -58,6 +59,29 @@ export class History {
         };
         return;
       }
+    }
+
+    this.add(patches, inversePatches);
+  }
+
+  merge(patches: Patch[], inversePatches: Patch[]) {
+    if (patches.length === 0 && inversePatches.length === 0) {
+      return;
+    }
+
+    if (this.timeline.length && this.pointer >= 0) {
+      const {
+        patches: currPatches,
+        inversePatches: currInversePatches,
+        timestamp,
+      } = this.timeline[this.pointer];
+
+      this.timeline[this.pointer] = {
+        timestamp,
+        patches: [...currPatches, ...patches],
+        inversePatches: [...inversePatches, ...currInversePatches],
+      };
+      return;
     }
 
     this.add(patches, inversePatches);

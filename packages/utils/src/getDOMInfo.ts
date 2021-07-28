@@ -57,6 +57,9 @@ export const styleInFlow = (el: HTMLElement, parent: HTMLElement) => {
 
   if (style.overflow && style.overflow !== 'visible') return;
   if (parentStyle.float !== 'none') return;
+  if (parent && parentStyle.display === 'grid') {
+    return;
+  }
   if (
     parent &&
     parentStyle.display === 'flex' &&

@@ -18,8 +18,16 @@ jobs:
         with:
           node-version: 14.x
 
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('yarn.lock') }}
+
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: yarn install --immutable
 
       - name: Build
         run: yarn build
