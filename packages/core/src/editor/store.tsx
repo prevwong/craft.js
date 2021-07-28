@@ -4,7 +4,7 @@ import { ActionMethods } from './actions';
 import { QueryMethods } from './query';
 
 import { DefaultEventHandlers } from '../events';
-import { EditorState, Options } from '../interfaces';
+import { EditorState, Options, NodeEventTypes } from '../interfaces';
 
 export const editorInitialState: EditorState = {
   nodes: {},
@@ -24,7 +24,10 @@ export const editorInitialState: EditorState = {
       error: 'red',
       success: 'rgb(98, 196, 98)',
     },
-    handlers: (store) => new DefaultEventHandlers(store),
+    handlers: (store) =>
+      new DefaultEventHandlers({
+        store,
+      }),
   },
 };
 
@@ -38,17 +41,15 @@ export const ActionMethodsWithConfig = {
     'setOptions',
     'setIndicator',
   ] as const,
-  normalizeHistory: (state) => {
-    // TODO(prev): this should be handled by the general normalising function
-
+  normalizeHistory: (state: EditorState) => {
     /**
      * On every undo/redo, we remove events pointing to deleted Nodes
      */
-    Object.keys(state.events).forEach((eventName) => {
+    Object.keys(state.events).forEach((eventName: NodeEventTypes) => {
       const nodeId = state.events[eventName];
 
       if (!!nodeId && !state.nodes[nodeId]) {
-        state.events[eventName] = false;
+        state.events[eventName] = null;
       }
     });
 
@@ -58,10 +59,14 @@ export const ActionMethodsWithConfig = {
     Object.keys(state.nodes).forEach((id) => {
       const node = state.nodes[id];
 
-      Object.keys(node.events).forEach((eventName) => {
-        const isEventActive = node.events[eventName];
+      Object.keys(node.events).forEach((eventName: NodeEventTypes) => {
+        const isEventActive = !!node.events[eventName];
 
-        if (!!isEventActive && !state.events[eventName] !== node.id) {
+        if (
+          isEventActive &&
+          state.events[eventName] &&
+          state.events[eventName] !== node.id
+        ) {
           node.events[eventName] = false;
         }
       });

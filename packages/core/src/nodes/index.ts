@@ -1,3 +1,4 @@
 export * from './Canvas';
 export * from './Element';
-export * from './NodeContext';
+export * from './NodeElement';
+export { NodeProvider } from './NodeContext';

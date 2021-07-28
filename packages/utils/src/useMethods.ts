@@ -1,10 +1,18 @@
 // https://github.com/pelotom/use-methods
-import produce, { Patch, produceWithPatches } from 'immer';
+import produce, {
+  Patch,
+  produceWithPatches,
+  enableMapSet,
+  enablePatches,
+} from 'immer';
 import isEqualWith from 'lodash/isEqualWith';
 import { useMemo, useEffect, useRef, useReducer, useCallback } from 'react';
 
 import { History, HISTORY_ACTIONS } from './History';
 import { Delete } from './utilityTypes';
+
+enableMapSet();
+enablePatches();
 
 export type SubscriberAndCallbacksFor<
   M extends MethodsOrOptions,
@@ -45,6 +53,14 @@ export type CallbacksFor<
           },
           M extends Options ? M['ignoreHistoryForActions'][number] : never
         >;
+        merge: () => Delete<
+          {
+            [T in ActionUnion<R>['type']]: (
+              ...payload: ActionByType<ActionUnion<R>, T>['payload']
+            ) => void;
+          },
+          M extends Options ? M['ignoreHistoryForActions'][number] : never
+        >;
         ignore: () => Delete<
           {
             [T in ActionUnion<R>['type']]: (
@@ -55,7 +71,7 @@ export type CallbacksFor<
         >;
       };
     }
-  : never;
+  : {};
 
 export type Methods<S = any, R extends MethodRecordBase<S> = any, Q = any> = (
   state: S,
@@ -115,7 +131,7 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<
         canRedo: () => boolean;
       };
     }
-  : never;
+  : {};
 
 export type PatchListenerAction<S, M extends MethodsOrOptions> = {
   type: keyof CallbacksFor<M>;
@@ -216,6 +232,7 @@ export function useMethods<
 
               // TODO: Simplify History API
               case HISTORY_ACTIONS.IGNORE:
+              case HISTORY_ACTIONS.MERGE:
               case HISTORY_ACTIONS.THROTTLE: {
                 const [type, ...params] = action.payload;
                 methods(draft, query)[type](...params);
@@ -268,6 +285,8 @@ export function useMethods<
               inversePatches,
               action.config && action.config.rate
             );
+          } else if (action.type === HISTORY_ACTIONS.MERGE) {
+            history.merge(patches, inversePatches);
           } else {
             history.add(patches, inversePatches);
           }
@@ -339,6 +358,20 @@ export function useMethods<
                 accum[type] = (...payload) =>
                   dispatch({
                     type: HISTORY_ACTIONS.IGNORE,
+                    payload: [type, ...payload],
+                  });
+                return accum;
+              }, {} as any),
+          };
+        },
+        merge: () => {
+          return {
+            ...actionTypes
+              .filter((type) => !ignoreHistoryForActions.includes(type))
+              .reduce((accum, type) => {
+                accum[type] = (...payload) =>
+                  dispatch({
+                    type: HISTORY_ACTIONS.MERGE,
                     payload: [type, ...payload],
                   });
                 return accum;

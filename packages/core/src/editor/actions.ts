@@ -32,61 +32,68 @@ const Methods = (
   query: QueryCallbacksFor<typeof QueryMethods>
 ) => {
   /** Helper functions */
-  const addNodeToParentAtIndex = (
-    node: Node,
-    parentId: NodeId,
-    index?: number
-  ) => {
-    const parent = getParentAndValidate(parentId);
-    // reset the parent node ids
-    if (!parent.data.nodes) {
-      parent.data.nodes = [];
-    }
-
-    if (parent.data.props.children) {
-      delete parent.data.props['children'];
-    }
-
-    if (index != null) {
-      parent.data.nodes.splice(index, 0, node.id);
-    } else {
-      parent.data.nodes.push(node.id);
-    }
-
-    node.data.parent = parent.id;
-    state.nodes[node.id] = node;
-  };
-
-  const addTreeToParentAtIndex = (
+  const addNodeTreeToParent = (
     tree: NodeTree,
     parentId?: NodeId,
-    index?: number
+    addNodeType?:
+      | {
+          type: 'child';
+          index: number;
+        }
+      | {
+          type: 'linked';
+          id: string;
+        }
   ) => {
-    const node = tree.nodes[tree.rootNodeId];
+    const iterateChildren = (id: NodeId, parentId?: NodeId) => {
+      const node = tree.nodes[id];
 
-    if (parentId != null) {
-      addNodeToParentAtIndex(node, parentId, index);
-    }
+      state.nodes[id] = {
+        ...node,
+        data: {
+          ...node.data,
+          parent: parentId,
+        },
+      };
 
-    if (node.data.nodes) {
-      const childToAdd = [...node.data.nodes];
-      node.data.nodes = [];
-      childToAdd.forEach((childId, index) =>
-        addTreeToParentAtIndex(
-          { rootNodeId: childId, nodes: tree.nodes },
-          node.id,
-          index
-        )
+      if (node.data.nodes.length > 0) {
+        delete state.nodes[id].data.props.children;
+        node.data.nodes.forEach((childNodeId) =>
+          iterateChildren(childNodeId, node.id)
+        );
+      }
+
+      Object.values(node.data.linkedNodes).forEach((linkedNodeId) =>
+        iterateChildren(linkedNodeId, node.id)
       );
+    };
+
+    iterateChildren(tree.rootNodeId, parentId);
+
+    if (!parentId) {
+      invariant(
+        tree.rootNodeId === ROOT_NODE,
+        'Cannot add non-root Node without a parent'
+      );
+
+      return;
     }
 
-    if (node.data.linkedNodes) {
-      Object.keys(node.data.linkedNodes).forEach((linkedId) => {
-        const nodeId = node.data.linkedNodes[linkedId];
-        state.nodes[nodeId] = tree.nodes[nodeId];
-        addTreeToParentAtIndex({ rootNodeId: nodeId, nodes: tree.nodes });
-      });
+    const parent = getParentAndValidate(parentId);
+
+    if (addNodeType.type === 'child') {
+      const index = addNodeType.index;
+
+      if (index != null) {
+        parent.data.nodes.splice(index, 0, tree.rootNodeId);
+      } else {
+        parent.data.nodes.push(tree.rootNodeId);
+      }
+
+      return;
     }
+
+    parent.data.linkedNodes[addNodeType.id] = tree.rootNodeId;
   };
 
   const getParentAndValidate = (parentId: NodeId): Node => {
@@ -96,7 +103,7 @@ const Methods = (
     return parent;
   };
 
-  const deleteNode = (id: NodeId, isLinkedNode: boolean = false) => {
+  const deleteNode = (id: NodeId) => {
     const targetNode = state.nodes[id],
       parentNode = state.nodes[targetNode.data.parent];
 
@@ -106,16 +113,24 @@ const Methods = (
       [...targetNode.data.nodes].forEach((childId) => deleteNode(childId));
     }
 
-    if (isLinkedNode && parentNode.data.linkedNodes) {
-      const linkedId = Object.keys(parentNode.data.linkedNodes).filter(
+    if (targetNode.data.linkedNodes) {
+      Object.values(targetNode.data.linkedNodes).map((linkedNodeId) =>
+        deleteNode(linkedNodeId)
+      );
+    }
+
+    const isChildNode = parentNode.data.nodes.includes(id);
+
+    if (isChildNode) {
+      const parentChildren = parentNode.data.nodes;
+      parentChildren.splice(parentChildren.indexOf(id), 1);
+    } else {
+      const linkedId = Object.keys(parentNode.data.linkedNodes).find(
         (id) => parentNode.data.linkedNodes[id] === id
-      )[0];
+      );
       if (linkedId) {
         delete parentNode.data.linkedNodes[linkedId];
       }
-    } else {
-      const parentChildren = parentNode.data.nodes;
-      parentChildren.splice(parentChildren.indexOf(id), 1);
     }
 
     removeNodeFromEvents(state, id);
@@ -134,21 +149,14 @@ const Methods = (
      */
     addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id: string) {
       const parent = getParentAndValidate(parentId);
-      if (!parent.data.linkedNodes) {
-        parent.data.linkedNodes = {};
-      }
 
       const existingLinkedNode = parent.data.linkedNodes[id];
+
       if (existingLinkedNode) {
-        deleteNode(existingLinkedNode, true);
+        deleteNode(existingLinkedNode);
       }
 
-      parent.data.linkedNodes[id] = tree.rootNodeId;
-
-      tree.nodes[tree.rootNodeId].data.parent = parentId;
-      state.nodes[tree.rootNodeId] = tree.nodes[tree.rootNodeId];
-
-      addTreeToParentAtIndex(tree);
+      addNodeTreeToParent(tree, parentId, { type: 'linked', id });
     },
 
     /**
@@ -168,7 +176,16 @@ const Methods = (
         nodes = nodeToAdd;
       }
       nodes.forEach((node: Node) => {
-        addNodeToParentAtIndex(node, parentId, index);
+        addNodeTreeToParent(
+          {
+            nodes: {
+              [node.id]: node,
+            },
+            rootNodeId: node.id,
+          },
+          parentId,
+          { type: 'child', index }
+        );
       });
     },
 
@@ -180,17 +197,7 @@ const Methods = (
      * @param index
      */
     addNodeTree(tree: NodeTree, parentId?: NodeId, index?: number) {
-      const node = tree.nodes[tree.rootNodeId];
-
-      if (!parentId) {
-        invariant(
-          tree.rootNodeId === ROOT_NODE,
-          'Cannot add non-root Node without a parent'
-        );
-        state.nodes[tree.rootNodeId] = node;
-      }
-
-      addTreeToParentAtIndex(tree, parentId, index);
+      addNodeTreeToParent(tree, parentId, { type: 'child', index });
     },
 
     /**
@@ -224,6 +231,7 @@ const Methods = (
 
       this.replaceNodes(fromEntries(nodePairs));
     },
+
     /**
      * Move a target Node to a new Parent at a given index
      * @param targetId

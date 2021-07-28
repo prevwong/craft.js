@@ -13,7 +13,15 @@ export type Options = {
   onNodesChange: (query: QueryCallbacksFor<typeof QueryMethods>) => void;
   resolver: Resolver;
   enabled: boolean;
-  indicator: Record<'success' | 'error', string>;
+  indicator: Partial<{
+    success: string;
+    error: string;
+    transition: string;
+    /**
+     * height & width of the rendered indicator
+     */
+    thickness: number;
+  }>;
   handlers: (store: EditorStore) => CoreEventHandlers;
 };
 

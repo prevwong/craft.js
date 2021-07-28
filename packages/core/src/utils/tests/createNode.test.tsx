@@ -1,3 +1,4 @@
+import { Element } from '../../nodes';
 import { createNode } from '../createNode';
 import { createTestNode } from '../createTestNode';
 
@@ -8,7 +9,7 @@ const expectNode = (node, testData) => {
   const match = createTestNode(node.id, {
     ...testData,
     props: isUserComponent
-      ? { ...(type.craft.defaultProps || {}), ...testData.props }
+      ? { ...(type.craft.props || {}), ...testData.props }
       : testData.props || {},
     custom: isUserComponent ? type.craft.custom : {},
     name: typeof type === 'string' ? type : type.name,
@@ -38,9 +39,10 @@ describe('createNode', () => {
   const props = { href: 'href' };
 
   describe('Returns correct type and props', () => {
-    it('should transform a link correctly', () => {
+    it('should create a Node object correctly', () => {
       const data = {
         type: 'a',
+        parent: null,
         props,
       };
 
@@ -73,29 +75,61 @@ describe('createNode', () => {
         },
       });
     });
-
-    describe('when a User Component is passed', () => {
-      const Component = () => {};
-      Component.craft = {
-        custom: {
-          css: {
-            background: '#fff',
+    describe('When type=Element', () => {
+      it('should parse Element props as node config', () => {
+        const testNode = {
+          data: {
+            type: Element,
+            parent: 'ROOT',
+            props: {
+              is: 'a',
+              href: 'craft.js.org',
+              style: { color: '#fff' },
+            },
           },
-        },
-        rules: {
-          canMoveIn: () => false,
-        },
-        defaultProps: {
-          text: '#000',
-        },
-        related: {
-          settings: () => {},
-        },
-      };
+        };
+        const node = createNode(testNode);
+
+        const { is: type, ...props } = testNode.data.props;
+
+        expectNode(node, {
+          type,
+          props,
+          parent: 'ROOT',
+        });
+      });
+    });
+    describe('when a User Component is passed', () => {
+      let Component;
+
+      beforeEach(() => {
+        Component = () => {
+          return null;
+        };
+
+        Component.craft = {
+          custom: {
+            css: {
+              background: '#fff',
+            },
+          },
+          rules: {
+            canMoveIn: () => false,
+          },
+          props: {
+            text: '#000',
+          },
+          related: {
+            settings: () => {},
+          },
+        };
+      });
 
       it('should return node with correct type and user component config', () => {
         const data = {
           type: Component,
+          parent: null,
+          props: {},
         };
 
         const node = createNode({
