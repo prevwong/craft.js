@@ -27,7 +27,7 @@
 ## Usage
 
 ```bash
-yarn add @craftjs/layers
+yarn add @craftjs/layers styled-components
 ```
 
 ```jsx
