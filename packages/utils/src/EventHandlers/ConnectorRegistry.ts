@@ -1,7 +1,8 @@
-import { nanoid } from 'nanoid';
 import isEqual from 'shallowequal';
 
 import { Connector } from './interfaces';
+
+import { getRandomId } from '../getRandomId';
 
 type ConnectorToRegister = {
   name: string;
@@ -30,7 +31,7 @@ export class ConnectorRegistry {
       return existingId;
     }
 
-    const newId = nanoid();
+    const newId = getRandomId();
     this.elementIdMap.set(element, newId);
     return newId;
   }

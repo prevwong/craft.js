@@ -3015,7 +3015,6 @@ __metadata:
     "@types/react": ^17.0.5
     debounce: ^1.2.0
     lodash: ^4.17.20
-    nanoid: ^3.1.23
     react: ^17.0.2
     tiny-invariant: ^1.0.6
   peerDependencies:
@@ -3044,6 +3043,7 @@ __metadata:
     "@types/react": ^17.0.5
     immer: ^8.0.1
     lodash: ^4.17.20
+    nanoid: ^3.1.23
     shallowequal: ^1.1.0
     tiny-invariant: ^1.0.6
   peerDependencies:

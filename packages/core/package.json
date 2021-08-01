@@ -39,7 +39,6 @@
     "@types/react": "^17.0.5",
     "debounce": "^1.2.0",
     "lodash": "^4.17.20",
-    "nanoid": "^3.1.23",
     "tiny-invariant": "^1.0.6"
   },
   "devDependencies": {
