@@ -38,10 +38,7 @@ export function useInternalEditor<C>(
   collector?: EditorCollector<C>
 ): useInternalEditorReturnType<C> {
   const store = useContext(EditorContext);
-  invariant(
-    Object.keys(store).length > 0,
-    ERROR_USE_EDITOR_OUTSIDE_OF_EDITOR_CONTEXT
-  );
+  invariant(store, ERROR_USE_EDITOR_OUTSIDE_OF_EDITOR_CONTEXT);
 
   const handlers = useEventHandler();
   const collected = useCollector(store, collector);
