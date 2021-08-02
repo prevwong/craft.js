@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.1.0-beta.20](https://github.com/prevwong/craft.js/compare/v0.1.0-beta.19...v0.1.0-beta.20) (2021-08-02)
+
+**Note:** Version bump only for package example-landing
+
+
+
+
+
 # 0.2.0-alpha.23 (2021-05-14)
 
 
