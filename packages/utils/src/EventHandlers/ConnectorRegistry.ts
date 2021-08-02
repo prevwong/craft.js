@@ -1,7 +1,8 @@
 import isEqual from 'shallowequal';
-import shortid from 'shortid';
 
 import { Connector } from './interfaces';
+
+import { getRandomId } from '../getRandomId';
 
 type ConnectorToRegister = {
   name: string;
@@ -30,7 +31,7 @@ export class ConnectorRegistry {
       return existingId;
     }
 
-    const newId = shortid();
+    const newId = getRandomId();
     this.elementIdMap.set(element, newId);
     return newId;
   }
