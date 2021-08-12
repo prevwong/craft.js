@@ -3033,6 +3033,7 @@ __metadata:
   peerDependencies:
     "@craftjs/core": ^0.2.0-alpha.19
     react: ^16.8.0
+    styled-components: ">= 4"
   languageName: unknown
   linkType: soft
 
