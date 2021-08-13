@@ -55,7 +55,10 @@ const Methods = (
       if (typeof node.data.type !== 'string') {
         invariant(
           state.options.resolver[node.data.name],
-          ERROR_NOT_IN_RESOLVER
+          ERROR_NOT_IN_RESOLVER.replace(
+            '%node_type%',
+            `${(node.data.type as any).name}`
+          )
         );
       }
 
