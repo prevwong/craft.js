@@ -16,7 +16,7 @@ export const resolveComponent = (
 
     for (let i = 0; i < Object.keys(resolver).length; i++) {
       const name = Object.keys(resolver)[i];
-      const fn = resolver[componentName];
+      const fn = resolver[name];
 
       if (fn === comp) {
         return name;
