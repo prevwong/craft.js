@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-alpha.26](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.25...v0.2.0-alpha.26) (2021-08-13)
+
+
+### Features
+
+* throw error if component is missing from resolver ([#293](https://github.com/prevwong/craft.js/issues/293)) ([4fa4713](https://github.com/prevwong/craft.js/commit/4fa47134a4a8f688266cc56dd58e0fb5b6d061d1))
+
+
+
+
+
 # [0.2.0-alpha.25](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.23...v0.2.0-alpha.25) (2021-07-26)
 
 

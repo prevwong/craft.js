@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-alpha.26](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.25...v0.2.0-alpha.26) (2021-08-13)
+
+
+### Bug Fixes
+
+* readonly parent error ([#280](https://github.com/prevwong/craft.js/issues/280)) ([536afce](https://github.com/prevwong/craft.js/commit/536afce7a8898bd98e54465cd11c554ac20f791a))
+* sync <Editor /> props with state options ([#271](https://github.com/prevwong/craft.js/issues/271)) ([5ee6714](https://github.com/prevwong/craft.js/commit/5ee6714f73eb8dcca79d28befecc8144853851c8)), closes [prevwong/craft.js#149](https://github.com/prevwong/craft.js/issues/149)
+
+
+### Features
+
+* throw error if component is missing from resolver ([#293](https://github.com/prevwong/craft.js/issues/293)) ([4fa4713](https://github.com/prevwong/craft.js/commit/4fa47134a4a8f688266cc56dd58e0fb5b6d061d1))
+
+
+
+
+
 # [0.2.0-alpha.25](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.23...v0.2.0-alpha.25) (2021-07-26)
 
 
