@@ -158,7 +158,7 @@ export function QueryMethods(state: EditorState) {
       ): NodeTree {
         let node = parseNodeFromJSX(reactElement, (node, jsx) => {
           const name = resolveComponent(state.options.resolver, node.data.type);
-          invariant(name !== null, ERROR_NOT_IN_RESOLVER);
+
           node.data.displayName = node.data.displayName || name;
           node.data.name = name;
 
