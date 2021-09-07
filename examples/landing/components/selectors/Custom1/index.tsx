@@ -17,7 +17,7 @@ export const OnlyButtons = ({ children, ...props }) => {
 
 OnlyButtons.craft = {
   rules: {
-    canMoveIn: (node) => node.data.type === Button,
+    canMoveIn: (nodes) => nodes.every((node) => node.data.type === Button),
   },
 };
 

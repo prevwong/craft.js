@@ -17,15 +17,23 @@ export const Custom3BtnDrop = ({ children }) => {
 
 Custom3BtnDrop.craft = {
   rules: {
-    canMoveOut: (target, self, helpers) => {
+    canMoveOut: (outgoingNodes, self, helpers) => {
       const {
         data: { nodes },
       } = self;
       const btnNodes = nodes.filter(
         (id) => helpers(id).get().data.type === Button
       );
-      if (target.data.type === Button && btnNodes.length === 1) return false;
-      return true;
+
+      const outgoingButtonNodes = outgoingNodes.filter(
+        (node) => node.data.type === Button
+      );
+
+      if (outgoingButtonNodes.length < btnNodes.length) {
+        return true;
+      }
+
+      return false;
     },
   },
 };
