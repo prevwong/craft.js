@@ -5,6 +5,7 @@ import {
   EventHandlerConnectors,
   CraftDOMEvent,
   Connector,
+  ConnectorInstance,
 } from './interfaces';
 import { isEventBlockedByDescendant } from './isEventBlockedByDescendant';
 
@@ -73,23 +74,39 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
   // Defines the connectors and their logic
   abstract handlers(): Record<string, (el: HTMLElement, ...args: any[]) => any>;
 
-  get connectors(): EventHandlerConnectors<this> {
-    const connectors = this.handlers();
-    return Object.keys(connectors).reduce<Record<string, Connector>>(
-      (accum, connectorName) => ({
+  createConnectorInstance(): ConnectorInstance<this> {
+    const handlers = this.handlers();
+
+    // Store all active connector cleanups here
+    const connectorsToCleanup: Array<() => void> = [];
+
+    const connectors = Object.entries(handlers).reduce<
+      Record<string, Connector>
+    >(
+      (accum, [name, handler]) => ({
         ...accum,
-        [connectorName]: (el, required, options) => {
-          this.registry.register(el, {
+        [name]: (el, required, options) => {
+          const removeFromRegistry = this.registry.register(el, {
             required,
-            name: connectorName,
+            name,
             options,
-            connector: connectors[connectorName],
+            connector: handler,
           });
+
+          connectorsToCleanup.push(removeFromRegistry);
+
           return el;
         },
       }),
       {}
     ) as any;
+
+    return {
+      connectors,
+      cleanup: () => {
+        connectorsToCleanup.forEach((cleanup) => cleanup());
+      },
+    };
   }
 
   derive<C extends EventHandlers>(

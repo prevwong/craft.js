@@ -3,9 +3,9 @@ import {
   useCollectorReturnType,
   QueryCallbacksFor,
   wrapConnectorHooks,
-  ChainableConnectors,
+  EventHandlerConnectors,
 } from '@craftjs/utils';
-import { useContext, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 
 import { EditorContext } from './EditorContext';
 import { QueryMethods } from './query';
@@ -26,22 +26,33 @@ export type useInternalEditorReturnType<C = null> = useCollectorReturnType<
 > & {
   inContext: boolean;
   store: EditorStore;
-  connectors: ChainableConnectors<
-    CoreEventHandlers['connectors'],
-    React.ReactElement
-  >;
+  connectors: EventHandlerConnectors<CoreEventHandlers, React.ReactElement>;
 };
 
 export function useInternalEditor<C>(
   collector?: EditorCollector<C>
 ): useInternalEditorReturnType<C> {
-  const handlers = useEventHandler();
+  const handler = useEventHandler();
   const store = useContext(EditorContext);
   const collected = useCollector(store, collector);
 
+  const connectorInstance = useMemo(() => handler.createConnectorInstance(), [
+    handler,
+  ]);
+
+  useEffect(() => {
+    return () => {
+      if (!connectorInstance) {
+        return;
+      }
+
+      connectorInstance.cleanup();
+    };
+  }, [connectorInstance]);
+
   const connectors = useMemo(
-    () => handlers && wrapConnectorHooks(handlers.connectors),
-    [handlers]
+    () => connectorInstance && wrapConnectorHooks(connectorInstance.connectors),
+    [connectorInstance]
   );
 
   return {

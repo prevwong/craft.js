@@ -199,14 +199,14 @@ Cypress.Commands.add(
         });
 
       if (position === 'inside') {
-        cy.get('@target').trigger('dragenter', {
+        cy.get('@target').trigger('dragover', {
           clientX: Math.floor(x),
           clientY: Math.floor(y),
           dataTransfer,
           force: true,
         });
       } else {
-        cy.get('@parent').trigger('dragenter', {
+        cy.get('@parent').trigger('dragover', {
           clientX: Math.floor(x),
           clientY: Math.floor(y),
           dataTransfer,

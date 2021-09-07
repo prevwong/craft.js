@@ -1,27 +1,13 @@
 import { deprecationWarning } from '@craftjs/utils';
 
 import { Node } from '../interfaces';
-import {
-  useInternalNode,
-  useInternalNodeReturnType,
-} from '../nodes/useInternalNode';
-
-export type useNodeReturnType<S = null> = useInternalNodeReturnType<S> &
-  Pick<useInternalNodeReturnType<S>['actions'], 'setProp'>;
-
-export function useNode(): useNodeReturnType;
-
-export function useNode<S = null>(
-  collect?: (node: Node) => S
-): useNodeReturnType<S>;
+import { useInternalNode } from '../nodes/useInternalNode';
 
 /**
  * A Hook to that provides methods and state information related to the corresponding Node that manages the current component.
  * @param collect - Collector function to consume values from the corresponding Node's state
  */
-export function useNode<S = null>(
-  collect?: (node: Node) => S
-): useNodeReturnType<S> {
+export function useNode<S = null>(collect?: (node: Node) => S) {
   const {
     id,
     related,
@@ -32,7 +18,7 @@ export function useNode<S = null>(
   } = useInternalNode(collect);
 
   return {
-    ...(collected as any),
+    ...collected,
     actions,
     id,
     related,

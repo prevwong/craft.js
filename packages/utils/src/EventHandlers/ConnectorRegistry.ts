@@ -12,6 +12,7 @@ type ConnectorToRegister = {
 };
 
 type RegisteredConnector = {
+  id: string;
   required: any;
   enable: () => void;
   disable: () => void;
@@ -32,6 +33,7 @@ export class ConnectorRegistry {
     }
 
     const newId = getRandomId();
+
     this.elementIdMap.set(element, newId);
     return newId;
   }
@@ -49,7 +51,7 @@ export class ConnectorRegistry {
           this.get(element, toRegister.name).required
         )
       ) {
-        return;
+        return () => this.remove(element, toRegister.name);
       }
 
       this.get(element, toRegister.name).disable();
@@ -57,7 +59,9 @@ export class ConnectorRegistry {
 
     let cleanup: () => void | null = null;
 
-    this.registry.set(this.getConnectorId(element, toRegister.name), {
+    const id = this.getConnectorId(element, toRegister.name);
+    this.registry.set(id, {
+      id,
       required: toRegister.required,
       enable: () => {
         if (cleanup) {
@@ -79,7 +83,9 @@ export class ConnectorRegistry {
       },
     });
 
-    this.registry.get(this.getConnectorId(element, toRegister.name)).enable();
+    this.registry.get(id).enable();
+
+    return () => this.remove(element, toRegister.name);
   }
 
   get(element: HTMLElement, name: string) {
@@ -98,8 +104,19 @@ export class ConnectorRegistry {
     });
   }
 
+  remove(element: HTMLElement, name: string) {
+    const connector = this.get(element, name);
+    if (!connector) {
+      return;
+    }
+
+    connector.disable();
+    this.registry.delete(connector.id);
+  }
+
   clear() {
+    this.disable();
     this.elementIdMap = new WeakMap();
-    this.registry.clear();
+    this.registry = new Map();
   }
 }

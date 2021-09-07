@@ -30,8 +30,14 @@ export type CraftEventListener<K extends keyof HTMLElementEventMap> = (
 ) => any;
 
 export type EventHandlerConnectors<
-  H extends EventHandlers
-> = ChainableConnectors<ReturnType<H['handlers']>>;
+  H extends EventHandlers,
+  E extends any = HTMLElement
+> = ChainableConnectors<ReturnType<H['handlers']>, E>;
+
+export type ConnectorInstance<H extends EventHandlers> = {
+  cleanup: () => void;
+  connectors: EventHandlerConnectors<H>;
+};
 
 export enum EventHandlerUpdates {
   HandlerDisabled,

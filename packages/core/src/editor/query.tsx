@@ -44,6 +44,8 @@ export function QueryMethods(state: EditorState) {
   return {
     /**
      * Determine the best possible location to drop the source Node relative to the target Node
+     *
+     * TODO: replace with Positioner.computeIndicator();
      */
     getDropPlaceholder: (
       source: NodeSelector,
@@ -120,6 +122,10 @@ export function QueryMethods(state: EditorState) {
      */
     getOptions(): Options {
       return options;
+    },
+
+    getNodes() {
+      return state.nodes;
     },
 
     /**

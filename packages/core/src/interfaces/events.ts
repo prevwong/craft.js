@@ -1,4 +1,4 @@
-import { NodeId, Node } from './nodes';
+import { NodeId, Node, NodeTree } from './nodes';
 
 export type NodeInfo = {
   id?: NodeId;
@@ -22,12 +22,24 @@ export type DOMInfo = Record<
   padding: Record<'top' | 'left' | 'bottom' | 'right', number>;
 };
 
-export interface DropAction {
+export interface DropPosition {
   parent: Node;
   index: number;
   where: string;
 }
 
-export type Placement = DropAction & {
+export type Placement = DropPosition & {
   currentNode: Node | null;
 };
+
+type ExistingDragTarget = {
+  type: 'existing';
+  nodes: NodeId[];
+};
+
+type NewDragTarget = {
+  type: 'new';
+  tree: NodeTree;
+};
+
+export type DragTarget = ExistingDragTarget | NewDragTarget;
