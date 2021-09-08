@@ -21,6 +21,10 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
   positioner: Positioner | null = null;
   currentSelectedElementIds = [];
 
+  onDisable() {
+    this.options.store.actions.clearEvents();
+  }
+
   handlers() {
     const store = this.options.store;
 
@@ -107,7 +111,6 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
         });
 
         return () => {
-          store.actions.setNodeEvent('selected', null);
           unbindOnMouseDown();
           unbindOnClick();
         };
@@ -123,7 +126,6 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
         );
 
         return () => {
-          store.actions.setNodeEvent('hovered', null);
           unbindMouseover();
         };
       },

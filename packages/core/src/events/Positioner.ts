@@ -7,6 +7,7 @@ import {
   DragTarget,
   DropPosition,
   Indicator,
+  Node,
   NodeId,
   NodeInfo,
   NodeSelectorWrapper,
@@ -20,7 +21,7 @@ export class Positioner {
   static BORDER_OFFSET = 10;
 
   private currentTargetId: NodeId | null;
-  private currentTargetDimensions: NodeInfo[] | null;
+  private currentTargetChildDimensions: NodeInfo[] | null;
   private currentIndicator: Indicator | null = null;
 
   private dragError: string | null;
@@ -28,21 +29,34 @@ export class Positioner {
 
   constructor(readonly store: EditorStore, readonly dragTarget: DragTarget) {
     this.currentTargetId = null;
-    this.currentTargetDimensions = null;
+    this.currentTargetChildDimensions = null;
     this.dragError = null;
-    this.draggedNodes = getNodesFromSelector(
-      this.store.query.getNodes(),
-      dragTarget.type === 'new'
-        ? dragTarget.tree.nodes[dragTarget.tree.rootNodeId]
-        : dragTarget.nodes
-    );
+    this.draggedNodes = this.getDraggedNodes();
 
-    if (dragTarget.type === 'new') {
+    this.validateDraggedNodes();
+  }
+
+  private getDraggedNodes() {
+    if (this.dragTarget.type === 'new') {
+      return getNodesFromSelector(
+        this.store.query.getNodes(),
+        this.dragTarget.tree.nodes[this.dragTarget.tree.rootNodeId]
+      );
+    }
+
+    return getNodesFromSelector(
+      this.store.query.getNodes(),
+      this.dragTarget.nodes
+    );
+  }
+
+  // Check if the elements being dragged are allowed to be dragged
+  private validateDraggedNodes() {
+    // We don't need to check for dragTarget.type = "new" because those nodes are not yet in the state (ie: via the .create() connector)
+    if (this.dragTarget.type === 'new') {
       return;
     }
 
-    // Check if the elements being dragged are allowed to be dragged
-    // We don't need to check for dragTarget.type = "new" because those nodes are not yet in the state (ie: via the .create() connector)
     this.draggedNodes.forEach(({ node, exists }) => {
       if (!exists) {
         return;
@@ -91,6 +105,33 @@ export class Positioner {
   }
 
   /**
+   * Get dimensions of every child Node in the specified parent Node
+   */
+  private getChildDimensions(newParentNode: Node) {
+    // Return the previous dimensions
+    // if the input drop target is the same as the previous one
+    if (
+      this.currentTargetId === newParentNode.id &&
+      this.currentTargetChildDimensions
+    ) {
+      return this.currentTargetChildDimensions;
+    }
+
+    return newParentNode.data.nodes.reduce((result, id: NodeId) => {
+      const dom = this.store.query.node(id).get().dom;
+
+      if (dom) {
+        result.push({
+          id,
+          ...getDOMInfo(dom),
+        });
+      }
+
+      return result;
+    }, [] as NodeInfo[]);
+  }
+
+  /**
    * Compute a new Indicator object based on the dropTarget and x,y coords
    * Returns null if theres no change from the previous Indicator
    */
@@ -106,47 +147,35 @@ export class Positioner {
       this.isNearBorders(getDOMInfo(newParentNode.dom), x, y) &&
       newParentNode.data.parent
     ) {
-      // Ignore if the current node is a linked node
       const isLinkedNode = this.store.query
         .node(newParentNode.id)
         .isLinkedNode();
-      newParentNode = !isLinkedNode
-        ? this.store.query.node(newParentNode.data.parent).get()
-        : null;
+
+      // Don't do anything if we're hovering at the borders of a linked node
+      // because there's won't be an adjacent sibling anyway
+      newParentNode = isLinkedNode
+        ? null
+        : this.store.query.node(newParentNode.data.parent).get();
     }
 
     if (!newParentNode || newParentNode.data.isCanvas === false) {
       return;
     }
 
-    const dimensions =
-      this.currentTargetId === dropTargetId
-        ? this.currentTargetDimensions
-        : newParentNode.data.nodes.reduce((result, id: NodeId) => {
-            const dom = this.store.query.node(id).get().dom;
+    this.currentTargetChildDimensions = this.getChildDimensions(newParentNode);
+    this.currentTargetId = newParentNode.id;
 
-            if (dom) {
-              result.push({
-                id,
-                ...getDOMInfo(dom),
-              });
-            }
-
-            return result;
-          }, [] as NodeInfo[]);
-
-    this.currentTargetDimensions = dimensions;
-
-    const position = findPosition(newParentNode, dimensions, x, y);
+    const position = findPosition(
+      newParentNode,
+      this.currentTargetChildDimensions,
+      x,
+      y
+    );
 
     // Ignore if the position is similar as the previous one
     if (!this.isDiff(position)) {
       return;
     }
-
-    const currentNode =
-      newParentNode.data.nodes.length &&
-      this.store.query.node(newParentNode.data.nodes[position.index]).get();
 
     let error = this.dragError || false;
 
@@ -160,7 +189,11 @@ export class Positioner {
       );
     }
 
-    const indicator = {
+    const currentNode =
+      newParentNode.data.nodes.length &&
+      this.store.query.node(newParentNode.data.nodes[position.index]).get();
+
+    this.currentIndicator = {
       placement: {
         ...position,
         currentNode,
@@ -168,9 +201,7 @@ export class Positioner {
       error,
     };
 
-    this.currentIndicator = indicator;
-
-    return indicator;
+    return this.currentIndicator;
   }
 
   getIndicator() {

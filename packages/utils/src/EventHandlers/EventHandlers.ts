@@ -15,6 +15,9 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
   private registry: ConnectorRegistry = new ConnectorRegistry();
   private subscribers: Set<(msg: EventHandlerUpdates) => void> = new Set();
 
+  onDisable: () => void | null;
+  onEnable: () => void | null;
+
   constructor(options?: O) {
     this.options = options;
   }
@@ -25,6 +28,10 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
   }
 
   disable() {
+    if (this.onDisable) {
+      this.onDisable();
+    }
+
     this.registry.disable();
 
     this.subscribers.forEach((listener) => {
@@ -33,6 +40,10 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
   }
 
   enable() {
+    if (this.onEnable) {
+      this.onEnable();
+    }
+
     this.registry.enable();
 
     this.subscribers.forEach((listener) => {
