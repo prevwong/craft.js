@@ -1,7 +1,7 @@
 import { NodeId, Node, NodeTree } from './nodes';
 
 export type NodeInfo = {
-  id?: NodeId;
+  id: NodeId;
 } & DOMInfo;
 
 export type DOMInfo = Record<

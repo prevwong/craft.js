@@ -5,7 +5,7 @@ import {
 } from './fixtures';
 
 import { EventHandlers } from '../EventHandlers';
-import { ConnectorInstance } from '../interfaces';
+import { ConnectorsUsage } from '../interfaces';
 
 describe('DerivedEventHandlers', () => {
   let dom,
@@ -14,7 +14,7 @@ describe('DerivedEventHandlers', () => {
     derivedInstance: EventHandlers,
     derivedHandlers;
 
-  let derivedConnectorInstance: ConnectorInstance<typeof derivedInstance>;
+  let derivedConnectorsUsage: ConnectorsUsage<typeof derivedInstance>;
 
   beforeEach(() => {
     dom = document.createElement('a');
@@ -25,28 +25,28 @@ describe('DerivedEventHandlers', () => {
     const testDerivedEventHandler = createTestDerivedHandlers(instance);
     derivedHandlers = testDerivedEventHandler.handlers;
     derivedInstance = testDerivedEventHandler.instance;
-    derivedConnectorInstance = derivedInstance.createConnectorInstance();
+    derivedConnectorsUsage = derivedInstance.createConnectorsUsage();
   });
   describe('attaching the connector', () => {
     beforeEach(() => {
       jest.clearAllMocks();
-      Object.keys(derivedConnectorInstance.connectors).forEach((key) => {
-        derivedConnectorInstance.connectors[key](dom);
+      Object.keys(derivedConnectorsUsage.connectors).forEach((key) => {
+        derivedConnectorsUsage.connectors[key](dom);
       });
     });
     it('should be able to attach connector', () => {
-      const chainedValue = derivedConnectorInstance.connectors.connect(dom);
+      const chainedValue = derivedConnectorsUsage.connectors.connect(dom);
       expect(chainedValue).toEqual(dom);
       expect(derivedHandlers.connect.init).toHaveBeenCalled();
     });
     it('should execute derived and parent connector init methods', () => {
-      Object.keys(derivedConnectorInstance.connectors).forEach((key) => {
+      Object.keys(derivedConnectorsUsage.connectors).forEach((key) => {
         expect(handlers[key].init).toHaveBeenCalled();
         expect(derivedHandlers[key].init).toHaveBeenCalled();
       });
     });
     it('should have attached derived and parent event listeners', () => {
-      Object.keys(derivedConnectorInstance.connectors).forEach((key) => {
+      Object.keys(derivedConnectorsUsage.connectors).forEach((key) => {
         triggerMouseEvent(dom, 'mousedown');
         expect(handlers[key].events.mousedown).toHaveBeenCalled();
         expect(derivedHandlers[key].events.mousedown).toHaveBeenCalled();
@@ -60,8 +60,8 @@ describe('DerivedEventHandlers', () => {
   describe('disabling the parent EventHandler instance', () => {
     dom = document.createElement('a');
     beforeEach(() => {
-      Object.keys(derivedConnectorInstance.connectors).forEach((key) => {
-        derivedConnectorInstance.connectors[key](dom);
+      Object.keys(derivedConnectorsUsage.connectors).forEach((key) => {
+        derivedConnectorsUsage.connectors[key](dom);
       });
 
       jest.clearAllMocks();
@@ -69,7 +69,7 @@ describe('DerivedEventHandlers', () => {
     });
 
     it('should only run cleanup', () => {
-      Object.keys(derivedConnectorInstance.connectors).forEach((key) => {
+      Object.keys(derivedConnectorsUsage.connectors).forEach((key) => {
         expect(derivedHandlers[key].cleanup).toHaveBeenCalledTimes(1);
         expect(derivedHandlers[key].init).toHaveBeenCalledTimes(0);
 
@@ -78,7 +78,7 @@ describe('DerivedEventHandlers', () => {
       });
     });
     it('should have detached event listeners', () => {
-      Object.keys(derivedConnectorInstance.connectors).forEach((key) => {
+      Object.keys(derivedConnectorsUsage.connectors).forEach((key) => {
         triggerMouseEvent(dom, 'mousedown');
         expect(handlers[key].events.mousedown).not.toHaveBeenCalled();
         expect(derivedHandlers[key].events.mousedown).not.toHaveBeenCalled();

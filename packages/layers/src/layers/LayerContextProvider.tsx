@@ -18,20 +18,20 @@ export const LayerContextProvider: React.FC<Omit<
   const storeRef = useRef(store);
   storeRef.current = store;
 
-  const connectorInstance = useMemo(() => handlers.createConnectorInstance(), [
+  const connectorsUsage = useMemo(() => handlers.createConnectorsUsage(), [
     handlers,
   ]);
 
   const connectors = useMemo(
-    () => wrapConnectorHooks(connectorInstance.connectors),
-    [connectorInstance]
+    () => wrapConnectorHooks(connectorsUsage.connectors),
+    [connectorsUsage]
   );
 
   useEffect(() => {
     return () => {
-      connectorInstance.cleanup();
+      connectorsUsage.cleanup();
     };
-  }, [connectorInstance]);
+  }, [connectorsUsage]);
 
   const { exists } = useEditor((state) => ({
     exists: !!state.nodes[id],

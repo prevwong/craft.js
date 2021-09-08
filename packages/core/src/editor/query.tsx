@@ -95,7 +95,7 @@ export function QueryMethods(state: EditorState) {
           ...dropAction,
           currentNode,
         },
-        error: false,
+        error: null,
       };
 
       const sourceNodes = getNodesFromSelector(state.nodes, source);

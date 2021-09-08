@@ -34,7 +34,7 @@ export type EventHandlerConnectors<
   E extends any = HTMLElement
 > = ChainableConnectors<ReturnType<H['handlers']>, E>;
 
-export type ConnectorInstance<H extends EventHandlers> = {
+export type ConnectorsUsage<H extends EventHandlers> = {
   cleanup: () => void;
   connectors: EventHandlerConnectors<H>;
 };
@@ -43,3 +43,18 @@ export enum EventHandlerUpdates {
   HandlerDisabled,
   HandlerEnabled,
 }
+
+export type ConnectorToRegister = {
+  name: string;
+  required: any;
+  connector: Connector;
+  options?: Record<string, any>;
+};
+
+export type RegisteredConnector = {
+  id: string;
+  required: any;
+  enable: () => void;
+  disable: () => void;
+  remove: () => void;
+};

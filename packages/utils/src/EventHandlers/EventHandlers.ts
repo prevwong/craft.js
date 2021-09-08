@@ -5,7 +5,7 @@ import {
   EventHandlerConnectors,
   CraftDOMEvent,
   Connector,
-  ConnectorInstance,
+  ConnectorsUsage,
 } from './interfaces';
 import { isEventBlockedByDescendant } from './isEventBlockedByDescendant';
 
@@ -85,11 +85,15 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
   // Defines the connectors and their logic
   abstract handlers(): Record<string, (el: HTMLElement, ...args: any[]) => any>;
 
-  createConnectorInstance(): ConnectorInstance<this> {
+  /**
+   * Creates a record of chainable connectors and tracks their usages
+   */
+  createConnectorsUsage(): ConnectorsUsage<this> {
     const handlers = this.handlers();
 
-    // Store all active connector cleanups here
-    const connectorsToCleanup: Array<() => void> = [];
+    // Track all active connector ids here
+    // This is so we can return a cleanup method below so the callee can programmatically cleanup all connectors
+    const activeConnectorIds: Set<string> = new Set();
 
     const connectors = Object.entries(handlers).reduce<
       Record<string, Connector>
@@ -97,14 +101,14 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
       (accum, [name, handler]) => ({
         ...accum,
         [name]: (el, required, options) => {
-          const removeFromRegistry = this.registry.register(el, {
+          const connector = this.registry.register(el, {
             required,
             name,
             options,
             connector: handler,
           });
 
-          connectorsToCleanup.push(removeFromRegistry);
+          activeConnectorIds.add(connector.id);
 
           return el;
         },
@@ -115,7 +119,9 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
     return {
       connectors,
       cleanup: () => {
-        connectorsToCleanup.forEach((cleanup) => cleanup());
+        activeConnectorIds.forEach((connectorId) =>
+          this.registry.remove(connectorId)
+        );
       },
     };
   }

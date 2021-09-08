@@ -100,6 +100,21 @@ export class Positioner {
     return true;
   }
 
+  private getNodeAtDropPosition(
+    childrenDimensions: NodeInfo[],
+    position: DropPosition
+  ) {
+    let currentNodeId =
+      childrenDimensions[position.index] &&
+      childrenDimensions[position.index].id;
+
+    if (!currentNodeId) {
+      return;
+    }
+
+    return this.store.query.node(currentNodeId).get();
+  }
+
   /**
    * Get dimensions of every child Node in the specified parent Node
    */
@@ -172,21 +187,22 @@ export class Positioner {
       return;
     }
 
-    let error = this.dragError || false;
+    let error = this.dragError;
 
     // Last thing to check for is if the dragged nodes can be dropped in the target area
     if (!error) {
       this.store.query.node(newParentNode.id).isDroppable(
         this.draggedNodes.map((sourceNode) => sourceNode.node),
-        (err) => {
-          error = err;
+        (dropError) => {
+          error = dropError;
         }
       );
     }
 
-    const currentNode =
-      newParentNode.data.nodes.length &&
-      this.store.query.node(newParentNode.data.nodes[position.index]).get();
+    const currentNode = this.getNodeAtDropPosition(
+      this.currentTargetChildDimensions,
+      position
+    );
 
     this.currentIndicator = {
       placement: {

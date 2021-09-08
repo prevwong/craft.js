@@ -36,23 +36,24 @@ export function useInternalEditor<C>(
   const store = useContext(EditorContext);
   const collected = useCollector(store, collector);
 
-  const connectorInstance = useMemo(() => handler.createConnectorInstance(), [
-    handler,
-  ]);
+  const connectorsUsage = useMemo(
+    () => handler && handler.createConnectorsUsage(),
+    [handler]
+  );
 
   useEffect(() => {
     return () => {
-      if (!connectorInstance) {
+      if (!connectorsUsage) {
         return;
       }
 
-      connectorInstance.cleanup();
+      connectorsUsage.cleanup();
     };
-  }, [connectorInstance]);
+  }, [connectorsUsage]);
 
   const connectors = useMemo(
-    () => connectorInstance && wrapConnectorHooks(connectorInstance.connectors),
-    [connectorInstance]
+    () => connectorsUsage && wrapConnectorHooks(connectorsUsage.connectors),
+    [connectorsUsage]
   );
 
   return {
