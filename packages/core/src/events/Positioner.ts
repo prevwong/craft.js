@@ -73,10 +73,6 @@ export class Positioner {
     x: number,
     y: number
   ) {
-    if (!this.currentIndicator) {
-      return null;
-    }
-
     const { top, bottom, left, right } = domInfo;
 
     if (
@@ -145,20 +141,19 @@ export class Positioner {
     // Get parent if we're hovering at the border of the current node
     if (
       this.isNearBorders(getDOMInfo(newParentNode.dom), x, y) &&
-      newParentNode.data.parent
+      newParentNode.data.parent &&
+      // Ignore if linked node because there's won't be an adjacent sibling anyway
+      !this.store.query.node(newParentNode.id).isLinkedNode()
     ) {
-      const isLinkedNode = this.store.query
-        .node(newParentNode.id)
-        .isLinkedNode();
-
-      // Don't do anything if we're hovering at the borders of a linked node
-      // because there's won't be an adjacent sibling anyway
-      newParentNode = isLinkedNode
-        ? null
-        : this.store.query.node(newParentNode.data.parent).get();
+      newParentNode = this.store.query.node(newParentNode.data.parent).get();
     }
 
-    if (!newParentNode || newParentNode.data.isCanvas === false) {
+    if (
+      !newParentNode ||
+      // Note: Even though the target Node may not be a Canvas Node
+      // But it might have linked canvas Nodes which we might want to take into consideration in the future
+      newParentNode.data.isCanvas === false
+    ) {
       return;
     }
 

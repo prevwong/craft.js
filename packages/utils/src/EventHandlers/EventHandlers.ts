@@ -15,8 +15,8 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
   private registry: ConnectorRegistry = new ConnectorRegistry();
   private subscribers: Set<(msg: EventHandlerUpdates) => void> = new Set();
 
-  onDisable: () => void | null;
-  onEnable: () => void | null;
+  onEnable?(): void;
+  onDisable?(): void;
 
   constructor(options?: O) {
     this.options = options;
