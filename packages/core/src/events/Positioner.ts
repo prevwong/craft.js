@@ -100,21 +100,6 @@ export class Positioner {
     return true;
   }
 
-  private getNodeAtDropPosition(
-    childrenDimensions: NodeInfo[],
-    position: DropPosition
-  ) {
-    let currentNodeId =
-      childrenDimensions[position.index] &&
-      childrenDimensions[position.index].id;
-
-    if (!currentNodeId) {
-      return;
-    }
-
-    return this.store.query.node(currentNodeId).get();
-  }
-
   /**
    * Get dimensions of every child Node in the specified parent Node
    */
@@ -219,10 +204,9 @@ export class Positioner {
       );
     }
 
-    const currentNode = this.getNodeAtDropPosition(
-      this.currentTargetChildDimensions,
-      position
-    );
+    const currentNodeId = newParentNode.data.nodes[position.index];
+    const currentNode =
+      currentNodeId && this.store.query.node(currentNodeId).get();
 
     this.currentIndicator = {
       placement: {
