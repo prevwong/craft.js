@@ -1,3 +1,4 @@
+import { isChromium, isLinux } from '@craftjs/utils';
 import { isFunction } from 'lodash';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
@@ -16,7 +17,14 @@ export type DefaultEventHandlersOptions = {
 export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
   DefaultEventHandlersOptions & O
 > {
-  static draggedElementShadow: HTMLElement;
+  /**
+   * Note: Multiple drag shadows (ie: via multiselect in v0.2 and higher) do not look good on Linux Chromium due to way it renders drag shadows in general,
+   * so will have to fallback to the single shadow approach above for the time being
+   * see: https://bugs.chromium.org/p/chromium/issues/detail?id=550999
+   */
+  static forceSingleDragShadow = isChromium() && isLinux();
+
+  draggedElementShadow: HTMLElement;
   dragTarget: DragTarget;
   positioner: Positioner | null = null;
   currentSelectedElementIds = [];
@@ -191,11 +199,12 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
               (id) => query.node(id).get().dom
             );
 
-            DefaultEventHandlers.draggedElementShadow = createShadow(
+            this.draggedElementShadow = createShadow(
               e,
-              query.node(id).get().dom,
-              selectedDOMs
+              selectedDOMs,
+              DefaultEventHandlers.forceSingleDragShadow
             );
+
             this.dragTarget = {
               type: 'existing',
               nodes: selectedElementIds,
@@ -252,9 +261,11 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
               .toNodeTree();
 
             const dom = e.currentTarget as HTMLElement;
-            DefaultEventHandlers.draggedElementShadow = createShadow(e, dom, [
-              el,
-            ]);
+            this.draggedElementShadow = createShadow(
+              e,
+              [dom],
+              DefaultEventHandlers.forceSingleDragShadow
+            );
             this.dragTarget = {
               type: 'new',
               tree,
@@ -307,7 +318,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
       return;
     }
 
-    const { draggedElementShadow } = DefaultEventHandlers;
+    const draggedElementShadow = this.draggedElementShadow;
 
     const indicator = this.positioner.getIndicator();
 
@@ -317,7 +328,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
     if (draggedElementShadow) {
       draggedElementShadow.parentNode.removeChild(draggedElementShadow);
-      DefaultEventHandlers.draggedElementShadow = null;
+      this.draggedElementShadow = null;
     }
 
     this.dragTarget = null;
