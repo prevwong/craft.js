@@ -1,4 +1,4 @@
-import { getDOMInfo } from '@craftjs/utils';
+import { getDOMInfo, ROOT_NODE } from '@craftjs/utils';
 
 import findPosition from './findPosition';
 
@@ -20,20 +20,61 @@ import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 export class Positioner {
   static BORDER_OFFSET = 10;
 
+  // Current Node being hovered on
+  private currentDropTargetId: NodeId | null;
+  // Current closest Canvas Node relative to the currentDropTarget
+  private currentDropTargetCanvasAncestorId: NodeId | null;
+
+  private currentIndicator: Indicator | null = null;
+
   private currentTargetId: NodeId | null;
   private currentTargetChildDimensions: NodeInfo[] | null;
-  private currentIndicator: Indicator | null = null;
 
   private dragError: string | null;
   private draggedNodes: NodeSelectorWrapper[];
 
+  private onScrollListener: (e: Event) => void;
+
   constructor(readonly store: EditorStore, readonly dragTarget: DragTarget) {
+    this.currentDropTargetId = null;
+    this.currentDropTargetCanvasAncestorId = null;
+
     this.currentTargetId = null;
     this.currentTargetChildDimensions = null;
+
+    this.currentIndicator = null;
+
     this.dragError = null;
     this.draggedNodes = this.getDraggedNodes();
 
     this.validateDraggedNodes();
+
+    this.onScrollListener = this.onScroll.bind(this);
+
+    window.addEventListener('scroll', this.onScrollListener, true);
+  }
+
+  cleanup() {
+    window.removeEventListener('scroll', this.onScrollListener, true);
+  }
+
+  private onScroll(e: Event) {
+    const scrollBody = e.target;
+    const rootNode = this.store.query.node(ROOT_NODE).get();
+
+    // Clear the currentTargetChildDimensions if the user has scrolled
+    // Because we will have to recompute new dimensions relative to the new scroll pos
+    const shouldClearChildDimensionsCache =
+      scrollBody instanceof Element &&
+      rootNode &&
+      rootNode.dom &&
+      scrollBody.contains(rootNode.dom);
+
+    if (!shouldClearChildDimensionsCache) {
+      return;
+    }
+
+    this.currentTargetChildDimensions = null;
   }
 
   private getDraggedNodes() {
@@ -100,27 +141,10 @@ export class Positioner {
     return true;
   }
 
-  private getNodeAtDropPosition(
-    childrenDimensions: NodeInfo[],
-    position: DropPosition
-  ) {
-    let currentNodeId =
-      childrenDimensions[position.index] &&
-      childrenDimensions[position.index].id;
-
-    if (!currentNodeId) {
-      return;
-    }
-
-    return this.store.query.node(currentNodeId).get();
-  }
-
   /**
    * Get dimensions of every child Node in the specified parent Node
    */
   private getChildDimensions(newParentNode: Node) {
-    // Return the previous dimensions
-    // if the input drop target is the same as the previous one
     if (
       this.currentTargetId === newParentNode.id &&
       this.currentTargetChildDimensions
@@ -143,32 +167,72 @@ export class Positioner {
   }
 
   /**
+   * Get closest Canvas node relative to the dropTargetId
+   * Return dropTargetId if it itself is a Canvas node
+   *
+   * In most cases it will be the dropTarget itself or its immediate parent.
+   * We typically only need to traverse 2 levels or more if the dropTarget is a linked node
+   *
+   * TODO: We should probably have some special rules to handle linked nodes
+   */
+  private getCanvasAncestor(dropTargetId: NodeId) {
+    // If the dropTargetId is the same as the previous one
+    // Return the canvas ancestor node that we found previuously
+    if (
+      dropTargetId === this.currentDropTargetId &&
+      this.currentDropTargetCanvasAncestorId
+    ) {
+      const node = this.store.query
+        .node(this.currentDropTargetCanvasAncestorId)
+        .get();
+
+      if (node) {
+        return node;
+      }
+    }
+
+    const getCanvas = (nodeId: NodeId): Node => {
+      const node = this.store.query.node(nodeId).get();
+
+      if (node && node.data.isCanvas) {
+        return node;
+      }
+
+      if (!node.data.parent) {
+        return null;
+      }
+
+      return getCanvas(node.data.parent);
+    };
+
+    return getCanvas(dropTargetId);
+  }
+
+  /**
    * Compute a new Indicator object based on the dropTarget and x,y coords
    * Returns null if theres no change from the previous Indicator
    */
   computeIndicator(dropTargetId: NodeId, x: number, y: number): Indicator {
-    let newParentNode = this.store.query.node(dropTargetId).get();
+    let newParentNode = this.getCanvasAncestor(dropTargetId);
 
     if (!newParentNode) {
       return;
     }
 
+    this.currentDropTargetId = dropTargetId;
+    this.currentDropTargetCanvasAncestorId = newParentNode.id;
+
     // Get parent if we're hovering at the border of the current node
     if (
-      this.isNearBorders(getDOMInfo(newParentNode.dom), x, y) &&
       newParentNode.data.parent &&
+      this.isNearBorders(getDOMInfo(newParentNode.dom), x, y) &&
       // Ignore if linked node because there's won't be an adjacent sibling anyway
       !this.store.query.node(newParentNode.id).isLinkedNode()
     ) {
       newParentNode = this.store.query.node(newParentNode.data.parent).get();
     }
 
-    if (
-      !newParentNode ||
-      // Note: Even though the target Node may not be a Canvas Node
-      // But it might have linked canvas Nodes which we might want to take into consideration in the future
-      newParentNode.data.isCanvas === false
-    ) {
+    if (!newParentNode) {
       return;
     }
 
@@ -199,10 +263,9 @@ export class Positioner {
       );
     }
 
-    const currentNode = this.getNodeAtDropPosition(
-      this.currentTargetChildDimensions,
-      position
-    );
+    const currentNodeId = newParentNode.data.nodes[position.index];
+    const currentNode =
+      currentNodeId && this.store.query.node(currentNodeId).get();
 
     this.currentIndicator = {
       placement: {
