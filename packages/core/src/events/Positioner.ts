@@ -20,16 +20,22 @@ import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 export class Positioner {
   static BORDER_OFFSET = 10;
 
-  private currentTargetId: NodeId | null;
-  private currentTargetChildDimensions: NodeInfo[] | null;
+  // Current Node being hovered on
+  private currentDropTargetId: NodeId | null;
+  // Current closest Canvas Node relative to the currentDropTarget
+  private currentDropTargetCanvasAncestorId: NodeId | null;
+
   private currentIndicator: Indicator | null = null;
 
   private dragError: string | null;
   private draggedNodes: NodeSelectorWrapper[];
 
   constructor(readonly store: EditorStore, readonly dragTarget: DragTarget) {
-    this.currentTargetId = null;
-    this.currentTargetChildDimensions = null;
+    this.currentDropTargetId = null;
+    this.currentDropTargetCanvasAncestorId = null;
+
+    this.currentIndicator = null;
+
     this.dragError = null;
     this.draggedNodes = this.getDraggedNodes();
 
@@ -104,15 +110,8 @@ export class Positioner {
    * Get dimensions of every child Node in the specified parent Node
    */
   private getChildDimensions(newParentNode: Node) {
-    // Return the previous dimensions
-    // if the input drop target is the same as the previous one
-    if (
-      this.currentTargetId === newParentNode.id &&
-      this.currentTargetChildDimensions
-    ) {
-      return this.currentTargetChildDimensions;
-    }
-
+    // TODO: add cache
+    // Can't do right now, since getDOMInfo returns top, left coords relative to scroll
     return newParentNode.data.nodes.reduce((result, id: NodeId) => {
       const dom = this.store.query.node(id).get().dom;
 
@@ -127,24 +126,43 @@ export class Positioner {
     }, [] as NodeInfo[]);
   }
 
-  private getCanvasNode(nodeId: NodeId) {
-    const node = this.store.query.node(nodeId).get();
+  /**
+   * Get closest Canvas node relative to the dropTargetId
+   * Return dropTargetId if it itself is a Canvas node
+   *
+   * TODO: We should probably have some special rules to handle linked nodes
+   */
+  private getCanvasAncestor(dropTargetId: NodeId) {
+    // If the dropTargetId is the same as the previous one
+    // Return the canvas ancestor node that we found previuously
+    if (
+      dropTargetId === this.currentDropTargetId &&
+      this.currentDropTargetCanvasAncestorId
+    ) {
+      const node = this.store.query
+        .node(this.currentDropTargetCanvasAncestorId)
+        .get();
 
-    if (!node) {
-      return null;
+      if (node) {
+        return node;
+      }
     }
 
-    if (node.data.isCanvas) {
-      return node;
-    }
+    const getAncestor = (nodeId: NodeId): Node => {
+      const node = this.store.query.node(nodeId).get();
 
-    const parentId = node.data.parent;
+      if (node && node.data.isCanvas) {
+        return node;
+      }
 
-    if (!parentId) {
-      return null;
-    }
+      if (!node.data.parent) {
+        return null;
+      }
 
-    return this.store.query.node(parentId).get();
+      return getAncestor(node.data.parent);
+    };
+
+    return getAncestor(dropTargetId);
   }
 
   /**
@@ -152,7 +170,10 @@ export class Positioner {
    * Returns null if theres no change from the previous Indicator
    */
   computeIndicator(dropTargetId: NodeId, x: number, y: number): Indicator {
-    let newParentNode = this.getCanvasNode(dropTargetId);
+    let newParentNode = this.getCanvasAncestor(dropTargetId);
+
+    this.currentDropTargetId = dropTargetId;
+    this.currentDropTargetCanvasAncestorId = newParentNode.id;
 
     if (!newParentNode) {
       return;
@@ -168,21 +189,13 @@ export class Positioner {
       newParentNode = this.store.query.node(newParentNode.data.parent).get();
     }
 
-    if (
-      !newParentNode ||
-      // Note: Even though the target Node may not be a Canvas Node
-      // But it might have linked canvas Nodes which we might want to take into consideration in the future
-      newParentNode.data.isCanvas === false
-    ) {
+    if (!newParentNode) {
       return;
     }
 
-    this.currentTargetChildDimensions = this.getChildDimensions(newParentNode);
-    this.currentTargetId = newParentNode.id;
-
     const position = findPosition(
       newParentNode,
-      this.currentTargetChildDimensions,
+      this.getChildDimensions(newParentNode),
       x,
       y
     );
