@@ -142,12 +142,32 @@ export class Positioner {
     }, [] as NodeInfo[]);
   }
 
+  private getCanvasNode(nodeId: NodeId) {
+    const node = this.store.query.node(nodeId).get();
+
+    if (!node) {
+      return null;
+    }
+
+    if (node.data.isCanvas) {
+      return node;
+    }
+
+    const parentId = node.data.parent;
+
+    if (!parentId) {
+      return null;
+    }
+
+    return this.store.query.node(parentId).get();
+  }
+
   /**
    * Compute a new Indicator object based on the dropTarget and x,y coords
    * Returns null if theres no change from the previous Indicator
    */
   computeIndicator(dropTargetId: NodeId, x: number, y: number): Indicator {
-    let newParentNode = this.store.query.node(dropTargetId).get();
+    let newParentNode = this.getCanvasNode(dropTargetId);
 
     if (!newParentNode) {
       return;
@@ -155,8 +175,8 @@ export class Positioner {
 
     // Get parent if we're hovering at the border of the current node
     if (
-      this.isNearBorders(getDOMInfo(newParentNode.dom), x, y) &&
       newParentNode.data.parent &&
+      this.isNearBorders(getDOMInfo(newParentNode.dom), x, y) &&
       // Ignore if linked node because there's won't be an adjacent sibling anyway
       !this.store.query.node(newParentNode.id).isLinkedNode()
     ) {
