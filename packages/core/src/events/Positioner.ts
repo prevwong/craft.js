@@ -50,7 +50,6 @@ export class Positioner {
     this.validateDraggedNodes();
 
     this.onScrollListener = this.onScroll.bind(this);
-
     window.addEventListener('scroll', this.onScrollListener, true);
   }
 
@@ -145,11 +144,13 @@ export class Positioner {
    * Get dimensions of every child Node in the specified parent Node
    */
   private getChildDimensions(newParentNode: Node) {
+    // Use previously computed child dimensions if newParentNode is the same as the previous one
+    const existingTargetChildDimensions = this.currentTargetChildDimensions;
     if (
       this.currentTargetId === newParentNode.id &&
-      this.currentTargetChildDimensions
+      existingTargetChildDimensions
     ) {
-      return this.currentTargetChildDimensions;
+      return existingTargetChildDimensions;
     }
 
     return newParentNode.data.nodes.reduce((result, id: NodeId) => {

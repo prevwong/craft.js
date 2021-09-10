@@ -18,6 +18,10 @@ export const RenderEditorIndicator = () => {
   const handler = useEventHandler();
 
   useEffect(() => {
+    if (!handler) {
+      return;
+    }
+
     if (!enabled) {
       handler.disable();
       return;

@@ -22,11 +22,14 @@ export function useNode<S = null>(collect?: (node: Node) => S) {
     actions,
     id,
     related,
-    setProp: (cb) => {
+    setProp: (
+      cb: (props: Record<string, any>) => void,
+      throttleRate?: number
+    ) => {
       deprecationWarning('useNode().setProp()', {
         suggest: 'useNode().actions.setProp()',
       });
-      return actions.setProp(cb);
+      return actions.setProp(cb, throttleRate);
     },
     inNodeContext,
     connectors,
