@@ -1,39 +1,37 @@
-import { ERROR_USE_NODE_OUTSIDE_OF_EDITOR_CONTEXT } from '@craftjs/utils';
+import {
+  ERROR_USE_NODE_OUTSIDE_OF_EDITOR_CONTEXT,
+  wrapConnectorHooks,
+} from '@craftjs/utils';
 import { useMemo, useContext } from 'react';
 import invariant from 'tiny-invariant';
 
-import { NodeContext, NodeContextType } from './NodeContext';
+import { NodeContext } from './NodeContext';
 
 import { useInternalEditor } from '../editor/useInternalEditor';
 import { Node } from '../interfaces';
 
-type internalActions = NodeContextType & {
-  inNodeContext: boolean;
-  actions: {
-    setProp: (cb: (props: any) => void, throttleRate?: number) => void;
-    setCustom: (cb: (custom: any) => void, throttleRate?: number) => void;
-    setHidden: (bool: boolean) => void;
-  };
-};
-
-// TODO: Deprecate useInternalNode in favor of useNode
-export type useInternalNodeReturnType<S = null> = S extends null
-  ? internalActions
-  : S & internalActions;
-export function useInternalNode(): useInternalNodeReturnType;
-export function useInternalNode<S = null>(
-  collect?: (node: Node) => S
-): useInternalNodeReturnType<S>;
-export function useInternalNode<S = null>(
-  collect?: (node: Node) => S
-): useInternalNodeReturnType<S> {
+export function useInternalNode<S = null>(collect?: (node: Node) => S) {
   const context = useContext(NodeContext);
   invariant(context, ERROR_USE_NODE_OUTSIDE_OF_EDITOR_CONTEXT);
 
-  const { id, related, connectors } = context;
+  const { id, related } = context;
 
-  const { actions: EditorActions, query, ...collected } = useInternalEditor(
+  const {
+    actions: EditorActions,
+    query,
+    connectors: editorConnectors,
+    ...collected
+  } = useInternalEditor(
     (state) => id && state.nodes[id] && collect && collect(state.nodes[id])
+  );
+
+  const connectors = useMemo(
+    () =>
+      wrapConnectorHooks({
+        connect: (dom: HTMLElement) => editorConnectors.connect(dom, id),
+        drag: (dom: HTMLElement) => editorConnectors.drag(dom, id),
+      }),
+    [editorConnectors, id]
   );
 
   const actions = useMemo(() => {
@@ -57,7 +55,7 @@ export function useInternalNode<S = null>(
   }, [EditorActions, id]);
 
   return {
-    ...(collected as any),
+    ...collected,
     id,
     related,
     inNodeContext: !!context,

@@ -17,9 +17,6 @@ export type Options = {
     success: string;
     error: string;
     transition: string;
-    /**
-     * height & width of the rendered indicator
-     */
     thickness: number;
   }>;
   handlers: (store: EditorStore) => CoreEventHandlers;
@@ -29,7 +26,7 @@ export type Resolver = Record<string, string | React.ElementType>;
 
 export interface Indicator {
   placement: Placement;
-  error: string | false;
+  error: string | null;
 }
 
 export type EditorEvents = Record<NodeEventTypes, NodeId | null> & {

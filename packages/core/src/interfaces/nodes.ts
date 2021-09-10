@@ -97,3 +97,25 @@ export interface NodeTree {
   rootNodeId: NodeId;
   nodes: Nodes;
 }
+
+type NodeIdSelector = NodeId | NodeId[];
+type NodeObjSelector = Node | Node[];
+
+export enum NodeSelectorType {
+  Any,
+  Id,
+  Obj,
+}
+
+export type NodeSelector<
+  T extends NodeSelectorType = NodeSelectorType.Any
+> = T extends NodeSelectorType.Id
+  ? NodeIdSelector
+  : T extends NodeSelectorType.Obj
+  ? NodeObjSelector
+  : NodeIdSelector | NodeObjSelector;
+
+export type NodeSelectorWrapper = {
+  node: Node;
+  exists: boolean;
+};
