@@ -1,4 +1,4 @@
-import { getDOMInfo } from '@craftjs/utils';
+import { getDOMInfo, ROOT_NODE } from '@craftjs/utils';
 
 import findPosition from './findPosition';
 
@@ -27,12 +27,20 @@ export class Positioner {
 
   private currentIndicator: Indicator | null = null;
 
+  private currentTargetId: NodeId | null;
+  private currentTargetChildDimensions: NodeInfo[] | null;
+
   private dragError: string | null;
   private draggedNodes: NodeSelectorWrapper[];
+
+  private onScrollListener: (e: Event) => void;
 
   constructor(readonly store: EditorStore, readonly dragTarget: DragTarget) {
     this.currentDropTargetId = null;
     this.currentDropTargetCanvasAncestorId = null;
+
+    this.currentTargetId = null;
+    this.currentTargetChildDimensions = null;
 
     this.currentIndicator = null;
 
@@ -40,6 +48,33 @@ export class Positioner {
     this.draggedNodes = this.getDraggedNodes();
 
     this.validateDraggedNodes();
+
+    this.onScrollListener = this.onScroll.bind(this);
+
+    window.addEventListener('scroll', this.onScrollListener, true);
+  }
+
+  cleanup() {
+    window.removeEventListener('scroll', this.onScrollListener, true);
+  }
+
+  private onScroll(e: Event) {
+    const scrollBody = e.target;
+    const rootNode = this.store.query.node(ROOT_NODE).get();
+
+    // Clear the currentTargetChildDimensions if the user has scrolled
+    // Because we will have to recompute new dimensions relative to the new scroll pos
+    const shouldClearChildDimensionsCache =
+      scrollBody instanceof Element &&
+      rootNode &&
+      rootNode.dom &&
+      scrollBody.contains(rootNode.dom);
+
+    if (!shouldClearChildDimensionsCache) {
+      return;
+    }
+
+    this.currentTargetChildDimensions = null;
   }
 
   private getDraggedNodes() {
@@ -110,8 +145,13 @@ export class Positioner {
    * Get dimensions of every child Node in the specified parent Node
    */
   private getChildDimensions(newParentNode: Node) {
-    // TODO: add cache
-    // Can't do right now, since getDOMInfo returns top, left coords relative to scroll
+    if (
+      this.currentTargetId === newParentNode.id &&
+      this.currentTargetChildDimensions
+    ) {
+      return this.currentTargetChildDimensions;
+    }
+
     return newParentNode.data.nodes.reduce((result, id: NodeId) => {
       const dom = this.store.query.node(id).get().dom;
 
@@ -129,6 +169,9 @@ export class Positioner {
   /**
    * Get closest Canvas node relative to the dropTargetId
    * Return dropTargetId if it itself is a Canvas node
+   *
+   * In most cases it will be the dropTarget itself or its immediate parent.
+   * We typically only need to traverse 2 levels or more if the dropTarget is a linked node
    *
    * TODO: We should probably have some special rules to handle linked nodes
    */
@@ -148,7 +191,7 @@ export class Positioner {
       }
     }
 
-    const getAncestor = (nodeId: NodeId): Node => {
+    const getCanvas = (nodeId: NodeId): Node => {
       const node = this.store.query.node(nodeId).get();
 
       if (node && node.data.isCanvas) {
@@ -159,10 +202,10 @@ export class Positioner {
         return null;
       }
 
-      return getAncestor(node.data.parent);
+      return getCanvas(node.data.parent);
     };
 
-    return getAncestor(dropTargetId);
+    return getCanvas(dropTargetId);
   }
 
   /**
@@ -172,12 +215,12 @@ export class Positioner {
   computeIndicator(dropTargetId: NodeId, x: number, y: number): Indicator {
     let newParentNode = this.getCanvasAncestor(dropTargetId);
 
-    this.currentDropTargetId = dropTargetId;
-    this.currentDropTargetCanvasAncestorId = newParentNode.id;
-
     if (!newParentNode) {
       return;
     }
+
+    this.currentDropTargetId = dropTargetId;
+    this.currentDropTargetCanvasAncestorId = newParentNode.id;
 
     // Get parent if we're hovering at the border of the current node
     if (
@@ -193,9 +236,12 @@ export class Positioner {
       return;
     }
 
+    this.currentTargetChildDimensions = this.getChildDimensions(newParentNode);
+    this.currentTargetId = newParentNode.id;
+
     const position = findPosition(
       newParentNode,
-      this.getChildDimensions(newParentNode),
+      this.currentTargetChildDimensions,
       x,
       y
     );
