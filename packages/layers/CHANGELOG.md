@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-alpha.27](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.26...v0.2.0-alpha.27) (2021-09-10)
+
+
+### Features
+
+* improve dnd ([#300](https://github.com/prevwong/craft.js/issues/300)) ([3fdbab6](https://github.com/prevwong/craft.js/commit/3fdbab669dd941f484128ef9d8440a9565606477))
+
+
+
+
+
 # [0.2.0-alpha.26](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.25...v0.2.0-alpha.26) (2021-08-13)
 
 **Note:** Version bump only for package @craftjs/layers

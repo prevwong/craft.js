@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-alpha.27](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.26...v0.2.0-alpha.27) (2021-09-10)
+
+
+### Bug Fixes
+
+* **examples:** multiselect ([536c7a0](https://github.com/prevwong/craft.js/commit/536c7a0a65dc291ebaf8fff1e9002a1a8cf32bea))
+
+
+
+
+
 # [0.2.0-alpha.26](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.25...v0.2.0-alpha.26) (2021-08-13)
 
 **Note:** Version bump only for package example-landing
