@@ -1,3 +1,4 @@
+import { isChromium, isLinux } from '@craftjs/utils';
 import { isFunction } from 'lodash';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
@@ -10,7 +11,9 @@ import { Indicator, NodeId, DragTarget } from '../interfaces';
  * Specifies Editor-wide event handlers and connectors
  */
 export class DefaultEventHandlers extends CoreEventHandlers {
-  static draggedElementShadow: HTMLElement;
+  static forceSingleDragShadow = isChromium() && isLinux();
+
+  draggedElementShadow: HTMLElement;
   dragTarget: DragTarget;
   positioner: Positioner | null = null;
   currentSelectedElementIds = [];
@@ -116,9 +119,10 @@ export class DefaultEventHandlers extends CoreEventHandlers {
 
             const { query } = store;
 
-            DefaultEventHandlers.draggedElementShadow = createShadow(
+            this.draggedElementShadow = createShadow(
               e,
-              query.node(id).get().dom
+              [query.node(id).get().dom],
+              DefaultEventHandlers.forceSingleDragShadow
             );
 
             this.dragTarget = {
@@ -177,7 +181,11 @@ export class DefaultEventHandlers extends CoreEventHandlers {
               .toNodeTree();
 
             const dom = e.currentTarget as HTMLElement;
-            DefaultEventHandlers.draggedElementShadow = createShadow(e, dom);
+            this.draggedElementShadow = createShadow(
+              e,
+              [dom],
+              DefaultEventHandlers.forceSingleDragShadow
+            );
             this.dragTarget = {
               type: 'new',
               tree,
@@ -230,7 +238,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
       return;
     }
 
-    const { draggedElementShadow } = DefaultEventHandlers;
+    const draggedElementShadow = this.draggedElementShadow;
 
     const indicator = this.positioner.getIndicator();
 
@@ -240,7 +248,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
 
     if (draggedElementShadow) {
       draggedElementShadow.parentNode.removeChild(draggedElementShadow);
-      DefaultEventHandlers.draggedElementShadow = null;
+      this.draggedElementShadow = null;
     }
 
     this.dragTarget = null;
