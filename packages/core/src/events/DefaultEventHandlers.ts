@@ -225,7 +225,6 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
               indicator.placement.parent.id,
               index
             );
-            this.positioner = null;
           });
         });
 
@@ -324,6 +323,8 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
     store.actions.setIndicator(null);
     store.actions.setNodeEvent('dragged', null);
+    this.positioner.cleanup();
+
     this.positioner = null;
   }
 }
