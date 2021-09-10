@@ -5,6 +5,7 @@ import {
   EventHandlerConnectors,
   CraftDOMEvent,
   Connector,
+  ConnectorsUsage,
 } from './interfaces';
 import { isEventBlockedByDescendant } from './isEventBlockedByDescendant';
 
@@ -13,6 +14,9 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
 
   private registry: ConnectorRegistry = new ConnectorRegistry();
   private subscribers: Set<(msg: EventHandlerUpdates) => void> = new Set();
+
+  onEnable?(): void;
+  onDisable?(): void;
 
   constructor(options?: O) {
     this.options = options;
@@ -24,6 +28,10 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
   }
 
   disable() {
+    if (this.onDisable) {
+      this.onDisable();
+    }
+
     this.registry.disable();
 
     this.subscribers.forEach((listener) => {
@@ -32,6 +40,10 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
   }
 
   enable() {
+    if (this.onEnable) {
+      this.onEnable();
+    }
+
     this.registry.enable();
 
     this.subscribers.forEach((listener) => {
@@ -73,23 +85,45 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
   // Defines the connectors and their logic
   abstract handlers(): Record<string, (el: HTMLElement, ...args: any[]) => any>;
 
-  get connectors(): EventHandlerConnectors<this> {
-    const connectors = this.handlers();
-    return Object.keys(connectors).reduce<Record<string, Connector>>(
-      (accum, connectorName) => ({
+  /**
+   * Creates a record of chainable connectors and tracks their usages
+   */
+  createConnectorsUsage(): ConnectorsUsage<this> {
+    const handlers = this.handlers();
+
+    // Track all active connector ids here
+    // This is so we can return a cleanup method below so the callee can programmatically cleanup all connectors
+    const activeConnectorIds: Set<string> = new Set();
+
+    const connectors = Object.entries(handlers).reduce<
+      Record<string, Connector>
+    >(
+      (accum, [name, handler]) => ({
         ...accum,
-        [connectorName]: (el, required, options) => {
-          this.registry.register(el, {
+        [name]: (el, required, options) => {
+          const connector = this.registry.register(el, {
             required,
-            name: connectorName,
+            name,
             options,
-            connector: connectors[connectorName],
+            connector: handler,
           });
+
+          activeConnectorIds.add(connector.id);
+
           return el;
         },
       }),
       {}
     ) as any;
+
+    return {
+      connectors,
+      cleanup: () => {
+        activeConnectorIds.forEach((connectorId) =>
+          this.registry.remove(connectorId)
+        );
+      },
+    };
   }
 
   derive<C extends EventHandlers>(

@@ -1,5 +1,5 @@
 import { deprecationWarning, ROOT_NODE } from '@craftjs/utils';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { useInternalEditor } from '../editor/useInternalEditor';
 import { SerializedNodes } from '../interfaces';
@@ -10,13 +10,24 @@ export type Frame = {
   data?: string | SerializedNodes;
 };
 
+const RenderRootNode = () => {
+  const { timestamp } = useInternalEditor((state) => ({
+    timestamp:
+      state.nodes[ROOT_NODE] && state.nodes[ROOT_NODE]._hydrationTimestamp,
+  }));
+
+  if (!timestamp) {
+    return null;
+  }
+
+  return <NodeElement id={ROOT_NODE} key={timestamp} />;
+};
+
 /**
  * A React Component that defines the editable area
  */
 export const Frame: React.FC<Frame> = ({ children, json, data }) => {
   const { actions, query } = useInternalEditor();
-
-  const [render, setRender] = useState<React.ReactElement | null>(null);
 
   if (!!json) {
     deprecationWarning('<Frame json={...} />', {
@@ -48,9 +59,7 @@ export const Frame: React.FC<Frame> = ({ children, json, data }) => {
 
       actions.history.ignore().addNodeTree(node);
     }
-
-    setRender(<NodeElement id={ROOT_NODE} />);
   }, [actions, query]);
 
-  return render;
+  return <RenderRootNode />;
 };

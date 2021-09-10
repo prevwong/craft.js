@@ -1,19 +1,10 @@
-import { ChainableConnectors, wrapConnectorHooks } from '@craftjs/utils';
-import React, { useMemo } from 'react';
+import React from 'react';
 
-import { useEventHandler } from '../events';
 import { NodeId } from '../interfaces';
 
 export type NodeContextType = {
   id: NodeId;
   related?: boolean;
-  connectors: ChainableConnectors<
-    {
-      connect: (element: HTMLElement) => void;
-      drag: (element: HTMLElement) => void;
-    },
-    React.ReactElement
-  >;
 };
 
 export const NodeContext = React.createContext<NodeContextType>(null);
@@ -25,19 +16,8 @@ export const NodeProvider: React.FC<NodeProviderProps> = ({
   related = false,
   children,
 }) => {
-  const handlers = useEventHandler();
-
-  const connectors = useMemo(
-    () =>
-      wrapConnectorHooks({
-        connect: (dom: HTMLElement) => handlers.connectors.connect(dom, id),
-        drag: (dom: HTMLElement) => handlers.connectors.drag(dom, id),
-      }),
-    [handlers, id]
-  );
-
   return (
-    <NodeContext.Provider value={{ id, related, connectors }}>
+    <NodeContext.Provider value={{ id, related }}>
       {children}
     </NodeContext.Provider>
   );

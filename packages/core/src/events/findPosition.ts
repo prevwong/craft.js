@@ -1,4 +1,4 @@
-import { Node, NodeInfo, DropAction } from '../interfaces';
+import { Node, NodeInfo, DropPosition } from '../interfaces';
 
 export default function findPosition(
   parent: Node,
@@ -6,7 +6,7 @@ export default function findPosition(
   posX: number,
   posY: number
 ) {
-  let result: DropAction = {
+  let result: DropPosition = {
     parent,
     index: 0,
     where: 'before',

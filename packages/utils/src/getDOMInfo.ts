@@ -1,20 +1,4 @@
-export const getDOMPadding = (dom: HTMLElement) => {
-  return {
-    left: parseInt(window.getComputedStyle(dom).paddingLeft),
-    right: parseInt(window.getComputedStyle(dom).paddingRight),
-    bottom: parseInt(window.getComputedStyle(dom).paddingTop),
-    top: parseInt(window.getComputedStyle(dom).paddingBottom),
-  };
-};
-export const getDOMMargin = (dom: HTMLElement) => {
-  return {
-    left: parseInt(window.getComputedStyle(dom).marginLeft),
-    right: parseInt(window.getComputedStyle(dom).marginRight),
-    bottom: parseInt(window.getComputedStyle(dom).marginTop),
-    top: parseInt(window.getComputedStyle(dom).marginBottom),
-  };
-};
-export const getDOMInfo = (dom: HTMLElement) => {
+export const getDOMInfo = (el: HTMLElement) => {
   const {
     x,
     y,
@@ -24,67 +8,87 @@ export const getDOMInfo = (dom: HTMLElement) => {
     right,
     width,
     height,
-  } = dom.getBoundingClientRect() as DOMRect;
-  const margin = getDOMMargin(dom),
-    padding = getDOMPadding(dom);
+  } = el.getBoundingClientRect() as DOMRect;
+
+  const style = window.getComputedStyle(el);
+
+  const margin = {
+    left: parseInt(style.marginLeft),
+    right: parseInt(style.marginRight),
+    bottom: parseInt(style.marginBottom),
+    top: parseInt(style.marginTop),
+  };
+
+  const padding = {
+    left: parseInt(style.paddingLeft),
+    right: parseInt(style.paddingRight),
+    bottom: parseInt(style.paddingBottom),
+    top: parseInt(style.paddingTop),
+  };
+
+  const styleInFlow = (parent: HTMLElement) => {
+    const parentStyle: any = getComputedStyle(parent);
+
+    if (style.overflow && style.overflow !== 'visible') {
+      return;
+    }
+
+    if (parentStyle.float !== 'none') {
+      return;
+    }
+
+    if (parentStyle.display === 'grid') {
+      return;
+    }
+
+    if (
+      parentStyle.display === 'flex' &&
+      parentStyle['flex-direction'] !== 'column'
+    ) {
+      return;
+    }
+
+    switch (style.position) {
+      case 'static':
+      case 'relative':
+        break;
+      default:
+        return;
+    }
+
+    switch (el.tagName) {
+      case 'TR':
+      case 'TBODY':
+      case 'THEAD':
+      case 'TFOOT':
+        return true;
+    }
+
+    switch (style.display) {
+      case 'block':
+      case 'list-item':
+      case 'table':
+      case 'flex':
+      case 'grid':
+        return true;
+    }
+
+    return;
+  };
 
   return {
-    x: Math.round(x),
-    y: Math.round(y),
-    top: Math.round(top),
-    left: Math.round(left),
-    bottom: Math.round(bottom),
-    right: Math.round(right),
-    width: Math.round(width),
-    height: Math.round(height),
+    x,
+    y,
+    top,
+    left,
+    bottom,
+    right,
+    width,
+    height,
     outerWidth: Math.round(width + margin.left + margin.right),
     outerHeight: Math.round(height + margin.top + margin.bottom),
     margin,
     padding,
-    inFlow: dom && dom.parentElement && !!styleInFlow(dom, dom.parentElement),
+    inFlow: el.parentElement && !!styleInFlow(el.parentElement),
   };
-};
-
-export const getComputedStyle = (dom: HTMLElement) => {
-  return window.getComputedStyle(dom);
-};
-
-export const styleInFlow = (el: HTMLElement, parent: HTMLElement) => {
-  const style: any = getComputedStyle(el);
-  const parentStyle: any = getComputedStyle(parent);
-
-  if (style.overflow && style.overflow !== 'visible') return;
-  if (parentStyle.float !== 'none') return;
-  if (parent && parentStyle.display === 'grid') {
-    return;
-  }
-  if (
-    parent &&
-    parentStyle.display === 'flex' &&
-    parentStyle['flex-direction'] !== 'column'
-  )
-    return;
-  switch (style.position) {
-    case 'static':
-    case 'relative':
-      break;
-    default:
-      return;
-  }
-  switch (el.tagName) {
-    case 'TR':
-    case 'TBODY':
-    case 'THEAD':
-    case 'TFOOT':
-      return true;
-  }
-  switch (style.display) {
-    case 'block':
-    case 'list-item':
-    case 'table':
-    case 'flex':
-    case 'grid':
-      return true;
-  }
-  return;
 };
