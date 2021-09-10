@@ -1,3 +1,6 @@
+// TODO: this approach does not work with Safari
+// Works partially with Linux (except on Chrome)
+// We'll need an alternate way to create drag shadows
 export const createShadow = (
   e: DragEvent,
   shadowsToCreate: HTMLElement[],
