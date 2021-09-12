@@ -218,7 +218,7 @@ export default function App() {
           <Topbar />
           <Grid container spacing={5} style={{paddingTop: "10px"}}>
             <Grid item xs>
-              <Frame json={json}>
+              <Frame data={json}>
                 <Element is={Container} padding={5} background="#eeeeee">
                   ...
                 </Element>
