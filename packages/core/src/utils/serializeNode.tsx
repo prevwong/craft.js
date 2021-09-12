@@ -31,7 +31,7 @@ export const serializeComp = (
         }
         return serializeComp(child, resolver);
       });
-    } else if (prop.type) {
+    } else if (typeof prop.type === 'function') {
       result[key] = serializeComp(prop, resolver);
     } else {
       result[key] = prop;
