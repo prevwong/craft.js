@@ -17,7 +17,7 @@ export const serializeComp = (
   resolver: Resolver
 ): ReducedComp => {
   let { type, isCanvas, props } = data;
-  props = Object.keys(props).reduce((result: Record<string, any>, key) => {
+  props = Object.keys(props || {}).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
 
     if (prop === undefined || prop === null) {
