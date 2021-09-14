@@ -20,7 +20,7 @@ export const serializeComp = (
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
 
-    if (prop === undefined || prop === null) {
+    if (prop === undefined || prop === null || typeof prop === 'function') {
       return result;
     }
 
@@ -31,7 +31,7 @@ export const serializeComp = (
         }
         return serializeComp(child, resolver);
       });
-    } else if (prop.type) {
+    } else if (typeof prop.type === 'function') {
       result[key] = serializeComp(prop, resolver);
     } else {
       result[key] = prop;
