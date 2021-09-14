@@ -40,7 +40,7 @@
   },
   "peerDependencies": {
     "@craftjs/core": "^0.1.0-alpha.1",
-    "react": ">=16.8.0"
+    "react": ">=16.8.0",
     "styled-components": ">= 4"
   }
 }
