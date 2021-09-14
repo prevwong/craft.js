@@ -1,7 +1,7 @@
-import { DropAction, DOMInfo } from '../interfaces';
+import { DropPosition, DOMInfo } from '../interfaces';
 
 export default function movePlaceholder(
-  pos: DropAction,
+  pos: DropPosition,
   canvasDOMInfo: DOMInfo, // which canvas is cursor at
   bestTargetDomInfo: DOMInfo | null, // closest element in canvas (null if canvas is empty)
   thickness: number = 2

@@ -9,3 +9,4 @@ export * from './deprecate';
 export * from './utilityTypes';
 export * from './History';
 export * from './getRandomId';
+export * from './platform';

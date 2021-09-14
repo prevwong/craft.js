@@ -40,6 +40,8 @@ export function QueryMethods(state: EditorState) {
   return {
     /**
      * Determine the best possible location to drop the source Node relative to the target Node
+     *
+     * TODO: replace with Positioner.computeIndicator();
      */
     getDropPlaceholder: (
       source: NodeId | Node,
@@ -91,7 +93,7 @@ export function QueryMethods(state: EditorState) {
           ...dropAction,
           currentNode,
         },
-        error: false,
+        error: null,
       };
 
       // If source Node is already in the editor, check if it's draggable
@@ -114,6 +116,10 @@ export function QueryMethods(state: EditorState) {
      */
     getOptions(): Options {
       return options;
+    },
+
+    getNodes() {
+      return state.nodes;
     },
 
     /**
@@ -148,7 +154,7 @@ export function QueryMethods(state: EditorState) {
       ): NodeTree {
         let node = parseNodeFromJSX(reactElement, (node, jsx) => {
           const name = resolveComponent(state.options.resolver, node.data.type);
-          invariant(name !== null, ERROR_NOT_IN_RESOLVER);
+
           node.data.displayName = node.data.displayName || name;
           node.data.name = name;
 

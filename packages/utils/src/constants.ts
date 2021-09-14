@@ -25,7 +25,7 @@ export const ERROR_MOVE_ROOT_NODE = 'Root Node cannot be moved';
 
 export const ERROR_MOVE_TO_DESCENDANT = 'Cannot move node into a descendant';
 export const ERROR_NOT_IN_RESOLVER =
-  'The component type specified for this node does not exist in the resolver';
+  'The component type specified for this node (%node_type%) does not exist in the resolver';
 export const ERROR_INFINITE_CANVAS =
   "The component specified in the <Canvas> `is` prop has additional Canvas specified in it's render template.";
 export const ERROR_CANNOT_DRAG =

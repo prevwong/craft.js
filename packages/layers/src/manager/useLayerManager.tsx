@@ -1,17 +1,19 @@
-import { useCollector, useCollectorReturnType } from '@craftjs/utils';
-import { useContext } from 'react';
+import { useCollector } from '@craftjs/utils';
+import { useContext, useMemo } from 'react';
 
-import { LayerManagerContext, LayerStore } from './context';
+import { LayerManagerContext } from './context';
 
 import { LayerState } from '../interfaces';
 
-export function useLayerManager(): useCollectorReturnType<LayerStore>;
-export function useLayerManager<C>(
-  collector?: (state: LayerState) => C
-): useCollectorReturnType<LayerStore, C>;
-export function useLayerManager<C>(
-  collector?: (state: LayerState) => C
-): useCollectorReturnType<LayerStore> {
+export function useLayerManager<C>(collector?: (state: LayerState) => C) {
   const { store } = useContext(LayerManagerContext);
-  return useCollector(store, collector);
+  const collected = useCollector(store, collector);
+
+  return useMemo(
+    () => ({
+      store,
+      ...collected,
+    }),
+    [store, collected]
+  );
 }

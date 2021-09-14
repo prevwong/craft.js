@@ -1,21 +1,8 @@
 import isEqual from 'shallowequal';
 
-import { Connector } from './interfaces';
+import { ConnectorToRegister, RegisteredConnector } from './interfaces';
 
 import { getRandomId } from '../getRandomId';
-
-type ConnectorToRegister = {
-  name: string;
-  required: any;
-  options?: Record<string, any>;
-  connector: Connector;
-};
-
-type RegisteredConnector = {
-  required: any;
-  enable: () => void;
-  disable: () => void;
-};
 
 /**
  * Stores all connected DOM elements and their connectors here
@@ -32,6 +19,7 @@ export class ConnectorRegistry {
     }
 
     const newId = getRandomId();
+
     this.elementIdMap.set(element, newId);
     return newId;
   }
@@ -41,33 +29,32 @@ export class ConnectorRegistry {
     return `${connectorName}--${elementId}`;
   }
 
-  register(element: HTMLElement, toRegister: ConnectorToRegister) {
-    if (this.get(element, toRegister.name)) {
-      if (
-        isEqual(
-          toRegister.required,
-          this.get(element, toRegister.name).required
-        )
-      ) {
-        return;
+  register(element: HTMLElement, connectorPayload: ConnectorToRegister) {
+    const existingConnector = this.getByElement(element, connectorPayload.name);
+
+    if (existingConnector) {
+      if (isEqual(connectorPayload.required, existingConnector.required)) {
+        return existingConnector;
       }
 
-      this.get(element, toRegister.name).disable();
+      this.getByElement(element, connectorPayload.name).disable();
     }
 
     let cleanup: () => void | null = null;
 
-    this.registry.set(this.getConnectorId(element, toRegister.name), {
-      required: toRegister.required,
+    const id = this.getConnectorId(element, connectorPayload.name);
+    this.registry.set(id, {
+      id,
+      required: connectorPayload.required,
       enable: () => {
         if (cleanup) {
           cleanup();
         }
 
-        cleanup = toRegister.connector(
+        cleanup = connectorPayload.connector(
           element,
-          toRegister.required,
-          toRegister.options
+          connectorPayload.required,
+          connectorPayload.options
         );
       },
       disable: () => {
@@ -77,13 +64,28 @@ export class ConnectorRegistry {
 
         cleanup();
       },
+      remove: () => {
+        return this.remove(id);
+      },
     });
 
-    this.registry.get(this.getConnectorId(element, toRegister.name)).enable();
+    this.registry.get(id).enable();
+
+    return this.registry.get(id);
   }
 
-  get(element: HTMLElement, name: string) {
-    return this.registry.get(this.getConnectorId(element, name));
+  get(id: string) {
+    return this.registry.get(id);
+  }
+
+  remove(id: string) {
+    const connector = this.get(id);
+    if (!connector) {
+      return;
+    }
+
+    connector.disable();
+    this.registry.delete(connector.id);
   }
 
   enable() {
@@ -98,8 +100,17 @@ export class ConnectorRegistry {
     });
   }
 
+  getByElement(element: HTMLElement, connectorName: string) {
+    return this.get(this.getConnectorId(element, connectorName));
+  }
+
+  removeByElement(element: HTMLElement, connectorName: string) {
+    return this.remove(this.getConnectorId(element, connectorName));
+  }
+
   clear() {
+    this.disable();
     this.elementIdMap = new WeakMap();
-    this.registry.clear();
+    this.registry = new Map();
   }
 }

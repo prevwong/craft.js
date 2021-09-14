@@ -4,7 +4,7 @@ import React from 'react';
 import { LayerMethods } from './actions';
 import { LayerManagerContext, LayerStore } from './context';
 
-import { EventManager } from '../events';
+import { LayerEventContextProvider } from '../events';
 import { LayerOptions } from '../interfaces';
 import { DefaultLayer } from '../layers';
 
@@ -27,7 +27,7 @@ export const LayerManagerProvider: React.FC<{
 
   return (
     <LayerManagerContext.Provider value={{ store }}>
-      <EventManager>{children}</EventManager>
+      <LayerEventContextProvider>{children}</LayerEventContextProvider>
     </LayerManagerContext.Provider>
   );
 };

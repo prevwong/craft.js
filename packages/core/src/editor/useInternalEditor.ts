@@ -3,10 +3,10 @@ import {
   useCollectorReturnType,
   QueryCallbacksFor,
   wrapConnectorHooks,
-  ChainableConnectors,
+  EventHandlerConnectors,
   ERROR_USE_EDITOR_OUTSIDE_OF_EDITOR_CONTEXT,
 } from '@craftjs/utils';
-import { useContext, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import invariant from 'tiny-invariant';
 
 import { EditorContext } from './EditorContext';
@@ -28,24 +28,36 @@ export type useInternalEditorReturnType<C = null> = useCollectorReturnType<
 > & {
   inContext: boolean;
   store: EditorStore;
-  connectors: ChainableConnectors<
-    CoreEventHandlers['connectors'],
-    React.ReactElement
-  >;
+  connectors: EventHandlerConnectors<CoreEventHandlers, React.ReactElement>;
 };
 
 export function useInternalEditor<C>(
   collector?: EditorCollector<C>
 ): useInternalEditorReturnType<C> {
+  const handler = useEventHandler();
   const store = useContext(EditorContext);
   invariant(store, ERROR_USE_EDITOR_OUTSIDE_OF_EDITOR_CONTEXT);
 
-  const handlers = useEventHandler();
   const collected = useCollector(store, collector);
 
+  const connectorsUsage = useMemo(
+    () => handler && handler.createConnectorsUsage(),
+    [handler]
+  );
+
+  useEffect(() => {
+    return () => {
+      if (!connectorsUsage) {
+        return;
+      }
+
+      connectorsUsage.cleanup();
+    };
+  }, [connectorsUsage]);
+
   const connectors = useMemo(
-    () => handlers && wrapConnectorHooks(handlers.connectors),
-    [handlers]
+    () => connectorsUsage && wrapConnectorHooks(connectorsUsage.connectors),
+    [connectorsUsage]
   );
 
   return {

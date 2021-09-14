@@ -4,7 +4,6 @@ import { LayerIndicator } from '../interfaces';
 
 export class LayerHandlers extends DerivedCoreEventHandlers<{
   layerStore: any;
-  layerId: NodeId;
 }> {
   static draggedElement;
   static events: {
@@ -14,25 +13,24 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
     indicator: null,
     currentCanvasHovered: null,
   };
-  static currentCanvasHovered;
 
-  getLayer(id) {
+  getLayer(id: NodeId) {
     return this.options.layerStore.getState().layers[id];
   }
 
   handlers() {
     const editorStore = this.derived.options.store;
-    const { layerStore, layerId } = this.options;
+    const { layerStore } = this.options;
     return {
-      layer: (el: HTMLElement) => {
+      layer: (el: HTMLElement, layerId: NodeId) => {
+        layerStore.actions.setDOM(layerId, {
+          dom: el,
+        });
+
         const cleanupParentConnectors = this.inherit((connectors) => {
           connectors.select(el, layerId);
           connectors.hover(el, layerId);
           connectors.drag(el, layerId);
-
-          layerStore.actions.setDOM(layerId, {
-            dom: el,
-          });
         });
 
         const unbindMouseOver = this.addCraftEventListener(
@@ -171,12 +169,12 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
           unbindDragEnter();
         };
       },
-      layerHeader: (el: HTMLElement) => {
+      layerHeader: (el: HTMLElement, layerId: NodeId) => {
         layerStore.actions.setDOM(layerId, {
           headingDom: el,
         });
       },
-      drag: (el: HTMLElement) => {
+      drag: (el: HTMLElement, layerId: NodeId) => {
         el.setAttribute('draggable', 'true');
 
         const unbindDragStart = this.addCraftEventListener(
