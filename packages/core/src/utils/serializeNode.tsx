@@ -31,7 +31,7 @@ export const serializeComp = (
         }
         return serializeComp(child, resolver);
       });
-    } else if (prop.type) {
+    } else if (prop.type && typeof prop.props === 'object') {
       result[key] = serializeComp(prop, resolver);
     } else {
       result[key] = prop;
