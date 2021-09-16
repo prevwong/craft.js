@@ -1,4 +1,4 @@
-import { isFunction } from 'lodash';
+import { isFunction, throttle } from 'lodash';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
 import { createShadow } from './createShadow';
@@ -14,6 +14,48 @@ export class DefaultEventHandlers extends CoreEventHandlers {
   static draggedElementShadow: HTMLElement;
   static draggedElement: DraggedElement;
   static indicator: Indicator = null;
+  static lastDragPosition: { x: number; y: number } = null;
+
+  computeDragIndicator(x: number, y: number, targetId: NodeId) {
+    const draggedElement = DefaultEventHandlers.draggedElement;
+    if (!draggedElement) {
+      return;
+    }
+
+    if (targetId) {
+      const node = this.options.store.query.node(targetId).get();
+      if (!node) {
+        return;
+      }
+    }
+
+    let node = (draggedElement as unknown) as Node;
+
+    if ((draggedElement as NodeTree).rootNodeId) {
+      const nodeTree = draggedElement as NodeTree;
+      node = nodeTree.nodes[nodeTree.rootNodeId];
+    }
+
+    const indicator = this.options.store.query.getDropPlaceholder(
+      node,
+      targetId,
+      {
+        x,
+        y,
+      }
+    );
+
+    if (!indicator) {
+      return;
+    }
+    this.options.store.actions.setIndicator(indicator);
+    DefaultEventHandlers.indicator = indicator;
+  }
+
+  throttledDragOver = throttle(this.computeDragIndicator, 200, {
+    leading: false,
+  });
+
   currentSelectedElementIds = [];
 
   handlers() {
@@ -67,6 +109,23 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           (e) => {
             e.craft.stopPropagation();
             e.preventDefault();
+
+            const { clientX: x, clientY: y } = e;
+            if (
+              DefaultEventHandlers.lastDragPosition &&
+              DefaultEventHandlers.lastDragPosition.x === x &&
+              DefaultEventHandlers.lastDragPosition.y === y
+            ) {
+              return;
+            }
+            DefaultEventHandlers.lastDragPosition = { x, y };
+
+            const draggedElement = DefaultEventHandlers.draggedElement;
+            if (!draggedElement) {
+              return;
+            }
+
+            this.throttledDragOver(x, y, targetId);
           }
         );
 
@@ -94,6 +153,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
               x,
               y,
             });
+            DefaultEventHandlers.lastDragPosition = { x, y };
 
             if (!indicator) {
               return;
