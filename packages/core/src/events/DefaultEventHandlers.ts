@@ -1,11 +1,12 @@
 import { isChromium, isLinux } from '@craftjs/utils';
 import { isFunction } from 'lodash';
+import { isValidElement } from 'react';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
 import { Positioner } from './Positioner';
 import { createShadow } from './createShadow';
 
-import { Indicator, NodeId, DragTarget } from '../interfaces';
+import { Indicator, NodeId, DragTarget, NodeTree } from '../interfaces';
 
 export type DefaultEventHandlersOptions = {
   isMultiSelectEnabled: (e: MouseEvent) => boolean;
@@ -245,7 +246,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
       },
       create: (
         el: HTMLElement,
-        userElement: React.ReactElement,
+        userElement: React.ReactElement | (() => NodeTree),
         options?: Partial<CreateHandlerOptions>
       ) => {
         el.setAttribute('draggable', 'true');
@@ -255,9 +256,9 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           'dragstart',
           (e) => {
             e.craft.stopPropagation();
-            const tree = store.query
-              .parseReactElement(userElement)
-              .toNodeTree();
+            const tree = isValidElement(userElement)
+              ? store.query.parseReactElement(userElement).toNodeTree()
+              : userElement();
 
             const dom = e.currentTarget as HTMLElement;
             this.draggedElementShadow = createShadow(
