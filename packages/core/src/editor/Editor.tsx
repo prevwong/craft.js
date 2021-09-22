@@ -16,6 +16,7 @@ export const Editor: React.FC<Partial<Options>> = ({
   children,
   onRender,
   onNodesChange,
+  onDropEnd,
   resolver,
   enabled,
   indicator,
@@ -30,7 +31,7 @@ export const Editor: React.FC<Partial<Options>> = ({
 
   const options = useMemo(() => {
     return pickBy(
-      { onRender, onNodesChange, resolver, enabled, indicator },
+      { onRender, onNodesChange, onDropEnd, resolver, enabled, indicator },
       (value) => value !== undefined
     );
   }, [enabled, indicator, onNodesChange, onRender, resolver]);

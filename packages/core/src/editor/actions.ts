@@ -284,6 +284,8 @@ const Methods = (
 
         state.nodes[targetId].data.parent = newParentId;
         currentParentNodes.splice(currentParentNodes.indexOf('marked'), 1);
+
+        state.options.onDropEnd(newParent, state.nodes[targetId]);
       });
     },
 

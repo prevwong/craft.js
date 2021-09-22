@@ -22,6 +22,7 @@ export const editorInitialState: EditorState = {
   options: {
     onNodesChange: () => null,
     onRender: ({ render }) => render,
+    onDropEnd: () => null,
     resolver: {},
     enabled: true,
     indicator: {
