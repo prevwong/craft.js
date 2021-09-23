@@ -275,6 +275,9 @@ const Methods = (
           throw new Error(err);
         });
 
+        // modify node props
+        state.options.onBeforeMoveEnd(newParent, targetNode);
+
         const currentParent = state.nodes[currentParentId];
         const currentParentNodes = currentParent.data.nodes;
 

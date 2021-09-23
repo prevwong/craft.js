@@ -22,6 +22,7 @@ export const editorInitialState: EditorState = {
   options: {
     onNodesChange: () => null,
     onRender: ({ render }) => render,
+    onBeforeMoveEnd: () => null,
     resolver: {},
     enabled: true,
     indicator: {
