@@ -1,6 +1,6 @@
 {
   "name": "@craftjs/core",
-  "version": "0.2.0-alpha.27",
+  "version": "0.2.0-alpha.28",
   "description": "A React Framework for building extensible drag and drop page editors",
   "keywords": [
     "react",
@@ -35,7 +35,7 @@
     "url": "https://github.com/prevwong/craft.js/issues"
   },
   "dependencies": {
-    "@craftjs/utils": "^0.2.0-alpha.27",
+    "@craftjs/utils": "^0.2.0-alpha.28",
     "@types/react": "^17.0.5",
     "debounce": "^1.2.0",
     "lodash": "^4.17.20",

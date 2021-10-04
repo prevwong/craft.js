@@ -11,7 +11,7 @@
     "web-builder",
     "react"
   ],
-  "version": "0.2.0-alpha.27",
+  "version": "0.2.0-alpha.28",
   "author": "Prev Wong <prevwong@gmail.com>",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/prevwong/craft.js/",
   "dependencies": {
-    "@craftjs/utils": "^0.2.0-alpha.27"
+    "@craftjs/utils": "^0.2.0-alpha.28"
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
