@@ -3042,7 +3042,7 @@ __metadata:
   resolution: "@craftjs/utils@workspace:packages/utils"
   dependencies:
     "@types/react": ^17.0.5
-    immer: ^8.0.1
+    immer: ^9.0.6
     lodash: ^4.17.20
     nanoid: ^3.1.23
     shallowequal: ^1.1.0
@@ -13926,10 +13926,17 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"immer@npm:8.0.1, immer@npm:^8.0.1":
+"immer@npm:8.0.1":
   version: 8.0.1
   resolution: "immer@npm:8.0.1"
   checksum: a8c8d531af8f968f4d5a2ec3c5eeb6dd6933c69d216b3f8c55275e34c87926d556db4e3d81f5f038e66f9886e874da4ab4f7ffe228e33d718593820e2f57b68f
+  languageName: node
+  linkType: hard
+
+"immer@npm:^9.0.6":
+  version: 9.0.6
+  resolution: "immer@npm:9.0.6"
+  checksum: 48c9b673ee0f3a05f0651f26c8ccdcbc034a47502dd26e716bd7bb301bcede194d1c5e895d4d6ec8d1e7bfb6444dd1056095b3f10e6c5e08cc3e798497a96531
   languageName: node
   linkType: hard
 
