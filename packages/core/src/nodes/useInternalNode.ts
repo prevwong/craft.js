@@ -7,26 +7,26 @@ import { NodeContext, NodeContextType } from './NodeContext';
 import { useInternalEditor } from '../editor/useInternalEditor';
 import { Node } from '../interfaces';
 
-type internalActions = NodeContextType & {
+type internalActions<P = any> = NodeContextType & {
   inNodeContext: boolean;
   actions: {
-    setProp: (cb: (props: any) => void, throttleRate?: number) => void;
+    setProp: (cb: (props: P) => void, throttleRate?: number) => void;
     setCustom: (cb: (custom: any) => void, throttleRate?: number) => void;
     setHidden: (bool: boolean) => void;
   };
 };
 
 // TODO: Deprecate useInternalNode in favor of useNode
-export type useInternalNodeReturnType<S = null> = S extends null
-  ? internalActions
-  : S & internalActions;
+export type useInternalNodeReturnType<S = null, P = any> = S extends null
+  ? internalActions<P>
+  : S & internalActions<P>;
 export function useInternalNode(): useInternalNodeReturnType;
-export function useInternalNode<S = null>(
-  collect?: (node: Node) => S
-): useInternalNodeReturnType<S>;
-export function useInternalNode<S = null>(
-  collect?: (node: Node) => S
-): useInternalNodeReturnType<S> {
+export function useInternalNode<S = null, P = any>(
+  collect?: (node: Node<P>) => S
+): useInternalNodeReturnType<S, P>;
+export function useInternalNode<S = null, P = any>(
+  collect?: (node: Node<P>) => S
+): useInternalNodeReturnType<S, P> {
   const context = useContext(NodeContext);
   invariant(context, ERROR_USE_NODE_OUTSIDE_OF_EDITOR_CONTEXT);
 
