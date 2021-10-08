@@ -23,9 +23,9 @@ export type UserComponent<T = any> = React.ComponentType<T> & {
 export type NodeId = string;
 export type NodeEventTypes = 'selected' | 'dragged' | 'hovered';
 
-export type Node = {
+export type Node<P = any> = {
   id: NodeId;
-  data: NodeData;
+  data: NodeData<P>;
   events: Record<NodeEventTypes, boolean>;
   dom: HTMLElement | null;
   related: Record<string, React.ElementType>;
@@ -42,7 +42,7 @@ export type NodeRules = {
 };
 export type NodeRelated = Record<string, React.ElementType>;
 
-export type NodeData = {
+export type NodeData<P = any> = {
   props: Record<string, any>;
   type: string | React.ElementType;
   name: string;
