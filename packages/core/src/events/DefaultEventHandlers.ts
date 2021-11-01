@@ -70,6 +70,15 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           }
         );
 
+        const unbindTouchDragOver = this.addCraftEventListener(
+          el,
+          'touchmove',
+          (e) => {
+            e.craft.stopPropagation();
+            e.preventDefault();
+          }
+        );
+
         const unbindDragEnter = this.addCraftEventListener(
           el,
           'dragenter',
@@ -78,6 +87,7 @@ export class DefaultEventHandlers extends CoreEventHandlers {
             e.preventDefault();
 
             const draggedElement = DefaultEventHandlers.draggedElement;
+
             if (!draggedElement) {
               return;
             }
@@ -103,9 +113,50 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           }
         );
 
+        const unbindTouchEnter = this.addCraftEventListener(
+          el,
+          'touchmove',
+          (e) => {
+            e.craft.stopPropagation();
+            e.preventDefault();
+
+            const draggedElement = DefaultEventHandlers.draggedElement;
+
+            console.log('draggedElement ', draggedElement);
+            if (!draggedElement) {
+              return;
+            }
+
+            let node = (draggedElement as unknown) as Node;
+
+            if ((draggedElement as NodeTree).rootNodeId) {
+              const nodeTree = draggedElement as NodeTree;
+              node = nodeTree.nodes[nodeTree.rootNodeId];
+            }
+
+            const { clientX: x, clientY: y } = e;
+
+            console.log('unbindTouchEnter  ', { node, targetId, x, y });
+
+            const indicator = store.query.getDropPlaceholder(node, targetId, {
+              x,
+              y,
+            });
+
+            console.log('Mobile Indicator ', indicator);
+            if (!indicator) {
+              return;
+            }
+            store.actions.setIndicator(indicator);
+            DefaultEventHandlers.indicator = indicator;
+          }
+        );
+
         return () => {
           unbindDragEnter();
+          unbindTouchEnter();
           unbindDragOver();
+          unbindTouchDragOver();
         };
       },
       drag: (el: HTMLElement, id: NodeId) => {
@@ -127,12 +178,26 @@ export class DefaultEventHandlers extends CoreEventHandlers {
               e,
               query.node(id).get().dom
             );
+
+            DefaultEventHandlers.draggedElement = id;
+          }
+        );
+
+        const unbindTouchStart = this.addCraftEventListener(
+          el,
+          'touchmove',
+          (e) => {
+            e.craft.stopPropagation();
+
+            console.log('touchmove - getting ID:', id);
+
             DefaultEventHandlers.draggedElement = id;
           }
         );
 
         const unbindDragEnd = this.addCraftEventListener(el, 'dragend', (e) => {
           e.craft.stopPropagation();
+
           const onDropElement = (draggedElement, placement) => {
             const index =
               placement.index + (placement.where === 'after' ? 1 : 0);
@@ -141,10 +206,31 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           this.dropElement(onDropElement);
         });
 
+        const unbindTouchEnd = this.addCraftEventListener(
+          el,
+          'touchend', // touchendoutside generates indicator placement
+          (e) => {
+            e.craft.stopPropagation();
+
+            const onDropElement = (draggedElement, placement) => {
+              // never getting in here - because placement is undefined
+              console.log('unbindTouchEnd', draggedElement, placement);
+
+              const index =
+                placement.index + (placement.where === 'after' ? 1 : 0);
+              store.actions.move(draggedElement, placement.parent.id, index);
+            };
+
+            this.dropElement(onDropElement);
+          }
+        );
+
         return () => {
           el.setAttribute('draggable', 'false');
           unbindDragStart();
           unbindDragEnd();
+          unbindTouchStart();
+          unbindTouchEnd();
         };
       },
       create: (
@@ -170,8 +256,30 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           }
         );
 
+        const unbindTouchStart = this.addCraftEventListener(
+          el,
+          'touchstart',
+          (e) => {
+            e.craft.stopPropagation();
+            e.preventDefault();
+
+            const tree = store.query
+              .parseReactElement(userElement)
+              .toNodeTree();
+
+            const dom = e.currentTarget as HTMLElement;
+
+            if (dom) {
+              DefaultEventHandlers.draggedElementShadow = createShadow(e, dom);
+            }
+
+            DefaultEventHandlers.draggedElement = tree;
+          }
+        );
+
         const unbindDragEnd = this.addCraftEventListener(el, 'dragend', (e) => {
           e.craft.stopPropagation();
+
           const onDropElement = (draggedElement, placement) => {
             const index =
               placement.index + (placement.where === 'after' ? 1 : 0);
@@ -188,10 +296,36 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           this.dropElement(onDropElement);
         });
 
+        const unbindTouchEnd = this.addCraftEventListener(
+          el,
+          'touchend',
+          (e) => {
+            e.craft.stopPropagation();
+            e.preventDefault();
+
+            const onDropElement = (draggedElement, placement) => {
+              const index =
+                placement.index + (placement.where === 'after' ? 1 : 0);
+              store.actions.addNodeTree(
+                draggedElement,
+                placement.parent.id,
+                index
+              );
+
+              if (options && isFunction(options.onCreate)) {
+                options.onCreate(draggedElement);
+              }
+            };
+            this.dropElement(onDropElement);
+          }
+        );
+
         return () => {
           el.removeAttribute('draggable');
           unbindDragStart();
           unbindDragEnd();
+          unbindTouchEnd();
+          unbindTouchStart();
         };
       },
     };

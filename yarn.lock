@@ -3018,7 +3018,7 @@ __metadata:
     react: ^17.0.2
     tiny-invariant: ^1.0.6
   peerDependencies:
-    react: ^16.8.0
+    react: ">=16.8.0"
   languageName: unknown
   linkType: soft
 
@@ -3032,7 +3032,7 @@ __metadata:
     styled-components: ^4.2.1
   peerDependencies:
     "@craftjs/core": ^0.1.0-alpha.1
-    react: ^16.8.0
+    react: ">=16.8.0"
     styled-components: ">= 4"
   languageName: unknown
   linkType: soft
@@ -3048,7 +3048,7 @@ __metadata:
     shallowequal: ^1.1.0
     tiny-invariant: ^1.0.6
   peerDependencies:
-    react: ^16.8.0
+    react: ">=16.8.0"
   languageName: unknown
   linkType: soft
 
