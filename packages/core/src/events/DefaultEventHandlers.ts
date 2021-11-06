@@ -11,6 +11,8 @@ import { Indicator, NodeId, DragTarget } from '../interfaces';
  * Specifies Editor-wide event handlers and connectors
  */
 export class DefaultEventHandlers extends CoreEventHandlers {
+  // used as a workaround for: https://github.com/prevwong/craft.js/issues/257
+  // more info: https://github.com/prevwong/craft.js/pull/304
   static forceSingleDragShadow = isChromium() && isLinux();
 
   draggedElementShadow: HTMLElement;
