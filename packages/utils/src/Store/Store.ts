@@ -76,7 +76,7 @@ export class Store<S = any> {
     this.notify();
   }
 
-  private notify() {
+  protected notify() {
     this.subscribers.forEach((subscriber) => subscriber(this.getState()));
   }
 }

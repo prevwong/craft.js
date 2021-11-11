@@ -176,6 +176,12 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
     };
   }
 
+  // TODO: temporary, it may actually make sense to have the resovler to be part of the state
+  replaceResolver(resolver: EditorStoreConfig['resolver']) {
+    this.resolver = resolver;
+    this.notify();
+  }
+
   // TODO: move to useEditor/useInternalEditor hook
   get query() {
     return new EditorQueryImpl(this);
