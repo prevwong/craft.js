@@ -39,13 +39,13 @@ export const getResolverConfig = (type: string, resolver: Resolver) => {
     isCanvas: false,
   };
 
-  if (tags.includes(type)) {
-    return defaultConfig;
-  }
-
   const component = resolver[type];
 
   if (!component) {
+    if (tags.includes(type)) {
+      return defaultConfig;
+    }
+
     return null;
   }
 
