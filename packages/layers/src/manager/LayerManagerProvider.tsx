@@ -1,33 +1,42 @@
-import { useMethods } from '@craftjs/utils';
-import React from 'react';
+import { useEditor } from '@craftjs/core';
+import React, { useMemo } from 'react';
 
-import { LayerMethods } from './actions';
-import { LayerManagerContext, LayerStore } from './context';
+import { LayerStore } from './LayerStore';
+import { LayerManagerContext } from './context';
 
-import { LayerEventContextProvider } from '../events';
+import { RenderLayerIndicator } from '../events';
 import { LayerOptions } from '../interfaces';
 import { DefaultLayer } from '../layers';
 
 export const LayerManagerProvider: React.FC<{
   options: Partial<LayerOptions>;
 }> = ({ children, options }) => {
-  // TODO: fix type
-  const store = useMethods(LayerMethods, {
-    layers: {},
-    events: {
-      selected: null,
-      dragged: null,
-      hovered: null,
-    },
-    options: {
-      renderLayer: DefaultLayer,
-      ...options,
-    },
-  }) as LayerStore;
+  const { store: editorStore } = useEditor();
+
+  const store = useMemo(
+    () =>
+      new LayerStore(
+        {
+          layers: {},
+          events: {
+            selected: null,
+            hovered: null,
+            indicator: null,
+          },
+          options: {
+            expandRootOnLoad: true,
+            renderLayer: DefaultLayer,
+            ...options,
+          },
+        },
+        editorStore
+      ),
+    [options, editorStore]
+  );
 
   return (
     <LayerManagerContext.Provider value={{ store }}>
-      <LayerEventContextProvider>{children}</LayerEventContextProvider>
+      <RenderLayerIndicator>{children}</RenderLayerIndicator>
     </LayerManagerContext.Provider>
   );
 };

@@ -5,22 +5,20 @@ import React, { useMemo, useContext, useRef, useEffect } from 'react';
 import { LayerContext } from './LayerContext';
 import { LayerNode } from './LayerNode';
 
-import { useLayerEventHandler } from '../events/LayerEventContext';
 import { LayerManagerContext } from '../manager';
 
 export const LayerContextProvider: React.FC<Omit<
   LayerContext,
   'connectors'
 >> = ({ id, depth }) => {
-  const handlers = useLayerEventHandler();
-
   const { store } = useContext(LayerManagerContext);
   const storeRef = useRef(store);
   storeRef.current = store;
 
-  const connectorsUsage = useMemo(() => handlers.createConnectorsUsage(), [
-    handlers,
-  ]);
+  const connectorsUsage = useMemo(
+    () => store.handlers.createConnectorsUsage(),
+    [store]
+  );
 
   const connectors = useMemo(
     () => wrapConnectorHooks(connectorsUsage.connectors),

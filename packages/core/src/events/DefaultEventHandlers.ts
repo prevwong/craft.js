@@ -38,7 +38,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
     return {
       connect: (el: HTMLElement, id: NodeId) => {
-        store.actions.setDOM(id, el);
+        this.dom.register(id, el);
 
         return this.reflect((connectors) => {
           connectors.select(el, id);
@@ -70,10 +70,8 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
               if (isMultiSelect || selectedElementIds.includes(id)) {
                 newSelectedElementIds = selectedElementIds.filter(
                   (selectedId) => {
-                    const descendants = query
-                      .node(selectedId)
-                      .descendants(true);
-                    const ancestors = query.node(selectedId).ancestors(true);
+                    const descendants = query.node(selectedId).descendants();
+                    const ancestors = query.node(selectedId).ancestors();
 
                     // Deselect ancestors/descendants
                     if (descendants.includes(id) || ancestors.includes(id)) {
@@ -195,8 +193,8 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
             actions.setNodeEvent('dragged', selectedElementIds);
 
-            const selectedDOMs = selectedElementIds.map(
-              (id) => query.node(id).get().dom
+            const selectedDOMs = selectedElementIds.map((id) =>
+              query.node(id).getDOM()
             );
 
             this.draggedElementShadow = createShadow(
@@ -231,7 +229,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
             store.actions.move(
               dragTarget.nodes,
-              indicator.placement.parent.id,
+              indicator.placement.parentNodeId,
               index
             );
           });
@@ -289,7 +287,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
               (indicator.placement.where === 'after' ? 1 : 0);
             store.actions.addNodeTree(
               dragTarget.tree,
-              indicator.placement.parent.id,
+              indicator.placement.parentNodeId,
               index
             );
 

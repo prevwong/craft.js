@@ -15,7 +15,7 @@ let node = {};
 let onRender = jest.fn();
 
 jest.mock('../../editor/useInternalEditor', () => ({
-  useInternalEditor: () => ({ onRender }),
+  useInternalEditor: () => ({ store: { config: { onRender } } }),
 }));
 
 jest.mock('../../nodes/useInternalNode', () => ({
@@ -23,9 +23,6 @@ jest.mock('../../nodes/useInternalNode', () => ({
     ...node,
     ...nodeContext,
   }),
-}));
-jest.mock('../../nodes/Canvas', () => ({
-  Canvas: () => null,
 }));
 jest.mock('../../nodes/NodeElement', () => ({
   NodeElement: () => null,

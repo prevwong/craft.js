@@ -6,24 +6,16 @@ import { act } from 'react-dom/test-utils';
 import { Events } from '../../events';
 import { Editor } from '../Editor';
 import { EditorContext } from '../EditorContext';
-import { useEditorStore } from '../store';
-
-jest.mock('../store');
-const mockStore = useEditorStore as jest.Mock<any>;
 
 describe('<Editor />', () => {
   const children = <h1>a children</h1>;
-  let actions;
   let component;
-  let query;
   let onNodesChange;
 
   beforeEach(() => {
     React.useEffect = (f) => f();
 
-    query = { serialize: jest.fn().mockImplementation(() => '{}') };
     onNodesChange = jest.fn();
-    mockStore.mockImplementation((value) => ({ ...value, query, actions }));
     act(() => {
       component = shallow(
         <Editor onNodesChange={onNodesChange}>{children}</Editor>

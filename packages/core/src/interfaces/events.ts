@@ -1,4 +1,4 @@
-import { NodeId, Node, NodeTree } from './nodes';
+import { NodeId, NodeTree } from './nodes';
 
 export type NodeInfo = {
   id: NodeId;
@@ -23,13 +23,13 @@ export type DOMInfo = Record<
 };
 
 export interface DropPosition {
-  parent: Node;
+  parentNodeId: NodeId;
   index: number;
   where: string;
 }
 
 export type Placement = DropPosition & {
-  currentNode: Node | null;
+  currentNodeId: NodeId | null;
 };
 
 type ExistingDragTarget = {
@@ -43,3 +43,8 @@ type NewDragTarget = {
 };
 
 export type DragTarget = ExistingDragTarget | NewDragTarget;
+
+export interface Indicator {
+  placement: Placement;
+  error: string | false;
+}

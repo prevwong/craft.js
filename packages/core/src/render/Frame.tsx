@@ -11,12 +11,12 @@ export type Frame = {
 };
 
 const RenderRootNode = () => {
-  const { timestamp } = useInternalEditor((state) => ({
-    timestamp:
-      state.nodes[ROOT_NODE] && state.nodes[ROOT_NODE]._hydrationTimestamp,
+  const { timestamp, isRootNodeExist } = useInternalEditor((state) => ({
+    timestamp: state.timestamp,
+    isRootNodeExist: !!state.node(ROOT_NODE),
   }));
 
-  if (!timestamp) {
+  if (!timestamp || !isRootNodeExist) {
     return null;
   }
 

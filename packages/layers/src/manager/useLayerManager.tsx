@@ -1,5 +1,5 @@
 import { useCollector } from '@craftjs/utils';
-import { useContext, useMemo } from 'react';
+import { useContext, useRef } from 'react';
 
 import { LayerManagerContext } from './context';
 
@@ -9,11 +9,10 @@ export function useLayerManager<C>(collector?: (state: LayerState) => C) {
   const { store } = useContext(LayerManagerContext);
   const collected = useCollector(store, collector);
 
-  return useMemo(
-    () => ({
-      store,
-      ...collected,
-    }),
-    [store, collected]
-  );
+  const { current: actions } = useRef(store.actions);
+
+  return {
+    ...collected,
+    actions,
+  };
 }

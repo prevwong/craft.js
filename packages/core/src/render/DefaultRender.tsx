@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { SimpleElement } from './SimpleElement';
 
@@ -7,35 +7,29 @@ import { NodeElement } from '../nodes/NodeElement';
 import { useInternalNode } from '../nodes/useInternalNode';
 
 export const DefaultRender = () => {
-  const { type, props, nodes, hydrationTimestamp } = useInternalNode(
-    (node) => ({
-      type: node.data.type,
-      props: node.data.props,
-      nodes: node.data.nodes,
-      hydrationTimestamp: node._hydrationTimestamp,
-    })
-  );
+  const { type, props, nodes } = useInternalNode((node) => ({
+    type: node.data.type,
+    props: node.data.props,
+    nodes: node.data.nodes,
+  }));
 
-  return useMemo(() => {
-    let children = props.children;
+  let children = props.children;
 
-    if (nodes && nodes.length > 0) {
-      children = (
-        <React.Fragment>
-          {nodes.map((id: NodeId) => (
-            <NodeElement id={id} key={id} />
-          ))}
-        </React.Fragment>
-      );
-    }
+  if (nodes && nodes.length > 0) {
+    children = (
+      <React.Fragment>
+        {nodes.map((id: NodeId) => (
+          <NodeElement id={id} key={id} />
+        ))}
+      </React.Fragment>
+    );
+  }
 
-    const render = React.createElement(type, props, children);
+  const render = React.createElement(type, props, children);
 
-    if (typeof type == 'string') {
-      return <SimpleElement render={render} />;
-    }
+  if (typeof type == 'string') {
+    return <SimpleElement render={render} />;
+  }
 
-    return render;
-    // eslint-disable-next-line  react-hooks/exhaustive-deps
-  }, [type, props, hydrationTimestamp, nodes]);
+  return render;
 };

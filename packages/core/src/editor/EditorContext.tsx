@@ -1,6 +1,9 @@
 import { createContext } from 'react';
 
-import { EditorStore } from './store';
+import { EditorStore } from '../interfaces';
 
-export type EditorContext = EditorStore;
-export const EditorContext = createContext<EditorContext>(null);
+export type EditorContext = {
+  store: EditorStore;
+};
+
+export const EditorContext = createContext<EditorContext>({} as EditorContext);

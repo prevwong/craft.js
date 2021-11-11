@@ -5,21 +5,18 @@ import invariant from 'tiny-invariant';
 import { resolveComponent } from './resolveComponent';
 
 import {
-  NodeData,
+  LegacyNodeData,
   SerializedNode,
   ReducedComp,
   ReduceCompType,
 } from '../interfaces';
 import { Resolver } from '../interfaces';
-import { Canvas } from '../nodes/Canvas';
 
 type DeserialisedType = JSX.Element & { name: string };
 
 const restoreType = (type: ReduceCompType, resolver: Resolver) =>
   typeof type === 'object' && type.resolvedName
-    ? type.resolvedName === 'Canvas'
-      ? Canvas
-      : resolver[type.resolvedName]
+    ? resolver[type.resolvedName]
     : typeof type === 'string'
     ? type
     : null;
@@ -75,7 +72,7 @@ export const deserializeComp = (
 export const deserializeNode = (
   data: SerializedNode,
   resolver: Resolver
-): Omit<NodeData, 'event'> => {
+): Omit<LegacyNodeData, 'event'> => {
   const { type: Comp, props: Props, ...nodeData } = data;
 
   const isCompAnHtmlElement = Comp !== undefined && typeof Comp === 'string';
@@ -94,7 +91,7 @@ export const deserializeNode = (
   const { type, name, props } = (deserializeComp(
     data,
     resolver
-  ) as unknown) as NodeData;
+  ) as unknown) as LegacyNodeData;
 
   const { parent, custom, displayName, isCanvas, nodes, hidden } = nodeData;
 

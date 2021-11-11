@@ -1,13 +1,13 @@
-import { Node, NodeInfo, DropPosition } from '../interfaces';
+import { NodeId, NodeInfo, DropPosition } from '../interfaces';
 
 export default function findPosition(
-  parent: Node,
+  parentNodeId: NodeId,
   dims: NodeInfo[],
   posX: number,
   posY: number
 ) {
   let result: DropPosition = {
-    parent,
+    parentNodeId,
     index: 0,
     where: 'before',
   };

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Node } from '../../interfaces';
+import { NodeQuery } from '../../interfaces';
 import { useNode } from '../useNode';
 
-export function connectNode<C>(collect?: (state: Node) => C) {
+export function connectNode<C>(collect?: (state: NodeQuery) => C) {
   return function (WrappedComponent: React.ElementType) {
     return (props: any) => {
       const node = useNode(collect);
