@@ -6,9 +6,8 @@ import { EventHandlerConnectors, EventHandlerUpdates } from './interfaces';
 export abstract class DerivedEventHandlers<
   P extends EventHandlers,
   O extends Record<string, any> = {}
-> extends EventHandlers {
+> extends EventHandlers<O> {
   derived: P;
-  options: O;
   unsubscribeParentHandlerListener: () => void;
 
   constructor(derived: P, options?: O) {

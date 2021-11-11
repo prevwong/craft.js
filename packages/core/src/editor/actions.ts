@@ -8,6 +8,7 @@ import {
   ERROR_DELETE_TOP_LEVEL_NODE,
   CallbacksFor,
   Delete,
+  ERROR_NOT_IN_RESOLVER,
 } from '@craftjs/utils';
 import invariant from 'tiny-invariant';
 
@@ -47,6 +48,16 @@ const Methods = (
   ) => {
     const iterateChildren = (id: NodeId, parentId?: NodeId) => {
       const node = tree.nodes[id];
+
+      if (typeof node.data.type !== 'string') {
+        invariant(
+          state.options.resolver[node.data.name],
+          ERROR_NOT_IN_RESOLVER.replace(
+            '%node_type%',
+            `${(node.data.type as any).name}`
+          )
+        );
+      }
 
       state.nodes[id] = {
         ...node,

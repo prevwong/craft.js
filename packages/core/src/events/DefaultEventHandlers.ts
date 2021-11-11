@@ -1,20 +1,28 @@
+import { isChromium, isLinux } from '@craftjs/utils';
 import { isFunction } from 'lodash';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
+import { Positioner } from './Positioner';
 import { createShadow } from './createShadow';
 
-import { Indicator, NodeId, NodeTree, Node } from '../interfaces';
-
-type DraggedElement = NodeId | NodeTree;
+import { Indicator, NodeId, DragTarget } from '../interfaces';
 
 /**
  * Specifies Editor-wide event handlers and connectors
  */
 export class DefaultEventHandlers extends CoreEventHandlers {
-  static draggedElementShadow: HTMLElement;
-  static draggedElement: DraggedElement;
-  static indicator: Indicator = null;
+  // used as a workaround for: https://github.com/prevwong/craft.js/issues/257
+  // more info: https://github.com/prevwong/craft.js/pull/304
+  static forceSingleDragShadow = isChromium() && isLinux();
+
+  draggedElementShadow: HTMLElement;
+  dragTarget: DragTarget;
+  positioner: Positioner | null = null;
   currentSelectedElementIds = [];
+
+  onDisable() {
+    this.options.store.actions.clearEvents();
+  }
 
   handlers() {
     const store = this.options.store;
@@ -41,7 +49,6 @@ export class DefaultEventHandlers extends CoreEventHandlers {
         );
 
         return () => {
-          store.actions.setNodeEvent('selected', null);
           unbindOnMouseDown();
         };
       },
@@ -56,7 +63,6 @@ export class DefaultEventHandlers extends CoreEventHandlers {
         );
 
         return () => {
-          store.actions.setNodeEvent('hovered', null);
           unbindMouseover();
         };
       },
@@ -67,6 +73,22 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           (e) => {
             e.craft.stopPropagation();
             e.preventDefault();
+
+            if (!this.positioner) {
+              return;
+            }
+
+            const indicator = this.positioner.computeIndicator(
+              targetId,
+              e.clientX,
+              e.clientY
+            );
+
+            if (!indicator) {
+              return;
+            }
+
+            store.actions.setIndicator(indicator);
           }
         );
 
@@ -76,30 +98,6 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           (e) => {
             e.craft.stopPropagation();
             e.preventDefault();
-
-            const draggedElement = DefaultEventHandlers.draggedElement;
-            if (!draggedElement) {
-              return;
-            }
-
-            let node = (draggedElement as unknown) as Node;
-
-            if ((draggedElement as NodeTree).rootNodeId) {
-              const nodeTree = draggedElement as NodeTree;
-              node = nodeTree.nodes[nodeTree.rootNodeId];
-            }
-
-            const { clientX: x, clientY: y } = e;
-            const indicator = store.query.getDropPlaceholder(node, targetId, {
-              x,
-              y,
-            });
-
-            if (!indicator) {
-              return;
-            }
-            store.actions.setIndicator(indicator);
-            DefaultEventHandlers.indicator = indicator;
           }
         );
 
@@ -123,22 +121,43 @@ export class DefaultEventHandlers extends CoreEventHandlers {
 
             const { query } = store;
 
-            DefaultEventHandlers.draggedElementShadow = createShadow(
+            this.draggedElementShadow = createShadow(
               e,
-              query.node(id).get().dom
+              [query.node(id).get().dom],
+              DefaultEventHandlers.forceSingleDragShadow
             );
-            DefaultEventHandlers.draggedElement = id;
+
+            this.dragTarget = {
+              type: 'existing',
+              nodes: [id],
+            };
+
+            this.positioner = new Positioner(
+              this.options.store,
+              this.dragTarget
+            );
           }
         );
 
         const unbindDragEnd = this.addCraftEventListener(el, 'dragend', (e) => {
           e.craft.stopPropagation();
-          const onDropElement = (draggedElement, placement) => {
+
+          this.dropElement((dragTarget, indicator) => {
+            if (dragTarget.type === 'new') {
+              return;
+            }
+
             const index =
-              placement.index + (placement.where === 'after' ? 1 : 0);
-            store.actions.move(draggedElement, placement.parent.id, index);
-          };
-          this.dropElement(onDropElement);
+              indicator.placement.index +
+              (indicator.placement.where === 'after' ? 1 : 0);
+
+            store.actions.move(
+              // Multiselect is only available in the next branch for now (0.2.0@alpha.x and higher)
+              dragTarget.nodes[0],
+              indicator.placement.parent.id,
+              index
+            );
+          });
         });
 
         return () => {
@@ -164,28 +183,43 @@ export class DefaultEventHandlers extends CoreEventHandlers {
               .toNodeTree();
 
             const dom = e.currentTarget as HTMLElement;
+            this.draggedElementShadow = createShadow(
+              e,
+              [dom],
+              DefaultEventHandlers.forceSingleDragShadow
+            );
+            this.dragTarget = {
+              type: 'new',
+              tree,
+            };
 
-            DefaultEventHandlers.draggedElementShadow = createShadow(e, dom);
-            DefaultEventHandlers.draggedElement = tree;
+            this.positioner = new Positioner(
+              this.options.store,
+              this.dragTarget
+            );
           }
         );
 
         const unbindDragEnd = this.addCraftEventListener(el, 'dragend', (e) => {
           e.craft.stopPropagation();
-          const onDropElement = (draggedElement, placement) => {
+          this.dropElement((dragTarget, indicator) => {
+            if (dragTarget.type === 'existing') {
+              return;
+            }
+
             const index =
-              placement.index + (placement.where === 'after' ? 1 : 0);
+              indicator.placement.index +
+              (indicator.placement.where === 'after' ? 1 : 0);
             store.actions.addNodeTree(
-              draggedElement,
-              placement.parent.id,
+              dragTarget.tree,
+              indicator.placement.parent.id,
               index
             );
 
             if (options && isFunction(options.onCreate)) {
-              options.onCreate(draggedElement);
+              options.onCreate(dragTarget.tree);
             }
-          };
-          this.dropElement(onDropElement);
+          });
         });
 
         return () => {
@@ -198,32 +232,33 @@ export class DefaultEventHandlers extends CoreEventHandlers {
   }
 
   private dropElement(
-    onDropNode: (
-      draggedElement: DraggedElement,
-      placement: Indicator['placement']
-    ) => void
+    onDropNode: (dragTarget: DragTarget, placement: Indicator) => void
   ) {
     const store = this.options.store;
 
-    const {
-      draggedElement,
-      draggedElementShadow,
-      indicator,
-    } = DefaultEventHandlers;
-    if (draggedElement && indicator && !indicator.error) {
-      const { placement } = indicator;
-      onDropNode(draggedElement, placement);
+    if (!this.positioner) {
+      return;
+    }
+
+    const draggedElementShadow = this.draggedElementShadow;
+
+    const indicator = this.positioner.getIndicator();
+
+    if (this.dragTarget && indicator && !indicator.error) {
+      onDropNode(this.dragTarget, indicator);
     }
 
     if (draggedElementShadow) {
       draggedElementShadow.parentNode.removeChild(draggedElementShadow);
-      DefaultEventHandlers.draggedElementShadow = null;
+      this.draggedElementShadow = null;
     }
 
-    DefaultEventHandlers.draggedElement = null;
-    DefaultEventHandlers.indicator = null;
+    this.dragTarget = null;
 
     store.actions.setIndicator(null);
     store.actions.setNodeEvent('dragged', null);
+    this.positioner.cleanup();
+
+    this.positioner = null;
   }
 }
