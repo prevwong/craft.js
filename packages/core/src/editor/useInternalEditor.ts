@@ -13,11 +13,9 @@ import { EditorQuery } from '../interfaces';
 export type EditorCollector<C> = (state: EditorQuery, query: EditorQuery) => C;
 
 export function useInternalEditor<C = null>(collector?: EditorCollector<C>) {
-  const context = useContext(EditorContext);
+  const { store } = useContext(EditorContext);
 
-  invariant(context, ERROR_USE_EDITOR_OUTSIDE_OF_EDITOR_CONTEXT);
-
-  const store = context.store;
+  invariant(store, ERROR_USE_EDITOR_OUTSIDE_OF_EDITOR_CONTEXT);
 
   const handlers = store.handlers;
 
