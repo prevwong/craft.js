@@ -148,7 +148,11 @@ export class EditorQueryImpl implements EditorQuery {
       toNodeTree: (
         normalize?: (node: Node, jsx: React.ReactElement) => void
       ): NodeTree => {
-        return parseNodeFromJSX(reactElement, this.store.resolver, normalize);
+        return parseNodeFromJSX(
+          reactElement,
+          this.store.getState().resolver,
+          normalize
+        );
       },
     };
   }
@@ -230,7 +234,10 @@ export class EditorQueryImpl implements EditorQuery {
   parseSerializedNode(serializedNode: SerializedNode) {
     return {
       toNode: (normalize?: (node: Node) => void) => {
-        const data = deserializeNode(serializedNode, this.store.resolver);
+        const data = deserializeNode(
+          serializedNode,
+          this.store.getState().resolver
+        );
         invariant(data.type, ERROR_NOT_IN_RESOLVER);
         const id = typeof normalize === 'string' && normalize;
         if (id) {
@@ -250,7 +257,7 @@ export class EditorQueryImpl implements EditorQuery {
   parseFreshNode(freshNode: FreshNode) {
     return {
       toNode: (normalize?: (node: Node) => void): Node => {
-        let node = adaptLegacyNode(freshNode, this.store.resolver);
+        let node = adaptLegacyNode(freshNode, this.store.getState().resolver);
 
         const { type, name, ...data } = freshNode.data;
 

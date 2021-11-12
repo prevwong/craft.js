@@ -14,9 +14,9 @@ describe('actions', () => {
           id: 'ROOT',
           type: 'div',
         },
-      },
-      resolver: {
-        ButtonComponent,
+        resolver: {
+          ButtonComponent,
+        },
       },
     });
   });
@@ -158,8 +158,10 @@ describe('actions', () => {
   describe('deserialize', () => {
     beforeEach(() => {
       store = createTestEditorStore({
-        resolver: {
-          Cover: () => null,
+        state: {
+          resolver: {
+            Cover: () => null,
+          },
         },
       });
     });
@@ -360,8 +362,8 @@ describe('actions', () => {
     it('should be able to set indicator state', () => {
       const indicator = {
         placement: {
-          currentNode: 'node-a',
-          parent: 'ROOT',
+          currentNodeId: 'node-a',
+          parentNodeId: 'ROOT',
           index: 0,
           where: 'after',
         },

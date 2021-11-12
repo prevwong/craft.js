@@ -20,8 +20,8 @@ export const Editor: React.FC<Partial<EditorProps>> = ({
   const initialConfigRef = useRef({
     state: {
       enabled: enabled !== undefined ? enabled : true,
+      resolver,
     },
-    resolver,
     ...(config || {}),
   });
 
@@ -31,7 +31,11 @@ export const Editor: React.FC<Partial<EditorProps>> = ({
   );
 
   useEffect(() => {
-    store.replaceResolver(resolver);
+    if (store.getState().resolver === resolver) {
+      return;
+    }
+
+    store.actions.setResolver(resolver);
   }, [store, resolver]);
 
   if (!store) {

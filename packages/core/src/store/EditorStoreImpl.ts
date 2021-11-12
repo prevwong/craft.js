@@ -7,7 +7,7 @@ import { EditorQueryImpl } from './query';
 import { CoreEventHandlers } from '../events/CoreEventHandlers';
 import { DefaultEventHandlers } from '../events/DefaultEventHandlers';
 import { EditorStore, EditorStoreConfig } from '../interfaces';
-import { EditorState, NodeId, Resolver } from '../interfaces';
+import { EditorState, NodeId } from '../interfaces';
 import { RelatedComponents } from '../nodes/RelatedComponents';
 
 const normalizeStateOnUndoRedo = (state: EditorState) => {
@@ -35,6 +35,7 @@ export const editorInitialState: EditorState = {
   },
   indicator: null,
   timestamp: Date.now(),
+  resolver: {},
 };
 
 export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
@@ -42,12 +43,12 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
   config: EditorStoreConfig;
   handlers: CoreEventHandlers;
   related: RelatedComponents;
-  resolver: Resolver;
 
   constructor(
     config?: Partial<EditorStoreConfig & { state: Partial<EditorState> }>
   ) {
     const { state, ...storeConfig } = config;
+
     super({
       ...editorInitialState,
       ...state,
@@ -66,22 +67,19 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
           isMultiSelectEnabled: (e: MouseEvent) => !!e.metaKey,
         }),
       normalizeNodes: () => {},
-      resolver: {},
       ...(storeConfig || {}),
     };
 
     // we do not want to warn the user if no resolver was supplied
-    if (this.config.resolver !== undefined) {
+    if (state.resolver !== undefined) {
       invariant(
-        typeof this.config.resolver === 'object' &&
-          !Array.isArray(this.config.resolver),
+        typeof state.resolver === 'object' && !Array.isArray(state.resolver),
         ERROR_RESOLVER_NOT_AN_OBJECT
       );
     }
 
     this.history = new History();
     this.related = new RelatedComponents();
-    this.resolver = this.config.resolver;
     this.handlers = this.config.handlers(this);
 
     this.subscribe(
@@ -174,12 +172,6 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
       ),
       history,
     };
-  }
-
-  // TODO: temporary, it may actually make sense to have the resovler to be part of the state
-  replaceResolver(resolver: EditorStoreConfig['resolver']) {
-    this.resolver = resolver;
-    this.notify();
   }
 
   // TODO: move to useEditor/useInternalEditor hook

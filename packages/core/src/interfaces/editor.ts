@@ -13,6 +13,7 @@ export type EditorState = {
   enabled: boolean;
   indicator: Indicator;
   timestamp: number;
+  resolver: Resolver;
 };
 
 export type ConnectedEditor = ReturnType<typeof useInternalEditor>;

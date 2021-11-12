@@ -21,6 +21,7 @@ import {
   NodeSelector,
   NodeSelectorType,
   LegacyNode,
+  Resolver,
 } from '../interfaces';
 import { fromEntries } from '../utils/fromEntries';
 import { getNodesFromSelector } from '../utils/getNodesFromSelector';
@@ -90,7 +91,7 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
       }
 
       nodes.forEach((nodeOrlegacyNode: Node | LegacyNode) => {
-        const node = adaptLegacyNode(nodeOrlegacyNode, store.resolver);
+        const node = adaptLegacyNode(nodeOrlegacyNode, state.resolver);
         state.nodes[node.id] = node;
 
         if (parentId) {
@@ -334,6 +335,10 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
       }
 
       this.setNodeEvent('hovered', null);
+    },
+
+    setResolver(resolver: Resolver) {
+      state.resolver = resolver;
     },
 
     /**

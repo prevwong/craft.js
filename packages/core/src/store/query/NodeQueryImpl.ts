@@ -64,7 +64,7 @@ export class NodeQueryImpl implements NodeQuery {
       };
     }
 
-    const config = getResolverConfig(node.type, this.store.resolver);
+    const config = getResolverConfig(node.type, this.store.getState().resolver);
 
     return {
       id: node.id,
@@ -87,7 +87,7 @@ export class NodeQueryImpl implements NodeQuery {
   }
 
   private getConfig() {
-    const config = getResolverConfig(this.type, this.store.resolver);
+    const config = getResolverConfig(this.type, this.store.getState().resolver);
     invariant(config, ERROR_NOT_IN_RESOLVER);
     return config;
   }
@@ -559,6 +559,6 @@ export class NodeQueryImpl implements NodeQuery {
   }
 
   toSerializedNode() {
-    return serializeNode(this.data, this.store.resolver);
+    return serializeNode(this.data, this.store.getState().resolver);
   }
 }

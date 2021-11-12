@@ -20,7 +20,7 @@ import {
 } from './nodes';
 
 import { CoreEventHandlers } from '../events';
-import { EditorState, Resolver } from '../interfaces';
+import { EditorState } from '../interfaces';
 import { RelatedComponents } from '../nodes/RelatedComponents';
 import { ActionMethods } from '../store/actions';
 
@@ -196,7 +196,6 @@ export type EditorStoreConfig = {
   }>;
   handlers: (store: EditorStore) => CoreEventHandlers;
   normalizeNodes: (state: EditorState, previousState: EditorState) => void;
-  resolver: Resolver;
 };
 
 type Actions = ReturnType<typeof ActionMethods>;
@@ -205,7 +204,6 @@ export interface EditorStore extends Store<EditorState> {
   config: EditorStoreConfig;
   handlers: CoreEventHandlers;
   related: RelatedComponents;
-  resolver: Resolver;
 
   actions: Actions & {
     history: {

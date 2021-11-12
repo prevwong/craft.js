@@ -42,13 +42,13 @@ describe('NodeQuery', () => {
     helper = (id) =>
       new NodeQueryImpl(
         createTestEditorStore({
-          resolver: {
-            RandomComponent,
-            RejectDragComponent,
-            RejectDropButtonComponent,
-            RejectDragOutgoingComponent,
-          },
           state: {
+            resolver: {
+              RandomComponent,
+              RejectDragComponent,
+              RejectDropButtonComponent,
+              RejectDragOutgoingComponent,
+            },
             nodes: {
               id: 'ROOT',
               type: 'div',

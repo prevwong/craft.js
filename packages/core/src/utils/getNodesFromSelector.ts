@@ -31,7 +31,7 @@ export const getNodesFromSelector = (
       }
 
       if (typeof item === 'object' && !mergedConfig.idOnly) {
-        const node = adaptLegacyNode(item, store.resolver);
+        const node = adaptLegacyNode(item, store.getState().resolver);
         return {
           node,
           exists: !!nodes[node.id],

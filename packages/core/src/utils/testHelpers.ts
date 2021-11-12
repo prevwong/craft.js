@@ -6,6 +6,7 @@ import {
   NodeEventTypes,
   NodeId,
   Nodes,
+  Resolver,
 } from '../interfaces';
 import { EditorStoreImpl, editorInitialState } from '../store';
 
@@ -66,14 +67,16 @@ export const createTestNodes = (node: PartialNestedNode) => {
 type TestEditorState = {
   nodes: PartialNestedNode;
   events: Record<NodeEventTypes, NodeId[]>;
+  resolver: Resolver;
 };
 
 export const createTestState = (state: Partial<TestEditorState> = {}) => {
-  const { nodes: rootNode, events } = state;
+  const { nodes: rootNode, events, resolver } = state;
 
   return {
     ...editorInitialState,
     ...state,
+    resolver: resolver || {},
     nodes: rootNode ? createTestNodes(rootNode) : {},
     events: {
       ...editorInitialState.events,
