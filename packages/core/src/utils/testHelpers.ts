@@ -8,7 +8,7 @@ import {
   Nodes,
   Resolver,
 } from '../interfaces';
-import { EditorStoreImpl, editorInitialState } from '../store';
+import { EditorStore, editorInitialState } from '../store';
 
 type NestedNode = Omit<Node, 'nodes' | 'linkedNodes' | 'parent'> & {
   nodes: NestedNode[];
@@ -25,7 +25,7 @@ type PartialNestedNode = Partial<
 export const createTestNodes = (node: PartialNestedNode) => {
   const flattenNodes: Nodes = {};
   const flattenNode = (partialNode: PartialNestedNode, parent = null) => {
-    const node = {
+    const node: PartialNestedNode = {
       id: getRandomId(),
       nodes: [],
       linkedNodes: {},
@@ -39,13 +39,15 @@ export const createTestNodes = (node: PartialNestedNode) => {
     };
 
     flattenNodes[node.id] = {
-      ...node,
+      ...(node as Node),
+      id: node.id,
       parent,
       nodes: [],
       linkedNodes: {},
     };
 
     flattenNodes[node.id].nodes = node.nodes.map((childNode) =>
+      // @ts-ignore
       flattenNode(childNode, node.id)
     );
     flattenNodes[node.id].linkedNodes = Object.entries(node.linkedNodes).reduce(
@@ -98,7 +100,7 @@ export const createTestEditorStore = (
 ) => {
   const { state, ...otherConfig } = config;
 
-  return new EditorStoreImpl({
+  return new EditorStore({
     ...otherConfig,
     state: createTestState(state),
   });

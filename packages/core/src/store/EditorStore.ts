@@ -2,11 +2,11 @@ import { Store, History, ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
 import invariant from 'tiny-invariant';
 
 import { ActionMethods } from './actions';
-import { EditorQueryImpl } from './query';
+import { EditorQuery } from './query';
 
 import { CoreEventHandlers } from '../events/CoreEventHandlers';
 import { DefaultEventHandlers } from '../events/DefaultEventHandlers';
-import { EditorStore, EditorStoreConfig } from '../interfaces';
+import { EditorStoreConfig } from '../interfaces';
 import { EditorState, NodeId } from '../interfaces';
 import { RelatedComponents } from '../nodes/RelatedComponents';
 
@@ -38,7 +38,7 @@ export const editorInitialState: EditorState = {
   resolver: {},
 };
 
-export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
+export class EditorStore extends Store<EditorState> {
   history: History;
   config: EditorStoreConfig;
   handlers: CoreEventHandlers;
@@ -176,6 +176,6 @@ export class EditorStoreImpl extends Store<EditorState> implements EditorStore {
 
   // TODO: move to useEditor/useInternalEditor hook
   get query() {
-    return new EditorQueryImpl(this);
+    return new EditorQuery(this);
   }
 }

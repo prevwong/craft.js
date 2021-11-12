@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { LegacyNode } from './legacy/nodes';
-import { NodeQuery } from './store';
+
+import { NodeQuery } from '../store';
 
 export type UserComponentConfig<T> = {
   displayName: string;

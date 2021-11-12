@@ -3,7 +3,6 @@ import { getDOMInfo, ROOT_NODE } from '@craftjs/utils';
 import findPosition from './findPosition';
 
 import {
-  EditorStore,
   DragTarget,
   DropPosition,
   Indicator,
@@ -11,8 +10,8 @@ import {
   NodeId,
   NodeInfo,
   NodeSelectorWrapper,
-  NodeQuery,
 } from '../interfaces';
+import { EditorStore, NodeQuery } from '../store';
 import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 
 /**

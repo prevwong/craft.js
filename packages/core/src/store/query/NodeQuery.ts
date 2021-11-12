@@ -15,6 +15,7 @@ import {
 import { createElement } from 'react';
 import invariant from 'tiny-invariant';
 
+import { EditorStore } from '..';
 import {
   LegacyNodeData,
   NodeEventTypes,
@@ -23,8 +24,6 @@ import {
   NodeRules,
   NodeSelector,
   BackwardsCompatibleNode,
-  EditorStore,
-  NodeQuery,
   LegacyNode,
 } from '../../interfaces';
 import { NodeProvider } from '../../nodes';
@@ -35,7 +34,7 @@ import { serializeNode } from '../../utils/serializeNode';
 /**
  * NodeQuery helpes define a Node in the EditorState
  */
-export class NodeQueryImpl implements NodeQuery {
+export class NodeQuery {
   node: Node;
 
   constructor(private readonly store: EditorStore, readonly id: NodeId) {
@@ -375,7 +374,7 @@ export class NodeQueryImpl implements NodeQuery {
       return null;
     }
 
-    return new NodeQueryImpl(this.store, id);
+    return new NodeQuery(this.store, id);
   }
 
   // ::Deprecated methods below:: //

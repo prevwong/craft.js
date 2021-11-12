@@ -8,7 +8,6 @@ import {
 import invariant from 'tiny-invariant';
 
 import {
-  EditorStore,
   EditorState,
   Indicator,
   NodeId,
@@ -23,6 +22,7 @@ import {
   LegacyNode,
   Resolver,
 } from '../interfaces';
+import { EditorStore } from '../store';
 import { fromEntries } from '../utils/fromEntries';
 import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 import { removeNodeFromEvents } from '../utils/removeNodeFromEvents';

@@ -9,7 +9,8 @@ import invariant from 'tiny-invariant';
 import { NodeContext } from './NodeContext';
 
 import { useInternalEditor } from '../editor/useInternalEditor';
-import { EditorState, NodeQuery } from '../interfaces';
+import { EditorState } from '../interfaces';
+import { NodeQuery } from '../store';
 
 export type NodeCollector<C> = (node: NodeQuery) => C;
 

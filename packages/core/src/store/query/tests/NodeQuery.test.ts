@@ -1,8 +1,8 @@
 import { NodeId } from '../../../interfaces';
 import { createTestEditorStore } from '../../../utils/testHelpers';
-import { NodeQueryImpl } from '../NodeQueryImpl';
+import { NodeQuery } from '../NodeQuery';
 
-let helper: (id: NodeId) => NodeQueryImpl;
+let helper: (id: NodeId) => NodeQuery;
 
 const SettingsComponent = () => null;
 const RandomComponent = () => null;
@@ -40,7 +40,7 @@ RejectDragOutgoingComponent.craft = {
 describe('NodeQuery', () => {
   beforeEach(() => {
     helper = (id) =>
-      new NodeQueryImpl(
+      new NodeQuery(
         createTestEditorStore({
           state: {
             resolver: {
@@ -146,7 +146,7 @@ describe('NodeQuery', () => {
       expect(
         helper('ROOT')
           .getChildNodes()
-          .every((node) => node instanceof NodeQueryImpl)
+          .every((node) => node instanceof NodeQuery)
       ).toEqual(true);
     });
   });
@@ -168,7 +168,7 @@ describe('NodeQuery', () => {
       expect(helper('node-card').getLinkedNodes()).toEqual([
         {
           id: 'header',
-          node: expect.any(NodeQueryImpl),
+          node: expect.any(NodeQuery),
         },
       ]);
     });

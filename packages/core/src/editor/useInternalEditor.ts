@@ -8,7 +8,7 @@ import invariant from 'tiny-invariant';
 
 import { EditorContext } from './EditorContext';
 
-import { EditorQuery } from '../interfaces';
+import { EditorQuery } from '../store';
 
 export type EditorCollector<C> = (state: EditorQuery, query: EditorQuery) => C;
 

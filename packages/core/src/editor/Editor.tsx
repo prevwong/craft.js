@@ -4,7 +4,7 @@ import { EditorContext } from './EditorContext';
 
 import { Events } from '../events';
 import { EditorState, EditorStoreConfig } from '../interfaces';
-import { EditorStoreImpl } from '../store';
+import { EditorStore } from '../store';
 
 type EditorProps = EditorStoreConfig & Partial<EditorState>;
 
@@ -25,10 +25,7 @@ export const Editor: React.FC<Partial<EditorProps>> = ({
     ...(config || {}),
   });
 
-  const store = useMemo(
-    () => new EditorStoreImpl(initialConfigRef.current),
-    []
-  );
+  const store = useMemo(() => new EditorStore(initialConfigRef.current), []);
 
   useEffect(() => {
     if (store.getState().resolver === resolver) {

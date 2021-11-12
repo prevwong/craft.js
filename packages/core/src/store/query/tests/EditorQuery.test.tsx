@@ -1,10 +1,10 @@
 import { ROOT_NODE } from '@craftjs/utils';
 import React from 'react';
 
-import { EditorStoreImpl } from '../../EditorStoreImpl';
-import { EditorQueryImpl } from '../EditorQueryImpl';
-import { EventQueryImpl } from '../EventQueryImpl';
-import { NodeQueryImpl } from '../NodeQueryImpl';
+import { EditorStore } from '../../EditorStore';
+import { EditorQuery } from '../EditorQuery';
+import { EventQuery } from '../EventQuery';
+import { NodeQuery } from '../NodeQuery';
 
 const Button = () => null;
 const NotInResolverComponent = () => null;
@@ -49,11 +49,11 @@ const nodes = {
 
 describe('EditorQuery', () => {
   const resolver = { Button };
-  let store: EditorStoreImpl;
-  let query: EditorQueryImpl;
+  let store: EditorStore;
+  let query: EditorQuery;
 
   beforeEach(() => {
-    store = new EditorStoreImpl({
+    store = new EditorStore({
       state: {
         resolver,
         nodes,
@@ -68,7 +68,7 @@ describe('EditorQuery', () => {
         },
       },
     });
-    query = new EditorQueryImpl(store);
+    query = new EditorQuery(store);
   });
 
   describe('isEnabled', () => {
@@ -79,14 +79,14 @@ describe('EditorQuery', () => {
 
   describe('root', () => {
     it('should return a record of the ROOT NodeQuery', () => {
-      expect(query.root instanceof NodeQueryImpl).toEqual(true);
+      expect(query.root instanceof NodeQuery).toEqual(true);
       expect(query.root.id).toEqual(ROOT_NODE);
     });
   });
 
   describe('node', () => {
     it('should return an instance of NodeQuery', () => {
-      expect(query.node('ROOT') instanceof NodeQueryImpl).toEqual(true);
+      expect(query.node('ROOT') instanceof NodeQuery).toEqual(true);
     });
     it('should return null if non-existing node', () => {
       expect(query.node('node-non-existing')).toEqual(null);
@@ -96,7 +96,7 @@ describe('EditorQuery', () => {
   describe('event', () => {
     it('should returnan instance of EventQuery', () => {
       ['selected', 'hovered', 'dragged'].forEach((eventType: any) => {
-        expect(query.event(eventType) instanceof EventQueryImpl).toEqual(true);
+        expect(query.event(eventType) instanceof EventQuery).toEqual(true);
       });
     });
   });
@@ -118,7 +118,7 @@ describe('EditorQuery', () => {
         nodes: Object.keys(nodes).reduce(
           (accum, id) => ({
             ...accum,
-            [id]: expect.any(NodeQueryImpl),
+            [id]: expect.any(NodeQuery),
           }),
           {}
         ),
@@ -132,7 +132,7 @@ describe('EditorQuery', () => {
           placement: {
             ...store.getState().indicator.placement,
             currentNode: null,
-            parent: expect.any(NodeQueryImpl),
+            parent: expect.any(NodeQuery),
           },
         },
       });
@@ -145,7 +145,7 @@ describe('EditorQuery', () => {
           Object.keys(store.getState().nodes).reduce(
             (accum, id) => ({
               ...accum,
-              [id]: new NodeQueryImpl(store, id).toSerializedNode(),
+              [id]: new NodeQuery(store, id).toSerializedNode(),
             }),
             {}
           )

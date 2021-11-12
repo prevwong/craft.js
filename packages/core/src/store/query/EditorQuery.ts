@@ -7,9 +7,10 @@ import {
 import React from 'react';
 import invariant from 'tiny-invariant';
 
-import { EventQueryImpl } from './EventQueryImpl';
-import { NodeQueryImpl } from './NodeQueryImpl';
+import { EventQuery } from './EventQuery';
+import { NodeQuery } from './NodeQuery';
 
+import { EditorStore } from '..';
 import findPosition from '../../events/findPosition';
 import {
   FreshNode,
@@ -21,9 +22,6 @@ import {
   NodeTree,
   SerializedNode,
   SerializedNodes,
-  EditorStore,
-  EditorQuery,
-  NodeQuery,
   NodeInfo,
 } from '../../interfaces';
 import { deserializeNode } from '../../utils/deserializeNode';
@@ -31,7 +29,7 @@ import { getNodesFromSelector } from '../../utils/getNodesFromSelector';
 import { parseNodeFromJSX } from '../../utils/parseNodeFromJSX';
 import { adaptLegacyNode } from '../../utils/types';
 
-export class EditorQueryImpl implements EditorQuery {
+export class EditorQuery {
   constructor(private readonly store: EditorStore) {
     this.store = store;
   }
@@ -54,11 +52,11 @@ export class EditorQueryImpl implements EditorQuery {
       return null;
     }
 
-    return new NodeQueryImpl(this.store, id);
+    return new NodeQuery(this.store, id);
   }
 
   event(eventType: NodeEventTypes) {
-    return new EventQueryImpl(this.store, eventType);
+    return new EventQuery(this.store, eventType);
   }
 
   /**
@@ -172,7 +170,7 @@ export class EditorQueryImpl implements EditorQuery {
     return Object.keys(this.state.nodes).reduce(
       (accum, nodeId) => ({
         ...accum,
-        [nodeId]: new NodeQueryImpl(this.store, nodeId),
+        [nodeId]: new NodeQuery(this.store, nodeId),
       }),
       {}
     );

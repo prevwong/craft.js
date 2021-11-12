@@ -1,11 +1,7 @@
-import {
-  NodeId,
-  NodeEventTypes,
-  EditorStore,
-  EventQuery,
-} from '../../interfaces';
+import { EditorStore } from '..';
+import { NodeId, NodeEventTypes } from '../../interfaces';
 
-export class EventQueryImpl implements EventQuery {
+export class EventQuery {
   private event: Set<NodeId>;
 
   constructor(private readonly store: EditorStore, type: NodeEventTypes) {

@@ -1,8 +1,8 @@
 import { NodeEventTypes } from '../../../interfaces';
 import { createTestEditorStore } from '../../../utils/testHelpers';
-import { EventQueryImpl } from '../EventQueryImpl';
+import { EventQuery } from '../EventQuery';
 
-let helper: (type: NodeEventTypes) => EventQueryImpl;
+let helper: (type: NodeEventTypes) => EventQuery;
 
 const selectedNodeIds = ['node-a', 'node-b', 'node-c'];
 
@@ -18,7 +18,7 @@ const store = createTestEditorStore({
 
 describe('EventHelpers', () => {
   beforeEach(() => {
-    helper = (eventType) => new EventQueryImpl(store, eventType);
+    helper = (eventType) => new EventQuery(store, eventType);
   });
 
   describe('isEmpty', () => {
