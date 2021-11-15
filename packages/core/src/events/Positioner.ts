@@ -280,4 +280,8 @@ export class Positioner {
   getIndicator() {
     return this.currentIndicator;
   }
+  
+  removeIndicator() {
+    this.currentIndicator = null;
+  }
 }
