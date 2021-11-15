@@ -19,7 +19,8 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prerelease": "lerna version --yes --conventional-commits --conventional-prerelease",
     "release": "lerna version --yes --conventional-commits --conventional-graduate",
-    "publish": "./scripts/publish.sh"
+    "publish": "./scripts/publish.sh",
+    "version": "echo \"Running post lerna version script; bump lockfile\" && yarn install && git stage yarn.lock"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
