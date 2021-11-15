@@ -160,7 +160,18 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
             store.actions.setIndicator(indicator);
           }
         );
+        
+        const unbindDragLeave = this.addCraftEventListener(
+          el,
+          'dragleave',
+          (e) => {
+            e.craft.stopPropagation();
+            e.preventDefault();
 
+            this.positioner?.removeIndicator();
+          }
+        );
+        
         const unbindDragEnter = this.addCraftEventListener(
           el,
           'dragenter',
@@ -173,6 +184,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
         return () => {
           unbindDragEnter();
           unbindDragOver();
+          unbindDragLeave();
         };
       },
       drag: (el: HTMLElement, id: NodeId) => {
