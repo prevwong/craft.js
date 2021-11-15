@@ -12,17 +12,16 @@
     "build:all": "lerna run build --stream",
     "deploy": "cross-env ENV=production ./scripts/deploy.sh",
     "prettier": "prettier --write .",
-    "release": "run-s lint clean build test release:npm",
-    "release:npm": "./scripts/release.sh",
-    "publish:beta": "lerna version prerelease --preid beta --force-publish --yes",
     "cy:test": "cypress run",
     "cy:open": "cypress open",
     "test": "jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lerna:version": "lerna version --conventional-commits --yes",
-    "lerna:prerelease": "yarn lerna:version --conventional-prerelease --yes",
-    "lerna:publish": "lerna publish from-git --yes"
+    "prerelease": "lerna version --yes --conventional-commits --conventional-prerelease --force-publish",
+    "prerelease:beta": "lerna version --yes --conventional-commits --conventional-prerelease --preid beta --force-publish",
+    "release": "lerna version --yes --conventional-commits --conventional-graduate --force-publish",
+    "publish": "./scripts/publish.sh",
+    "version": "echo \"Running post lerna version script; bump lockfile\" && yarn install && git stage yarn.lock"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
