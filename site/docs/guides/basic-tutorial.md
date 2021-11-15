@@ -494,7 +494,7 @@ export const CardTop = ({children}) => {
 CardTop.craft = {
   rules: {
     // Only accept Text
-    canMoveIn: (incomingNode) => incomingNode.data.type == Text
+    canMoveIn: (incomingNodes) => incomingNodes.every(incomingNode => incomingNode.data.type === Text)
   }
 }
 
@@ -510,7 +510,7 @@ export const CardBottom = ({children}) => {
 CardBottom.craft = {
   rules: {
     // Only accept Buttons
-    canMoveIn : (incomingNode) => incomingNode.data.type == Button
+    canMoveIn : (incomingNode) => incomingNodes.every(incomingNode => incomingNode.data.type === Button)
   }
 }
 
