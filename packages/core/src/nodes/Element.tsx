@@ -39,11 +39,7 @@ export function Element<T extends React.ElementType>({
   };
 
   const { query, actions } = useInternalEditor();
-  const { id: nodeId, linkedNodes, inNodeContext } = useInternalNode(
-    (node) => ({
-      linkedNodes: node.linkedNodes(),
-    })
-  );
+  const { id: nodeId, inNodeContext } = useInternalNode();
 
   const [linkedNodeId, setLinkedNodeId] = useState<NodeId | null>(null);
 
@@ -53,12 +49,13 @@ export function Element<T extends React.ElementType>({
     if (inNodeContext) {
       let linkedNodeId;
 
-      const existingNode =
-        linkedNodes && linkedNodes[id] && query.node(linkedNodes[id]).get();
+      const existingLinkedNode = query
+        .node(nodeId)
+        .getLinkedNodes()
+        .find((linkedNode) => linkedNode.id === id);
 
-      // Render existing linked Node if it already exists (and is the same type as the JSX)
-      if (existingNode && existingNode.data.type === is) {
-        linkedNodeId = existingNode.id;
+      if (existingLinkedNode && existingLinkedNode.node.getComponent() === is) {
+        linkedNodeId = existingLinkedNode.node.id;
       } else {
         // otherwise, create and render a new linked Node
         const linkedElement = React.createElement(
