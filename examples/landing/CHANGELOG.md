@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.0](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.28...v0.3.0-alpha.0) (2021-11-16)
+
+
+### Features
+
+* refactor editor store ([#259](https://github.com/prevwong/craft.js/issues/259)) ([234c74c](https://github.com/prevwong/craft.js/commit/234c74c3e4633793fe9419e7fffdba841cd3746d))
+
+
+
+
+
 # [0.2.0-alpha.28](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.27...v0.2.0-alpha.28) (2021-10-04)
 
 **Note:** Version bump only for package example-landing

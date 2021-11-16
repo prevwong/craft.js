@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.0](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.28...v0.3.0-alpha.0) (2021-11-16)
+
+
+### Bug Fixes
+
+* linked node hydration ([48b6fe4](https://github.com/prevwong/craft.js/commit/48b6fe46a4e37f578b622b7abcf4c77d7e44cc6b))
+* test ([fe618f1](https://github.com/prevwong/craft.js/commit/fe618f14792569b13f0e2847406ef5ef8e9fd2db))
+
+
+### Features
+
+* add temp replaceResolver method ([16568ef](https://github.com/prevwong/craft.js/commit/16568efbeae4248aa992afdba7d7d32abe306e20))
+* backwards compatible parseReactElement ([c80dd95](https://github.com/prevwong/craft.js/commit/c80dd950fcf85c205afe2f901e68ded9ae2963b6))
+* backwards-compatible node tree ([9c5f5da](https://github.com/prevwong/craft.js/commit/9c5f5daef10c28718ece1497daefd53c61fcf8dc))
+* fix resolver priority ([a24efaf](https://github.com/prevwong/craft.js/commit/a24efaf89629522cfae05960e12abf9e57016c85))
+* move resolver out of state ([ddf9a0f](https://github.com/prevwong/craft.js/commit/ddf9a0f59b76b27c0fbc0385fc97d5e995ddda1c))
+* move resolver to EditorState ([e71dc96](https://github.com/prevwong/craft.js/commit/e71dc9626dd39f050e80cc1794697ecd58d4f358))
+* refactor editor store ([#259](https://github.com/prevwong/craft.js/issues/259)) ([234c74c](https://github.com/prevwong/craft.js/commit/234c74c3e4633793fe9419e7fffdba841cd3746d))
+* simplify EditorState ([#272](https://github.com/prevwong/craft.js/issues/272)) ([f5b1bd4](https://github.com/prevwong/craft.js/commit/f5b1bd46915e16bb773f246b35d827ffcff81915))
+
+
+
+
+
 # [0.2.0-alpha.28](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.27...v0.2.0-alpha.28) (2021-10-04)
 
 **Note:** Version bump only for package @craftjs/core

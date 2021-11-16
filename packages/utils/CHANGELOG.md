@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.0](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.28...v0.3.0-alpha.0) (2021-11-16)
+
+
+### Features
+
+* add temp replaceResolver method ([16568ef](https://github.com/prevwong/craft.js/commit/16568efbeae4248aa992afdba7d7d32abe306e20))
+* refactor editor store ([#259](https://github.com/prevwong/craft.js/issues/259)) ([234c74c](https://github.com/prevwong/craft.js/commit/234c74c3e4633793fe9419e7fffdba841cd3746d))
+* simplify EditorState ([#272](https://github.com/prevwong/craft.js/issues/272)) ([f5b1bd4](https://github.com/prevwong/craft.js/commit/f5b1bd46915e16bb773f246b35d827ffcff81915))
+
+
+
+
+
 # [0.2.0-alpha.28](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.27...v0.2.0-alpha.28) (2021-10-04)
 
 **Note:** Version bump only for package @craftjs/utils
