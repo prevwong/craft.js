@@ -35,7 +35,6 @@ export const editorInitialState: EditorState = {
   },
   indicator: null,
   timestamp: Date.now(),
-  resolver: {},
 };
 
 export class EditorStore extends Store<EditorState> {
@@ -67,13 +66,15 @@ export class EditorStore extends Store<EditorState> {
           isMultiSelectEnabled: (e: MouseEvent) => !!e.metaKey,
         }),
       normalizeNodes: () => {},
+      resolver: {},
       ...(storeConfig || {}),
     };
 
     // we do not want to warn the user if no resolver was supplied
-    if (state.resolver !== undefined) {
+    if (this.config.resolver !== undefined) {
       invariant(
-        typeof state.resolver === 'object' && !Array.isArray(state.resolver),
+        typeof this.config.resolver === 'object' &&
+          !Array.isArray(this.config.resolver),
         ERROR_RESOLVER_NOT_AN_OBJECT
       );
     }
@@ -126,6 +127,7 @@ export class EditorStore extends Store<EditorState> {
                       'clearEvents',
                       'setOptions',
                       'setIndicator',
+                      'setEnabled',
                     ].includes(actionKey) ||
                     !historyCallback
                   ) {
@@ -174,8 +176,21 @@ export class EditorStore extends Store<EditorState> {
     };
   }
 
+  reconfigure(config: Partial<EditorStoreConfig>) {
+    this.config = {
+      ...this.config,
+      ...config,
+    };
+
+    this.notify();
+  }
+
   // TODO: move to useEditor/useInternalEditor hook
   get query() {
     return new EditorQuery(this);
+  }
+
+  get resolver() {
+    return this.config.resolver;
   }
 }

@@ -1,6 +1,7 @@
-import { LegacyNode, SerializedNodes, EditorStore } from '../../interfaces';
+import { LegacyNode, SerializedNodes } from '../../interfaces';
 import { createTestEditorStore } from '../../utils/testHelpers';
 import { createNode } from '../../utils/types';
+import { EditorStore } from '../EditorStore';
 
 const ButtonComponent = () => null;
 
@@ -14,9 +15,9 @@ describe('actions', () => {
           id: 'ROOT',
           type: 'div',
         },
-        resolver: {
-          ButtonComponent,
-        },
+      },
+      resolver: {
+        ButtonComponent,
       },
     });
   });
@@ -158,10 +159,8 @@ describe('actions', () => {
   describe('deserialize', () => {
     beforeEach(() => {
       store = createTestEditorStore({
-        state: {
-          resolver: {
-            Cover: () => null,
-          },
+        resolver: {
+          Cover: () => null,
         },
       });
     });

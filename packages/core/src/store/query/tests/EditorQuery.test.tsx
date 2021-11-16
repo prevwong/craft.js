@@ -54,8 +54,8 @@ describe('EditorQuery', () => {
 
   beforeEach(() => {
     store = new EditorStore({
+      resolver,
       state: {
-        resolver,
         nodes,
         indicator: {
           error: null,

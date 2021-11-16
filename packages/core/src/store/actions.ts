@@ -20,7 +20,6 @@ import {
   NodeSelectorType,
   LegacyNode,
   BackwardsCompatibleNodeTree,
-  Resolver,
 } from '../interfaces';
 import { EditorStore } from '../store';
 import { fromEntries } from '../utils/fromEntries';
@@ -108,7 +107,7 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
       }
 
       nodes.forEach((nodeOrlegacyNode: Node | LegacyNode) => {
-        const node = adaptLegacyNode(nodeOrlegacyNode, state.resolver);
+        const node = adaptLegacyNode(nodeOrlegacyNode, store.resolver);
         state.nodes[node.id] = node;
 
         if (parentId) {
@@ -139,7 +138,7 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
     ) {
       const { nodes, linkedNodes, ...node } = adaptLegacyNode(
         tree.nodes[tree.rootNodeId],
-        state.resolver
+        store.resolver
       );
 
       action().add(
@@ -360,11 +359,6 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
 
       this.setNodeEvent('hovered', null);
     },
-
-    setResolver(resolver: Resolver) {
-      state.resolver = resolver;
-    },
-
     /**
      * Set editor options via a callback function
      * @deprecated

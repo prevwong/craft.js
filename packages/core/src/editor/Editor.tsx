@@ -1,3 +1,4 @@
+import pickBy from 'lodash/pickBy';
 import React, { useMemo, useRef, useEffect } from 'react';
 
 import { EditorContext } from './EditorContext';
@@ -15,25 +16,52 @@ export const Editor: React.FC<Partial<EditorProps>> = ({
   children,
   enabled,
   resolver,
-  ...config
+  onRender,
+  onNodesChange,
+  indicator,
 }) => {
-  const initialConfigRef = useRef({
+  // TODO: refactor editor store config
+  const editorStoreConfig = useMemo(() => {
+    return pickBy(
+      { onRender, onNodesChange, resolver, indicator },
+      (value) => value !== undefined
+    );
+  }, [indicator, onNodesChange, onRender, resolver]);
+
+  const initialEditorStoreConfigRef = useRef(editorStoreConfig);
+
+  const initialEditorStoreWithStateConfigRef = useRef({
+    ...initialEditorStoreConfigRef.current,
     state: {
-      enabled: enabled !== undefined ? enabled : true,
-      resolver,
+      enabled: enabled !== undefined ? !!enabled : true,
     },
-    ...(config || {}),
   });
 
-  const store = useMemo(() => new EditorStore(initialConfigRef.current), []);
+  const store = useMemo(
+    () => new EditorStore(initialEditorStoreWithStateConfigRef.current),
+    []
+  );
 
   useEffect(() => {
-    if (store.getState().resolver === resolver) {
+    if (initialEditorStoreConfigRef.current === editorStoreConfig) {
       return;
     }
 
-    store.actions.setResolver(resolver);
-  }, [store, resolver]);
+    console.log('set config');
+    store.reconfigure(editorStoreConfig);
+  }, [store, editorStoreConfig]);
+
+  useEffect(() => {
+    if (enabled === undefined) {
+      return;
+    }
+
+    if (!!enabled === store.getState().enabled) {
+      return;
+    }
+
+    store.actions.setEnabled(enabled);
+  }, [store, enabled]);
 
   if (!store) {
     return null;

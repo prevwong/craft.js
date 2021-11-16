@@ -2,6 +2,8 @@ import { CoreEventHandlers } from '../events';
 import { EditorState } from '../interfaces';
 import { EditorQuery, EditorStore } from '../store';
 
+export type Resolver = Record<string, string | React.ElementType>;
+
 export type EditorStoreConfig = {
   onRender: React.ComponentType<{ render: React.ReactElement }>;
   onNodesChange: (query: EditorQuery) => void;
@@ -13,4 +15,5 @@ export type EditorStoreConfig = {
   }>;
   handlers: (store: EditorStore) => CoreEventHandlers;
   normalizeNodes: (state: EditorState, previousState: EditorState) => void;
+  resolver: Resolver;
 };
