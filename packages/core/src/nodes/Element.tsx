@@ -64,7 +64,7 @@ export function Element<T extends React.ElementType>({
           children
         );
 
-        const tree = query.parseReactElement(linkedElement).toNodeTree();
+        const tree = query.parseReactElementAsNodeTree(linkedElement);
 
         linkedNodeId = tree.rootNodeId;
         actions.history.ignore().addLinkedNodeFromTree(tree, nodeId, id);

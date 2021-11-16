@@ -174,19 +174,17 @@ describe('EditorQuery', () => {
           const tree = query.parseReactElement(element).toNodeTree();
 
           const validateTree = (id, element, parent = null) => {
-            const { nodes, ...restNode } = tree.nodes[id];
+            const nodeData = tree.nodes[id].data;
+            const { nodes } = nodeData;
+
             const { children, ...props } = element.props;
 
-            expect(restNode).toEqual({
-              id: expect.any(String),
+            expect(nodeData).toEqual({
               props: {
                 ...props,
                 ...(nodes.length === 0 ? { children } : {}),
               },
-              type:
-                typeof element.type === 'string'
-                  ? element.type
-                  : element.type.name,
+              type: element.type,
               displayName:
                 typeof element.type === 'string'
                   ? element.type
@@ -196,6 +194,11 @@ describe('EditorQuery', () => {
               custom: {},
               parent,
               isCanvas: false,
+              nodes,
+              name:
+                typeof element.type === 'string'
+                  ? element.type
+                  : element.type.name,
             });
 
             if (!element.props.children) {

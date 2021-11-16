@@ -1,30 +1,67 @@
-import { Node, NodeTree } from '../interfaces';
+import { isLegacyNode } from './types';
 
-const mergeNodes = (rootNode: Node, childrenNodes: NodeTree[]) => {
-  if (childrenNodes.length < 1) {
+import {
+  Node,
+  NodeTree,
+  LegacyNode,
+  LegacyNodeTree,
+  BackwardsCompatibleNodeTree,
+} from '../interfaces';
+
+const mergeNodes = (
+  rootNode: Node | LegacyNode,
+  childrenTree: BackwardsCompatibleNodeTree[]
+) => {
+  if (childrenTree.length < 1) {
     return { [rootNode.id]: rootNode };
   }
-  const nodes = childrenNodes.map(({ rootNodeId }) => rootNodeId);
-  const nodeWithChildren = { ...rootNode, nodes };
-  const rootNodes = { [rootNode.id]: nodeWithChildren };
-  return childrenNodes.reduce((accum, tree) => {
+
+  const childrenNodeIds = childrenTree.map(({ rootNodeId }) => rootNodeId);
+  const rootNodeWithNewChildren = {
+    [rootNode.id]: isLegacyNode(rootNode)
+      ? {
+          ...rootNode,
+          data: {
+            ...rootNode.data,
+            nodes: childrenNodeIds,
+          },
+        }
+      : { ...rootNode, nodes: childrenNodeIds },
+  };
+
+  return childrenTree.reduce((accum, tree) => {
     const currentNode = tree.nodes[tree.rootNodeId];
     return {
       ...accum,
       ...tree.nodes,
       // set the parent id for the current node
-      [currentNode.id]: {
-        ...currentNode,
-        parent: rootNode.id,
-      },
+      [currentNode.id]: isLegacyNode(currentNode)
+        ? {
+            ...currentNode,
+            data: {
+              ...currentNode.data,
+              parent: rootNode.id,
+            },
+          }
+        : {
+            ...currentNode,
+            parent: rootNode.id,
+          },
     };
-  }, rootNodes);
+  }, rootNodeWithNewChildren);
 };
 
-export const mergeTrees = (
-  rootNode: Node,
-  childrenNodes: NodeTree[]
-): NodeTree => ({
-  rootNodeId: rootNode.id,
-  nodes: mergeNodes(rootNode, childrenNodes),
-});
+export function mergeTrees(
+  rootNode: LegacyNode,
+  childrenTree: LegacyNodeTree[]
+): LegacyNodeTree;
+export function mergeTrees(rootNode: Node, childrenTree: NodeTree[]): NodeTree;
+export function mergeTrees(
+  rootNode: Node | LegacyNode,
+  childrenTree: BackwardsCompatibleNodeTree[]
+): BackwardsCompatibleNodeTree {
+  return {
+    rootNodeId: rootNode.id,
+    nodes: mergeNodes(rootNode, childrenTree),
+  };
+}

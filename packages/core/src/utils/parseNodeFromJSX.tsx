@@ -4,16 +4,24 @@ import invariant from 'tiny-invariant';
 
 import { mergeTrees } from './mergeTrees';
 import { resolveComponent } from './resolveComponent';
-import { createNodeWithResolverConfig } from './types';
+import { asLegacyNode, createNodeWithResolverConfig } from './types';
 
-import { Node, NodeTree, Resolver } from '../interfaces';
+import {
+  LegacyNode,
+  LegacyNodeTree,
+  Node,
+  Resolver,
+  BackwardsCompatibleNodeTree,
+  NodeTree,
+} from '../interfaces';
 import { defaultElementProps, Element } from '../nodes/Element';
 
-export function parseNodeFromJSX(
+function parseBackwardsCompatibleNodeFromJSX(
+  legacy: boolean,
   element: React.ReactElement,
   resolver: Resolver,
-  normalize?: any
-): NodeTree {
+  normalize?: (node: Node | LegacyNode, element: React.ReactElement) => void
+): LegacyNodeTree | NodeTree {
   let { type: componentType, props: componentProps } = element;
 
   const nodeConfig: Partial<Node> = {
@@ -46,7 +54,13 @@ export function parseNodeFromJSX(
   nodeConfig.type = resolveComponent(resolver, componentType);
   nodeConfig.displayName = nodeConfig.type;
 
-  invariant(nodeConfig.type, ERROR_NOT_IN_RESOLVER);
+  invariant(
+    nodeConfig.type,
+    ERROR_NOT_IN_RESOLVER.replace(
+      '%node_type%',
+      typeof componentType === 'string' ? componentType : componentType.name
+    )
+  );
 
   const node = createNodeWithResolverConfig(nodeConfig, resolver);
 
@@ -54,14 +68,21 @@ export function parseNodeFromJSX(
     normalize(node, element);
   }
 
-  let childrenNodes = [];
+  let childrenNodes: BackwardsCompatibleNodeTree[] = [];
 
   if (node.props.children) {
     childrenNodes = React.Children.toArray(node.props.children).reduce<
-      NodeTree[]
+      BackwardsCompatibleNodeTree[]
     >((accum, child: any) => {
       if (React.isValidElement(child)) {
-        accum.push(parseNodeFromJSX(child, resolver));
+        accum.push(
+          parseBackwardsCompatibleNodeFromJSX(
+            legacy,
+            child,
+            resolver,
+            normalize
+          )
+        );
       }
       return accum;
     }, []);
@@ -70,5 +91,38 @@ export function parseNodeFromJSX(
     }
   }
 
-  return mergeTrees(node, childrenNodes);
+  if (!legacy) {
+    return mergeTrees(node, childrenNodes as NodeTree[]);
+  }
+
+  return mergeTrees(
+    asLegacyNode(node, resolver),
+    childrenNodes as LegacyNodeTree[]
+  );
+}
+
+export function parseLegacyNodeFromJSX(
+  element: React.ReactElement,
+  resolver: Resolver,
+  normalize?: (node: LegacyNode, element: React.ReactElement) => void
+) {
+  return parseBackwardsCompatibleNodeFromJSX(
+    true,
+    element,
+    resolver,
+    normalize
+  ) as LegacyNodeTree;
+}
+
+export function parseNodeFromJSX(
+  element: React.ReactElement,
+  resolver: Resolver,
+  normalize?: (node: Node, element: React.ReactElement) => void
+) {
+  return parseBackwardsCompatibleNodeFromJSX(
+    false,
+    element,
+    resolver,
+    normalize
+  ) as NodeTree;
 }

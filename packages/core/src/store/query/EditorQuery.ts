@@ -19,14 +19,17 @@ import {
   NodeEventTypes,
   NodeId,
   NodeSelector,
-  NodeTree,
+  LegacyNode,
   SerializedNode,
   SerializedNodes,
   NodeInfo,
 } from '../../interfaces';
 import { deserializeNode } from '../../utils/deserializeNode';
 import { getNodesFromSelector } from '../../utils/getNodesFromSelector';
-import { parseNodeFromJSX } from '../../utils/parseNodeFromJSX';
+import {
+  parseNodeFromJSX,
+  parseLegacyNodeFromJSX,
+} from '../../utils/parseNodeFromJSX';
 import { adaptLegacyNode } from '../../utils/types';
 
 export class EditorQuery {
@@ -40,6 +43,37 @@ export class EditorQuery {
 
   get root() {
     return this.node(ROOT_NODE);
+  }
+
+  get indicator() {
+    if (!this.state.indicator) {
+      return null;
+    }
+
+    const { placement, error } = this.state.indicator;
+
+    return {
+      error,
+      placement: {
+        ...placement,
+        // The following are needed for backwards compatibility:
+        parent: this.node(placement.parentNodeId),
+        currentNode: placement.currentNodeId
+          ? this.node(placement.currentNodeId)
+          : null,
+      },
+    };
+  }
+
+  get history() {
+    return {
+      canUndo: () => this.store.history.canUndo(),
+      canRedo: () => this.store.history.canRedo(),
+    };
+  }
+
+  get timestamp() {
+    return this.state.timestamp;
   }
 
   isEnabled() {
@@ -136,31 +170,41 @@ export class EditorQuery {
     return output;
   }
 
+  /**
+   * Parse a React Element into a NodeTree
+   * Note: you don't typically need this, and this API is subject to change
+   */
+  parseReactElementAsNodeTree(
+    element: React.ReactElement,
+    normalize?: (node: Node, jsx: React.ReactElement) => void
+  ) {
+    return parseNodeFromJSX(element, this.store.resolver, normalize);
+  }
+
+  /**
+   * Get the internal EditorState
+   * @returns EditorState
+   */
   getState() {
     return this.state;
   }
 
-  parseReactElement(reactElement: React.ReactElement) {
-    return {
-      toNodeTree: (
-        normalize?: (node: Node, jsx: React.ReactElement) => void
-      ): NodeTree => {
-        return parseNodeFromJSX(reactElement, this.store.resolver, normalize);
-      },
-    };
-  }
-
-  get history() {
-    return {
-      canUndo: () => this.store.history.canUndo(),
-      canRedo: () => this.store.history.canRedo(),
-    };
-  }
-
+  /**
+   * @deprecated
+   *
+   * Return the events state.
+   * Consider using query.event('selected') instead
+   */
   get events() {
     return this.state.events;
   }
 
+  /**
+   * @deprecated
+   *
+   * Returns the nodes state
+   * Consider using the query.node('node-id') instead
+   */
   get nodes(): Record<string, NodeQuery> {
     return Object.keys(this.state.nodes).reduce(
       (accum, nodeId) => ({
@@ -171,6 +215,10 @@ export class EditorQuery {
     );
   }
 
+  /**
+   * @deprecated
+   *
+   */
   get options() {
     return {
       ...this.store.config,
@@ -178,41 +226,43 @@ export class EditorQuery {
     };
   }
 
-  get indicator() {
-    if (!this.state.indicator) {
-      return null;
-    }
-
-    const { placement, error } = this.state.indicator;
-
-    return {
-      error,
-      placement: {
-        ...placement,
-        // The following are needed for backwards compatibility:
-        parent: this.node(placement.parentNodeId),
-        currentNode: placement.currentNodeId
-          ? this.node(placement.currentNodeId)
-          : null,
-      },
-    };
-  }
-
-  get timestamp() {
-    return this.state.timestamp;
-  }
-
+  /**
+   * @deprecated
+   *
+   * Use query.event() instead
+   */
   getEvent(eventType: NodeEventTypes) {
     return this.event(eventType);
   }
 
+  /**
+   * @deprecated
+   */
   getOptions() {
     return this.options;
   }
 
   /**
    * @deprecated
-   * @returns
+   *
+   * Use query.parseReactElementAsNodeTree() instead
+   */
+  parseReactElement(reactElement: React.ReactElement) {
+    return {
+      toNodeTree: (
+        normalize?: (node: LegacyNode, jsx: React.ReactElement) => void
+      ) => {
+        return parseLegacyNodeFromJSX(
+          reactElement,
+          this.store.resolver,
+          normalize
+        );
+      },
+    };
+  }
+
+  /**
+   * @deprecated
    */
   getSerializedNodes(): SerializedNodes {
     return Object.keys(this.state.nodes).reduce(
@@ -226,7 +276,6 @@ export class EditorQuery {
 
   /**
    * @deprecated
-   * @returns
    */
   serialize(): string {
     return JSON.stringify(this.getSerializedNodes());
@@ -234,8 +283,6 @@ export class EditorQuery {
 
   /**
    * @deprecated
-   * @param serializedNode
-   * @returns
    */
   parseSerializedNode(serializedNode: SerializedNode) {
     return {
@@ -259,8 +306,6 @@ export class EditorQuery {
 
   /**
    * @deprecated
-   * @param freshNode
-   * @returns
    */
   parseFreshNode(freshNode: FreshNode) {
     return {

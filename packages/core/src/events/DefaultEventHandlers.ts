@@ -253,9 +253,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           'dragstart',
           (e) => {
             e.craft.stopPropagation();
-            const tree = store.query
-              .parseReactElement(userElement)
-              .toNodeTree();
+            const tree = store.query.parseReactElementAsNodeTree(userElement);
 
             const dom = e.currentTarget as HTMLElement;
             this.draggedElementShadow = createShadow(
