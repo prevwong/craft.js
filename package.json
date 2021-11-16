@@ -17,6 +17,7 @@
     "test": "jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "new-major-prerelease": "lerna version preminor --yes --conventional-commits --conventional-prerelease --preid alpha --force-publish",
     "prerelease": "lerna version --yes --conventional-commits --conventional-prerelease --force-publish",
     "prerelease:beta": "lerna version --yes --conventional-commits --conventional-prerelease --preid beta --force-publish",
     "release": "lerna version --yes --conventional-commits --conventional-graduate --force-publish",
