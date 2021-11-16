@@ -48,25 +48,39 @@ export class EventQuery {
     return this.event.size;
   }
 
-  // ::Deprecated methods below:: //
+  /**
+   * @deprecated
+   */
   first() {
     const values = this.all();
     return values[0];
   }
 
+  /**
+   * @deprecated
+   */
   last() {
     const values = this.all();
     return values[values.length - 1];
   }
 
+  /**
+   * @deprecated
+   */
   all() {
     return Array.from(this.event);
   }
 
+  /**
+   * @deprecated
+   */
   at(i: number) {
     return this.all()[i];
   }
 
+  /**
+   * @deprecated
+   */
   raw() {
     return this.event;
   }

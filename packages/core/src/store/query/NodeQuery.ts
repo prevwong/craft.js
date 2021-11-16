@@ -377,7 +377,9 @@ export class NodeQuery {
     return new NodeQuery(this.store, id);
   }
 
-  // ::Deprecated methods below:: //
+  /**
+   * @deprecated
+   */
   get(): LegacyNode {
     return {
       id: this.id,
@@ -389,6 +391,9 @@ export class NodeQuery {
     };
   }
 
+  /**
+   * @deprecated
+   */
   get data(): LegacyNodeData {
     return {
       type: this.getComponent(),
@@ -404,6 +409,9 @@ export class NodeQuery {
     };
   }
 
+  /**
+   * @deprecated
+   */
   get events(): Record<NodeEventTypes, boolean> {
     return {
       selected: this.isSelected(),
@@ -412,10 +420,16 @@ export class NodeQuery {
     };
   }
 
+  /**
+   * @deprecated
+   */
   get dom() {
     return this.getDOM();
   }
 
+  /**
+   * @deprecated
+   */
   get related() {
     const related = this.getConfig().related;
 
@@ -442,10 +456,16 @@ export class NodeQuery {
     }, {});
   }
 
+  /**
+   * @deprecated
+   */
   get rules() {
     return this.getRules();
   }
 
+  /**
+   * @deprecated
+   */
   get _hydrationTimestamp() {
     deprecationWarning('Node._hydrationTimestamp', {
       suggest: 'EditorState.timestamp',
@@ -456,7 +476,6 @@ export class NodeQuery {
 
   /**
    * @deprecated
-   * @returns
    */
   linkedNodes() {
     return Object.values(this.node.linkedNodes);
@@ -464,7 +483,6 @@ export class NodeQuery {
 
   /**
    * @deprecated
-   * @returns
    */
   childNodes() {
     return this.node.nodes;
@@ -472,7 +490,6 @@ export class NodeQuery {
 
   /**
    * @deprecated
-   * @returns
    */
   isTopLevelCanvas() {
     return !this.isRoot() && !this.getParent();
@@ -480,8 +497,6 @@ export class NodeQuery {
 
   /**
    * @deprecated
-   * @param deep
-   * @returns
    */
   ancestors(deep = false): NodeId[] {
     const appendParentNode = (
@@ -510,9 +525,6 @@ export class NodeQuery {
 
   /**
    * @deprecated
-   * @param deep
-   * @param includeOnly
-   * @returns
    */
   descendants(
     deep = false,
@@ -557,6 +569,9 @@ export class NodeQuery {
     return appendChildNode(this.id);
   }
 
+  /**
+   * @deprecated
+   */
   toSerializedNode() {
     return serializeNode(this.data, this.store.resolver);
   }

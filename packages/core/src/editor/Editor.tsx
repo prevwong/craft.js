@@ -47,7 +47,6 @@ export const Editor: React.FC<Partial<EditorProps>> = ({
       return;
     }
 
-    console.log('set config');
     store.reconfigure(editorStoreConfig);
   }, [store, editorStoreConfig]);
 
