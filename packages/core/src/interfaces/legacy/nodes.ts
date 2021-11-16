@@ -1,5 +1,5 @@
 import { NodeEventTypes, NodeRelated, NodeRules } from '..';
-import { NodeId } from '../nodes';
+import { NodeId, Node, NodeTree } from '../nodes';
 
 export type LegacyNodeData = {
   /**
@@ -72,11 +72,18 @@ export type LegacyNode = {
   dom: HTMLElement;
 };
 
+export type BackwardsCompatibleNode = Node & LegacyNode;
+
 export type LegacyNodes = Record<NodeId, LegacyNode>;
 
 export type LegacyNodeTree = {
   rootNodeId: NodeId;
   nodes: LegacyNodes;
+};
+
+export type BackwardsCompatibleNodeTree = {
+  rootNodeId: NodeTree['rootNodeId'];
+  nodes: Record<NodeId, LegacyNode | Node>;
 };
 
 export type FreshNode = {

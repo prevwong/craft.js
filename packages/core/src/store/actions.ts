@@ -15,18 +15,18 @@ import {
   Nodes,
   LegacyStateOptions,
   NodeEventTypes,
-  NodeTree,
   SerializedNodes,
   NodeSelector,
   NodeSelectorType,
   LegacyNode,
+  BackwardsCompatibleNodeTree,
   Resolver,
 } from '../interfaces';
 import { EditorStore } from '../store';
 import { fromEntries } from '../utils/fromEntries';
 import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 import { removeNodeFromEvents } from '../utils/removeNodeFromEvents';
-import { adaptLegacyNode } from '../utils/types';
+import { adaptLegacyNode, isLegacyNode } from '../utils/types';
 
 // TODO: refactor
 export const ActionMethods = (state: EditorState, store: EditorStore) => {
@@ -51,7 +51,11 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
      * @param parentId
      * @param id
      */
-    addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id: string) {
+    addLinkedNodeFromTree(
+      tree: BackwardsCompatibleNodeTree,
+      parentId: NodeId,
+      id: string
+    ) {
       const parent = getParentAndValidate(parentId);
       if (!parent.linkedNodes) {
         parent.linkedNodes = {};
@@ -64,10 +68,23 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
 
       parent.linkedNodes[id] = tree.rootNodeId;
 
-      tree.nodes[tree.rootNodeId].parent = parentId;
-      state.nodes[tree.rootNodeId] = tree.nodes[tree.rootNodeId];
+      const rootNode = tree.nodes[tree.rootNodeId];
 
-      action().addNodeTree(tree);
+      action().addNodeTree({
+        ...tree,
+        nodes: {
+          ...tree.nodes,
+          [rootNode.id]: isLegacyNode(rootNode)
+            ? ({
+                ...rootNode,
+                data: {
+                  ...rootNode.data,
+                  parent: parentId,
+                },
+              } as LegacyNode)
+            : rootNode,
+        },
+      });
     },
 
     /**
@@ -115,8 +132,15 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
      * @param parentId
      * @param index
      */
-    addNodeTree(tree: NodeTree, parentId?: NodeId, index?: number) {
-      const { nodes, linkedNodes, ...node } = tree.nodes[tree.rootNodeId];
+    addNodeTree(
+      tree: BackwardsCompatibleNodeTree,
+      parentId?: NodeId,
+      index?: number
+    ) {
+      const { nodes, linkedNodes, ...node } = adaptLegacyNode(
+        tree.nodes[tree.rootNodeId],
+        state.resolver
+      );
 
       action().add(
         {

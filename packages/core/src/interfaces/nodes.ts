@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { LegacyNode } from './legacy/nodes';
+import { BackwardsCompatibleNode } from './legacy/nodes';
 
 import { NodeQuery } from '../store';
 
@@ -32,8 +32,6 @@ export type Node = {
   hidden: boolean;
   isCanvas: boolean;
 };
-
-export type BackwardsCompatibleNode = Node & LegacyNode;
 
 export type NodeHelpersType = (id: NodeId) => NodeQuery;
 export type NodeRules = {

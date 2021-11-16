@@ -140,7 +140,6 @@ export class EditorQuery {
     return this.state;
   }
 
-  // ::Deprecated methods below:: //
   parseReactElement(reactElement: React.ReactElement) {
     return {
       toNodeTree: (
@@ -215,6 +214,10 @@ export class EditorQuery {
     return this.options;
   }
 
+  /**
+   * @deprecated
+   * @returns
+   */
   getSerializedNodes(): SerializedNodes {
     return Object.keys(this.state.nodes).reduce(
       (accum, id) => ({
@@ -225,10 +228,19 @@ export class EditorQuery {
     );
   }
 
+  /**
+   * @deprecated
+   * @returns
+   */
   serialize(): string {
     return JSON.stringify(this.getSerializedNodes());
   }
 
+  /**
+   * @deprecated
+   * @param serializedNode
+   * @returns
+   */
   parseSerializedNode(serializedNode: SerializedNode) {
     return {
       toNode: (normalize?: (node: Node) => void) => {
@@ -252,6 +264,11 @@ export class EditorQuery {
     };
   }
 
+  /**
+   * @deprecated
+   * @param freshNode
+   * @returns
+   */
   parseFreshNode(freshNode: FreshNode) {
     return {
       toNode: (normalize?: (node: Node) => void): Node => {

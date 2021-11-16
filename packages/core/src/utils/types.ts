@@ -49,15 +49,20 @@ export const createNodeWithResolverConfig = (
   });
 };
 
+export const isLegacyNode = (
+  node: Node | LegacyNode | FreshNode
+): node is LegacyNode =>
+  typeof node === 'object' && !!(node as LegacyNode).data;
+
 export const adaptLegacyNode = (
   node: Node | LegacyNode | FreshNode,
   resolver: Resolver
 ) => {
-  if ((node as LegacyNode).data) {
+  if (isLegacyNode(node)) {
     const {
       id,
       data: { type: componentType, ...legacyNodeData },
-    } = node as LegacyNode;
+    } = node;
 
     const type = resolveComponentToType(resolver, componentType);
     invariant(type, ERROR_NOT_IN_RESOLVER);
@@ -73,4 +78,34 @@ export const adaptLegacyNode = (
   }
 
   return createNodeWithResolverConfig(node, resolver);
+};
+
+export const asLegacyNode = (node: Node, resolver: Resolver) => {
+  const resolvedConfig = getResolverConfig(node.type, resolver);
+
+  const legacyNode: LegacyNode = {
+    id: node.id,
+    data: {
+      type: resolvedConfig.component,
+      name: node.type,
+      displayName: resolvedConfig.displayName,
+      parent: node.parent,
+      props: node.props,
+      custom: node.custom,
+      hidden: node.hidden,
+      isCanvas: node.isCanvas,
+      nodes: node.nodes,
+      linkedNodes: node.linkedNodes,
+    },
+    rules: resolvedConfig.rules,
+    related: resolvedConfig.related,
+    events: {
+      selected: false,
+      hovered: false,
+      dragged: false,
+    },
+    dom: null,
+  };
+
+  return legacyNode;
 };
