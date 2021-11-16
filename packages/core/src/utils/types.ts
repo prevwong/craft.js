@@ -28,11 +28,13 @@ export const createNodeWithResolverConfig = (
   partialNode: Partial<Node>,
   resolver: Resolver
 ) => {
-  const resolverConfig = getResolverConfig(partialNode.type || 'div', resolver);
+  const type = partialNode.type || 'div';
+  const resolverConfig = getResolverConfig(type, resolver);
 
-  if (!resolverConfig) {
-    return createNode(partialNode);
-  }
+  invariant(
+    resolverConfig,
+    ERROR_NOT_IN_RESOLVER.replace('%node_type%', `${type}`)
+  );
 
   return createNode({
     ...partialNode,
@@ -65,7 +67,13 @@ export const adaptLegacyNode = (
     } = node;
 
     const type = resolveComponentToType(resolver, componentType);
-    invariant(type, ERROR_NOT_IN_RESOLVER);
+    invariant(
+      type,
+      ERROR_NOT_IN_RESOLVER.replace(
+        '%node_type%',
+        `${(componentType as any).displayName || (componentType as any).name}`
+      )
+    );
 
     return createNodeWithResolverConfig(
       {

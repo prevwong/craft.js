@@ -4,6 +4,7 @@ import {
   ROOT_NODE,
   DEPRECATED_ROOT_NODE,
   ERROR_NOPARENT,
+  ERROR_DELETE_TOP_LEVEL_NODE,
 } from '@craftjs/utils';
 import invariant from 'tiny-invariant';
 
@@ -25,19 +26,114 @@ import { EditorStore } from '../store';
 import { fromEntries } from '../utils/fromEntries';
 import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 import { removeNodeFromEvents } from '../utils/removeNodeFromEvents';
-import { adaptLegacyNode, isLegacyNode } from '../utils/types';
+import { adaptLegacyNode } from '../utils/types';
 
 // TODO: refactor
 export const ActionMethods = (state: EditorState, store: EditorStore) => {
-  const action = () => ActionMethods(state, store);
   const query = store.query;
 
   /** Helper functions */
+  const addNodeTreeToParent = (
+    tree: BackwardsCompatibleNodeTree,
+    parentId?: NodeId,
+    addNodeType?:
+      | {
+          type: 'child';
+          index: number;
+        }
+      | {
+          type: 'linked';
+          id: string;
+        }
+  ) => {
+    const iterateChildren = (id: NodeId, parentId?: NodeId) => {
+      const node = adaptLegacyNode(tree.nodes[id], store.resolver);
+
+      state.nodes[id] = {
+        ...node,
+        parent: parentId,
+      };
+
+      if (node.nodes.length > 0) {
+        delete state.nodes[id].props.children;
+
+        node.nodes.forEach((childNodeId) =>
+          iterateChildren(childNodeId, node.id)
+        );
+      }
+
+      Object.values(node.linkedNodes).forEach((linkedNodeId) =>
+        iterateChildren(linkedNodeId, node.id)
+      );
+    };
+
+    iterateChildren(tree.rootNodeId, parentId);
+
+    if (!parentId) {
+      invariant(
+        tree.rootNodeId === ROOT_NODE,
+        'Cannot add non-root Node without a parent'
+      );
+
+      return;
+    }
+
+    const parent = getParentAndValidate(parentId);
+
+    if (addNodeType.type === 'child') {
+      const index = addNodeType.index;
+
+      if (index != null) {
+        parent.nodes.splice(index, 0, tree.rootNodeId);
+      } else {
+        parent.nodes.push(tree.rootNodeId);
+      }
+
+      return;
+    }
+
+    parent.linkedNodes[addNodeType.id] = tree.rootNodeId;
+  };
+
   const getParentAndValidate = (parentId: NodeId): Node => {
     invariant(parentId, ERROR_NOPARENT);
     const parent = state.nodes[parentId];
     invariant(parent, ERROR_INVALID_NODEID);
     return parent;
+  };
+
+  const deleteNode = (id: NodeId) => {
+    const targetNode = state.nodes[id],
+      parentNode = state.nodes[targetNode.parent];
+
+    if (targetNode.nodes) {
+      // we deep clone here because otherwise immer will mutate the node
+      // object as we remove nodes
+      [...targetNode.nodes].forEach((childId) => deleteNode(childId));
+    }
+
+    if (targetNode.linkedNodes) {
+      Object.values(targetNode.linkedNodes).map((linkedNodeId) =>
+        deleteNode(linkedNodeId)
+      );
+    }
+
+    const isChildNode = parentNode.nodes.includes(id);
+
+    if (isChildNode) {
+      const parentChildren = parentNode.nodes;
+      parentChildren.splice(parentChildren.indexOf(id), 1);
+    } else {
+      const linkedId = Object.keys(parentNode.linkedNodes).find(
+        (id) => parentNode.linkedNodes[id] === id
+      );
+      if (linkedId) {
+        delete parentNode.linkedNodes[linkedId];
+      }
+    }
+
+    removeNodeFromEvents(state, id);
+    delete state.nodes[id];
   };
 
   return {
@@ -56,34 +152,14 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
       id: string
     ) {
       const parent = getParentAndValidate(parentId);
-      if (!parent.linkedNodes) {
-        parent.linkedNodes = {};
-      }
 
       const existingLinkedNode = parent.linkedNodes[id];
+
       if (existingLinkedNode) {
-        action().delete(existingLinkedNode);
+        deleteNode(existingLinkedNode);
       }
 
-      parent.linkedNodes[id] = tree.rootNodeId;
-
-      const rootNode = tree.nodes[tree.rootNodeId];
-
-      action().addNodeTree({
-        ...tree,
-        nodes: {
-          ...tree.nodes,
-          [rootNode.id]: isLegacyNode(rootNode)
-            ? ({
-                ...rootNode,
-                data: {
-                  ...rootNode.data,
-                  parent: parentId,
-                },
-              } as LegacyNode)
-            : rootNode,
-        },
-      });
+      addNodeTreeToParent(tree, parentId, { type: 'linked', id });
     },
 
     /**
@@ -98,6 +174,7 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
       parentId: NodeId,
       index?: number
     ) {
+      // TODO: Deprecate adding array of Nodes to keep implementation simpler
       let nodes = [nodeToAdd];
       if (Array.isArray(nodeToAdd)) {
         deprecationWarning('actions.add(node: Node[])', {
@@ -105,22 +182,17 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
         });
         nodes = nodeToAdd;
       }
-
-      nodes.forEach((nodeOrlegacyNode: Node | LegacyNode) => {
-        const node = adaptLegacyNode(nodeOrlegacyNode, store.resolver);
-        state.nodes[node.id] = node;
-
-        if (parentId) {
-          const parent = getParentAndValidate(parentId);
-
-          if (index != null) {
-            parent.nodes.splice(index, 0, node.id);
-          } else {
-            parent.nodes.push(node.id);
-          }
-
-          node.parent = parent.id;
-        }
+      nodes.forEach((node: Node | LegacyNode) => {
+        addNodeTreeToParent(
+          {
+            nodes: {
+              [node.id]: node,
+            },
+            rootNodeId: node.id,
+          },
+          parentId,
+          { type: 'child', index }
+        );
       });
     },
 
@@ -136,40 +208,7 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
       parentId?: NodeId,
       index?: number
     ) {
-      const { nodes, linkedNodes, ...node } = adaptLegacyNode(
-        tree.nodes[tree.rootNodeId],
-        store.resolver
-      );
-
-      action().add(
-        {
-          ...node,
-          nodes: [],
-          linkedNodes: {},
-        },
-        parentId,
-        index
-      );
-
-      if (nodes) {
-        nodes.map((childNodeId) =>
-          action().addNodeTree(
-            { rootNodeId: childNodeId, nodes: tree.nodes },
-            node.id
-          )
-        );
-      }
-
-      if (linkedNodes) {
-        Object.keys(linkedNodes).forEach((linkedId) => {
-          const nodeId = linkedNodes[linkedId];
-          action().addLinkedNodeFromTree(
-            { rootNodeId: nodeId, nodes: tree.nodes },
-            node.id,
-            linkedId
-          );
-        });
-      }
+      addNodeTreeToParent(tree, parentId, { type: 'child', index });
     },
 
     /**
@@ -183,39 +222,11 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
       });
 
       targets.forEach(({ node }) => {
-        const { id } = node;
-
-        const targetNode = state.nodes[id],
-          parentNode = state.nodes[targetNode.parent];
-
-        if (targetNode.nodes) {
-          // we deep clone here because otherwise immer will mutate the node
-          // object as we remove nodes
-          [...targetNode.nodes].forEach((childId) => action().delete(childId));
-        }
-
-        if (targetNode.linkedNodes) {
-          Object.values(targetNode.linkedNodes).map((linkedNodeId) =>
-            action().delete(linkedNodeId)
-          );
-        }
-
-        const isChildNode = parentNode.nodes.includes(id);
-
-        if (isChildNode) {
-          const parentChildren = parentNode.nodes;
-          parentChildren.splice(parentChildren.indexOf(id), 1);
-        } else {
-          const linkedId = Object.keys(parentNode.linkedNodes).find(
-            (id) => parentNode.linkedNodes[id] === id
-          );
-          if (linkedId) {
-            delete parentNode.linkedNodes[linkedId];
-          }
-        }
-
-        removeNodeFromEvents(state, id);
-        delete state.nodes[id];
+        invariant(
+          !query.node(node.id).isTopLevelNode(),
+          ERROR_DELETE_TOP_LEVEL_NODE
+        );
+        deleteNode(node.id);
       });
     },
 
