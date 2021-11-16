@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.0](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.28...v0.2.0-beta.0) (2021-11-16)
+
+
+### Bug Fixes
+
+* **docs:** basic example paths and command ([#327](https://github.com/prevwong/craft.js/issues/327)) ([b835a0a](https://github.com/prevwong/craft.js/commit/b835a0a758f684854ca936fb0c878b75c524901f))
+
+
+
+
+
 # [0.2.0-alpha.28](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.27...v0.2.0-alpha.28) (2021-10-04)
 
 **Note:** Version bump only for package craft.js
