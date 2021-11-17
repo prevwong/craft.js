@@ -14,3 +14,9 @@ export type EditorState = {
 };
 
 export type ConnectedEditor = ReturnType<typeof useInternalEditor>;
+
+export type StateVersion = 'latest' | 'v1';
+
+export type StateVersionOpt = {
+  version: StateVersion;
+};

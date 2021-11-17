@@ -25,6 +25,10 @@ import {
   NodeSelector,
   BackwardsCompatibleNode,
   LegacyNode,
+  NodeTree,
+  LegacyNodeTree,
+  StateVersionOpt,
+  BackwardsCompatibleNodeTree,
 } from '../../interfaces';
 import { NodeProvider } from '../../nodes';
 import { getNodesFromSelector } from '../../utils/getNodesFromSelector';
@@ -193,7 +197,7 @@ export class NodeQuery {
   }
 
   getDOM() {
-    return this.store.handlers.dom.get(this.node.id);
+    return this.store.handlers.dom.get(this.node.id) || null;
   }
 
   getRules(): NodeRules {
@@ -356,11 +360,19 @@ export class NodeQuery {
     }
   }
 
-  toNodeTree() {
-    const nodes = [this, ...this.getDescendants()].reduce((accum, node) => {
-      accum[node.id] = node.get();
-      return accum;
-    }, {});
+  toNodeTree(): NodeTree;
+  toNodeTree(opt: { version: 'v1' }): LegacyNodeTree;
+  toNodeTree(opt: { version: 'latest' }): NodeTree;
+  toNodeTree(
+    opt: StateVersionOpt = { version: 'latest' }
+  ): BackwardsCompatibleNodeTree {
+    const nodes: Record<NodeId, Node> = [this, ...this.getDescendants()].reduce(
+      (accum, node) => {
+        accum[node.id] = opt.version === 'v1' ? node.get() : node.getState();
+        return accum;
+      },
+      {}
+    );
 
     return {
       rootNodeId: this.id,

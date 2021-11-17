@@ -77,9 +77,9 @@ export const adaptLegacyNode = (
 
     return createNodeWithResolverConfig(
       {
+        ...legacyNodeData,
         id,
         type,
-        ...legacyNodeData,
       },
       resolver
     );
