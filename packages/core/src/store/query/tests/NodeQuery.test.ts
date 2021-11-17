@@ -1,5 +1,6 @@
 import { NodeId } from '../../../interfaces';
 import { createTestEditorStore } from '../../../utils/testHelpers';
+import { asLegacyNode } from '../../../utils/types';
 import { NodeQuery } from '../NodeQuery';
 
 let helper: (id: NodeId) => NodeQuery;
@@ -37,98 +38,96 @@ RejectDragOutgoingComponent.craft = {
   },
 };
 
-describe('NodeQuery', () => {
-  beforeEach(() => {
-    helper = (id) =>
-      new NodeQuery(
-        createTestEditorStore({
-          resolver: {
-            RandomComponent,
-            RejectDragComponent,
-            RejectDropButtonComponent,
-            RejectDragOutgoingComponent,
-          },
-          state: {
-            nodes: {
-              id: 'ROOT',
-              type: 'div',
+const editorStore = createTestEditorStore({
+  resolver: {
+    RandomComponent,
+    RejectDragComponent,
+    RejectDropButtonComponent,
+    RejectDragOutgoingComponent,
+  },
+  state: {
+    nodes: {
+      id: 'ROOT',
+      type: 'div',
+      isCanvas: true,
+      nodes: [
+        {
+          id: 'node-card',
+          type: 'div',
+          linkedNodes: {
+            header: {
+              id: 'linked-node',
               isCanvas: true,
               nodes: [
                 {
-                  id: 'node-card',
-                  type: 'div',
-                  linkedNodes: {
-                    header: {
-                      id: 'linked-node',
-                      isCanvas: true,
-                      nodes: [
-                        {
-                          id: 'linked-node-child',
-                          type: 'span',
-                          nodes: [
-                            {
-                              id: 'linked-node-grandchild',
-                              type: 'button',
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  },
+                  id: 'linked-node-child',
+                  type: 'span',
                   nodes: [
                     {
-                      id: 'node-card-child',
+                      id: 'linked-node-grandchild',
                       type: 'button',
-                      nodes: [
-                        {
-                          id: 'node-card-grandchild',
-                        },
-                      ],
-                    },
-                  ],
-                },
-                {
-                  id: 'component-node',
-                  type: 'RandomComponent',
-                  props: { color: 'primary' },
-                },
-                {
-                  id: 'canvas-node',
-                  type: 'div',
-                  isCanvas: true,
-                  nodes: [
-                    {
-                      id: 'button',
-                      type: 'button',
-                    },
-                    {
-                      id: 'drag-reject-node',
-                      type: 'RejectDragComponent',
-                    },
-                    {
-                      id: 'drop-button-reject-node',
-                      isCanvas: true,
-                      type: 'RejectDropButtonComponent',
-                    },
-                    {
-                      id: 'drag-reject-outgoing-node',
-                      isCanvas: true,
-                      type: 'RejectDragOutgoingComponent',
-                      nodes: [
-                        {
-                          id: 'rejecting-parent',
-                          type: 'button',
-                        },
-                      ],
                     },
                   ],
                 },
               ],
             },
           },
-        }),
-        id
-      );
+          nodes: [
+            {
+              id: 'node-card-child',
+              type: 'button',
+              nodes: [
+                {
+                  id: 'node-card-grandchild',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: 'component-node',
+          type: 'RandomComponent',
+          props: { color: 'primary' },
+        },
+        {
+          id: 'canvas-node',
+          type: 'div',
+          isCanvas: true,
+          nodes: [
+            {
+              id: 'button',
+              type: 'button',
+            },
+            {
+              id: 'drag-reject-node',
+              type: 'RejectDragComponent',
+            },
+            {
+              id: 'drop-button-reject-node',
+              isCanvas: true,
+              type: 'RejectDropButtonComponent',
+            },
+            {
+              id: 'drag-reject-outgoing-node',
+              isCanvas: true,
+              type: 'RejectDragOutgoingComponent',
+              nodes: [
+                {
+                  id: 'rejecting-parent',
+                  type: 'button',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  },
+});
+
+describe('NodeQuery', () => {
+  beforeEach(() => {
+    helper = (id) => new NodeQuery(editorStore, id);
   });
 
   it('should throw error if invalid value supplied as NodeId', () => {
@@ -219,11 +218,16 @@ describe('NodeQuery', () => {
 
   describe('getRelated', () => {
     it('should return NodeElement with RelatedComponent', () => {
+      // @ts-ignore
+      const relatedComponent = helper('component-node').getRelated(
+        'settings'
+      )();
       const {
         id,
         related,
         children: { type: childType },
-      } = helper('component-node').getRelated('settings')().props;
+      } = relatedComponent.props;
+
       expect({ id, related, childType }).toEqual({
         id: 'component-node',
         related: true,
@@ -313,6 +317,188 @@ describe('NodeQuery', () => {
     });
   });
 
+  describe('toNodeTree', () => {
+    describe('when version=latest', () => {
+      it('should return NodeTree', () => {
+        expect(helper('node-card').toNodeTree()).toEqual({
+          rootNodeId: 'node-card',
+          nodes: {
+            'node-card': {
+              id: 'node-card',
+              nodes: ['node-card-child'],
+              linkedNodes: {
+                header: 'linked-node',
+              },
+              props: {},
+              custom: {},
+              type: 'div',
+              displayName: 'div',
+              isCanvas: false,
+              hidden: false,
+              parent: 'ROOT',
+            },
+            'linked-node': {
+              id: 'linked-node',
+              nodes: ['linked-node-child'],
+              linkedNodes: {},
+              props: {},
+              custom: {},
+              type: 'div',
+              displayName: 'div',
+              isCanvas: true,
+              hidden: false,
+              parent: 'node-card',
+            },
+            'linked-node-child': {
+              id: 'linked-node-child',
+              nodes: ['linked-node-grandchild'],
+              linkedNodes: {},
+              props: {},
+              custom: {},
+              type: 'span',
+              displayName: 'div',
+              isCanvas: false,
+              hidden: false,
+              parent: 'linked-node',
+            },
+            'linked-node-grandchild': {
+              id: 'linked-node-grandchild',
+              nodes: [],
+              linkedNodes: {},
+              props: {},
+              custom: {},
+              type: 'button',
+              displayName: 'div',
+              isCanvas: false,
+              hidden: false,
+              parent: 'linked-node-child',
+            },
+            'node-card-child': {
+              id: 'node-card-child',
+              nodes: ['node-card-grandchild'],
+              linkedNodes: {},
+              props: {},
+              custom: {},
+              type: 'button',
+              displayName: 'div',
+              isCanvas: false,
+              hidden: false,
+              parent: 'node-card',
+            },
+            'node-card-grandchild': {
+              id: 'node-card-grandchild',
+              nodes: [],
+              linkedNodes: {},
+              props: {},
+              custom: {},
+              type: 'div',
+              displayName: 'div',
+              isCanvas: false,
+              hidden: false,
+              parent: 'node-card-child',
+            },
+          },
+        });
+      });
+    });
+    describe('when version=v1', () => {
+      it('should return LegacyNodeTree', () => {
+        const matchLegacyNode = (node) => {
+          return {
+            ...asLegacyNode(node, editorStore.resolver),
+            rules: {
+              canMoveIn: expect.any(Function),
+              canMoveOut: expect.any(Function),
+              canDrag: expect.any(Function),
+              canDrop: expect.any(Function),
+            },
+          };
+        };
+        expect(helper('node-card').toNodeTree({ version: 'v1' })).toMatchObject(
+          {
+            rootNodeId: 'node-card',
+            nodes: {
+              'node-card': matchLegacyNode({
+                id: 'node-card',
+                nodes: ['node-card-child'],
+                linkedNodes: {
+                  header: 'linked-node',
+                },
+                props: {},
+                custom: {},
+                type: 'div',
+                displayName: 'div',
+                isCanvas: false,
+                hidden: false,
+                parent: 'ROOT',
+              }),
+              'linked-node': matchLegacyNode({
+                id: 'linked-node',
+                nodes: ['linked-node-child'],
+                linkedNodes: {},
+                props: {},
+                custom: {},
+                type: 'div',
+                displayName: 'div',
+                isCanvas: true,
+                hidden: false,
+                parent: 'node-card',
+              }),
+              'linked-node-child': matchLegacyNode({
+                id: 'linked-node-child',
+                nodes: ['linked-node-grandchild'],
+                linkedNodes: {},
+                props: {},
+                custom: {},
+                type: 'span',
+                displayName: 'div',
+                isCanvas: false,
+                hidden: false,
+                parent: 'linked-node',
+              }),
+              'linked-node-grandchild': matchLegacyNode({
+                id: 'linked-node-grandchild',
+                nodes: [],
+                linkedNodes: {},
+                props: {},
+                custom: {},
+                type: 'button',
+                displayName: 'div',
+                isCanvas: false,
+                hidden: false,
+                parent: 'linked-node-child',
+              }),
+              'node-card-child': matchLegacyNode({
+                id: 'node-card-child',
+                nodes: ['node-card-grandchild'],
+                linkedNodes: {},
+                props: {},
+                custom: {},
+                type: 'button',
+                displayName: 'div',
+                isCanvas: false,
+                hidden: false,
+                parent: 'node-card',
+              }),
+              'node-card-grandchild': matchLegacyNode({
+                id: 'node-card-grandchild',
+                nodes: [],
+                linkedNodes: {},
+                props: {},
+                custom: {},
+                type: 'div',
+                displayName: 'div',
+                isCanvas: false,
+                hidden: false,
+                parent: 'node-card-child',
+              }),
+            },
+          }
+        );
+      });
+    });
+  });
+
   describe('Legacy NodeHelpers', () => {
     describe('get', () => {
       it('should return LegacyNode', () => {
@@ -337,7 +523,7 @@ describe('NodeQuery', () => {
             canMoveOut: expect.any(Function),
           },
           related: {},
-          dom: undefined,
+          dom: null,
           events: {
             selected: false,
             hovered: false,

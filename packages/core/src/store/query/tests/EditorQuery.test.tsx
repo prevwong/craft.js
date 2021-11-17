@@ -138,6 +138,35 @@ describe('EditorQuery', () => {
       });
     });
   });
+  describe('serialize', () => {
+    it('when version is latest', () => {
+      expect(query.serialize()).toEqual(
+        JSON.stringify(
+          Object.keys(store.getState().nodes).reduce(
+            (accum, id) => ({
+              ...accum,
+              [id]: new NodeQuery(store, id).getState(),
+            }),
+            {}
+          )
+        )
+      );
+    });
+    it('when version is v1', () => {
+      expect(query.serialize({ version: 'v1' })).toEqual(
+        JSON.stringify(
+          Object.keys(store.getState().nodes).reduce(
+            (accum, id) => ({
+              ...accum,
+              [id]: new NodeQuery(store, id).toSerializedNode(),
+            }),
+            {}
+          )
+        )
+      );
+    });
+  });
+
   describe('Legacy Queries', () => {
     describe('getSerializedNodes', () => {
       it('should return SerializedNodes', () => {
@@ -254,23 +283,39 @@ describe('EditorQuery', () => {
             },
           ].forEach((input) => {
             expect(query.parseFreshNode(input).toNode()).toEqual({
-              isCanvas: false,
-              linkedNodes: {},
-              nodes: [],
-              parent: null,
-              hidden: false,
-              props: {},
-              custom: {},
-              ...input.data,
               id: expect.any(String),
-              type:
-                typeof input.data.type === 'string'
-                  ? input.data.type
-                  : input.data.type.name,
-              displayName:
-                typeof input.data.type === 'string'
-                  ? input.data.type
-                  : input.data.type.name,
+              data: {
+                isCanvas: false,
+                linkedNodes: {},
+                nodes: [],
+                parent: null,
+                hidden: false,
+                props: {},
+                custom: {},
+                ...input.data,
+                type: input.data.type,
+                displayName:
+                  typeof input.data.type === 'string'
+                    ? input.data.type
+                    : input.data.type.name,
+                name:
+                  typeof input.data.type === 'string'
+                    ? input.data.type
+                    : input.data.type.name,
+              },
+              dom: null,
+              events: {
+                dragged: false,
+                hovered: false,
+                selected: false,
+              },
+              related: {},
+              rules: {
+                canDrag: expect.any(Function),
+                canDrop: expect.any(Function),
+                canMoveIn: expect.any(Function),
+                canMoveOut: expect.any(Function),
+              },
             });
           });
         });

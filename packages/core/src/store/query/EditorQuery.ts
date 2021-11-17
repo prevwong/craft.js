@@ -2,6 +2,7 @@ import {
   deprecationWarning,
   ERROR_NOT_IN_RESOLVER,
   getDOMInfo,
+  getRandomId,
   ROOT_NODE,
 } from '@craftjs/utils';
 import React from 'react';
@@ -23,6 +24,7 @@ import {
   SerializedNode,
   SerializedNodes,
   NodeInfo,
+  StateVersionOpt,
 } from '../../interfaces';
 import { deserializeNode } from '../../utils/deserializeNode';
 import { getNodesFromSelector } from '../../utils/getNodesFromSelector';
@@ -30,7 +32,7 @@ import {
   parseNodeFromJSX,
   parseLegacyNodeFromJSX,
 } from '../../utils/parseNodeFromJSX';
-import { adaptLegacyNode } from '../../utils/types';
+import { adaptLegacyNode, asLegacyNode } from '../../utils/types';
 
 export class EditorQuery {
   constructor(private readonly store: EditorStore) {
@@ -41,6 +43,9 @@ export class EditorQuery {
     return this.store.getState();
   }
 
+  /**
+   * Get the Root Node
+   */
   get root() {
     return this.node(ROOT_NODE);
   }
@@ -91,6 +96,20 @@ export class EditorQuery {
 
   event(eventType: NodeEventTypes) {
     return new EventQuery(this.store, eventType);
+  }
+
+  getNodes() {
+    return Object.keys(this.state.nodes).map(
+      (id) => new NodeQuery(this.store, id)
+    );
+  }
+
+  serialize(opt?: StateVersionOpt): string {
+    if (opt && opt.version === 'v1') {
+      return JSON.stringify(this.getSerializedNodes());
+    }
+
+    return JSON.stringify(this.getState().nodes);
   }
 
   /**
@@ -171,6 +190,14 @@ export class EditorQuery {
   }
 
   /**
+   * Generate a new NodeId
+   * You don't typically need this, other than when you want to create a new Node manually
+   */
+  generateRandomNodeId() {
+    return getRandomId();
+  }
+
+  /**
    * Parse a React Element into a NodeTree
    * Note: you don't typically need this, and this API is subject to change
    */
@@ -183,7 +210,6 @@ export class EditorQuery {
 
   /**
    * Get the internal EditorState
-   * @returns EditorState
    */
   getState() {
     return this.state;
@@ -277,16 +303,9 @@ export class EditorQuery {
   /**
    * @deprecated
    */
-  serialize(): string {
-    return JSON.stringify(this.getSerializedNodes());
-  }
-
-  /**
-   * @deprecated
-   */
   parseSerializedNode(serializedNode: SerializedNode) {
     return {
-      toNode: (normalize?: (node: Node) => void) => {
+      toNode: (normalize?: (node: LegacyNode) => void) => {
         const data = deserializeNode(serializedNode, this.store.resolver);
         invariant(data.type, ERROR_NOT_IN_RESOLVER);
         const id = typeof normalize === 'string' && normalize;
@@ -309,21 +328,18 @@ export class EditorQuery {
    */
   parseFreshNode(freshNode: FreshNode) {
     return {
-      toNode: (normalize?: (node: Node) => void): Node => {
+      toNode: (normalize?: (node: LegacyNode) => void): LegacyNode => {
+        // Recreate the Node
         let node = adaptLegacyNode(freshNode, this.store.resolver);
 
-        const { type, name, ...data } = freshNode.data;
-
-        node = {
-          ...node,
-          ...data,
-        };
+        // parseFreshNode is a deprecated method, so it should be expecting the legacy Node
+        const legacyNode = asLegacyNode(node, this.store.resolver);
 
         if (normalize) {
-          normalize(node);
+          normalize(legacyNode);
         }
 
-        return node;
+        return legacyNode;
       },
     };
   }

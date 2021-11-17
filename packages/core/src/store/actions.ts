@@ -13,7 +13,6 @@ import {
   Indicator,
   NodeId,
   Node,
-  Nodes,
   LegacyStateOptions,
   NodeEventTypes,
   SerializedNodes,
@@ -262,12 +261,6 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
       });
     },
 
-    replaceNodes(nodes: Nodes) {
-      this.clearEvents();
-      state.nodes = nodes;
-      state.timestamp = Date.now();
-    },
-
     clearEvents() {
       this.setNodeEvent('selected', null);
       this.setNodeEvent('hovered', null);
@@ -280,7 +273,7 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
      */
     reset() {
       this.clearEvents();
-      this.replaceNodes({});
+      this.deserialize({});
     },
 
     setEnabled(enabled: boolean) {
@@ -353,6 +346,34 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
       targets.forEach(({ node }) => cb(state.nodes[node.id].props));
     },
 
+    deserialize(input: SerializedNodes | string) {
+      this.clearEvents();
+
+      const dehydratedNodes =
+        typeof input == 'string' ? JSON.parse(input) : input;
+
+      const nodePairs = Object.keys(dehydratedNodes).map((id) => {
+        let nodeId = id;
+
+        if (id === DEPRECATED_ROOT_NODE) {
+          nodeId = ROOT_NODE;
+        }
+
+        return [
+          nodeId,
+          adaptLegacyNode(
+            query
+              .parseSerializedNode(dehydratedNodes[id])
+              .toNode((node) => (node.id = nodeId)),
+            store.resolver
+          ),
+        ];
+      });
+
+      state.nodes = fromEntries(nodePairs);
+      state.timestamp = Date.now();
+    },
+
     selectNode(nodeIdSelector?: NodeSelector<NodeSelectorType.Id>) {
       if (nodeIdSelector) {
         const targets = getNodesFromSelector(store, nodeIdSelector, {
@@ -379,32 +400,6 @@ export const ActionMethods = (state: EditorState, store: EditorStore) => {
       const opts = { enabled: state.enabled };
       cb(opts);
       state.enabled = opts.enabled;
-    },
-
-    /**
-     * @deprecated
-     * @param input
-     */
-    deserialize(input: SerializedNodes | string) {
-      const dehydratedNodes =
-        typeof input == 'string' ? JSON.parse(input) : input;
-
-      const nodePairs = Object.keys(dehydratedNodes).map((id) => {
-        let nodeId = id;
-
-        if (id === DEPRECATED_ROOT_NODE) {
-          nodeId = ROOT_NODE;
-        }
-
-        return [
-          nodeId,
-          query
-            .parseSerializedNode(dehydratedNodes[id])
-            .toNode((node) => (node.id = nodeId)),
-        ];
-      });
-
-      this.replaceNodes(fromEntries(nodePairs));
     },
   };
 };
