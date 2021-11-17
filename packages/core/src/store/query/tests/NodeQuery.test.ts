@@ -218,11 +218,16 @@ describe('NodeQuery', () => {
 
   describe('getRelated', () => {
     it('should return NodeElement with RelatedComponent', () => {
+      // @ts-ignore
+      const relatedComponent = helper('component-node').getRelated(
+        'settings'
+      )();
       const {
         id,
         related,
         children: { type: childType },
-      } = helper('component-node').getRelated('settings')().props;
+      } = relatedComponent.props;
+
       expect({ id, related, childType }).toEqual({
         id: 'component-node',
         related: true,

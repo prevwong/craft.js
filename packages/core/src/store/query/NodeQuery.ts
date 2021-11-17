@@ -442,7 +442,7 @@ export class NodeQuery {
   /**
    * @deprecated
    */
-  get related() {
+  get related(): Record<string, React.ElementType> {
     const related = this.getConfig().related;
 
     const relatedNodeContext = {
