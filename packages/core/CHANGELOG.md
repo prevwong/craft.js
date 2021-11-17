@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.1](https://github.com/prevwong/craft.js/compare/v0.3.0-alpha.0...v0.3.0-alpha.1) (2021-11-17)
+
+
+### Bug Fixes
+
+* backwards compatibility bugs ([#345](https://github.com/prevwong/craft.js/issues/345)) ([c60e402](https://github.com/prevwong/craft.js/commit/c60e4024e58b3f89389f94e974b94e903434e334))
+
+
+
+
+
 # [0.3.0-alpha.0](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.28...v0.3.0-alpha.0) (2021-11-16)
 
 
