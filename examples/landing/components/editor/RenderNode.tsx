@@ -103,7 +103,7 @@ export const RenderNode = ({ render }) => {
         ? ReactDOM.createPortal(
             <IndicatorDiv
               ref={currentRef}
-              className="px-2 py-2 text-white bg-primary fixed flex items-center"
+              className="fixed flex items-center px-2 py-2 text-white bg-primary"
               style={{
                 left: getPos(dom).left,
                 top: getPos(dom).top,
@@ -112,7 +112,15 @@ export const RenderNode = ({ render }) => {
             >
               <h2 className="flex-1 mr-4">{name}</h2>
               {moveable ? (
-                <Btn className="mr-2 cursor-move" ref={drag}>
+                <Btn
+                  className="mr-2 cursor-move"
+                  ref={(ref) => {
+                    if (id !== ROOT_NODE) {
+                      actions.selectNode(id);
+                    }
+                    drag(ref);
+                  }}
+                >
                   <Move />
                 </Btn>
               ) : null}
