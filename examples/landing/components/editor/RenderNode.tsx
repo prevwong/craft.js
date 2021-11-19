@@ -114,11 +114,9 @@ export const RenderNode = ({ render }) => {
               {moveable ? (
                 <Btn
                   className="mr-2 cursor-move"
-                  ref={(ref) => {
-                    if (id !== ROOT_NODE) {
-                      actions.selectNode(id);
-                    }
-                    drag(ref);
+                  ref={drag}
+                  onMouseDown={() => {
+                    actions.selectNode(id);
                   }}
                 >
                   <Move />
