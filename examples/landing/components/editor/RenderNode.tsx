@@ -116,7 +116,11 @@ export const RenderNode = ({ render }) => {
                   className="mr-2 cursor-move"
                   ref={drag}
                   onMouseDown={() => {
-                    actions.selectNode(id);
+                    // only select the node if it is not already selected
+                    // otherwise during multiple selection we would lose other the multiple selection nodes
+                    if (!isActive) {
+                      actions.selectNode(id);
+                    }
                   }}
                 >
                   <Move />
