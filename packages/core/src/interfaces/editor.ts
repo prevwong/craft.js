@@ -10,7 +10,11 @@ import { CoreEventHandlers } from '../events';
 
 export type Options = {
   onRender: React.ComponentType<{ render: React.ReactElement }>;
-  onBeforeMoveEnd: (targetNode: Node, currentNode: Node) => void;
+  onBeforeMoveEnd: (
+    targetNode: Node,
+    newParentNode: Node,
+    existingParentNode: Node
+  ) => void;
   onNodesChange: (query: QueryCallbacksFor<typeof QueryMethods>) => void;
   resolver: Resolver;
   enabled: boolean;

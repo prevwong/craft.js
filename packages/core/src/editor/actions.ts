@@ -276,7 +276,11 @@ const Methods = (
         });
 
         // modify node props
-        state.options.onBeforeMoveEnd(newParent, targetNode);
+        state.options.onBeforeMoveEnd(
+          targetNode,
+          newParent,
+          state.nodes[currentParentId]
+        );
 
         const currentParent = state.nodes[currentParentId];
         const currentParentNodes = currentParent.data.nodes;

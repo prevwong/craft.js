@@ -41,7 +41,7 @@ export const Editor: React.FC<Partial<Options>> = ({
       },
       (value) => value !== undefined
     );
-  }, [enabled, indicator, onNodesChange, onRender, resolver]);
+  }, [enabled, indicator, onBeforeMoveEnd, onNodesChange, onRender, resolver]);
 
   const context = useEditorStore(
     options,
