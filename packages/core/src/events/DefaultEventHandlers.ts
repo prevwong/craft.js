@@ -191,7 +191,22 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
             e.craft.stopPropagation();
 
             const { query, actions } = store;
-            const selectedElementIds = query.getEvent('selected').all();
+
+            let selectedElementIds = query.getEvent('selected').all();
+
+            const isMultiSelect = this.options.isMultiSelectEnabled(e);
+            const isNodeAlreadySelected = this.currentSelectedElementIds.includes(
+              id
+            );
+
+            if (!isNodeAlreadySelected) {
+              if (isMultiSelect) {
+                selectedElementIds = [...selectedElementIds, id];
+              } else {
+                selectedElementIds = [id];
+              }
+              store.actions.setNodeEvent('selected', selectedElementIds);
+            }
 
             actions.setNodeEvent('dragged', selectedElementIds);
 
