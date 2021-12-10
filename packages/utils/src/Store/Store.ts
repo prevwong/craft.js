@@ -15,6 +15,8 @@ export class Store<S = any> {
   private subscribers: Set<(state: S) => void> = new Set();
   private state: S;
 
+  isFlushing = false;
+
   constructor(initialState: S) {
     this.state = initialState;
   }
@@ -24,7 +26,7 @@ export class Store<S = any> {
     onChange: (collected: C) => void,
     init: boolean = false
   ) {
-    let current = collector(this.getState());
+    let current;
     let isInvalidated = false;
 
     const subscriber = (state: S) => {
@@ -33,7 +35,8 @@ export class Store<S = any> {
       }
 
       const newCollectedValues = collector(state);
-      if (isEqual(newCollectedValues, current)) {
+
+      if (current && isEqual(newCollectedValues, current)) {
         return;
       }
 
@@ -70,10 +73,19 @@ export class Store<S = any> {
 
     const draft = createDraft(this.state);
     setter(draft as S);
-
     this.state = finishDraft(draft, onPatch) as S;
 
-    this.notify();
+    if (!this.isFlushing) {
+      this.isFlushing = true;
+
+      /**
+       * Batch multiple subsequent state changes into a single notify call
+       */
+      Promise.resolve().then(() => {
+        this.isFlushing = false;
+        this.notify();
+      });
+    }
   }
 
   protected notify() {
