@@ -1,4 +1,9 @@
-import { Store, History, ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
+import {
+  Store,
+  History,
+  HistoryMergeOpts,
+  ERROR_RESOLVER_NOT_AN_OBJECT,
+} from '@craftjs/utils';
 import invariant from 'tiny-invariant';
 
 import { ActionMethods } from './actions';
@@ -162,9 +167,9 @@ export class EditorStore extends Store<EditorState> {
         getBaseActions((patch, inversePatch) =>
           this.history.throttleAdd(patch, inversePatch, rate)
         ),
-      merge: () =>
+      merge: (opts?: HistoryMergeOpts) =>
         getBaseActions((patch, inversePatch) =>
-          this.history.merge(patch, inversePatch)
+          this.history.merge(patch, inversePatch, opts)
         ),
     };
 

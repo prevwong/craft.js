@@ -15,6 +15,10 @@ export const HISTORY_ACTIONS = {
   CLEAR: 'HISTORY_CLEAR',
 };
 
+export type HistoryMergeOpts = {
+  ignoreIfNoPreviousRecords: boolean;
+};
+
 export class History {
   timeline: Timeline = [];
   pointer = -1;
@@ -65,7 +69,11 @@ export class History {
     this.add(patches, inversePatches);
   }
 
-  merge(patches: Patch[], inversePatches: Patch[]) {
+  merge(
+    patches: Patch[],
+    inversePatches: Patch[],
+    opts?: Partial<HistoryMergeOpts>
+  ) {
     if (patches.length === 0 && inversePatches.length === 0) {
       return;
     }
@@ -82,6 +90,12 @@ export class History {
         patches: [...currPatches, ...patches],
         inversePatches: [...inversePatches, ...currInversePatches],
       };
+      return;
+    }
+
+    // There's no previous history records in the timeline, and therefore nothing to merge with
+    // If ignoreIfNoPreviousRecords=true, then we will simply discard the current changes from the timeline
+    if (opts && opts.ignoreIfNoPreviousRecords) {
       return;
     }
 
