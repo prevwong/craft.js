@@ -9,7 +9,7 @@ describe('History Manager', () => {
     dummyTimeline = [
       {
         patches: [{ op: 'add', path: '/node1', value: 32 }],
-        inversePatches: [],
+        inversePatches: [{ op: 'remove', path: '/node1' }],
         state: { node1: 32 },
       },
       {
@@ -24,16 +24,78 @@ describe('History Manager', () => {
       history = new History();
     });
 
-    const { patches, inversePatches } = dummyTimeline[0];
-
     it('should add history to timeline', () => {
-      history.add(patches, inversePatches);
-      expect(history.timeline).toMatchObject([{ patches, inversePatches }]);
+      history.add(dummyTimeline[0].patches, dummyTimeline[0].inversePatches);
+      expect(history.timeline).toMatchObject([
+        {
+          patches: dummyTimeline[0].patches,
+          inversePatches: dummyTimeline[0].inversePatches,
+        },
+      ]);
     });
 
     it('should ignore adding empty history to timeline', () => {
       history.add([], []);
       expect(history.timeline).toMatchObject([]);
+    });
+
+    describe('merge', () => {
+      it('should add a new record to the timeline its empty', () => {
+        history.merge(
+          dummyTimeline[0].patches,
+          dummyTimeline[0].inversePatches
+        );
+        expect(history.timeline).toMatchObject([
+          {
+            patches: dummyTimeline[0].patches,
+            inversePatches: dummyTimeline[0].inversePatches,
+          },
+        ]);
+      });
+      it('should merge with previous history stack if timeline is not empty', () => {
+        history.add(dummyTimeline[0].patches, dummyTimeline[0].inversePatches);
+        history.ignore(
+          dummyTimeline[1].patches,
+          dummyTimeline[1].inversePatches
+        );
+        expect(history.timeline).toEqual([
+          {
+            timestamp: expect.any(Number),
+            patches: [...dummyTimeline[0].patches, ...dummyTimeline[1].patches],
+            inversePatches: [
+              ...dummyTimeline[1].inversePatches,
+              ...dummyTimeline[0].inversePatches,
+            ],
+          },
+        ]);
+      });
+    });
+
+    describe('ignore', () => {
+      it('should not add to an empty timeline', () => {
+        history.ignore(
+          dummyTimeline[0].patches,
+          dummyTimeline[0].inversePatches
+        );
+        expect(history.timeline).toMatchObject([]);
+      });
+      it('should merge with previous history stack if timeline is not empty', () => {
+        history.add(dummyTimeline[0].patches, dummyTimeline[0].inversePatches);
+        history.ignore(
+          dummyTimeline[1].patches,
+          dummyTimeline[1].inversePatches
+        );
+        expect(history.timeline).toEqual([
+          {
+            timestamp: expect.any(Number),
+            patches: [...dummyTimeline[0].patches, ...dummyTimeline[1].patches],
+            inversePatches: [
+              ...dummyTimeline[1].inversePatches,
+              ...dummyTimeline[0].inversePatches,
+            ],
+          },
+        ]);
+      });
     });
   });
 

@@ -88,6 +88,20 @@ export class History {
     this.add(patches, inversePatches);
   }
 
+  ignore(patches: Patch[], inversePatches: Patch[]) {
+    if (patches.length === 0 && inversePatches.length === 0) {
+      return;
+    }
+
+    // If there's no undo/redo record, don't do anything
+    if (this.timeline.length === 0) {
+      return;
+    }
+
+    // Otherwise, merge the current changes with the previous undo/redo record
+    this.merge(patches, inversePatches);
+  }
+
   clear() {
     this.timeline = [];
     this.pointer = -1;
