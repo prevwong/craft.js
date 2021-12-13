@@ -67,7 +67,11 @@ export function Element<T extends React.ElementType>({
         const tree = query.parseReactElementAsNodeTree(linkedElement);
 
         linkedNodeId = tree.rootNodeId;
-        actions.history.ignore().addLinkedNodeFromTree(tree, nodeId, id);
+        actions.history
+          .merge({
+            ignoreIfNoPreviousRecords: true,
+          })
+          .addLinkedNodeFromTree(tree, nodeId, id);
       }
 
       setLinkedNodeId(linkedNodeId);
