@@ -1,4 +1,4 @@
-import { useNode, useEditor } from '@craftjs/core';
+import { useNode } from '@craftjs/core';
 import cx from 'classnames';
 import { debounce } from 'debounce';
 import { Resizable } from 're-resizable';
@@ -83,32 +83,23 @@ const Indicators = styled.div<{ bound?: 'row' | 'column' }>`
 
 export const Resizer = ({ propKey, children, ...props }: any) => {
   const {
-    id,
     actions: { setProp },
     connectors: { connect },
     fillSpace,
     nodeWidth,
     nodeHeight,
-    parent,
     active,
     inNodeContext,
+    parentDirection,
+    isRootNode,
   } = useNode((node) => ({
-    parent: node.data.parent,
-    active: node.events.selected,
-    nodeWidth: node.data.props[propKey.width],
-    nodeHeight: node.data.props[propKey.height],
-    fillSpace: node.data.props.fillSpace,
+    active: node.isSelected(),
+    nodeWidth: node.props[propKey.width],
+    nodeHeight: node.props[propKey.height],
+    fillSpace: node.props.fillSpace,
+    parentDirection: !node.isRoot() && node.getParent().props.flexDirection,
+    isRootNode: node.isRoot(),
   }));
-
-  const { isRootNode, parentDirection } = useEditor((state, query) => {
-    return {
-      parentDirection:
-        parent &&
-        state.nodes[parent] &&
-        state.nodes[parent].data.props.flexDirection,
-      isRootNode: query.node(id).isRoot(),
-    };
-  });
 
   const resizable = useRef<Resizable>(null);
   const isResizing = useRef<Boolean>(false);

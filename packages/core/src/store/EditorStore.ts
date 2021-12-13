@@ -114,16 +114,19 @@ export class EditorStore extends Store<EditorState> {
           ...accum,
           [actionKey]: (...args) => {
             return this.setState(
-              (state) => ActionMethods(state, this)[actionKey](...args),
+              (state) => {
+                ActionMethods(state, this)[actionKey](...args);
+
+                // TODO: this will be deprecated
+                // Keeping it here until we improve the actions API
+                if (this.config.normalizeNodes) {
+                  return;
+                }
+
+                this.config.normalizeNodes(state, currentState);
+              },
               {
                 onPatch: (patches, inversePatches) => {
-                  // TODO: this will be deprecated
-                  // Keeping it here until we improve the actions API
-                  if (this.config.normalizeNodes) {
-                    this.setState((state) =>
-                      this.config.normalizeNodes(state, currentState)
-                    );
-                  }
                   if (
                     [
                       'setDOM',

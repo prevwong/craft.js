@@ -6,7 +6,7 @@ export function useCollector<S extends Store, C = null>(
   store: S,
   collector?: (state: StateForStore<S>) => C
 ) {
-  const [collected, setCollected] = useState<any>(
+  const [collected, setCollected] = useState<any>(() =>
     collector ? collector(store.getState()) : ({} as C)
   );
 

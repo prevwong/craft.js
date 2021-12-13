@@ -32,13 +32,29 @@ export class Store<S = any> {
         return;
       }
 
-      const newCollectedValues = collector(state);
-      if (isEqual(newCollectedValues, current)) {
-        return;
-      }
+      /**
+       * In an event where a Node gets deleted -
+       * Before React is able to fully unmount all components/hooks within that deleted Node's context
+       * There may be subscribers that is attempting to access properties of the deleted Node
+       * In that case, these subscribers will be notified and thus an error will be thrown (attempting to access property of undefined)
+       *
+       * Although this can be avoided by using useNode over useEditor when accessing Node properties under the current NodeContext
+       * Nevertheless, since there may be users who are still using the legacy useNode/useEditor (without NodeQuery/EditorQuery),
+       * we'll wrap this within a try-catch block for the time being.
+       */
 
-      current = newCollectedValues;
-      onChange(current);
+      try {
+        const newCollectedValues = collector(state);
+        if (isEqual(newCollectedValues, current)) {
+          return;
+        }
+
+        current = newCollectedValues;
+        onChange(current);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.warn(err);
+      }
     };
 
     if (init) {

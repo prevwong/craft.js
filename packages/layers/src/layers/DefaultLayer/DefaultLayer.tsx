@@ -56,7 +56,8 @@ export const DefaultLayer: React.FC = ({ children }) => {
   }));
   const { hasChildCanvases } = useEditor((state, query) => {
     return {
-      hasChildCanvases: query.node(id).isParentOfTopLevelNodes(),
+      hasChildCanvases:
+        query.node(id) && query.node(id).isParentOfTopLevelNodes(),
     };
   });
 
