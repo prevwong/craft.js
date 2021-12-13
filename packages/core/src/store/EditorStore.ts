@@ -157,20 +157,23 @@ export class EditorStore extends Store<EditorState> {
           this.history.redo(state);
           normalizeStateOnUndoRedo(state);
         }),
-      ignore: () => getBaseActions(),
+      ignore: () =>
+        getBaseActions((patches, inversePatches) => {
+          this.history.ignore(patches, inversePatches);
+        }),
       throttle: (rate: number = 500) =>
-        getBaseActions((patch, inversePatch) =>
-          this.history.throttleAdd(patch, inversePatch, rate)
+        getBaseActions((patches, inversePatches) =>
+          this.history.throttleAdd(patches, inversePatches, rate)
         ),
       merge: () =>
-        getBaseActions((patch, inversePatch) =>
-          this.history.merge(patch, inversePatch)
+        getBaseActions((patches, inversePatches) =>
+          this.history.merge(patches, inversePatches)
         ),
     };
 
     return {
-      ...getBaseActions((patch, inversePatch) =>
-        this.history.add(patch, inversePatch)
+      ...getBaseActions((patches, inversePatches) =>
+        this.history.add(patches, inversePatches)
       ),
       history,
     };
