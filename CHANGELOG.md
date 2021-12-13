@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.2](https://github.com/prevwong/craft.js/compare/v0.3.0-alpha.1...v0.3.0-alpha.2) (2021-12-13)
+
+
+### Bug Fixes
+
+* linked nodes history ([#353](https://github.com/prevwong/craft.js/issues/353)) ([c6f3c3f](https://github.com/prevwong/craft.js/commit/c6f3c3ffdfa8f1da9a7121b6291739b58add204e))
+* normalize state call ([#351](https://github.com/prevwong/craft.js/issues/351)) ([0da49ec](https://github.com/prevwong/craft.js/commit/0da49ec86ea94a337ead44f82af007986781e98b))
+* try catch collector values ([#352](https://github.com/prevwong/craft.js/issues/352)) ([d7ee28c](https://github.com/prevwong/craft.js/commit/d7ee28cb061156c0d450965f133d2e9e9e1d5c95))
+
+
+
+
+
 # [0.3.0-alpha.1](https://github.com/prevwong/craft.js/compare/v0.3.0-alpha.0...v0.3.0-alpha.1) (2021-11-17)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.2](https://github.com/prevwong/craft.js/compare/v0.3.0-alpha.1...v0.3.0-alpha.2) (2021-12-13)
+
+
+### Bug Fixes
+
+* try catch collector values ([#352](https://github.com/prevwong/craft.js/issues/352)) ([d7ee28c](https://github.com/prevwong/craft.js/commit/d7ee28cb061156c0d450965f133d2e9e9e1d5c95))
+
+
+
+
+
 # [0.3.0-alpha.1](https://github.com/prevwong/craft.js/compare/v0.3.0-alpha.0...v0.3.0-alpha.1) (2021-11-17)
 
 **Note:** Version bump only for package @craftjs/layers
