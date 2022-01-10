@@ -119,7 +119,9 @@ export class DefaultEventHandlers extends CoreEventHandlers {
           (e) => {
             e.craft.stopPropagation();
 
-            const { query } = store;
+            const { query, actions } = store;
+
+            actions.setNodeEvent('dragged', id);
 
             this.draggedElementShadow = createShadow(
               e,
