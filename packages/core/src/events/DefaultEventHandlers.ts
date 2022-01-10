@@ -1,5 +1,6 @@
 import { isChromium, isLinux } from '@craftjs/utils';
 import { isFunction } from 'lodash';
+import React from 'react';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
 import { Positioner } from './Positioner';
@@ -245,7 +246,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
       },
       create: (
         el: HTMLElement,
-        userElement: React.ReactElement | (() => NodeTree),
+        userElement: React.ReactElement | (() => NodeTree | React.ReactElement),
         options?: Partial<CreateHandlerOptions>
       ) => {
         el.setAttribute('draggable', 'true');
