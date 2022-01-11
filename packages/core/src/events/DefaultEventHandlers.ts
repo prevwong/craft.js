@@ -1,6 +1,6 @@
 import { isChromium, isLinux } from '@craftjs/utils';
 import { isFunction } from 'lodash';
-import React from 'react';
+import React, { isValidElement } from 'react';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
 import { Positioner } from './Positioner';
@@ -256,10 +256,18 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           'dragstart',
           (e) => {
             e.craft.stopPropagation();
-            const tree =
-              typeof userElement === 'function'
-                ? userElement()
-                : store.query.parseReactElement(userElement).toNodeTree();
+            let tree;
+            if (typeof userElement === 'function') {
+              if (isValidElement(userElement())) {
+                tree = store.query
+                  .parseReactElement(userElement() as React.ReactElement)
+                  .toNodeTree();
+              } else {
+                tree = userElement();
+              }
+            } else {
+              tree = store.query.parseReactElement(userElement).toNodeTree();
+            }
 
             const dom = e.currentTarget as HTMLElement;
             this.draggedElementShadow = createShadow(
