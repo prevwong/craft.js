@@ -1,9 +1,9 @@
 {
   "name": "example-basic",
-  "version": "0.3.0-alpha.2",
+  "version": "0.3.0-alpha.3",
   "private": true,
   "dependencies": {
-    "@craftjs/core": "^0.3.0-alpha.2",
+    "@craftjs/core": "^0.3.0-alpha.3",
     "@material-ui/core": "latest",
     "clsx": "latest",
     "copy-to-clipboard": "^3.2.0",
