@@ -3030,6 +3030,7 @@ __metadata:
     "@babel/core": ^7.7.4
     "@craftjs/utils": ^0.3.0-alpha.2
     "@svgr/rollup": ^4.3.3
+    react-contenteditable: ^3.3.3
     styled-components: ^4.2.1
   peerDependencies:
     "@craftjs/core": ^0.3.0-alpha.0
