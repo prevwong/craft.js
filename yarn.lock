@@ -3032,7 +3032,7 @@ __metadata:
     "@svgr/rollup": ^4.3.3
     styled-components: ^4.2.1
   peerDependencies:
-    "@craftjs/core": ^0.2.0-alpha.19
+    "@craftjs/core": ^0.3.0-alpha.0
     react: ^16.8.0
     styled-components: ">= 4"
   languageName: unknown
