@@ -1,6 +1,6 @@
 import { isChromium, isLinux } from '@craftjs/utils';
 import { isFunction } from 'lodash';
-import React, { isValidElement } from 'react';
+import React from 'react';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
 import { Positioner } from './Positioner';
@@ -258,7 +258,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
             e.craft.stopPropagation();
             let tree;
             if (typeof userElement === 'function') {
-              if (isValidElement(userElement())) {
+              if (React.isValidElement(userElement())) {
                 tree = store.query
                   .parseReactElement(userElement() as React.ReactElement)
                   .toNodeTree();
