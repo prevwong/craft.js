@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.1](https://github.com/prevwong/craft.js/compare/v0.1.0...v0.1.1) (2022-01-11)
+
+
+### Bug Fixes
+
+* set drag state ([#360](https://github.com/prevwong/craft.js/issues/360)) ([33c4955](https://github.com/prevwong/craft.js/commit/33c4955db0182121c58f5978c7b16ec393fce362))
+
+
+
+
+
 # [0.1.0](https://github.com/prevwong/craft.js/compare/v0.1.0-beta.20...v0.1.0) (2021-11-15)
 
 
