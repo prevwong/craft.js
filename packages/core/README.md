@@ -5,7 +5,6 @@
   <img src="https://img.shields.io/npm/v/@craftjs/core?color=%232680eb&label=NPM&logo=npm&logoColor=%232680eb&style=for-the-badge">
 </a>
 <img src="https://img.shields.io/npm/l/@craftjs/core?color=%23000&style=for-the-badge">
-<img src="https://img.shields.io/github/workflow/status/prevwong/craft.js/Deploy to gh-pages?style=for-the-badge">
 </div>
 
 <div align="center" style={{d}}>
