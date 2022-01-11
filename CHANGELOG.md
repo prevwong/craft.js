@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.1](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.0...v0.2.0-beta.1) (2022-01-11)
+
+
+### Features
+
+* add onBeforeMoveEnd ([#320](https://github.com/prevwong/craft.js/issues/320)) ([048490f](https://github.com/prevwong/craft.js/commit/048490fa6f8edd612dc0e7fe47a418cb5114ee68))
+
+
+
+
+
 # [0.2.0-beta.0](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.28...v0.2.0-beta.0) (2021-11-16)
 
 
