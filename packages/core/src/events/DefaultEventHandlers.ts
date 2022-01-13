@@ -258,7 +258,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
             e.craft.stopPropagation();
             let tree;
             if (typeof userElement === 'function') {
-              let result = userElement();
+              const result = userElement();
               if (React.isValidElement(result)) {
                 tree = store.query.parseReactElement(result).toNodeTree();
               } else {
