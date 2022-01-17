@@ -3007,11 +3007,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@craftjs/core@^0.2.0-beta.1, @craftjs/core@workspace:packages/core":
+"@craftjs/core@^0.2.0-beta.2, @craftjs/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@craftjs/core@workspace:packages/core"
   dependencies:
-    "@craftjs/utils": ^0.2.0-beta.1
+    "@craftjs/utils": ^0.2.0-beta.2
     "@types/react": ^17.0.5
     debounce: ^1.2.0
     lodash: ^4.17.20
@@ -3022,12 +3022,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@craftjs/layers@^0.2.0-beta.1, @craftjs/layers@workspace:packages/layers":
+"@craftjs/layers@^0.2.0-beta.2, @craftjs/layers@workspace:packages/layers":
   version: 0.0.0-use.local
   resolution: "@craftjs/layers@workspace:packages/layers"
   dependencies:
     "@babel/core": ^7.7.4
-    "@craftjs/utils": ^0.2.0-beta.1
+    "@craftjs/utils": ^0.2.0-beta.2
     "@svgr/rollup": ^4.3.3
     react-contenteditable: ^3.3.3
     styled-components: ^4.2.1
@@ -3038,7 +3038,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@craftjs/utils@^0.2.0-beta.1, @craftjs/utils@workspace:packages/utils":
+"@craftjs/utils@^0.2.0-beta.2, @craftjs/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@craftjs/utils@workspace:packages/utils"
   dependencies:
@@ -11694,7 +11694,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "example-basic@workspace:examples/basic"
   dependencies:
-    "@craftjs/core": ^0.2.0-beta.1
+    "@craftjs/core": ^0.2.0-beta.2
     "@material-ui/core": latest
     clsx: latest
     copy-to-clipboard: ^3.2.0
@@ -11714,8 +11714,8 @@ __metadata:
   resolution: "example-landing@workspace:examples/landing"
   dependencies:
     "@babel/core": ^7.7.5
-    "@craftjs/core": ^0.2.0-beta.1
-    "@craftjs/layers": ^0.2.0-beta.1
+    "@craftjs/core": ^0.2.0-beta.2
+    "@craftjs/layers": ^0.2.0-beta.2
     "@fullhuman/postcss-purgecss": ^1.3.0
     "@material-ui/core": ^4.5.2
     "@material-ui/icons": ^4.5.1
