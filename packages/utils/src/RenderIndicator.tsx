@@ -1,8 +1,5 @@
 import React from 'react';
-
-import { isReactNative } from './isReactNative';
-
-const ReactDOM = !isReactNative ? require('react-dom') : null;
+import ReactDOM from 'react-dom';
 
 export const RenderIndicator: React.FC<any> = ({ style, parentDom }) => {
   const indicator = (
