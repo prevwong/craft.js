@@ -13,7 +13,7 @@
 
 <p align="center">
   <strong>
-    <a href="https://prevwong.github.io/craft.js/">Live Demo</a>
+    <a href="https://craft.js.org/">Live Demo</a>
   </strong>
 </p>
 
@@ -33,8 +33,8 @@ These examples should give you an idea on the flexibility of Craft.js.
 
 Both these examples look very different from each other, with very different UI. But they are both built with Craft.js! 🤯
 
-- [Landing](https://prevwong.github.io/craft.js)
-- [Basic](https://prevwong.github.io/craft.js/examples/basic)
+- [Landing](https://craft.js.org/examples/landing/)
+- [Basic](https://craft.js.org/examples/basic/)
 
 
 ## Features :fire:
@@ -189,7 +189,7 @@ You should use this if:
 
 You should not use this if:
 - ❌ You need a page editor that works out of the box. Craft.js is an abstraction where you implement your own page editor upon. For example, it does not come with a ready-made user interface.
-  - However, you could still consider using the [examples](https://github.com/prevwong/craft.js/tree/master/packages/examples) as a starting point.
+  - However, you could still consider using the [examples](https://github.com/dxcqcv/craft.js/tree/develop/examples) as a starting point.
 
 
 ## Additional Packages :tada:
