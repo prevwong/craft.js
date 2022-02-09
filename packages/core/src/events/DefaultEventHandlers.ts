@@ -168,6 +168,8 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           el,
           'dragenter',
           (e) => {
+            store.actions.setNodeEvent('draggedOver', targetId);
+
             e.craft.stopPropagation();
             e.preventDefault();
           }
@@ -358,6 +360,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
     store.actions.setIndicator(null);
     store.actions.setNodeEvent('dragged', null);
+    store.actions.setNodeEvent('draggedOver', null);
     this.positioner.cleanup();
 
     this.positioner = null;
