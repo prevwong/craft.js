@@ -13,7 +13,7 @@
 
 <p align="center">
   <strong>
-    <a href="https://prevwong.github.io/craft.js/">Live Demo</a>
+    <a href="https://craft.js.org/">Live Demo</a>
   </strong>
 </p>
 
@@ -24,17 +24,17 @@ There're existing libraries that come with a fully working page editor out of th
 Craft.js solves this problem by modularising the building blocks of a page editor. It ships with a drag-n-drop system and handles the way user components should be rendered, updated and moved - among other things. With this, you'll be able to build your own page editor exactly how you want it to look and behave.
 
 ## Docs
-- [Core concepts](https://prevwong.github.io/craft.js/r/docs/concepts/nodes)
-- [Tutorial](https://prevwong.github.io/craft.js/r/docs/guides/basic-tutorial)
-- [API Reference](https://prevwong.github.io/craft.js/r/docs/api/editor-state)
+- [Core concepts](https://craft.js.org/docs/concepts/nodes)
+- [Tutorial](https://craft.js.org/docs/guides/basic-tutorial)
+- [API Reference](https://craft.js.org/docs/api/editor-state)
 
 ## Examples
 These examples should give you an idea on the flexibility of Craft.js.
 
 Both these examples look very different from each other, with very different UI. But they are both built with Craft.js! 🤯
 
-- [Landing](https://prevwong.github.io/craft.js)
-- [Basic](https://prevwong.github.io/craft.js/examples/basic)
+- [Landing](https://craft.js.org)
+- [Basic](https://craft.js.org/examples/basic)
 
 
 ## Features :fire:
