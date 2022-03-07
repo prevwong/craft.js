@@ -193,7 +193,7 @@ You should not use this if:
 
 
 ## Additional Packages :tada:
-- **[@craftjs/layers](https://github.com/prevwong/craft.js/tree/master/packages/layers)** A Photoshop-like layers panel
+- **[@craftjs/layers](https://github.com/prevwong/craft.js/tree/develop/packages/layers)** A Photoshop-like layers panel
 
 ## Acknowledgements :raised_hands:
 
