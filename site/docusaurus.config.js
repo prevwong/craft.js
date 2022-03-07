@@ -15,9 +15,9 @@ module.exports = {
   onBrokenLinks: 'warn',
   themeConfig: {
     algolia: {
-      apiKey: 'e641d82b10af84aa818e883b1035c3b4',
+      appId: 'PH8YTBNA7Q',
+      apiKey: '7a21621f37e010ec9a8c39298d71b045',
       indexName: 'craft-js',
-      algoliaOptions: {}, // Optional, if provided by Algolia
     },
     prism: {
       theme: require('prism-react-renderer/themes/shadesOfPurple'),
