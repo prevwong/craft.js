@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.3](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.2...v0.2.0-beta.3) (2022-03-07)
+
+
+### Bug Fixes
+
+* remove redundant "}" of the image url ([#372](https://github.com/prevwong/craft.js/issues/372)) ([78d66b3](https://github.com/prevwong/craft.js/commit/78d66b3d3b499fb2b07c3bdb7339eee900e9bd1d))
+* syntax error in README example ([#375](https://github.com/prevwong/craft.js/issues/375)) ([b8fc62f](https://github.com/prevwong/craft.js/commit/b8fc62f6e2b07251111265a969eff446380ddb8f))
+
+
+### Features
+
+* expose serializeNode ([#381](https://github.com/prevwong/craft.js/issues/381)) ([0ced058](https://github.com/prevwong/craft.js/commit/0ced058f844cd8043a063349e483e7775f074240))
+
+
+
+
+
 # [0.2.0-beta.2](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.1...v0.2.0-beta.2) (2022-01-17)
 
 

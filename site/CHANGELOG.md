@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.3](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.2...v0.2.0-beta.3) (2022-03-07)
+
+
+### Bug Fixes
+
+* remove redundant "}" of the image url ([#372](https://github.com/prevwong/craft.js/issues/372)) ([78d66b3](https://github.com/prevwong/craft.js/commit/78d66b3d3b499fb2b07c3bdb7339eee900e9bd1d))
+
+
+
+
+
 # [0.2.0-beta.2](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.1...v0.2.0-beta.2) (2022-01-17)
 
 **Note:** Version bump only for package site
