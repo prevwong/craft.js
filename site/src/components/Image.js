@@ -1,11 +1,13 @@
 import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
-export const Image = ({ img }) => {
+export const Image = ({ img, src }) => {
   const context = useDocusaurusContext();
   const {
     siteConfig: { baseUrl },
   } = context;
+
+  const imageSrc = src || `${baseUrl}img/${img}`;
 
   return (
     <div className="img-wrapper">
@@ -15,7 +17,7 @@ export const Image = ({ img }) => {
           <div></div>
           <div></div>
         </header>
-        <img src={`${baseUrl}img/${img}`} />
+        <img src={imageSrc} />
       </div>
     </div>
   );
