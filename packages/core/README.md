@@ -66,7 +66,7 @@ const App = () => {
       <header>Some fancy header or whatever</header>
       <Editor>
         // Editable area starts here
-        <Frame resolver={TextComponent, Container}>
+        <Frame resolver={{TextComponent, Container}}>
           <Canvas>
             <TextComponent text="I'm already rendered here" />
           </Canvas>
