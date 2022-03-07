@@ -189,7 +189,7 @@ You should use this if:
 
 You should not use this if:
 - ❌ You need a page editor that works out of the box. Craft.js is an abstraction where you implement your own page editor upon. For example, it does not come with a ready-made user interface.
-  - However, you could still consider using the [examples](https://github.com/prevwong/craft.js/tree/master/packages/examples) as a starting point.
+  - However, you could still consider using the [examples](https://github.com/prevwong/craft.js/tree/develop/examples) as a starting point.
 
 
 ## Additional Packages :tada:
