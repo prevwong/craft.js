@@ -7,7 +7,7 @@ export const Image = ({ img, src }) => {
     siteConfig: { baseUrl },
   } = context;
 
-  const imageSrc = src || `${baseUrl}img/${img}}`;
+  const imageSrc = src || `${baseUrl}img/${img}`;
 
   return (
     <div className="img-wrapper">
