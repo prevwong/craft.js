@@ -14,13 +14,13 @@
 </p>
 <p align="center">
   <strong>
-    <a href="https://prevwong.github.io/craft.js/r/docs/additional/layers">Documentation</a>
+    <a href="https://craft.js.org/docs/additional/layers">Documentation</a>
   </strong>
 </p>
 
 <p align="center">
   <strong>
-    <a href="https://prevwong.github.io/craft.js/">Craft.js</a>
+    <a href="https://craft.js.org">Craft.js</a>
   </strong>
 </p>
 
