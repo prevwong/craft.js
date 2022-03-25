@@ -7,4 +7,4 @@ export * from './events';
 export * from './store';
 export * from './utils/testHelpers';
 export * from './utils/types';
-export { ROOT_NODE } from '@craftjs/utils';
+export { ROOT_NODE, History, HISTORY_OPERATION } from '@craftjs/utils';
