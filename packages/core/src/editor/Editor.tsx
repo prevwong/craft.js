@@ -7,7 +7,10 @@ import { Events } from '../events';
 import { EditorState, EditorStoreConfig } from '../interfaces';
 import { EditorStore } from '../store';
 
-type EditorProps = EditorStoreConfig & Partial<EditorState>;
+type EditorProps = EditorStoreConfig & {
+  enabled: boolean;
+  store: EditorStore;
+};
 
 /**
  * A React Component that provides the Editor context
@@ -19,6 +22,7 @@ export const Editor: React.FC<Partial<EditorProps>> = ({
   onRender,
   onNodesChange,
   indicator,
+  store: customEditorStore,
 }) => {
   // TODO: refactor editor store config
   const editorStoreConfig = useMemo(() => {
@@ -38,17 +42,23 @@ export const Editor: React.FC<Partial<EditorProps>> = ({
   });
 
   const store = useMemo(
-    () => new EditorStore(initialEditorStoreWithStateConfigRef.current),
-    []
+    () =>
+      customEditorStore ||
+      new EditorStore(initialEditorStoreWithStateConfigRef.current),
+    [customEditorStore]
   );
 
   useEffect(() => {
+    if (customEditorStore) {
+      return;
+    }
+
     if (initialEditorStoreConfigRef.current === editorStoreConfig) {
       return;
     }
 
     store.reconfigure(editorStoreConfig);
-  }, [store, editorStoreConfig]);
+  }, [customEditorStore, store, editorStoreConfig]);
 
   useEffect(() => {
     if (enabled === undefined) {
