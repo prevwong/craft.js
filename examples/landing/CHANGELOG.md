@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.4](https://github.com/prevwong/craft.js/compare/v0.3.0-alpha.3...v0.3.0-alpha.4) (2022-03-28)
+
+
+### Features
+
+* add carbonads snippet ([9bd30ee](https://github.com/prevwong/craft.js/commit/9bd30ee19f13e8887dbc84ae96ba42ea59480a30))
+
+
+
+
+
 # [0.3.0-alpha.3](https://github.com/prevwong/craft.js/compare/v0.3.0-alpha.2...v0.3.0-alpha.3) (2022-01-11)
 
 **Note:** Version bump only for package example-landing

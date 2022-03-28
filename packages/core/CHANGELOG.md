@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.4](https://github.com/prevwong/craft.js/compare/v0.3.0-alpha.3...v0.3.0-alpha.4) (2022-03-28)
+
+
+### Bug Fixes
+
+* syntax error in README example ([#375](https://github.com/prevwong/craft.js/issues/375)) ([e1ffaee](https://github.com/prevwong/craft.js/commit/e1ffaeeec2f29cfc00b57b5fcbea62c0158e4865))
+
+
+### Features
+
+* add history event listener ([#399](https://github.com/prevwong/craft.js/issues/399)) ([ba76ba7](https://github.com/prevwong/craft.js/commit/ba76ba7e42a1820a82d17857f876f617611589cb))
+* create custom EditorStore ([#398](https://github.com/prevwong/craft.js/issues/398)) ([61260ac](https://github.com/prevwong/craft.js/commit/61260ac5d8722871608d4029340a0ace03a434b1))
+
+
+
+
+
 # [0.3.0-alpha.3](https://github.com/prevwong/craft.js/compare/v0.3.0-alpha.2...v0.3.0-alpha.3) (2022-01-11)
 
 **Note:** Version bump only for package @craftjs/core
