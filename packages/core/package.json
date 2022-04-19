@@ -36,13 +36,13 @@
   },
   "dependencies": {
     "@craftjs/utils": "^0.2.0-beta.3",
-    "@types/react": "^17.0.5",
     "debounce": "^1.2.0",
     "lodash": "^4.17.20",
     "tiny-invariant": "^1.0.6"
   },
   "devDependencies": {
-    "react": "^17.0.2"
+    "@types/react": "17.0.2",
+    "react": "17.0.2"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17"

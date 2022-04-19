@@ -3,16 +3,16 @@
   "version": "0.2.0-beta.3",
   "private": true,
   "dependencies": {
-    "@craftjs/core": "^0.2.0-beta.3",
+    "@craftjs/core": "0.2.0-beta.3",
     "@material-ui/core": "latest",
     "clsx": "latest",
-    "copy-to-clipboard": "^3.2.0",
-    "lzutf8": "^0.5.5",
-    "material-ui-color-picker": "^3.2.0",
-    "next": "^10.2.0",
+    "copy-to-clipboard": "3.2.0",
+    "lzutf8": "0.5.5",
+    "material-ui-color-picker": "3.2.0",
+    "next": "10.2.0",
     "prop-types": "latest",
     "react": "17.0.2",
-    "react-contenteditable": "^3.3.3",
+    "react-contenteditable": "3.3.3",
     "react-dom": "17.0.2"
   },
   "scripts": {
@@ -22,6 +22,6 @@
     "clean": "rimraf lib .next out dist"
   },
   "devDependencies": {
-    "cross-env": "^6.0.3"
+    "cross-env": "6.0.3"
   }
 }

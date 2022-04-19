@@ -14,12 +14,14 @@
     "clean": "rimraf lib dist"
   },
   "dependencies": {
-    "@types/react": "^17.0.5",
     "immer": "^9.0.6",
     "lodash": "^4.17.20",
     "nanoid": "^3.1.23",
     "shallowequal": "^1.1.0",
     "tiny-invariant": "^1.0.6"
+  },
+  "devDependencies": {
+    "@types/react": "17.0.2"
   },
   "nohoist": [
     "immer",
