@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.4](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.3...v0.2.0-beta.4) (2022-04-21)
+
+
+### Bug Fixes
+
+* disable connectors when editor is disabled ([#406](https://github.com/prevwong/craft.js/issues/406)) ([ede60d3](https://github.com/prevwong/craft.js/commit/ede60d360d69bea7959b8960dd006448d2807b9a))
+
+
+
+
+
 # [0.2.0-beta.3](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.2...v0.2.0-beta.3) (2022-03-07)
 
 **Note:** Version bump only for package @craftjs/utils
