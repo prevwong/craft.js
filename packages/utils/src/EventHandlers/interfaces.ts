@@ -35,6 +35,7 @@ export type EventHandlerConnectors<
 > = ChainableConnectors<ReturnType<H['handlers']>, E>;
 
 export type ConnectorsUsage<H extends EventHandlers> = {
+  register: () => void;
   cleanup: () => void;
   connectors: EventHandlerConnectors<H>;
 };

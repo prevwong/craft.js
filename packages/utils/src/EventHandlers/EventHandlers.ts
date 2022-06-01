@@ -6,6 +6,7 @@ import {
   CraftDOMEvent,
   Connector,
   ConnectorsUsage,
+  RegisteredConnector,
 } from './interfaces';
 import { isEventBlockedByDescendant } from './isEventBlockedByDescendant';
 
@@ -93,7 +94,13 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
 
     // Track all active connector ids here
     // This is so we can return a cleanup method below so the callee can programmatically cleanup all connectors
-    const activeConnectorIds: Set<string> = new Set();
+    const connectorsToRegister: Map<
+      string,
+      () => RegisteredConnector
+    > = new Map();
+    const registeredConnectors: Set<RegisteredConnector> = new Set();
+
+    let isRegistering = false;
 
     const connectors = Object.entries(handlers).reduce<
       Record<string, Connector>
@@ -101,14 +108,25 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
       (accum, [name, handler]) => ({
         ...accum,
         [name]: (el, required, options) => {
-          const connector = this.registry.register(el, {
-            required,
-            name,
-            options,
-            connector: handler,
-          });
+          connectorsToRegister.set(
+            this.registry.getConnectorId(el, name),
+            () => {
+              const connector = this.registry.register(el, {
+                required,
+                name,
+                options,
+                connector: handler,
+              });
 
-          activeConnectorIds.add(connector.id);
+              registeredConnectors.add(connector);
+
+              return connector;
+            }
+          );
+
+          if (isRegistering) {
+            connectorsToRegister.get(this.registry.getConnectorId(el, name))();
+          }
 
           return el;
         },
@@ -118,9 +136,17 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
 
     return {
       connectors,
+      register: () => {
+        isRegistering = true;
+
+        connectorsToRegister.forEach((registerConnector) => {
+          registerConnector();
+        });
+      },
       cleanup: () => {
-        activeConnectorIds.forEach((connectorId) =>
-          this.registry.remove(connectorId)
+        isRegistering = false;
+        registeredConnectors.forEach((connector) =>
+          this.registry.remove(connector.id)
         );
       },
     };
