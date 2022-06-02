@@ -23,6 +23,8 @@ export function useLayer<S = null>(collect?: (layer: Layer) => S) {
   const actions = useMemo(() => {
     return {
       toggleLayer: () => managerActions.toggleLayer(id),
+      setExpandedState: (expanded: boolean) =>
+        managerActions.setExpandedState(id, expanded),
     };
   }, [managerActions, id]);
 
