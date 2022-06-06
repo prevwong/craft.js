@@ -12,7 +12,7 @@ import { Options } from '../interfaces';
 /**
  * A React Component that provides the Editor context
  */
-export const Editor: React.FC<Partial<Options>> = ({
+export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
   children,
   onRender,
   onNodesChange,

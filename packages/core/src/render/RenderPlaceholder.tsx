@@ -8,10 +8,9 @@ export type Placeholder = {
   suggestedStyles: any;
 };
 
-export const RenderPlaceholder: React.FC<Placeholder> = ({
-  placeholder,
-  suggestedStyles,
-}) => {
+export const RenderPlaceholder: React.FC<React.PropsWithChildren<
+  Placeholder
+>> = ({ placeholder, suggestedStyles }) => {
   const { indicator } = useEditor((state) => ({
     indicator: state.options.indicator,
   }));

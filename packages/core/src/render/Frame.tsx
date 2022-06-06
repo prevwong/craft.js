@@ -26,7 +26,11 @@ const RenderRootNode = () => {
 /**
  * A React Component that defines the editable area
  */
-export const Frame: React.FC<Frame> = ({ children, json, data }) => {
+export const Frame: React.FC<React.PropsWithChildren<Frame>> = ({
+  children,
+  json,
+  data,
+}) => {
   const { actions, query } = useInternalEditor();
 
   if (!!json) {
