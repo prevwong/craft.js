@@ -9,6 +9,7 @@ import { useInternalEditorReturnType } from '../editor/useInternalEditor';
 import { CoreEventHandlers } from '../events';
 
 export type Options = {
+  children?: React.ReactNode;
   onRender: React.ComponentType<{ render: React.ReactElement }>;
   onBeforeMoveEnd: (
     targetNode: Node,

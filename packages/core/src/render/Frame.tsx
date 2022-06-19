@@ -6,6 +6,7 @@ import { SerializedNodes } from '../interfaces';
 import { NodeElement } from '../nodes/NodeElement';
 
 export type Frame = {
+  children?: React.ReactNode;
   json?: string;
   data?: string | SerializedNodes;
 };
