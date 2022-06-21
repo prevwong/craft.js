@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.6](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.5...v0.2.0-beta.6) (2022-06-21)
+
+
+### Bug Fixes
+
+* add missing children prop in updated React.FC type ([#431](https://github.com/prevwong/craft.js/issues/431)) ([0fab58b](https://github.com/prevwong/craft.js/commit/0fab58bb0d62748c5a05fa18928b90263d534c25))
+
+
+### Features
+
+* **layers:** add set expanded state ([#425](https://github.com/prevwong/craft.js/issues/425)) ([be66140](https://github.com/prevwong/craft.js/commit/be66140c5ed6ea5c756fbf3ebde2b2ab3922fbd6))
+
+
+
+
+
 # [0.2.0-beta.5](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.4...v0.2.0-beta.5) (2022-05-31)
 
 **Note:** Version bump only for package craft.js

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.6](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.5...v0.2.0-beta.6) (2022-06-21)
+
+
+### Features
+
+* **layers:** add set expanded state ([#425](https://github.com/prevwong/craft.js/issues/425)) ([be66140](https://github.com/prevwong/craft.js/commit/be66140c5ed6ea5c756fbf3ebde2b2ab3922fbd6))
+
+
+
+
+
 # [0.2.0-beta.5](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.4...v0.2.0-beta.5) (2022-05-31)
 
 **Note:** Version bump only for package @craftjs/layers
