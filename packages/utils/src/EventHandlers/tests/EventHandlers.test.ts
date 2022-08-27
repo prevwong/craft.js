@@ -12,6 +12,7 @@ describe('EventHandlers', () => {
     handlers = testEventHandler.handlers;
     instance = testEventHandler.instance;
     connectorsUsage = instance.createConnectorsUsage();
+    connectorsUsage.register();
   });
   describe('connectors', () => {
     it('should have core connectors', () => {

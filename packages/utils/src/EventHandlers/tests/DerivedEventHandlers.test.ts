@@ -26,6 +26,7 @@ describe('DerivedEventHandlers', () => {
     derivedHandlers = testDerivedEventHandler.handlers;
     derivedInstance = testDerivedEventHandler.instance;
     derivedConnectorsUsage = derivedInstance.createConnectorsUsage();
+    derivedConnectorsUsage.register();
   });
   describe('attaching the connector', () => {
     beforeEach(() => {
