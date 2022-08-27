@@ -3425,31 +3425,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@material-ui/core@latest":
-  version: 4.8.0
-  resolution: "@material-ui/core@npm:4.8.0"
-  dependencies:
-    "@babel/runtime": ^7.4.4
-    "@material-ui/styles": ^4.7.1
-    "@material-ui/system": ^4.7.1
-    "@material-ui/types": ^4.1.1
-    "@material-ui/utils": ^4.7.1
-    "@types/react-transition-group": ^4.2.0
-    clsx: ^1.0.2
-    convert-css-length: ^2.0.1
-    hoist-non-react-statics: ^3.2.1
-    normalize-scroll-left: ^0.2.0
-    popper.js: ^1.14.1
-    prop-types: ^15.7.2
-    react-is: ^16.8.0
-    react-transition-group: ^4.3.0
-  peerDependencies:
-    react: ^16.8.0
-    react-dom: ^16.8.0
-  checksum: 5a23574c8598517505429ea0cbb1606f9e468e8e0a9db4a9caf65f14468bee1b9277e07255ebfd82b46cd35d5ba446729b68568d87797b3f5e5255e5c93adad5
-  languageName: node
-  linkType: hard
-
 "@material-ui/core@npm:4.5.2":
   version: 4.5.2
   resolution: "@material-ui/core@npm:4.5.2"
@@ -3487,34 +3462,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@material-ui/styles@npm:4.5.2":
-  version: 4.5.2
-  resolution: "@material-ui/styles@npm:4.5.2"
-  dependencies:
-    "@babel/runtime": ^7.4.4
-    "@emotion/hash": ^0.7.1
-    "@material-ui/types": ^4.1.1
-    "@material-ui/utils": ^4.5.2
-    clsx: ^1.0.2
-    csstype: ^2.5.2
-    hoist-non-react-statics: ^3.2.1
-    jss: ^10.0.0
-    jss-plugin-camel-case: ^10.0.0
-    jss-plugin-default-unit: ^10.0.0
-    jss-plugin-global: ^10.0.0
-    jss-plugin-nested: ^10.0.0
-    jss-plugin-props-sort: ^10.0.0
-    jss-plugin-rule-value-function: ^10.0.0
-    jss-plugin-vendor-prefixer: ^10.0.0
-    prop-types: ^15.7.2
-  peerDependencies:
-    react: ^16.8.0
-    react-dom: ^16.8.0
-  checksum: 0372b3d71879e3ca669736c1c3deb4e4e8e43ab67ad5b2b1ee92a80d784cb8cea55b2af29b1badd035b0c2463b29c8dfdf4478501bd9fed6c22a0d5a6ff1712a
-  languageName: node
-  linkType: hard
-
-"@material-ui/styles@npm:^4.5.2, @material-ui/styles@npm:^4.7.1":
+"@material-ui/styles@npm:^4.5.2":
   version: 4.7.1
   resolution: "@material-ui/styles@npm:4.7.1"
   dependencies:
@@ -3541,7 +3489,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@material-ui/system@npm:^4.5.2, @material-ui/system@npm:^4.7.1":
+"@material-ui/system@npm:^4.5.2":
   version: 4.7.1
   resolution: "@material-ui/system@npm:4.7.1"
   dependencies:
@@ -4419,6 +4367,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/hoist-non-react-statics@npm:*":
+  version: 3.3.1
+  resolution: "@types/hoist-non-react-statics@npm:3.3.1"
+  dependencies:
+    "@types/react": "*"
+    hoist-non-react-statics: ^3.3.0
+  checksum: 2c0778570d9a01d05afabc781b32163f28409bb98f7245c38d5eaf082416fdb73034003f5825eb5e21313044e8d2d9e1f3fe2831e345d3d1b1d20bcd12270719
+  languageName: node
+  linkType: hard
+
 "@types/html-minifier-terser@npm:^5.0.0":
   version: 5.1.0
   resolution: "@types/html-minifier-terser@npm:5.1.0"
@@ -4658,14 +4616,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/styled-components@npm:4.1.20":
-  version: 4.1.20
-  resolution: "@types/styled-components@npm:4.1.20"
+"@types/styled-components@npm:4.4.1":
+  version: 4.4.1
+  resolution: "@types/styled-components@npm:4.4.1"
   dependencies:
+    "@types/hoist-non-react-statics": "*"
     "@types/react": "*"
     "@types/react-native": "*"
     csstype: ^2.2.0
-  checksum: b9fd22d7254087b1c6ec97431ee66a51b4062a180c7b93ed42642b6702e2b4fcc65326917b959028702be4275d64d893453fd1b4e02af9e27517f6058064e1d5
+  checksum: 9a86e331f519b768118b00f5ed32a8ee97406c249d27692f9c678f6aacc7b38dd59c6f4d9f7b6fd80f5f65e4861cd802d30a809d25df6965b8c9c65bb6267fbf
   languageName: node
   linkType: hard
 
@@ -9913,7 +9872,7 @@ clsx@latest:
   resolution: "example-basic@workspace:examples/basic"
   dependencies:
     "@craftjs/core": ^0.2.0-beta.6
-    "@material-ui/core": latest
+    "@material-ui/core": 4.5.2
     clsx: latest
     copy-to-clipboard: 3.2.0
     cross-env: 6.0.3
@@ -9937,12 +9896,11 @@ clsx@latest:
     "@fullhuman/postcss-purgecss": 1.3.0
     "@material-ui/core": 4.5.2
     "@material-ui/icons": 4.5.1
-    "@material-ui/styles": 4.5.2
     "@types/classnames": 2.2.9
     "@types/node": 12.12.5
     "@types/react": 17.0.2
     "@types/react-color": 3.0.1
-    "@types/styled-components": 4.1.20
+    "@types/styled-components": 4.4.1
     autoprefixer: latest
     babel-plugin-inline-react-svg: 1.1.0
     classnames: 2.2.6
@@ -11621,6 +11579,15 @@ fsevents@~2.3.1:
   dependencies:
     react-is: ^16.7.0
   checksum: 0333b04ef07539c29215ff251c047894d7d544c98263396c21bca6b7ccbf76250e09167d5958758eab60aeff2cd493349b962e20feeb70cc869bf0a239187cf3
+  languageName: node
+  linkType: hard
+
+"hoist-non-react-statics@npm:^3.3.0":
+  version: 3.3.2
+  resolution: "hoist-non-react-statics@npm:3.3.2"
+  dependencies:
+    react-is: ^16.7.0
+  checksum: b1538270429b13901ee586aa44f4cc3ecd8831c061d06cb8322e50ea17b3f5ce4d0e2e66394761e6c8e152cd8c34fb3b4b690116c6ce2bd45b18c746516cb9e8
   languageName: node
   linkType: hard
 
