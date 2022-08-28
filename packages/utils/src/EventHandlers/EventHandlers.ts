@@ -145,7 +145,7 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
           registerConnector();
         });
 
-        // deferredConnectorsToRegister.clear();
+        deferredConnectorsToRegister.clear();
       },
       cleanup: () => {
         canRegisterConnectors = false;
