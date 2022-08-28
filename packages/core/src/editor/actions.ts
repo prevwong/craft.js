@@ -267,6 +267,9 @@ const Methods = (
       });
 
       const newParent = state.nodes[newParentId];
+
+      const nodesArrToCleanup = new Set<string[]>();
+
       targets.forEach(({ node: targetNode }, i) => {
         const targetId = targetNode.id;
         const currentParentId = targetNode.data.parent;
@@ -285,12 +288,26 @@ const Methods = (
         const currentParent = state.nodes[currentParentId];
         const currentParentNodes = currentParent.data.nodes;
 
-        currentParentNodes[currentParentNodes.indexOf(targetId)] = 'marked';
+        nodesArrToCleanup.add(currentParentNodes);
+
+        const oldIndex = currentParentNodes.indexOf(targetId);
+        currentParentNodes[oldIndex] = '$$'; // mark for deletion
 
         newParent.data.nodes.splice(index + i, 0, targetId);
 
         state.nodes[targetId].data.parent = newParentId;
-        currentParentNodes.splice(currentParentNodes.indexOf('marked'), 1);
+      });
+
+      nodesArrToCleanup.forEach((nodes) => {
+        const length = nodes.length;
+
+        [...nodes].reverse().forEach((value, index) => {
+          if (value !== '$$') {
+            return;
+          }
+
+          nodes.splice(length - 1 - index, 1);
+        });
       });
     },
 
