@@ -121,6 +121,10 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
             return connector;
           };
 
+          /**
+           * Only register connectors immediately if register() has been called.
+           * Otherwise, defer registration until register() is called
+           */
           if (canRegisterConnectors) {
             registerConnector();
           } else {
