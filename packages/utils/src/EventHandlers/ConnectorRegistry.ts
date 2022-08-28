@@ -26,7 +26,7 @@ export class ConnectorRegistry {
     return newId;
   }
 
-  private getConnectorId(element: HTMLElement, connectorName: string) {
+  getConnectorId(element: HTMLElement, connectorName: string) {
     const elementId = this.getElementId(element);
     return `${connectorName}--${elementId}`;
   }

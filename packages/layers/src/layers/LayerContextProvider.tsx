@@ -28,6 +28,8 @@ export const LayerContextProvider: React.FC<Omit<
   );
 
   useEffect(() => {
+    connectorsUsage.register();
+
     return () => {
       connectorsUsage.cleanup();
     };
