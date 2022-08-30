@@ -98,7 +98,7 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
     const activeConnectorIds: Set<string> = new Set();
 
     let canRegisterConnectors = false;
-    const deferredConnectorsToRegister: Map<
+    const connectorsToRegister: Map<
       string,
       () => RegisteredConnector
     > = new Map();
@@ -121,17 +121,19 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
             return connector;
           };
 
+          connectorsToRegister.set(
+            this.registry.getConnectorId(el, name),
+            registerConnector
+          );
+
           /**
-           * Only register connectors immediately if register() has been called.
-           * Otherwise, defer registration until register() is called
+           * If register() has been called,
+           * register the connector immediately.
+           *
+           * Otherwise, registration is deferred until after register() is called
            */
           if (canRegisterConnectors) {
             registerConnector();
-          } else {
-            deferredConnectorsToRegister.set(
-              this.registry.getConnectorId(el, name),
-              registerConnector
-            );
           }
 
           return el;
@@ -145,11 +147,9 @@ export abstract class EventHandlers<O extends Record<string, any> = {}> {
       register: () => {
         canRegisterConnectors = true;
 
-        deferredConnectorsToRegister.forEach((registerConnector) => {
+        connectorsToRegister.forEach((registerConnector) => {
           registerConnector();
         });
-
-        deferredConnectorsToRegister.clear();
       },
       cleanup: () => {
         canRegisterConnectors = false;
