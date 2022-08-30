@@ -6,7 +6,7 @@ import produce, {
   enablePatches,
 } from 'immer';
 import isEqualWith from 'lodash/isEqualWith';
-import { useMemo, useEffect, useRef, useReducer, useCallback } from 'react';
+import { useMemo, useEffect, useRef, useCallback } from 'react';
 
 import { History, HISTORY_ACTIONS } from './History';
 import { Delete } from './utilityTypes';
@@ -314,7 +314,7 @@ export function useMethods<
       stateRef.current = newState;
       watcher.notify();
     },
-    [reducer]
+    [reducer, watcher]
   );
 
   useEffect(() => {
@@ -402,7 +402,7 @@ export function useMethods<
         },
       },
     };
-  }, [methodsFactory]);
+  }, [dispatch, methodsFactory]);
 
   return useMemo(
     () => ({
