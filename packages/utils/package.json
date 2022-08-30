@@ -28,6 +28,6 @@
     "immer/**"
   ],
   "peerDependencies": {
-    "react": "^16.8.0 || ^17"
+    "react": "^16.8.0 || ^17 || ^18"
   }
 }
