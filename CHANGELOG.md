@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.7](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.6...v0.2.0-beta.7) (2022-08-30)
+
+
+### Bug Fixes
+
+* input field caret jumps in react 18 ([#451](https://github.com/prevwong/craft.js/issues/451)) ([51f34ff](https://github.com/prevwong/craft.js/commit/51f34ffd86a215ca618ed8adca550fad86a45680))
+* multi-select move order ([#452](https://github.com/prevwong/craft.js/issues/452)) ([54648fa](https://github.com/prevwong/craft.js/commit/54648facdb20e9af4949c92f50f83d05cf324515))
+* register event connectors on useEffect ([#450](https://github.com/prevwong/craft.js/issues/450)) ([418f7a8](https://github.com/prevwong/craft.js/commit/418f7a823c5f39bae0b31ca82577f0ea74d4b10d))
+
+
+
+
+
 # [0.2.0-beta.6](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.5...v0.2.0-beta.6) (2022-06-21)
 
 
