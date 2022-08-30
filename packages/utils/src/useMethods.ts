@@ -194,14 +194,14 @@ export function useMethods<
 ): SubscriberAndCallbacksFor<MethodsOrOptions<S, R>, Q> {
   const history = useMemo(() => new History(), []);
 
-  let methods: Methods<S, R>;
+  let methodsFactory: Methods<S, R>;
   let ignoreHistoryForActionsRef = useRef([]);
   let normalizeHistoryRef = useRef<any>();
 
   if (typeof methodsOrOptions === 'function') {
-    methods = methodsOrOptions;
+    methodsFactory = methodsOrOptions;
   } else {
-    methods = methodsOrOptions.methods;
+    methodsFactory = methodsOrOptions.methods;
     ignoreHistoryForActionsRef.current = methodsOrOptions.ignoreHistoryForActions as any;
     normalizeHistoryRef.current = methodsOrOptions.normalizeHistory;
   }
@@ -209,114 +209,123 @@ export function useMethods<
   const patchListenerRef = useRef(patchListener);
   patchListenerRef.current = patchListener;
 
-  const [reducer, methodsFactory] = useMemo(() => {
+  const stateRef = useRef(initialState);
+
+  const reducer = useMemo(() => {
     const { current: normalizeHistory } = normalizeHistoryRef;
     const { current: ignoreHistoryForActions } = ignoreHistoryForActionsRef;
     const { current: patchListener } = patchListenerRef;
 
-    return [
-      (state: S, action: Action) => {
-        const query =
-          queryMethods && createQuery(queryMethods, () => state, history);
+    return (state: S, action: Action) => {
+      const query =
+        queryMethods && createQuery(queryMethods, () => state, history);
 
-        let finalState;
-        let [nextState, patches, inversePatches] = (produceWithPatches as any)(
-          state,
-          (draft: S) => {
-            switch (action.type) {
-              case HISTORY_ACTIONS.UNDO: {
-                return history.undo(draft);
-              }
-              case HISTORY_ACTIONS.REDO: {
-                return history.redo(draft);
-              }
-              case HISTORY_ACTIONS.CLEAR: {
-                history.clear();
-                return {
-                  ...draft,
-                };
-              }
-
-              // TODO: Simplify History API
-              case HISTORY_ACTIONS.IGNORE:
-              case HISTORY_ACTIONS.MERGE:
-              case HISTORY_ACTIONS.THROTTLE: {
-                const [type, ...params] = action.payload;
-                methods(draft, query)[type](...params);
-                break;
-              }
-              default:
-                methods(draft, query)[action.type](...action.payload);
+      let finalState;
+      let [nextState, patches, inversePatches] = (produceWithPatches as any)(
+        state,
+        (draft: S) => {
+          switch (action.type) {
+            case HISTORY_ACTIONS.UNDO: {
+              return history.undo(draft);
             }
+            case HISTORY_ACTIONS.REDO: {
+              return history.redo(draft);
+            }
+            case HISTORY_ACTIONS.CLEAR: {
+              history.clear();
+              return {
+                ...draft,
+              };
+            }
+
+            // TODO: Simplify History API
+            case HISTORY_ACTIONS.IGNORE:
+            case HISTORY_ACTIONS.MERGE:
+            case HISTORY_ACTIONS.THROTTLE: {
+              const [type, ...params] = action.payload;
+              methodsFactory(draft, query)[type](...params);
+              break;
+            }
+            default:
+              methodsFactory(draft, query)[action.type](...action.payload);
+          }
+        }
+      );
+
+      finalState = nextState;
+
+      if (patchListener) {
+        patchListener(
+          nextState,
+          state,
+          { type: action.type, params: action.payload, patches },
+          query,
+          (cb) => {
+            let normalizedDraft = produceWithPatches(nextState, cb);
+            finalState = normalizedDraft[0];
+
+            patches = [...patches, ...normalizedDraft[1]];
+            inversePatches = [...normalizedDraft[2], ...inversePatches];
           }
         );
+      }
 
-        finalState = nextState;
+      if (
+        [HISTORY_ACTIONS.UNDO, HISTORY_ACTIONS.REDO].includes(
+          action.type as any
+        ) &&
+        normalizeHistory
+      ) {
+        finalState = produce(finalState, normalizeHistory);
+      }
 
-        if (patchListener) {
-          patchListener(
-            nextState,
-            state,
-            { type: action.type, params: action.payload, patches },
-            query,
-            (cb) => {
-              let normalizedDraft = produceWithPatches(nextState, cb);
-              finalState = normalizedDraft[0];
-
-              patches = [...patches, ...normalizedDraft[1]];
-              inversePatches = [...normalizedDraft[2], ...inversePatches];
-            }
+      if (
+        ![
+          ...ignoreHistoryForActions,
+          HISTORY_ACTIONS.UNDO,
+          HISTORY_ACTIONS.REDO,
+          HISTORY_ACTIONS.IGNORE,
+          HISTORY_ACTIONS.CLEAR,
+        ].includes(action.type as any)
+      ) {
+        if (action.type === HISTORY_ACTIONS.THROTTLE) {
+          history.throttleAdd(
+            patches,
+            inversePatches,
+            action.config && action.config.rate
           );
+        } else if (action.type === HISTORY_ACTIONS.MERGE) {
+          history.merge(patches, inversePatches);
+        } else {
+          history.add(patches, inversePatches);
         }
+      }
 
-        if (
-          [HISTORY_ACTIONS.UNDO, HISTORY_ACTIONS.REDO].includes(
-            action.type as any
-          ) &&
-          normalizeHistory
-        ) {
-          finalState = produce(finalState, normalizeHistory);
-        }
+      return finalState;
+    };
+  }, [history, methodsFactory, queryMethods]);
 
-        if (
-          ![
-            ...ignoreHistoryForActions,
-            HISTORY_ACTIONS.UNDO,
-            HISTORY_ACTIONS.REDO,
-            HISTORY_ACTIONS.IGNORE,
-            HISTORY_ACTIONS.CLEAR,
-          ].includes(action.type as any)
-        ) {
-          if (action.type === HISTORY_ACTIONS.THROTTLE) {
-            history.throttleAdd(
-              patches,
-              inversePatches,
-              action.config && action.config.rate
-            );
-          } else if (action.type === HISTORY_ACTIONS.MERGE) {
-            history.merge(patches, inversePatches);
-          } else {
-            history.add(patches, inversePatches);
-          }
-        }
+  const getState = useCallback(() => stateRef.current, []);
+  const watcher = useMemo(() => new Watcher<S>(getState), [getState]);
 
-        return finalState;
-      },
-      methods,
-    ];
-  }, [history, methods, queryMethods]);
+  const dispatch = useCallback(
+    (action: any) => {
+      const newState = reducer(stateRef.current, action);
+      stateRef.current = newState;
+      watcher.notify();
+    },
+    [reducer]
+  );
 
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  // Create ref for state, so we can use it inside memoized functions without having to add it as a dependency
-  const currState = useRef();
-  currState.current = state;
+  useEffect(() => {
+    watcher.notify();
+  }, [watcher]);
 
   const query = useMemo(
     () =>
       !queryMethods
         ? []
-        : createQuery(queryMethods, () => currState.current, history),
+        : createQuery(queryMethods, () => stateRef.current, history),
     [history, queryMethods]
   );
 
@@ -394,14 +403,6 @@ export function useMethods<
       },
     };
   }, [methodsFactory]);
-
-  const getState = useCallback(() => currState.current, []);
-  const watcher = useMemo(() => new Watcher<S>(getState), [getState]);
-
-  useEffect(() => {
-    currState.current = state;
-    watcher.notify();
-  }, [state, watcher]);
 
   return useMemo(
     () => ({
