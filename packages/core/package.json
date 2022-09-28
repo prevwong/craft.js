@@ -18,8 +18,8 @@
   "author": "Prev Wong <prevwong@gmail.com>",
   "homepage": "https://github.com/prevwong/craft.js/",
   "license": "MIT",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
+  "main": "./src/index.tsx",
+  "module": "./src/index.tsx",
   "types": "./lib/index.d.ts",
   "repository": {
     "type": "git",

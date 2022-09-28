@@ -329,6 +329,48 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           unbindDragEnd();
         };
       },
+      attach: (el: HTMLElement, type: string, { onDragStart, onDragEnd }) => {
+        el.setAttribute('draggable', 'true');
+
+        const unbindDragStart = this.addCraftEventListener(
+          el,
+          'dragstart',
+          (e) => {
+            e.craft.stopPropagation();
+            const {
+              options: { resolver },
+            } = store.getState() as any;
+            const tree = store.query
+              .parseReactElement(React.createElement(resolver[type]))
+              .toNodeTree();
+            const dom = e.currentTarget as HTMLElement;
+            this.draggedElementShadow = createShadow(
+              e,
+              [dom],
+              DefaultEventHandlers.forceSingleDragShadow
+            );
+            this.dragTarget = { type: 'new', tree };
+
+            this.positioner = new Positioner(
+              this.options.store,
+              this.dragTarget
+            );
+            onDragStart();
+          }
+        );
+
+        const unbindDragEnd = this.addCraftEventListener(el, 'dragend', (e) => {
+          e.craft.stopPropagation();
+          onDragEnd(); // This needs to be called before dropElement so the indicator is not cleared for the onDragEnd callback
+          this.dropElement(() => null);
+        });
+
+        return () => {
+          el.setAttribute('draggable', 'false');
+          unbindDragStart();
+          unbindDragEnd();
+        };
+      },
     };
   }
 
