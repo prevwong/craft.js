@@ -211,15 +211,17 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
             actions.setNodeEvent('dragged', selectedElementIds);
 
-            const selectedDOMs = selectedElementIds.map(
-              (id) => query.node(id).get().dom
-            );
+            // Kizen customization: do not show the shadowed element when
+            // dragging existing items on the canvas.
+            // const selectedDOMs = selectedElementIds.map(
+            //   (id) => query.node(id).get().dom
+            // );
 
-            this.draggedElementShadow = createShadow(
-              e,
-              selectedDOMs,
-              DefaultEventHandlers.forceSingleDragShadow
-            );
+            // this.draggedElementShadow = createShadow(
+            //   e,
+            //   selectedDOMs,
+            //   DefaultEventHandlers.forceSingleDragShadow
+            // );
 
             this.dragTarget = {
               type: 'existing',
