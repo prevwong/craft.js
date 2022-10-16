@@ -6,7 +6,7 @@ import { NodeId } from '../interfaces';
 import { NodeElement } from '../nodes/NodeElement';
 import { useInternalNode } from '../nodes/useInternalNode';
 
-export const DefaultRender = () => {
+export const DefaultRender = (p) => {
   const { type, props, nodes, hydrationTimestamp } = useInternalNode(
     (node) => ({
       type: node.data.type,
@@ -29,7 +29,7 @@ export const DefaultRender = () => {
       );
     }
 
-    const render = React.createElement(type, props, children);
+    const render = React.createElement(type, { ...props, ...p }, children);
 
     if (typeof type == 'string') {
       return <SimpleElement render={render} />;
@@ -37,5 +37,5 @@ export const DefaultRender = () => {
 
     return render;
     // eslint-disable-next-line  react-hooks/exhaustive-deps
-  }, [type, props, hydrationTimestamp, nodes]);
+  }, [type, props, p, hydrationTimestamp, nodes]);
 };

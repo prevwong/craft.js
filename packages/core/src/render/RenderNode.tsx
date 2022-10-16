@@ -10,7 +10,7 @@ type RenderNodeToElementType = {
 };
 export const RenderNodeToElement: React.FC<React.PropsWithChildren<
   RenderNodeToElementType
->> = ({ render }) => {
+>> = ({ render, ...rest }) => {
   const { hidden } = useInternalNode((node) => ({
     hidden: node.data.hidden,
   }));
@@ -24,5 +24,5 @@ export const RenderNodeToElement: React.FC<React.PropsWithChildren<
     return null;
   }
 
-  return React.createElement(onRender, { render: render || <DefaultRender /> });
+  return React.createElement(onRender, { render: render || <DefaultRender {...rest} /> });
 };

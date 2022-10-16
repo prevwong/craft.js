@@ -12,10 +12,10 @@ export type NodeElementProps = {
 
 export const NodeElement: React.FC<React.PropsWithChildren<
   NodeElementProps
->> = ({ id, render }) => {
+>> = ({ id, render, ...rest }) => {
   return (
     <NodeProvider id={id}>
-      <RenderNodeToElement render={render} />
+      <RenderNodeToElement render={render} {...rest} />
     </NodeProvider>
   );
 };
