@@ -1,5 +1,5 @@
 import { isChromium, isLinux } from '@craftjs/utils';
-import { isFunction } from 'lodash';
+import isFunction from 'lodash/isFunction';
 import React from 'react';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';

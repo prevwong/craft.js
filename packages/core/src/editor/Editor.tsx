@@ -1,5 +1,5 @@
 import { ERROR_RESOLVER_NOT_AN_OBJECT, HISTORY_ACTIONS } from '@craftjs/utils';
-import { pickBy } from 'lodash';
+import pickBy from 'lodash/pickBy';
 import React, { useEffect, useMemo } from 'react';
 import invariant from 'tiny-invariant';
 
