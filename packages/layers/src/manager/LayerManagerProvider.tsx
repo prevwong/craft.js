@@ -10,6 +10,7 @@ import { DefaultLayer } from '../layers';
 
 export const LayerManagerProvider: React.FC<{
   options: Partial<LayerOptions>;
+  children?: React.ReactNode;
 }> = ({ children, options }) => {
   // TODO: fix type
   const store = useMethods(LayerMethods, {
