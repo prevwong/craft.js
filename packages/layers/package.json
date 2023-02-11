@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.7.4",
-    "@svgr/rollup": "4.3.3",
+    "@svgr/rollup": "6.5.1",
     "styled-components": "4.2.1"
   },
   "peerDependencies": {

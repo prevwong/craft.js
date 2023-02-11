@@ -21,7 +21,7 @@
     "tiny-invariant": "^1.0.6"
   },
   "devDependencies": {
-    "@types/react": "17.0.2"
+    "@types/react": "18.0.27"
   },
   "nohoist": [
     "immer",

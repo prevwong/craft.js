@@ -9,11 +9,11 @@
     "copy-to-clipboard": "3.2.0",
     "lzutf8": "0.5.5",
     "material-ui-color-picker": "3.2.0",
-    "next": "10.2.0",
+    "next": "13.1.6",
     "prop-types": "latest",
-    "react": "17.0.2",
+    "react": "18.2.0",
     "react-contenteditable": "3.3.3",
-    "react-dom": "17.0.2"
+    "react-dom": "18.2.0"
   },
   "scripts": {
     "start": "next dev -p 3002",

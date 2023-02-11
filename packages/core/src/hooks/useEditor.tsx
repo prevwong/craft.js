@@ -67,7 +67,7 @@ export function useEditor<S>(collect?: any): useEditorReturnType<S> {
   const {
     connectors,
     actions: internalActions,
-    query: { deserialize, ...query },
+    query,
     store,
     ...collected
   } = useInternalEditor(collect);
