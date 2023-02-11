@@ -1,9 +1,9 @@
 import path from 'path';
 
-import babel from 'rollup-plugin-babel';
-import resolve from 'rollup-plugin-node-resolve';
-import { terser } from 'rollup-plugin-terser';
-import typescript from 'rollup-plugin-typescript';
+import babel from '@rollup/plugin-babel';
+import resolve from '@rollup/plugin-node-resolve';
+import terser from '@rollup/plugin-terser';
+import typescript from '@rollup/plugin-typescript';
 
 const shouldMinify = process.env.NODE_ENV === 'production';
 const bundle = ['tslib'];
@@ -12,7 +12,7 @@ export default {
   input: './src/index.ts',
   output: [
     {
-      dir: 'dist/esm',
+      file: 'dist/esm/index.js',
       format: 'esm',
       globals: {
         react: 'React',
@@ -20,7 +20,7 @@ export default {
       },
     },
     {
-      dir: 'dist/cjs',
+      file: 'dist/cjs/index.js',
       format: 'cjs',
     },
   ],
@@ -29,8 +29,14 @@ export default {
   },
   plugins: [
     resolve(),
-    typescript(),
+    typescript({
+      declaration: false,
+      declarationDir: undefined,
+      outputToFilesystem: true,
+    }),
     babel({
+      babelHelpers: 'bundled',
+      extensions: ['.ts'],
       presets: [
         ['@babel/preset-typescript'],
         [
@@ -50,7 +56,6 @@ export default {
     }),
     shouldMinify &&
       terser({
-        sourcemap: true,
         output: { comments: 'some' },
         compress: {
           keep_infinity: true,
