@@ -4,10 +4,10 @@ import { createContext } from 'react';
 import { LayerMethods } from './actions';
 
 export type LayerStore = SubscriberAndCallbacksFor<typeof LayerMethods>;
-export type LayerManagerContext = {
+export type LayerManagerContextType = {
   store: LayerStore;
 };
 
-export const LayerManagerContext = createContext<LayerManagerContext>(
-  {} as LayerManagerContext
+export const LayerManagerContext = createContext<LayerManagerContextType>(
+  {} as LayerManagerContextType
 );

@@ -20,7 +20,7 @@ export const elementPropToNodeData = {
   canvas: 'isCanvas',
 };
 
-export type Element<T extends React.ElementType> = {
+export type ElementProps<T extends React.ElementType> = {
   id?: NodeId;
   is?: T;
   custom?: Record<string, any>;
@@ -32,7 +32,7 @@ export function Element<T extends React.ElementType>({
   id,
   children,
   ...elementProps
-}: Element<T>) {
+}: ElementProps<T>) {
   const { is } = {
     ...defaultElementProps,
     ...elementProps,

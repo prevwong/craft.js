@@ -134,7 +134,7 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<
     }
   : {};
 
-export type PatchListenerAction<S, M extends MethodsOrOptions> = {
+export type PatchListenerAction<M extends MethodsOrOptions> = {
   type: keyof CallbacksFor<M>;
   params: any;
   patches: Patch[];
@@ -147,7 +147,7 @@ export type PatchListener<
 > = (
   newState: S,
   previousState: S,
-  actionPerformedWithPatches: PatchListenerAction<S, M>,
+  actionPerformedWithPatches: PatchListenerAction<M>,
   query: QueryCallbacksFor<Q>,
   normalizer: (cb: (draft: S) => void) => void
 ) => void;

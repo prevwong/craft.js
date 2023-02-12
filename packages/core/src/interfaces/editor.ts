@@ -29,7 +29,7 @@ export type Options = {
     state: EditorState,
     previousState: EditorState,
     actionPerformed: Delete<
-      PatchListenerAction<EditorState, typeof ActionMethodsWithConfig>,
+      PatchListenerAction<typeof ActionMethodsWithConfig>,
       'patches'
     >,
     query: QueryCallbacksFor<typeof QueryMethods>
