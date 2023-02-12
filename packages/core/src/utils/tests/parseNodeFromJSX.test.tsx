@@ -1,23 +1,27 @@
 import React, { Fragment } from 'react';
 
-import { createNode } from '../createNode';
 import { parseNodeFromJSX } from '../parseNodeFromJSX';
 
 const Component = ({ href }) => <a href={href}>Hi</a>;
 
+let mockedCreateNode = jest.fn();
+
+jest.mock('../createNode', () => ({
+  __esModule: true,
+  createNode: jest
+    .fn()
+    .mockImplementation((...args) => mockedCreateNode(...args)),
+}));
+
 describe('parseNodeFromJSX', () => {
   const props = { href: 'href' };
-
-  beforeEach(() => {
-    createNode = jest.fn();
-  });
 
   describe('Returns correct type and props', () => {
     it('should transform a link correctly', () => {
       // eslint-disable-next-line  jsx-a11y/anchor-has-content
       parseNodeFromJSX(<a {...props} />);
 
-      expect(createNode).toBeCalledWith(
+      expect(mockedCreateNode).toBeCalledWith(
         {
           data: {
             type: 'a',
@@ -30,7 +34,7 @@ describe('parseNodeFromJSX', () => {
     it('should be able to parse a component correctly', () => {
       parseNodeFromJSX(<Component {...props} />);
 
-      expect(createNode).toBeCalledWith(
+      expect(mockedCreateNode).toBeCalledWith(
         {
           data: {
             type: Component,
@@ -43,7 +47,7 @@ describe('parseNodeFromJSX', () => {
     it('should transform text with `div` correctly', () => {
       parseNodeFromJSX('div');
 
-      expect(createNode).toBeCalledWith(
+      expect(mockedCreateNode).toBeCalledWith(
         {
           data: {
             type: Fragment,
@@ -57,7 +61,7 @@ describe('parseNodeFromJSX', () => {
       const text = 'hello there';
       parseNodeFromJSX(text);
 
-      expect(createNode).toBeCalledWith(
+      expect(mockedCreateNode).toBeCalledWith(
         {
           data: {
             type: Fragment,

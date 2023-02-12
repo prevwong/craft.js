@@ -7,23 +7,24 @@ import {
   secondaryButton,
   documentWithCardState,
 } from '../../tests/fixtures';
-import { createNode } from '../../utils/createNode';
-import { deserializeNode } from '../../utils/deserializeNode';
-import { parseNodeFromJSX } from '../../utils/parseNodeFromJSX';
-import { resolveComponent } from '../../utils/resolveComponent';
 import { QueryMethods } from '../query';
 
+let mockedResolveComponent = jest.fn().mockImplementation(() => null);
+let mockedCreateNode = jest.fn().mockImplementation(() => null);
+let mockedParsedNodeFromJsx = jest.fn().mockImplementation(() => null);
+let mockedDeserializeNode = jest.fn().mockImplementation(() => null);
+
 jest.mock('../../utils/resolveComponent', () => ({
-  resolveComponent: () => null,
+  resolveComponent: (...args) => mockedResolveComponent(...args),
 }));
 jest.mock('../../utils/createNode', () => ({
-  createNode: () => null,
+  createNode: (...args) => mockedCreateNode(...args),
 }));
 jest.mock('../../utils/parseNodeFromJSX', () => ({
-  parseNodeFromJSX: () => null,
+  parseNodeFromJSX: (...args) => mockedParsedNodeFromJsx(...args),
 }));
 jest.mock('../../utils/deserializeNode', () => ({
-  deserializeNode: () => null,
+  deserializeNode: (...args) => mockedDeserializeNode(...args),
 }));
 
 describe('query', () => {
@@ -45,24 +46,31 @@ describe('query', () => {
         custom: {},
         isCanvas: false,
         parent: null,
-
+        linkedNodes: {},
+        name: null,
         displayName: 'h2',
         hidden: false,
       };
 
       beforeEach(() => {
-        deserializeNode = jest.fn().mockImplementation(() => data);
-        createNode = jest.fn().mockImplementation(() => null);
-
+        mockedDeserializeNode = jest.fn().mockImplementation((...args) => {
+          const { deserializeNode } = jest.requireActual(
+            '../../utils/deserializeNode'
+          );
+          return deserializeNode(...args);
+        });
         query.parseSerializedNode(data).toNode();
       });
 
       it('should call deserializeNode', () => {
-        expect(deserializeNode).toBeCalledWith(data, state.options.resolver);
+        expect(mockedDeserializeNode).toBeCalledWith(
+          data,
+          state.options.resolver
+        );
       });
 
       it('should call parseNodeFromJSX', () => {
-        expect(createNode).toHaveBeenCalledWith(
+        expect(mockedCreateNode).toHaveBeenCalledWith(
           {
             data,
           },
@@ -79,7 +87,6 @@ describe('query', () => {
       };
 
       beforeEach(() => {
-        createNode = jest.fn().mockImplementation(() => null);
         query
           .parseFreshNode({
             data: {
@@ -90,7 +97,7 @@ describe('query', () => {
       });
 
       it('should call createNode', () => {
-        expect(createNode).toHaveBeenCalledWith(
+        expect(mockedCreateNode).toHaveBeenCalledWith(
           {
             data,
           },
@@ -104,14 +111,8 @@ describe('query', () => {
     let tree;
     const node = <h1>Hello</h1>;
     const name = 'Document';
-    const nodeData = { ...rootNode.data, type: 'div' };
 
     describe('when we cant resolve a name', () => {
-      beforeEach(() => {
-        parseNodeFromJSX = jest.fn().mockImplementation(() => {
-          throw new Error();
-        });
-      });
       it('should throw an error', () => {
         expect(() => query.parseReactElement(node).toNodeTree()).toThrow();
       });
@@ -119,20 +120,14 @@ describe('query', () => {
 
     describe('when we can resolve the type', () => {
       beforeEach(() => {
-        resolveComponent = jest.fn().mockImplementation(() => name);
-        parseNodeFromJSX = jest.fn().mockImplementation(() => {
-          resolveComponent(state.options.resolver, nodeData.type);
+        mockedResolveComponent = jest.fn().mockImplementation(() => name);
+        mockedParsedNodeFromJsx = jest.fn().mockImplementation(() => {
           return { ...rootNode.data, type: 'div' };
         });
 
         tree = query.parseReactElement(node).toNodeTree();
       });
-      it('should have called the resolveComponent', () => {
-        expect(resolveComponent).toHaveBeenCalledWith(
-          state.options.resolver,
-          nodeData.type
-        );
-      });
+
       it('should have changed the displayName and name of the node', () => {
         expect(rootNode.data.name).toEqual(name);
       });
@@ -140,12 +135,14 @@ describe('query', () => {
       describe('when there is a single node with no children', () => {
         const node = <button />;
         beforeEach(() => {
-          parseNodeFromJSX = jest.fn().mockImplementation(() => rootNode);
+          mockedParsedNodeFromJsx = jest
+            .fn()
+            .mockImplementation(() => rootNode);
           tree = query.parseReactElement(node).toNodeTree();
         });
 
         it('should have called parseNodeFromJSX once', () => {
-          expect(parseNodeFromJSX).toHaveBeenCalledTimes(1);
+          expect(mockedParsedNodeFromJsx).toHaveBeenCalledTimes(1);
         });
         it('should have replied with the right payload', () => {
           expect(tree).toEqual({
@@ -165,7 +162,7 @@ describe('query', () => {
           </div>
         );
         beforeEach(() => {
-          parseNodeFromJSX = jest
+          mockedParsedNodeFromJsx = jest
             .fn()
             .mockImplementationOnce(() => rootNode)
             .mockImplementationOnce(() => card)
@@ -174,7 +171,7 @@ describe('query', () => {
           tree = query.parseReactElement(node).toNodeTree();
         });
         it('should have called parseNodeFromReactNode 4 times', () => {
-          expect(parseNodeFromJSX).toHaveBeenCalledTimes(4);
+          expect(mockedParsedNodeFromJsx).toHaveBeenCalledTimes(4);
         });
         it('should have replied with the right payload', () => {
           expect(tree).toEqual({

@@ -1,3 +1,4 @@
+import { FreshNode } from '../../interfaces';
 import { Element } from '../../nodes';
 import { createNode } from '../createNode';
 import { createTestNode } from '../createTestNode';
@@ -40,7 +41,7 @@ describe('createNode', () => {
 
   describe('Returns correct type and props', () => {
     it('should create a Node object correctly', () => {
-      const data = {
+      const data: FreshNode['data'] = {
         type: 'a',
         parent: null,
         props,

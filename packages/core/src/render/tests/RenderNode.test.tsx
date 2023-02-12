@@ -1,17 +1,16 @@
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 import identity from 'lodash/identity';
 import React from 'react';
 
-import { NodeElement } from '../../nodes/NodeElement';
+import { NodeData } from '../../interfaces';
 import { RenderNodeToElement } from '../RenderNode';
-import { SimpleElement } from '../SimpleElement';
 
 let nodeContext = {
   id: 1,
   connectors: { connect: identity, drag: identity },
 };
 
-let node = {};
+let node: Partial<NodeData> = {};
 let onRender = jest.fn();
 
 jest.mock('../../editor/useInternalEditor', () => ({
@@ -36,7 +35,6 @@ jest.mock('../SimpleElement', () => ({
 }));
 
 describe('<RenderNode />', () => {
-  const injectedProps = { className: 'hi', style: { fontSize: 18 } };
   let component;
 
   beforeEach(() => {
@@ -46,7 +44,7 @@ describe('<RenderNode />', () => {
   describe('When the node is hidden', () => {
     beforeEach(() => {
       node = { hidden: true, type: jest.fn() };
-      component = mount(<RenderNodeToElement />);
+      component = render(<RenderNodeToElement />);
     });
     it('should not have called onRender', () => {
       expect(onRender).not.toHaveBeenCalled();
@@ -60,10 +58,7 @@ describe('<RenderNode />', () => {
     const props = { className: 'hello' };
     beforeEach(() => {
       node = { type: 'h1', props };
-      component = mount(<RenderNodeToElement {...injectedProps} />);
-    });
-    it('should contain a SimpleElement', () => {
-      expect(component.find(SimpleElement)).toHaveLength(1);
+      component = render(<RenderNodeToElement />);
     });
     it('should have called onRender', () => {
       expect(onRender).toHaveBeenCalled();
@@ -73,29 +68,26 @@ describe('<RenderNode />', () => {
   describe('When the node has type and no nodes', () => {
     const type = () => (
       <p>
-        <button />
+        <button data-testid="test-button" />
       </p>
     );
     const props = { className: 'hello' };
     beforeEach(() => {
       node = { type, props };
-      component = mount(<RenderNodeToElement {...injectedProps} />);
+      component = render(<RenderNodeToElement />);
     });
     it('should have called onRender', () => {
       expect(onRender).toHaveBeenCalled();
     });
-    it('should not contain a SimpleElement', () => {
-      expect(component.find(SimpleElement)).toHaveLength(0);
-    });
     it('should contain a button', () => {
-      expect(component.find('button')).toHaveLength(1);
+      expect(component.getByTestId('test-button')).not.toEqual(null);
     });
   });
 
   describe('When the node has type and contains nodes', () => {
     const type = ({ children }) => (
       <p>
-        <button />
+        <button data-testid="test-button" />
         {children}
       </p>
     );
@@ -104,20 +96,13 @@ describe('<RenderNode />', () => {
 
     beforeEach(() => {
       node = { type, props, nodes: [nodeId] };
-      component = mount(<RenderNodeToElement />);
+      component = render(<RenderNodeToElement />);
     });
     it('should have called onRender', () => {
       expect(onRender).toHaveBeenCalled();
     });
-    it('should not contain a SimpleElement', () => {
-      expect(component.find(SimpleElement)).toHaveLength(0);
-    });
-    it('should contain one node element with the right id', () => {
-      expect(component.find(NodeElement)).toHaveLength(1);
-      expect(component.contains(<NodeElement id={nodeId} />)).toBe(true);
-    });
     it('should contain a button', () => {
-      expect(component.find('button')).toHaveLength(1);
+      expect(component.getByTestId('test-button')).not.toEqual(null);
     });
   });
 });
