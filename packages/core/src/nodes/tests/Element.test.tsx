@@ -1,4 +1,4 @@
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 import React from 'react';
 
 import { createTestNode } from '../../utils/createTestNode';
@@ -58,19 +58,20 @@ describe('<Element />', () => {
 
   describe('when no id is passed', () => {
     it('should throw error', () => {
-      expect(() => mount(<Element />)).toThrow();
+      expect(() => render(<Element />)).toThrow();
     });
   });
 
   describe('when there is no existing node', () => {
     let elementProps, children;
+
     beforeEach(() => {
       elementProps = {
         color: '#fff',
       };
 
       children = <h1>Child</h1>;
-      mount(
+      render(
         <Element id="test" {...elementProps}>
           {children}
         </Element>
@@ -108,7 +109,7 @@ describe('<Element />', () => {
         },
       });
 
-      mount(<Element id="test" color="#000" />);
+      render(<Element id="test" color="#000" />);
     });
     it('should render existing Node', () => {
       expect(NodeElementTest).toHaveBeenCalledWith({

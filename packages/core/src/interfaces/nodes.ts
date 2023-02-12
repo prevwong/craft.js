@@ -48,7 +48,7 @@ export type NodeData = {
   name: string;
   displayName: string;
   isCanvas: boolean;
-  parent: NodeId;
+  parent: NodeId | null;
   linkedNodes: Record<string, NodeId>;
   nodes: NodeId[];
   hidden: boolean;

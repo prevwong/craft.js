@@ -15,8 +15,7 @@ describe('useEditor', () => {
     reset: 'reset',
     ...otherActions,
   };
-  const otherQueries = { another: 'query' };
-  const query = { deserialize: 'deserialize', ...otherQueries };
+  const query = { another: 'query' };
   const state = {
     aRandomValue: 'aRandomValue',
     connectors: 'one',
@@ -45,7 +44,7 @@ describe('useEditor', () => {
           history: expect.any(Object),
         },
         connectors: state.connectors,
-        query: otherQueries,
+        query,
         aRandomValue: state.aRandomValue,
       })
     );
