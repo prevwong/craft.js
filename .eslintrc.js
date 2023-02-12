@@ -19,5 +19,6 @@ module.exports = {
     ],
     '@typescript-eslint/no-unused-expressions': 2,
     '@typescript-eslint/no-unused-vars': 2,
+    'import/no-anonymous-default-export': 0,
   },
 };
