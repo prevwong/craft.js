@@ -4,12 +4,12 @@
   "version": "0.2.0-beta.8",
   "author": "Prev Wong <prevwong@gmail.com>",
   "license": "MIT",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
-    "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
+    "build": "rimraf ./dist && rollup -c",
     "dev:yalc": "../../scripts/yalc.sh",
     "clean": "rimraf lib dist"
   },
@@ -21,7 +21,15 @@
     "tiny-invariant": "^1.0.6"
   },
   "devDependencies": {
-    "@types/react": "18.0.27"
+    "@rollup/plugin-inject": "^4.0.4",
+    "@types/react": "18.0.27",
+    "esbuild": "^0.14.48",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.60.2",
+    "rollup-plugin-esbuild": "^4.9.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "typescript": "^4.8.4"
   },
   "nohoist": [
     "immer",
@@ -29,5 +37,6 @@
   ],
   "peerDependencies": {
     "react": "^16.8.0 || ^17 || ^18"
-  }
+  },
+  "sideEffects": false
 }

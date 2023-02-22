@@ -1,9 +1,7 @@
 import image from '@svgr/rollup';
 
-import config from '../../rollup.config';
+import { getConfig } from '../../rollup.base';
 
-export default {
-  ...config,
-  input: './src/index.tsx',
-  plugins: [...config.plugins, image()],
-};
+const baseConfig = getConfig('src/index.tsx', [image()]);
+
+export default baseConfig;

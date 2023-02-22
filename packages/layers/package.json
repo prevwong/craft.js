@@ -13,13 +13,13 @@
   ],
   "version": "0.2.0-beta.8",
   "author": "Prev Wong <prevwong@gmail.com>",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
   "license": "MIT",
-  "types": "./lib/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
-    "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
+    "build": "rimraf ./dist && rollup -c",
     "clean": "rimraf lib dist"
   },
   "repository": {
@@ -31,17 +31,26 @@
   },
   "homepage": "https://github.com/prevwong/craft.js/",
   "dependencies": {
-    "@craftjs/utils": "^0.2.0-beta.8",
+    "@craftjs/utils": "file:../utils",
     "react-contenteditable": "^3.3.3"
   },
   "devDependencies": {
     "@babel/core": "7.7.4",
+    "@rollup/plugin-inject": "^4.0.4",
     "@svgr/rollup": "6.5.1",
-    "styled-components": "4.2.1"
+    "esbuild": "^0.14.48",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.60.2",
+    "rollup-plugin-esbuild": "^4.9.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "styled-components": "4.2.1",
+    "typescript": "^4.8.4"
   },
   "peerDependencies": {
     "@craftjs/core": "^0.2.0-alpha.19",
     "react": "^16.8.0 || ^17 || ^18",
     "styled-components": ">= 4"
-  }
+  },
+  "sideEffects": false
 }

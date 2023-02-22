@@ -1,6 +1,5 @@
-import config from '../../rollup.config';
+import { getConfig } from '../../rollup.base';
 
-export default {
-  ...config,
-  input: './src/index.tsx',
-};
+const baseConfig = getConfig('src/index.tsx');
+
+export default baseConfig;

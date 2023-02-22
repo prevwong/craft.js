@@ -18,16 +18,16 @@
   "author": "Prev Wong <prevwong@gmail.com>",
   "homepage": "https://github.com/prevwong/craft.js/",
   "license": "MIT",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/prevwong/craft.js/"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
-    "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
+    "build": "rimraf ./dist && rollup -c",
     "dev:yalc": "../../scripts/yalc.sh",
     "clean": "rimraf lib dist"
   },
@@ -35,16 +35,25 @@
     "url": "https://github.com/prevwong/craft.js/issues"
   },
   "dependencies": {
-    "@craftjs/utils": "^0.2.0-beta.8",
+    "@craftjs/utils": "file:../utils",
     "debounce": "^1.2.0",
     "lodash": "^4.17.20",
     "tiny-invariant": "^1.0.6"
   },
   "devDependencies": {
+    "@rollup/plugin-inject": "^4.0.4",
     "@types/react": "18.0.27",
-    "react": "18.2.0"
+    "esbuild": "^0.14.48",
+    "react": "18.2.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.60.2",
+    "rollup-plugin-esbuild": "^4.9.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "typescript": "^4.8.4"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17 || ^18"
-  }
+  },
+  "sideEffects": false
 }
