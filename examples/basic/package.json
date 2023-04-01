@@ -1,10 +1,10 @@
 {
   "name": "example-basic",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": true,
   "dependencies": {
     "@material-ui/core": "latest",
-    "@noahbaron91/core": "^0.2.2",
+    "@noahbaron91/core": "^0.2.3",
     "clsx": "latest",
     "copy-to-clipboard": "3.2.0",
     "lzutf8": "0.5.5",

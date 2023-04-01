@@ -3624,11 +3624,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@noahbaron91/core@^0.2.2, @noahbaron91/core@workspace:packages/core":
+"@noahbaron91/core@^0.2.3, @noahbaron91/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@noahbaron91/core@workspace:packages/core"
   dependencies:
-    "@noahbaron91/utils": ^0.2.0
+    "@noahbaron91/utils": ^0.2.3
     "@types/react": 17.0.2
     debounce: ^1.2.0
     lodash: ^4.17.20
@@ -3639,12 +3639,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@noahbaron91/layers@^0.2.0, @noahbaron91/layers@workspace:packages/layers":
+"@noahbaron91/layers@^0.2.3, @noahbaron91/layers@workspace:packages/layers":
   version: 0.0.0-use.local
   resolution: "@noahbaron91/layers@workspace:packages/layers"
   dependencies:
     "@babel/core": 7.7.4
-    "@noahbaron91/utils": ^0.2.0
+    "@noahbaron91/utils": ^0.2.3
     "@svgr/rollup": 4.3.3
     react-contenteditable: ^3.3.3
     styled-components: 4.2.1
@@ -3655,7 +3655,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@noahbaron91/utils@^0.2.0, @noahbaron91/utils@workspace:packages/utils":
+"@noahbaron91/utils@^0.2.3, @noahbaron91/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@noahbaron91/utils@workspace:packages/utils"
   dependencies:
@@ -9913,7 +9913,7 @@ clsx@latest:
   resolution: "example-basic@workspace:examples/basic"
   dependencies:
     "@material-ui/core": latest
-    "@noahbaron91/core": ^0.2.2
+    "@noahbaron91/core": ^0.2.3
     clsx: latest
     copy-to-clipboard: 3.2.0
     cross-env: 6.0.3
@@ -9936,8 +9936,8 @@ clsx@latest:
     "@material-ui/core": 4.5.2
     "@material-ui/icons": 4.5.1
     "@material-ui/styles": 4.5.2
-    "@noahbaron91/core": ^0.2.2
-    "@noahbaron91/layers": ^0.2.0
+    "@noahbaron91/core": ^0.2.3
+    "@noahbaron91/layers": ^0.2.3
     "@types/classnames": 2.2.9
     "@types/node": 12.12.5
     "@types/react": 17.0.2
