@@ -1,4 +1,4 @@
-import { useNode } from '@craftjs/core';
+import { useNode } from '@noahbaron91/core';
 import React, { createContext, useMemo, useRef, useState } from 'react';
 import { Node, Range, Transforms } from 'slate';
 import { ReactEditor, Slate } from 'slate-react';

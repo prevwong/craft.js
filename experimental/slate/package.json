@@ -1,5 +1,5 @@
 {
-  "name": "@craftjs/slate",
+  "name": "@noahbaron91/slate",
   "version": "0.2.0-alpha.24",
   "author": "Prev Wong",
   "main": "./dist/cjs/index.js",
@@ -7,14 +7,14 @@
   "license": "MIT",
   "types": "./lib/index.d.ts",
   "dependencies": {
-    "@craftjs/utils": "<=0.2.0-alpha.24"
+    "@noahbaron91/utils": "<=0.2.0-alpha.24"
   },
   "devDependencies": {
     "slate": "^0.57.0",
     "slate-react": "^0.57.0"
   },
   "peerDependencies": {
-    "@craftjs/core": "<=0.2.0-alpha.19",
+    "@noahbaron91/core": "<=0.2.0-alpha.19",
     "react": "^16.8.0",
     "slate": "^0.57.0",
     "slate-react": "^0.57.0"

@@ -1,4 +1,4 @@
-import { ERROR_RESOLVER_NOT_AN_OBJECT } from '@craftjs/utils';
+import { ERROR_RESOLVER_NOT_AN_OBJECT } from '@noahbaron91/utils';
 import { shallow } from 'enzyme';
 import React from 'react';
 import { act } from 'react-dom/test-utils';

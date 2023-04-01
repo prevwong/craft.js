@@ -1,4 +1,4 @@
-import { Indicator, useEditor } from '@craftjs/core';
+import { Indicator, useEditor } from '@noahbaron91/core';
 import React from 'react';
 
 export type Placeholder = {

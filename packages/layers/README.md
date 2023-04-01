@@ -1,9 +1,9 @@
 <div align="center" style={{d}}>
-<h1>@craftjs/layers</h1>
+<h1>@noahbaron91/layers</h1>
 
-<a href="https://www.npmjs.com/package/@craftjs/layers">
-  <img src="https://img.shields.io/npm/v/@craftjs/layers?color=%232680eb&label=NPM&logo=npm&logoColor=%232680eb&style=for-the-badge">
-</a><img alt="NPM" src="https://img.shields.io/npm/l/@craftjs/layers?color=%23000&style=for-the-badge">
+<a href="https://www.npmjs.com/package/@noahbaron91/layers">
+  <img src="https://img.shields.io/npm/v/@noahbaron91/layers?color=%232680eb&label=NPM&logo=npm&logoColor=%232680eb&style=for-the-badge">
+</a><img alt="NPM" src="https://img.shields.io/npm/l/@noahbaron91/layers?color=%23000&style=for-the-badge">
 </div>
 
 <div align="center" style={{d}}>
@@ -27,13 +27,13 @@
 ## Usage
 
 ```bash
-yarn add @craftjs/layers styled-components
+yarn add @noahbaron91/layers styled-components
 ```
 
 ```jsx
 import React from "react";
-import {Editor} from "@craftjs/core"
-import {Layers} from "@craftjs/layers"
+import {Editor} from "@noahbaron91/core"
+import {Layers} from "@noahbaron91/layers"
 
 export default function App() {
   return (

@@ -14,7 +14,7 @@ Methods that helps describe a specified `Node`.
 You can access the NodeHelpers via the `node` query method in the `useEditor` hook.
 
 ```jsx
-import {useEditor} from "@craftjs/core";
+import {useEditor} from "@noahbaron91/core";
 
 const TextComponent = () => {
   const { id } = useNode();

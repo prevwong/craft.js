@@ -5,7 +5,7 @@ import {
   wrapConnectorHooks,
   EventHandlerConnectors,
   ERROR_USE_EDITOR_OUTSIDE_OF_EDITOR_CONTEXT,
-} from '@craftjs/utils';
+} from '@noahbaron91/utils';
 import { useContext, useEffect, useMemo } from 'react';
 import invariant from 'tiny-invariant';
 

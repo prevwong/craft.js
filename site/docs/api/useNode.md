@@ -52,7 +52,7 @@ const { connectors, setProp, ...collected } = useNode(collector);
 ### Collecting state information
 ```tsx
 import cx from "classnames";
-import {useNode} from "@craftjs/core";
+import {useNode} from "@noahbaron91/core";
 
 const Example = () => {
   const { isHovered, amIBeingDragged } = useNode((node) => ({
@@ -200,7 +200,7 @@ For Class Components, use `connectNode` instead.
 ### Example
 ```jsx
 
-import {connectNode} from "@craftjs/core";
+import {connectNode} from "@noahbaron91/core";
 class ButtonInner extends React.Component {
   render() {
     const { connectors: {connect, drag}, isHovered, ...compProps } = this.props;

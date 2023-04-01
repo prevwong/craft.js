@@ -1,4 +1,4 @@
-import { EditorState, QueryMethods } from '@craftjs/core';
+import { EditorState, QueryMethods } from '@noahbaron91/core';
 import forIn from 'lodash/forIn';
 import pickBy from 'lodash/pickBy';
 

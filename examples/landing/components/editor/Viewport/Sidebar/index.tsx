@@ -1,5 +1,5 @@
-import { useEditor } from '@craftjs/core';
-import { Layers } from '@craftjs/layers';
+import { useEditor } from '@noahbaron91/core';
+import { Layers } from '@noahbaron91/layers';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 

@@ -1,10 +1,10 @@
 
 <div align="center" style={{d}}>
 <h1>craft.js</h1>
-<a href="https://www.npmjs.com/package/@craftjs/core">
-  <img src="https://img.shields.io/npm/v/@craftjs/core?color=%232680eb&label=NPM&logo=npm&logoColor=%232680eb&style=for-the-badge">
+<a href="https://www.npmjs.com/package/@noahbaron91/core">
+  <img src="https://img.shields.io/npm/v/@noahbaron91/core?color=%232680eb&label=NPM&logo=npm&logoColor=%232680eb&style=for-the-badge">
 </a>
-<img src="https://img.shields.io/npm/l/@craftjs/core?color=%23000&style=for-the-badge">
+<img src="https://img.shields.io/npm/l/@noahbaron91/core?color=%23000&style=for-the-badge">
 </div>
 
 <div align="center" style={{d}}>
@@ -43,7 +43,7 @@ No need for complicated plugin systems. Design your editor from top to bottom th
 
 A simple user component can easily be defined as such:
 ```jsx
-import {useNode} from "@craftjs/core";
+import {useNode} from "@noahbaron91/core";
 
 const TextComponent = ({text}) => {
   const { connectors: {drag} } = useNode();
@@ -59,7 +59,7 @@ const TextComponent = ({text}) => {
 Heck, the entire UI of your page editor is built using just React.
 ```jsx
 import React from "react";
-import {Editor, Frame, Canvas, Selector} from "@craftjs/core";
+import {Editor, Frame, Canvas, Selector} from "@noahbaron91/core";
 const App = () => {
   return (
     <div>
@@ -83,7 +83,7 @@ An obvious requirement for page editors is that they need to allow users to edit
 In the following example, when the user clicks on a component, we'll display a modal that requires the user to input a value for the `text` prop. As the input value changes, the component will be re-rendered with updated prop.
 
 ```jsx
-import {useNode} from "@craftjs/core";
+import {useNode} from "@noahbaron91/core";
 
 const TextComponent = ({text}) => {
   const { connectors: { connect, drag }, isClicked, actions: {setProp} } = useNode(
@@ -118,7 +118,7 @@ Let's say we need a "Container" component which users can drop into the editor. 
 In Craft.js, it's as simple as calling the `<Canvas />`
 
 ```jsx
-import {useNode} from "@craftjs/core";
+import {useNode} from "@noahbaron91/core";
 const Container = () => {
   const { connectors: {drag} } = useNode();
 
@@ -136,7 +136,7 @@ const Container = () => {
 ### Extensible
 Craft.js provides an expressive API which allows you to easily read and manipulate the editor state. Let's say you would like to implement a copy function for a component:
 ```jsx
-import {useEditor, useNode} from "@craftjs/core";
+import {useEditor, useNode} from "@noahbaron91/core";
 const Container = () => {
   const { actions: {add}, query: { createNode, node } } = useEditor();
   const { id, connectors: {drag, connect} } = useNode();
@@ -193,7 +193,7 @@ You should not use this if:
 
 
 ## Additional Packages :tada:
-- **[@craftjs/layers](https://github.com/prevwong/craft.js/tree/develop/packages/layers)** A Photoshop-like layers panel
+- **[@noahbaron91/layers](https://github.com/prevwong/craft.js/tree/develop/packages/layers)** A Photoshop-like layers panel
 
 ## Acknowledgements :raised_hands:
 

@@ -1,4 +1,4 @@
-import { ERROR_INVALID_NODEID } from '@craftjs/utils';
+import { ERROR_INVALID_NODEID } from '@noahbaron91/utils';
 import invariant from 'tiny-invariant';
 
 import { Nodes, Node, NodeSelectorWrapper, NodeSelector } from '../interfaces';

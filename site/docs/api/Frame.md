@@ -31,7 +31,7 @@ Both props specifies the initial screen to render. You must specify at least one
 
 ### With JSX
 ```tsx {9,10,16,17}
-import {Editor, Frame, Element} from "@craftjs/core";
+import {Editor, Frame, Element} from "@noahbaron91/core";
 
 const App = () => {
   return (
@@ -56,7 +56,7 @@ const App = () => {
 
 ### Loading from serialized Nodes
 ```tsx {10}
-import {Editor, Frame, Element} from "@craftjs/core";
+import {Editor, Frame, Element} from "@noahbaron91/core";
 
 const App = () => {
   return (

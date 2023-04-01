@@ -1,7 +1,7 @@
 import {
   ERROR_USE_EDITOR_OUTSIDE_OF_EDITOR_CONTEXT,
   ERROR_USE_NODE_OUTSIDE_OF_EDITOR_CONTEXT,
-} from '@craftjs/utils';
+} from '@noahbaron91/utils';
 import { render } from '@testing-library/react';
 import * as React from 'react';
 

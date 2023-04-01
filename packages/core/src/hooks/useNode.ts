@@ -1,4 +1,4 @@
-import { deprecationWarning } from '@craftjs/utils';
+import { deprecationWarning } from '@noahbaron91/utils';
 
 import { Node } from '../interfaces';
 import { useInternalNode } from '../nodes/useInternalNode';

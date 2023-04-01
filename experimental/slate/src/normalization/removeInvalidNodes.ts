@@ -1,4 +1,4 @@
-import { EditorState, NodeHelpers, NodeId } from '@craftjs/core';
+import { EditorState, NodeHelpers, NodeId } from '@noahbaron91/core';
 import forIn from 'lodash/forIn';
 import pickBy from 'lodash/pickBy';
 

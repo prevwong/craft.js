@@ -74,6 +74,7 @@
   "dependencies": {
     "@babel/preset-typescript": "7.7.7",
     "all-contributors-cli": "6.11.2",
+    "rollup": "2.79.0",
     "rollup-plugin-typescript": "1.0.1"
   },
   "license": "MIT",

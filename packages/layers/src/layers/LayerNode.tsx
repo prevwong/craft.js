@@ -1,4 +1,4 @@
-import { useEditor, ROOT_NODE } from '@craftjs/core';
+import { useEditor, ROOT_NODE } from '@noahbaron91/core';
 import React, { useRef, useEffect, useLayoutEffect, useState } from 'react';
 
 import { LayerContextProvider } from './LayerContextProvider';

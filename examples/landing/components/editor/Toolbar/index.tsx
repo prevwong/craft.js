@@ -1,4 +1,4 @@
-import { useEditor } from '@craftjs/core';
+import { useEditor } from '@noahbaron91/core';
 import React from 'react';
 
 export * from './ToolbarItem';

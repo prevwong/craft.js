@@ -1,4 +1,3 @@
-import { useEditor } from '@craftjs/core';
 import {
   Box,
   FormControlLabel,
@@ -12,6 +11,7 @@ import {
   TextField,
   Snackbar,
 } from '@material-ui/core';
+import { useEditor } from '@noahbaron91/core';
 import copy from 'copy-to-clipboard';
 import lz from 'lzutf8';
 import React, { useState } from 'react';

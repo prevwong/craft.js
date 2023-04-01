@@ -38,7 +38,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # 0.2.0-alpha.21 (2021-03-22)
 
-**Note:** Version bump only for package @craftjs/slate
+**Note:** Version bump only for package @noahbaron91/slate
 
 
 
@@ -68,7 +68,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # 0.2.0-alpha.18 (2021-03-11)
 
-**Note:** Version bump only for package @craftjs/slate
+**Note:** Version bump only for package @noahbaron91/slate
 
 
 
@@ -98,7 +98,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # 0.2.0-alpha.15 (2021-02-11)
 
-**Note:** Version bump only for package @craftjs/slate
+**Note:** Version bump only for package @noahbaron91/slate
 
 
 
@@ -106,7 +106,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # 0.2.0-alpha.14 (2021-02-08)
 
-**Note:** Version bump only for package @craftjs/slate
+**Note:** Version bump only for package @noahbaron91/slate
 
 
 
@@ -191,7 +191,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # 0.2.0-alpha.6 (2021-01-06)
 
-**Note:** Version bump only for package @craftjs/slate
+**Note:** Version bump only for package @noahbaron91/slate
 
 
 
@@ -199,4 +199,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # 0.2.0-alpha.5 (2021-01-06)
 
-**Note:** Version bump only for package @craftjs/slate
+**Note:** Version bump only for package @noahbaron91/slate

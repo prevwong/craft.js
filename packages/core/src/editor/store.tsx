@@ -2,7 +2,7 @@ import {
   useMethods,
   SubscriberAndCallbacksFor,
   PatchListener,
-} from '@craftjs/utils';
+} from '@noahbaron91/utils';
 
 import { ActionMethods } from './actions';
 import { QueryMethods } from './query';
@@ -32,7 +32,7 @@ export const editorInitialState: EditorState = {
     handlers: (store) =>
       new DefaultEventHandlers({
         store,
-        isMultiSelectEnabled: (e: MouseEvent) => !!e.metaKey,
+        isMultiSelectEnabled: (e: MouseEvent) => !!e.shiftKey,
       }),
     normalizeNodes: () => {},
   },

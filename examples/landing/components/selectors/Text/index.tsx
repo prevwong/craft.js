@@ -1,4 +1,4 @@
-import { useNode, useEditor } from '@craftjs/core';
+import { useNode, useEditor } from '@noahbaron91/core';
 import React from 'react';
 import ContentEditable from 'react-contenteditable';
 

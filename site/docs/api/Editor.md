@@ -27,7 +27,7 @@ Creates the context that stores the editor state.
 By default, every user element is rendered just as it is. However, if you'd like to, for example, wrap every user element inside a `div`, you can do so through the `onRender` prop:
 
 ```jsx {3-9,13}
-import {Editor} from "@craftjs/core";
+import {Editor} from "@noahbaron91/core";
 
 const RenderNode = ({element}) => {
   return (
@@ -57,7 +57,7 @@ In the above example, every user element will now be wrapped in a black `div`.
 You could change the colours of the drag and drop indicators like so:
 
 ```jsx {6-9}
-import {Editor} from "@craftjs/core";
+import {Editor} from "@noahbaron91/core";
 
 const App = () => {
   return (
@@ -84,7 +84,7 @@ const App = () => {
 Perform a callback whenever the Nodes in the editor is updated/changed
 
 ```jsx {6-11}
-import {Editor} from "@craftjs/core";
+import {Editor} from "@noahbaron91/core";
 
 const App = () => {
   return (

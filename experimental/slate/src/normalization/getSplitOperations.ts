@@ -1,4 +1,4 @@
-import { EditorState } from '@craftjs/core';
+import { EditorState } from '@noahbaron91/core';
 
 // Get a list of operations to perform in a scenario where a non-Slate element is found inside the Slate node
 // For example: the user drags a Button and drops it inside between 2 Text nodes

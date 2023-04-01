@@ -1,4 +1,4 @@
-import { Element, useNode } from '@craftjs/core';
+import { Element, useNode } from '@noahbaron91/core';
 import React from 'react';
 
 import { Container } from '../Container';

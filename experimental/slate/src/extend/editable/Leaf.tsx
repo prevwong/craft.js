@@ -1,5 +1,5 @@
-import { NodeElement } from '@craftjs/core';
-import { Overwrite } from '@craftjs/utils';
+import { NodeElement } from '@noahbaron91/core';
+import { Overwrite } from '@noahbaron91/utils';
 import React from 'react';
 import { RenderLeafProps } from 'slate-react';
 

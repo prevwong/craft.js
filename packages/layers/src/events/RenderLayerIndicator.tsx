@@ -1,5 +1,5 @@
-import { useEditor } from '@craftjs/core';
-import { RenderIndicator } from '@craftjs/utils';
+import { useEditor } from '@noahbaron91/core';
+import { RenderIndicator } from '@noahbaron91/utils';
 import React, { useMemo } from 'react';
 
 import { useLayerManager } from '../manager/useLayerManager';

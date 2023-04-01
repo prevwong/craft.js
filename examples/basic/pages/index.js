@@ -1,5 +1,5 @@
-import { Editor, Frame, Element } from '@craftjs/core';
 import { Typography, Paper, Grid, makeStyles } from '@material-ui/core';
+import { Editor, Frame, Element } from '@noahbaron91/core';
 import React from 'react';
 
 import { SettingsPanel } from '../components/SettingsPanel';

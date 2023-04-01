@@ -6,11 +6,11 @@
     "allowJs": true,
     "esModuleInterop": true,
     "paths": {
-      "@craftjs/core": ["packages/core/src/index"],
-      "@craftjs/*": ["packages/core/src/*"],
-      "@craftjs/layers": ["packages/layers/src/index"],
-      "@craftjs/utils": ["packages/utils/src/index"],
-      "@craftjs/utils/*": ["packages/utils/src/*"],
+      "@noahbaron91/core": ["packages/core/src/index"],
+      "@noahbaron91/*": ["packages/core/src/*"],
+      "@noahbaron91/layers": ["packages/layers/src/index"],
+      "@noahbaron91/utils": ["packages/utils/src/index"],
+      "@noahbaron91/utils/*": ["packages/utils/src/*"]
     }
   },
   "exclude": ["**/node_modules/**"]
