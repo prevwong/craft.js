@@ -38,11 +38,11 @@ module.exports = {
           position: 'right',
           items: [
             {
-              to: 'examples/landing/',
+              to: 'pathname:///examples/landing/',
               label: 'Landing',
             },
             {
-              to: 'examples/basic/',
+              to: 'pathname:///examples/basic',
               label: 'Basic',
             },
           ],

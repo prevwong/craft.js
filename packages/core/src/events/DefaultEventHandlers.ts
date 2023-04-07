@@ -1,11 +1,12 @@
 import { isChromium, isLinux } from '@craftjs/utils';
 import { isFunction } from 'lodash';
+import React from 'react';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
 import { Positioner } from './Positioner';
 import { createShadow } from './createShadow';
 
-import { Indicator, NodeId, DragTarget } from '../interfaces';
+import { Indicator, NodeId, DragTarget, NodeTree } from '../interfaces';
 
 export type DefaultEventHandlersOptions = {
   isMultiSelectEnabled: (e: MouseEvent) => boolean;
@@ -189,7 +190,22 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
             e.craft.stopPropagation();
 
             const { query, actions } = store;
-            const selectedElementIds = query.getEvent('selected').all();
+
+            let selectedElementIds = query.getEvent('selected').all();
+
+            const isMultiSelect = this.options.isMultiSelectEnabled(e);
+            const isNodeAlreadySelected = this.currentSelectedElementIds.includes(
+              id
+            );
+
+            if (!isNodeAlreadySelected) {
+              if (isMultiSelect) {
+                selectedElementIds = [...selectedElementIds, id];
+              } else {
+                selectedElementIds = [id];
+              }
+              store.actions.setNodeEvent('selected', selectedElementIds);
+            }
 
             actions.setNodeEvent('dragged', selectedElementIds);
 
@@ -243,7 +259,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
       },
       create: (
         el: HTMLElement,
-        userElement: React.ReactElement,
+        userElement: React.ReactElement | (() => NodeTree | React.ReactElement),
         options?: Partial<CreateHandlerOptions>
       ) => {
         el.setAttribute('draggable', 'true');
@@ -253,7 +269,17 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           'dragstart',
           (e) => {
             e.craft.stopPropagation();
-            const tree = store.query.parseReactElementAsNodeTree(userElement);
+            let tree;
+            if (typeof userElement === 'function') {
+              const result = userElement();
+              if (React.isValidElement(result)) {
+                tree = store.query.parseReactElementAsNodeTree(result);
+              } else {
+                tree = result;
+              }
+            } else {
+              tree = store.query.parseReactElementAsNodeTree(userElement);
+            }
 
             const dom = e.currentTarget as HTMLElement;
             this.draggedElementShadow = createShadow(

@@ -17,7 +17,7 @@ function Home() {
       classNAme="landing-pp"
     >
       <iframe
-        style={{ width: '100%', border: 'none', outline: 'none' }}
+        style={{ flex: 1, width: '100%', border: 'none', outline: 'none' }}
         src={
           process.env.NODE_ENV === 'production'
             ? '/examples/landing'

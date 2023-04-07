@@ -494,7 +494,7 @@ export const CardTop = ({children}) => {
 CardTop.craft = {
   rules: {
     // Only accept Text
-    canMoveIn: (incomingNode) => incomingNode.data.type == Text
+    canMoveIn: (incomingNodes) => incomingNodes.every(incomingNode => incomingNode.data.type === Text)
   }
 }
 
@@ -510,7 +510,7 @@ export const CardBottom = ({children}) => {
 CardBottom.craft = {
   rules: {
     // Only accept Buttons
-    canMoveIn : (incomingNode) => incomingNode.data.type == Button
+    canMoveIn : (incomingNode) => incomingNodes.every(incomingNode => incomingNode.data.type === Button)
   }
 }
 
@@ -634,14 +634,14 @@ The `useNode` hook accepts a collector function which can be used to retrieve st
 ```jsx {4-5,8,10,18}
 // components/user/Text.js
 export const Text = ({text, fontSize}) => {
-  const { connectors: {connect, drag}, selected, dragged, actions: {setProp} } = useNode((state) => ({
-    selected: state.events.selected,
-    dragged: state.events.dragged
+  const { connectors: {connect, drag}, hasSelectedNode, hasDraggedNode, actions: {setProp} } = useNode((state) => ({
+    hasSelectedNode: state.events.selected.size > 0,
+    hasDraggedNode: state.events.dragged.size > 0
   }));
 
   const [editable, setEditable] = useState(false);
 
-  useEffect(() => {!selected && setEditable(false)}, [selected]);
+  useEffect(() => {!hasSelectedNode && setEditable(false)}, [hasSelectedNode]);
 
   return (
      <div 
@@ -667,9 +667,9 @@ While we are at it, let's also add a slider for users to edit the `fontSize`
 import {Slider, FormControl, FormLabel} from "@material-ui/core";
 
 export const Text= ({text, fontSize, textAlign}) => {
-  const { connectors: {connect, drag}, selected, dragged, actions: {setProp} } = useNode((state) => ({
-    selected: state.events.selected,
-    dragged: state.events.dragged
+  const { connectors: {connect, drag}, hasSelectedNode, hasDraggedNode, actions: {setProp} } = useNode((state) => ({
+    hasSelectedNode: state.events.selected.size > 0,
+    hasDraggedNode: state.events.dragged.size > 0
   }));
 
   ...
@@ -678,7 +678,7 @@ export const Text= ({text, fontSize, textAlign}) => {
     <div {...}>
       <ContentEditable {...} />
       {
-        selected && (
+        hasSelectedNode && (
           <FormControl className="text-additional-settings" size="small">
             <FormLabel component="legend">Font size</FormLabel>
             <Slider
@@ -918,10 +918,15 @@ Card.craft = {
 We need to get the currently selected component which can be obtained from the editor's internal state. Similar to `useNode`, a collector function can be specified to `useEditor`. The difference is here, we'll be dealing with the editor's internal state rather than with a specific `Node`:
 
 ```jsx
-const { currentlySelectedId } = useEditor((state) => ({
-  currentlySelectedId: state.events.selected
-}))
+const { currentlySelectedId } = useEditor((state) => {
+  const [currentlySelectedId] = state.events.selected;
+  return {
+    currentlySelectedId
+  }
+})
 ```
+
+> Note: state.events.selected is of type `Set<string>`. This is because in the case of multi-select, it's possible for the user to select multiple Nodes by holding down the `<meta>` key.
 
 Now, let's replace the placeholder text fields in our Settings Panel with the `settings` Related Component:
 
@@ -933,7 +938,7 @@ import { useEditor } from "@craftjs/core";
 
 export const SettingsPanel = () => {
   const { selected } = useEditor((state) => {
-    const currentNodeId = state.events.selected;
+    const [currentNodeId] = state.events.selected;
     let selected;
 
     if ( currentNodeId ) {
@@ -983,7 +988,7 @@ Also, it's important to note that not all nodes are deletable - if we try to del
 
 export const SettingsPanel = () => {
   const { actions, selected } } = useEditor((state, query) => {
-    const currentNodeId = state.events.selected;
+    const [currentNodeId] = state.events.selected;
     let selected;
 
     if ( currentNodeId ) {

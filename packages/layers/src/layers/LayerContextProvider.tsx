@@ -2,13 +2,13 @@ import { useEditor } from '@craftjs/core';
 import { wrapConnectorHooks } from '@craftjs/utils';
 import React, { useMemo, useContext, useRef, useEffect } from 'react';
 
-import { LayerContext } from './LayerContext';
+import { LayerContext, LayerContextType } from './LayerContext';
 import { LayerNode } from './LayerNode';
 
 import { LayerManagerContext } from '../manager';
 
 export const LayerContextProvider: React.FC<Omit<
-  LayerContext,
+  LayerContextType,
   'connectors'
 >> = ({ id, depth }) => {
   const { store } = useContext(LayerManagerContext);
@@ -26,6 +26,8 @@ export const LayerContextProvider: React.FC<Omit<
   );
 
   useEffect(() => {
+    connectorsUsage.register();
+
     return () => {
       connectorsUsage.cleanup();
     };

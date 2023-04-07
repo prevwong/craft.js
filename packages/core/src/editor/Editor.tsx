@@ -4,7 +4,7 @@ import React, { useMemo, useRef, useEffect } from 'react';
 import { EditorContext } from './EditorContext';
 
 import { Events } from '../events';
-import { EditorState, EditorStoreConfig } from '../interfaces';
+import { EditorStoreConfig } from '../interfaces';
 import { EditorStore } from '../store';
 
 type EditorProps = EditorStoreConfig & {
@@ -15,7 +15,9 @@ type EditorProps = EditorStoreConfig & {
 /**
  * A React Component that provides the Editor context
  */
-export const Editor: React.FC<Partial<EditorProps>> = ({
+export const Editor: React.FC<React.PropsWithChildren<
+  Partial<EditorProps>
+>> = ({
   children,
   enabled,
   resolver,

@@ -27,6 +27,7 @@ export type SidebarItemProps = {
   icon: string;
   visible?: boolean;
   onChange?: (bool: boolean) => void;
+  children?: React.ReactNode;
 };
 
 const HeaderDiv = styled.div`

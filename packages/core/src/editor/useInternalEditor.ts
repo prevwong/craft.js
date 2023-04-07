@@ -37,11 +37,9 @@ export function useInternalEditor<C = null>(collector?: EditorCollector<C>) {
   );
 
   useEffect(() => {
-    return () => {
-      if (!connectorsUsage) {
-        return;
-      }
+    connectorsUsage.register();
 
+    return () => {
       connectorsUsage.cleanup();
     };
   }, [connectorsUsage]);

@@ -8,9 +8,9 @@ import { useInternalNode } from '../nodes/useInternalNode';
 type RenderNodeToElementType = {
   render?: React.ReactElement;
 };
-export const RenderNodeToElement: React.FC<RenderNodeToElementType> = ({
-  render,
-}) => {
+export const RenderNodeToElement: React.FC<React.PropsWithChildren<
+  RenderNodeToElementType
+>> = ({ render }) => {
   const { hidden } = useInternalNode((node) => ({
     hidden: node.data.hidden,
   }));

@@ -2,7 +2,11 @@ import React from 'react';
 
 import { RenderEditorIndicator } from './RenderEditorIndicator';
 
-export const Events: React.FC = ({ children }) => {
+type EventsProps = {
+  children?: React.ReactNode;
+};
+
+export const Events: React.FC<EventsProps> = ({ children }) => {
   return (
     <>
       <RenderEditorIndicator />

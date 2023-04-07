@@ -38,12 +38,12 @@ MyComp.craft = {
       const ancestors = helper(node.id).ancestors();
       ...
     },
-    canMoveIn : (incoming: Node, self: Node, helper: NodeHelpers) => {
-      const isRoot = helper(node.id).isRoot();
+    canMoveIn : (incoming: Node[], self: Node, helper: NodeHelpers) => {
+      const isRoot = helper(self.id).isRoot();
       ...
     }
-    canMoveOut: (outgoing: Node, self: Node, helper: NodeHelpers) => {
-      const isDeletable = helper(node.id).isDeletable();
+    canMoveOut: (outgoing: Node[], self: Node, helper: NodeHelpers) => {
+      const isDeletable = helper(self.id).isDeletable();
       ...
     }
   }

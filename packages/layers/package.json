@@ -35,13 +35,13 @@
     "react-contenteditable": "^3.3.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.4",
-    "@svgr/rollup": "^4.3.3",
-    "styled-components": "^4.2.1"
+    "@babel/core": "7.7.4",
+    "@svgr/rollup": "6.5.1",
+    "styled-components": "4.2.1"
   },
   "peerDependencies": {
-    "@craftjs/core": "^0.3.0-alpha.0",
-    "react": "^16.8.0 || ^17",
+    "@craftjs/core": "^0.2.0-alpha.19",
+    "react": "^16.8.0 || ^17 || ^18",
     "styled-components": ">= 4"
   }
 }

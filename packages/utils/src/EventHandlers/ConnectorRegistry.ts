@@ -9,6 +9,8 @@ import { getRandomId } from '../getRandomId';
  * This allows us to easily enable/disable and perform cleanups
  */
 export class ConnectorRegistry {
+  private isEnabled: boolean = true;
+
   private elementIdMap: WeakMap<HTMLElement, string> = new WeakMap();
   private registry: Map<String, RegisteredConnector> = new Map();
 
@@ -24,7 +26,7 @@ export class ConnectorRegistry {
     return newId;
   }
 
-  private getConnectorId(element: HTMLElement, connectorName: string) {
+  getConnectorId(element: HTMLElement, connectorName: string) {
     const elementId = this.getElementId(element);
     return `${connectorName}--${elementId}`;
   }
@@ -69,7 +71,9 @@ export class ConnectorRegistry {
       },
     });
 
-    this.registry.get(id).enable();
+    if (this.isEnabled) {
+      this.registry.get(id).enable();
+    }
 
     return this.registry.get(id);
   }
@@ -89,12 +93,14 @@ export class ConnectorRegistry {
   }
 
   enable() {
+    this.isEnabled = true;
     this.registry.forEach((connectors) => {
       connectors.enable();
     });
   }
 
   disable() {
+    this.isEnabled = false;
     this.registry.forEach((connectors) => {
       connectors.disable();
     });

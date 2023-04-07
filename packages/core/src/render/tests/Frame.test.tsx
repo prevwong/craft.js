@@ -1,4 +1,4 @@
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 import React from 'react';
 
 import { useInternalEditor } from '../../editor/useInternalEditor';
@@ -35,7 +35,7 @@ describe('<Frame />', () => {
 
   describe('When rendering using `data`', () => {
     beforeEach(() => {
-      mount(<Frame data={data} />);
+      render(<Frame data={data} />);
     });
     it('should deserialize the nodes', () => {
       expect(deserialize).toHaveBeenCalledWith(data);
