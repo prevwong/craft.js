@@ -460,30 +460,14 @@ html[data-theme='dark'] .api-description {
     calc(var(--ifm-menu-link-padding-horizontal))
     var(--ifm-menu-link-padding-vertical)
     var(--ifm-menu-link-padding-horizontal);
-  border-top: 1px solid var(--ifm-toc-border-color);
-  border-right: 1px solid var(--ifm-toc-border-color);
-}
-
-@media screen and (max-width: 996px) {
-  #carbonads-container {
-    position: fixed;
-    margin-top: 20px;
-    width: 300px;
-    bottom: 5px;
-    z-index: 9;
-    left: 19px;
-    border-radius: 3px;
-    background: #fff;
-    box-shadow: 0px 3px 28px 0px rgb(1 1 1 / 11%);
-    border: none;
-  }
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 #carbonads * {
   margin: initial;
   padding: initial;
-}
-#carbonads {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Arial,
     sans-serif;
@@ -491,9 +475,12 @@ html[data-theme='dark'] .api-description {
 
 #carbonads {
   display: flex;
-  max-width: 330px;
-  background-color: transparent;
-  z-index: 100;
+  flex-direction: column;
+  background: transparent;
+  padding: 0.25rem 0.3rem;
+  border: 1px solid var(--ifm-toc-border-color);
+  min-height: 50px;
+  width: 100%;
 }
 
 #carbonads a {
@@ -505,47 +492,50 @@ html[data-theme='dark'] .api-description {
   color: inherit;
 }
 
-#carbonads span {
+#carbonads > span {
   position: relative;
-  display: block;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 #carbonads .carbon-wrap {
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #carbonads .carbon-img {
   display: block;
-  margin: 0;
   line-height: 1;
 }
 
 #carbonads .carbon-img img {
   display: block;
+  width: 100%;
+  object-fit: contain;
 }
 
 #carbonads .carbon-text {
-  font-size: 11px;
-  padding: 10px;
-  margin-bottom: 16px;
+  font-size: 0.75rem;
+  padding: 0.375rem 0.375rem 1.575rem 0.75rem;
+  color: rgb(0 0 0 / 84%);
+  font-weight: 300;
   line-height: 1.5;
   text-align: left;
-  color: #333333;
-  font-weight: 400;
+  flex: 1;
 }
 
 #carbonads .carbon-poweredby {
+  color: rgb(0 0 0 / 54%);
   display: block;
-  padding: 6px 8px;
+  position: relative;
   text-align: center;
+  margin-top: 5px;
+  font-size: 0.6rem;
+  font-weight: 300;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
-  font-size: 8px;
-  line-height: 1;
   position: absolute;
   bottom: 0;
   right: 0;
-  color: #8f8f8f;
 }
