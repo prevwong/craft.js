@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.9](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.8...v0.2.0-beta.9) (2023-04-07)
+
+
+### Bug Fixes
+
+* types ([8d3aee4](https://github.com/prevwong/craft.js/commit/8d3aee4359bacd41f6284e38ca45558262170501))
+
+
+
+
+
 # [0.2.0-beta.8](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.7...v0.2.0-beta.8) (2022-08-30)
 
 **Note:** Version bump only for package @craftjs/utils

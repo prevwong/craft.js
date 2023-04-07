@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.9](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.8...v0.2.0-beta.9) (2023-04-07)
+
+
+### Bug Fixes
+
+* missing options in <Editor /> props ([#501](https://github.com/prevwong/craft.js/issues/501)) ([c74f4c9](https://github.com/prevwong/craft.js/commit/c74f4c94e1722c4f515a34ebf8718af896661de7))
+* nested "type" key in Element props leads to serialization error ([#308](https://github.com/prevwong/craft.js/issues/308)) ([#478](https://github.com/prevwong/craft.js/issues/478)) ([ed46ee6](https://github.com/prevwong/craft.js/commit/ed46ee6e6653cd0d15cb35080516ca5ccf08959a))
+* types ([8d3aee4](https://github.com/prevwong/craft.js/commit/8d3aee4359bacd41f6284e38ca45558262170501))
+
+
+
+
+
 # [0.2.0-beta.8](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.7...v0.2.0-beta.8) (2022-08-30)
 
 **Note:** Version bump only for package @craftjs/core
