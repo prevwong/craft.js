@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.10](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.9...v0.2.0-beta.10) (2023-04-09)
+
+
+### Bug Fixes
+
+* carbon snippet ([c7fb7dc](https://github.com/prevwong/craft.js/commit/c7fb7dccbc0709a547406a7e92c8bc598d42d705))
+
+
+
+
+
 # [0.2.0-beta.9](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.8...v0.2.0-beta.9) (2023-04-07)
 
 
