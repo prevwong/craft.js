@@ -9,7 +9,7 @@ If you are interested in proposing a new feature or have found a bug that you'd 
 
 
 # Setup
-1. Fork this repository and create your branch from `master`
+1. Fork this repository and create your branch from `develop`
 ```bash
 git clone https://github.com/your-name/craft.js
 cd craft.js
@@ -17,15 +17,15 @@ cd craft.js
 
 2. Install the dependencies and start the development server
 ```bash
-> yarn install
-> yarn dev
+> pnpm install
+> pnpm dev
 ```
 
 3. Here are some additional npm scripts that might be useful
 ```bash
-> yarn clean # clean all build files from all packages in the monorepo
-> yarn build # create production build for all craftjs packages
-> yarn lint # run tests across the monorepo 
+> pnpm clean # clean all build files from all packages in the monorepo
+> pnpm build # create production build for all craftjs packages
+> pnpm lint # run tests across the monorepo 
 ```
 4. Do your magic. :fireworks: Be sure that the package(s) that you're working on can still be successfully built after you've applied your changes.
 5. Submit a [pull request](https://github.com/prevwong/craft.js/compare) to merge the changes from your fork :heart: **(If your PR is not linked to an existing issue, then be sure to explain what your PR aims to accomplish)**

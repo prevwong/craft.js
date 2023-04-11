@@ -1,17 +1,24 @@
 #!/bin/bash
 
 args=()
-if [ $NODE_ENV == 'development' ]
-then
-   args+=( '-w' );
-fi
 
+while getopts ":w" options; do 
+    case "${options}" in
+        w)
+            args+=( '-w' );
+        ;;
+        *)          
+            echo "Invalid option";
+            exit 1
+        ;;
+    esac
+done
 
-defaultRollupConfig=../../rollup.config.js
+rollup=../../rollup.config.js
 if [ -f ./rollup.config.js ]
 then
-  defaultRollupConfig=rollup.config.js
+  rollup=rollup.config.js
 fi
 
-npx tsc --skipLibCheck --emitDeclarationOnly "${args[@]}" &
-npx rollup -c "${defaultRollupConfig}" "${args[@]}"
+pnpm tsc --skipLibCheck --emitDeclarationOnly "${args[@]}" &
+pnpm rollup -c "${rollup}" "${args[@]}"
