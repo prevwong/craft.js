@@ -5,6 +5,7 @@ import { LayerOptions } from './interfaces';
 import { LayerContextProvider } from './layers/LayerContextProvider';
 import { LayerManagerProvider } from './manager/LayerManagerProvider';
 export { useLayer } from './layers';
+export * from './layers/DefaultLayer';
 
 export const Layers: React.FC<Partial<LayerOptions>> = ({ ...options }) => {
   return (
