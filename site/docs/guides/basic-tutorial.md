@@ -510,7 +510,7 @@ export const CardBottom = ({children}) => {
 CardBottom.craft = {
   rules: {
     // Only accept Buttons
-    canMoveIn : (incomingNode) => incomingNodes.every(incomingNode => incomingNode.data.type === Button)
+    canMoveIn : (incomingNodes) => incomingNodes.every(incomingNode => incomingNode.data.type === Button)
   }
 }
 
