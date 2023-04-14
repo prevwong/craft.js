@@ -553,7 +553,7 @@ Let's go back to our Toolbox component and modify it so that dragging those butt
 
 The `useEditor` also provides `connectors`; the one we are interested in right now is `create` which attaches a drag handler to the  DOM specified in its first argument and creates the element specified in its second arguement.
 
-```jsx {20,23,26}
+```jsx {20,23,26,29}
 // components/Toolbox.js
 import React from "react";
 import { Box, Typography, Grid, Button as MaterialButton } from "@material-ui/core";
