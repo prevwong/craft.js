@@ -34,6 +34,8 @@
     "react-contenteditable": "^3.3.3"
   },
   "devDependencies": {
+    "react": "18.2.0",
+    "@craftjs/core": "workspace:*",
     "@babel/core": "7.7.4",
     "@svgr/rollup": "6.5.1",
     "styled-components": "4.2.1"
