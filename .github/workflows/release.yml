@@ -1,13 +1,12 @@
-name: Pull Request
+name: Release
 on:
-  pull_request:
+  push:
     branches:
       - develop
-      - next
 
 jobs:
   release:
-    name: Build and Test
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,8 +29,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
-        run: pnpm build
-
-      - name: Run tests
-        run: pnpm test
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm run changeset:version
+          publish: pnpm run publish
+          title: 'chore: release'
+          commit: 'chore: release'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

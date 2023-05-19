@@ -18,9 +18,8 @@
   "license": "MIT",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
-    "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
-    "clean": "rimraf lib dist"
+    "dev": "cross-env NODE_ENV=development ../../scripts/build.sh -w",
+    "build": "cross-env NODE_ENV=production ../../scripts/build.sh"
   },
   "repository": {
     "type": "git",
@@ -35,6 +34,8 @@
     "react-contenteditable": "^3.3.3"
   },
   "devDependencies": {
+    "react": "18.2.0",
+    "@craftjs/core": "workspace:*",
     "@babel/core": "7.7.4",
     "@svgr/rollup": "6.5.1",
     "styled-components": "4.2.1"

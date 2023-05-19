@@ -3,25 +3,22 @@
   "private": true,
   "author": "Prev Wong <prevwong@gmail.com>",
   "scripts": {
-    "dev": "./scripts/dev.sh",
-    "dev:site": "lerna run start --scope site",
-    "dev:all": "run-p dev dev:site",
-    "dev:yalc": "lerna run dev:yalc --parallel",
-    "clean": "lerna run clean --stream",
-    "build": "lerna run build --stream --ignore site --ignore 'example-*'",
-    "build:all": "lerna run build --stream",
-    "deploy": "cross-env ENV=production ./scripts/deploy.sh",
+    "dev": "turbo run dev",
+    "build": "pnpm run clean && turbo run build --filter=!./examples/*",
+    "build:packages": "pnpm run clean && turbo run build --filter='./packages/*' --no-cache --force",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint --fix . --ext .js,.jsx,.ts,.tsx",
+    "test": "jest",
+    "test:watch": "cross-env NODE_ENV=test jest --watchAll",
+    "clean": "rimraf -g **/lib **/dist",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
+    "publish": "run-s build:packages lint test changeset:publish",
+    "postinstall": "run-s build:packages",
     "prettier": "prettier --write .",
     "cy:test": "cypress run",
     "cy:open": "cypress open",
-    "test": "jest",
-    "test:watch": "cross-env NODE_ENV=test jest --watchAll",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "prerelease": "lerna version --yes --conventional-commits --conventional-prerelease --force-publish",
-    "prerelease:beta": "lerna version --yes --conventional-commits --conventional-prerelease --preid beta --force-publish",
-    "release": "lerna version --yes --conventional-commits --conventional-graduate --force-publish",
-    "publish": "./scripts/publish.sh",
-    "version": "echo \"Running post lerna version script; bump lockfile\" && yarn install && git stage yarn.lock"
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
@@ -52,26 +49,21 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-react-hooks": "4.6.0",
-    "husky": "3.1.0",
+    "husky": "^8.0.3",
     "jest": "29.4.2",
     "jest-environment-jsdom": "^29.4.2",
-    "lerna": "4.0.0",
     "lint-staged": "9.5.0",
     "nodemon": "2.0.20",
     "npm-run-all": "4.1.5",
     "prettier": "2.0.1",
     "pretty-quick": "2.0.1",
-    "rimraf": "3.0.2",
+    "rimraf": "^4.4.0",
     "rollup": "2.79.0",
     "ts-jest": "29.0.5",
-    "typescript": "4.9.5"
-  },
-  "workspaces": {
-    "packages": [
-      "packages/*",
-      "site",
-      "examples/*"
-    ]
+    "turbo": "latest",
+    "typescript": "4.9.5",
+    "@changesets/changelog-github": "^0.4.8",
+    "@changesets/cli": "^2.26.0"
   },
   "license": "MIT",
   "repository": {
@@ -81,14 +73,8 @@
   "lint-staged": {
     "packages/**/*.{js,jsx,ts,tsx}": [
       "pretty-quick --staged",
-      "npm run lint",
+      "pnpm run lint",
       "git add"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "jest"
-    }
   }
 }
