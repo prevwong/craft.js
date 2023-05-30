@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.11](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.10...v0.2.0-beta.11) (2023-05-30)
+
+
+### Bug Fixes
+
+* forward props to related components ([#233](https://github.com/prevwong/craft.js/issues/233)) ([2d53e6b](https://github.com/prevwong/craft.js/commit/2d53e6b12c4b4b02eedc7299612392dbdb43b2b1))
+
+
+
+
+
 # [0.2.0-beta.10](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.9...v0.2.0-beta.10) (2023-04-09)
 
 **Note:** Version bump only for package @craftjs/core
