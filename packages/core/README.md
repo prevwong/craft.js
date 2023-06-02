@@ -248,3 +248,7 @@ Craft.js is released under the [MIT license](https://github.com/prevwong/craft.j
 <a href="https://opencollective.com/craftjs/contribute" target="_blank">
   <img src="https://opencollective.com/craftjs/donate/button@2x.png?color=blue" width="260" />
 </a>
+
+
+# To start the project in local machine
+cmd -> yarn run-p dev dev:site
