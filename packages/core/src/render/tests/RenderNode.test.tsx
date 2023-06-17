@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import identity from 'lodash/identity';
+import identity from 'lodash.identity';
 import React from 'react';
 
 import { NodeData } from '../../interfaces';

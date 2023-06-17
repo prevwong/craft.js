@@ -15,12 +15,13 @@
   },
   "dependencies": {
     "immer": "^9.0.6",
-    "lodash": "^4.17.20",
+    "lodash.isequalwith": "^4.4.0",
     "nanoid": "^3.1.23",
     "shallowequal": "^1.1.0",
     "tiny-invariant": "^1.0.6"
   },
   "devDependencies": {
+    "@types/lodash.isequalwith": "^4.4.7",
     "@types/react": "18.0.27"
   },
   "nohoist": [

@@ -37,10 +37,17 @@
   "dependencies": {
     "@craftjs/utils": "^0.2.0-beta.11",
     "debounce": "^1.2.0",
-    "lodash": "^4.17.20",
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.identity": "^3.0.0",
+    "lodash.isfunction": "^3.0.9",
+    "lodash.mapvalues": "^4.6.0",
     "tiny-invariant": "^1.0.6"
   },
   "devDependencies": {
+    "@types/lodash.clonedeep": "^4.5.7",
+    "@types/lodash.identity": "^3.0.7",
+    "@types/lodash.isfunction": "^3.0.7",
+    "@types/lodash.mapvalues": "^4.6.7",
     "@types/react": "18.0.27",
     "react": "18.2.0"
   },
