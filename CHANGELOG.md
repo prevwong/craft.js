@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.12](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.11...v0.2.0-beta.12) (2023-06-30)
+
+
+### Bug Fixes
+
+* **layers:** indicator width calculation ([#543](https://github.com/prevwong/craft.js/issues/543)) ([a4713e8](https://github.com/prevwong/craft.js/commit/a4713e8359fb721b72ab851bfadf315e87a5cc45))
+
+
+
+
+
 # [0.2.0-beta.11](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.10...v0.2.0-beta.11) (2023-05-30)
 
 
