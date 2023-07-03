@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.12](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.11...v0.2.0-beta.12) (2023-06-30)
+
+**Note:** Version bump only for package @craftjs/utils
+
+
+
+
+
 # [0.2.0-beta.11](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.10...v0.2.0-beta.11) (2023-05-30)
 
 **Note:** Version bump only for package @craftjs/utils

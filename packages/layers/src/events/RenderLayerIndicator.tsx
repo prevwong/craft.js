@@ -50,7 +50,7 @@ export const RenderLayerIndicator: React.FC<any> = ({ children }) => {
         return {
           top,
           left: headingPos.left,
-          width: pos.width - headingPos.left,
+          width: pos.width + pos.left - headingPos.left,
           height: 2,
           borderWidth: 0,
           background: color,
