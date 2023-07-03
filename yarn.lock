@@ -2253,10 +2253,6 @@ __metadata:
   dependencies:
     "@craftjs/utils": ^0.2.0-beta.11
     "@types/lodash": ^4.14.195
-    "@types/lodash.clonedeep": ^4.5.7
-    "@types/lodash.identity": ^3.0.7
-    "@types/lodash.isfunction": ^3.0.7
-    "@types/lodash.mapvalues": ^4.6.7
     "@types/react": 18.0.27
     debounce: ^1.2.0
     lodash: ^4.17.21
@@ -2287,7 +2283,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@craftjs/utils@workspace:packages/utils"
   dependencies:
-    "@types/lodash.isequalwith": ^4.4.7
     "@types/react": 18.0.27
     immer: ^9.0.6
     lodash: ^4.17.21
@@ -5437,52 +5432,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.clonedeep@npm:^4.5.7":
-  version: 4.5.7
-  resolution: "@types/lodash.clonedeep@npm:4.5.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 20d6a20970b3b54b3c10cf17ace1cea49c4905d7f7cae2575a98108466e8d4c9bea3b3449d11ccaac4da1fc9bab225f477f4c2dbea8ba877cc47f629455efb69
-  languageName: node
-  linkType: hard
-
-"@types/lodash.identity@npm:^3.0.7":
-  version: 3.0.7
-  resolution: "@types/lodash.identity@npm:3.0.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: accdaecd1bd645f54c7cdf24b0c0dc4a91c7c809da719baa67ea4b82f5db5e6d7dc6a27a44c4ebe3006c1207a2c396fa39672e4559dbdb3fa82e1ad3310037b9
-  languageName: node
-  linkType: hard
-
-"@types/lodash.isequalwith@npm:^4.4.7":
-  version: 4.4.7
-  resolution: "@types/lodash.isequalwith@npm:4.4.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 0b39d3aff24138530e39158d6d54bc949f369e7c4bb40635a9cad3ff14ea801c9d32b14d58b86c42f9f6c62c8503260a269d6abd9e7dfe6ab923f365abce8bca
-  languageName: node
-  linkType: hard
-
-"@types/lodash.isfunction@npm:^3.0.7":
-  version: 3.0.7
-  resolution: "@types/lodash.isfunction@npm:3.0.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 20cf10ee331b56d9ef9e083872e0f78b2f1acbe4bbd5e7a29daacf8c523d255314c2376fa5095c49bd6114ad9ca7766b4e08e223f7b8a942643c92ae360b6b52
-  languageName: node
-  linkType: hard
-
-"@types/lodash.mapvalues@npm:^4.6.7":
-  version: 4.6.7
-  resolution: "@types/lodash.mapvalues@npm:4.6.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: f28db2c0629ddff44f42ee545c35a6079ab7619d14e41eea6963a014da535346b13595391787570267b9c20457a2cc5f6d2c390e87e40f12a7618e4b7b5d6682
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:*, @types/lodash@npm:^4.14.195":
+"@types/lodash@npm:^4.14.195":
   version: 4.14.195
   resolution: "@types/lodash@npm:4.14.195"
   checksum: 39b75ca635b3fa943d17d3d3aabc750babe4c8212485a4df166fe0516e39288e14b0c60afc6e21913cc0e5a84734633c71e617e2bd14eaa1cf51b8d7799c432e

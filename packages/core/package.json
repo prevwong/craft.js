@@ -42,10 +42,6 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.195",
-    "@types/lodash.clonedeep": "^4.5.7",
-    "@types/lodash.identity": "^3.0.7",
-    "@types/lodash.isfunction": "^3.0.7",
-    "@types/lodash.mapvalues": "^4.6.7",
     "@types/react": "18.0.27",
     "react": "18.2.0"
   },
