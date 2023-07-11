@@ -101,6 +101,7 @@ export const useEditorStore = (
     ActionMethodsWithConfig,
     {
       ...editorInitialState,
+      ...(options.handlers ? { handlers: options.handlers } : {}),
       options: {
         ...editorInitialState.options,
         ...options,
