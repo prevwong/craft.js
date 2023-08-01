@@ -18,7 +18,6 @@ export const editorInitialState: EditorState = {
     hovered: new Set<NodeId>(),
   },
   indicator: null,
-  handlers: null,
   options: {
     onNodesChange: () => null,
     onRender: ({ render }) => render,

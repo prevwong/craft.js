@@ -49,7 +49,6 @@ export type EditorState = {
   nodes: Nodes;
   events: EditorEvents;
   options: Options;
-  handlers: CoreEventHandlers;
   indicator: Indicator;
 };
 
