@@ -89,7 +89,10 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
   }, [context, options.enabled]);
 
   useEffect(() => {
-    context.subscribe(
+    if (!context.query.getOptions().onNodesChange) {
+      return;
+    }
+    const unsubscribe = context.subscribe(
       (_) => ({
         json: context.query.serialize(),
       }),
@@ -97,6 +100,11 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
         context.query.getOptions().onNodesChange(context.query);
       }
     );
+    return () => {
+      if (unsubscribe) {
+        return unsubscribe();
+      }
+    };
   }, [context]);
 
   return context ? (
