@@ -18,6 +18,7 @@ export function parseNodeFromJSX(
 
   return createNode(
     {
+      id: element.props?.id,
       data: {
         type: actualType,
         props: { ...element.props },
