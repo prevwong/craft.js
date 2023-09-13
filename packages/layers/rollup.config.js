@@ -1,9 +1,9 @@
-import image from '@svgr/rollup';
+const svgrRollup = require('@svgr/rollup');
 
-import config from '../../rollup.config';
+const config = require('../../rollup.config');
 
-export default {
+module.exports = {
   ...config,
   input: './src/index.tsx',
-  plugins: [...config.plugins, image()],
+  plugins: [...config.plugins, svgrRollup()],
 };

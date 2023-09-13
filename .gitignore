@@ -2,8 +2,6 @@ node_modules
 .cache
 *-cache
 out
-dist
-lib
 *-*.log
 .now
 .vscode

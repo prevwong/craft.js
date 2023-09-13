@@ -1,14 +1,14 @@
-import path from 'path';
+const path = require('path');
 
-import babel from 'rollup-plugin-babel';
-import resolve from 'rollup-plugin-node-resolve';
-import { terser } from 'rollup-plugin-terser';
-import typescript from 'rollup-plugin-typescript';
+const babel = require('rollup-plugin-babel');
+const resolve = require('rollup-plugin-node-resolve');
+const { terser } = require('rollup-plugin-terser');
+const typescript = require('rollup-plugin-typescript');
 
 const shouldMinify = process.env.NODE_ENV === 'production';
 const bundle = ['tslib'];
 
-export default {
+module.exports = {
   input: './src/index.ts',
   output: [
     {

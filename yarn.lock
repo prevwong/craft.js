@@ -3037,20 +3037,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@craftjs/utils@^0.2.0-beta.0, @craftjs/utils@workspace:packages/utils":
-  version: 0.0.0-use.local
-  resolution: "@craftjs/utils@workspace:packages/utils"
+"@craftjs/utils@npm:^0.2.0-beta.0":
+  version: 0.2.0-beta.12
+  resolution: "@craftjs/utils@npm:0.2.0-beta.12"
   dependencies:
-    "@types/react": ^17.0.5
     immer: ^9.0.6
     lodash: ^4.17.20
     nanoid: ^3.1.23
     shallowequal: ^1.1.0
     tiny-invariant: ^1.0.6
   peerDependencies:
-    react: ^16.8.0
-  languageName: unknown
-  linkType: soft
+    react: ^16.8.0 || ^17 || ^18
+  checksum: b2be804196a7e661e0d8c933cbd150f65e543d78f557e6cbf9b63f1ca2539642914bd0f74ba9489e52eadc8cd7e3cb901bcd85296abd1c8e03850cdcf9b82bc9
+  languageName: node
+  linkType: hard
 
 "@csstools/convert-colors@npm:^1.4.0":
   version: 1.4.0
@@ -9381,6 +9381,21 @@ __metadata:
   checksum: 151fcb91773c0ae826fc801eab86f8f818605dbf63c8e5515adf0ff0fec5ede8e614f387f93c088d65527a2ea9021f0cd8c6b6e5c7fef2b77480b5e2c33700dc
   languageName: node
   linkType: hard
+
+"craftjs-utils-meetovo@workspace:packages/utils":
+  version: 0.0.0-use.local
+  resolution: "craftjs-utils-meetovo@workspace:packages/utils"
+  dependencies:
+    "@types/react": ^17.0.5
+    immer: ^9.0.6
+    lodash: ^4.17.20
+    nanoid: ^3.1.23
+    shallowequal: ^1.1.0
+    tiny-invariant: ^1.0.6
+  peerDependencies:
+    react: ^16.8.0
+  languageName: unknown
+  linkType: soft
 
 "create-ecdh@npm:^4.0.0":
   version: 4.0.3
