@@ -1,4 +1,4 @@
-import { getRandomId as getRandomNodeId } from '@craftjs/utils';
+import { getRandomId as getRandomNodeId } from 'craftjs-utils-meetovo';
 import React from 'react';
 
 import { Node, FreshNode, UserComponentConfig } from '../interfaces';

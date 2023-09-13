@@ -1,5 +1,5 @@
 import { useEditor } from '@craftjs/core';
-import { useEffectOnce } from '@craftjs/utils';
+import { useEffectOnce } from 'craftjs-utils-meetovo';
 import React, { useState, createContext } from 'react';
 
 import { SlateSetupContextType } from '../interfaces';

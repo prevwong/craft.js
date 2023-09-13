@@ -1,5 +1,1 @@
-export declare const createShadow: (
-  e: DragEvent,
-  shadowsToCreate: HTMLElement[],
-  forceSingleShadow?: boolean
-) => HTMLElement;
+export declare const createShadow: (e: DragEvent, shadowsToCreate: HTMLElement[], forceSingleShadow?: boolean) => HTMLElement;

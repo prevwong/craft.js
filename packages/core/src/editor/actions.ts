@@ -9,7 +9,7 @@ import {
   CallbacksFor,
   Delete,
   ERROR_NOT_IN_RESOLVER,
-} from '@craftjs/utils';
+} from 'craftjs-utils-meetovo';
 import invariant from 'tiny-invariant';
 
 import { QueryMethods } from './query';

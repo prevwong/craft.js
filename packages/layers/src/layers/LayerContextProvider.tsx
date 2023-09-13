@@ -1,5 +1,5 @@
 import { useEditor } from '@craftjs/core';
-import { wrapConnectorHooks } from '@craftjs/utils';
+import { wrapConnectorHooks } from 'craftjs-utils-meetovo';
 import React, { useMemo, useContext, useRef, useEffect } from 'react';
 
 import { LayerContext } from './LayerContext';

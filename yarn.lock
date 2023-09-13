@@ -3011,8 +3011,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@craftjs/core@workspace:packages/core"
   dependencies:
-    "@craftjs/utils": ^0.2.0-beta.0
     "@types/react": ^17.0.5
+    craftjs-utils-meetovo: ^0.2.0-beta.0
     debounce: ^1.2.0
     lodash: ^4.17.20
     react: ^17.0.2
@@ -3027,8 +3027,8 @@ __metadata:
   resolution: "@craftjs/layers@workspace:packages/layers"
   dependencies:
     "@babel/core": ^7.7.4
-    "@craftjs/utils": ^0.2.0-beta.0
     "@svgr/rollup": ^4.3.3
+    craftjs-utils-meetovo: ^0.2.0-beta.0
     styled-components: ^4.2.1
   peerDependencies:
     "@craftjs/core": ^0.2.0-alpha.19
@@ -3036,21 +3036,6 @@ __metadata:
     styled-components: ">= 4"
   languageName: unknown
   linkType: soft
-
-"@craftjs/utils@npm:^0.2.0-beta.0":
-  version: 0.2.0-beta.12
-  resolution: "@craftjs/utils@npm:0.2.0-beta.12"
-  dependencies:
-    immer: ^9.0.6
-    lodash: ^4.17.20
-    nanoid: ^3.1.23
-    shallowequal: ^1.1.0
-    tiny-invariant: ^1.0.6
-  peerDependencies:
-    react: ^16.8.0 || ^17 || ^18
-  checksum: b2be804196a7e661e0d8c933cbd150f65e543d78f557e6cbf9b63f1ca2539642914bd0f74ba9489e52eadc8cd7e3cb901bcd85296abd1c8e03850cdcf9b82bc9
-  languageName: node
-  linkType: hard
 
 "@csstools/convert-colors@npm:^1.4.0":
   version: 1.4.0
@@ -9382,7 +9367,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"craftjs-utils-meetovo@workspace:packages/utils":
+"craftjs-utils-meetovo@^0.2.0-beta.0, craftjs-utils-meetovo@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "craftjs-utils-meetovo@workspace:packages/utils"
   dependencies:

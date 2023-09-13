@@ -1,5 +1,5 @@
 import { NodeId } from '@craftjs/core';
-import { EventHandlerConnectors } from '@craftjs/utils';
+import { EventHandlerConnectors } from 'craftjs-utils-meetovo';
 import React from 'react';
 
 import { LayerHandlers } from '../events/LayerHandlers';

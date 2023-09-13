@@ -1,4 +1,4 @@
-import { isChromium, isLinux } from '@craftjs/utils';
+import { isChromium, isLinux } from 'craftjs-utils-meetovo';
 import { isFunction } from 'lodash';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';

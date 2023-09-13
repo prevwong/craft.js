@@ -137,7 +137,7 @@
         "version": "63b66918290d794f73832a6d0325be5026236674fe8c0cb0b68d162000d7bbe8",
         "signature": "63b66918290d794f73832a6d0325be5026236674fe8c0cb0b68d162000d7bbe8"
       },
-      "../../../node_modules/@craftjs/utils/lib/constants.d.ts": {
+      "../../utils/lib/constants.d.ts": {
         "version": "b6f472785c048dccea382f92f4ebf2211cb099b08a915a24bb60d735f5bd59ce",
         "signature": "b6f472785c048dccea382f92f4ebf2211cb099b08a915a24bb60d735f5bd59ce"
       },
@@ -145,35 +145,35 @@
         "version": "487f50ac2bdbffb3ce6f3822831f7d46773572c9272a023fb919904cdbdecd9e",
         "signature": "487f50ac2bdbffb3ce6f3822831f7d46773572c9272a023fb919904cdbdecd9e"
       },
-      "../../../node_modules/@craftjs/utils/lib/history.d.ts": {
-        "version": "2deb497f56da9cc61e458ac917e9ad2fd9cc4e787fad7ceb62b098022045c9da",
-        "signature": "2deb497f56da9cc61e458ac917e9ad2fd9cc4e787fad7ceb62b098022045c9da"
+      "../../utils/lib/history.d.ts": {
+        "version": "3590772197739c2f9c99ce3dc69be3bb9e9dc3f4b94ac5a7067b27dafa18bb98",
+        "signature": "3590772197739c2f9c99ce3dc69be3bb9e9dc3f4b94ac5a7067b27dafa18bb98"
       },
-      "../../../node_modules/@craftjs/utils/lib/utilitytypes.d.ts": {
-        "version": "8024c869223bbe6367dae5fda79a745ed91281a0c64362c97a1619854d71099f",
-        "signature": "8024c869223bbe6367dae5fda79a745ed91281a0c64362c97a1619854d71099f"
+      "../../utils/lib/utilitytypes.d.ts": {
+        "version": "555011e71ed644d50534ba9b32c105573182b907fe45a411d3675759cc84eb97",
+        "signature": "555011e71ed644d50534ba9b32c105573182b907fe45a411d3675759cc84eb97"
       },
-      "../../../node_modules/@craftjs/utils/lib/usemethods.d.ts": {
-        "version": "80d71c4bf5d1c43a7884aed5b5e21a105442490c4681949b129b894bc5e99ea0",
-        "signature": "80d71c4bf5d1c43a7884aed5b5e21a105442490c4681949b129b894bc5e99ea0"
+      "../../utils/lib/usemethods.d.ts": {
+        "version": "a6b57bb95a124b3d3581f07113a8a6a13e279c72af96e39453dd85c9abfb7973",
+        "signature": "a6b57bb95a124b3d3581f07113a8a6a13e279c72af96e39453dd85c9abfb7973"
       },
-      "../../../node_modules/@craftjs/utils/lib/getdominfo.d.ts": {
+      "../../utils/lib/getdominfo.d.ts": {
         "version": "544d102b545836ddbdb73bd36807d6d5e1a86f0ff015ec200963a30d74a323d2",
         "signature": "544d102b545836ddbdb73bd36807d6d5e1a86f0ff015ec200963a30d74a323d2"
       },
-      "../../../node_modules/@craftjs/utils/lib/usecollector.d.ts": {
-        "version": "d5c15a45cc55ad3ad29acca11a01b00ad263156470ac96f3922e88bb8c552233",
-        "signature": "d5c15a45cc55ad3ad29acca11a01b00ad263156470ac96f3922e88bb8c552233"
+      "../../utils/lib/usecollector.d.ts": {
+        "version": "5c62491e2f1d34ad4ff829d13b4ff6631bc98cd30b8d9de7336bf37044c601d4",
+        "signature": "5c62491e2f1d34ad4ff829d13b4ff6631bc98cd30b8d9de7336bf37044c601d4"
       },
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/interfaces.d.ts": {
-        "version": "b048d7709c23047c4d69c059f9887b6b859aae0200dc6b3f676f130114ecb594",
-        "signature": "b048d7709c23047c4d69c059f9887b6b859aae0200dc6b3f676f130114ecb594"
+      "../../utils/lib/eventhandlers/interfaces.d.ts": {
+        "version": "ee774fd47e2fa2d553d5155cfa27ce82476d63367f448a02838c96b6b4093ec0",
+        "signature": "ee774fd47e2fa2d553d5155cfa27ce82476d63367f448a02838c96b6b4093ec0"
       },
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/eventhandlers.d.ts": {
+      "../../utils/lib/eventhandlers/eventhandlers.d.ts": {
         "version": "3b025d5baa281ff103cbf13d6e5b930bba3076920e7562a7b823fc2f2c5b91da",
         "signature": "3b025d5baa281ff103cbf13d6e5b930bba3076920e7562a7b823fc2f2c5b91da"
       },
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/derivedeventhandlers.d.ts": {
+      "../../utils/lib/eventhandlers/derivedeventhandlers.d.ts": {
         "version": "cbb12d5ce0bd318449ffe40b6f0b63fbbcb3665ad364bf18a1a4061f22e35d73",
         "signature": "cbb12d5ce0bd318449ffe40b6f0b63fbbcb3665ad364bf18a1a4061f22e35d73"
       },
@@ -197,35 +197,35 @@
         "version": "881ea8e225320dd9b436999d82998e1d7699e512e0597f0015e5abd59d95974a",
         "signature": "881ea8e225320dd9b436999d82998e1d7699e512e0597f0015e5abd59d95974a"
       },
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/wrapconnectorhooks.d.ts": {
+      "../../utils/lib/eventhandlers/wrapconnectorhooks.d.ts": {
         "version": "09144fb350ec34c3a3edac35e4e87e8f93d9ecc1d77f297445fc11b416de9297",
         "signature": "09144fb350ec34c3a3edac35e4e87e8f93d9ecc1d77f297445fc11b416de9297"
       },
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/index.d.ts": {
+      "../../utils/lib/eventhandlers/index.d.ts": {
         "version": "2d4d4233e00e4015ea6705730dce39df015b403837f6e97ff881b99ecb043c27",
         "signature": "2d4d4233e00e4015ea6705730dce39df015b403837f6e97ff881b99ecb043c27"
       },
-      "../../../node_modules/@craftjs/utils/lib/renderindicator.d.ts": {
+      "../../utils/lib/renderindicator.d.ts": {
         "version": "c0759585656a7f75fd63c17acc06bd1219c29b6ade7b2efdb2d389a2b7cef7a0",
         "signature": "c0759585656a7f75fd63c17acc06bd1219c29b6ade7b2efdb2d389a2b7cef7a0"
       },
-      "../../../node_modules/@craftjs/utils/lib/useeffectonce.d.ts": {
-        "version": "7d51625601abab9e5e478a4348ba6344b6cfd61f7a34859d0375db0061d74c6b",
-        "signature": "7d51625601abab9e5e478a4348ba6344b6cfd61f7a34859d0375db0061d74c6b"
+      "../../utils/lib/useeffectonce.d.ts": {
+        "version": "15f022e0418f5746ece8fd4e8b02356c433613e31fe52cdbe1534689f9d446fe",
+        "signature": "15f022e0418f5746ece8fd4e8b02356c433613e31fe52cdbe1534689f9d446fe"
       },
-      "../../../node_modules/@craftjs/utils/lib/deprecate.d.ts": {
-        "version": "98bbc3f5d633341f214253f3b2106d32e9bdc8899606f4fdf2f2149eec858a3f",
-        "signature": "98bbc3f5d633341f214253f3b2106d32e9bdc8899606f4fdf2f2149eec858a3f"
+      "../../utils/lib/deprecate.d.ts": {
+        "version": "cb3dfa53a467135eb625e38724081a2e1f71e17efc2641e9bf321cb28abb7afa",
+        "signature": "cb3dfa53a467135eb625e38724081a2e1f71e17efc2641e9bf321cb28abb7afa"
       },
-      "../../../node_modules/@craftjs/utils/lib/getrandomid.d.ts": {
+      "../../utils/lib/getrandomid.d.ts": {
         "version": "010715dbe25478b4b6bb1826c203ded0b10b6e0c5d7dce862cd47688cde59e4e",
         "signature": "010715dbe25478b4b6bb1826c203ded0b10b6e0c5d7dce862cd47688cde59e4e"
       },
-      "../../../node_modules/@craftjs/utils/lib/platform.d.ts": {
+      "../../utils/lib/platform.d.ts": {
         "version": "3df44d2bb32f282f857e4f33f87ff50a071a835fcd03a3ce17bde527e0ed0415",
         "signature": "3df44d2bb32f282f857e4f33f87ff50a071a835fcd03a3ce17bde527e0ed0415"
       },
-      "../../../node_modules/@craftjs/utils/lib/index.d.ts": {
+      "../../utils/lib/index.d.ts": {
         "version": "5c4c103e36d3d0c6034acc14b43870a186bf65560d9cf41d0f32b055ab1b3277",
         "signature": "5c4c103e36d3d0c6034acc14b43870a186bf65560d9cf41d0f32b055ab1b3277"
       },
@@ -238,28 +238,28 @@
         "signature": "ddc75a962e60ae20eb8208ecd92f7694a62db1f0d73ac5ffa66c27d45380bf36"
       },
       "../src/layers/layercontext.tsx": {
-        "version": "29afbcd1876b48ede55ec979674ca66c4ebd418823afb112c747ea1291f2101a",
-        "signature": "bfa97c515a3810991813f6f70556c7e7b22635ab9300bd7bff1500739a6e1d39"
+        "version": "4cf7628265f0b9cd2cccedfb85d3afdab5674fe7b02b26fad6c5aeb329de14d5",
+        "signature": "2692791e40bf64c55fd9f6805afe40512efe6020c200f8758bf6785b9c3e1261"
       },
       "../src/manager/actions.tsx": {
         "version": "83a6501cfac60b3650f7e811d07af85170dea0a998756ada7b07f166f3656410",
         "signature": "dfecd59c66609d160bbcd6490ec692d2fc418eee93b73350e23725b97960f3c4"
       },
       "../src/manager/context.tsx": {
-        "version": "52618d37ea86380b3b1c2ed771617dd2540235d9c55bcaef182e25f734a64767",
-        "signature": "d2fd1ad332b72e65dcd2e63ebdd921d69ec328e7bf03a64ba784f59b47d11bec"
+        "version": "8f679b1fb0c41f780c02b99c83549f4b514fcb8eaf4b092f38eafdd429bd5e07",
+        "signature": "6935575e9bd9a93e4289cd17a32b4191d20cb4e634aeeb2e02d9a93b17964726"
       },
       "../src/manager/uselayermanager.tsx": {
-        "version": "5776da17a98f59fedf56f52d4ebc362b3dfe32554c01a8e832f5762a5e64a003",
-        "signature": "dae41421838ca7b62292cee931faa8e47955e55cc46d85573b89814330ccff21"
+        "version": "2bd2ab03291b151f991ef880b770e1051606ad4661166ec5bec776318d94d4b7",
+        "signature": "c8412feb0af6bcfc1803298ad8cb03460d858e2dfe2060e22918480ef9e97541"
       },
       "../src/manager/index.tsx": {
         "version": "c914c39677df36a644f0d895d8a20a4a0f8dcd122b6cba6107c6b5116c765784",
         "signature": "c914c39677df36a644f0d895d8a20a4a0f8dcd122b6cba6107c6b5116c765784"
       },
       "../src/layers/uselayer.tsx": {
-        "version": "25b4d0331e11a7da47a61db4021213114d25b9d5b5c2ecbcef51ef14cc355477",
-        "signature": "ae0d2711dde492cc10a3fb460f641a5496f18cc3ca7a39459c2a7c6633253cac"
+        "version": "23f9fca69f6bd529d689dc9ef5a89910d28d182bdc3c3c5a3b51eacc6a5c2116",
+        "signature": "fd93b9e97d330a781a5e22a309d4d6e9c47aecdd66d497c491fe30791fdf8e26"
       },
       "../src/layers/layernode.tsx": {
         "version": "417a0764c78ea592a8e3fa59649cb7e83ff45d3727d6bbb9cd87512f6c766f6f",
@@ -270,11 +270,11 @@
         "signature": "c06d55c578a9e436e58729de3ecd14a131d7d48071fe9af29db9d3789cb0f931"
       },
       "../src/layers/layercontextprovider.tsx": {
-        "version": "eaf86fe9f6340535e966d39a7859734de2f2b2d89f7636c2bd60b2eff5a26917",
+        "version": "a1a6c7ca1c19bc829486bea271f8ee529eccee927d45c59c209f8f2a1b750e38",
         "signature": "07eaf66f2021182a0b30f79fa7febdb43cd90244e9e3f6bc57caa21936ab63cd"
       },
       "../src/events/renderlayerindicator.tsx": {
-        "version": "5753320561a18bf79bb3ad47858c5a2d879062423f15e3470f8475e9a0631c1b",
+        "version": "a958bcabf2486759408e592c0a3f7e25d28679a2e691193e9ae7c2e595637bbf",
         "signature": "2f978c7d8807b8a4616c5e5ff07458ce83638abd33d47f2710bf4548624fb0eb"
       },
       "../src/events/layereventcontextprovider.tsx": {
@@ -326,11 +326,11 @@
         "signature": "9802539a583adeca951419d7fb5ccc48c01cbd3a9e854473d324e08a59da83bf"
       },
       "../src/manager/layermanagerprovider.tsx": {
-        "version": "d4a4c73a8379d0d7ce95e3ee1d69766b6360d3a1f4629cb6a493b6c95de8e967",
+        "version": "024a9e0a2d10548d38d8fd824f2939a1f05f9e223f3303d4baf0c3e47d1da0fe",
         "signature": "e53f1eaad7a5ed6e954852f94a80904c97b20e167d945beeeae4ca106e6af40d"
       },
       "../src/index.tsx": {
-        "version": "dad1701ec60a778e2516f77c585000e40063862c6178b6a483f40f6e27144119",
+        "version": "50d54e4005f2a13d5c6af4dd232235708772136c626151e9906fcd132e90cd84",
         "signature": "f74d44a06d61da2b60da301cfa2b6dbe74723508a8058e970378086dd869c88d"
       },
       "../svg.d.ts": {
@@ -1161,7 +1161,7 @@
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/constants.d.ts": [
+      "../../utils/lib/constants.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
@@ -1173,59 +1173,59 @@
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/history.d.ts": [
+      "../../utils/lib/history.d.ts": [
         "../../../node_modules/immer/compat/pre-3.7/dist/immer.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/utilitytypes.d.ts": [
+      "../../utils/lib/utilitytypes.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/usemethods.d.ts": [
+      "../../utils/lib/usemethods.d.ts": [
         "../../../node_modules/immer/compat/pre-3.7/dist/immer.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/history.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/utilitytypes.d.ts",
+        "../../utils/lib/history.d.ts",
+        "../../utils/lib/utilitytypes.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/getdominfo.d.ts": [
+      "../../utils/lib/getdominfo.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/usecollector.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/usemethods.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/utilitytypes.d.ts",
+      "../../utils/lib/usecollector.d.ts": [
+        "../../utils/lib/usemethods.d.ts",
+        "../../utils/lib/utilitytypes.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/interfaces.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/eventhandlers.d.ts",
+      "../../utils/lib/eventhandlers/interfaces.d.ts": [
+        "../../utils/lib/eventhandlers/eventhandlers.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/eventhandlers.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/interfaces.d.ts",
+      "../../utils/lib/eventhandlers/eventhandlers.d.ts": [
+        "../../utils/lib/eventhandlers/interfaces.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/derivedeventhandlers.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/eventhandlers.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/interfaces.d.ts",
+      "../../utils/lib/eventhandlers/derivedeventhandlers.d.ts": [
+        "../../utils/lib/eventhandlers/eventhandlers.d.ts",
+        "../../utils/lib/eventhandlers/interfaces.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
@@ -1265,68 +1265,68 @@
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/wrapconnectorhooks.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/interfaces.d.ts",
+      "../../utils/lib/eventhandlers/wrapconnectorhooks.d.ts": [
+        "../../utils/lib/eventhandlers/interfaces.d.ts",
         "../../../node_modules/@types/react/index.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/index.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/eventhandlers.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/derivedeventhandlers.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/wrapconnectorhooks.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/interfaces.d.ts",
+      "../../utils/lib/eventhandlers/index.d.ts": [
+        "../../utils/lib/eventhandlers/eventhandlers.d.ts",
+        "../../utils/lib/eventhandlers/derivedeventhandlers.d.ts",
+        "../../utils/lib/eventhandlers/wrapconnectorhooks.d.ts",
+        "../../utils/lib/eventhandlers/interfaces.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/renderindicator.d.ts": [
+      "../../utils/lib/renderindicator.d.ts": [
         "../../../node_modules/@types/react/index.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/useeffectonce.d.ts": [
+      "../../utils/lib/useeffectonce.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/deprecate.d.ts": [
+      "../../utils/lib/deprecate.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/getrandomid.d.ts": [
+      "../../utils/lib/getrandomid.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/platform.d.ts": [
+      "../../utils/lib/platform.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/index.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/constants.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/usemethods.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/getdominfo.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/usecollector.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/index.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/renderindicator.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/useeffectonce.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/deprecate.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/utilitytypes.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/history.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/getrandomid.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/platform.d.ts",
+      "../../utils/lib/index.d.ts": [
+        "../../utils/lib/constants.d.ts",
+        "../../utils/lib/usemethods.d.ts",
+        "../../utils/lib/getdominfo.d.ts",
+        "../../utils/lib/usecollector.d.ts",
+        "../../utils/lib/eventhandlers/index.d.ts",
+        "../../utils/lib/renderindicator.d.ts",
+        "../../utils/lib/useeffectonce.d.ts",
+        "../../utils/lib/deprecate.d.ts",
+        "../../utils/lib/utilitytypes.d.ts",
+        "../../utils/lib/history.d.ts",
+        "../../utils/lib/getrandomid.d.ts",
+        "../../utils/lib/platform.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
@@ -1346,7 +1346,7 @@
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "../src/layers/layercontext.tsx": [
-        "../../../node_modules/@craftjs/utils/lib/index.d.ts",
+        "../../utils/lib/index.d.ts",
         "../../../node_modules/@types/react/index.d.ts",
         "../src/events/layerhandlers.ts",
         "../../../node_modules/@types/node/fs.d.ts",
@@ -1362,7 +1362,7 @@
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "../src/manager/context.tsx": [
-        "../../../node_modules/@craftjs/utils/lib/index.d.ts",
+        "../../utils/lib/index.d.ts",
         "../../../node_modules/@types/react/index.d.ts",
         "../src/manager/actions.tsx",
         "../../../node_modules/@types/node/fs.d.ts",
@@ -1371,7 +1371,7 @@
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "../src/manager/uselayermanager.tsx": [
-        "../../../node_modules/@craftjs/utils/lib/index.d.ts",
+        "../../utils/lib/index.d.ts",
         "../../../node_modules/@types/react/index.d.ts",
         "../src/manager/context.tsx",
         "../src/interfaces.tsx",
@@ -1389,7 +1389,7 @@
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "../src/layers/uselayer.tsx": [
-        "../../../node_modules/@craftjs/utils/lib/index.d.ts",
+        "../../utils/lib/index.d.ts",
         "../../../node_modules/@types/react/index.d.ts",
         "../src/layers/layercontext.tsx",
         "../src/interfaces.tsx",
@@ -1418,7 +1418,7 @@
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "../src/layers/layercontextprovider.tsx": [
-        "../../../node_modules/@craftjs/utils/lib/index.d.ts",
+        "../../utils/lib/index.d.ts",
         "../../../node_modules/@types/react/index.d.ts",
         "../src/layers/layercontext.tsx",
         "../src/layers/layernode.tsx",
@@ -1430,7 +1430,7 @@
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "../src/events/renderlayerindicator.tsx": [
-        "../../../node_modules/@craftjs/utils/lib/index.d.ts",
+        "../../utils/lib/index.d.ts",
         "../../../node_modules/@types/react/index.d.ts",
         "../src/manager/uselayermanager.tsx",
         "../../../node_modules/@types/node/fs.d.ts",
@@ -1543,7 +1543,7 @@
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "../src/manager/layermanagerprovider.tsx": [
-        "../../../node_modules/@craftjs/utils/lib/index.d.ts",
+        "../../utils/lib/index.d.ts",
         "../../../node_modules/@types/react/index.d.ts",
         "../src/manager/actions.tsx",
         "../src/manager/context.tsx",
@@ -1556,7 +1556,7 @@
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "../src/index.tsx": [
-        "../../../node_modules/@craftjs/utils/lib/index.d.ts",
+        "../../utils/lib/index.d.ts",
         "../../../node_modules/@types/react/index.d.ts",
         "../src/interfaces.tsx",
         "../src/layers/layercontextprovider.tsx",
@@ -2907,25 +2907,25 @@
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/constants.d.ts": [
+      "../../utils/lib/constants.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/index.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/constants.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/usemethods.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/getdominfo.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/usecollector.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/index.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/renderindicator.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/useeffectonce.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/deprecate.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/utilitytypes.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/history.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/getrandomid.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/platform.d.ts",
+      "../../utils/lib/index.d.ts": [
+        "../../utils/lib/constants.d.ts",
+        "../../utils/lib/usemethods.d.ts",
+        "../../utils/lib/getdominfo.d.ts",
+        "../../utils/lib/usecollector.d.ts",
+        "../../utils/lib/eventhandlers/index.d.ts",
+        "../../utils/lib/renderindicator.d.ts",
+        "../../utils/lib/useeffectonce.d.ts",
+        "../../utils/lib/deprecate.d.ts",
+        "../../utils/lib/utilitytypes.d.ts",
+        "../../utils/lib/history.d.ts",
+        "../../utils/lib/getrandomid.d.ts",
+        "../../utils/lib/platform.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
@@ -2961,7 +2961,7 @@
       ],
       "../src/layers/uselayer.tsx": [
         "../../../node_modules/@types/react/index.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/index.d.ts",
+        "../../utils/lib/index.d.ts",
         "../src/interfaces.tsx"
       ],
       "../src/layers/defaultlayer/defaultlayer.tsx": [
@@ -2977,7 +2977,7 @@
       ],
       "../src/manager/uselayermanager.tsx": [
         "../src/interfaces.tsx",
-        "../../../node_modules/@craftjs/utils/lib/index.d.ts"
+        "../../utils/lib/index.d.ts"
       ],
       "../src/manager/index.tsx": [
         "../src/manager/uselayermanager.tsx",
@@ -2985,11 +2985,11 @@
       ],
       "../src/manager/context.tsx": [
         "../../../node_modules/@types/react/index.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/index.d.ts",
+        "../../utils/lib/index.d.ts",
         "../src/manager/actions.tsx"
       ],
       "../src/layers/layercontext.tsx": [
-        "../../../node_modules/@craftjs/utils/lib/index.d.ts",
+        "../../utils/lib/index.d.ts",
         "../src/events/layerhandlers.ts",
         "../../../node_modules/@types/react/index.d.ts"
       ],
@@ -2999,77 +2999,77 @@
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/history.d.ts": [
+      "../../utils/lib/history.d.ts": [
         "../../../node_modules/immer/compat/pre-3.7/dist/immer.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/usemethods.d.ts": [
+      "../../utils/lib/usemethods.d.ts": [
         "../../../node_modules/immer/compat/pre-3.7/dist/immer.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/history.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/utilitytypes.d.ts",
+        "../../utils/lib/history.d.ts",
+        "../../utils/lib/utilitytypes.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/usecollector.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/usemethods.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/utilitytypes.d.ts",
+      "../../utils/lib/usecollector.d.ts": [
+        "../../utils/lib/usemethods.d.ts",
+        "../../utils/lib/utilitytypes.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/utilitytypes.d.ts": [
+      "../../utils/lib/utilitytypes.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/getdominfo.d.ts": [
+      "../../utils/lib/getdominfo.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/interfaces.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/eventhandlers.d.ts",
+      "../../utils/lib/eventhandlers/interfaces.d.ts": [
+        "../../utils/lib/eventhandlers/eventhandlers.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/index.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/eventhandlers.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/derivedeventhandlers.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/wrapconnectorhooks.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/interfaces.d.ts",
+      "../../utils/lib/eventhandlers/index.d.ts": [
+        "../../utils/lib/eventhandlers/eventhandlers.d.ts",
+        "../../utils/lib/eventhandlers/derivedeventhandlers.d.ts",
+        "../../utils/lib/eventhandlers/wrapconnectorhooks.d.ts",
+        "../../utils/lib/eventhandlers/interfaces.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/wrapconnectorhooks.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/interfaces.d.ts",
+      "../../utils/lib/eventhandlers/wrapconnectorhooks.d.ts": [
+        "../../utils/lib/eventhandlers/interfaces.d.ts",
         "../../../node_modules/@types/react/index.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/derivedeventhandlers.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/eventhandlers.d.ts",
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/interfaces.d.ts",
+      "../../utils/lib/eventhandlers/derivedeventhandlers.d.ts": [
+        "../../utils/lib/eventhandlers/eventhandlers.d.ts",
+        "../../utils/lib/eventhandlers/interfaces.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/eventhandlers.d.ts": [
-        "../../../node_modules/@craftjs/utils/lib/eventhandlers/interfaces.d.ts",
+      "../../utils/lib/eventhandlers/eventhandlers.d.ts": [
+        "../../utils/lib/eventhandlers/interfaces.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
@@ -3109,7 +3109,7 @@
         "../../../node_modules/@types/react/index.d.ts",
         "../src/events/layerhandlers.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/renderindicator.d.ts": [
+      "../../utils/lib/renderindicator.d.ts": [
         "../../../node_modules/@types/react/index.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
@@ -3415,25 +3415,25 @@
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/useeffectonce.d.ts": [
+      "../../utils/lib/useeffectonce.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/deprecate.d.ts": [
+      "../../utils/lib/deprecate.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/getrandomid.d.ts": [
+      "../../utils/lib/getrandomid.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../../../node_modules/@craftjs/utils/lib/platform.d.ts": [
+      "../../utils/lib/platform.d.ts": [
         "../../../node_modules/@types/node/fs.d.ts",
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
@@ -4323,29 +4323,29 @@
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../node_modules/@craftjs/utils/lib/constants.d.ts",
+      "../../utils/lib/constants.d.ts",
       "../../../node_modules/immer/compat/pre-3.7/dist/immer.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/history.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/utilitytypes.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/usemethods.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/getdominfo.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/usecollector.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/interfaces.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/eventhandlers.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/derivedeventhandlers.d.ts",
+      "../../utils/lib/history.d.ts",
+      "../../utils/lib/utilitytypes.d.ts",
+      "../../utils/lib/usemethods.d.ts",
+      "../../utils/lib/getdominfo.d.ts",
+      "../../utils/lib/usecollector.d.ts",
+      "../../utils/lib/eventhandlers/interfaces.d.ts",
+      "../../utils/lib/eventhandlers/eventhandlers.d.ts",
+      "../../utils/lib/eventhandlers/derivedeventhandlers.d.ts",
       "../../../node_modules/@types/react/global.d.ts",
       "../../../node_modules/@types/react/node_modules/csstype/index.d.ts",
       "../../../node_modules/@types/prop-types/index.d.ts",
       "../../../node_modules/@types/scheduler/tracing.d.ts",
       "../../../node_modules/@types/react/index.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/wrapconnectorhooks.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/eventhandlers/index.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/renderindicator.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/useeffectonce.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/deprecate.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/getrandomid.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/platform.d.ts",
-      "../../../node_modules/@craftjs/utils/lib/index.d.ts",
+      "../../utils/lib/eventhandlers/wrapconnectorhooks.d.ts",
+      "../../utils/lib/eventhandlers/index.d.ts",
+      "../../utils/lib/renderindicator.d.ts",
+      "../../utils/lib/useeffectonce.d.ts",
+      "../../utils/lib/deprecate.d.ts",
+      "../../utils/lib/getrandomid.d.ts",
+      "../../utils/lib/platform.d.ts",
+      "../../utils/lib/index.d.ts",
       [
         "../src/interfaces.tsx",
         [
@@ -4457,7 +4457,7 @@
           },
           {
             "file": "../src/layers/layercontext.tsx",
-            "start": 280,
+            "start": 287,
             "length": 13,
             "code": 2344,
             "category": 1,
@@ -4520,7 +4520,7 @@
           },
           {
             "file": "../src/layers/layercontextprovider.tsx",
-            "start": 692,
+            "start": 699,
             "length": 21,
             "code": 2339,
             "category": 1,

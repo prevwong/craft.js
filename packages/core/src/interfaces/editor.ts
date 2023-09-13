@@ -1,4 +1,4 @@
-import { QueryCallbacksFor, Delete, PatchListenerAction } from '@craftjs/utils';
+import { QueryCallbacksFor, Delete, PatchListenerAction } from 'craftjs-utils-meetovo';
 
 import { Placement } from './events';
 import { Nodes, NodeEventTypes, NodeId } from './nodes';

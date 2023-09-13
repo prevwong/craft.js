@@ -1,4 +1,4 @@
-import { ERROR_DESERIALIZE_COMPONENT_NOT_IN_RESOLVER } from '@craftjs/utils';
+import { ERROR_DESERIALIZE_COMPONENT_NOT_IN_RESOLVER } from 'craftjs-utils-meetovo';
 import React from 'react';
 import invariant from 'tiny-invariant';
 

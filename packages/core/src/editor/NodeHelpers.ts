@@ -11,7 +11,7 @@ import {
   ERROR_MOVE_TOP_LEVEL_NODE,
   ERROR_MOVE_CANNOT_DROP,
   ROOT_NODE,
-} from '@craftjs/utils';
+} from 'craftjs-utils-meetovo';
 import invariant from 'tiny-invariant';
 
 import { EditorState, NodeId, NodeSelector } from '../interfaces';
