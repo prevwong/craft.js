@@ -76,6 +76,17 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
       return;
     }
 
+
+     if (
+      options.onNodesChange !== undefined &&
+      options.onNodesChange !== context.query.getOptions().onNodesChange
+    ) {
+      context.actions.setOptions((editorOptions) => {
+        editorOptions.onNodesChange = options.onNodesChange;
+      });
+    }
+
+    
     if (
       options.enabled === undefined ||
       context.query.getOptions().enabled === options.enabled
@@ -86,7 +97,7 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
     context.actions.setOptions((editorOptions) => {
       editorOptions.enabled = options.enabled;
     });
-  }, [context, options.enabled]);
+  }, [context, options.enabled, options.onNodesChange]);
 
   useEffect(() => {
     context.subscribe(
