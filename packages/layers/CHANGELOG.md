@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.13](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.12...v0.2.0-beta.13) (2023-09-30)
+
+
+### Bug Fixes
+
+* dropping node into empty container [#563](https://github.com/prevwong/craft.js/issues/563) ([3d7e3b6](https://github.com/prevwong/craft.js/commit/3d7e3b687724b3155b0820a78b9b16dbfbff8b0e))
+
+
+
+
+
 # [0.2.0-beta.12](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.11...v0.2.0-beta.12) (2023-06-30)
 
 
