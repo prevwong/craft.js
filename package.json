@@ -90,5 +90,8 @@
       "pre-commit": "lint-staged",
       "pre-push": "jest"
     }
+  },
+  "dependencies": {
+    "@changesets/cli": "^2.26.2"
   }
 }
