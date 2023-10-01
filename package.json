@@ -90,5 +90,6 @@
       "pre-commit": "lint-staged",
       "pre-push": "jest"
     }
-  }
+  },
+  "packageManager": "yarn@3.6.3"
 }
