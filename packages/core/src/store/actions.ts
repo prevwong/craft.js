@@ -3,41 +3,37 @@ import {
   ERROR_INVALID_NODEID,
   ROOT_NODE,
   DEPRECATED_ROOT_NODE,
-  QueryCallbacksFor,
   ERROR_NOPARENT,
   ERROR_DELETE_TOP_LEVEL_NODE,
-  CallbacksFor,
-  Delete,
-  ERROR_NOT_IN_RESOLVER,
 } from '@craftjs/utils';
 import invariant from 'tiny-invariant';
-
-import { QueryMethods } from './query';
 
 import {
   EditorState,
   Indicator,
   NodeId,
   Node,
-  Nodes,
-  Options,
+  LegacyStateOptions,
   NodeEventTypes,
-  NodeTree,
   SerializedNodes,
   NodeSelector,
   NodeSelectorType,
+  LegacyNode,
+  BackwardsCompatibleNodeTree,
 } from '../interfaces';
+import { EditorStore } from '../store';
 import { fromEntries } from '../utils/fromEntries';
 import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 import { removeNodeFromEvents } from '../utils/removeNodeFromEvents';
+import { adaptLegacyNode } from '../utils/types';
 
-const Methods = (
-  state: EditorState,
-  query: QueryCallbacksFor<typeof QueryMethods>
-) => {
+// TODO: refactor
+export const ActionMethods = (state: EditorState, store: EditorStore) => {
+  const query = store.query;
+
   /** Helper functions */
   const addNodeTreeToParent = (
-    tree: NodeTree,
+    tree: BackwardsCompatibleNodeTree,
     parentId?: NodeId,
     addNodeType?:
       | {
@@ -50,34 +46,22 @@ const Methods = (
         }
   ) => {
     const iterateChildren = (id: NodeId, parentId?: NodeId) => {
-      const node = tree.nodes[id];
-
-      if (typeof node.data.type !== 'string') {
-        invariant(
-          state.options.resolver[node.data.name],
-          ERROR_NOT_IN_RESOLVER.replace(
-            '%node_type%',
-            `${(node.data.type as any).name}`
-          )
-        );
-      }
+      const node = adaptLegacyNode(tree.nodes[id], store.resolver);
 
       state.nodes[id] = {
         ...node,
-        data: {
-          ...node.data,
-          parent: parentId,
-        },
+        parent: parentId,
       };
 
-      if (node.data.nodes.length > 0) {
-        delete state.nodes[id].data.props.children;
-        node.data.nodes.forEach((childNodeId) =>
+      if (node.nodes.length > 0) {
+        delete state.nodes[id].props.children;
+
+        node.nodes.forEach((childNodeId) =>
           iterateChildren(childNodeId, node.id)
         );
       }
 
-      Object.values(node.data.linkedNodes).forEach((linkedNodeId) =>
+      Object.values(node.linkedNodes).forEach((linkedNodeId) =>
         iterateChildren(linkedNodeId, node.id)
       );
     };
@@ -99,15 +83,15 @@ const Methods = (
       const index = addNodeType.index;
 
       if (index != null) {
-        parent.data.nodes.splice(index, 0, tree.rootNodeId);
+        parent.nodes.splice(index, 0, tree.rootNodeId);
       } else {
-        parent.data.nodes.push(tree.rootNodeId);
+        parent.nodes.push(tree.rootNodeId);
       }
 
       return;
     }
 
-    parent.data.linkedNodes[addNodeType.id] = tree.rootNodeId;
+    parent.linkedNodes[addNodeType.id] = tree.rootNodeId;
   };
 
   const getParentAndValidate = (parentId: NodeId): Node => {
@@ -119,31 +103,31 @@ const Methods = (
 
   const deleteNode = (id: NodeId) => {
     const targetNode = state.nodes[id],
-      parentNode = state.nodes[targetNode.data.parent];
+      parentNode = state.nodes[targetNode.parent];
 
-    if (targetNode.data.nodes) {
+    if (targetNode.nodes) {
       // we deep clone here because otherwise immer will mutate the node
       // object as we remove nodes
-      [...targetNode.data.nodes].forEach((childId) => deleteNode(childId));
+      [...targetNode.nodes].forEach((childId) => deleteNode(childId));
     }
 
-    if (targetNode.data.linkedNodes) {
-      Object.values(targetNode.data.linkedNodes).map((linkedNodeId) =>
+    if (targetNode.linkedNodes) {
+      Object.values(targetNode.linkedNodes).map((linkedNodeId) =>
         deleteNode(linkedNodeId)
       );
     }
 
-    const isChildNode = parentNode.data.nodes.includes(id);
+    const isChildNode = parentNode.nodes.includes(id);
 
     if (isChildNode) {
-      const parentChildren = parentNode.data.nodes;
+      const parentChildren = parentNode.nodes;
       parentChildren.splice(parentChildren.indexOf(id), 1);
     } else {
-      const linkedId = Object.keys(parentNode.data.linkedNodes).find(
-        (id) => parentNode.data.linkedNodes[id] === id
+      const linkedId = Object.keys(parentNode.linkedNodes).find(
+        (id) => parentNode.linkedNodes[id] === id
       );
       if (linkedId) {
-        delete parentNode.data.linkedNodes[linkedId];
+        delete parentNode.linkedNodes[linkedId];
       }
     }
 
@@ -161,10 +145,14 @@ const Methods = (
      * @param parentId
      * @param id
      */
-    addLinkedNodeFromTree(tree: NodeTree, parentId: NodeId, id: string) {
+    addLinkedNodeFromTree(
+      tree: BackwardsCompatibleNodeTree,
+      parentId: NodeId,
+      id: string
+    ) {
       const parent = getParentAndValidate(parentId);
 
-      const existingLinkedNode = parent.data.linkedNodes[id];
+      const existingLinkedNode = parent.linkedNodes[id];
 
       if (existingLinkedNode) {
         deleteNode(existingLinkedNode);
@@ -180,7 +168,11 @@ const Methods = (
      * @param parentId
      * @param index
      */
-    add(nodeToAdd: Node | Node[], parentId: NodeId, index?: number) {
+    add(
+      nodeToAdd: Node | Node[] | LegacyNode | LegacyNode[],
+      parentId: NodeId,
+      index?: number
+    ) {
       // TODO: Deprecate adding array of Nodes to keep implementation simpler
       let nodes = [nodeToAdd];
       if (Array.isArray(nodeToAdd)) {
@@ -189,7 +181,7 @@ const Methods = (
         });
         nodes = nodeToAdd;
       }
-      nodes.forEach((node: Node) => {
+      nodes.forEach((node: Node | LegacyNode) => {
         addNodeTreeToParent(
           {
             nodes: {
@@ -210,7 +202,11 @@ const Methods = (
      * @param parentId
      * @param index
      */
-    addNodeTree(tree: NodeTree, parentId?: NodeId, index?: number) {
+    addNodeTree(
+      tree: BackwardsCompatibleNodeTree,
+      parentId?: NodeId,
+      index?: number
+    ) {
       addNodeTreeToParent(tree, parentId, { type: 'child', index });
     },
 
@@ -219,7 +215,7 @@ const Methods = (
      * @param id
      */
     delete(selector: NodeSelector<NodeSelectorType.Id>) {
-      const targets = getNodesFromSelector(state.nodes, selector, {
+      const targets = getNodesFromSelector(store, selector, {
         existOnly: true,
         idOnly: true,
       });
@@ -233,28 +229,6 @@ const Methods = (
       });
     },
 
-    deserialize(input: SerializedNodes | string) {
-      const dehydratedNodes =
-        typeof input == 'string' ? JSON.parse(input) : input;
-
-      const nodePairs = Object.keys(dehydratedNodes).map((id) => {
-        let nodeId = id;
-
-        if (id === DEPRECATED_ROOT_NODE) {
-          nodeId = ROOT_NODE;
-        }
-
-        return [
-          nodeId,
-          query
-            .parseSerializedNode(dehydratedNodes[id])
-            .toNode((node) => (node.id = nodeId)),
-        ];
-      });
-
-      this.replaceNodes(fromEntries(nodePairs));
-    },
-
     /**
      * Move a target Node to a new Parent at a given index
      * @param targetId
@@ -262,58 +236,29 @@ const Methods = (
      * @param index
      */
     move(selector: NodeSelector, newParentId: NodeId, index: number) {
-      const targets = getNodesFromSelector(state.nodes, selector, {
+      const targets = getNodesFromSelector(store, selector, {
         existOnly: true,
       });
 
       const newParent = state.nodes[newParentId];
-
-      const nodesArrToCleanup = new Set<string[]>();
-
       targets.forEach(({ node: targetNode }, i) => {
         const targetId = targetNode.id;
-        const currentParentId = targetNode.data.parent;
+        const currentParentId = targetNode.parent;
 
         query.node(newParentId).isDroppable([targetId], (err) => {
           throw new Error(err);
         });
 
-        // modify node props
-        state.options.onBeforeMoveEnd(
-          targetNode,
-          newParent,
-          state.nodes[currentParentId]
-        );
-
         const currentParent = state.nodes[currentParentId];
-        const currentParentNodes = currentParent.data.nodes;
+        const currentParentNodes = currentParent.nodes;
 
-        nodesArrToCleanup.add(currentParentNodes);
+        currentParentNodes[currentParentNodes.indexOf(targetId)] = 'marked';
 
-        const oldIndex = currentParentNodes.indexOf(targetId);
-        currentParentNodes[oldIndex] = '$$'; // mark for deletion
+        newParent.nodes.splice(index + i, 0, targetId);
 
-        newParent.data.nodes.splice(index + i, 0, targetId);
-
-        state.nodes[targetId].data.parent = newParentId;
+        state.nodes[targetId].parent = newParentId;
+        currentParentNodes.splice(currentParentNodes.indexOf('marked'), 1);
       });
-
-      nodesArrToCleanup.forEach((nodes) => {
-        const length = nodes.length;
-
-        [...nodes].reverse().forEach((value, index) => {
-          if (value !== '$$') {
-            return;
-          }
-
-          nodes.splice(length - 1 - index, 1);
-        });
-      });
-    },
-
-    replaceNodes(nodes: Nodes) {
-      this.clearEvents();
-      state.nodes = nodes;
     },
 
     clearEvents() {
@@ -328,43 +273,29 @@ const Methods = (
      */
     reset() {
       this.clearEvents();
-      this.replaceNodes({});
+      this.deserialize({});
     },
 
-    /**
-     * Set editor options via a callback function
-     *
-     * @param cb: function used to set the options.
-     */
-    setOptions(cb: (options: Partial<Options>) => void) {
-      cb(state.options);
+    setEnabled(enabled: boolean) {
+      state.enabled = enabled;
     },
 
     setNodeEvent(
       eventType: NodeEventTypes,
       nodeIdSelector: NodeSelector<NodeSelectorType.Id>
     ) {
-      state.events[eventType].forEach((id) => {
-        if (state.nodes[id]) {
-          state.nodes[id].events[eventType] = false;
-        }
-      });
-
       state.events[eventType] = new Set();
 
       if (!nodeIdSelector) {
         return;
       }
 
-      const targets = getNodesFromSelector(state.nodes, nodeIdSelector, {
+      const targets = getNodesFromSelector(store, nodeIdSelector, {
         idOnly: true,
         existOnly: true,
       });
 
       const nodeIds: Set<NodeId> = new Set(targets.map(({ node }) => node.id));
-      nodeIds.forEach((id) => {
-        state.nodes[id].events[eventType] = true;
-      });
       state.events[eventType] = nodeIds;
     },
 
@@ -375,38 +306,17 @@ const Methods = (
      */
     setCustom<T extends NodeId>(
       selector: NodeSelector<NodeSelectorType.Id>,
-      cb: (data: EditorState['nodes'][T]['data']['custom']) => void
+      cb: (data: EditorState['nodes'][T]['custom']) => void
     ) {
-      const targets = getNodesFromSelector(state.nodes, selector, {
+      const targets = getNodesFromSelector(store, selector, {
         idOnly: true,
         existOnly: true,
       });
 
-      targets.forEach(({ node }) => cb(state.nodes[node.id].data.custom));
-    },
-
-    /**
-     * Given a `id`, it will set the `dom` porperty of that node.
-     *
-     * @param id of the node we want to set
-     * @param dom
-     */
-    setDOM(id: NodeId, dom: HTMLElement) {
-      if (!state.nodes[id]) {
-        return;
-      }
-
-      state.nodes[id].dom = dom;
+      targets.forEach(({ node }) => cb(state.nodes[node.id].custom));
     },
 
     setIndicator(indicator: Indicator | null) {
-      if (
-        indicator &&
-        (!indicator.placement.parent.dom ||
-          (indicator.placement.currentNode &&
-            !indicator.placement.currentNode.dom))
-      )
-        return;
       state.indicator = indicator;
     },
 
@@ -416,7 +326,7 @@ const Methods = (
      * @param bool
      */
     setHidden(id: NodeId, bool: boolean) {
-      state.nodes[id].data.hidden = bool;
+      state.nodes[id].hidden = bool;
     },
 
     /**
@@ -428,17 +338,45 @@ const Methods = (
       selector: NodeSelector<NodeSelectorType.Id>,
       cb: (props: any) => void
     ) {
-      const targets = getNodesFromSelector(state.nodes, selector, {
+      const targets = getNodesFromSelector(store, selector, {
         idOnly: true,
         existOnly: true,
       });
 
-      targets.forEach(({ node }) => cb(state.nodes[node.id].data.props));
+      targets.forEach(({ node }) => cb(state.nodes[node.id].props));
+    },
+
+    deserialize(input: SerializedNodes | string) {
+      this.clearEvents();
+
+      const dehydratedNodes =
+        typeof input == 'string' ? JSON.parse(input) : input;
+
+      const nodePairs = Object.keys(dehydratedNodes).map((id) => {
+        let nodeId = id;
+
+        if (id === DEPRECATED_ROOT_NODE) {
+          nodeId = ROOT_NODE;
+        }
+
+        return [
+          nodeId,
+          adaptLegacyNode(
+            query
+              .parseSerializedNode(dehydratedNodes[id])
+              .toNode((node) => (node.id = nodeId)),
+            store.resolver
+          ),
+        ];
+      });
+
+      state.nodes = fromEntries(nodePairs);
+      state.timestamp = Date.now();
     },
 
     selectNode(nodeIdSelector?: NodeSelector<NodeSelectorType.Id>) {
       if (nodeIdSelector) {
-        const targets = getNodesFromSelector(state.nodes, nodeIdSelector, {
+        const targets = getNodesFromSelector(store, nodeIdSelector, {
           idOnly: true,
           existOnly: true,
         });
@@ -453,27 +391,15 @@ const Methods = (
 
       this.setNodeEvent('hovered', null);
     },
-  };
-};
-
-export const ActionMethods = (
-  state: EditorState,
-  query: QueryCallbacksFor<typeof QueryMethods>
-) => {
-  return {
-    ...Methods(state, query),
-    // Note: Beware: advanced method! You most likely don't need to use this
-    // TODO: fix parameter types and cleanup the method
-    setState(
-      cb: (
-        state: EditorState,
-        actions: Delete<CallbacksFor<typeof Methods>, 'history'>
-      ) => void
-    ) {
-      const { history, ...actions } = this;
-
-      // We pass the other actions as the second parameter, so that devs could still make use of the predefined actions
-      cb(state, actions);
+    /**
+     * Set editor options via a callback function
+     * @deprecated
+     * @param cb: function used to set the options.
+     */
+    setOptions(cb: (options: Partial<LegacyStateOptions>) => void) {
+      const opts = { enabled: state.enabled };
+      cb(opts);
+      state.enabled = opts.enabled;
     },
   };
 };

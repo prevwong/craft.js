@@ -1,110 +1,76 @@
-import cloneDeep from 'lodash/cloneDeep';
+import { getRandomId } from '@craftjs/utils';
 
-import { createNode } from './createNode';
+import {
+  EditorStoreConfig,
+  Node,
+  NodeEventTypes,
+  NodeId,
+  Nodes,
+} from '../interfaces';
+import { EditorStore, editorInitialState } from '../store';
 
-import { editorInitialState } from '../editor/store';
-import { Nodes } from '../interfaces';
-
-const getTestNode = (parentNode) => {
-  const {
-    events,
-    data: { nodes: childNodes, linkedNodes },
-    ...restParentNode
-  } = parentNode;
-  const validParentNode = createNode(cloneDeep(parentNode));
-  parentNode = {
-    ...validParentNode,
-    ...restParentNode,
-    events: {
-      ...validParentNode.events,
-      ...events,
-    },
-    dom: parentNode.dom || validParentNode.dom,
-  };
-
-  return {
-    node: parentNode,
-    childNodes,
-    linkedNodes,
-  };
+type NestedNode = Omit<Node, 'nodes' | 'linkedNodes' | 'parent'> & {
+  nodes: NestedNode[];
+  linkedNodes: Record<NodeId, NestedNode>;
 };
 
-export const expectEditorState = (lhs, rhs) => {
-  const { nodes: nodesRhs, ...restRhs } = rhs;
-  const { nodes: nodesLhs, ...restLhs } = lhs;
-  expect(restLhs).toEqual(restRhs);
+type PartialNestedNode = Partial<
+  Omit<NestedNode, 'nodes' | 'linkedNodes'> & {
+    nodes: PartialNestedNode[];
+    linkedNodes: Record<NodeId, PartialNestedNode>;
+  }
+>;
 
-  const nodesRhsSimplified = Object.keys(nodesRhs).reduce((accum, id) => {
-    const { _hydrationTimestamp, rules, ...node } = nodesRhs[id];
-    accum[id] = node;
-    return accum;
-  }, {});
+export const createTestNodes = (node: PartialNestedNode) => {
+  const flattenNodes: Nodes = {};
+  const flattenNode = (partialNode: PartialNestedNode, parent = null) => {
+    const node: PartialNestedNode = {
+      id: getRandomId(),
+      nodes: [],
+      linkedNodes: {},
+      props: {},
+      custom: {},
+      type: 'div',
+      displayName: 'div',
+      isCanvas: false,
+      hidden: false,
+      ...partialNode,
+    };
 
-  const nodesLhsSimplified = Object.keys(nodesLhs).reduce((accum, id) => {
-    const { _hydrationTimestamp, rules, ...node } = nodesLhs[id];
-    accum[id] = node;
-    return accum;
-  }, {});
+    flattenNodes[node.id] = {
+      ...(node as Node),
+      id: node.id,
+      parent,
+      nodes: [],
+      linkedNodes: {},
+    };
 
-  expect(nodesLhsSimplified).toEqual(nodesRhsSimplified);
-};
+    flattenNodes[node.id].nodes = node.nodes.map((childNode) =>
+      // @ts-ignore
+      flattenNode(childNode, node.id)
+    );
+    flattenNodes[node.id].linkedNodes = Object.entries(node.linkedNodes).reduce(
+      (accum, [id, linkedNode]) => ({
+        ...accum,
+        [id]: flattenNode(linkedNode, node.id),
+      }),
+      {}
+    );
 
-export const createTestNodes = (rootNode): Nodes => {
-  const nodes = {};
-  const iterateNodes = (testNode) => {
-    const { node: parentNode, childNodes, linkedNodes } = getTestNode(testNode);
-    nodes[parentNode.id] = parentNode;
-
-    if (childNodes) {
-      childNodes.forEach((childTestNode, i) => {
-        const {
-          node: childNode,
-          childNodes: grandChildNodes,
-          linkedNodes: grandChildLinkedNodes,
-        } = getTestNode(childTestNode);
-        childNode.data.parent = parentNode.id;
-        nodes[childNode.id] = childNode;
-        parentNode.data.nodes[i] = childNode.id;
-        iterateNodes({
-          ...childNode,
-          data: {
-            ...childNode.data,
-            nodes: grandChildNodes || [],
-            linkedNodes: grandChildLinkedNodes || {},
-          },
-        });
-      });
-    }
-
-    if (linkedNodes) {
-      Object.keys(linkedNodes).forEach((linkedId) => {
-        const {
-          node: childNode,
-          childNodes: grandChildNodes,
-          linkedNodes: grandChildLinkedNodes,
-        } = getTestNode(linkedNodes[linkedId]);
-        parentNode.data.linkedNodes[linkedId] = childNode.id;
-
-        childNode.data.parent = parentNode.id;
-        nodes[childNode.id] = childNode;
-        iterateNodes({
-          ...childNode,
-          data: {
-            ...childNode.data,
-            nodes: grandChildNodes || [],
-            linkedNodes: grandChildLinkedNodes || {},
-          },
-        });
-      });
-    }
+    return node.id;
   };
 
-  iterateNodes(rootNode);
+  flattenNode(node);
 
-  return nodes;
+  return flattenNodes;
 };
 
-export const createTestState = (state = {} as any) => {
+type TestEditorState = {
+  nodes: PartialNestedNode;
+  events: Record<NodeEventTypes, NodeId[]>;
+};
+
+export const createTestState = (state: Partial<TestEditorState> = {}) => {
   const { nodes: rootNode, events } = state;
 
   return {
@@ -113,7 +79,26 @@ export const createTestState = (state = {} as any) => {
     nodes: rootNode ? createTestNodes(rootNode) : {},
     events: {
       ...editorInitialState.events,
-      ...(events || {}),
+      ...(!events
+        ? {}
+        : Object.entries(events).reduce(
+            (accum, [eventType, array]) => ({
+              ...accum,
+              [eventType]: new Set(array),
+            }),
+            {}
+          )),
     },
   };
+};
+
+export const createTestEditorStore = (
+  config: Partial<EditorStoreConfig & { state: Partial<TestEditorState> }>
+) => {
+  const { state, ...otherConfig } = config;
+
+  return new EditorStore({
+    ...otherConfig,
+    state: createTestState(state),
+  });
 };

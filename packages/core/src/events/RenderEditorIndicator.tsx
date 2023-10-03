@@ -1,13 +1,12 @@
 import { RenderIndicator, getDOMInfo } from '@craftjs/utils';
 import React, { useEffect } from 'react';
 
-import { useEventHandler } from './EventContext';
 import movePlaceholder from './movePlaceholder';
 
 import { useInternalEditor } from '../editor/useInternalEditor';
 
 export const RenderEditorIndicator = () => {
-  const { indicator, indicatorOptions, enabled } = useInternalEditor(
+  const { indicator, indicatorOptions, enabled, store } = useInternalEditor(
     (state) => ({
       indicator: state.indicator,
       indicatorOptions: state.options.indicator,
@@ -15,20 +14,18 @@ export const RenderEditorIndicator = () => {
     })
   );
 
-  const handler = useEventHandler();
-
   useEffect(() => {
-    if (!handler) {
+    if (!store.handlers) {
       return;
     }
 
     if (!enabled) {
-      handler.disable();
+      store.handlers.disable();
       return;
     }
 
-    handler.enable();
-  }, [enabled, handler]);
+    store.handlers.enable();
+  }, [enabled, store]);
 
   if (!indicator) {
     return null;

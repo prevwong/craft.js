@@ -1,109 +1,86 @@
-import { ERROR_RESOLVER_NOT_AN_OBJECT, HISTORY_ACTIONS } from '@craftjs/utils';
-import React, { useEffect, useRef } from 'react';
-import invariant from 'tiny-invariant';
+import pickBy from 'lodash/pickBy';
+import React, { useMemo, useRef, useEffect } from 'react';
 
 import { EditorContext } from './EditorContext';
-import { useEditorStore } from './store';
 
 import { Events } from '../events';
-import { Options } from '../interfaces';
+import { EditorStoreConfig } from '../interfaces';
+import { EditorStore } from '../store';
+
+type EditorProps = EditorStoreConfig & {
+  enabled: boolean;
+  store: EditorStore;
+};
 
 /**
  * A React Component that provides the Editor context
  */
-export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
+export const Editor: React.FC<React.PropsWithChildren<
+  Partial<EditorProps>
+>> = ({
   children,
-  ...options
+  enabled,
+  resolver,
+  onRender,
+  onNodesChange,
+  indicator,
+  store: customEditorStore,
 }) => {
-  // we do not want to warn the user if no resolver was supplied
-  if (options.resolver !== undefined) {
-    invariant(
-      typeof options.resolver === 'object' &&
-        !Array.isArray(options.resolver) &&
-        options.resolver !== null,
-      ERROR_RESOLVER_NOT_AN_OBJECT
+  // TODO: refactor editor store config
+  const editorStoreConfig = useMemo(() => {
+    return pickBy(
+      { onRender, onNodesChange, resolver, indicator },
+      (value) => value !== undefined
     );
-  }
+  }, [indicator, onNodesChange, onRender, resolver]);
 
-  const optionsRef = useRef(options);
+  const initialEditorStoreConfigRef = useRef(editorStoreConfig);
 
-  const context = useEditorStore(
-    optionsRef.current,
-    (state, previousState, actionPerformedWithPatches, query, normalizer) => {
-      if (!actionPerformedWithPatches) {
-        return;
-      }
+  const initialEditorStoreWithStateConfigRef = useRef({
+    ...initialEditorStoreConfigRef.current,
+    state: {
+      enabled: enabled !== undefined ? !!enabled : true,
+    },
+  });
 
-      const { patches, ...actionPerformed } = actionPerformedWithPatches;
-
-      for (let i = 0; i < patches.length; i++) {
-        const { path } = patches[i];
-        const isModifyingNodeData =
-          path.length > 2 && path[0] === 'nodes' && path[2] === 'data';
-
-        let actionType = actionPerformed.type;
-
-        if (
-          [HISTORY_ACTIONS.IGNORE, HISTORY_ACTIONS.THROTTLE].includes(
-            actionType
-          ) &&
-          actionPerformed.params
-        ) {
-          actionPerformed.type = actionPerformed.params[0];
-        }
-
-        if (
-          ['setState', 'deserialize'].includes(actionPerformed.type) ||
-          isModifyingNodeData
-        ) {
-          normalizer((draft) => {
-            if (state.options.normalizeNodes) {
-              state.options.normalizeNodes(
-                draft,
-                previousState,
-                actionPerformed,
-                query
-              );
-            }
-          });
-          break; // we exit the loop as soon as we find a change in node.data
-        }
-      }
-    }
+  const store = useMemo(
+    () =>
+      customEditorStore ||
+      new EditorStore(initialEditorStoreWithStateConfigRef.current),
+    [customEditorStore]
   );
 
-  // sync enabled prop with editor store options
   useEffect(() => {
-    if (!context) {
+    if (customEditorStore) {
       return;
     }
 
-    if (
-      options.enabled === undefined ||
-      context.query.getOptions().enabled === options.enabled
-    ) {
+    if (initialEditorStoreConfigRef.current === editorStoreConfig) {
       return;
     }
 
-    context.actions.setOptions((editorOptions) => {
-      editorOptions.enabled = options.enabled;
-    });
-  }, [context, options.enabled]);
+    store.reconfigure(editorStoreConfig);
+  }, [customEditorStore, store, editorStoreConfig]);
 
   useEffect(() => {
-    context.subscribe(
-      (_) => ({
-        json: context.query.serialize(),
-      }),
-      () => {
-        context.query.getOptions().onNodesChange(context.query);
-      }
-    );
-  }, [context]);
+    if (enabled === undefined) {
+      return;
+    }
 
-  return context ? (
-    <EditorContext.Provider value={context}>
+    if (!!enabled === store.getState().enabled) {
+      return;
+    }
+
+    store.actions.setEnabled(enabled);
+  }, [store, enabled]);
+
+  if (!store) {
+    return null;
+  }
+
+  return (
+    <EditorContext.Provider value={{ store }}>
       <Events>{children}</Events>
     </EditorContext.Provider>
-  ) : null;
+  );
 };

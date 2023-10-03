@@ -1,7 +1,8 @@
-import { QueryCallbacksFor } from '@craftjs/utils';
 import React from 'react';
 
-import { QueryMethods } from '../editor/query';
+import { BackwardsCompatibleNode } from './legacy/nodes';
+
+import { NodeQuery } from '../store';
 
 export type UserComponentConfig<T> = {
   displayName: string;
@@ -9,12 +10,7 @@ export type UserComponentConfig<T> = {
   related: Partial<NodeRelated>;
   props: Partial<T>;
   custom: Record<string, any>;
-  info: Record<string, any>;
   isCanvas: boolean;
-
-  // TODO: Deprecate
-  name: string;
-  defaultProps: Partial<T>;
 };
 
 export type UserComponent<T = any> = React.ComponentType<T> & {
@@ -26,65 +22,37 @@ export type NodeEventTypes = 'selected' | 'dragged' | 'hovered';
 
 export type Node = {
   id: NodeId;
-  data: NodeData;
-  info: Record<string, any>;
-  events: Record<NodeEventTypes, boolean>;
-  dom: HTMLElement | null;
-  related: Record<string, React.ElementType>;
-  rules: NodeRules;
-  _hydrationTimestamp: number;
+  type: string;
+  displayName: string;
+  parent: NodeId | null;
+  nodes: NodeId[];
+  linkedNodes: Record<string, NodeId>;
+  props: Record<string, any>;
+  custom: Record<string, any>;
+  hidden: boolean;
+  isCanvas: boolean;
 };
 
-export type NodeHelpersType = QueryCallbacksFor<typeof QueryMethods>['node'];
+export type NodeHelpersType = (id: NodeId) => NodeQuery;
 export type NodeRules = {
-  canDrag(node: Node, helpers: NodeHelpersType): boolean;
-  canDrop(dropTarget: Node, self: Node, helpers: NodeHelpersType): boolean;
-  canMoveIn(canMoveIn: Node[], self: Node, helpers: NodeHelpersType): boolean;
-  canMoveOut(canMoveOut: Node[], self: Node, helpers: NodeHelpersType): boolean;
+  canDrag(node: BackwardsCompatibleNode, helpers: NodeHelpersType): boolean;
+  canDrop(
+    dropTarget: BackwardsCompatibleNode,
+    self: BackwardsCompatibleNode,
+    helpers: NodeHelpersType
+  ): boolean;
+  canMoveIn(
+    canMoveIn: BackwardsCompatibleNode[],
+    self: BackwardsCompatibleNode,
+    helpers: NodeHelpersType
+  ): boolean;
+  canMoveOut(
+    canMoveOut: BackwardsCompatibleNode[],
+    self: BackwardsCompatibleNode,
+    helpers: NodeHelpersType
+  ): boolean;
 };
 export type NodeRelated = Record<string, React.ElementType>;
-
-export type NodeData = {
-  props: Record<string, any>;
-  type: string | React.ElementType;
-  name: string;
-  displayName: string;
-  isCanvas: boolean;
-  parent: NodeId | null;
-  linkedNodes: Record<string, NodeId>;
-  nodes: NodeId[];
-  hidden: boolean;
-  custom?: any;
-  _childCanvas?: Record<string, NodeId>; // TODO: Deprecate in favour of linkedNodes
-};
-
-export type FreshNode = {
-  id?: NodeId;
-  data: Partial<NodeData> & Required<Pick<NodeData, 'type'>>;
-};
-
-export type ReduceCompType =
-  | string
-  | {
-      resolvedName: string;
-    };
-
-export type ReducedComp = {
-  type: ReduceCompType;
-  isCanvas: boolean;
-  props: any;
-};
-
-export type SerializedNode = Omit<
-  NodeData,
-  'type' | 'subtype' | 'name' | 'event'
-> &
-  ReducedComp;
-
-export type SerializedNodes = Record<NodeId, SerializedNode>;
-
-// TODO: Deprecate in favor of SerializedNode
-export type SerializedNodeData = SerializedNode;
 
 export type Nodes = Record<NodeId, Node>;
 

@@ -1,48 +1,39 @@
 import {
   useCollector,
-  useCollectorReturnType,
-  QueryCallbacksFor,
   wrapConnectorHooks,
-  EventHandlerConnectors,
   ERROR_USE_EDITOR_OUTSIDE_OF_EDITOR_CONTEXT,
 } from '@craftjs/utils';
-import { useContext, useEffect, useMemo } from 'react';
+import { useContext, useMemo, useEffect } from 'react';
 import invariant from 'tiny-invariant';
 
 import { EditorContext } from './EditorContext';
-import { QueryMethods } from './query';
-import { EditorStore } from './store';
 
-import { CoreEventHandlers } from '../events/CoreEventHandlers';
-import { useEventHandler } from '../events/EventContext';
-import { EditorState } from '../interfaces';
+import { EditorQuery } from '../store';
 
-export type EditorCollector<C> = (
-  state: EditorState,
-  query: QueryCallbacksFor<typeof QueryMethods>
-) => C;
+export type EditorCollector<C> = (state: EditorQuery, query: EditorQuery) => C;
 
-export type useInternalEditorReturnType<C = null> = useCollectorReturnType<
-  EditorStore,
-  C
-> & {
-  inContext: boolean;
-  store: EditorStore;
-  connectors: EventHandlerConnectors<CoreEventHandlers, React.ReactElement>;
-};
+export function useInternalEditor<C = null>(collector?: EditorCollector<C>) {
+  const { store } = useContext(EditorContext);
 
-export function useInternalEditor<C>(
-  collector?: EditorCollector<C>
-): useInternalEditorReturnType<C> {
-  const handler = useEventHandler();
-  const store = useContext(EditorContext);
   invariant(store, ERROR_USE_EDITOR_OUTSIDE_OF_EDITOR_CONTEXT);
 
-  const collected = useCollector(store, collector);
+  const handlers = store.handlers;
+
+  const collected = useCollector(
+    store,
+    collector
+      ? () =>
+          collector(
+            store.query,
+            // For backwards compatibility:
+            store.query
+          )
+      : null
+  );
 
   const connectorsUsage = useMemo(
-    () => handler && handler.createConnectorsUsage(),
-    [handler]
+    () => handlers && handlers.createConnectorsUsage(),
+    [handlers]
   );
 
   useEffect(() => {
@@ -58,8 +49,13 @@ export function useInternalEditor<C>(
     [connectorsUsage]
   );
 
+  const actions = useMemo(() => store.actions, [store]);
+  const query = useMemo(() => store.query, [store]);
+
   return {
     ...collected,
+    actions,
+    query,
     connectors,
     inContext: !!store,
     store,

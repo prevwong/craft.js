@@ -2,7 +2,7 @@ import React, { Children } from 'react';
 
 import { resolveComponent } from './resolveComponent';
 
-import { NodeData, ReducedComp, SerializedNode } from '../interfaces';
+import { LegacyNodeData, ReducedComp, SerializedNode } from '../interfaces';
 import { Resolver } from '../interfaces';
 
 const reduceType = (type: React.ElementType | string, resolver: Resolver) => {
@@ -13,7 +13,7 @@ const reduceType = (type: React.ElementType | string, resolver: Resolver) => {
 };
 
 export const serializeComp = (
-  data: Pick<NodeData, 'type' | 'isCanvas' | 'props'>,
+  data: Pick<LegacyNodeData, 'type' | 'isCanvas' | 'props'>,
   resolver: Resolver
 ): ReducedComp => {
   let { type, isCanvas, props } = data;
@@ -47,7 +47,7 @@ export const serializeComp = (
 };
 
 export const serializeNode = (
-  data: Omit<NodeData, 'event'>,
+  data: LegacyNodeData,
   resolver: Resolver
 ): SerializedNode => {
   const { type, props, isCanvas, name, ...nodeData } = data;

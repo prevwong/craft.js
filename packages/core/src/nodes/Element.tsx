@@ -39,30 +39,23 @@ export function Element<T extends React.ElementType>({
   };
 
   const { query, actions } = useInternalEditor();
-  const { node, inNodeContext } = useInternalNode((node) => ({
-    node: {
-      id: node.id,
-      data: node.data,
-    },
-  }));
+  const { id: nodeId, inNodeContext } = useInternalNode();
 
   const [linkedNodeId, setLinkedNodeId] = useState<NodeId | null>(null);
 
   useEffectOnce(() => {
     invariant(!!id, ERROR_TOP_LEVEL_ELEMENT_NO_ID);
-    const { id: nodeId, data } = node;
 
     if (inNodeContext) {
       let linkedNodeId;
 
-      const existingNode =
-        data.linkedNodes &&
-        data.linkedNodes[id] &&
-        query.node(data.linkedNodes[id]).get();
+      const existingLinkedNode = query
+        .node(nodeId)
+        .getLinkedNodes()
+        .find((linkedNode) => linkedNode.id === id);
 
-      // Render existing linked Node if it already exists (and is the same type as the JSX)
-      if (existingNode && existingNode.data.type === is) {
-        linkedNodeId = existingNode.id;
+      if (existingLinkedNode && existingLinkedNode.node.getComponent() === is) {
+        linkedNodeId = existingLinkedNode.node.id;
       } else {
         // otherwise, create and render a new linked Node
         const linkedElement = React.createElement(
@@ -71,10 +64,14 @@ export function Element<T extends React.ElementType>({
           children
         );
 
-        const tree = query.parseReactElement(linkedElement).toNodeTree();
+        const tree = query.parseReactElementAsNodeTree(linkedElement);
 
         linkedNodeId = tree.rootNodeId;
-        actions.history.ignore().addLinkedNodeFromTree(tree, nodeId, id);
+        actions.history
+          .merge({
+            ignoreIfNoPreviousRecords: true,
+          })
+          .addLinkedNodeFromTree(tree, nodeId, id);
       }
 
       setLinkedNodeId(linkedNodeId);

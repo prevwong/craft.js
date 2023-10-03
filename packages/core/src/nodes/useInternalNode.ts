@@ -1,4 +1,5 @@
 import {
+  useCollector,
   wrapConnectorHooks,
   ERROR_USE_NODE_OUTSIDE_OF_EDITOR_CONTEXT,
 } from '@craftjs/utils';
@@ -8,9 +9,12 @@ import invariant from 'tiny-invariant';
 import { NodeContext } from './NodeContext';
 
 import { useInternalEditor } from '../editor/useInternalEditor';
-import { Node } from '../interfaces';
+import { EditorState } from '../interfaces';
+import { NodeQuery } from '../store';
 
-export function useInternalNode<S = null>(collect?: (node: Node) => S) {
+export type NodeCollector<C> = (node: NodeQuery) => C;
+
+export function useInternalNode<C = null>(collect?: NodeCollector<C>) {
   const context = useContext(NodeContext);
   invariant(context, ERROR_USE_NODE_OUTSIDE_OF_EDITOR_CONTEXT);
 
@@ -18,12 +22,9 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S) {
 
   const {
     actions: EditorActions,
-    query,
     connectors: editorConnectors,
-    ...collected
-  } = useInternalEditor(
-    (state) => id && state.nodes[id] && collect && collect(state.nodes[id])
-  );
+    store,
+  } = useInternalEditor();
 
   const connectors = useMemo(
     () =>
@@ -33,6 +34,12 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S) {
       }),
     [editorConnectors, id]
   );
+
+  const collectorCallback = !collect
+    ? null
+    : (state: EditorState) => state.nodes[id] && collect(store.query.node(id));
+
+  const collected = useCollector(store, collectorCallback);
 
   const actions = useMemo(() => {
     return {

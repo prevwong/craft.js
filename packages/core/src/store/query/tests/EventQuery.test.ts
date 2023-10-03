@@ -1,19 +1,24 @@
-import { EventHelpers } from '../EventHelpers';
+import { NodeEventTypes } from '../../../interfaces';
+import { createTestEditorStore } from '../../../utils/testHelpers';
+import { EventQuery } from '../EventQuery';
 
-let helper;
+let helper: (type: NodeEventTypes) => EventQuery;
 
 const selectedNodeIds = ['node-a', 'node-b', 'node-c'];
 
-const state = {
-  events: {
-    selected: new Set(selectedNodeIds),
-    hovered: new Set(),
+const store = createTestEditorStore({
+  state: {
+    events: {
+      selected: selectedNodeIds,
+      hovered: [],
+      dragged: [],
+    },
   },
-};
+});
 
 describe('EventHelpers', () => {
   beforeEach(() => {
-    helper = (eventType) => EventHelpers(state as any, eventType);
+    helper = (eventType) => new EventQuery(store, eventType);
   });
 
   describe('isEmpty', () => {
@@ -54,7 +59,9 @@ describe('EventHelpers', () => {
 
   describe('raw', () => {
     it('should return the raw event state', () => {
-      expect(helper('selected').raw()).toBe(state.events['selected']);
+      expect(helper('selected').raw()).toBe(
+        store.getState().events['selected']
+      );
     });
   });
 

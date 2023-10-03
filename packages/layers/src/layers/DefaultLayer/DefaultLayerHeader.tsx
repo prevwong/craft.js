@@ -112,7 +112,7 @@ export const DefaultLayerHeader: React.FC = () => {
     return {
       hidden: state.nodes[id] && state.nodes[id].data.hidden,
       selected,
-      topLevel: query.node(id).isTopLevelCanvas(),
+      topLevel: query.node(id) && query.node(id).isTopLevelCanvas(),
     };
   });
 

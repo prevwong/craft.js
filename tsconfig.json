@@ -10,7 +10,7 @@
       "@craftjs/*": ["packages/core/src/*"],
       "@craftjs/layers": ["packages/layers/src/index"],
       "@craftjs/utils": ["packages/utils/src/index"],
-      "@craftjs/utils/*": ["packages/utils/src/*"],
+      "@craftjs/utils/*": ["packages/utils/src/*"]
     }
   },
   "exclude": ["**/node_modules/**", "cypress"]

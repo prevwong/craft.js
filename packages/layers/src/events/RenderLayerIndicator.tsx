@@ -14,18 +14,18 @@ export const RenderLayerIndicator: React.FC<any> = ({ children }) => {
 
     if (indicator) {
       const {
-        placement: { where, parent, currentNode },
+        placement: { where, parentNodeId, currentNodeId },
         error,
       } = indicator;
-      const layerId = currentNode ? currentNode.id : parent.id;
+      const layerId = currentNodeId || parentNodeId;
 
       let top;
       const color = error ? indicatorStyles.error : indicatorStyles.success;
 
-      if (indicator.onCanvas && layers[parent.id].dom != null) {
-        const parentPos = layers[parent.id].dom.getBoundingClientRect();
+      if (indicator.onCanvas && layers[parentNodeId].dom != null) {
+        const parentPos = layers[parentNodeId].dom.getBoundingClientRect();
         const parentHeadingPos = layers[
-          parent.id
+          parentNodeId
         ].headingDom.getBoundingClientRect();
         return {
           top: parentHeadingPos.top,
@@ -41,7 +41,7 @@ export const RenderLayerIndicator: React.FC<any> = ({ children }) => {
         const headingPos = layers[layerId].headingDom.getBoundingClientRect();
         const pos = layers[layerId].dom.getBoundingClientRect();
 
-        if (where === 'after' || !currentNode) {
+        if (where === 'after' || !currentNodeId) {
           top = pos.top + pos.height;
         } else {
           top = pos.top;

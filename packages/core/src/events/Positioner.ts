@@ -2,7 +2,6 @@ import { getDOMInfo, ROOT_NODE } from '@craftjs/utils';
 
 import findPosition from './findPosition';
 
-import { EditorStore } from '../editor/store';
 import {
   DragTarget,
   DropPosition,
@@ -12,6 +11,7 @@ import {
   NodeInfo,
   NodeSelectorWrapper,
 } from '../interfaces';
+import { EditorStore, NodeQuery } from '../store';
 import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 
 /**
@@ -59,15 +59,15 @@ export class Positioner {
 
   private onScroll(e: Event) {
     const scrollBody = e.target;
-    const rootNode = this.store.query.node(ROOT_NODE).get();
+    const rootNode = this.store.query.node(ROOT_NODE);
 
     // Clear the currentTargetChildDimensions if the user has scrolled
     // Because we will have to recompute new dimensions relative to the new scroll pos
     const shouldClearChildDimensionsCache =
       scrollBody instanceof Element &&
       rootNode &&
-      rootNode.dom &&
-      scrollBody.contains(rootNode.dom);
+      rootNode.getDOM() &&
+      scrollBody.contains(rootNode.getDOM());
 
     if (!shouldClearChildDimensionsCache) {
       return;
@@ -79,15 +79,12 @@ export class Positioner {
   private getDraggedNodes() {
     if (this.dragTarget.type === 'new') {
       return getNodesFromSelector(
-        this.store.query.getNodes(),
+        this.store,
         this.dragTarget.tree.nodes[this.dragTarget.tree.rootNodeId]
       );
     }
 
-    return getNodesFromSelector(
-      this.store.query.getNodes(),
-      this.dragTarget.nodes
-    );
+    return getNodesFromSelector(this.store, this.dragTarget.nodes);
   }
 
   // Check if the elements being dragged are allowed to be dragged
@@ -130,7 +127,8 @@ export class Positioner {
   private isDiff(newPosition: DropPosition) {
     if (
       this.currentIndicator &&
-      this.currentIndicator.placement.parent.id === newPosition.parent.id &&
+      this.currentIndicator.placement.parentNodeId ===
+        newPosition.parentNodeId &&
       this.currentIndicator.placement.index === newPosition.index &&
       this.currentIndicator.placement.where === newPosition.where
     ) {
@@ -153,7 +151,7 @@ export class Positioner {
       return existingTargetChildDimensions;
     }
 
-    return newParentNode.data.nodes.reduce((result, id: NodeId) => {
+    return newParentNode.nodes.reduce((result, id: NodeId) => {
       const dom = this.store.query.node(id).get().dom;
 
       if (dom) {
@@ -183,27 +181,27 @@ export class Positioner {
       dropTargetId === this.currentDropTargetId &&
       this.currentDropTargetCanvasAncestorId
     ) {
-      const node = this.store.query
-        .node(this.currentDropTargetCanvasAncestorId)
-        .get();
+      const node = this.store.query.node(
+        this.currentDropTargetCanvasAncestorId
+      );
 
       if (node) {
         return node;
       }
     }
 
-    const getCanvas = (nodeId: NodeId): Node => {
-      const node = this.store.query.node(nodeId).get();
+    const getCanvas = (nodeId: NodeId): NodeQuery => {
+      const node = this.store.query.node(nodeId);
 
-      if (node && node.data.isCanvas) {
+      if (node && node.isCanvas()) {
         return node;
       }
 
-      if (!node.data.parent) {
+      if (!node.getParent()) {
         return null;
       }
 
-      return getCanvas(node.data.parent);
+      return getCanvas(node.getParent().id);
     };
 
     return getCanvas(dropTargetId);
@@ -225,23 +223,25 @@ export class Positioner {
 
     // Get parent if we're hovering at the border of the current node
     if (
-      newParentNode.data.parent &&
-      this.isNearBorders(getDOMInfo(newParentNode.dom), x, y) &&
+      newParentNode.getParent() &&
+      this.isNearBorders(getDOMInfo(newParentNode.getDOM()), x, y) &&
       // Ignore if linked node because there's won't be an adjacent sibling anyway
       !this.store.query.node(newParentNode.id).isLinkedNode()
     ) {
-      newParentNode = this.store.query.node(newParentNode.data.parent).get();
+      newParentNode = newParentNode.getParent();
     }
 
     if (!newParentNode) {
       return;
     }
 
-    this.currentTargetChildDimensions = this.getChildDimensions(newParentNode);
+    this.currentTargetChildDimensions = this.getChildDimensions(
+      newParentNode.getState()
+    );
     this.currentTargetId = newParentNode.id;
 
     const position = findPosition(
-      newParentNode,
+      newParentNode.id,
       this.currentTargetChildDimensions,
       x,
       y
@@ -265,13 +265,11 @@ export class Positioner {
     }
 
     const currentNodeId = newParentNode.data.nodes[position.index];
-    const currentNode =
-      currentNodeId && this.store.query.node(currentNodeId).get();
 
     this.currentIndicator = {
       placement: {
         ...position,
-        currentNode,
+        currentNodeId,
       },
       error,
     };
