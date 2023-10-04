@@ -2,4 +2,4 @@
 '@craftjs/core': patch
 ---
 
-editor fixes for handling incorrect resolver value
+Ensure non-null resolver prop value in Editor component
