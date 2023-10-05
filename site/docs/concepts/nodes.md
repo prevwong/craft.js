@@ -54,7 +54,7 @@ By default, a non-Canvas Node is created. So, how do we actually create a Canvas
 
 In the above example, using the `<Element />` component with the `canvas` prop, we've created a Canvas node of the type `div`. Since our `div` element is now handled by a Canvas node, therefore it is now a droppable region. On the other hand, since `h1`, `MyComp` and `MyContainerComp` are child Nodes of a Canvas, they are now draggable. 
 
-The `<Element />` component can also be used to configure other values of a Node, which is further detailed [here](../api/Element)
+The `<Element />` component can also be used to configure other values of a Node, which is further detailed [here](../api/element)
 
 <!-- We could also specify other things with the `<Element />` component, such as we could tell Craft to prevent parsing the children of an element as Nodes:
 

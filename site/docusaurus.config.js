@@ -18,6 +18,7 @@ module.exports = {
       appId: 'PH8YTBNA7Q',
       apiKey: '7a21621f37e010ec9a8c39298d71b045',
       indexName: 'craft-js',
+      contextualSearch: false
     },
     prism: {
       theme: require('prism-react-renderer/themes/shadesOfPurple'),
@@ -38,7 +39,7 @@ module.exports = {
           position: 'right',
           items: [
             {
-              to: 'pathname:///examples/landing/',
+              to: 'pathname:///examples/landing',
               label: 'Landing',
             },
             {
@@ -47,7 +48,7 @@ module.exports = {
             },
           ],
         },
-        { to: 'support', label: 'Support', position: 'right' },
+        { to: 'docs/sponsor', label: 'Sponsor', position: 'right' },
         {
           href: 'https://github.com/prevwong/craft.js',
           label: 'GitHub',
