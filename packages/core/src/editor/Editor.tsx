@@ -79,7 +79,7 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
     }
 
     if (
-      options.enabled === undefined ||
+      options?.enabled === undefined ||
       context.query.getOptions().enabled === options.enabled
     ) {
       return;
@@ -88,7 +88,7 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
     context.actions.setOptions((editorOptions) => {
       editorOptions.enabled = options.enabled;
     });
-  }, [context, options.enabled]);
+  }, [context, options?.enabled]);
 
   useEffect(() => {
     context.subscribe(
