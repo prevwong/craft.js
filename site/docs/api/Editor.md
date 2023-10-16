@@ -116,14 +116,9 @@ import {
   NodeId
 } from '@craftjs/core'
 
-class CustomEventHandlers extends DefaultEventHandlers {
-  isMultiSelectEnabled: (e: MouseEvent) => boolean
+type CustomEventHandlersOptions = {};
 
-  constructor(options: DefaultEventHandlersOptions & { store: EditorStore }) {
-    super(options)
-    this.isMultiSelectEnabled = options.isMultiSelectEnabled
-  }
-
+class CustomEventHandlers extends DefaultEventHandlers<CustomEventHandlersOptions> {
   handlers() {
     const defaultHandlers = super.handlers()
 
@@ -131,7 +126,7 @@ class CustomEventHandlers extends DefaultEventHandlers {
       ...defaultHandlers,
       // Customize the hover event handler
       hover: (el: HTMLElement, id: NodeId) => {
-        const unbindMouseover = defaultHandlers.hover(el, id)
+        const unbindDefaultHoverHandler = defaultHandlers.hover(el, id)
 
         // Track when the mouse leaves a node and remove the hovered state
         const unbindMouseleave = this.addCraftEventListener(el, 'mouseleave', (e) => {
@@ -141,7 +136,7 @@ class CustomEventHandlers extends DefaultEventHandlers {
         })
 
         return () => {
-          unbindMouseover()
+          unbindDefaultHoverHandler()
           unbindMouseleave()
         }
       }
