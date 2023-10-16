@@ -107,7 +107,7 @@ const App = () => {
 ### Override default event handlers
 Customize how the default event handlers are handled
 
-```tsx {9-40,46-48}
+```tsx {9-35,41-43}
 import {
   DefaultEventHandlers,
   DefaultEventHandlersOptions,
