@@ -74,7 +74,7 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
 
   // sync enabled prop with editor store options
   useEffect(() => {
-    if (!context || !options) {
+    if (!context) {
       return;
     }
 
