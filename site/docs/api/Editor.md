@@ -134,8 +134,8 @@ class CustomEventHandlers extends DefaultEventHandlers {
         })
 
         return () => {
-          unbindDefaultHoverHandler()
-          unbindMouseleave()
+          unbindDefaultHoverHandler();
+          unbindMouseleave();
         }
       }
     }
