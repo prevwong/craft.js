@@ -116,9 +116,7 @@ import {
   NodeId
 } from '@craftjs/core'
 
-type CustomEventHandlersOptions = {};
-
-class CustomEventHandlers extends DefaultEventHandlers<CustomEventHandlersOptions> {
+class CustomEventHandlers extends DefaultEventHandlers {
   handlers() {
     const defaultHandlers = super.handlers()
 
@@ -152,7 +150,7 @@ const App = () => {
         new CustomEventHandlers({ store, isMultiSelectEnabled: () => false })
       }
     >
-      ..
+      ...
     </Editor>
   )
 }
