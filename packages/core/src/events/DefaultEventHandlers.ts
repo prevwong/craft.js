@@ -139,7 +139,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           'mouseleave',
           (e) => {
             e.craft.stopPropagation();
-            store.actions.setNodeEvent('hovered', '');
+            store.actions.setNodeEvent('hovered', null);
           }
         );
 
