@@ -1,5 +1,11 @@
 # @craftjs/core
 
+## 0.2.2
+
+### Patch Changes
+
+- [#569](https://github.com/prevwong/craft.js/pull/569) [`e8681d2`](https://github.com/prevwong/craft.js/commit/e8681d25720caf68e0b0cfc635474f94486c7bdd) Thanks [@giliamverheide](https://github.com/giliamverheide)! - Remove node hovered state on mouseleave event
+
 ## 0.2.1
 
 ### Patch Changes
