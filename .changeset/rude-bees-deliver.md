@@ -2,4 +2,4 @@
 '@craftjs/core': patch
 ---
 
-Added mouseleave event to default hover event handler that removes hovered state when triggered
+Remove node hovered state on mouseleave event
