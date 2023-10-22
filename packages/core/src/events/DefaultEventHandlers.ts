@@ -134,8 +134,18 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           }
         );
 
+        const unbindMouseleave = this.addCraftEventListener(
+          el,
+          'mouseleave',
+          (e) => {
+            e.craft.stopPropagation();
+            store.actions.setNodeEvent('hovered', null);
+          }
+        );
+
         return () => {
           unbindMouseover();
+          unbindMouseleave();
         };
       },
       drop: (el: HTMLElement, targetId: NodeId) => {
