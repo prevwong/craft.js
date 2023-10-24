@@ -9,37 +9,37 @@ export declare function useLayerManager<C>(collector?: (state: LayerState) => C)
     }, any>;
 } & import("craftjs-utils-meetovo").ConditionallyMergeRecordTypes<C, {
     actions: {
+        setDOM: (id: string, domCollection: Partial<Record<"dom" | "headingDom", HTMLElement>>) => void;
+        setIndicator: (indicator: any) => void;
         setLayerEvent: (eventType: import("../interfaces").LayerEvents, id: string) => void;
         registerLayer: (id: string) => void;
-        setDOM: (id: string, domCollection: Partial<Record<"dom" | "headingDom", HTMLElement>>) => void;
         toggleLayer: (id: string) => void;
-        setIndicator: (indicator: any) => void;
     } & {
         history: {
             undo: () => void;
             redo: () => void;
             clear: () => void;
             throttle: (rate?: number) => Pick<{
+                setDOM: (id: string, domCollection: Partial<Record<"dom" | "headingDom", HTMLElement>>) => void;
+                setIndicator: (indicator: any) => void;
                 setLayerEvent: (eventType: import("../interfaces").LayerEvents, id: string) => void;
                 registerLayer: (id: string) => void;
-                setDOM: (id: string, domCollection: Partial<Record<"dom" | "headingDom", HTMLElement>>) => void;
                 toggleLayer: (id: string) => void;
-                setIndicator: (indicator: any) => void;
-            }, "setLayerEvent" | "registerLayer" | "setDOM" | "toggleLayer" | "setIndicator">;
+            }, "setDOM" | "setIndicator" | "setLayerEvent" | "registerLayer" | "toggleLayer">;
             merge: () => Pick<{
+                setDOM: (id: string, domCollection: Partial<Record<"dom" | "headingDom", HTMLElement>>) => void;
+                setIndicator: (indicator: any) => void;
                 setLayerEvent: (eventType: import("../interfaces").LayerEvents, id: string) => void;
                 registerLayer: (id: string) => void;
-                setDOM: (id: string, domCollection: Partial<Record<"dom" | "headingDom", HTMLElement>>) => void;
                 toggleLayer: (id: string) => void;
-                setIndicator: (indicator: any) => void;
-            }, "setLayerEvent" | "registerLayer" | "setDOM" | "toggleLayer" | "setIndicator">;
+            }, "setDOM" | "setIndicator" | "setLayerEvent" | "registerLayer" | "toggleLayer">;
             ignore: () => Pick<{
+                setDOM: (id: string, domCollection: Partial<Record<"dom" | "headingDom", HTMLElement>>) => void;
+                setIndicator: (indicator: any) => void;
                 setLayerEvent: (eventType: import("../interfaces").LayerEvents, id: string) => void;
                 registerLayer: (id: string) => void;
-                setDOM: (id: string, domCollection: Partial<Record<"dom" | "headingDom", HTMLElement>>) => void;
                 toggleLayer: (id: string) => void;
-                setIndicator: (indicator: any) => void;
-            }, "setLayerEvent" | "registerLayer" | "setDOM" | "toggleLayer" | "setIndicator">;
+            }, "setDOM" | "setIndicator" | "setLayerEvent" | "registerLayer" | "toggleLayer">;
         };
     };
     query: {} | ({

@@ -3,6 +3,12 @@ import { EditorStore } from './store';
 export declare type EditorContext = EditorStore;
 export declare const EditorContext: import("react").Context<import("craftjs-utils-meetovo").SubscriberAndCallbacksFor<{
     methods: (state: import("..").EditorState, query: {
+        getDropPlaceholder: (source: string | string[] | import("..").Node | import("..").Node[], target: string, pos: {
+            x: number;
+            y: number;
+        }, nodesToDOM?: (node: import("..").Node) => HTMLElement) => import("..").Indicator;
+        getOptions: () => import("..").Options;
+        getNodes: () => Record<string, import("..").Node>;
         node: (id: string) => {
             isCanvas(): boolean;
             isRoot(): boolean;
@@ -29,12 +35,6 @@ export declare const EditorContext: import("react").Context<import("craftjs-util
             decendants(deep?: boolean): any;
             isTopLevelCanvas(): boolean;
         };
-        getDropPlaceholder: (source: string | string[] | import("..").Node | import("..").Node[], target: string, pos: {
-            x: number;
-            y: number;
-        }, nodesToDOM?: (node: import("..").Node) => HTMLElement) => import("..").Indicator;
-        getOptions: () => import("..").Options;
-        getNodes: () => Record<string, import("..").Node>;
         getSerializedNodes: () => Record<string, import("..").SerializedNode>;
         getEvent: (eventType: import("..").NodeEventTypes) => {
             contains(id: string): boolean;
@@ -65,6 +65,12 @@ export declare const EditorContext: import("react").Context<import("craftjs-util
         };
     }) => {
         setState(cb: (state: import("..").EditorState, actions: Pick<{
+            setDOM: (id: string, dom: HTMLElement) => void;
+            setNodeEvent: (eventType: import("..").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+            selectNode: (nodeIdSelector?: string | string[]) => void;
+            clearEvents: () => void;
+            setOptions: (cb: (options: Partial<import("..").Options>) => void) => void;
+            setIndicator: (indicator: import("..").Indicator) => void;
             addLinkedNodeFromTree: (tree: import("..").NodeTree, parentId: string, id: string) => void;
             add: (nodeToAdd: import("..").Node | import("..").Node[], parentId: string, index?: number) => void;
             addNodeTree: (tree: import("..").NodeTree, parentId?: string, index?: number) => void;
@@ -72,22 +78,22 @@ export declare const EditorContext: import("react").Context<import("craftjs-util
             deserialize: (input: string | Record<string, import("..").SerializedNode>) => void;
             move: (selector: string | string[] | import("..").Node | import("..").Node[], newParentId: string, index: number) => void;
             replaceNodes: (nodes: Record<string, import("..").Node>) => void;
-            clearEvents: () => void;
             reset: () => void;
-            setOptions: (cb: (options: Partial<import("..").Options>) => void) => void;
-            setNodeEvent: (eventType: import("..").NodeEventTypes, nodeIdSelector: string | string[]) => void;
             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-            setDOM: (id: string, dom: HTMLElement) => void;
-            setIndicator: (indicator: import("..").Indicator) => void;
             setHidden: (id: string, bool: boolean) => void;
             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-            selectNode: (nodeIdSelector?: string | string[]) => void;
         } & {
             history: {
                 undo: () => void;
                 redo: () => void;
                 clear: () => void;
                 throttle: (rate?: number) => Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("..").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("..").Options>) => void) => void;
+                    setIndicator: (indicator: import("..").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("..").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: import("..").Node | import("..").Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("..").NodeTree, parentId?: string, index?: number) => void;
@@ -95,18 +101,18 @@ export declare const EditorContext: import("react").Context<import("craftjs-util
                     deserialize: (input: string | Record<string, import("..").SerializedNode>) => void;
                     move: (selector: string | string[] | import("..").Node | import("..").Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, import("..").Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("..").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("..").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("..").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                 merge: () => Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("..").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("..").Options>) => void) => void;
+                    setIndicator: (indicator: import("..").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("..").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: import("..").Node | import("..").Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("..").NodeTree, parentId?: string, index?: number) => void;
@@ -114,18 +120,18 @@ export declare const EditorContext: import("react").Context<import("craftjs-util
                     deserialize: (input: string | Record<string, import("..").SerializedNode>) => void;
                     move: (selector: string | string[] | import("..").Node | import("..").Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, import("..").Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("..").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("..").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("..").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                 ignore: () => Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("..").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("..").Options>) => void) => void;
+                    setIndicator: (indicator: import("..").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("..").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: import("..").Node | import("..").Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("..").NodeTree, parentId?: string, index?: number) => void;
@@ -133,19 +139,13 @@ export declare const EditorContext: import("react").Context<import("craftjs-util
                     deserialize: (input: string | Record<string, import("..").SerializedNode>) => void;
                     move: (selector: string | string[] | import("..").Node | import("..").Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, import("..").Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("..").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("..").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("..").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
             };
-        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">) => void): void;
+        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">) => void): void;
         addLinkedNodeFromTree(tree: import("..").NodeTree, parentId: string, id: string): void;
         add(nodeToAdd: import("..").Node | import("..").Node[], parentId: string, index?: number): void;
         addNodeTree(tree: import("..").NodeTree, parentId?: string, index?: number): void;

@@ -3016,7 +3016,7 @@ __metadata:
     debounce: ^1.2.0
     lodash: ^4.17.20
     react: ^17.0.2
-    tiny-invariant: ^1.0.6
+    tiny-invariant: "git+https://github.com/AminRafaey/tiny-invariant.git"
   peerDependencies:
     react: ^16.8.0
   languageName: unknown
@@ -24820,6 +24820,13 @@ resolve@^1.17.0:
   version: 2.1.0
   resolution: "tiny-emitter@npm:2.1.0"
   checksum: 0055509c72e5fe35d6ab66fa6339342e0f29129e77ed2086e475fdf80be43a8651f2517be76513b46a042c8356396f4da5a35e2e23457252176808d5a892036a
+  languageName: node
+  linkType: hard
+
+"tiny-invariant@git+https://github.com/AminRafaey/tiny-invariant.git":
+  version: 1.0.6
+  resolution: "tiny-invariant@https://github.com/AminRafaey/tiny-invariant.git#commit=36135adc28cf67c17cdfdffc96d2e039a36159cc"
+  checksum: 85f04eaf07a53faeb3eb5d07dcc457ee060714c627fd5d189b45efb11a32b78bb9c83a6d9d12a025bf80338e12ee88c0133d753143d4a79cea1e39cbdd3b7439
   languageName: node
   linkType: hard
 

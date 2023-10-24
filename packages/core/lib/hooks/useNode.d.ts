@@ -6,6 +6,12 @@ import { Node } from '../interfaces';
  */
 export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pick<import("../editor/useInternalEditor").useInternalEditorReturnType<S>, "inContext" | "store" | Exclude<keyof import("craftjs-utils-meetovo").ConditionallyMergeRecordTypes<S, {
     actions: {
+        setDOM: (id: string, dom: HTMLElement) => void;
+        setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+        selectNode: (nodeIdSelector?: string | string[]) => void;
+        clearEvents: () => void;
+        setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+        setIndicator: (indicator: import("../interfaces").Indicator) => void;
         addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
         add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
         addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -13,17 +19,17 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
         deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
         move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
         replaceNodes: (nodes: Record<string, Node>) => void;
-        clearEvents: () => void;
         reset: () => void;
-        setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-        setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
         setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-        setDOM: (id: string, dom: HTMLElement) => void;
-        setIndicator: (indicator: import("../interfaces").Indicator) => void;
         setHidden: (id: string, bool: boolean) => void;
         setProp: (selector: string | string[], cb: (props: any) => void) => void;
-        selectNode: (nodeIdSelector?: string | string[]) => void;
         setState: (cb: (state: import("../interfaces").EditorState, actions: Pick<{
+            setDOM: (id: string, dom: HTMLElement) => void;
+            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+            selectNode: (nodeIdSelector?: string | string[]) => void;
+            clearEvents: () => void;
+            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+            setIndicator: (indicator: import("../interfaces").Indicator) => void;
             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -31,22 +37,22 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
             replaceNodes: (nodes: Record<string, Node>) => void;
-            clearEvents: () => void;
             reset: () => void;
-            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-            setDOM: (id: string, dom: HTMLElement) => void;
-            setIndicator: (indicator: import("../interfaces").Indicator) => void;
             setHidden: (id: string, bool: boolean) => void;
             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-            selectNode: (nodeIdSelector?: string | string[]) => void;
         } & {
             history: {
                 undo: () => void;
                 redo: () => void;
                 clear: () => void;
                 throttle: (rate?: number) => Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -54,18 +60,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                     deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                     move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                 merge: () => Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -73,18 +79,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                     deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                     move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                 ignore: () => Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -92,25 +98,25 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                     deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                     move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
             };
-        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">) => void) => void;
+        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">) => void) => void;
     } & {
         history: {
             undo: () => void;
             redo: () => void;
             clear: () => void;
             throttle: (rate?: number) => Pick<{
+                setDOM: (id: string, dom: HTMLElement) => void;
+                setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                selectNode: (nodeIdSelector?: string | string[]) => void;
+                clearEvents: () => void;
+                setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                setIndicator: (indicator: import("../interfaces").Indicator) => void;
                 addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                 add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                 addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -118,17 +124,17 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                 deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                 move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                 replaceNodes: (nodes: Record<string, Node>) => void;
-                clearEvents: () => void;
                 reset: () => void;
-                setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                 setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                setDOM: (id: string, dom: HTMLElement) => void;
-                setIndicator: (indicator: import("../interfaces").Indicator) => void;
                 setHidden: (id: string, bool: boolean) => void;
                 setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                selectNode: (nodeIdSelector?: string | string[]) => void;
                 setState: (cb: (state: import("../interfaces").EditorState, actions: Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -136,22 +142,22 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                     deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                     move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
                 } & {
                     history: {
                         undo: () => void;
                         redo: () => void;
                         clear: () => void;
                         throttle: (rate?: number) => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -159,18 +165,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                         merge: () => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -178,18 +184,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                         ignore: () => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -197,21 +203,21 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                     };
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">) => void) => void;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">) => void) => void;
             }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp" | "setState">;
             merge: () => Pick<{
+                setDOM: (id: string, dom: HTMLElement) => void;
+                setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                selectNode: (nodeIdSelector?: string | string[]) => void;
+                clearEvents: () => void;
+                setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                setIndicator: (indicator: import("../interfaces").Indicator) => void;
                 addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                 add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                 addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -219,17 +225,17 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                 deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                 move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                 replaceNodes: (nodes: Record<string, Node>) => void;
-                clearEvents: () => void;
                 reset: () => void;
-                setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                 setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                setDOM: (id: string, dom: HTMLElement) => void;
-                setIndicator: (indicator: import("../interfaces").Indicator) => void;
                 setHidden: (id: string, bool: boolean) => void;
                 setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                selectNode: (nodeIdSelector?: string | string[]) => void;
                 setState: (cb: (state: import("../interfaces").EditorState, actions: Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -237,22 +243,22 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                     deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                     move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
                 } & {
                     history: {
                         undo: () => void;
                         redo: () => void;
                         clear: () => void;
                         throttle: (rate?: number) => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -260,18 +266,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                         merge: () => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -279,18 +285,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                         ignore: () => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -298,21 +304,21 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                     };
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">) => void) => void;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">) => void) => void;
             }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp" | "setState">;
             ignore: () => Pick<{
+                setDOM: (id: string, dom: HTMLElement) => void;
+                setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                selectNode: (nodeIdSelector?: string | string[]) => void;
+                clearEvents: () => void;
+                setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                setIndicator: (indicator: import("../interfaces").Indicator) => void;
                 addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                 add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                 addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -320,17 +326,17 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                 deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                 move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                 replaceNodes: (nodes: Record<string, Node>) => void;
-                clearEvents: () => void;
                 reset: () => void;
-                setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                 setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                setDOM: (id: string, dom: HTMLElement) => void;
-                setIndicator: (indicator: import("../interfaces").Indicator) => void;
                 setHidden: (id: string, bool: boolean) => void;
                 setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                selectNode: (nodeIdSelector?: string | string[]) => void;
                 setState: (cb: (state: import("../interfaces").EditorState, actions: Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -338,22 +344,22 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                     deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                     move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
                 } & {
                     history: {
                         undo: () => void;
                         redo: () => void;
                         clear: () => void;
                         throttle: (rate?: number) => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -361,18 +367,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                         merge: () => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -380,18 +386,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                         ignore: () => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -399,23 +405,23 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                     };
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">) => void) => void;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">) => void) => void;
             }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp" | "setState">;
         };
     };
     query: {
+        getDropPlaceholder: (source: string | string[] | Node | Node[], target: string, pos: {
+            x: number;
+            y: number;
+        }, nodesToDOM?: (node: Node) => HTMLElement) => import("../interfaces").Indicator;
+        getOptions: () => import("../interfaces").Options;
+        getNodes: () => Record<string, Node>;
         node: (id: string) => {
             isCanvas(): boolean;
             isRoot(): boolean;
@@ -442,12 +448,6 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
             decendants(deep?: boolean): any;
             isTopLevelCanvas(): boolean;
         };
-        getDropPlaceholder: (source: string | string[] | Node | Node[], target: string, pos: {
-            x: number;
-            y: number;
-        }, nodesToDOM?: (node: Node) => HTMLElement) => import("../interfaces").Indicator;
-        getOptions: () => import("../interfaces").Options;
-        getNodes: () => Record<string, Node>;
         getSerializedNodes: () => Record<string, import("../interfaces").SerializedNode>;
         getEvent: (eventType: import("../interfaces").NodeEventTypes) => {
             contains(id: string): boolean;
@@ -477,7 +477,7 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
             canRedo: () => boolean;
         };
     };
-}>, "connectors" | "actions" | "query">> & {
+}>, "query" | "actions" | "connectors">> & {
     id: string;
     related: boolean;
     inNodeContext: boolean;
@@ -489,9 +489,15 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
     connectors: import("craftjs-utils-meetovo").ChainableConnectors<{
         connect: (dom: HTMLElement) => HTMLElement;
         drag: (dom: HTMLElement) => HTMLElement;
-    }, HTMLElement | import("react").ReactElement<any, string | ((props: any) => import("react").ReactElement<any, any>) | (new (props: any) => import("react").Component<any, any, any>)>>;
+    }, import("react").ReactElement<any, string | ((props: any) => import("react").ReactElement<any, any>) | (new (props: any) => import("react").Component<any, any, any>)> | HTMLElement>;
 }, "inContext" | "store" | Exclude<Exclude<keyof import("craftjs-utils-meetovo").ConditionallyMergeRecordTypes<S, {
     actions: {
+        setDOM: (id: string, dom: HTMLElement) => void;
+        setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+        selectNode: (nodeIdSelector?: string | string[]) => void;
+        clearEvents: () => void;
+        setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+        setIndicator: (indicator: import("../interfaces").Indicator) => void;
         addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
         add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
         addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -499,17 +505,17 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
         deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
         move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
         replaceNodes: (nodes: Record<string, Node>) => void;
-        clearEvents: () => void;
         reset: () => void;
-        setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-        setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
         setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-        setDOM: (id: string, dom: HTMLElement) => void;
-        setIndicator: (indicator: import("../interfaces").Indicator) => void;
         setHidden: (id: string, bool: boolean) => void;
         setProp: (selector: string | string[], cb: (props: any) => void) => void;
-        selectNode: (nodeIdSelector?: string | string[]) => void;
         setState: (cb: (state: import("../interfaces").EditorState, actions: Pick<{
+            setDOM: (id: string, dom: HTMLElement) => void;
+            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+            selectNode: (nodeIdSelector?: string | string[]) => void;
+            clearEvents: () => void;
+            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+            setIndicator: (indicator: import("../interfaces").Indicator) => void;
             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -517,22 +523,22 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
             replaceNodes: (nodes: Record<string, Node>) => void;
-            clearEvents: () => void;
             reset: () => void;
-            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-            setDOM: (id: string, dom: HTMLElement) => void;
-            setIndicator: (indicator: import("../interfaces").Indicator) => void;
             setHidden: (id: string, bool: boolean) => void;
             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-            selectNode: (nodeIdSelector?: string | string[]) => void;
         } & {
             history: {
                 undo: () => void;
                 redo: () => void;
                 clear: () => void;
                 throttle: (rate?: number) => Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -540,18 +546,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                     deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                     move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                 merge: () => Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -559,18 +565,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                     deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                     move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                 ignore: () => Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -578,25 +584,25 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                     deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                     move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
             };
-        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">) => void) => void;
+        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">) => void) => void;
     } & {
         history: {
             undo: () => void;
             redo: () => void;
             clear: () => void;
             throttle: (rate?: number) => Pick<{
+                setDOM: (id: string, dom: HTMLElement) => void;
+                setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                selectNode: (nodeIdSelector?: string | string[]) => void;
+                clearEvents: () => void;
+                setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                setIndicator: (indicator: import("../interfaces").Indicator) => void;
                 addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                 add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                 addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -604,17 +610,17 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                 deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                 move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                 replaceNodes: (nodes: Record<string, Node>) => void;
-                clearEvents: () => void;
                 reset: () => void;
-                setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                 setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                setDOM: (id: string, dom: HTMLElement) => void;
-                setIndicator: (indicator: import("../interfaces").Indicator) => void;
                 setHidden: (id: string, bool: boolean) => void;
                 setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                selectNode: (nodeIdSelector?: string | string[]) => void;
                 setState: (cb: (state: import("../interfaces").EditorState, actions: Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -622,22 +628,22 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                     deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                     move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
                 } & {
                     history: {
                         undo: () => void;
                         redo: () => void;
                         clear: () => void;
                         throttle: (rate?: number) => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -645,18 +651,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                         merge: () => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -664,18 +670,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                         ignore: () => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -683,21 +689,21 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                     };
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">) => void) => void;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">) => void) => void;
             }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp" | "setState">;
             merge: () => Pick<{
+                setDOM: (id: string, dom: HTMLElement) => void;
+                setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                selectNode: (nodeIdSelector?: string | string[]) => void;
+                clearEvents: () => void;
+                setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                setIndicator: (indicator: import("../interfaces").Indicator) => void;
                 addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                 add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                 addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -705,17 +711,17 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                 deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                 move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                 replaceNodes: (nodes: Record<string, Node>) => void;
-                clearEvents: () => void;
                 reset: () => void;
-                setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                 setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                setDOM: (id: string, dom: HTMLElement) => void;
-                setIndicator: (indicator: import("../interfaces").Indicator) => void;
                 setHidden: (id: string, bool: boolean) => void;
                 setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                selectNode: (nodeIdSelector?: string | string[]) => void;
                 setState: (cb: (state: import("../interfaces").EditorState, actions: Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -723,22 +729,22 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                     deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                     move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
                 } & {
                     history: {
                         undo: () => void;
                         redo: () => void;
                         clear: () => void;
                         throttle: (rate?: number) => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -746,18 +752,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                         merge: () => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -765,18 +771,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                         ignore: () => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -784,21 +790,21 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                     };
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">) => void) => void;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">) => void) => void;
             }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp" | "setState">;
             ignore: () => Pick<{
+                setDOM: (id: string, dom: HTMLElement) => void;
+                setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                selectNode: (nodeIdSelector?: string | string[]) => void;
+                clearEvents: () => void;
+                setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                setIndicator: (indicator: import("../interfaces").Indicator) => void;
                 addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                 add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                 addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -806,17 +812,17 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                 deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                 move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                 replaceNodes: (nodes: Record<string, Node>) => void;
-                clearEvents: () => void;
                 reset: () => void;
-                setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                 setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                setDOM: (id: string, dom: HTMLElement) => void;
-                setIndicator: (indicator: import("../interfaces").Indicator) => void;
                 setHidden: (id: string, bool: boolean) => void;
                 setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                selectNode: (nodeIdSelector?: string | string[]) => void;
                 setState: (cb: (state: import("../interfaces").EditorState, actions: Pick<{
+                    setDOM: (id: string, dom: HTMLElement) => void;
+                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                    selectNode: (nodeIdSelector?: string | string[]) => void;
+                    clearEvents: () => void;
+                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                     add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                     addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -824,22 +830,22 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                     deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                     move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                     replaceNodes: (nodes: Record<string, Node>) => void;
-                    clearEvents: () => void;
                     reset: () => void;
-                    setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                    setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                     setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                    setDOM: (id: string, dom: HTMLElement) => void;
-                    setIndicator: (indicator: import("../interfaces").Indicator) => void;
                     setHidden: (id: string, bool: boolean) => void;
                     setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                    selectNode: (nodeIdSelector?: string | string[]) => void;
                 } & {
                     history: {
                         undo: () => void;
                         redo: () => void;
                         clear: () => void;
                         throttle: (rate?: number) => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -847,18 +853,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                         merge: () => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -866,18 +872,18 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                         ignore: () => Pick<{
+                            setDOM: (id: string, dom: HTMLElement) => void;
+                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
+                            selectNode: (nodeIdSelector?: string | string[]) => void;
+                            clearEvents: () => void;
+                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
+                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             addLinkedNodeFromTree: (tree: import("../interfaces").NodeTree, parentId: string, id: string) => void;
                             add: (nodeToAdd: Node | Node[], parentId: string, index?: number) => void;
                             addNodeTree: (tree: import("../interfaces").NodeTree, parentId?: string, index?: number) => void;
@@ -885,23 +891,23 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
                             deserialize: (input: string | Record<string, import("../interfaces").SerializedNode>) => void;
                             move: (selector: string | string[] | Node | Node[], newParentId: string, index: number) => void;
                             replaceNodes: (nodes: Record<string, Node>) => void;
-                            clearEvents: () => void;
                             reset: () => void;
-                            setOptions: (cb: (options: Partial<import("../interfaces").Options>) => void) => void;
-                            setNodeEvent: (eventType: import("../interfaces").NodeEventTypes, nodeIdSelector: string | string[]) => void;
                             setCustom: (selector: string | string[], cb: (data: any) => void) => void;
-                            setDOM: (id: string, dom: HTMLElement) => void;
-                            setIndicator: (indicator: import("../interfaces").Indicator) => void;
                             setHidden: (id: string, bool: boolean) => void;
                             setProp: (selector: string | string[], cb: (props: any) => void) => void;
-                            selectNode: (nodeIdSelector?: string | string[]) => void;
-                        }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">;
+                        }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">;
                     };
-                }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "clearEvents" | "reset" | "setOptions" | "setNodeEvent" | "setCustom" | "setDOM" | "setIndicator" | "setHidden" | "setProp" | "selectNode">) => void) => void;
+                }, "setDOM" | "setNodeEvent" | "selectNode" | "clearEvents" | "setOptions" | "setIndicator" | "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp">) => void) => void;
             }, "addLinkedNodeFromTree" | "add" | "addNodeTree" | "delete" | "deserialize" | "move" | "replaceNodes" | "reset" | "setCustom" | "setHidden" | "setProp" | "setState">;
         };
     };
     query: {
+        getDropPlaceholder: (source: string | string[] | Node | Node[], target: string, pos: {
+            x: number;
+            y: number;
+        }, nodesToDOM?: (node: Node) => HTMLElement) => import("../interfaces").Indicator;
+        getOptions: () => import("../interfaces").Options;
+        getNodes: () => Record<string, Node>;
         node: (id: string) => {
             isCanvas(): boolean;
             isRoot(): boolean;
@@ -928,12 +934,6 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
             decendants(deep?: boolean): any;
             isTopLevelCanvas(): boolean;
         };
-        getDropPlaceholder: (source: string | string[] | Node | Node[], target: string, pos: {
-            x: number;
-            y: number;
-        }, nodesToDOM?: (node: Node) => HTMLElement) => import("../interfaces").Indicator;
-        getOptions: () => import("../interfaces").Options;
-        getNodes: () => Record<string, Node>;
         getSerializedNodes: () => Record<string, import("../interfaces").SerializedNode>;
         getEvent: (eventType: import("../interfaces").NodeEventTypes) => {
             contains(id: string): boolean;
@@ -963,7 +963,7 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
             canRedo: () => boolean;
         };
     };
-}>, "connectors" | "actions" | "query">, "connectors" | "id" | "related" | "actions" | "inNodeContext">> & {
+}>, "query" | "actions" | "connectors">, "id" | "actions" | "inNodeContext" | "connectors" | "related">> & {
     actions: {
         setProp: (cb: any, throttleRate?: number) => void;
         setCustom: (cb: any, throttleRate?: number) => void;
@@ -976,5 +976,5 @@ export declare function useNode<S = null>(collect?: (node: Node) => S): Pick<Pic
     connectors: import("craftjs-utils-meetovo").ChainableConnectors<{
         connect: (dom: HTMLElement) => HTMLElement;
         drag: (dom: HTMLElement) => HTMLElement;
-    }, HTMLElement | import("react").ReactElement<any, string | ((props: any) => import("react").ReactElement<any, any>) | (new (props: any) => import("react").Component<any, any, any>)>>;
+    }, import("react").ReactElement<any, string | ((props: any) => import("react").ReactElement<any, any>) | (new (props: any) => import("react").Component<any, any, any>)> | HTMLElement>;
 };

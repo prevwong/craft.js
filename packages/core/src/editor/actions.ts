@@ -113,7 +113,10 @@ const Methods = (
   const getParentAndValidate = (parentId: NodeId): Node => {
     invariant(parentId, ERROR_NOPARENT);
     const parent = state.nodes[parentId];
-    invariant(parent, ERROR_INVALID_NODEID);
+    invariant(
+      parent,
+      `${ERROR_INVALID_NODEID}-Parent validation failed-${parentId}`
+    );
     return parent;
   };
 

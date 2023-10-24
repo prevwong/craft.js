@@ -10,8 +10,8 @@ export declare class LayerHandlers extends DerivedCoreEventHandlers<{
     };
     getLayer(id: NodeId): any;
     handlers(): {
-        layer: (el: HTMLElement, layerId: any) => () => void;
-        layerHeader: (el: HTMLElement, layerId: any) => void;
-        drag: (el: HTMLElement, layerId: any) => () => void;
+        layer: (el: HTMLElement, layerId: string) => () => void;
+        layerHeader: (el: HTMLElement, layerId: string) => void;
+        drag: (el: HTMLElement, layerId: string) => () => void;
     };
 }
