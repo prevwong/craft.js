@@ -222,10 +222,15 @@ const Methods = (
      * @param id
      */
     delete(selector: NodeSelector<NodeSelectorType.Id>) {
-      const targets = getNodesFromSelector(state.nodes, selector, {
-        existOnly: true,
-        idOnly: true,
-      });
+      const targets = getNodesFromSelector(
+        state.nodes,
+        selector,
+        {
+          existOnly: true,
+          idOnly: true,
+        },
+        'delete'
+      );
 
       targets.forEach(({ node }) => {
         invariant(
@@ -265,9 +270,14 @@ const Methods = (
      * @param index
      */
     move(selector: NodeSelector, newParentId: NodeId, index: number) {
-      const targets = getNodesFromSelector(state.nodes, selector, {
-        existOnly: true,
-      });
+      const targets = getNodesFromSelector(
+        state.nodes,
+        selector,
+        {
+          existOnly: true,
+        },
+        'move'
+      );
 
       const newParent = state.nodes[newParentId];
       targets.forEach(({ node: targetNode }, i) => {
@@ -335,10 +345,15 @@ const Methods = (
         return;
       }
 
-      const targets = getNodesFromSelector(state.nodes, nodeIdSelector, {
-        idOnly: true,
-        existOnly: true,
-      });
+      const targets = getNodesFromSelector(
+        state.nodes,
+        nodeIdSelector,
+        {
+          idOnly: true,
+          existOnly: true,
+        },
+        'setNodeEvent'
+      );
 
       const nodeIds: Set<NodeId> = new Set(targets.map(({ node }) => node.id));
       nodeIds.forEach((id) => {
@@ -356,10 +371,15 @@ const Methods = (
       selector: NodeSelector<NodeSelectorType.Id>,
       cb: (data: EditorState['nodes'][T]['data']['custom']) => void
     ) {
-      const targets = getNodesFromSelector(state.nodes, selector, {
-        idOnly: true,
-        existOnly: true,
-      });
+      const targets = getNodesFromSelector(
+        state.nodes,
+        selector,
+        {
+          idOnly: true,
+          existOnly: true,
+        },
+        'setCustom'
+      );
 
       targets.forEach(({ node }) => cb(state.nodes[node.id].data.custom));
     },
@@ -407,20 +427,30 @@ const Methods = (
       selector: NodeSelector<NodeSelectorType.Id>,
       cb: (props: any) => void
     ) {
-      const targets = getNodesFromSelector(state.nodes, selector, {
-        idOnly: true,
-        existOnly: true,
-      });
+      const targets = getNodesFromSelector(
+        state.nodes,
+        selector,
+        {
+          idOnly: true,
+          existOnly: true,
+        },
+        'setProp'
+      );
 
       targets.forEach(({ node }) => cb(state.nodes[node.id].data.props));
     },
 
     selectNode(nodeIdSelector?: NodeSelector<NodeSelectorType.Id>) {
       if (nodeIdSelector) {
-        const targets = getNodesFromSelector(state.nodes, nodeIdSelector, {
-          idOnly: true,
-          existOnly: true,
-        });
+        const targets = getNodesFromSelector(
+          state.nodes,
+          nodeIdSelector,
+          {
+            idOnly: true,
+            existOnly: true,
+          },
+          'selectNode'
+        );
 
         this.setNodeEvent(
           'selected',

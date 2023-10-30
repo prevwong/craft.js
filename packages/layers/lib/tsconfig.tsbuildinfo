@@ -242,8 +242,8 @@
         "signature": "8cbb0434a8046ffe466bca148070f8ab54d34e07f9aa214a7179d28e9ac96af5"
       },
       "../../core/lib/editor/store.d.ts": {
-        "version": "0401a9ac454e31fae495d458bdff2c51d4af56cca9fda301241acc0e216d3f78",
-        "signature": "0401a9ac454e31fae495d458bdff2c51d4af56cca9fda301241acc0e216d3f78"
+        "version": "f18eba9c18620fea67610b081db29606a3406fd2eb1c21d148c86f3623d42dda",
+        "signature": "f18eba9c18620fea67610b081db29606a3406fd2eb1c21d148c86f3623d42dda"
       },
       "../../core/lib/events/coreeventhandlers.d.ts": {
         "version": "083d11e285f2595eefe234f342ceaaf8ccd2ef269636bb5d4e4169442e7c32e0",
@@ -314,8 +314,8 @@
         "signature": "4076ef3e27921760cf09ba1899d282ec116cbe9c5051419fb14be6f2722597d5"
       },
       "../../core/lib/hooks/usenode.d.ts": {
-        "version": "56c83c920c7850c03795a52db9155b0886c2a7ffdd42b1e0ad457955be5b200a",
-        "signature": "56c83c920c7850c03795a52db9155b0886c2a7ffdd42b1e0ad457955be5b200a"
+        "version": "15b8f168a01c5f3b6872879f5aafff6f852b7b5e3ada18627ac1cab04d30dfd0",
+        "signature": "15b8f168a01c5f3b6872879f5aafff6f852b7b5e3ada18627ac1cab04d30dfd0"
       },
       "../../core/lib/hooks/legacy/connecteditor.d.ts": {
         "version": "0bdbce88b4e3b0623032b7c4df8ac99ed8f3a6be29bd6f25ca3cbd6d40d9bb87",
@@ -3478,6 +3478,275 @@
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "../../core/lib/editor/query.d.ts": [
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/interfaces/nodes.d.ts": [
+        "../../utils/lib/index.d.ts",
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../core/lib/editor/query.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/interfaces/events.d.ts": [
+        "../../core/lib/interfaces/nodes.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/editor/store.d.ts": [
+        "../../utils/lib/index.d.ts",
+        "../../core/lib/editor/query.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/events/coreeventhandlers.d.ts": [
+        "../../utils/lib/index.d.ts",
+        "../../core/lib/editor/store.d.ts",
+        "../../core/lib/interfaces/nodes.d.ts",
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/editor/useinternaleditor.d.ts": [
+        "../../utils/lib/index.d.ts",
+        "../../core/lib/editor/query.d.ts",
+        "../../core/lib/editor/store.d.ts",
+        "../../core/lib/events/coreeventhandlers.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/events/eventcontext.d.ts": [
+        "../../core/lib/events/coreeventhandlers.d.ts",
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/events/positioner.d.ts": [
+        "../../core/lib/editor/store.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/events/defaulteventhandlers.d.ts": [
+        "../../core/lib/events/coreeventhandlers.d.ts",
+        "../../core/lib/events/positioner.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/events/events.d.ts": [
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/events/index.d.ts": [
+        "../../core/lib/events/eventcontext.d.ts",
+        "../../core/lib/events/coreeventhandlers.d.ts",
+        "../../core/lib/events/defaulteventhandlers.d.ts",
+        "../../core/lib/events/events.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/interfaces/editor.d.ts": [
+        "../../utils/lib/index.d.ts",
+        "../../core/lib/interfaces/events.d.ts",
+        "../../core/lib/interfaces/nodes.d.ts",
+        "../../core/lib/editor/query.d.ts",
+        "../../core/lib/editor/store.d.ts",
+        "../../core/lib/editor/useinternaleditor.d.ts",
+        "../../core/lib/events/index.d.ts",
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/interfaces/index.d.ts": [
+        "../../core/lib/interfaces/nodes.d.ts",
+        "../../core/lib/interfaces/editor.d.ts",
+        "../../core/lib/interfaces/events.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/nodes/element.d.ts": [
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/nodes/canvas.d.ts": [
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../core/lib/nodes/element.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/nodes/nodeelement.d.ts": [
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/nodes/nodecontext.d.ts": [
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/nodes/index.d.ts": [
+        "../../core/lib/nodes/canvas.d.ts",
+        "../../core/lib/nodes/element.d.ts",
+        "../../core/lib/nodes/nodeelement.d.ts",
+        "../../core/lib/nodes/nodecontext.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/render/frame.d.ts": [
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/render/index.d.ts": [
+        "../../core/lib/render/frame.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/hooks/useeditor.d.ts": [
+        "../../utils/lib/index.d.ts",
+        "../../core/lib/editor/useinternaleditor.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/hooks/usenode.d.ts": [
+        "../../core/lib/interfaces/index.d.ts",
+        "../../core/lib/editor/useinternaleditor.d.ts",
+        "../../utils/lib/index.d.ts",
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/hooks/legacy/connecteditor.d.ts": [
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/hooks/legacy/connectnode.d.ts": [
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/hooks/index.d.ts": [
+        "../../core/lib/hooks/useeditor.d.ts",
+        "../../core/lib/hooks/usenode.d.ts",
+        "../../core/lib/hooks/legacy/connecteditor.d.ts",
+        "../../core/lib/hooks/legacy/connectnode.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/editor/editor.d.ts": [
+        "../../../node_modules/@types/react/index.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/editor/nodehelpers.d.ts": [
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/editor/index.d.ts": [
+        "../../core/lib/editor/editor.d.ts",
+        "../../core/lib/editor/store.d.ts",
+        "../../core/lib/editor/query.d.ts",
+        "../../core/lib/editor/nodehelpers.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/utils/testhelpers.d.ts": [
+        "../../core/lib/interfaces/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../../core/lib/index.d.ts": [
+        "../../core/lib/nodes/index.d.ts",
+        "../../core/lib/render/index.d.ts",
+        "../../core/lib/interfaces/index.d.ts",
+        "../../core/lib/hooks/index.d.ts",
+        "../../core/lib/editor/index.d.ts",
+        "../../core/lib/events/index.d.ts",
+        "../../core/lib/utils/testhelpers.d.ts",
+        "../../utils/lib/index.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "../src/events/layerhandlers.ts": [
         "../src/interfaces.tsx",
         "../../core/lib/index.d.ts"
@@ -4721,275 +4990,6 @@
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/editor/query.d.ts": [
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/editor/index.d.ts": [
-        "../../core/lib/editor/editor.d.ts",
-        "../../core/lib/editor/store.d.ts",
-        "../../core/lib/editor/query.d.ts",
-        "../../core/lib/editor/nodehelpers.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/index.d.ts": [
-        "../../core/lib/nodes/index.d.ts",
-        "../../core/lib/render/index.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../core/lib/hooks/index.d.ts",
-        "../../core/lib/editor/index.d.ts",
-        "../../core/lib/events/index.d.ts",
-        "../../core/lib/utils/testhelpers.d.ts",
-        "../../utils/lib/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/interfaces/editor.d.ts": [
-        "../../utils/lib/index.d.ts",
-        "../../core/lib/interfaces/events.d.ts",
-        "../../core/lib/interfaces/nodes.d.ts",
-        "../../core/lib/editor/query.d.ts",
-        "../../core/lib/editor/store.d.ts",
-        "../../core/lib/editor/useinternaleditor.d.ts",
-        "../../core/lib/events/index.d.ts",
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/interfaces/index.d.ts": [
-        "../../core/lib/interfaces/nodes.d.ts",
-        "../../core/lib/interfaces/editor.d.ts",
-        "../../core/lib/interfaces/events.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/utils/testhelpers.d.ts": [
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/editor/nodehelpers.d.ts": [
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/editor/editor.d.ts": [
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/hooks/legacy/connectnode.d.ts": [
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/hooks/index.d.ts": [
-        "../../core/lib/hooks/useeditor.d.ts",
-        "../../core/lib/hooks/usenode.d.ts",
-        "../../core/lib/hooks/legacy/connecteditor.d.ts",
-        "../../core/lib/hooks/legacy/connectnode.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/hooks/legacy/connecteditor.d.ts": [
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/hooks/usenode.d.ts": [
-        "../../core/lib/interfaces/index.d.ts",
-        "../../core/lib/editor/useinternaleditor.d.ts",
-        "../../utils/lib/index.d.ts",
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/render/frame.d.ts": [
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/render/index.d.ts": [
-        "../../core/lib/render/frame.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/nodes/nodecontext.d.ts": [
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/nodes/index.d.ts": [
-        "../../core/lib/nodes/canvas.d.ts",
-        "../../core/lib/nodes/element.d.ts",
-        "../../core/lib/nodes/nodeelement.d.ts",
-        "../../core/lib/nodes/nodecontext.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/nodes/nodeelement.d.ts": [
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/nodes/element.d.ts": [
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/nodes/canvas.d.ts": [
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../core/lib/nodes/element.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/events/defaulteventhandlers.d.ts": [
-        "../../core/lib/events/coreeventhandlers.d.ts",
-        "../../core/lib/events/positioner.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/events/index.d.ts": [
-        "../../core/lib/events/eventcontext.d.ts",
-        "../../core/lib/events/coreeventhandlers.d.ts",
-        "../../core/lib/events/defaulteventhandlers.d.ts",
-        "../../core/lib/events/events.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/events/positioner.d.ts": [
-        "../../core/lib/editor/store.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/editor/useinternaleditor.d.ts": [
-        "../../utils/lib/index.d.ts",
-        "../../core/lib/editor/query.d.ts",
-        "../../core/lib/editor/store.d.ts",
-        "../../core/lib/events/coreeventhandlers.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/hooks/useeditor.d.ts": [
-        "../../utils/lib/index.d.ts",
-        "../../core/lib/editor/useinternaleditor.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/editor/store.d.ts": [
-        "../../utils/lib/index.d.ts",
-        "../../core/lib/editor/query.d.ts",
-        "../../core/lib/interfaces/index.d.ts",
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/events/coreeventhandlers.d.ts": [
-        "../../utils/lib/index.d.ts",
-        "../../core/lib/editor/store.d.ts",
-        "../../core/lib/interfaces/nodes.d.ts",
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/events/eventcontext.d.ts": [
-        "../../core/lib/events/coreeventhandlers.d.ts",
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/interfaces/nodes.d.ts": [
-        "../../utils/lib/index.d.ts",
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../core/lib/editor/query.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/interfaces/events.d.ts": [
-        "../../core/lib/interfaces/nodes.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../../core/lib/events/events.d.ts": [
-        "../../../node_modules/@types/react/index.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -5050,11 +5050,18 @@
       "../../utils/lib/getrandomid.d.ts",
       "../../utils/lib/platform.d.ts",
       "../../utils/lib/index.d.ts",
+      "../../core/lib/events/events.d.ts",
+      "../src/manager/actions.tsx",
+      "../src/manager/context.tsx",
+      "../src/manager/uselayermanager.tsx",
+      "../src/manager/index.tsx",
+      "../src/events/index.tsx",
       "../../../node_modules/@types/styled-components/node_modules/csstype/index.d.ts",
       "../../../node_modules/@types/styled-components/node_modules/@types/react/global.d.ts",
       "../../../node_modules/@types/styled-components/node_modules/@types/react/index.d.ts",
       "../../../node_modules/@types/styled-components/index.d.ts",
       "../../../node_modules/react-contenteditable/lib/react-contenteditable.d.ts",
+      "../src/layers/defaultlayer/index.tsx",
       "../svg.d.ts",
       "../../../node_modules/@types/babel__generator/node_modules/@babel/types/lib/index.d.ts",
       "../../../node_modules/@types/babel__generator/index.d.ts",
@@ -5205,18 +5212,20 @@
       "../../../node_modules/@types/testing-library__react/index.d.ts",
       "../../../node_modules/@types/yargs-parser/index.d.ts",
       "../../../node_modules/@types/yargs/index.d.ts",
-      "../../core/lib/events/events.d.ts",
+      "../../core/lib/editor/store.d.ts",
+      "../../core/lib/editor/index.d.ts",
+      "../../core/lib/interfaces/editor.d.ts",
+      "../../core/lib/events/positioner.d.ts",
+      "../../core/lib/editor/useinternaleditor.d.ts",
+      "../../core/lib/events/coreeventhandlers.d.ts",
+      "../../core/lib/hooks/usenode.d.ts",
+      "../../core/lib/hooks/index.d.ts",
       "../../core/lib/editor/query.d.ts",
       "../../core/lib/interfaces/nodes.d.ts",
       "../../core/lib/interfaces/events.d.ts",
-      "../../core/lib/editor/store.d.ts",
-      "../../core/lib/events/coreeventhandlers.d.ts",
-      "../../core/lib/editor/useinternaleditor.d.ts",
       "../../core/lib/events/eventcontext.d.ts",
-      "../../core/lib/events/positioner.d.ts",
       "../../core/lib/events/defaulteventhandlers.d.ts",
       "../../core/lib/events/index.d.ts",
-      "../../core/lib/interfaces/editor.d.ts",
       "../../core/lib/interfaces/index.d.ts",
       "../../core/lib/nodes/element.d.ts",
       "../../core/lib/nodes/canvas.d.ts",
@@ -5226,33 +5235,24 @@
       "../../core/lib/render/frame.d.ts",
       "../../core/lib/render/index.d.ts",
       "../../core/lib/hooks/useeditor.d.ts",
-      "../../core/lib/hooks/usenode.d.ts",
       "../../core/lib/hooks/legacy/connecteditor.d.ts",
       "../../core/lib/hooks/legacy/connectnode.d.ts",
-      "../../core/lib/hooks/index.d.ts",
       "../../core/lib/editor/editor.d.ts",
       "../../core/lib/editor/nodehelpers.d.ts",
-      "../../core/lib/editor/index.d.ts",
       "../../core/lib/utils/testhelpers.d.ts",
       "../../core/lib/index.d.ts",
       "../src/interfaces.tsx",
       "../src/events/layerhandlers.ts",
       "../src/layers/layercontext.tsx",
-      "../src/manager/actions.tsx",
-      "../src/manager/context.tsx",
-      "../src/manager/uselayermanager.tsx",
-      "../src/manager/index.tsx",
       "../src/layers/uselayer.tsx",
       "../src/layers/layernode.tsx",
       "../src/events/layereventcontext.tsx",
       "../src/layers/layercontextprovider.tsx",
       "../src/events/renderlayerindicator.tsx",
       "../src/events/layereventcontextprovider.tsx",
-      "../src/events/index.tsx",
       "../src/layers/defaultlayer/editablelayername.tsx",
       "../src/layers/defaultlayer/defaultlayerheader.tsx",
       "../src/layers/defaultlayer/defaultlayer.tsx",
-      "../src/layers/defaultlayer/index.tsx",
       "../src/layers/index.ts",
       "../src/manager/layermanagerprovider.tsx",
       "../src/index.tsx"

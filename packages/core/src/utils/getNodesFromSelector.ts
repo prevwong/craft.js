@@ -7,7 +7,8 @@ type config = { existOnly: boolean; idOnly: boolean };
 export const getNodesFromSelector = (
   nodes: Nodes,
   selector: NodeSelector,
-  config?: Partial<config>
+  config?: Partial<config>,
+  source?: string
 ): NodeSelectorWrapper[] => {
   const items = Array.isArray(selector) ? selector : [selector];
 
@@ -44,7 +45,7 @@ export const getNodesFromSelector = (
   if (mergedConfig.existOnly) {
     invariant(
       nodeSelectors.filter((selector) => !selector.exists).length === 0,
-      `${ERROR_INVALID_NODEID}-Failed to fetch nodes`
+      `${ERROR_INVALID_NODEID}-Failed to fetch nodes-${source || ''}`
     );
   }
 

@@ -238,8 +238,8 @@
         "signature": "7da28f9e207745f3a58935987dee82b8436594e504b109c00059b5ac5ef7af1d"
       },
       "../src/utils/getnodesfromselector.ts": {
-        "version": "adf808b874e942ea21eb62dfaa8df4d4df183e8af0922df9fd7bea155b16ca5b",
-        "signature": "e660c28c17f3097acb843b99ebed4b1b6ce678c64bd2867df6cda5ad62d61e59"
+        "version": "be523f74733179d8963ec6761e4838f4696a3d38121e6232d952065d655b75c7",
+        "signature": "fb6998ab5e611605b9e0734e0faf4cb5fca0b3a3fd5ffd0d451ae3373224cd91"
       },
       "../src/utils/resolvecomponent.ts": {
         "version": "c77970842927a075964f631b6039fa0d0ba8530ed41c5b5cd53a6aac2114efa5",
@@ -251,7 +251,7 @@
       },
       "../src/editor/nodehelpers.ts": {
         "version": "66dcef5066f984486f8a2cf54de5bfaa056c712846743f8479e89349f84a4b36",
-        "signature": "efade5a3b43c865e6d33a80e6ce12d0270ed1b80faa8610acf45e7153f13fa39"
+        "signature": "5d0a219a6cb5ac55627fbdcd087494c4c9175e255d6c6a22c68f93e49b17cee5"
       },
       "../src/events/findposition.ts": {
         "version": "a038277eb1a5c2d0cc417b0303b0250127bea70b1a682658bf78e3016e9df71c",
@@ -279,7 +279,7 @@
       },
       "../src/editor/query.tsx": {
         "version": "12374e38827106dcb4052792b9d03a30166bddc640c3f0a65506b6d60937ccc0",
-        "signature": "4bff8922dbc5cda7b8e897024a3864d6f2d424dfc956bb898bd2f584efce4dad"
+        "signature": "61bbde30fbc1ec52efc3bf7052bb817cc1abafaf1a309dc04453c38047dc2129"
       },
       "../src/interfaces/nodes.ts": {
         "version": "0ac7874451ab1f6d077a732b5fbbf45535c960be305c61e92e7950ae732d5131",
@@ -294,8 +294,8 @@
         "signature": "f3df89d0138c6dd000ed0dfa9a1d9402efc2b7d5f03a57e602c2d1f853c7db97"
       },
       "../src/editor/actions.ts": {
-        "version": "aab9f614d80edb0aff471d252273d01b9e16b1051b097f13816f36d7d4752c88",
-        "signature": "44b3b5ab83c3cfb00ef8dbd5125df7fb189b078e84f0be51d1aeaa5ef7e55c3b"
+        "version": "ad758ac13a39b1ec6b74cd0fdd6c12cfe5aa6c1930c53775b3fda124a4da38de",
+        "signature": "092cccd32d90c54d976da6f02549490a791be5b34ee0c95281b1265a9b791b13"
       },
       "../src/events/coreeventhandlers.ts": {
         "version": "3c398e314e7d51d79b07df1ef669801608f9eb924ae26d213aa8ab6a7b9151cb",
@@ -323,7 +323,7 @@
       },
       "../src/editor/editorcontext.tsx": {
         "version": "28bf665fed45e4ed02a292ad8f5126e8fb9a9de6fd356b4ba30d90c87a8e3eb7",
-        "signature": "68c6c1419ef139aa73e290cb7dbb138aa193e1d1f121de2b9af812baa3dbaefc"
+        "signature": "e52dc03e565812c8976c6ef60c6b3ed3a19b595ad6cc8c06bfaf5d48e0f4d1aa"
       },
       "../src/editor/useinternaleditor.ts": {
         "version": "12c851a638c54462be2d7203911b46e4e67478c3a25bfbcd32849ad0034d9bfc",
@@ -343,7 +343,7 @@
       },
       "../src/editor/store.tsx": {
         "version": "35503a7b37fe7c0fc6b89645769a91538f7a5cb429b2301a9e8ae585477d16ba",
-        "signature": "f18eba9c18620fea67610b081db29606a3406fd2eb1c21d148c86f3623d42dda"
+        "signature": "98de43242c920a7bf3852d399c0a1f22cfb4f2befbf1a4a5e9e93d97dd84ffe6"
       },
       "../src/interfaces/editor.ts": {
         "version": "48b0d61e0ca00bcb91b8a5251c9aae1523369f07150c1ff8e487f0ddcd7970ce",
@@ -3488,6 +3488,12 @@
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "../node_modules/tiny-invariant/src/index.d.ts": [
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "../src/editor/eventhelpers.ts": [
         "../src/interfaces/index.ts"
       ],
@@ -4856,12 +4862,6 @@
         "../../../node_modules/@types/node/ts3.2/fs.d.ts",
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "../node_modules/tiny-invariant/src/index.d.ts": [
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -4922,8 +4922,42 @@
       "../../utils/lib/getrandomid.d.ts",
       "../../utils/lib/platform.d.ts",
       "../../utils/lib/index.d.ts",
+      "../node_modules/tiny-invariant/src/index.d.ts",
+      "../src/editor/eventhelpers.ts",
+      "../src/utils/resolvecomponent.ts",
+      "../src/utils/serializenode.tsx",
+      "../src/events/findposition.ts",
+      "../src/utils/createnode.ts",
+      "../src/utils/deserializenode.tsx",
       "../src/utils/fromentries.ts",
+      "../src/utils/mergetrees.tsx",
+      "../src/utils/parsenodefromjsx.tsx",
+      "../src/interfaces/events.ts",
+      "../src/utils/removenodefromevents.ts",
+      "../src/events/eventcontext.ts",
       "../src/events/createshadow.ts",
+      "../src/events/defaulteventhandlers.ts",
+      "../src/events/moveplaceholder.ts",
+      "../src/events/rendereditorindicator.tsx",
+      "../src/events/index.tsx",
+      "../src/interfaces/index.ts",
+      "../src/nodes/nodecontext.tsx",
+      "../src/nodes/useinternalnode.ts",
+      "../src/hooks/usenode.ts",
+      "../src/render/simpleelement.tsx",
+      "../src/render/defaultrender.tsx",
+      "../src/render/rendernode.tsx",
+      "../src/nodes/nodeelement.tsx",
+      "../src/nodes/element.tsx",
+      "../src/nodes/canvas.tsx",
+      "../src/nodes/index.ts",
+      "../src/render/frame.tsx",
+      "../src/render/index.tsx",
+      "../src/hooks/useeditor.tsx",
+      "../src/hooks/legacy/connecteditor.tsx",
+      "../src/hooks/legacy/connectnode.tsx",
+      "../src/hooks/index.ts",
+      "../src/index.tsx",
       "../../../node_modules/@types/babel__generator/node_modules/@babel/types/lib/index.d.ts",
       "../../../node_modules/@types/babel__generator/index.d.ts",
       "../../../node_modules/@types/babel__traverse/node_modules/@babel/types/lib/index.d.ts",
@@ -5078,55 +5112,21 @@
       "../../../node_modules/@types/testing-library__react/index.d.ts",
       "../../../node_modules/@types/yargs-parser/index.d.ts",
       "../../../node_modules/@types/yargs/index.d.ts",
-      "../node_modules/tiny-invariant/src/index.d.ts",
-      "../src/editor/query.tsx",
-      "../src/utils/deserializenode.tsx",
-      "../src/editor/nodehelpers.ts",
-      "../src/utils/resolvecomponent.ts",
       "../src/utils/getnodesfromselector.ts",
-      "../src/editor/eventhelpers.ts",
-      "../src/utils/serializenode.tsx",
-      "../src/events/findposition.ts",
-      "../src/utils/createnode.ts",
-      "../src/utils/mergetrees.tsx",
-      "../src/utils/parsenodefromjsx.tsx",
-      "../src/interfaces/nodes.ts",
-      "../src/interfaces/events.ts",
-      "../src/utils/removenodefromevents.ts",
-      "../src/editor/actions.ts",
-      "../src/events/coreeventhandlers.ts",
-      "../src/events/eventcontext.ts",
       "../src/events/positioner.ts",
-      "../src/events/defaulteventhandlers.ts",
-      "../src/events/moveplaceholder.ts",
-      "../src/editor/editorcontext.tsx",
-      "../src/editor/useinternaleditor.ts",
-      "../src/events/rendereditorindicator.tsx",
-      "../src/events/events.tsx",
-      "../src/events/index.tsx",
+      "../src/editor/actions.ts",
       "../src/editor/store.tsx",
-      "../src/interfaces/editor.ts",
-      "../src/interfaces/index.ts",
-      "../src/nodes/nodecontext.tsx",
-      "../src/nodes/useinternalnode.ts",
-      "../src/hooks/usenode.ts",
-      "../src/render/simpleelement.tsx",
-      "../src/render/defaultrender.tsx",
-      "../src/render/rendernode.tsx",
-      "../src/nodes/nodeelement.tsx",
-      "../src/nodes/element.tsx",
-      "../src/nodes/canvas.tsx",
-      "../src/nodes/index.ts",
-      "../src/render/frame.tsx",
-      "../src/render/index.tsx",
-      "../src/hooks/useeditor.tsx",
-      "../src/hooks/legacy/connecteditor.tsx",
-      "../src/hooks/legacy/connectnode.tsx",
-      "../src/hooks/index.ts",
-      "../src/editor/editor.tsx",
-      "../src/editor/index.tsx",
       "../src/utils/testhelpers.ts",
-      "../src/index.tsx"
+      "../src/editor/index.tsx",
+      "../src/editor/editor.tsx",
+      "../src/interfaces/editor.ts",
+      "../src/editor/useinternaleditor.ts",
+      "../src/editor/editorcontext.tsx",
+      "../src/events/events.tsx",
+      "../src/events/coreeventhandlers.ts",
+      "../src/editor/query.tsx",
+      "../src/interfaces/nodes.ts",
+      "../src/editor/nodehelpers.ts"
     ]
   },
   "version": "3.6.4"
