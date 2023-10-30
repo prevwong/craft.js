@@ -926,7 +926,7 @@ const { currentlySelectedId } = useEditor((state) => {
 })
 ```
 
-> Note: state.events.selected is of type `Set<string>`. This is because in the case of multi-select, it's possible for the user to select multiple Nodes by holding down the `<meta>` key.
+> Note: state.events.selected is of type `Set<string>`. This is because in the case of multi-select, it's possible for the user to select multiple Nodes by holding down the `<meta>` key (Mac) or `<ctrl>` key (Windows).
 
 Now, let's replace the placeholder text fields in our Settings Panel with the `settings` Related Component:
 
