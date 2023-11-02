@@ -8,11 +8,11 @@
 module.exports = {
   docs: {
     Migrating: ['migrating/migrating-0.1.x'],
-    Introduction: ['overview', 'acknowledgements'],
+    Introduction: ['overview', 'acknowledgements', 'sponsor'],
     'Core Concepts': [
       'concepts/nodes',
       'concepts/user-components',
-      'concepts/editor-components',
+      'concepts/editor',
     ],
     Guides: ['guides/basic-tutorial', 'guides/save-load-state'],
     'API Reference': [

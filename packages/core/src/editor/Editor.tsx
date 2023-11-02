@@ -18,7 +18,9 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
   // we do not want to warn the user if no resolver was supplied
   if (options.resolver !== undefined) {
     invariant(
-      typeof options.resolver === 'object' && !Array.isArray(options.resolver),
+      typeof options.resolver === 'object' &&
+        !Array.isArray(options.resolver) &&
+        options.resolver !== null,
       ERROR_RESOLVER_NOT_AN_OBJECT
     );
   }
@@ -72,7 +74,7 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
 
   // sync enabled prop with editor store options
   useEffect(() => {
-    if (!context || !options) {
+    if (!context) {
       return;
     }
 

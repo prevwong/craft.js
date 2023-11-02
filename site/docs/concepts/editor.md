@@ -1,5 +1,5 @@
 ---
-id: editor-components
+id: editor
 title: Interacting with the Editor
 ---
 

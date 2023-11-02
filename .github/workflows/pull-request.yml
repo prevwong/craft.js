@@ -3,7 +3,7 @@ name: Pull Request
 on:
   pull_request:
     branches:
-      - develop
+      - main
       - next
 
 jobs:
@@ -13,10 +13,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Use Node.js 10.x
-        uses: actions/setup-node@v1
+        
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16
 
       - name: Cache node_modules
         id: cache-modules
@@ -28,7 +29,7 @@ jobs:
       - name: Install dependencies
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: yarn install --immutable
-        
+
       - name: Build
         run: yarn build
 

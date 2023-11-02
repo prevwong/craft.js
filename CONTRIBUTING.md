@@ -30,9 +30,23 @@ cd craft.js
 4. Do your magic. :fireworks: Be sure that the package(s) that you're working on can still be successfully built after you've applied your changes.
 5. Submit a [pull request](https://github.com/prevwong/craft.js/compare) to merge the changes from your fork :heart: **(If your PR is not linked to an existing issue, then be sure to explain what your PR aims to accomplish)**
 
-# URL
-- Production (master branch): https://craft.js.org/
-- Staging (develop branch): https://craftjs.netlify.com/
+## Pull requests
+
+Craft.js uses [Changesets](https://github.com/changesets/changesets) to track and publish new releases.
+
+Therefore, when you submit a change that affects functionality (ie: fix a bug or add a new feature) to one of the packages (in the `/packages/` folder), then you will need to create a new Changeset by running the following command:
+
+```bash
+yarn changeset
+```
+
+Typos and changes made to the `/examples` or the main `/site` do not require a changeset.
+
+Currently Craft.js is still using major version 0.y.z, where y is only incremented when there's a major/breaking change. Hence, when creating a changeset:- 
+- All backwards compatible changes and bug fixes should be labelled as a `patch` 
+- Otherwise, it should be labelled as `minor`
+- `major` should **not** be used at the moment
+
 
 # License
 By contributing, you agree that your contributions will be licensed under MIT License.

@@ -1,5 +1,5 @@
 import { isChromium, isLinux } from '@craftjs/utils';
-import { isFunction } from 'lodash';
+import isFunction from 'lodash/isFunction';
 import React from 'react';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
@@ -134,8 +134,18 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           }
         );
 
+        const unbindMouseleave = this.addCraftEventListener(
+          el,
+          'mouseleave',
+          (e) => {
+            e.craft.stopPropagation();
+            store.actions.setNodeEvent('hovered', null);
+          }
+        );
+
         return () => {
           unbindMouseover();
+          unbindMouseleave();
         };
       },
       drop: (el: HTMLElement, targetId: NodeId) => {

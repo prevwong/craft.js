@@ -51,11 +51,7 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
 
             const { indicator, currentCanvasHovered } = LayerHandlers.events;
 
-            if (
-              currentCanvasHovered &&
-              indicator &&
-              currentCanvasHovered.data.nodes
-            ) {
+            if (currentCanvasHovered && indicator) {
               const heading = this.getLayer(
                 currentCanvasHovered.id
               ).headingDom.getBoundingClientRect();
@@ -70,6 +66,17 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
                   ];
 
                 if (!currNode) {
+                  // If the currentCanvasHovered has no child nodes, then we place the indicator as the first child
+                  LayerHandlers.events.indicator = {
+                    ...indicator,
+                    placement: {
+                      ...indicator.placement,
+                      index: 0,
+                      where: 'before',
+                      parent: currentCanvasHovered,
+                    },
+                    onCanvas: true,
+                  };
                   return;
                 }
 
