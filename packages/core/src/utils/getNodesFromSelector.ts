@@ -43,10 +43,13 @@ export const getNodesFromSelector = (
     });
 
   if (mergedConfig.existOnly) {
-    invariant(
-      nodeSelectors.filter((selector) => !selector.exists).length === 0,
-      `${ERROR_INVALID_NODEID}-Failed to fetch nodes-${source || ''}`
-    );
+    if (!(nodeSelectors.filter((selector) => !selector.exists).length === 0)) {
+      (window as any).letExistingExceptionThrough = true;
+      invariant(
+        false,
+        `${ERROR_INVALID_NODEID}-Failed to fetch nodes-${source || ''}`
+      );
+    }
   }
 
   return nodeSelectors;

@@ -242,8 +242,8 @@
         "signature": "8cbb0434a8046ffe466bca148070f8ab54d34e07f9aa214a7179d28e9ac96af5"
       },
       "../../core/lib/editor/store.d.ts": {
-        "version": "3f966bec55efdade3bc80ebf8e315e1fd037fe2460e5d2da9b73211456b3eb52",
-        "signature": "3f966bec55efdade3bc80ebf8e315e1fd037fe2460e5d2da9b73211456b3eb52"
+        "version": "5d4e0f06123c8f1f30d1f794da660a12abfc8f2b3868000e23ed569c52a5a887",
+        "signature": "5d4e0f06123c8f1f30d1f794da660a12abfc8f2b3868000e23ed569c52a5a887"
       },
       "../../core/lib/events/coreeventhandlers.d.ts": {
         "version": "083d11e285f2595eefe234f342ceaaf8ccd2ef269636bb5d4e4169442e7c32e0",
@@ -5213,17 +5213,17 @@
       "../../../node_modules/@types/yargs-parser/index.d.ts",
       "../../../node_modules/@types/yargs/index.d.ts",
       "../../core/lib/editor/store.d.ts",
+      "../../core/lib/editor/index.d.ts",
+      "../../core/lib/interfaces/editor.d.ts",
       "../../core/lib/events/positioner.d.ts",
-      "../../core/lib/events/coreeventhandlers.d.ts",
-      "../../core/lib/interfaces/nodes.d.ts",
-      "../../core/lib/editor/nodehelpers.d.ts",
-      "../../core/lib/editor/query.d.ts",
-      "../../core/lib/interfaces/events.d.ts",
       "../../core/lib/editor/useinternaleditor.d.ts",
+      "../../core/lib/events/coreeventhandlers.d.ts",
+      "../../core/lib/editor/query.d.ts",
+      "../../core/lib/interfaces/nodes.d.ts",
+      "../../core/lib/interfaces/events.d.ts",
       "../../core/lib/events/eventcontext.d.ts",
       "../../core/lib/events/defaulteventhandlers.d.ts",
       "../../core/lib/events/index.d.ts",
-      "../../core/lib/interfaces/editor.d.ts",
       "../../core/lib/interfaces/index.d.ts",
       "../../core/lib/nodes/element.d.ts",
       "../../core/lib/nodes/canvas.d.ts",
@@ -5238,7 +5238,7 @@
       "../../core/lib/hooks/legacy/connectnode.d.ts",
       "../../core/lib/hooks/index.d.ts",
       "../../core/lib/editor/editor.d.ts",
-      "../../core/lib/editor/index.d.ts",
+      "../../core/lib/editor/nodehelpers.d.ts",
       "../../core/lib/utils/testhelpers.d.ts",
       "../../core/lib/index.d.ts",
       "../src/interfaces.tsx",

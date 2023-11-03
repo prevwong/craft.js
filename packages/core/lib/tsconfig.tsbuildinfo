@@ -238,7 +238,7 @@
         "signature": "7da28f9e207745f3a58935987dee82b8436594e504b109c00059b5ac5ef7af1d"
       },
       "../src/utils/getnodesfromselector.ts": {
-        "version": "be523f74733179d8963ec6761e4838f4696a3d38121e6232d952065d655b75c7",
+        "version": "0bf1902f99d7774266f2c65e082a7833d45547b926c626be23a60278cdcd5283",
         "signature": "fb6998ab5e611605b9e0734e0faf4cb5fca0b3a3fd5ffd0d451ae3373224cd91"
       },
       "../src/utils/resolvecomponent.ts": {
@@ -4924,7 +4924,6 @@
       "../../utils/lib/index.d.ts",
       "../node_modules/tiny-invariant/src/index.d.ts",
       "../src/editor/eventhelpers.ts",
-      "../src/utils/getnodesfromselector.ts",
       "../src/utils/resolvecomponent.ts",
       "../src/utils/serializenode.tsx",
       "../src/editor/nodehelpers.ts",
@@ -4938,11 +4937,20 @@
       "../src/interfaces/nodes.ts",
       "../src/interfaces/events.ts",
       "../src/utils/removenodefromevents.ts",
+      "../src/editor/actions.ts",
+      "../src/events/coreeventhandlers.ts",
       "../src/events/eventcontext.ts",
+      "../src/events/positioner.ts",
       "../src/events/createshadow.ts",
+      "../src/events/defaulteventhandlers.ts",
       "../src/events/moveplaceholder.ts",
+      "../src/editor/editorcontext.tsx",
+      "../src/editor/useinternaleditor.ts",
       "../src/events/rendereditorindicator.tsx",
+      "../src/events/events.tsx",
       "../src/events/index.tsx",
+      "../src/editor/store.tsx",
+      "../src/interfaces/editor.ts",
       "../src/interfaces/index.ts",
       "../src/nodes/nodecontext.tsx",
       "../src/nodes/useinternalnode.ts",
@@ -4960,6 +4968,9 @@
       "../src/hooks/legacy/connecteditor.tsx",
       "../src/hooks/legacy/connectnode.tsx",
       "../src/hooks/index.ts",
+      "../src/editor/editor.tsx",
+      "../src/editor/index.tsx",
+      "../src/utils/testhelpers.ts",
       "../src/index.tsx",
       "../../../node_modules/@types/babel__generator/node_modules/@babel/types/lib/index.d.ts",
       "../../../node_modules/@types/babel__generator/index.d.ts",
@@ -5115,18 +5126,7 @@
       "../../../node_modules/@types/testing-library__react/index.d.ts",
       "../../../node_modules/@types/yargs-parser/index.d.ts",
       "../../../node_modules/@types/yargs/index.d.ts",
-      "../src/editor/actions.ts",
-      "../src/editor/store.tsx",
-      "../src/utils/testhelpers.ts",
-      "../src/editor/index.tsx",
-      "../src/editor/editor.tsx",
-      "../src/interfaces/editor.ts",
-      "../src/editor/useinternaleditor.ts",
-      "../src/editor/editorcontext.tsx",
-      "../src/events/events.tsx",
-      "../src/events/positioner.ts",
-      "../src/events/coreeventhandlers.ts",
-      "../src/events/defaulteventhandlers.ts"
+      "../src/utils/getnodesfromselector.ts"
     ]
   },
   "version": "3.6.4"
