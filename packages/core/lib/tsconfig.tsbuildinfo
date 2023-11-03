@@ -294,8 +294,8 @@
         "signature": "f3df89d0138c6dd000ed0dfa9a1d9402efc2b7d5f03a57e602c2d1f853c7db97"
       },
       "../src/editor/actions.ts": {
-        "version": "ad758ac13a39b1ec6b74cd0fdd6c12cfe5aa6c1930c53775b3fda124a4da38de",
-        "signature": "092cccd32d90c54d976da6f02549490a791be5b34ee0c95281b1265a9b791b13"
+        "version": "800676ebde66ac21a88e0e10cdc86741ba24c6738f8f560b80ad9cbdbf780dce",
+        "signature": "b775f55710e8b82abe14e29802df6b746828511c228e01766952692241d89e46"
       },
       "../src/events/coreeventhandlers.ts": {
         "version": "3c398e314e7d51d79b07df1ef669801608f9eb924ae26d213aa8ab6a7b9151cb",
@@ -314,7 +314,7 @@
         "signature": "34d5f2c68ef1032351436afae94414b6faaa0e064de4cbee5b51d0c263eeeeee"
       },
       "../src/events/defaulteventhandlers.ts": {
-        "version": "61121b5f5b429999cb525ce2605a329b1624af832feea953915868515142d08d",
+        "version": "535d803002b806e551b1593aadd9924954f2603ed4635687264534db20607a12",
         "signature": "6354ec04f4ab6c96973128c2678de8afa21f5e706072043513566c6b4b0d45cc"
       },
       "../src/events/moveplaceholder.ts": {
@@ -323,7 +323,7 @@
       },
       "../src/editor/editorcontext.tsx": {
         "version": "28bf665fed45e4ed02a292ad8f5126e8fb9a9de6fd356b4ba30d90c87a8e3eb7",
-        "signature": "e52dc03e565812c8976c6ef60c6b3ed3a19b595ad6cc8c06bfaf5d48e0f4d1aa"
+        "signature": "b6ec36ea84290fd8ee24e3df7b6e792a476c90c8cf07407eb8199aee33fdbfc4"
       },
       "../src/editor/useinternaleditor.ts": {
         "version": "12c851a638c54462be2d7203911b46e4e67478c3a25bfbcd32849ad0034d9bfc",
@@ -343,7 +343,7 @@
       },
       "../src/editor/store.tsx": {
         "version": "35503a7b37fe7c0fc6b89645769a91538f7a5cb429b2301a9e8ae585477d16ba",
-        "signature": "98de43242c920a7bf3852d399c0a1f22cfb4f2befbf1a4a5e9e93d97dd84ffe6"
+        "signature": "5d4e0f06123c8f1f30d1f794da660a12abfc8f2b3868000e23ed569c52a5a887"
       },
       "../src/interfaces/editor.ts": {
         "version": "48b0d61e0ca00bcb91b8a5251c9aae1523369f07150c1ff8e487f0ddcd7970ce",
@@ -4924,19 +4924,22 @@
       "../../utils/lib/index.d.ts",
       "../node_modules/tiny-invariant/src/index.d.ts",
       "../src/editor/eventhelpers.ts",
+      "../src/utils/getnodesfromselector.ts",
       "../src/utils/resolvecomponent.ts",
       "../src/utils/serializenode.tsx",
+      "../src/editor/nodehelpers.ts",
       "../src/events/findposition.ts",
       "../src/utils/createnode.ts",
       "../src/utils/deserializenode.tsx",
       "../src/utils/fromentries.ts",
       "../src/utils/mergetrees.tsx",
       "../src/utils/parsenodefromjsx.tsx",
+      "../src/editor/query.tsx",
+      "../src/interfaces/nodes.ts",
       "../src/interfaces/events.ts",
       "../src/utils/removenodefromevents.ts",
       "../src/events/eventcontext.ts",
       "../src/events/createshadow.ts",
-      "../src/events/defaulteventhandlers.ts",
       "../src/events/moveplaceholder.ts",
       "../src/events/rendereditorindicator.tsx",
       "../src/events/index.tsx",
@@ -5112,8 +5115,6 @@
       "../../../node_modules/@types/testing-library__react/index.d.ts",
       "../../../node_modules/@types/yargs-parser/index.d.ts",
       "../../../node_modules/@types/yargs/index.d.ts",
-      "../src/utils/getnodesfromselector.ts",
-      "../src/events/positioner.ts",
       "../src/editor/actions.ts",
       "../src/editor/store.tsx",
       "../src/utils/testhelpers.ts",
@@ -5123,10 +5124,9 @@
       "../src/editor/useinternaleditor.ts",
       "../src/editor/editorcontext.tsx",
       "../src/events/events.tsx",
+      "../src/events/positioner.ts",
       "../src/events/coreeventhandlers.ts",
-      "../src/editor/query.tsx",
-      "../src/interfaces/nodes.ts",
-      "../src/editor/nodehelpers.ts"
+      "../src/events/defaulteventhandlers.ts"
     ]
   },
   "version": "3.6.4"

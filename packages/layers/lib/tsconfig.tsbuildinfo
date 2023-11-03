@@ -230,8 +230,8 @@
         "signature": "5c4c103e36d3d0c6034acc14b43870a186bf65560d9cf41d0f32b055ab1b3277"
       },
       "../../core/lib/editor/query.d.ts": {
-        "version": "4bff8922dbc5cda7b8e897024a3864d6f2d424dfc956bb898bd2f584efce4dad",
-        "signature": "4bff8922dbc5cda7b8e897024a3864d6f2d424dfc956bb898bd2f584efce4dad"
+        "version": "72b8fd97d283df230bc612ac3c5389d01151c2e267a64e62510f385e8445fd87",
+        "signature": "72b8fd97d283df230bc612ac3c5389d01151c2e267a64e62510f385e8445fd87"
       },
       "../../core/lib/interfaces/nodes.d.ts": {
         "version": "64a5acb8ffbf286f73d7e7146b6253f7dd9e183ea61a4891aa9ca8b6c52a650b",
@@ -242,8 +242,8 @@
         "signature": "8cbb0434a8046ffe466bca148070f8ab54d34e07f9aa214a7179d28e9ac96af5"
       },
       "../../core/lib/editor/store.d.ts": {
-        "version": "f18eba9c18620fea67610b081db29606a3406fd2eb1c21d148c86f3623d42dda",
-        "signature": "f18eba9c18620fea67610b081db29606a3406fd2eb1c21d148c86f3623d42dda"
+        "version": "3f966bec55efdade3bc80ebf8e315e1fd037fe2460e5d2da9b73211456b3eb52",
+        "signature": "3f966bec55efdade3bc80ebf8e315e1fd037fe2460e5d2da9b73211456b3eb52"
       },
       "../../core/lib/events/coreeventhandlers.d.ts": {
         "version": "083d11e285f2595eefe234f342ceaaf8ccd2ef269636bb5d4e4169442e7c32e0",
@@ -334,8 +334,8 @@
         "signature": "584a3bac6967ebaee7db3455ac80f3858d73e5988adc788d31e0bae33798eda5"
       },
       "../../core/lib/editor/nodehelpers.d.ts": {
-        "version": "efade5a3b43c865e6d33a80e6ce12d0270ed1b80faa8610acf45e7153f13fa39",
-        "signature": "efade5a3b43c865e6d33a80e6ce12d0270ed1b80faa8610acf45e7153f13fa39"
+        "version": "2b8ca2c0e5e7fa23b8314c2e292430cc939288a89e6efcd02b7a879fbe745379",
+        "signature": "2b8ca2c0e5e7fa23b8314c2e292430cc939288a89e6efcd02b7a879fbe745379"
       },
       "../../core/lib/editor/index.d.ts": {
         "version": "1904b74e4371545849654b34e9f58a41bdb159c3f9da8882d4b50841ce0e7a43",
@@ -5213,19 +5213,17 @@
       "../../../node_modules/@types/yargs-parser/index.d.ts",
       "../../../node_modules/@types/yargs/index.d.ts",
       "../../core/lib/editor/store.d.ts",
-      "../../core/lib/editor/index.d.ts",
-      "../../core/lib/interfaces/editor.d.ts",
       "../../core/lib/events/positioner.d.ts",
-      "../../core/lib/editor/useinternaleditor.d.ts",
       "../../core/lib/events/coreeventhandlers.d.ts",
-      "../../core/lib/hooks/usenode.d.ts",
-      "../../core/lib/hooks/index.d.ts",
-      "../../core/lib/editor/query.d.ts",
       "../../core/lib/interfaces/nodes.d.ts",
+      "../../core/lib/editor/nodehelpers.d.ts",
+      "../../core/lib/editor/query.d.ts",
       "../../core/lib/interfaces/events.d.ts",
+      "../../core/lib/editor/useinternaleditor.d.ts",
       "../../core/lib/events/eventcontext.d.ts",
       "../../core/lib/events/defaulteventhandlers.d.ts",
       "../../core/lib/events/index.d.ts",
+      "../../core/lib/interfaces/editor.d.ts",
       "../../core/lib/interfaces/index.d.ts",
       "../../core/lib/nodes/element.d.ts",
       "../../core/lib/nodes/canvas.d.ts",
@@ -5235,10 +5233,12 @@
       "../../core/lib/render/frame.d.ts",
       "../../core/lib/render/index.d.ts",
       "../../core/lib/hooks/useeditor.d.ts",
+      "../../core/lib/hooks/usenode.d.ts",
       "../../core/lib/hooks/legacy/connecteditor.d.ts",
       "../../core/lib/hooks/legacy/connectnode.d.ts",
+      "../../core/lib/hooks/index.d.ts",
       "../../core/lib/editor/editor.d.ts",
-      "../../core/lib/editor/nodehelpers.d.ts",
+      "../../core/lib/editor/index.d.ts",
       "../../core/lib/utils/testhelpers.d.ts",
       "../../core/lib/index.d.ts",
       "../src/interfaces.tsx",

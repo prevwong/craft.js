@@ -90,7 +90,11 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
               }
             }
 
-            store.actions.setNodeEvent('selected', newSelectedElementIds);
+            store.actions.setNodeEvent(
+              'selected',
+              newSelectedElementIds,
+              'select'
+            );
           }
         );
 
@@ -109,10 +113,18 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
 
           if (isMultiSelect && isNodeAlreadySelected) {
             newSelectedElementIds.splice(newSelectedElementIds.indexOf(id), 1);
-            store.actions.setNodeEvent('selected', newSelectedElementIds);
+            store.actions.setNodeEvent(
+              'selected',
+              newSelectedElementIds,
+              'if-unbindOnClick'
+            );
           } else if (!isMultiSelect && selectedElementIds.length > 1) {
             newSelectedElementIds = [id];
-            store.actions.setNodeEvent('selected', newSelectedElementIds);
+            store.actions.setNodeEvent(
+              'selected',
+              newSelectedElementIds,
+              'else-unbindOnClick'
+            );
           }
 
           this.currentSelectedElementIds = newSelectedElementIds;
@@ -129,7 +141,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           'mouseover',
           (e) => {
             e.craft.stopPropagation();
-            store.actions.setNodeEvent('hovered', id);
+            store.actions.setNodeEvent('hovered', id, 'hover');
           }
         );
 
@@ -193,7 +205,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
             const { query, actions } = store;
             const selectedElementIds = query.getEvent('selected').all();
 
-            actions.setNodeEvent('dragged', selectedElementIds);
+            actions.setNodeEvent('dragged', selectedElementIds, 'drag');
 
             const selectedDOMs = selectedElementIds.map(
               (id) => query.node(id).get().dom
@@ -333,7 +345,7 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
     this.dragTarget = null;
 
     store.actions.setIndicator(null);
-    store.actions.setNodeEvent('dragged', null);
+    store.actions.setNodeEvent('dragged', null, 'dropElement');
     this.positioner.cleanup();
 
     this.positioner = null;

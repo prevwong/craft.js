@@ -331,7 +331,8 @@ const Methods = (
 
     setNodeEvent(
       eventType: NodeEventTypes,
-      nodeIdSelector: NodeSelector<NodeSelectorType.Id>
+      nodeIdSelector: NodeSelector<NodeSelectorType.Id>,
+      source?: string
     ) {
       state.events[eventType].forEach((id) => {
         if (state.nodes[id]) {
@@ -352,7 +353,7 @@ const Methods = (
           idOnly: true,
           existOnly: true,
         },
-        'setNodeEvent'
+        `setNodeEvent - ${source}`
       );
 
       const nodeIds: Set<NodeId> = new Set(targets.map(({ node }) => node.id));
@@ -454,7 +455,8 @@ const Methods = (
 
         this.setNodeEvent(
           'selected',
-          targets.map(({ node }) => node.id)
+          targets.map(({ node }) => node.id),
+          'selectNode'
         );
       } else {
         this.setNodeEvent('selected', null);
