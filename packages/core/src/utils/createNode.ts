@@ -37,6 +37,7 @@ export function createNode(
       linkedNodes: {},
       ...newNode.data,
     },
+    customMetadata: {},
     related: {},
     events: {
       selected: false,
@@ -135,6 +136,10 @@ export function createNode(
             React.createElement(userComponentConfig.related[comp], props)
           );
       });
+    }
+
+    if (userComponentConfig.customMetadata) {
+      node.customMetadata = userComponentConfig.customMetadata;
     }
   }
 
