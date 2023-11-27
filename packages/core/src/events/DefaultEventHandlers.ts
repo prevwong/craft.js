@@ -10,6 +10,7 @@ import { Indicator, NodeId, DragTarget, NodeTree } from '../interfaces';
 
 export type DefaultEventHandlersOptions = {
   isMultiSelectEnabled: (e: MouseEvent) => boolean;
+  removeHoverOnMouseleave: boolean;
 };
 
 /**
@@ -134,17 +135,22 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           }
         );
 
-        const unbindMouseleave = this.addCraftEventListener(
-          el,
-          'mouseleave',
-          (e) => {
+        let unbindMouseleave: (() => void) | null = null;
+
+        if (this.options.removeHoverOnMouseleave) {
+          this.addCraftEventListener(el, 'mouseleave', (e) => {
             e.craft.stopPropagation();
             store.actions.setNodeEvent('hovered', null);
-          }
-        );
+          });
+        }
 
         return () => {
           unbindMouseover();
+
+          if (!unbindMouseleave) {
+            return;
+          }
+
           unbindMouseleave();
         };
       },
