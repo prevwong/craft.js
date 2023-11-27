@@ -1,5 +1,11 @@
 # @craftjs/core
 
+## 0.2.3
+
+### Patch Changes
+
+- [#582](https://github.com/prevwong/craft.js/pull/582) [`12b4af9`](https://github.com/prevwong/craft.js/commit/12b4af96b5571be422aba375417135fd62f62b22) Thanks [@prevwong](https://github.com/prevwong)! - Add option to remove hover state on mouseleave
+
 ## 0.2.2
 
 ### Patch Changes
