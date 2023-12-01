@@ -1,4 +1,3 @@
-// TODO: this approach does not work with Safari
 // Works partially with Linux (except on Chrome)
 // We'll need an alternate way to create drag shadows
 export const createShadow = (
@@ -9,13 +8,14 @@ export const createShadow = (
   if (shadowsToCreate.length === 1 || forceSingleShadow) {
     const { width, height } = shadowsToCreate[0].getBoundingClientRect();
     const shadow = shadowsToCreate[0].cloneNode(true) as HTMLElement;
-
-    shadow.style.position = `fixed`;
+    shadow.style.position = `absolute`;
     shadow.style.left = `-100%`;
     shadow.style.top = `-100%`;
     shadow.style.width = `${width}px`;
     shadow.style.height = `${height}px`;
     shadow.style.pointerEvents = 'none';
+    shadow.style.background = 'white';
+    shadow.classList.add('drag-shadow');
 
     document.body.appendChild(shadow);
     e.dataTransfer.setDragImage(shadow, 0, 0);
@@ -28,12 +28,14 @@ export const createShadow = (
    * That container will be used as the drag shadow for the current drag event
    */
   const container = document.createElement('div');
-  container.style.position = 'fixed';
+  container.style.position = 'absolute';
   container.style.left = '-100%';
   container.style.top = `-100%`;
   container.style.width = '100%';
   container.style.height = '100%';
   container.style.pointerEvents = 'none';
+  container.style.background = 'white';
+  container.classList.add('drag-shadow-container');
 
   shadowsToCreate.forEach((dom) => {
     const { width, height, top, left } = dom.getBoundingClientRect();
@@ -44,6 +46,7 @@ export const createShadow = (
     shadow.style.top = `${top}px`;
     shadow.style.width = `${width}px`;
     shadow.style.height = `${height}px`;
+    shadow.classList.add('drag-shadow');
 
     container.appendChild(shadow);
   });
