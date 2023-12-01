@@ -8,13 +8,13 @@ export const createShadow = (
   if (shadowsToCreate.length === 1 || forceSingleShadow) {
     const { width, height } = shadowsToCreate[0].getBoundingClientRect();
     const shadow = shadowsToCreate[0].cloneNode(true) as HTMLElement;
+
     shadow.style.position = `absolute`;
     shadow.style.left = `-100%`;
     shadow.style.top = `-100%`;
     shadow.style.width = `${width}px`;
     shadow.style.height = `${height}px`;
     shadow.style.pointerEvents = 'none';
-    shadow.style.background = 'white';
     shadow.classList.add('drag-shadow');
 
     document.body.appendChild(shadow);
@@ -34,7 +34,6 @@ export const createShadow = (
   container.style.width = '100%';
   container.style.height = '100%';
   container.style.pointerEvents = 'none';
-  container.style.background = 'white';
   container.classList.add('drag-shadow-container');
 
   shadowsToCreate.forEach((dom) => {
