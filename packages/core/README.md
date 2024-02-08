@@ -207,44 +207,20 @@ Although it is not actually used here, many aspects of Craft.js are written with
 
 If you have questions or there's something you'd like to discuss (eg: contributing), please head over to our [Discord](https://discord.gg/sPpF7fX) server.
 
-## Contributors ✨
 
-Craft.js is made with :heart: by these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+## Sponsor :heart_decoration:
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="https://github.com/prevwong"><img src="https://avatars3.githubusercontent.com/u/16416929?v=4" width="100px;" alt=""/><br /><sub><b>Prev Wong</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=prevwong" title="Code">💻</a> <a href="#design-prevwong" title="Design">🎨</a> <a href="https://github.com/prevwong/craft.js/commits?author=prevwong" title="Documentation">📖</a> <a href="#ideas-prevwong" title="Ideas, Planning, & Feedback">🤔</a> <a href="#example-prevwong" title="Examples">💡</a></td>
-    <td align="center"><a href="https://github.com/azreenashah"><img src="https://avatars0.githubusercontent.com/u/26489181?v=4" width="100px;" alt=""/><br /><sub><b>azreenashah</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=azreenashah" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/fengzilong"><img src="https://avatars0.githubusercontent.com/u/9125255?v=4" width="100px;" alt=""/><br /><sub><b>MO</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=fengzilong" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/ankri"><img src="https://avatars3.githubusercontent.com/u/2842920?v=4" width="100px;" alt=""/><br /><sub><b>Andy Krings-Stern</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=ankri" title="Code">💻</a> <a href="https://github.com/prevwong/craft.js/commits?author=ankri" title="Documentation">📖</a> <a href="#ideas-ankri" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://dackdive.hateblo.jp/"><img src="https://avatars0.githubusercontent.com/u/1001444?v=4" width="100px;" alt=""/><br /><sub><b>Shingo Yamazaki</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=zaki-yama" title="Documentation">📖</a></td>
-    <td align="center"><a href="http://joelschneider.com"><img src="https://avatars0.githubusercontent.com/u/3977552?v=4" width="100px;" alt=""/><br /><sub><b>Joel Schneider</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/issues?q=author%3Ajmschneider" title="Bug reports">🐛</a> <a href="https://github.com/prevwong/craft.js/commits?author=jmschneider" title="Documentation">📖</a></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="https://github.com/Enva2712"><img src="https://avatars0.githubusercontent.com/u/18131608?v=4" width="100px;" alt=""/><br /><sub><b>Evan Rusmisel</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=Enva2712" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://www.candu.ai"><img src="https://avatars0.githubusercontent.com/u/1311832?v=4" width="100px;" alt=""/><br /><sub><b>Michele Riccardo Esposito</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=mresposito" title="Code">💻</a> <a href="#ideas-mresposito" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://github.com/matdru"><img src="https://avatars1.githubusercontent.com/u/4158076?v=4" width="100px;" alt=""/><br /><sub><b>Mateusz Drulis</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=matdru" title="Code">💻</a> <a href="#ideas-matdru" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://github.com/sprabowo"><img src="https://avatars2.githubusercontent.com/u/11748183?v=4" width="100px;" alt=""/><br /><sub><b>Sigit Prabowo</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/issues?q=author%3Asprabowo" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="http://vjsrinath.com"><img src="https://avatars0.githubusercontent.com/u/5001683?v=4" width="100px;" alt=""/><br /><sub><b>Srinath Janakiraman</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=vjsrinath" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/boqiaok"><img src="https://avatars1.githubusercontent.com/u/15731814?v=4" width="100px;" alt=""/><br /><sub><b>Kim</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/issues?q=author%3Aboqiaok" title="Bug reports">🐛</a></td>
-  </tr>
-</table>
-
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
+Craft.js is released under the [MIT license](https://github.com/prevwong/craft.js/blob/master/LICENSE) and is built with 100% love. If you found it useful and would like to ensure its continued development, please consider becoming a backer/sponsor or making a one-time donation via <a href="https://github.com/sponsors/prevwong" target="_blank">Github Sponsor</a>, <a href="https://opencollective.com/craftjs/contribute" target="_blank">Open Collective</a> or <a href="https://ko-fi.com/prevwong" target="_blank">Ko-fi</a>.
 
 
-## Support :heart_decoration:
+<img src="https://opencollective.com/craftjs/sponsors.svg?width=890">
+<img src="https://opencollective.com/craftjs/backers.svg?width=890">
 
-Craft.js is released under the [MIT license](https://github.com/prevwong/craft.js/blob/master/LICENSE) and is built with 100% love. If you found it useful and would like to ensure its continued development, please consider becoming a backer/sponsor or making a one-time donation via <a href="https://opencollective.com/craftjs/contribute" target="_blank">Open Collective</a> or <a href="https://paypal.me/prevwong" target="_blank">Paypal</a>.
+### Sponsors
+- [Tangro](https://opencollective.com/tangro-software-components-gmbh)
+- [Bask](https://opencollective.com/guest-14bbf5c3)
 
-
-<a href="https://opencollective.com/craftjs/contribute" target="_blank">
-  <img src="https://opencollective.com/craftjs/donate/button@2x.png?color=blue" width="260" />
-</a>
+### Backers
+- [CORS Digital](https://opencollective.com/cors-digital)
+- [Mattermix](https://opencollective.com/mattermix)
+- [muttenzer](https://github.com/muttenzer)
