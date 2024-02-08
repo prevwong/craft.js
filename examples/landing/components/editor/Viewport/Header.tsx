@@ -8,6 +8,7 @@ import Checkmark from '../../../public/icons/check.svg';
 import Customize from '../../../public/icons/customize.svg';
 import RedoSvg from '../../../public/icons/toolbox/redo.svg';
 import UndoSvg from '../../../public/icons/toolbox/undo.svg';
+import { useEffect } from 'react';
 
 const HeaderDiv = styled.div`
   width: 100%;
@@ -57,6 +58,29 @@ export const Header = () => {
     canUndo: query.history.canUndo(),
     canRedo: query.history.canRedo(),
   }));
+  // ketstroke undo redo
+  useEffect(() => {
+    const handleKeyDown = (event: any) => {
+      if (event.ctrlKey || event.metaKey) {
+        if (event.key.toLowerCase() === 'z') {
+          event.preventDefault();
+          if (event.shiftKey) {
+            if (canRedo) {
+              actions.history.redo();
+            }
+          } else if (canUndo) {
+            actions.history.undo();
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [canUndo, canRedo, actions]);
 
   return (
     <HeaderDiv className="header text-white transition w-full">
