@@ -34,6 +34,7 @@ export type Options = {
     >,
     query: QueryCallbacksFor<typeof QueryMethods>
   ) => void;
+  context: EditorStore;
 };
 
 export type Resolver = Record<string, string | React.ElementType>;
