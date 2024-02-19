@@ -37,7 +37,7 @@ export function createNode(
       linkedNodes: {},
       ...newNode.data,
     },
-    customMetadata: {},
+    info: {},
     related: {},
     events: {
       selected: false,
@@ -138,8 +138,8 @@ export function createNode(
       });
     }
 
-    if (userComponentConfig.customMetadata) {
-      node.customMetadata = userComponentConfig.customMetadata;
+    if (userComponentConfig.info) {
+      node.info = userComponentConfig.info;
     }
   }
 

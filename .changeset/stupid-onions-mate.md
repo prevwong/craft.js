@@ -2,4 +2,4 @@
 '@craftjs/core': patch
 ---
 
-Add custom metadata to the UserComponent that can be brought into Node
+Add a property `info` to `UserComponent`, which will be copied to `Node`, but will not be serialized.
