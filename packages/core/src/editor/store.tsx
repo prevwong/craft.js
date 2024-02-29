@@ -35,6 +35,7 @@ export const editorInitialState: EditorState = {
         isMultiSelectEnabled: (e: MouseEvent) => !!e.metaKey,
       }),
     normalizeNodes: () => {},
+    context: null,
   },
 };
 

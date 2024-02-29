@@ -25,6 +25,47 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
     );
   }
 
+  // use props provided context or internal one
+  const internalContext = useEditorContext(options);
+  const context = options.context ?? internalContext;
+
+  // sync enabled prop with editor store options
+  useEffect(() => {
+    if (!context) {
+      return;
+    }
+
+    if (
+      options.enabled === undefined ||
+      context.query.getOptions().enabled === options.enabled
+    ) {
+      return;
+    }
+
+    context.actions.setOptions((editorOptions) => {
+      editorOptions.enabled = options.enabled;
+    });
+  }, [context, options.enabled]);
+
+  useEffect(() => {
+    context.subscribe(
+      (_) => ({
+        json: context.query.serialize(),
+      }),
+      () => {
+        context.query.getOptions().onNodesChange(context.query);
+      }
+    );
+  }, [context]);
+
+  return context ? (
+    <EditorContext.Provider value={context}>
+      <Events>{children}</Events>
+    </EditorContext.Provider>
+  ) : null;
+};
+
+export const useEditorContext = (options) => {
   const optionsRef = useRef(options);
 
   const context = useEditorStore(
@@ -72,38 +113,5 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
     }
   );
 
-  // sync enabled prop with editor store options
-  useEffect(() => {
-    if (!context) {
-      return;
-    }
-
-    if (
-      options.enabled === undefined ||
-      context.query.getOptions().enabled === options.enabled
-    ) {
-      return;
-    }
-
-    context.actions.setOptions((editorOptions) => {
-      editorOptions.enabled = options.enabled;
-    });
-  }, [context, options.enabled]);
-
-  useEffect(() => {
-    context.subscribe(
-      (_) => ({
-        json: context.query.serialize(),
-      }),
-      () => {
-        context.query.getOptions().onNodesChange(context.query);
-      }
-    );
-  }, [context]);
-
-  return context ? (
-    <EditorContext.Provider value={context}>
-      <Events>{children}</Events>
-    </EditorContext.Provider>
-  ) : null;
+  return context;
 };
