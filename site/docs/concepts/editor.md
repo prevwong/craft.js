@@ -102,7 +102,7 @@ const Sidebar = () => {
 }
 
 ```
-Queries are also accesible via the `useEditor` collector function. Let's look at an example where we build a component that returns all the descendants of the current selected Node:
+Queries are also accessible via the `useEditor` collector function. Let's look at an example where we build a component that returns all the descendants of the current selected Node:
 
 ```jsx
 const ShowMeMyDescendants = () => {
