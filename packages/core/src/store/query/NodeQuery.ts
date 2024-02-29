@@ -107,6 +107,10 @@ export class NodeQuery {
     return this.node.custom;
   }
 
+  get info() {
+    return this.getConfig().info;
+  }
+
   getState() {
     return this.node;
   }

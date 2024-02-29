@@ -36,6 +36,7 @@ export const getResolverConfig = (type: string, resolver: Resolver) => {
     related: {},
     props: {},
     custom: {},
+    info: {},
     isCanvas: false,
   };
 
