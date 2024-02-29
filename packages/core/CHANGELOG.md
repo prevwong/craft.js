@@ -1,5 +1,11 @@
 # @craftjs/core
 
+## 0.2.5
+
+### Patch Changes
+
+- [#578](https://github.com/prevwong/craft.js/pull/578) [`246fa3c`](https://github.com/prevwong/craft.js/commit/246fa3caa7667e1bb78f73ff0bb96e06f152a266) Thanks [@Traveller23](https://github.com/Traveller23)! - Add a property `info` to `UserComponent`, which will be copied to `Node`, but will not be serialized.
+
 ## 0.2.4
 
 ### Patch Changes
