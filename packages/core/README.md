@@ -43,38 +43,39 @@ No need for complicated plugin systems. Design your editor from top to bottom th
 
 A simple user component can easily be defined as such:
 ```jsx
-import {useNode} from "@craftjs/core";
+import { useNode } from "@craftjs/core";
 
-const TextComponent = ({text}) => {
-  const { connectors: {drag} } = useNode();
+const TextComponent = ({ text }) => {
+  const {
+    connectors: { connect, drag },
+  } = useNode();
 
   return (
-    <div ref={drag}>
+    <div ref={(ref) => connect(drag(ref))}>
       <h2>{text}</h2>
     </div>
-  )
-}
+  );
+};
+
 ```
 
 Heck, the entire UI of your page editor is built using just React.
 ```jsx
 import React from "react";
-import {Editor, Frame, Canvas, Selector} from "@craftjs/core";
+import { Editor, Frame, Selector } from "@craftjs/core";
 const App = () => {
   return (
     <div>
       <header>Some fancy header or whatever</header>
       <Editor>
         // Editable area starts here
-        <Frame resolver={{TextComponent, Container}}>
-          <Canvas>
-            <TextComponent text="I'm already rendered here" />
-          </Canvas>
+        <Frame resolver={{ TextComponent, Container }}>
+          <Element canvas is={TextComponent} text="I'm already rendered here" />
         </Frame>
       </Editor>
     </div>
-  )
-}
+  );
+};
 ```
 
 ### Control how your components are edited
@@ -83,32 +84,32 @@ An obvious requirement for page editors is that they need to allow users to edit
 In the following example, when the user clicks on a component, we'll display a modal that requires the user to input a value for the `text` prop. As the input value changes, the component will be re-rendered with updated prop.
 
 ```jsx
-import {useNode} from "@craftjs/core";
+import { useNode } from "@craftjs/core";
 
-const TextComponent = ({text}) => {
-  const { connectors: { connect, drag }, isClicked, actions: {setProp} } = useNode(
-    (state) => ({
-      isClicked: state.event.selected,
-    })
-  );
+const TextComponent = ({ text }) => {
+  const {
+    connectors: { connect, drag },
+    isClicked,
+    actions: { setProp },
+  } = useNode((state) => ({
+    isClicked: state.events.selected,
+  }));
 
   return (
-    <div ref={dom => connect(drag(dom))}>
+    <div ref={(dom) => connect(drag(dom))}>
       <h2>{text}</h2>
-      {
-        isClicked ? (
-          <Modal>
-            <input
-              type="text"
-              value={text}
-              onChange={e => setProp(e.target.value)}
-            />
-          </Modal>
-        )
-      }
+      {isClicked ? (
+        <Modal>
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setProp(e.target.value)}
+          />
+        </Modal>
+      ) : null}
     </div>
-  )
-}
+  );
+};
 ```
 With this, you could easily implement content editable text or drag-to-resize components, just as any modern page editor would have.
 
