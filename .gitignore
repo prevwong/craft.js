@@ -9,6 +9,7 @@ lib
 .vscode
 .idea
 build
+.rollup.cache
 
 .DS_Store
 cypress/videos/*
