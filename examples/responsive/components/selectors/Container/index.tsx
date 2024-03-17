@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { ContainerSettings } from './ContainerSettings';
-
 export type ContainerProps = {
   background: Record<'r' | 'g' | 'b' | 'a', number>;
   color: Record<'r' | 'g' | 'b' | 'a', number>;
@@ -43,16 +41,16 @@ export const Container = (props: Partial<ContainerProps>) => {
     ...props,
   };
   const {
-    flexDirection,
-    alignItems,
-    justifyContent,
-    fillSpace,
+    // flexDirection,
+    // alignItems,
+    // justifyContent,
+    // fillSpace,
     background,
-    color,
-    padding,
-    margin,
+    // color,
+    // padding,
+    // margin,
     shadow,
-    radius,
+    // radius,
     children,
   } = props;
   return (
@@ -83,8 +81,5 @@ Container.craft = {
   props: defaultProps,
   rules: {
     canDrag: () => true,
-  },
-  related: {
-    toolbar: ContainerSettings,
   },
 };

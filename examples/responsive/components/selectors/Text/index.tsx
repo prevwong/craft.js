@@ -2,8 +2,6 @@ import { useNode, useEditor } from '@craftjs/core';
 import React from 'react';
 import ContentEditable from 'react-contenteditable';
 
-import { TextSettings } from './TextSettings';
-
 export type TextProps = {
   fontSize: string;
   textAlign: string;
@@ -62,8 +60,5 @@ Text.craft = {
     margin: [0, 0, 0, 0],
     shadow: 0,
     text: 'Text',
-  },
-  related: {
-    toolbar: TextSettings,
   },
 };

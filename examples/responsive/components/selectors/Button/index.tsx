@@ -3,8 +3,6 @@ import cx from 'classnames';
 import React from 'react';
 import styled from 'styled-components';
 
-import { ButtonSettings } from './ButtonSettings';
-
 import { Text } from '../Text';
 
 type ButtonProps = {
@@ -66,8 +64,5 @@ Button.craft = {
       ...Text.craft.props,
       textAlign: 'center',
     },
-  },
-  related: {
-    toolbar: ButtonSettings,
   },
 };

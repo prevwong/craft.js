@@ -1,10 +1,14 @@
 import { Editor, Frame, Element } from '@craftjs/core';
 import { Button, ButtonGroup, createMuiTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
+import dynamic from 'next/dynamic';
+import type { ReactNode } from 'react';
 import React, { useState } from 'react';
+import { useLayoutEffect } from 'react';
+import IFrame from 'react-frame-component';
+import { useFrame } from 'react-frame-component';
 
 import { Container, Text } from '../components/selectors';
-import IFrame from 'react-frame-component';
 
 const theme = createMuiTheme({
   typography: {
@@ -67,10 +71,6 @@ function App() {
     </ThemeProvider>
   );
 }
-
-import type { ReactNode } from 'react';
-import { useFrame } from 'react-frame-component';
-import { useLayoutEffect } from 'react';
 function AddStyles({ children }: { children: ReactNode }) {
   const { document: doc } = useFrame(); // <iframe ref="iframe" /> then this.$refs.iframe....
   useLayoutEffect(() => {
@@ -96,7 +96,5 @@ function AddStyles({ children }: { children: ReactNode }) {
 
   return <>{children}</>;
 }
-
-import dynamic from 'next/dynamic';
 
 export default dynamic(() => Promise.resolve(App), { ssr: false });
