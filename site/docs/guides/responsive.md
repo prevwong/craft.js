@@ -20,6 +20,8 @@ The 2 main issues we will tackle are:
 
 
 ## Changing the editor's screen size
+
+### The naive approach
 First we have to choose at what screen sizes we will work with. We could allow the users to choose the breakpoints. But to keep it simple lets just decide on 3. Based on [tailwindcss's breakpoints](https://tailwindcss.com/docs/screens) we'll go with:
 
 ```js
@@ -104,7 +106,7 @@ At this point we have two options:
 1. Have each component keep a state of the classes it should apply based on each breakpoint and pass around the current breakpoint via something like a store or a context. I would not recommend this personally.
 2. Use an iframe which is how all the big website design apps do it
 
-#### Using an Iframe
+### Using an Iframe
 Before you try to replace our div with an iframe and call it a day, I tried, it doesn't work :( We need an iframe-like thing that works well with react. There are probably other options, I encounrage you to do your own research but one I have used and works is the `react-frame-component` package.
 
 ```bash
@@ -190,8 +192,8 @@ If you wrap the inside of the Iframe with this component, like so:
               </AddStyles>
             </IFrame>
 ```
-
-it will copy all the stylesheets from your nextjs app into the iframe and now, **finally, it works!!!! But don't go yet, we still have problem #2 to tackle.**
+### Solution
+it will copy all the stylesheets from your nextjs app into the iframe and now, **finally, it works!!!! But don't go yet, we still have problem #2 to tackle, [how to let the user specify responsive styles](#the-problem-of-styles).**
 
 <Image img="tutorial/responsive-03.gif" />
 
