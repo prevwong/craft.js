@@ -635,8 +635,8 @@ The `useNode` hook accepts a collector function which can be used to retrieve st
 // components/user/Text.js
 export const Text = ({text, fontSize}) => {
   const { connectors: {connect, drag}, hasSelectedNode, hasDraggedNode, actions: {setProp} } = useNode((state) => ({
-    hasSelectedNode: state.events.selected.size > 0,
-    hasDraggedNode: state.events.dragged.size > 0
+    hasSelectedNode: state.events.selected,
+    hasDraggedNode: state.events.dragged
   }));
 
   const [editable, setEditable] = useState(false);
@@ -668,8 +668,8 @@ import {Slider, FormControl, FormLabel} from "@material-ui/core";
 
 export const Text= ({text, fontSize, textAlign}) => {
   const { connectors: {connect, drag}, hasSelectedNode, hasDraggedNode, actions: {setProp} } = useNode((state) => ({
-    hasSelectedNode: state.events.selected.size > 0,
-    hasDraggedNode: state.events.dragged.size > 0
+    hasSelectedNode: state.events.selected,
+    hasDraggedNode: state.events.dragged
   }));
 
   ...
