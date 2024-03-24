@@ -14,7 +14,11 @@ module.exports = {
       'concepts/user-components',
       'concepts/editor',
     ],
-    Guides: ['guides/basic-tutorial', 'guides/save-load-state'],
+    Guides: [
+      'guides/basic-tutorial',
+      'guides/save-load-state',
+      'guides/responsive',
+    ],
     'API Reference': [
       'api/editor-state',
       'api/node',
