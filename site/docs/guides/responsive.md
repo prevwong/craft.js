@@ -137,9 +137,9 @@ Then we can wrap our first frame from craftjs with the frame from `react-frame-c
 > **NOTE: if using SSR framework like next**
 > You must ensure that this component runs only on the client
 
-If you did this correctly you should be able you should see the text on the screen and be able to resize the iframe correctly. **But, and this is important** the text will still not change color. So, we are back where we started, see? progress. This is because of the [CSS Problem](#the-css-problem)
+If you did this correctly you should be able you should see the text on the screen and be able to resize the iframe correctly. **But, and this is important** the text will still not change color. So, we are back where we started, see? progress. This is because of the [Iframe CSS Problem](#the-iframe-css-problem)
 
-### The CSS Problem
+### The iframe CSS Problem
 An **iframe is a website inside your website, therefore it does not have access to your website's style sheets.** 
 
 **This is a very complex issue**, fixing it will largely depend on what styling solution you have chosen & how you implement styling in your editor. The general ideal is that you need to add a stylesheet with the styling you need for your editor to function to the iframe.
