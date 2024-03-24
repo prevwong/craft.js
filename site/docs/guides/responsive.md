@@ -134,64 +134,25 @@ Then we can wrap our first frame from craftjs with the frame from `react-frame-c
           </div>
 ```
 
-If you did this correctly and you are using nextjs (like I am) now the entire craftjs frame no longer shows on the page. See? Progress.
+> **NOTE: if using SSR framework like next**
+> You must ensure that this component runs only on the client
 
-This is because `react-frame-component` doesn't play well with SSR. Quick fix for this is to use next dynamic:
-```tsx
-import dynamic from "next/dynamic";
-export default dynamic(()=> Promise.resolve(App), { ssr: false });
-```
+If you did this correctly you should be able you should see the text on the screen and be able to resize the iframe correctly. **But, and this is important** the text will still not change color. So, we are back where we started, see? progress. This is because of the [CSS Problem](#the-css-problem)
 
-After that is fixed, or if you had the foresight to not use nextjs to begin with, you should see the text on the screen and be able to resize the iframe correctly. **But, and this is important** the text will still not change color. So, we are back where we started, see? progress.
+### The CSS Problem
+An **iframe is a website inside your website, therefore it does not have access to your website's style sheets.** 
 
-This happens because an **iframe is a complete separete entity from you website, it doesn't have access any of your stylesheets** therefore the tailwindcss classes are not applying any styles. The way to fix this is to inject a stylesheet (or various) into the iframe. There are many fixes you might find for this, all of them out of the scope of this tutorial. For this tutorial I will use a piece of code suggested by another user (forgot the name and can't find the issue so if you know message me so I can give credit).
+**This is a very complex issue**, fixing it will largely depend on what styling solution you have chosen & how you implement styling in your editor. The general ideal is that you need to add a stylesheet with the styling you need for your editor to function to the iframe.
 
-```tsx
-import { useFrame } from 'react-frame-component';
-import { useLayoutEffect } from 'react';
-function AddStyles({ children }: { children: ReactNode }) {
-  const { document: doc } = useFrame(); 
-  useLayoutEffect(() => {
-    // this covers development case as well as part of production
-    document.head.querySelectorAll('style').forEach((style) => {
-      if (style.id === 'colors') return;
-      const frameStyles = style.cloneNode(true);
-      doc?.head.append(frameStyles);
-    });
-    if (process && process.env.NODE_ENV === 'production') {
-      document.head.querySelectorAll('link[as="style"]').forEach((ele) => {
-        if (ele.id === 'colors') return;
-        doc?.head.append(ele.cloneNode(true));
-      });
-      document.head
-        .querySelectorAll('link[rel="stylesheet"]')
-        .forEach((ele) => {
-          if (ele.id === 'colors') return;
-          doc?.head.append(ele.cloneNode(true));
-        });
-    }
-  }, [doc]);
+**Here are some solutions based on common patterns**
+1. **CSS-in-JS Solution**: if using something like `Styled Components` where all `User Components` are styled with `styled-components`, in which case - the stylesheet for those components are generated on runtime and is injected into the parent document rather than inside inside the iframe. The easiest solution is to clone the stylesheet into the iframe.
+2. **Using tailwind or other CSS library**: You can clone the stylesheet into the iframe. Or you can add the tailwind/bootstrap/... cdn stylesheet to the iframe
 
-  return <>{children}</>;
-}
-```
+Either way you will probably have to look around, decide on a solution and implement it. 
+
+**To clone a stylesheet from your document into the iframe** you can just get a reference to the HTML element & append it to the head of the iframe (react-frame-component provides a nice hook that gives you a reference the the iframe document).
 
 
-If you wrap the inside of the Iframe with this component, like so: 
-```tsx
-            <IFrame className="block h-full w-full">
-              <AddStyles>
-                <Frame>
-                  <Element canvas is={Container}>
-                    <div className="sm:text-red md:text-white 2xl:text-black">
-                      This text is red on mobile, white on tablets & black on
-                      desktops
-                    </div>
-                  </Element>
-                </Frame>
-              </AddStyles>
-            </IFrame>
-```
 ### Solution
 it will copy all the stylesheets from your nextjs app into the iframe and now, **finally, it works!!!! But don't go yet, we still have problem #2 to tackle, [how to let the user specify responsive styles](#the-problem-of-styles).**
 
