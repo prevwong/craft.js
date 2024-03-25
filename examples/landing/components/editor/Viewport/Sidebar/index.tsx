@@ -61,7 +61,8 @@ const CarbonAdsContainer = styled.div`
   }
 
   #carbonads .carbon-img {
-    display: block;
+    display: flex;
+    align-items: center;
     margin: 0;
     line-height: 1;
     max-width: 30%;
@@ -73,7 +74,7 @@ const CarbonAdsContainer = styled.div`
   }
 
   #carbonads .carbon-text {
-    font-size: 8px;
+    font-size: 12px;
     padding: 10px;
     margin-bottom: 16px;
     line-height: 1.5;
@@ -90,7 +91,7 @@ const CarbonAdsContainer = styled.div`
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: 600;
-    font-size: 6px;
+    font-size: 9px;
     line-height: 1;
     position: absolute;
     bottom: 0;
@@ -115,7 +116,7 @@ const Carbonads = () => {
 
     script.setAttribute(
       'src',
-      '//cdn.carbonads.com/carbon.js?serve=CWYDVK7J&placement=rekajsorg'
+      '//cdn.carbonads.com/carbon.js?serve=CEAI453N&placement=craftjsorg'
     );
     script.setAttribute('id', '_carbonads_js');
 

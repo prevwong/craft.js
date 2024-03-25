@@ -1,5 +1,11 @@
 # @craftjs/layers
 
+## 0.2.2
+
+### Patch Changes
+
+- [#604](https://github.com/prevwong/craft.js/pull/604) [`7d091ab`](https://github.com/prevwong/craft.js/commit/7d091ab9e5c8e1c9e1d66439b5805330b5557930) Thanks [@Hahlh](https://github.com/Hahlh)! - Improve defaultLayerHeader chevron rotation
+
 ## 0.2.1
 
 ### Patch Changes

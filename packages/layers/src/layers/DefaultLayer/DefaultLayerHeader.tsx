@@ -42,12 +42,14 @@ const StyledDiv = styled.div<{ depth: number; selected: boolean }>`
 const Expand = styled.a<{ expanded: boolean }>`
   width: 8px;
   height: 8px;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
   transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
   transform: rotate(${(props) => (props.expanded ? 180 : 0)}deg);
   opacity: 0.7;
   cursor: pointer;
-  transform-origin: 60% center;
 `;
 
 const Hide = styled.a<{ selected: boolean; isHidden: boolean }>`
