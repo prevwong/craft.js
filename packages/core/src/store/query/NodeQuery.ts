@@ -321,7 +321,9 @@ export class NodeQuery {
         if (!exists) {
           return;
         }
-        const targetDeepNodes = this.descendants();
+        const targetDeepNodes = this.find(targetNode.id)
+          .getDescendants()
+          .map((query) => query.id);
 
         invariant(
           !targetDeepNodes.includes(this.id) && this.id !== targetNode.id,
