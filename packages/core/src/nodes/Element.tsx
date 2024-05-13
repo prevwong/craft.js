@@ -26,6 +26,7 @@ export type ElementProps<T extends React.ElementType> = {
   custom?: Record<string, any>;
   children?: React.ReactNode;
   canvas?: boolean;
+  hidden?: boolean;
 } & React.ComponentProps<T>;
 
 export function Element<T extends React.ElementType>({
