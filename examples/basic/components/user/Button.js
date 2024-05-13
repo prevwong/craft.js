@@ -32,7 +32,7 @@ export const ButtonSettings = () => {
     actions: { setProp },
     props,
   } = useNode((node) => ({
-    props: node.data.props,
+    props: node.props,
   }));
 
   return (

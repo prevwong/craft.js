@@ -36,12 +36,12 @@ export const Toolbox = () => {
     enabled,
     connectors: { create },
   } = useEditor((state) => ({
-    enabled: state.options.enabled,
+    enabled: state.isEnabled(),
   }));
 
   return (
     <ToolboxDiv
-      enabled={enabled && enabled}
+      enabled={enabled}
       className="toolbox transition w-12 h-full flex flex-col bg-white"
     >
       <div className="flex flex-1 flex-col items-center pt-3">

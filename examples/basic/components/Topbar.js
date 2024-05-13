@@ -19,9 +19,9 @@ import React, { useState } from 'react';
 export const Topbar = () => {
   const { actions, query, enabled, canUndo, canRedo } = useEditor(
     (state, query) => ({
-      enabled: state.options.enabled,
-      canUndo: state.options.enabled && query.history.canUndo(),
-      canRedo: state.options.enabled && query.history.canRedo(),
+      enabled: state.isEnabled(),
+      canUndo: state.isEnabled() && query.history.canUndo(),
+      canRedo: state.isEnabled() && query.history.canRedo(),
     })
   );
 
@@ -39,9 +39,9 @@ export const Topbar = () => {
             control={
               <Switch
                 checked={enabled}
-                onChange={(_, value) =>
-                  actions.setOptions((options) => (options.enabled = value))
-                }
+                onChange={(_, value) => {
+                  actions.setEnabled(value);
+                }}
               />
             }
             label="Enable"

@@ -28,7 +28,7 @@ export const Text = ({
     actions: { setProp },
   } = useNode();
   const { enabled } = useEditor((state) => ({
-    enabled: state.options.enabled,
+    enabled: state.isEnabled(),
   }));
   return (
     <ContentEditable

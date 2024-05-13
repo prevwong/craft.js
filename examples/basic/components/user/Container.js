@@ -25,8 +25,8 @@ export const ContainerSettings = () => {
     padding,
     actions: { setProp },
   } = useNode((node) => ({
-    background: node.data.props.background,
-    padding: node.data.props.padding,
+    background: node.props.background,
+    padding: node.props.padding,
   }));
 
   return (
