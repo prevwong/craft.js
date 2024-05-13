@@ -45,7 +45,7 @@ export const ToolbarSection = ({ title, props, summary, children }: any) => {
     nodeProps:
       props &&
       props.reduce((res: any, key: any) => {
-        res[key] = node.data.props[key] || null;
+        res[key] = node.props[key] || null;
         return res;
       }, {}),
   }));

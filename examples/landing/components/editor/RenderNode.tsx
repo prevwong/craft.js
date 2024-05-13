@@ -48,13 +48,13 @@ export const RenderNode = ({ render }) => {
     connectors: { drag },
     parent,
   } = useNode((node) => ({
-    isHover: node.events.hovered,
-    dom: node.dom,
-    name: node.data.custom.displayName || node.data.displayName,
-    moveable: query.node(node.id).isDraggable(),
-    deletable: query.node(node.id).isDeletable(),
-    parent: node.data.parent,
-    props: node.data.props,
+    isHover: node.isHovered(),
+    dom: node.getDOM(),
+    name: node.custom.displayName || node.type,
+    moveable: node.isDraggable(),
+    deletable: node.isDeletable(),
+    parent: node.getParent()?.id,
+    props: node.props,
   }));
 
   const currentRef = useRef<HTMLDivElement>();

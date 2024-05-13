@@ -9,8 +9,8 @@ export const Text = ({ text, fontSize, textAlign, ...props }) => {
     selected,
     actions: { setProp },
   } = useNode((state) => ({
-    selected: state.events.selected,
-    dragged: state.events.dragged,
+    selected: state.isSelected(),
+    dragged: state.isDragged(),
   }));
 
   const [editable, setEditable] = useState(false);

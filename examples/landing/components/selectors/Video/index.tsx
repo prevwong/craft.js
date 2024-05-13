@@ -20,12 +20,12 @@ const YoutubeDiv = styled.div<any>`
 
 export const Video = (props: any) => {
   const { enabled } = useEditor((state) => ({
-    enabled: state.options.enabled,
+    enabled: state.isEnabled(),
   }));
   const {
     connectors: { connect },
   } = useNode((node) => ({
-    selected: node.events.selected,
+    selected: node.isSelected(),
   }));
 
   const { videoId } = props;

@@ -34,7 +34,7 @@ export const Button: UserComponent<ButtonProps> = (props: any) => {
   const {
     connectors: { connect },
   } = useNode((node) => ({
-    selected: node.events.selected,
+    selected: node.isSelected(),
   }));
 
   const { text, textComponent, color, ...otherProps } = props;

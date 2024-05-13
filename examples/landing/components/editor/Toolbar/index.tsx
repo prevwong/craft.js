@@ -7,19 +7,19 @@ export * from './ToolbarTextInput';
 export * from './ToolbarDropdown';
 
 export const Toolbar = () => {
-  const { active, related } = useEditor((state, query) => {
+  const { active, toolbar } = useEditor((query) => {
     // TODO: handle multiple selected elements
-    const currentlySelectedNodeId = query.getEvent('selected').first();
+    const currentlySelectedNode = query.event('selected').getFirst();
     return {
-      active: currentlySelectedNodeId,
-      related:
-        currentlySelectedNodeId && state.nodes[currentlySelectedNodeId].related,
+      active: currentlySelectedNode?.id ?? null,
+      toolbar:
+        currentlySelectedNode && currentlySelectedNode.getRelated('toolbar'),
     };
   });
 
   return (
     <div className="py-1 h-full">
-      {active && related.toolbar && React.createElement(related.toolbar)}
+      {active && toolbar && React.createElement(toolbar)}
       {!active && (
         <div
           className="px-5 py-2 flex flex-col items-center h-full justify-center text-center"

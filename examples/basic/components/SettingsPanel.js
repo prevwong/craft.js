@@ -10,17 +10,15 @@ import React from 'react';
 
 export const SettingsPanel = () => {
   const { actions, selected, isEnabled } = useEditor((state, query) => {
-    const currentNodeId = query.getEvent('selected').last();
+    const currentNode = query.event('selected').getLast();
     let selected;
 
-    if (currentNodeId) {
+    if (currentNode) {
       selected = {
-        id: currentNodeId,
-        name: state.nodes[currentNodeId].data.name,
-        settings:
-          state.nodes[currentNodeId].related &&
-          state.nodes[currentNodeId].related.settings,
-        isDeletable: query.node(currentNodeId).isDeletable(),
+        id: currentNode.id,
+        name: currentNode.type,
+        settings: currentNode.getRelated('settings'),
+        isDeletable: currentNode.isDeletable(),
       };
     }
 

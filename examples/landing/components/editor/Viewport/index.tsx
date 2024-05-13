@@ -14,7 +14,7 @@ export const Viewport: React.FC<{ children?: React.ReactNode }> = ({
     connectors,
     actions: { setOptions },
   } = useEditor((state) => ({
-    enabled: state.options.enabled,
+    enabled: state.isEnabled(),
   }));
 
   useEffect(() => {
