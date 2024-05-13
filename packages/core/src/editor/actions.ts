@@ -84,12 +84,7 @@ const Methods = (
 
     iterateChildren(tree.rootNodeId, parentId);
 
-    if (!parentId) {
-      invariant(
-        tree.rootNodeId === ROOT_NODE,
-        'Cannot add non-root Node without a parent'
-      );
-
+    if (!parentId && tree.rootNodeId === ROOT_NODE) {
       return;
     }
 
@@ -180,7 +175,7 @@ const Methods = (
      * @param parentId
      * @param index
      */
-    add(nodeToAdd: Node | Node[], parentId: NodeId, index?: number) {
+    add(nodeToAdd: Node | Node[], parentId?: NodeId, index?: number) {
       // TODO: Deprecate adding array of Nodes to keep implementation simpler
       let nodes = [nodeToAdd];
       if (Array.isArray(nodeToAdd)) {
