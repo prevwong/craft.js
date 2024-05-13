@@ -1,6 +1,6 @@
 import tags from 'html-tags';
 
-import { Resolver } from '../interfaces';
+import { Resolver, UserComponentConfig } from '../interfaces';
 
 export const resolveComponentToType = (
   resolver: Resolver,
@@ -23,7 +23,14 @@ export const resolveComponentToType = (
   if (typeof comp === 'string') return comp;
 };
 
-export const getResolverConfig = (type: string, resolver: Resolver) => {
+type ResolvedComponentConfig = UserComponentConfig<any> & {
+  component: string | React.ComponentType;
+};
+
+export const getResolverConfig = (
+  type: string,
+  resolver: Resolver
+): ResolvedComponentConfig => {
   const defaultConfig = {
     component: type,
     displayName: type,
@@ -50,7 +57,7 @@ export const getResolverConfig = (type: string, resolver: Resolver) => {
     return null;
   }
 
-  const craftConfig = component['craft'] || {};
+  const craftConfig: UserComponentConfig<any> = component['craft'] || {};
 
   return {
     ...defaultConfig,

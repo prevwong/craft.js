@@ -1,3 +1,5 @@
+import { DeepPartial } from '@craftjs/utils';
+
 import React from 'react';
 
 import { BackwardsCompatibleNode } from './legacy/nodes';
@@ -6,15 +8,16 @@ import { NodeQuery } from '../store';
 
 export type UserComponentConfig<T> = {
   displayName: string;
-  rules: Partial<NodeRules>;
-  related: Partial<NodeRelated>;
-  props: Partial<T>;
+  rules: NodeRules;
+  related: NodeRelated;
+  props: T;
   custom: Record<string, any>;
   isCanvas: boolean;
+  info: Record<string, any>;
 };
 
 export type UserComponent<T = any> = React.ComponentType<T> & {
-  craft?: Partial<UserComponentConfig<T>>;
+  craft?: Partial<DeepPartial<UserComponentConfig<T>>>;
 };
 
 export type NodeId = string;

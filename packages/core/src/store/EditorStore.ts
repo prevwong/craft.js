@@ -69,6 +69,7 @@ export class EditorStore extends Store<EditorState> {
         new DefaultEventHandlers({
           store,
           isMultiSelectEnabled: (e: MouseEvent) => !!e.metaKey,
+          removeHoverOnMouseleave: false,
         }),
       normalizeNodes: () => {},
       resolver: {},

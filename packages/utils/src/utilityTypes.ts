@@ -7,3 +7,13 @@ export type ConditionallyMergeRecordTypes<
   C,
   S extends Record<string, any>
 > = C extends null ? S : C & S;
+export type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends
+    | string
+    | number
+    | boolean
+    | Function
+    | Array<any>
+    ? T[K]
+    : DeepPartial<T[K]>;
+};

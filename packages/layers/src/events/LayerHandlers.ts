@@ -73,7 +73,6 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
                       ...indicator.placement,
                       index: 0,
                       where: 'before',
-                      parent: currentCanvasHovered,
                     },
                     onCanvas: true,
                   };
