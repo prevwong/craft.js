@@ -14,6 +14,12 @@ import {
 } from '../interfaces';
 import { getNodesFromSelector } from '../utils/getNodesFromSelector';
 
+// Hack: to trigger dragend event immediate
+// Otherwise we would have to wait until the native animation is completed before we can actually drop an block
+const documentDragoverEventHandler = (e: DragEvent) => {
+  e.preventDefault();
+};
+
 /**
  * Positioner is responsible for computing the drop Indicator during a sequence of drag-n-drop events
  */
@@ -51,10 +57,12 @@ export class Positioner {
 
     this.onScrollListener = this.onScroll.bind(this);
     window.addEventListener('scroll', this.onScrollListener, true);
+    window.addEventListener('dragover', documentDragoverEventHandler, false);
   }
 
   cleanup() {
     window.removeEventListener('scroll', this.onScrollListener, true);
+    window.removeEventListener('dragover', documentDragoverEventHandler, false);
   }
 
   private onScroll(e: Event) {
