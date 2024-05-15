@@ -79,7 +79,9 @@ describe('<Element />', () => {
     });
 
     it('should call query.parseReactElement()', () => {
-      expect(parseReactElement).toHaveBeenCalledWith(
+      const arg0 = parseReactElement.mock.calls[0][0];
+      const arg0WithoutOwner = { ...arg0, _owner: null };
+      expect(arg0WithoutOwner).toEqual(
         <Element {...elementProps}>{children}</Element>
       );
     });

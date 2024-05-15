@@ -44,21 +44,21 @@ export const Frame: React.FC<React.PropsWithChildren<FrameProps>> = ({
     initialData: data || json,
   });
 
-  const isInitialChildrenLoadedRef = useRef(false);
+  const isInitialLoadedRef = useRef(false);
+
+  if (!isInitialLoadedRef.current && initialState.current.initialData) {
+    actions.history.ignore().deserialize(initialState.current.initialData);
+    isInitialLoadedRef.current = true;
+  }
 
   useEffect(() => {
-    const { initialChildren, initialData } = initialState.current;
-
-    if (initialData) {
-      actions.history.ignore().deserialize(initialData);
-      return;
-    }
+    const { initialChildren } = initialState.current;
 
     // Prevent recreating Nodes from child elements if we already did it the first time
     // Usually an issue in React Strict Mode where this hook is called twice which results in orphaned Nodes
-    const isInitialChildrenLoaded = isInitialChildrenLoadedRef.current;
+    const isInitialLoaded = isInitialLoadedRef.current;
 
-    if (!initialChildren || isInitialChildrenLoaded) {
+    if (!initialChildren || isInitialLoaded) {
       return;
     }
 
@@ -72,7 +72,7 @@ export const Frame: React.FC<React.PropsWithChildren<FrameProps>> = ({
     });
 
     actions.history.ignore().addNodeTree(node);
-    isInitialChildrenLoadedRef.current = true;
+    isInitialLoadedRef.current = true;
   }, [actions, query]);
 
   return <RenderRootNode />;

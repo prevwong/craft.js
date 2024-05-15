@@ -1,4 +1,4 @@
-import { ERROR_TOP_LEVEL_ELEMENT_NO_ID, useEffectOnce } from '@craftjs/utils';
+import { ERROR_TOP_LEVEL_ELEMENT_NO_ID } from '@craftjs/utils';
 import React, { useState } from 'react';
 import invariant from 'tiny-invariant';
 
@@ -47,9 +47,7 @@ export function Element<T extends React.ElementType>({
     },
   }));
 
-  const [linkedNodeId, setLinkedNodeId] = useState<NodeId | null>(null);
-
-  useEffectOnce(() => {
+  const [linkedNodeId] = useState<NodeId | null>(() => {
     invariant(!!id, ERROR_TOP_LEVEL_ELEMENT_NO_ID);
     const { id: nodeId, data } = node;
 
@@ -77,9 +75,9 @@ export function Element<T extends React.ElementType>({
         linkedNodeId = tree.rootNodeId;
         actions.history.ignore().addLinkedNodeFromTree(tree, nodeId, id);
       }
-
-      setLinkedNodeId(linkedNodeId);
+      return linkedNodeId;
     }
+    return null;
   });
 
   return linkedNodeId ? <NodeElement id={linkedNodeId} /> : null;
