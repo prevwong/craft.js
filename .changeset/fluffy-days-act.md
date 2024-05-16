@@ -2,4 +2,4 @@
 '@craftjs/core': minor
 ---
 
-Resolve performance issue within resolveComponent.
+Improve resolver performance
