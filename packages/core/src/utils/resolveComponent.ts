@@ -38,11 +38,6 @@ const searchComponentInResolver = (
   resolver: Resolver,
   comp: React.ElementType
 ): string | null => {
-  const componentName = getComponentName(comp);
-  if (Object.hasOwn(resolver, componentName)) {
-    return componentName;
-  }
-
   const name = getReversedResolver(resolver).get(comp);
   return name !== undefined ? name : null;
 };
