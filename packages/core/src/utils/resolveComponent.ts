@@ -4,44 +4,63 @@ import invariant from 'tiny-invariant';
 
 import { Resolver } from '../interfaces';
 
-let currResolver: Resolver | undefined = undefined;
-const reversedResolver = new Map<React.ElementType | string, string>();
+type ReversedResolver = Map<React.ComponentType | string, string>;
 
-export const resolveComponent = (
-  resolver: Resolver,
-  comp: React.ElementType | string
-) => {
-  const componentName = (comp as any).name || (comp as any).displayName;
-  const resolvedName = resolver[componentName]
-    ? componentName
-    : searchComponentInResolver(resolver, comp);
+type CachedResolverData = {
+  resolver: Resolver;
+  reversed: ReversedResolver;
+};
 
-  invariant(
-    resolvedName,
-    ERROR_NOT_IN_RESOLVER.replace('%node_type%', componentName)
-  );
+let CACHED_RESOLVER_DATA: CachedResolverData | null = null;
 
-  return resolvedName;
+const getReversedResolver = (resolver: Resolver): ReversedResolver => {
+  if (CACHED_RESOLVER_DATA && CACHED_RESOLVER_DATA.resolver === resolver) {
+    return CACHED_RESOLVER_DATA.reversed;
+  }
+
+  CACHED_RESOLVER_DATA = {
+    resolver,
+    reversed: new Map(),
+  };
+
+  for (const [name, comp] of Object.entries(resolver)) {
+    CACHED_RESOLVER_DATA.reversed.set(comp, name);
+  }
+
+  return CACHED_RESOLVER_DATA.reversed;
+};
+
+const getComponentName = (component: React.ElementType): string | undefined => {
+  return (component as any).name || (component as any).displayName;
 };
 
 const searchComponentInResolver = (
   resolver: Resolver,
-  comp: React.ElementType | string
-): string | undefined => {
-  if (currResolver !== resolver) updateReversedResolver(resolver);
+  comp: React.ElementType
+): string | null => {
+  const componentName = getComponentName(comp);
+  if (Object.hasOwn(resolver, componentName)) {
+    return componentName;
+  }
 
-  const name = reversedResolver.get(comp);
-  if (name !== undefined) return name;
-
-  if (typeof comp === 'string') return comp;
-
-  return undefined;
+  const name = getReversedResolver(resolver).get(comp);
+  return name !== undefined ? name : null;
 };
 
-const updateReversedResolver = (resolver: Resolver): void => {
-  currResolver = resolver;
-  reversedResolver.clear();
-  for (const [name, comp] of Object.entries(resolver)) {
-    reversedResolver.set(comp, name);
+export const resolveComponent = (
+  resolver: Resolver,
+  comp: React.ElementType | string
+): string => {
+  if (typeof comp === 'string') {
+    return comp;
   }
+
+  const resolvedName = searchComponentInResolver(resolver, comp);
+
+  invariant(
+    resolvedName,
+    ERROR_NOT_IN_RESOLVER.replace('%node_type%', getComponentName(comp))
+  );
+
+  return resolvedName;
 };
