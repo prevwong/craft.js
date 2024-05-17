@@ -1,5 +1,5 @@
 import { deprecationWarning, ROOT_NODE } from '@craftjs/utils';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { useInternalEditor } from '../editor/useInternalEditor';
 import { SerializedNodes } from '../interfaces';
@@ -39,41 +39,28 @@ export const Frame: React.FC<React.PropsWithChildren<FrameProps>> = ({
     });
   }
 
-  const initialState = useRef({
-    initialChildren: children,
-    initialData: data || json,
-  });
+  const isLoaded = useRef(false);
 
-  const isInitialChildrenLoadedRef = useRef(false);
-
-  useEffect(() => {
-    const { initialChildren, initialData } = initialState.current;
+  if (!isLoaded.current) {
+    const initialData = data || json;
 
     if (initialData) {
       actions.history.ignore().deserialize(initialData);
-      return;
+    } else if (children) {
+      const rootNode = React.Children.only(children) as React.ReactElement;
+
+      const node = query.parseReactElement(rootNode).toNodeTree((node, jsx) => {
+        if (jsx === rootNode) {
+          node.id = ROOT_NODE;
+        }
+        return node;
+      });
+
+      actions.history.ignore().addNodeTree(node);
     }
 
-    // Prevent recreating Nodes from child elements if we already did it the first time
-    // Usually an issue in React Strict Mode where this hook is called twice which results in orphaned Nodes
-    const isInitialChildrenLoaded = isInitialChildrenLoadedRef.current;
-
-    if (!initialChildren || isInitialChildrenLoaded) {
-      return;
-    }
-
-    const rootNode = React.Children.only(initialChildren) as React.ReactElement;
-
-    const node = query.parseReactElement(rootNode).toNodeTree((node, jsx) => {
-      if (jsx === rootNode) {
-        node.id = ROOT_NODE;
-      }
-      return node;
-    });
-
-    actions.history.ignore().addNodeTree(node);
-    isInitialChildrenLoadedRef.current = true;
-  }, [actions, query]);
+    isLoaded.current = true;
+  }
 
   return <RenderRootNode />;
 };
