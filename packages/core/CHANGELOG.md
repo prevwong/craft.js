@@ -1,5 +1,19 @@
 # @craftjs/core
 
+## 0.2.6
+
+### Patch Changes
+
+- [`4fa9b46`](https://github.com/prevwong/craft.js/commit/4fa9b4654c75f75dbcb4fff0a7abc61b94984319) Thanks [@Traveller23](https://github.com/Traveller23)! - Improve resolver performance
+
+* [#634](https://github.com/prevwong/craft.js/pull/634) [`4dcd6a2`](https://github.com/prevwong/craft.js/commit/4dcd6a202b1740035967856b04f612f834030b6c) Thanks [@prevwong](https://github.com/prevwong)! - Prevent delay when drop element outside of Editor frame
+
+- [#630](https://github.com/prevwong/craft.js/pull/630) [`fcc71d8`](https://github.com/prevwong/craft.js/commit/fcc71d81cb27ea3a5f7d5550785dfbff19690926) Thanks [@pavsidhu](https://github.com/pavsidhu)! - Add `hidden` prop to <Element /> component's prop type
+
+* [`cb45f2c`](https://github.com/prevwong/craft.js/commit/cb45f2c8785e7ce048c52e841b7d034d4059142a) Thanks [@tomas-c](https://github.com/tomas-c)! - SSR support
+
+- [`b25469e`](https://github.com/prevwong/craft.js/commit/b25469ecc7ffb59fa1f43d3664e002c1e2a5bd46) Thanks [@prevwong](https://github.com/prevwong)! - Make parentId param optional in actions.add()
+
 ## 0.2.5
 
 ### Patch Changes
