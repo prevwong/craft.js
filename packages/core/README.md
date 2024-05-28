@@ -62,7 +62,7 @@ const TextComponent = ({ text }) => {
 Heck, the entire UI of your page editor is built using just React.
 ```jsx
 import React from "react";
-import { Editor, Frame, Selector } from "@craftjs/core";
+import { Editor, Frame, Element  } from "@craftjs/core";
 const App = () => {
   return (
     <div>
