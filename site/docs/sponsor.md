@@ -8,3 +8,17 @@ Craft.js is released under the [MIT license](https://github.com/prevwong/craft.j
 In July 2022, I left my full-time job and in that time to focus on Craft and it's [future](https://github.com/prevwong/craft.js/issues/507). If you found this project useful and would like to ensure its continued development, please consider sponsoring/donating to the project. Your contribution would mean a lot to me!
 
 You can choose to contribute via [Github Sponsors](https://github.com/sponsors/prevwong), [OpenCollective](https://opencollective.com/craftjs), [Patreon](https://patreon.com/imprev) or [Ko-fi](https://ko-fi.com/prevwong).
+
+
+### Sponsors
+- [Tangro](https://opencollective.com/tangro-software-components-gmbh)
+
+### Backers
+- [Tekeste Kidanu](https://opencollective.com/guest-1703f486)
+- [CORS Digital](https://opencollective.com/cors-digital)
+- [Mattermix](https://opencollective.com/mattermix)
+- [muttenzer](https://github.com/muttenzer)
+- [ITCuw](https://github.com/ITCuw)
+- [quan](https://github.com/qu8n)
+- [Victor Vanegas](vicvans20)
+- [kasayo](https://opencollective.com/kasayo)

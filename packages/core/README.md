@@ -219,9 +219,13 @@ Craft.js is released under the [MIT license](https://github.com/prevwong/craft.j
 
 ### Sponsors
 - [Tangro](https://opencollective.com/tangro-software-components-gmbh)
-- [Bask](https://opencollective.com/guest-14bbf5c3)
 
 ### Backers
+- [Tekeste Kidanu](https://opencollective.com/guest-1703f486)
 - [CORS Digital](https://opencollective.com/cors-digital)
 - [Mattermix](https://opencollective.com/mattermix)
 - [muttenzer](https://github.com/muttenzer)
+- [ITCuw](https://github.com/ITCuw)
+- [quan](https://github.com/qu8n)
+- [Victor Vanegas](vicvans20)
+- [kasayo](https://opencollective.com/kasayo)
