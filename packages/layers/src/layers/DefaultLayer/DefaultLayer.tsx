@@ -44,9 +44,11 @@ const LayerChildren = styled.div<{ hasCanvases: boolean }>`
       : ''}
 `;
 
-export const DefaultLayer: React.FC<{ children?: React.ReactNode }> = ({
-  children,
-}) => {
+export type DefaultLayerProps = {
+  children?: React.ReactNode;
+};
+
+export const DefaultLayer = ({ children }: DefaultLayerProps) => {
   const {
     id,
     expanded,

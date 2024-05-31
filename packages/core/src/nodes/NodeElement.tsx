@@ -10,9 +10,7 @@ export type NodeElementProps = {
   render?: React.ReactElement;
 };
 
-export const NodeElement: React.FC<React.PropsWithChildren<
-  NodeElementProps
->> = ({ id, render }) => {
+export const NodeElement = ({ id, render }: NodeElementProps) => {
   return (
     <NodeProvider id={id}>
       <RenderNodeToElement render={render} />

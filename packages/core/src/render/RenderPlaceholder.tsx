@@ -3,14 +3,15 @@ import React from 'react';
 import { useEditor } from '../hooks';
 import { Indicator } from '../interfaces';
 
-export type Placeholder = {
+export type RenderPlaceholderProps = {
   placeholder: Indicator;
   suggestedStyles: any;
 };
 
-export const RenderPlaceholder: React.FC<React.PropsWithChildren<
-  Placeholder
->> = ({ placeholder, suggestedStyles }) => {
+export const RenderPlaceholder = ({
+  placeholder,
+  suggestedStyles,
+}: RenderPlaceholderProps) => {
   const { indicator } = useEditor((state) => ({
     indicator: state.options.indicator,
   }));

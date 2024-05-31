@@ -5,12 +5,11 @@ import { DefaultRender } from './DefaultRender';
 import { useInternalEditor } from '../editor/useInternalEditor';
 import { useInternalNode } from '../nodes/useInternalNode';
 
-type RenderNodeToElementType = {
+type RenderNodeToElementProps = {
   render?: React.ReactElement;
+  children?: React.ReactNode;
 };
-export const RenderNodeToElement: React.FC<React.PropsWithChildren<
-  RenderNodeToElementType
->> = ({ render }) => {
+export const RenderNodeToElement = ({ render }: RenderNodeToElementProps) => {
   const { hidden } = useInternalNode((node) => ({
     hidden: node.data.hidden,
   }));

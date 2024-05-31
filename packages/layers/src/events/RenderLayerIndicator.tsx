@@ -4,7 +4,13 @@ import React, { useMemo } from 'react';
 
 import { useLayerManager } from '../manager/useLayerManager';
 
-export const RenderLayerIndicator: React.FC<any> = ({ children }) => {
+type RenderLayerIndicatorProps = {
+  children?: React.ReactNode;
+};
+
+export const RenderLayerIndicator = ({
+  children,
+}: RenderLayerIndicatorProps) => {
   const { layers, events } = useLayerManager((state) => state);
   const { query } = useEditor((state) => ({ enabled: state.options.enabled }));
   const { indicator: indicatorStyles } = query.getOptions();

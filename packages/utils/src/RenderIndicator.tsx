@@ -1,7 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-export const RenderIndicator: React.FC<any> = ({ style, parentDom }) => {
+type RenderIndicatorProps = {
+  style: React.CSSProperties;
+  parentDom?: HTMLElement;
+};
+
+export const RenderIndicator = ({ style, parentDom }: RenderIndicatorProps) => {
   const indicator = (
     <div
       style={{
