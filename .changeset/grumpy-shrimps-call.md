@@ -2,4 +2,4 @@
 '@craftjs/core': patch
 ---
 
-Fix <Element /> hydration errror in react strict mode
+Fix <Element /> linked node creating when in react strict mode
