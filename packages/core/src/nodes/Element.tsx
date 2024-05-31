@@ -1,5 +1,5 @@
 import { ERROR_TOP_LEVEL_ELEMENT_NO_ID } from '@craftjs/utils';
-import React, { useState } from 'react';
+import React from 'react';
 import invariant from 'tiny-invariant';
 
 import { NodeElement } from './NodeElement';
@@ -40,45 +40,38 @@ export function Element<T extends React.ElementType>({
   };
 
   const { query, actions } = useInternalEditor();
-  const { node, inNodeContext } = useInternalNode((node) => ({
+  const { node } = useInternalNode((node) => ({
     node: {
       id: node.id,
       data: node.data,
     },
   }));
 
-  const [linkedNodeId] = useState<NodeId | null>(() => {
-    invariant(!!id, ERROR_TOP_LEVEL_ELEMENT_NO_ID);
-    const { id: nodeId, data } = node;
+  invariant(!!id, ERROR_TOP_LEVEL_ELEMENT_NO_ID);
 
-    if (inNodeContext) {
-      let linkedNodeId;
+  let linkedNodeId: string;
 
-      const existingNode =
-        data.linkedNodes &&
-        data.linkedNodes[id] &&
-        query.node(data.linkedNodes[id]).get();
+  const { id: nodeId, data } = node;
 
-      // Render existing linked Node if it already exists (and is the same type as the JSX)
-      if (existingNode && existingNode.data.type === is) {
-        linkedNodeId = existingNode.id;
-      } else {
-        // otherwise, create and render a new linked Node
-        const linkedElement = React.createElement(
-          Element,
-          elementProps,
-          children
-        );
+  const existingNode =
+    data.linkedNodes &&
+    data.linkedNodes[id] &&
+    query.node(data.linkedNodes[id]).get();
 
-        const tree = query.parseReactElement(linkedElement).toNodeTree();
+  if (existingNode && existingNode.data.type === is) {
+    linkedNodeId = existingNode.id;
+  } else {
+    const linkedElement = React.createElement(Element, elementProps, children);
 
-        linkedNodeId = tree.rootNodeId;
-        actions.history.ignore().addLinkedNodeFromTree(tree, nodeId, id);
-      }
-      return linkedNodeId;
-    }
+    const tree = query.parseReactElement(linkedElement).toNodeTree();
+
+    linkedNodeId = tree.rootNodeId;
+    actions.history.ignore().addLinkedNodeFromTree(tree, nodeId, id);
+  }
+
+  if (!linkedNodeId) {
     return null;
-  });
+  }
 
-  return linkedNodeId ? <NodeElement id={linkedNodeId} /> : null;
+  return <NodeElement id={linkedNodeId} />;
 }
