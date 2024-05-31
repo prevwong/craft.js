@@ -15,7 +15,7 @@ export const NodeElement: React.FC<React.PropsWithChildren<
 >> = ({ id, render }) => {
   return (
     <NodeProvider id={id}>
-      <RenderNodeToElement render={render} />
+      <RenderNodeToElement id={id} render={render} />
     </NodeProvider>
   );
 };
