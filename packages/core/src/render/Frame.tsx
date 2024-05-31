@@ -6,6 +6,7 @@ import { SerializedNodes } from '../interfaces';
 import { NodeElement } from '../nodes/NodeElement';
 
 export type FrameProps = {
+  children?: React.ReactNode;
   json?: string;
   data?: string | SerializedNodes;
 };
@@ -26,11 +27,7 @@ const RenderRootNode = () => {
 /**
  * A React Component that defines the editable area
  */
-export const Frame: React.FC<React.PropsWithChildren<FrameProps>> = ({
-  children,
-  json,
-  data,
-}) => {
+export const Frame = ({ children, json, data }: FrameProps) => {
   const { actions, query } = useInternalEditor();
 
   if (!!json) {

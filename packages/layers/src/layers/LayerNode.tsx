@@ -6,7 +6,7 @@ import { useLayer } from './useLayer';
 
 import { useLayerManager } from '../manager/useLayerManager';
 
-export const LayerNode: React.FC = () => {
+export const LayerNode = () => {
   const { id, depth, children, expanded } = useLayer((layer) => ({
     expanded: layer.expanded,
   }));

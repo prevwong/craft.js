@@ -8,10 +8,15 @@ import { LayerEventContextProvider } from '../events';
 import { LayerOptions } from '../interfaces';
 import { DefaultLayer } from '../layers';
 
-export const LayerManagerProvider: React.FC<{
+type LayerManagerProviderProps = {
   options: Partial<LayerOptions>;
   children?: React.ReactNode;
-}> = ({ children, options }) => {
+};
+
+export const LayerManagerProvider = ({
+  children,
+  options,
+}: LayerManagerProviderProps) => {
   // TODO: fix type
   const store = useMethods(LayerMethods, {
     layers: {},

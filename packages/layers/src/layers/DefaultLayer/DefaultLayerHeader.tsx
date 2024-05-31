@@ -91,7 +91,7 @@ const TopLevelIndicator = styled.div`
   }
 `;
 
-export const DefaultLayerHeader: React.FC = () => {
+export const DefaultLayerHeader = () => {
   const {
     id,
     depth,
