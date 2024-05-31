@@ -1,5 +1,16 @@
 # @craftjs/core
 
+## 0.2.7
+
+### Patch Changes
+
+- [#653](https://github.com/prevwong/craft.js/pull/653) [`c069dff`](https://github.com/prevwong/craft.js/commit/c069dff47176541361cd0cf1769830176c07eb99) Thanks [@prevwong](https://github.com/prevwong)! - Fix <Element /> linked node creating when in react strict mode
+
+* [`9eff6b8`](https://github.com/prevwong/craft.js/commit/9eff6b811933da34f33143212bfb87b1a24829fe) Thanks [@prevwong](https://github.com/prevwong)! - Cleanup React.FC prop types
+
+* Updated dependencies [[`9eff6b8`](https://github.com/prevwong/craft.js/commit/9eff6b811933da34f33143212bfb87b1a24829fe)]:
+  - @craftjs/utils@0.2.2
+
 ## 0.2.6
 
 ### Patch Changes
