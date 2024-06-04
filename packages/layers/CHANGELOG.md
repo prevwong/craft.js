@@ -1,5 +1,14 @@
 # @craftjs/layers
 
+## 0.2.3
+
+### Patch Changes
+
+- [`9eff6b8`](https://github.com/prevwong/craft.js/commit/9eff6b811933da34f33143212bfb87b1a24829fe) Thanks [@prevwong](https://github.com/prevwong)! - Cleanup React.FC prop types
+
+- Updated dependencies [[`9eff6b8`](https://github.com/prevwong/craft.js/commit/9eff6b811933da34f33143212bfb87b1a24829fe)]:
+  - @craftjs/utils@0.2.2
+
 ## 0.2.2
 
 ### Patch Changes
