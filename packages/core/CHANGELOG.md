@@ -1,5 +1,11 @@
 # @craftjs/core
 
+## 0.2.8
+
+### Patch Changes
+
+- [#656](https://github.com/prevwong/craft.js/pull/656) [`62cb06a`](https://github.com/prevwong/craft.js/commit/62cb06aa3f4f8747f52998112ca66943d72322b4) Thanks [@mateusz-oi](https://github.com/mateusz-oi)! - Add exports for Positioner and createShadow
+
 ## 0.2.7
 
 ### Patch Changes
