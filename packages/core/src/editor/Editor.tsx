@@ -79,6 +79,17 @@ export const Editor = ({ children, ...options }: EditorProps) => {
       return;
     }
 
+
+     if (
+      options.onNodesChange !== undefined &&
+      options.onNodesChange !== context.query.getOptions().onNodesChange
+    ) {
+      context.actions.setOptions((editorOptions) => {
+        editorOptions.onNodesChange = options.onNodesChange;
+      });
+    }
+
+    
     if (
       options.enabled === undefined ||
       context.query.getOptions().enabled === options.enabled
@@ -89,7 +100,7 @@ export const Editor = ({ children, ...options }: EditorProps) => {
     context.actions.setOptions((editorOptions) => {
       editorOptions.enabled = options.enabled;
     });
-  }, [context, options.enabled]);
+  }, [context, options.enabled, options.onNodesChange]);
 
   useEffect(() => {
     context.subscribe(
