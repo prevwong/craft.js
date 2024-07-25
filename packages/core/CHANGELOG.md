@@ -1,5 +1,14 @@
 # @craftjs/core
 
+## 0.2.9
+
+### Patch Changes
+
+- [`2186c83`](https://github.com/prevwong/craft.js/commit/2186c83d28284380ce9d38f72c6223dfc7d5c525) Thanks [@prevwong](https://github.com/prevwong)! - Allow customising dnd indicator style/classname
+
+- Updated dependencies [[`2186c83`](https://github.com/prevwong/craft.js/commit/2186c83d28284380ce9d38f72c6223dfc7d5c525)]:
+  - @craftjs/utils@0.2.3
+
 ## 0.2.8
 
 ### Patch Changes
