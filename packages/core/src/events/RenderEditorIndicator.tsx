@@ -35,6 +35,7 @@ export const RenderEditorIndicator = () => {
   }
 
   return React.createElement(RenderIndicator, {
+    className: indicatorOptions.className,
     style: {
       ...movePlaceholder(
         indicator.placement,
@@ -47,6 +48,7 @@ export const RenderEditorIndicator = () => {
         ? indicatorOptions.error
         : indicatorOptions.success,
       transition: indicatorOptions.transition || '0.2s ease-in',
+      ...(indicatorOptions.style ?? {}),
     },
     parentDom: indicator.placement.parent.dom,
   });

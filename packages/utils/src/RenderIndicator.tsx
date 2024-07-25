@@ -3,12 +3,18 @@ import ReactDOM from 'react-dom';
 
 type RenderIndicatorProps = {
   style: React.CSSProperties;
+  className?: string;
   parentDom?: HTMLElement;
 };
 
-export const RenderIndicator = ({ style, parentDom }: RenderIndicatorProps) => {
+export const RenderIndicator = ({
+  style,
+  className,
+  parentDom,
+}: RenderIndicatorProps) => {
   const indicator = (
     <div
+      className={className}
       style={{
         position: 'fixed',
         display: 'block',
