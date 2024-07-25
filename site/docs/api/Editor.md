@@ -53,9 +53,9 @@ const App = () => {
 ```
 In the above example, every user element will now be wrapped in a black `div`.
 
-### Specifying the Drop Indicator colour
+### Customising the drag-and-drop indicator
 
-You could change the colours of the drag and drop indicators like so:
+You could also change the colours/style of the drag-and-drop indicator like so:
 
 ```jsx {6-9}
 import {Editor} from "@craftjs/core";
@@ -65,7 +65,11 @@ const App = () => {
     <Editor
       indicator={{
         'success': '#2d9d78', // green
-        'error': '#e34850' // red
+        'error': '#e34850', // red
+        'style': { // custom CSS properties
+          boxShadow: '...
+        },
+        'className': 'your-css-class' // custom CSS class
       }}
     >
       <Frame resolver={{Hero}}>
