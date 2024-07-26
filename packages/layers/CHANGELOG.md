@@ -1,5 +1,14 @@
 # @craftjs/layers
 
+## 0.2.4
+
+### Patch Changes
+
+- [`8f2b7e7`](https://github.com/prevwong/craft.js/commit/8f2b7e7e334195956723cb295a277d3ed17fb0e4) Thanks [@prevwong](https://github.com/prevwong)! - Inject Craft package version and export sourcemaps
+
+- Updated dependencies [[`8f2b7e7`](https://github.com/prevwong/craft.js/commit/8f2b7e7e334195956723cb295a277d3ed17fb0e4), [`b0a9e0b`](https://github.com/prevwong/craft.js/commit/b0a9e0bc65ebbc770a1ad093fac3e052d86fc2dc)]:
+  - @craftjs/utils@0.2.3
+
 ## 0.2.3
 
 ### Patch Changes
