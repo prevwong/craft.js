@@ -8,20 +8,38 @@ import typescript from '@rollup/plugin-typescript';
 const shouldMinify = process.env.NODE_ENV === 'production';
 const bundle = ['tslib'];
 
+const injectPackageVersion = () => {
+  const pkg = require('./package.json');
+
+  return `
+if ( typeof window !== 'undefined' ) {
+  if ( !window['__CRAFTJS__'] ) {
+    window['__CRAFTJS__'] = {};
+  }
+  
+  window['__CRAFTJS__']["${pkg.name}"] = "${pkg.version}";
+}
+  `;
+};
+
 export default {
   input: './src/index.ts',
   output: [
     {
       file: 'dist/esm/index.js',
       format: 'esm',
+      intro: injectPackageVersion(),
       globals: {
         react: 'React',
         'react-dom': 'ReactDOM',
       },
+      sourcemap: true,
     },
     {
       file: 'dist/cjs/index.js',
+      intro: injectPackageVersion(),
       format: 'cjs',
+      sourcemap: true,
     },
   ],
   external: (id) => {
