@@ -1,5 +1,13 @@
 # @craftjs/utils
 
+## 0.2.3
+
+### Patch Changes
+
+- [`8f2b7e7`](https://github.com/prevwong/craft.js/commit/8f2b7e7e334195956723cb295a277d3ed17fb0e4) Thanks [@prevwong](https://github.com/prevwong)! - Inject Craft package version and export sourcemaps
+
+* [#683](https://github.com/prevwong/craft.js/pull/683) [`b0a9e0b`](https://github.com/prevwong/craft.js/commit/b0a9e0bc65ebbc770a1ad093fac3e052d86fc2dc) Thanks [@prevwong](https://github.com/prevwong)! - Allow customising dnd indicator style/classname
+
 ## 0.2.2
 
 ### Patch Changes
