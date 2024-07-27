@@ -8,7 +8,8 @@
   "module": "./dist/esm/index.js",
   "types": "./lib/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "lib"
   ],
   "scripts": {
     "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
