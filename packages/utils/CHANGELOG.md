@@ -1,5 +1,11 @@
 # @craftjs/utils
 
+## 0.2.4
+
+### Patch Changes
+
+- [`cd13881`](https://github.com/prevwong/craft.js/commit/cd1388144637c8e788e8e245cbcb42d9d2490e12) Thanks [@prevwong](https://github.com/prevwong)! - Fix regression - include typings in npm package
+
 ## 0.2.3
 
 ### Patch Changes
