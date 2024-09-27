@@ -138,10 +138,14 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
         let unbindMouseleave: (() => void) | null = null;
 
         if (this.options.removeHoverOnMouseleave) {
-          this.addCraftEventListener(el, 'mouseleave', (e) => {
-            e.craft.stopPropagation();
-            store.actions.setNodeEvent('hovered', null);
-          });
+          unbindMouseleave = this.addCraftEventListener(
+            el,
+            'mouseleave',
+            (e) => {
+              e.craft.stopPropagation();
+              store.actions.setNodeEvent('hovered', null);
+            }
+          );
         }
 
         return () => {
