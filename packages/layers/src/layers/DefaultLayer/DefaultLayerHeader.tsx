@@ -1,6 +1,6 @@
 import { useEditor } from '@craftjs/core';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { EditableLayerName } from './EditableLayerName';
 import Arrow from './svg/arrow.svg';
@@ -9,15 +9,15 @@ import Linked from './svg/linked.svg';
 
 import { useLayer } from '../useLayer';
 
-const StyledDiv = styled.div<{ depth: number; selected: boolean }>`
+const StyledDiv = styled.div<{ $depth: number; $selected: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 4px 10px;
-  background: ${(props) => (props.selected ? '#2680eb' : 'transparent')};
-  color: ${(props) => (props.selected ? '#fff' : 'inherit')};
+  background: ${(props) => (props.$selected ? '#2680eb' : 'transparent')};
+  color: ${(props) => (props.$selected ? '#fff' : 'inherit')};
   svg {
-    fill: ${(props) => (props.selected ? '#fff' : '#808184')};
+    fill: ${(props) => (props.$selected ? '#fff' : '#808184')};
     margin-top: 2px;
   }
   .inner {
@@ -26,7 +26,7 @@ const StyledDiv = styled.div<{ depth: number; selected: boolean }>`
       padding: 0px;
       flex: 1;
       display: flex;
-      margin-left: ${(props) => props.depth * 10}px;
+      margin-left: ${(props) => props.$depth * 10}px;
       align-items: center;
       div.layer-name {
         flex: 1;
@@ -39,7 +39,7 @@ const StyledDiv = styled.div<{ depth: number; selected: boolean }>`
   }
 `;
 
-const Expand = styled.a<{ expanded: boolean }>`
+const Expand = styled.a<{ $expanded: boolean }>`
   width: 8px;
   height: 8px;
   display: flex;
@@ -47,12 +47,12 @@ const Expand = styled.a<{ expanded: boolean }>`
   justify-content: center;
   transform-origin: center;
   transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-  transform: rotate(${(props) => (props.expanded ? 180 : 0)}deg);
+  transform: rotate(${(props) => (props.$expanded ? 180 : 0)}deg);
   opacity: 0.7;
   cursor: pointer;
 `;
 
-const Hide = styled.a<{ selected: boolean; isHidden: boolean }>`
+const Hide = styled.a<{ $selected: boolean; $isHidden: boolean }>`
   width: 14px;
   height: 14px;
   margin-right: 10px;
@@ -64,20 +64,20 @@ const Hide = styled.a<{ selected: boolean; isHidden: boolean }>`
     width: 100%;
     height: 100%;
     object-fit: contain;
-    opacity: ${(props) => (props.isHidden ? 0.2 : 1)};
+    opacity: ${(props) => (props.$isHidden ? 0.2 : 1)};
   }
   &:after {
     content: ' ';
     width: 2px;
-    height: ${(props) => (props.isHidden ? 100 : 0)}%;
+    height: ${(props) => (props.$isHidden ? 100 : 0)}%;
     position: absolute;
     left: 2px;
     top: 3px;
-    background: ${(props) => (props.selected ? '#fff' : '#808184')};
+    background: ${(props) => (props.$selected ? '#fff' : '#808184')};
     transform: rotate(-45deg);
     transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     transform-origin: 0% 0%;
-    opacity: ${(props) => (props.isHidden ? 0.4 : 1)};
+    opacity: ${(props) => (props.$isHidden ? 0.4 : 1)};
   }
 `;
 
@@ -117,10 +117,10 @@ export const DefaultLayerHeader = () => {
   });
 
   return (
-    <StyledDiv selected={selected} ref={drag} depth={depth}>
+    <StyledDiv $selected={selected} ref={drag} $depth={depth}>
       <Hide
-        selected={selected}
-        isHidden={hidden}
+        $selected={selected}
+        $isHidden={hidden}
         onClick={() => actions.setHidden(id, !hidden)}
       >
         <Eye />
@@ -138,7 +138,7 @@ export const DefaultLayerHeader = () => {
           </div>
           <div>
             {children && children.length ? (
-              <Expand expanded={expanded} onMouseDown={() => toggleLayer()}>
+              <Expand $expanded={expanded} onMouseDown={() => toggleLayer()}>
                 <Arrow />
               </Expand>
             ) : null}

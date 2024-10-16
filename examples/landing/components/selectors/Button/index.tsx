@@ -1,7 +1,7 @@
 import { UserComponent, useNode } from '@craftjs/core';
 import cx from 'classnames';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { ButtonSettings } from './ButtonSettings';
 
@@ -16,40 +16,55 @@ type ButtonProps = {
   textComponent?: any;
 };
 
-const StyledButton = styled.button<ButtonProps>`
+// N.B: Alias required StyledComponent props for Transient Props; https://styled-components.com/docs/api#transient-props
+type StyledButtonProps = {
+  $background?: Record<'r' | 'g' | 'b' | 'a', number>;
+  $buttonStyle?: string;
+  $margin?: any[];
+};
+
+const StyledButton = styled.button<StyledButtonProps>`
   background: ${(props) =>
-    props.buttonStyle === 'full'
-      ? `rgba(${Object.values(props.background)})`
+    props.$buttonStyle === 'full'
+      ? `rgba(${Object.values(props.$background)})`
       : 'transparent'};
   border: 2px solid transparent;
   border-color: ${(props) =>
-    props.buttonStyle === 'outline'
-      ? `rgba(${Object.values(props.background)})`
+    props.$buttonStyle === 'outline'
+      ? `rgba(${Object.values(props.$background)})`
       : 'transparent'};
-  margin: ${({ margin }) =>
-    `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`};
+  margin: ${({ $margin }) =>
+    `${$margin[0]}px ${$margin[1]}px ${$margin[2]}px ${$margin[3]}px`};
 `;
 
-export const Button: UserComponent<ButtonProps> = (props: any) => {
+export const Button: UserComponent<ButtonProps> = ({
+  text,
+  textComponent,
+  color,
+  buttonStyle,
+  background,
+  margin,
+}: ButtonProps) => {
   const {
     connectors: { connect },
   } = useNode((node) => ({
     selected: node.events.selected,
   }));
 
-  const { text, textComponent, color, ...otherProps } = props;
   return (
     <StyledButton
       ref={connect}
       className={cx([
         'rounded w-full px-4 py-2',
         {
-          'shadow-lg': props.buttonStyle === 'full',
+          'shadow-lg': buttonStyle === 'full',
         },
       ])}
-      {...otherProps}
+      $buttonStyle={buttonStyle}
+      $background={background}
+      $margin={margin}
     >
-      <Text {...textComponent} text={text} color={props.color} />
+      <Text {...textComponent} text={text} color={color} />
     </StyledButton>
   );
 };

@@ -29,7 +29,7 @@
     "react-loading": "2.0.3",
     "react-rnd": "10.1.1",
     "react-youtube": "7.9.0",
-    "styled-components": "4.4.1"
+    "styled-components": "6.1.13"
   },
   "devDependencies": {
     "@babel/core": "7.7.5",

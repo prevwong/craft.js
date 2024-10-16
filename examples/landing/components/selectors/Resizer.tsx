@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { debounce } from 'debounce';
 import { Resizable } from 're-resizable';
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import {
   isPercentage,
@@ -12,7 +12,7 @@ import {
   getElementDimensions,
 } from '../../utils/numToMeasurement';
 
-const Indicators = styled.div<{ bound?: 'row' | 'column' }>`
+const Indicators = styled.div<{ $bound?: 'row' | 'column' }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -32,8 +32,8 @@ const Indicators = styled.div<{ bound?: 'row' | 'column' }>`
     border: 2px solid #36a9e0;
     &:nth-child(1) {
       ${(props) =>
-        props.bound
-          ? props.bound === 'row'
+        props.$bound
+          ? props.$bound === 'row'
             ? `
                 left: 50%;
                 top: -5px;
@@ -52,12 +52,12 @@ const Indicators = styled.div<{ bound?: 'row' | 'column' }>`
     &:nth-child(2) {
       right: -5px;
       top: -5px;
-      display: ${(props) => (props.bound ? 'none' : 'block')};
+      display: ${(props) => (props.$bound ? 'none' : 'block')};
     }
     &:nth-child(3) {
       ${(props) =>
-        props.bound
-          ? props.bound === 'row'
+        props.$bound
+          ? props.$bound === 'row'
             ? `
                 left: 50%;
                 bottom: -5px;
@@ -76,7 +76,7 @@ const Indicators = styled.div<{ bound?: 'row' | 'column' }>`
     &:nth-child(4) {
       bottom: -5px;
       right: -5px;
-      display: ${(props) => (props.bound ? 'none' : 'block')};
+      display: ${(props) => (props.$bound ? 'none' : 'block')};
     }
   }
 `;
@@ -257,7 +257,7 @@ export const Resizer = ({ propKey, children, ...props }: any) => {
     >
       {children}
       {active && (
-        <Indicators bound={fillSpace === 'yes' ? parentDirection : false}>
+        <Indicators $bound={fillSpace === 'yes' ? parentDirection : false}>
           <span></span>
           <span></span>
           <span></span>
