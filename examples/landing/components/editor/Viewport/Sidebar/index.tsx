@@ -1,7 +1,7 @@
 import { useEditor } from '@craftjs/core';
 import { Layers } from '@craftjs/layers';
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { SidebarItem } from './SidebarItem';
 
@@ -9,11 +9,11 @@ import CustomizeIcon from '../../../../public/icons/customize.svg';
 import LayerIcon from '../../../../public/icons/layers.svg';
 import { Toolbar } from '../../Toolbar';
 
-export const SidebarDiv = styled.div<{ enabled: boolean }>`
+export const SidebarDiv = styled.div<{ $enabled: boolean }>`
   width: 280px;
-  opacity: ${(props) => (props.enabled ? 1 : 0)};
+  opacity: ${(props) => (props.$enabled ? 1 : 0)};
   background: #fff;
-  margin-right: ${(props) => (props.enabled ? 0 : -280)}px;
+  margin-right: ${(props) => (props.$enabled ? 0 : -280)}px;
 `;
 
 const CarbonAdsContainer = styled.div`
@@ -143,7 +143,7 @@ export const Sidebar = () => {
   }));
 
   return (
-    <SidebarDiv enabled={enabled} className="sidebar transition bg-white w-2">
+    <SidebarDiv $enabled={enabled} className="sidebar transition bg-white w-2">
       <div className="flex flex-col h-full">
         <SidebarItem
           icon={CustomizeIcon}

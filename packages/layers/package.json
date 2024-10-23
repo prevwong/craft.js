@@ -41,11 +41,11 @@
   "devDependencies": {
     "@babel/core": "7.7.4",
     "@svgr/rollup": "6.5.1",
-    "styled-components": "4.2.1"
+    "styled-components": "6.1.13"
   },
   "peerDependencies": {
     "@craftjs/core": ">=0.2.0",
     "react": "^16.8.0 || ^17 || ^18",
-    "styled-components": ">= 4"
+    "styled-components": ">= 6.1"
   }
 }
