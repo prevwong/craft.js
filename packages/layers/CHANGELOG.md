@@ -1,5 +1,13 @@
 # @craftjs/layers
 
+## 0.2.6
+
+### Patch Changes
+
+- [#707](https://github.com/prevwong/craft.js/pull/707) [`48cb5cb`](https://github.com/prevwong/craft.js/commit/48cb5cb0526cd79bc64de6c09bf6a37d1492104c) Thanks [@pixel-toys-chris-evans](https://github.com/pixel-toys-chris-evans)! - Updated 'styled-components' from 4.x.x to 6.x.x
+
+* [#705](https://github.com/prevwong/craft.js/pull/705) [`2f133d9`](https://github.com/prevwong/craft.js/commit/2f133d99bcc32d7ed9f9aa6069585af23ac6e226) Thanks [@itsbjoern](https://github.com/itsbjoern)! - Use removeHoverOnMouseleave option for layers package
+
 ## 0.2.5
 
 ### Patch Changes
