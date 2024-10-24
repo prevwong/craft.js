@@ -1,5 +1,11 @@
 # @craftjs/core
 
+## 0.2.11
+
+### Patch Changes
+
+- [#705](https://github.com/prevwong/craft.js/pull/705) [`2f133d9`](https://github.com/prevwong/craft.js/commit/2f133d99bcc32d7ed9f9aa6069585af23ac6e226) Thanks [@itsbjoern](https://github.com/itsbjoern)! - Use removeHoverOnMouseleave option for layers package
+
 ## 0.2.10
 
 ### Patch Changes
