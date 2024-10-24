@@ -8,7 +8,7 @@ export interface CreateHandlerOptions {
 }
 
 export class CoreEventHandlers<O = {}> extends EventHandlers<
-  { store: EditorStore } & O
+  { store: EditorStore; removeHoverOnMouseleave: boolean } & O
 > {
   handlers() {
     return {

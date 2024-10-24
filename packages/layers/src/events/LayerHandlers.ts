@@ -42,6 +42,19 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
           }
         );
 
+        let unbindMouseleave: (() => void) | null = null;
+
+        if (this.derived.options.removeHoverOnMouseleave) {
+          unbindMouseleave = this.addCraftEventListener(
+            el,
+            'mouseleave',
+            (e) => {
+              e.craft.stopPropagation();
+              layerStore.actions.setLayerEvent('hovered', null);
+            }
+          );
+        }
+
         const unbindDragOver = this.addCraftEventListener(
           el,
           'dragover',
@@ -174,6 +187,12 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
           unbindMouseOver();
           unbindDragOver();
           unbindDragEnter();
+
+          if (!unbindMouseleave) {
+            return;
+          }
+
+          unbindMouseleave();
         };
       },
       layerHeader: (el: HTMLElement, layerId: NodeId) => {
