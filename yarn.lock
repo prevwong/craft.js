@@ -10854,6 +10854,48 @@ clsx@latest:
   languageName: unknown
   linkType: soft
 
+"example-responsive@workspace:examples/responsive":
+  version: 0.0.0-use.local
+  resolution: "example-responsive@workspace:examples/responsive"
+  dependencies:
+    "@babel/core": 7.7.5
+    "@craftjs/core": "workspace:*"
+    "@craftjs/layers": "workspace:*"
+    "@fullhuman/postcss-purgecss": 1.3.0
+    "@material-ui/core": 4.5.2
+    "@material-ui/icons": 4.5.1
+    "@types/classnames": 2.2.9
+    "@types/node": 12.12.5
+    "@types/react": 18.0.27
+    "@types/react-color": 3.0.1
+    "@types/styled-components": 4.4.1
+    autoprefixer: latest
+    babel-plugin-inline-react-svg: 2.0.1
+    classnames: 2.2.6
+    cross-env: 6.0.3
+    cssnano: 4.1.10
+    debounce: 1.2.0
+    lzutf8: 0.5.5
+    next: 13.1.6
+    next-seo: 4.24.0
+    postcss: latest
+    postcss-import: 12.0.1
+    postcss-preset-env: 6.7.0
+    re-resizable: 6.1.0
+    react: 18.2.0
+    react-color: 2.17.3
+    react-contenteditable: 3.3.2
+    react-dom: 18.2.0
+    react-frame-component: ^5.2.6
+    react-loading: 2.0.3
+    react-rnd: 10.1.1
+    react-youtube: 7.9.0
+    styled-components: 4.4.1
+    tailwindcss: latest
+    typescript: 4.9.5
+  languageName: unknown
+  linkType: soft
+
 "execa@npm:5.0.0, execa@npm:^5.0.0":
   version: 5.0.0
   resolution: "execa@npm:5.0.0"
@@ -20114,6 +20156,17 @@ clsx@latest:
   version: 3.2.0
   resolution: "react-fast-compare@npm:3.2.0"
   checksum: 8ef272c825ae329f61633ce4ce7f15aa5b84e5214d88bc0823880236e03e985a13195befa2c7a4eda7db3b017dc7985729152d88445823f652403cf36c2b86aa
+  languageName: node
+  linkType: hard
+
+"react-frame-component@npm:^5.2.6":
+  version: 5.2.6
+  resolution: "react-frame-component@npm:5.2.6"
+  peerDependencies:
+    prop-types: ^15.5.9
+    react: ">= 16.3"
+    react-dom: ">= 16.3"
+  checksum: 6669a0acc1532b53e80b14688b06d64bfab88103a1e4377a386f4350a51d76494b48ac1b8f6818bd60ae2d37cce015314ce725d807be72e9fe9258e9303bb6ec
   languageName: node
   linkType: hard
 
