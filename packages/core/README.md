@@ -219,6 +219,7 @@ Craft.js is released under the [MIT license](https://github.com/prevwong/craft.j
 
 ### Sponsors
 - [eye-square](https://github.com/eye-square)
+- [api4ui](https://github.com/api4ui)
 
 ### Backers
 - [Tekeste Kidanu](https://opencollective.com/guest-1703f486)

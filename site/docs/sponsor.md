@@ -11,7 +11,8 @@ You can choose to contribute via [Github Sponsors](https://github.com/sponsors/p
 
 
 ### Sponsors
-- [Tangro](https://opencollective.com/tangro-software-components-gmbh)
+- [eye-square](https://github.com/eye-square)
+- [api4ui](https://github.com/api4ui)
 
 ### Backers
 - [Tekeste Kidanu](https://opencollective.com/guest-1703f486)
@@ -19,6 +20,6 @@ You can choose to contribute via [Github Sponsors](https://github.com/sponsors/p
 - [Mattermix](https://opencollective.com/mattermix)
 - [muttenzer](https://github.com/muttenzer)
 - [ITCuw](https://github.com/ITCuw)
-- [quan](https://github.com/qu8n)
 - [Victor Vanegas](vicvans20)
-- [kasayo](https://opencollective.com/kasayo)
+- [Andreas Thoelke](https://github.com/andreasthoelke)
+- [Saltcorn](https://github.com/saltcorn)
