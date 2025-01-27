@@ -23,6 +23,8 @@ export type Options = {
     error: string;
     transition: string;
     thickness: number;
+    className: string;
+    style: React.CSSProperties;
   }>;
   handlers: (store: EditorStore) => CoreEventHandlers;
   normalizeNodes: (
@@ -49,7 +51,6 @@ export type EditorState = {
   nodes: Nodes;
   events: EditorEvents;
   options: Options;
-  handlers: CoreEventHandlers;
   indicator: Indicator;
 };
 

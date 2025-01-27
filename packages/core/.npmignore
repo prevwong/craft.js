@@ -2,3 +2,4 @@ src
 rollup.config.js
 tsconfig.json
 nodemon.json
+.rollup.cache

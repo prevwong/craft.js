@@ -1,11 +1,12 @@
 import { deprecationWarning, ROOT_NODE } from '@craftjs/utils';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { useInternalEditor } from '../editor/useInternalEditor';
 import { SerializedNodes } from '../interfaces';
 import { NodeElement } from '../nodes/NodeElement';
 
 export type FrameProps = {
+  children?: React.ReactNode;
   json?: string;
   data?: string | SerializedNodes;
 };
@@ -26,11 +27,7 @@ const RenderRootNode = () => {
 /**
  * A React Component that defines the editable area
  */
-export const Frame: React.FC<React.PropsWithChildren<FrameProps>> = ({
-  children,
-  json,
-  data,
-}) => {
+export const Frame = ({ children, json, data }: FrameProps) => {
   const { actions, query } = useInternalEditor();
 
   if (!!json) {
@@ -39,20 +36,15 @@ export const Frame: React.FC<React.PropsWithChildren<FrameProps>> = ({
     });
   }
 
-  const initialState = useRef({
-    initialChildren: children,
-    initialData: data || json,
-  });
+  const isLoaded = useRef(false);
 
-  useEffect(() => {
-    const { initialChildren, initialData } = initialState.current;
+  if (!isLoaded.current) {
+    const initialData = data || json;
 
     if (initialData) {
       actions.history.ignore().deserialize(initialData);
-    } else if (initialChildren) {
-      const rootNode = React.Children.only(
-        initialChildren
-      ) as React.ReactElement;
+    } else if (children) {
+      const rootNode = React.Children.only(children) as React.ReactElement;
 
       const node = query.parseReactElement(rootNode).toNodeTree((node, jsx) => {
         if (jsx === rootNode) {
@@ -63,7 +55,9 @@ export const Frame: React.FC<React.PropsWithChildren<FrameProps>> = ({
 
       actions.history.ignore().addNodeTree(node);
     }
-  }, [actions, query]);
+
+    isLoaded.current = true;
+  }
 
   return <RenderRootNode />;
 };

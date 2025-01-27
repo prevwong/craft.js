@@ -1,407 +1,95 @@
-# Change Log
+# @craftjs/core
 
-All notable changes to this project will be documented in this file.
-See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+## 0.2.11
 
-# [0.2.0-beta.10](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.9...v0.2.0-beta.10) (2023-04-09)
+### Patch Changes
 
-**Note:** Version bump only for package @craftjs/core
+- [#705](https://github.com/prevwong/craft.js/pull/705) [`2f133d9`](https://github.com/prevwong/craft.js/commit/2f133d99bcc32d7ed9f9aa6069585af23ac6e226) Thanks [@itsbjoern](https://github.com/itsbjoern)! - Use removeHoverOnMouseleave option for layers package
 
+## 0.2.10
 
+### Patch Changes
 
+- [`cd13881`](https://github.com/prevwong/craft.js/commit/cd1388144637c8e788e8e245cbcb42d9d2490e12) Thanks [@prevwong](https://github.com/prevwong)! - Fix regression - include typings in npm package
 
+- Updated dependencies [[`cd13881`](https://github.com/prevwong/craft.js/commit/cd1388144637c8e788e8e245cbcb42d9d2490e12)]:
+  - @craftjs/utils@0.2.4
 
-# [0.2.0-beta.9](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.8...v0.2.0-beta.9) (2023-04-07)
+## 0.2.9
 
+### Patch Changes
 
-### Bug Fixes
+- [`8f2b7e7`](https://github.com/prevwong/craft.js/commit/8f2b7e7e334195956723cb295a277d3ed17fb0e4) Thanks [@prevwong](https://github.com/prevwong)! - Inject Craft package version and export sourcemaps
 
-* missing options in <Editor /> props ([#501](https://github.com/prevwong/craft.js/issues/501)) ([c74f4c9](https://github.com/prevwong/craft.js/commit/c74f4c94e1722c4f515a34ebf8718af896661de7))
-* nested "type" key in Element props leads to serialization error ([#308](https://github.com/prevwong/craft.js/issues/308)) ([#478](https://github.com/prevwong/craft.js/issues/478)) ([ed46ee6](https://github.com/prevwong/craft.js/commit/ed46ee6e6653cd0d15cb35080516ca5ccf08959a))
-* types ([8d3aee4](https://github.com/prevwong/craft.js/commit/8d3aee4359bacd41f6284e38ca45558262170501))
+* [#683](https://github.com/prevwong/craft.js/pull/683) [`b0a9e0b`](https://github.com/prevwong/craft.js/commit/b0a9e0bc65ebbc770a1ad093fac3e052d86fc2dc) Thanks [@prevwong](https://github.com/prevwong)! - Allow customising dnd indicator style/classname
 
+* Updated dependencies [[`8f2b7e7`](https://github.com/prevwong/craft.js/commit/8f2b7e7e334195956723cb295a277d3ed17fb0e4), [`b0a9e0b`](https://github.com/prevwong/craft.js/commit/b0a9e0bc65ebbc770a1ad093fac3e052d86fc2dc)]:
+  - @craftjs/utils@0.2.3
 
+## 0.2.8
 
+### Patch Changes
 
+- [#656](https://github.com/prevwong/craft.js/pull/656) [`62cb06a`](https://github.com/prevwong/craft.js/commit/62cb06aa3f4f8747f52998112ca66943d72322b4) Thanks [@mateusz-oi](https://github.com/mateusz-oi)! - Add exports for Positioner and createShadow
 
-# [0.2.0-beta.8](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.7...v0.2.0-beta.8) (2022-08-30)
+## 0.2.7
 
-**Note:** Version bump only for package @craftjs/core
+### Patch Changes
 
+- [#653](https://github.com/prevwong/craft.js/pull/653) [`c069dff`](https://github.com/prevwong/craft.js/commit/c069dff47176541361cd0cf1769830176c07eb99) Thanks [@prevwong](https://github.com/prevwong)! - Fix <Element /> linked node creating when in react strict mode
 
+* [`9eff6b8`](https://github.com/prevwong/craft.js/commit/9eff6b811933da34f33143212bfb87b1a24829fe) Thanks [@prevwong](https://github.com/prevwong)! - Cleanup React.FC prop types
 
+* Updated dependencies [[`9eff6b8`](https://github.com/prevwong/craft.js/commit/9eff6b811933da34f33143212bfb87b1a24829fe)]:
+  - @craftjs/utils@0.2.2
 
+## 0.2.6
 
-# [0.2.0-beta.7](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.6...v0.2.0-beta.7) (2022-08-30)
+### Patch Changes
 
+- [`4fa9b46`](https://github.com/prevwong/craft.js/commit/4fa9b4654c75f75dbcb4fff0a7abc61b94984319) Thanks [@Traveller23](https://github.com/Traveller23)! - Improve resolver performance
 
-### Bug Fixes
+* [#634](https://github.com/prevwong/craft.js/pull/634) [`4dcd6a2`](https://github.com/prevwong/craft.js/commit/4dcd6a202b1740035967856b04f612f834030b6c) Thanks [@prevwong](https://github.com/prevwong)! - Prevent delay when drop element outside of Editor frame
 
-* multi-select move order ([#452](https://github.com/prevwong/craft.js/issues/452)) ([54648fa](https://github.com/prevwong/craft.js/commit/54648facdb20e9af4949c92f50f83d05cf324515))
-* register event connectors on useEffect ([#450](https://github.com/prevwong/craft.js/issues/450)) ([418f7a8](https://github.com/prevwong/craft.js/commit/418f7a823c5f39bae0b31ca82577f0ea74d4b10d))
+- [#630](https://github.com/prevwong/craft.js/pull/630) [`fcc71d8`](https://github.com/prevwong/craft.js/commit/fcc71d81cb27ea3a5f7d5550785dfbff19690926) Thanks [@pavsidhu](https://github.com/pavsidhu)! - Add `hidden` prop to <Element /> component's prop type
 
+* [`cb45f2c`](https://github.com/prevwong/craft.js/commit/cb45f2c8785e7ce048c52e841b7d034d4059142a) Thanks [@tomas-c](https://github.com/tomas-c)! - SSR support
 
+- [`b25469e`](https://github.com/prevwong/craft.js/commit/b25469ecc7ffb59fa1f43d3664e002c1e2a5bd46) Thanks [@prevwong](https://github.com/prevwong)! - Make parentId param optional in actions.add()
 
+## 0.2.5
 
+### Patch Changes
 
-# [0.2.0-beta.6](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.5...v0.2.0-beta.6) (2022-06-21)
+- [#578](https://github.com/prevwong/craft.js/pull/578) [`246fa3c`](https://github.com/prevwong/craft.js/commit/246fa3caa7667e1bb78f73ff0bb96e06f152a266) Thanks [@Traveller23](https://github.com/Traveller23)! - Add a property `info` to `UserComponent`, which will be copied to `Node`, but will not be serialized.
 
+## 0.2.4
 
-### Bug Fixes
+### Patch Changes
 
-* add missing children prop in updated React.FC type ([#431](https://github.com/prevwong/craft.js/issues/431)) ([0fab58b](https://github.com/prevwong/craft.js/commit/0fab58bb0d62748c5a05fa18928b90263d534c25))
+- [#587](https://github.com/prevwong/craft.js/pull/587) [`e4bc34c`](https://github.com/prevwong/craft.js/commit/e4bc34c5956c119f5c99cf2baf6eec5fa8852763) Thanks [@Accir](https://github.com/Accir)! - fix Safari drag shadow
 
+## 0.2.3
 
+### Patch Changes
 
+- [#582](https://github.com/prevwong/craft.js/pull/582) [`12b4af9`](https://github.com/prevwong/craft.js/commit/12b4af96b5571be422aba375417135fd62f62b22) Thanks [@prevwong](https://github.com/prevwong)! - Add option to remove hover state on mouseleave
 
+## 0.2.2
 
-# [0.2.0-beta.5](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.4...v0.2.0-beta.5) (2022-05-31)
+### Patch Changes
 
-**Note:** Version bump only for package @craftjs/core
+- [#569](https://github.com/prevwong/craft.js/pull/569) [`e8681d2`](https://github.com/prevwong/craft.js/commit/e8681d25720caf68e0b0cfc635474f94486c7bdd) Thanks [@giliamverheide](https://github.com/giliamverheide)! - Remove node hovered state on mouseleave event
 
+## 0.2.1
 
+### Patch Changes
 
+- [#566](https://github.com/prevwong/craft.js/pull/566) [`f2b77fd`](https://github.com/prevwong/craft.js/commit/f2b77fdb2af0fd8b638c37fc3feb42d9e8f3f1d4) Thanks [@ismajl-ramadani](https://github.com/ismajl-ramadani)! - Ensure non-null resolver prop value in Editor component
 
+* [#540](https://github.com/prevwong/craft.js/pull/540) [`462d368`](https://github.com/prevwong/craft.js/commit/462d368e1ffd2a8b7ae987beae8a64720b4bdf67) Thanks [@chavda-bhavik](https://github.com/chavda-bhavik)! - Import specific lodash methods
 
-# [0.2.0-beta.4](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.3...v0.2.0-beta.4) (2022-04-21)
+- [#567](https://github.com/prevwong/craft.js/pull/567) [`2fffe69`](https://github.com/prevwong/craft.js/commit/2fffe6951af8e49a9b8389602d162fc3b38662a2) Thanks [@prevwong](https://github.com/prevwong)! - Fix orphaned nodes when parsing from Frame's children in strict mode
 
-**Note:** Version bump only for package @craftjs/core
-
-
-
-
-
-# [0.2.0-beta.3](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.2...v0.2.0-beta.3) (2022-03-07)
-
-
-### Bug Fixes
-
-* syntax error in README example ([#375](https://github.com/prevwong/craft.js/issues/375)) ([b8fc62f](https://github.com/prevwong/craft.js/commit/b8fc62f6e2b07251111265a969eff446380ddb8f))
-
-
-### Features
-
-* expose serializeNode ([#381](https://github.com/prevwong/craft.js/issues/381)) ([0ced058](https://github.com/prevwong/craft.js/commit/0ced058f844cd8043a063349e483e7775f074240))
-
-
-
-
-
-# [0.2.0-beta.2](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.1...v0.2.0-beta.2) (2022-01-17)
-
-
-### Features
-
-* support custom NodeTree in connectors.create() ([#317](https://github.com/prevwong/craft.js/issues/317)) ([d4c2164](https://github.com/prevwong/craft.js/commit/d4c2164e38554dd7c941dc550be9d7f20313759e))
-
-
-
-
-
-# [0.2.0-beta.1](https://github.com/prevwong/craft.js/compare/v0.2.0-beta.0...v0.2.0-beta.1) (2022-01-11)
-
-
-### Features
-
-* add onBeforeMoveEnd ([#320](https://github.com/prevwong/craft.js/issues/320)) ([048490f](https://github.com/prevwong/craft.js/commit/048490fa6f8edd612dc0e7fe47a418cb5114ee68))
-
-
-
-
-
-# [0.2.0-beta.0](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.28...v0.2.0-beta.0) (2021-11-16)
-
-**Note:** Version bump only for package @craftjs/core
-
-
-
-
-
-# [0.2.0-alpha.28](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.27...v0.2.0-alpha.28) (2021-10-04)
-
-**Note:** Version bump only for package @craftjs/core
-
-
-
-
-
-# [0.2.0-alpha.27](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.26...v0.2.0-alpha.27) (2021-09-10)
-
-
-### Bug Fixes
-
-* drag shadow ([#304](https://github.com/prevwong/craft.js/issues/304)) ([dc047c9](https://github.com/prevwong/craft.js/commit/dc047c9079038101cd25e46bff5e630ce07d2066))
-
-
-### Features
-
-* improve dnd ([#300](https://github.com/prevwong/craft.js/issues/300)) ([3fdbab6](https://github.com/prevwong/craft.js/commit/3fdbab669dd941f484128ef9d8440a9565606477))
-
-
-
-
-
-# [0.2.0-alpha.26](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.25...v0.2.0-alpha.26) (2021-08-13)
-
-
-### Bug Fixes
-
-* readonly parent error ([#280](https://github.com/prevwong/craft.js/issues/280)) ([536afce](https://github.com/prevwong/craft.js/commit/536afce7a8898bd98e54465cd11c554ac20f791a))
-* sync <Editor /> props with state options ([#271](https://github.com/prevwong/craft.js/issues/271)) ([5ee6714](https://github.com/prevwong/craft.js/commit/5ee6714f73eb8dcca79d28befecc8144853851c8)), closes [prevwong/craft.js#149](https://github.com/prevwong/craft.js/issues/149)
-
-
-### Features
-
-* throw error if component is missing from resolver ([#293](https://github.com/prevwong/craft.js/issues/293)) ([4fa4713](https://github.com/prevwong/craft.js/commit/4fa47134a4a8f688266cc56dd58e0fb5b6d061d1))
-
-
-
-
-
-# [0.2.0-alpha.25](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.23...v0.2.0-alpha.25) (2021-07-26)
-
-
-### Bug Fixes
-
-* linked node props ([#245](https://github.com/prevwong/craft.js/issues/245)) ([452ea48](https://github.com/prevwong/craft.js/commit/452ea484f20f2d9536404f9e831cd7ee6629a4f6))
-* missing type in UserComponentConfig ([3da530a](https://github.com/prevwong/craft.js/commit/3da530ad61bb362fe36272a43213f6cafbafedd1))
-* types ([bd726c7](https://github.com/prevwong/craft.js/commit/bd726c7ddb43a26381785687ff5ce11c222b2033))
-
-
-
-
-
-# [0.2.0-alpha.24](https://github.com/prevwong/craft.js/compare/v0.2.0-alpha.23...v0.2.0-alpha.24) (2021-05-22)
-
-
-### Bug Fixes
-
-* linked node props ([#245](https://github.com/prevwong/craft.js/issues/245)) ([452ea48](https://github.com/prevwong/craft.js/commit/452ea484f20f2d9536404f9e831cd7ee6629a4f6))
-* missing type in UserComponentConfig ([3da530a](https://github.com/prevwong/craft.js/commit/3da530ad61bb362fe36272a43213f6cafbafedd1))
-* types ([bd726c7](https://github.com/prevwong/craft.js/commit/bd726c7ddb43a26381785687ff5ce11c222b2033))
-
-
-
-
-
-# 0.2.0-alpha.23 (2021-05-14)
-
-
-### Features
-
-* **slate:** improve speed of slate/craft integration ([#241](https://github.com/prevwong/craft.js/issues/241)) ([763274c](https://github.com/prevwong/craft.js/commit/763274c4787130675127703d333ea63ee8482fb1))
-
-
-
-
-
-# 0.2.0-alpha.22 (2021-04-26)
-
-
-### Bug Fixes
-
-* orphaned linked nodes ([#236](https://github.com/prevwong/craft.js/issues/236)) ([65450ea](https://github.com/prevwong/craft.js/commit/65450ea97a0bbac4efc51d0306025bd07a5165bb))
-
-
-
-
-
-# 0.2.0-alpha.21 (2021-03-22)
-
-**Note:** Version bump only for package @craftjs/core
-
-
-
-
-
-# 0.2.0-alpha.20 (2021-03-22)
-
-
-### Bug Fixes
-
-* remove slate node ([#217](https://github.com/prevwong/craft.js/issues/217)) ([9f7ec97](https://github.com/prevwong/craft.js/commit/9f7ec97e88825460054f8880bb4b5900c2776721))
-
-
-
-
-
-# 0.2.0-alpha.19 (2021-03-16)
-
-
-### Features
-
-* additional indicator options ([#212](https://github.com/prevwong/craft.js/issues/212)) ([0d9c6e5](https://github.com/prevwong/craft.js/commit/0d9c6e59a8725ba600d177ad5a9beec0434e640c))
-
-
-
-
-
-# 0.2.0-alpha.18 (2021-03-11)
-
-**Note:** Version bump only for package @craftjs/core
-
-
-
-
-
-# 0.2.0-alpha.17 (2021-03-11)
-
-
-### Bug Fixes
-
-* lint ([3750b11](https://github.com/prevwong/craft.js/commit/3750b11dbe27b477820dac8c940bcb46981e6956))
-
-
-
-
-
-# 0.2.0-alpha.16 (2021-02-18)
-
-
-### Bug Fixes
-
-* handlers not being disabled ([#189](https://github.com/prevwong/craft.js/issues/189)) ([f9c2274](https://github.com/prevwong/craft.js/commit/f9c227415d3bc4ef0490437b16a862234c15d7f7))
-
-
-
-
-
-# 0.2.0-alpha.15 (2021-02-11)
-
-**Note:** Version bump only for package @craftjs/core
-
-
-
-
-
-# 0.2.0-alpha.14 (2021-02-08)
-
-**Note:** Version bump only for package @craftjs/core
-
-
-
-
-
-# 0.2.0-alpha.13 (2021-02-03)
-
-
-### Bug Fixes
-
-* yarn.lock ([6782edf](https://github.com/prevwong/craft.js/commit/6782edf1715a41c0f21daaeab92c5e7edb8c2f17))
-
-
-
-
-
-# 0.2.0-alpha.12 (2021-01-28)
-
-
-### Bug Fixes
-
-* **slate:** delete orphaned nodes ([#171](https://github.com/prevwong/craft.js/issues/171)) ([f201ddc](https://github.com/prevwong/craft.js/commit/f201ddc8a26cd09deab69220a9099bb5ff2c6973))
-
-
-
-
-
-# 0.2.0-alpha.11 (2021-01-26)
-
-
-### Bug Fixes
-
-* **slate:** split operation bug ([#169](https://github.com/prevwong/craft.js/issues/169)) ([9a7b3b3](https://github.com/prevwong/craft.js/commit/9a7b3b3e3a4f6d71d2ef5d9d1de1cb4d2c931696))
-
-
-
-
-
-# 0.2.0-alpha.10 (2021-01-22)
-
-
-### Bug Fixes
-
-* remove auto-add drag connector ([#163](https://github.com/prevwong/craft.js/issues/163)) ([60a600a](https://github.com/prevwong/craft.js/commit/60a600a8c9bc675b3715c6f5881da9574fbf3845))
-
-
-
-
-
-# 0.2.0-alpha.9 (2021-01-20)
-
-
-### Bug Fixes
-
-* remove slate op ([#162](https://github.com/prevwong/craft.js/issues/162)) ([a46ed6c](https://github.com/prevwong/craft.js/commit/a46ed6cd72700273279e89c13e9e7c3d4238f93c))
-
-
-
-
-
-# 0.2.0-alpha.8 (2021-01-12)
-
-
-### Bug Fixes
-
-* slate bugs ([#159](https://github.com/prevwong/craft.js/issues/159)) ([58af806](https://github.com/prevwong/craft.js/commit/58af80669a43bedf015d22be0a8d6be2a47de89c))
-
-
-
-
-
-# 0.2.0-alpha.7 (2021-01-12)
-
-
-### Features
-
-* history merge ([8016b82](https://github.com/prevwong/craft.js/commit/8016b82bf26dd208a17df59c93ed7f46cbee955f))
-
-
-
-
-
-# 0.2.0-alpha.6 (2021-01-06)
-
-**Note:** Version bump only for package @craftjs/core
-
-
-
-
-
-# 0.2.0-alpha.5 (2021-01-06)
-
-**Note:** Version bump only for package @craftjs/core
-
-
-
-
-
-# 0.2.0-alpha.4 (2021-01-06)
-
-**Note:** Version bump only for package @craftjs/core
-
-
-
-
-
-# 0.2.0-alpha.3 (2021-01-04)
-
-**Note:** Version bump only for package @craftjs/core
-
-
-
-
-
-# 0.2.0-alpha.2 (2021-01-04)
-
-
-### Bug Fixes
-
-* History throttle ([#157](https://github.com/prevwong/craft.js/issues/157)) ([bc4bcbd](https://github.com/prevwong/craft.js/commit/bc4bcbde27c6cc48ba132e07e03f0c43798f6272))
-
-
-
-
-
-# 0.2.0-alpha.1 (2020-12-04)
-
-**Note:** Version bump only for package @craftjs/core
+- Updated dependencies [[`462d368`](https://github.com/prevwong/craft.js/commit/462d368e1ffd2a8b7ae987beae8a64720b4bdf67)]:
+  - @craftjs/utils@0.2.1

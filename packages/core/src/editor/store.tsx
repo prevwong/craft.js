@@ -18,7 +18,6 @@ export const editorInitialState: EditorState = {
     hovered: new Set<NodeId>(),
   },
   indicator: null,
-  handlers: null,
   options: {
     onNodesChange: () => null,
     onRender: ({ render }) => render,
@@ -32,6 +31,7 @@ export const editorInitialState: EditorState = {
     handlers: (store) =>
       new DefaultEventHandlers({
         store,
+        removeHoverOnMouseleave: false,
         isMultiSelectEnabled: (e: MouseEvent) => !!e.metaKey,
       }),
     normalizeNodes: () => {},

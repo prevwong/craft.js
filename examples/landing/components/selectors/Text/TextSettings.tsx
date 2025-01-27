@@ -12,7 +12,7 @@ export const TextSettings = () => {
         props={['fontSize', 'fontWeight', 'textAlign']}
         summary={({ fontSize, fontWeight, textAlign }: any) => {
           return `${fontSize || ''}, ${weightDescription(
-            fontWeight
+            parseInt(fontWeight)
           )}, ${capitalize(textAlign)}`;
         }}
       >

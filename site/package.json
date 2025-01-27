@@ -1,6 +1,6 @@
 {
   "name": "site",
-  "version": "0.2.0-beta.10",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "start": "docusaurus start",
@@ -9,9 +9,8 @@
     "deploy": "docusaurus deploy"
   },
   "dependencies": {
-    "@docusaurus/core": "2.3.1",
-    "@docusaurus/plugin-client-redirects": "2.3.1",
-    "@docusaurus/preset-classic": "2.3.1",
+    "@docusaurus/core": "2.4.3",
+    "@docusaurus/preset-classic": "2.4.3",
     "classnames": "2.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

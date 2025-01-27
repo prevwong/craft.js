@@ -9,11 +9,15 @@ export type NodeContextType = {
 
 export const NodeContext = React.createContext<NodeContextType>(null);
 
-export type NodeProviderProps = Omit<NodeContextType, 'connectors'>;
+export type NodeProviderProps = Omit<NodeContextType, 'connectors'> & {
+  children?: React.ReactNode;
+};
 
-export const NodeProvider: React.FC<React.PropsWithChildren<
-  NodeProviderProps
->> = ({ id, related = false, children }) => {
+export const NodeProvider = ({
+  id,
+  related = false,
+  children,
+}: NodeProviderProps) => {
   return (
     <NodeContext.Provider value={{ id, related }}>
       {children}

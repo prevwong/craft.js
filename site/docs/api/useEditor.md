@@ -58,7 +58,7 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
         "(sourceNodeId: NodeId, targetNodeId: NodeId, pos: {x: number, y: number}, nodesToDOM?: (node: Node) => HTMLElement = node => node.dom)",
         "Given the target Node and mouse coordinates on the screen, determine the best possible location to drop the source Node. By default, the Node's DOM property is taken into consideration."
       ],
-      ["node", "(id: NodeId) => NodeHelpers", "Returns an object containing helper methods to describe the specified Node. Click <a href='/docs/api/helpers/'>here</a> for more information."],
+      ["node", "(id: NodeId) => NodeHelpers", "Returns an object containing helper methods to describe the specified Node. Click <a href='/docs/api/helpers'>here</a> for more information."],
       ["parseReactElement", "(element: React.ReactElement) => Object", [
         ["toNodeTree", "(normalize?: (node: Node, jsx: React.ReactElement) => void) => NodeTree", "Parse a given React element into a NodeTree"]
       ]],

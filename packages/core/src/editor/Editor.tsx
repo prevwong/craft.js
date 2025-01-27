@@ -8,17 +8,20 @@ import { useEditorStore } from './store';
 import { Events } from '../events';
 import { Options } from '../interfaces';
 
+type EditorProps = Partial<Options> & {
+  children?: React.ReactNode;
+};
+
 /**
  * A React Component that provides the Editor context
  */
-export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
-  children,
-  ...options
-}) => {
+export const Editor = ({ children, ...options }: EditorProps) => {
   // we do not want to warn the user if no resolver was supplied
   if (options.resolver !== undefined) {
     invariant(
-      typeof options.resolver === 'object' && !Array.isArray(options.resolver),
+      typeof options.resolver === 'object' &&
+        !Array.isArray(options.resolver) &&
+        options.resolver !== null,
       ERROR_RESOLVER_NOT_AN_OBJECT
     );
   }
@@ -72,7 +75,7 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
 
   // sync enabled prop with editor store options
   useEffect(() => {
-    if (!context || !options) {
+    if (!context) {
       return;
     }
 
@@ -99,9 +102,13 @@ export const Editor: React.FC<React.PropsWithChildren<Partial<Options>>> = ({
     );
   }, [context]);
 
-  return context ? (
+  if (!context) {
+    return null;
+  }
+
+  return (
     <EditorContext.Provider value={context}>
       <Events>{children}</Events>
     </EditorContext.Provider>
-  ) : null;
+  );
 };

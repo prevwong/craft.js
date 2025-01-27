@@ -42,6 +42,19 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
           }
         );
 
+        let unbindMouseleave: (() => void) | null = null;
+
+        if (this.derived.options.removeHoverOnMouseleave) {
+          unbindMouseleave = this.addCraftEventListener(
+            el,
+            'mouseleave',
+            (e) => {
+              e.craft.stopPropagation();
+              layerStore.actions.setLayerEvent('hovered', null);
+            }
+          );
+        }
+
         const unbindDragOver = this.addCraftEventListener(
           el,
           'dragover',
@@ -51,11 +64,7 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
 
             const { indicator, currentCanvasHovered } = LayerHandlers.events;
 
-            if (
-              currentCanvasHovered &&
-              indicator &&
-              currentCanvasHovered.data.nodes
-            ) {
+            if (currentCanvasHovered && indicator) {
               const heading = this.getLayer(
                 currentCanvasHovered.id
               ).headingDom.getBoundingClientRect();
@@ -70,6 +79,17 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
                   ];
 
                 if (!currNode) {
+                  // If the currentCanvasHovered has no child nodes, then we place the indicator as the first child
+                  LayerHandlers.events.indicator = {
+                    ...indicator,
+                    placement: {
+                      ...indicator.placement,
+                      index: 0,
+                      where: 'before',
+                      parent: currentCanvasHovered,
+                    },
+                    onCanvas: true,
+                  };
                   return;
                 }
 
@@ -167,6 +187,12 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
           unbindMouseOver();
           unbindDragOver();
           unbindDragEnter();
+
+          if (!unbindMouseleave) {
+            return;
+          }
+
+          unbindMouseleave();
         };
       },
       layerHeader: (el: HTMLElement, layerId: NodeId) => {

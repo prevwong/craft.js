@@ -1,5 +1,5 @@
 import { isChromium, isLinux } from '@craftjs/utils';
-import { isFunction } from 'lodash';
+import isFunction from 'lodash/isFunction';
 import React from 'react';
 
 import { CoreEventHandlers, CreateHandlerOptions } from './CoreEventHandlers';
@@ -10,6 +10,7 @@ import { Indicator, NodeId, DragTarget, NodeTree } from '../interfaces';
 
 export type DefaultEventHandlersOptions = {
   isMultiSelectEnabled: (e: MouseEvent) => boolean;
+  removeHoverOnMouseleave: boolean;
 };
 
 /**
@@ -134,8 +135,27 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           }
         );
 
+        let unbindMouseleave: (() => void) | null = null;
+
+        if (this.options.removeHoverOnMouseleave) {
+          unbindMouseleave = this.addCraftEventListener(
+            el,
+            'mouseleave',
+            (e) => {
+              e.craft.stopPropagation();
+              store.actions.setNodeEvent('hovered', null);
+            }
+          );
+        }
+
         return () => {
           unbindMouseover();
+
+          if (!unbindMouseleave) {
+            return;
+          }
+
+          unbindMouseleave();
         };
       },
       drop: (el: HTMLElement, targetId: NodeId) => {

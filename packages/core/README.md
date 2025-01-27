@@ -43,38 +43,39 @@ No need for complicated plugin systems. Design your editor from top to bottom th
 
 A simple user component can easily be defined as such:
 ```jsx
-import {useNode} from "@craftjs/core";
+import { useNode } from "@craftjs/core";
 
-const TextComponent = ({text}) => {
-  const { connectors: {drag} } = useNode();
+const TextComponent = ({ text }) => {
+  const {
+    connectors: { connect, drag },
+  } = useNode();
 
   return (
-    <div ref={drag}>
+    <div ref={(ref) => connect(drag(ref))}>
       <h2>{text}</h2>
     </div>
-  )
-}
+  );
+};
+
 ```
 
 Heck, the entire UI of your page editor is built using just React.
 ```jsx
 import React from "react";
-import {Editor, Frame, Canvas, Selector} from "@craftjs/core";
+import { Editor, Frame, Element  } from "@craftjs/core";
 const App = () => {
   return (
     <div>
       <header>Some fancy header or whatever</header>
       <Editor>
         // Editable area starts here
-        <Frame resolver={{TextComponent, Container}}>
-          <Canvas>
-            <TextComponent text="I'm already rendered here" />
-          </Canvas>
+        <Frame resolver={{ TextComponent, Container }}>
+          <Element canvas is={TextComponent} text="I'm already rendered here" />
         </Frame>
       </Editor>
     </div>
-  )
-}
+  );
+};
 ```
 
 ### Control how your components are edited
@@ -83,32 +84,32 @@ An obvious requirement for page editors is that they need to allow users to edit
 In the following example, when the user clicks on a component, we'll display a modal that requires the user to input a value for the `text` prop. As the input value changes, the component will be re-rendered with updated prop.
 
 ```jsx
-import {useNode} from "@craftjs/core";
+import { useNode } from "@craftjs/core";
 
-const TextComponent = ({text}) => {
-  const { connectors: { connect, drag }, isClicked, actions: {setProp} } = useNode(
-    (state) => ({
-      isClicked: state.event.selected,
-    })
-  );
+const TextComponent = ({ text }) => {
+  const {
+    connectors: { connect, drag },
+    isClicked,
+    actions: { setProp },
+  } = useNode((state) => ({
+    isClicked: state.events.selected,
+  }));
 
   return (
-    <div ref={dom => connect(drag(dom))}>
+    <div ref={(dom) => connect(drag(dom))}>
       <h2>{text}</h2>
-      {
-        isClicked ? (
-          <Modal>
-            <input
-              type="text"
-              value={text}
-              onChange={e => setProp(e.target.value)}
-            />
-          </Modal>
-        )
-      }
+      {isClicked ? (
+        <Modal>
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setProp(e.target.value)}
+          />
+        </Modal>
+      ) : null}
     </div>
-  )
-}
+  );
+};
 ```
 With this, you could easily implement content editable text or drag-to-resize components, just as any modern page editor would have.
 
@@ -207,44 +208,25 @@ Although it is not actually used here, many aspects of Craft.js are written with
 
 If you have questions or there's something you'd like to discuss (eg: contributing), please head over to our [Discord](https://discord.gg/sPpF7fX) server.
 
-## Contributors ✨
 
-Craft.js is made with :heart: by these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+## Sponsor :heart_decoration:
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="https://github.com/prevwong"><img src="https://avatars3.githubusercontent.com/u/16416929?v=4" width="100px;" alt=""/><br /><sub><b>Prev Wong</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=prevwong" title="Code">💻</a> <a href="#design-prevwong" title="Design">🎨</a> <a href="https://github.com/prevwong/craft.js/commits?author=prevwong" title="Documentation">📖</a> <a href="#ideas-prevwong" title="Ideas, Planning, & Feedback">🤔</a> <a href="#example-prevwong" title="Examples">💡</a></td>
-    <td align="center"><a href="https://github.com/azreenashah"><img src="https://avatars0.githubusercontent.com/u/26489181?v=4" width="100px;" alt=""/><br /><sub><b>azreenashah</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=azreenashah" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/fengzilong"><img src="https://avatars0.githubusercontent.com/u/9125255?v=4" width="100px;" alt=""/><br /><sub><b>MO</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=fengzilong" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/ankri"><img src="https://avatars3.githubusercontent.com/u/2842920?v=4" width="100px;" alt=""/><br /><sub><b>Andy Krings-Stern</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=ankri" title="Code">💻</a> <a href="https://github.com/prevwong/craft.js/commits?author=ankri" title="Documentation">📖</a> <a href="#ideas-ankri" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://dackdive.hateblo.jp/"><img src="https://avatars0.githubusercontent.com/u/1001444?v=4" width="100px;" alt=""/><br /><sub><b>Shingo Yamazaki</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=zaki-yama" title="Documentation">📖</a></td>
-    <td align="center"><a href="http://joelschneider.com"><img src="https://avatars0.githubusercontent.com/u/3977552?v=4" width="100px;" alt=""/><br /><sub><b>Joel Schneider</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/issues?q=author%3Ajmschneider" title="Bug reports">🐛</a> <a href="https://github.com/prevwong/craft.js/commits?author=jmschneider" title="Documentation">📖</a></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="https://github.com/Enva2712"><img src="https://avatars0.githubusercontent.com/u/18131608?v=4" width="100px;" alt=""/><br /><sub><b>Evan Rusmisel</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=Enva2712" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://www.candu.ai"><img src="https://avatars0.githubusercontent.com/u/1311832?v=4" width="100px;" alt=""/><br /><sub><b>Michele Riccardo Esposito</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=mresposito" title="Code">💻</a> <a href="#ideas-mresposito" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://github.com/matdru"><img src="https://avatars1.githubusercontent.com/u/4158076?v=4" width="100px;" alt=""/><br /><sub><b>Mateusz Drulis</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=matdru" title="Code">💻</a> <a href="#ideas-matdru" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://github.com/sprabowo"><img src="https://avatars2.githubusercontent.com/u/11748183?v=4" width="100px;" alt=""/><br /><sub><b>Sigit Prabowo</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/issues?q=author%3Asprabowo" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="http://vjsrinath.com"><img src="https://avatars0.githubusercontent.com/u/5001683?v=4" width="100px;" alt=""/><br /><sub><b>Srinath Janakiraman</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/commits?author=vjsrinath" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/boqiaok"><img src="https://avatars1.githubusercontent.com/u/15731814?v=4" width="100px;" alt=""/><br /><sub><b>Kim</b></sub></a><br /><a href="https://github.com/prevwong/craft.js/issues?q=author%3Aboqiaok" title="Bug reports">🐛</a></td>
-  </tr>
-</table>
-
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
+Craft.js is released under the [MIT license](https://github.com/prevwong/craft.js/blob/master/LICENSE) and is built with 100% love. If you found it useful and would like to ensure its continued development, please consider becoming a backer/sponsor or making a one-time donation via <a href="https://github.com/sponsors/prevwong" target="_blank">Github Sponsor</a>, <a href="https://opencollective.com/craftjs/contribute" target="_blank">Open Collective</a> or <a href="https://ko-fi.com/prevwong" target="_blank">Ko-fi</a>.
 
 
-## Support :heart_decoration:
+<img src="https://opencollective.com/craftjs/sponsors.svg?width=890">
+<img src="https://opencollective.com/craftjs/backers.svg?width=890">
 
-Craft.js is released under the [MIT license](https://github.com/prevwong/craft.js/blob/master/LICENSE) and is built with 100% love. If you found it useful and would like to ensure its continued development, please consider becoming a backer/sponsor or making a one-time donation via <a href="https://opencollective.com/craftjs/contribute" target="_blank">Open Collective</a> or <a href="https://paypal.me/prevwong" target="_blank">Paypal</a>.
+### Sponsors
+- [eye-square](https://github.com/eye-square)
+- [api4ui](https://github.com/api4ui)
 
-
-<a href="https://opencollective.com/craftjs/contribute" target="_blank">
-  <img src="https://opencollective.com/craftjs/donate/button@2x.png?color=blue" width="260" />
-</a>
+### Backers
+- [Tekeste Kidanu](https://opencollective.com/guest-1703f486)
+- [CORS Digital](https://opencollective.com/cors-digital)
+- [Mattermix](https://opencollective.com/mattermix)
+- [muttenzer](https://github.com/muttenzer)
+- [ITCuw](https://github.com/ITCuw)
+- [Victor Vanegas](vicvans20)
+- [Andreas Thoelke](https://github.com/andreasthoelke)
+- [Saltcorn](https://github.com/saltcorn)

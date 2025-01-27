@@ -11,12 +11,16 @@
     "web-builder",
     "react"
   ],
-  "version": "0.2.0-beta.10",
+  "version": "0.2.6",
   "author": "Prev Wong <prevwong@gmail.com>",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "license": "MIT",
   "types": "./lib/index.d.ts",
+  "files": [
+    "dist",
+    "lib"
+  ],
   "scripts": {
     "start": "cross-env NODE_ENV=development ../../scripts/build.sh",
     "build": "cross-env NODE_ENV=production ../../scripts/build.sh",
@@ -31,17 +35,17 @@
   },
   "homepage": "https://github.com/prevwong/craft.js/",
   "dependencies": {
-    "@craftjs/utils": "^0.2.0-beta.10",
+    "@craftjs/utils": "^0.2.4",
     "react-contenteditable": "^3.3.3"
   },
   "devDependencies": {
     "@babel/core": "7.7.4",
     "@svgr/rollup": "6.5.1",
-    "styled-components": "4.2.1"
+    "styled-components": "6.1.13"
   },
   "peerDependencies": {
-    "@craftjs/core": "^0.2.0-alpha.19",
+    "@craftjs/core": ">=0.2.0",
     "react": "^16.8.0 || ^17 || ^18",
-    "styled-components": ">= 4"
+    "styled-components": ">= 6.1"
   }
 }

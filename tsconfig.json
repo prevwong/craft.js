@@ -5,6 +5,7 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "esModuleInterop": true,
+    "sourceMap": true,
     "paths": {
       "@craftjs/core": ["packages/core/src/index"],
       "@craftjs/*": ["packages/core/src/*"],

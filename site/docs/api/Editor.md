@@ -17,7 +17,8 @@ Creates the context that stores the editor state.
   ["enabled?", "boolean", "Optional. If set to false, all editing capabilities will be disabled"],
   ["indicator?", 'Record<"success" | "error", String>', "Optional. The colour to use for the drop indicator. The colour set in 'success' will be used when the indicator shows a droppable location; otherwise the colour set in 'error' will be used."],
   ["onRender?", "React.ComponentType<{element: React.ReactElement}>", "Optional. Specify a custom component to render every User Element in the editor."],
-  ["onNodesChange?", "(query: QueryMethods) => void", "Optional. A callback method when the values of any of the nodes in the state changes"]
+  ["onNodesChange?", "(query: QueryMethods) => void", "Optional. A callback method when the values of any of the nodes in the state changes"],
+  ["handlers?", "(store: EditorStore) => CoreEventHandlers", "Optional. Override the default event handlers with your own logic."]
 ]} />
 
 
@@ -52,9 +53,9 @@ const App = () => {
 ```
 In the above example, every user element will now be wrapped in a black `div`.
 
-### Specifying the Drop Indicator colour
+### Customising the drag-and-drop indicator
 
-You could change the colours of the drag and drop indicators like so:
+You could also change the colours/style of the drag-and-drop indicator like so:
 
 ```jsx {6-9}
 import {Editor} from "@craftjs/core";
@@ -64,7 +65,11 @@ const App = () => {
     <Editor
       indicator={{
         'success': '#2d9d78', // green
-        'error': '#e34850' // red
+        'error': '#e34850', // red
+        'style': { // custom CSS properties
+          boxShadow: '...
+        },
+        'className': 'your-css-class' // custom CSS class
       }}
     >
       <Frame resolver={{Hero}}>
@@ -97,6 +102,59 @@ const App = () => {
       }}
     >
       ..
+    </Editor>
+  )
+}
+```
+
+
+### Override default event handlers
+Customize how the default event handlers are handled
+
+```tsx {9-35,41-43}
+import {
+  DefaultEventHandlers,
+  DefaultEventHandlersOptions,
+  Editor,
+  EditorStore,
+  NodeId
+} from '@craftjs/core'
+
+class CustomEventHandlers extends DefaultEventHandlers {
+  handlers() {
+    const defaultHandlers = super.handlers()
+
+    return {
+      ...defaultHandlers,
+      // Customize the hover event handler
+      hover: (el: HTMLElement, id: NodeId) => {
+        const unbindDefaultHoverHandler = defaultHandlers.hover(el, id)
+
+        // Track when the mouse leaves a node and remove the hovered state
+        const unbindMouseleave = this.addCraftEventListener(el, 'mouseleave', (e) => {
+          e.craft.stopPropagation()
+          this.options.store.actions.setNodeEvent('hovered', '')
+          console.log(`mouseleave node ${id}`)
+        })
+
+        return () => {
+          unbindDefaultHoverHandler();
+          unbindMouseleave();
+        }
+      }
+    }
+  }
+}
+
+const App = () => {
+  return (
+    <Editor
+      // Use your own event handlers
+      handlers={(store) =>
+        new CustomEventHandlers({ store, isMultiSelectEnabled: () => false })
+      }
+    >
+      ...
     </Editor>
   )
 }

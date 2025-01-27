@@ -1,7 +1,7 @@
 import { useEditor } from '@craftjs/core';
 import { Layers } from '@craftjs/layers';
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { SidebarItem } from './SidebarItem';
 
@@ -9,11 +9,11 @@ import CustomizeIcon from '../../../../public/icons/customize.svg';
 import LayerIcon from '../../../../public/icons/layers.svg';
 import { Toolbar } from '../../Toolbar';
 
-export const SidebarDiv = styled.div<{ enabled: boolean }>`
+export const SidebarDiv = styled.div<{ $enabled: boolean }>`
   width: 280px;
-  opacity: ${(props) => (props.enabled ? 1 : 0)};
+  opacity: ${(props) => (props.$enabled ? 1 : 0)};
   background: #fff;
-  margin-right: ${(props) => (props.enabled ? 0 : -280)}px;
+  margin-right: ${(props) => (props.$enabled ? 0 : -280)}px;
 `;
 
 const CarbonAdsContainer = styled.div`
@@ -61,7 +61,8 @@ const CarbonAdsContainer = styled.div`
   }
 
   #carbonads .carbon-img {
-    display: block;
+    display: flex;
+    align-items: center;
     margin: 0;
     line-height: 1;
     max-width: 30%;
@@ -73,7 +74,7 @@ const CarbonAdsContainer = styled.div`
   }
 
   #carbonads .carbon-text {
-    font-size: 8px;
+    font-size: 12px;
     padding: 10px;
     margin-bottom: 16px;
     line-height: 1.5;
@@ -90,7 +91,7 @@ const CarbonAdsContainer = styled.div`
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: 600;
-    font-size: 6px;
+    font-size: 9px;
     line-height: 1;
     position: absolute;
     bottom: 0;
@@ -115,7 +116,7 @@ const Carbonads = () => {
 
     script.setAttribute(
       'src',
-      '//cdn.carbonads.com/carbon.js?serve=CWYDVK7J&placement=rekajsorg'
+      '//cdn.carbonads.com/carbon.js?serve=CEAI453N&placement=craftjsorg'
     );
     script.setAttribute('id', '_carbonads_js');
 
@@ -142,7 +143,7 @@ export const Sidebar = () => {
   }));
 
   return (
-    <SidebarDiv enabled={enabled} className="sidebar transition bg-white w-2">
+    <SidebarDiv $enabled={enabled} className="sidebar transition bg-white w-2">
       <div className="flex flex-col h-full">
         <SidebarItem
           icon={CustomizeIcon}

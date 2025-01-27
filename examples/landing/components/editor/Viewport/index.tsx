@@ -59,15 +59,6 @@ export const Viewport: React.FC<{ children?: React.ReactNode }> = ({
             <div className="relative flex-col flex items-center pt-8">
               {children}
             </div>
-            <div
-              className={
-                'flex items-center justify-center w-full pt-6 text-xs text-light-gray-2'
-              }
-            >
-              <a href="https://www.netlify.com">
-                This site is powered by Netlify
-              </a>
-            </div>
           </div>
         </div>
         <Sidebar />
