@@ -2653,7 +2653,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@craftjs/utils@workspace:packages/utils"
   dependencies:
-    "@types/react": 18.0.27
+    "@types/react": 19.0.8
     immer: ^9.0.6
     lodash: ^4.17.21
     nanoid: ^3.1.23
@@ -6164,17 +6164,6 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: e752df961105e5127652460504785897ca6e77259e0da8f233f694f9e8f451cde7fa0709d4456ade0ff600c8ce909cfe29f9b08b9c247fa9b734e126ec53edd7
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:18.0.27":
-  version: 18.0.27
-  resolution: "@types/react@npm:18.0.27"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: 600fdbc39a92ea4a77047db3e12f05f67776a710f5918248c0189a59ac2a38900c9db5a5d2e433a16df528a3ecab1aa114b322cacea573bb1ca2fc0b094c52d1
   languageName: node
   linkType: hard
 
