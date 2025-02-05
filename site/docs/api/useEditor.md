@@ -47,7 +47,8 @@ const { connectors, actions, query, ...collected } = useEditor(collector);
         ["undo", "() => void", "Undo the last recorded action"],
         ["redo", "() => void", "Redo the last undone action"],
         ["ignore", "() => ActionMethods", "Run an action without recording its changes in the history"],
-        ["throttle", "(throttleRate: number = 500) => ActionMethods", "Run an action while throttling its changes recorded to the history. This is useful if you need to group the changes made by a certain action as a single history record"],
+        ["throttle", "(throttleRate: number = 500) => ActionMethods", "Run an action while throttling its changes recorded to the history. This is useful if you need to group the changes made by a certain action as a single history record within a specified time window (throttleRate)."],
+        ["merge", "() => ActionMethods", "Run an action and merge its changes into the latest recorded history entry. This is useful for combining multiple related changes into a single history record."],
       ]]
     ]],
     ["query", "QueryMethods", [
