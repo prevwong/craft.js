@@ -13,7 +13,7 @@
     "prop-types": "latest",
     "react": "18.2.0",
     "react-contenteditable": "3.3.3",
-    "react-dom": "18.2.0"
+    "react-dom": "19.0.0"
   },
   "scripts": {
     "start": "next dev -p 3002",

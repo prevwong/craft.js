@@ -1,6 +1,5 @@
 import { Editor, Frame, Element } from '@craftjs/core';
-import { createMuiTheme } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@mui/material';
 import { NextSeo } from 'next-seo';
 import React from 'react';
 
@@ -12,7 +11,7 @@ import { Custom2, Custom2VideoDrop } from '../components/selectors/Custom2';
 import { Custom3, Custom3BtnDrop } from '../components/selectors/Custom3';
 import { Video } from '../components/selectors/Video';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   typography: {
     fontFamily: [
       'acumin-pro',
