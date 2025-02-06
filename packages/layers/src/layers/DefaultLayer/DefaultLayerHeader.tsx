@@ -117,7 +117,13 @@ export const DefaultLayerHeader = () => {
   });
 
   return (
-    <StyledDiv $selected={selected} ref={drag} $depth={depth}>
+    <StyledDiv
+      $selected={selected}
+      ref={(dom) => {
+        drag(dom);
+      }}
+      $depth={depth}
+    >
       <Hide
         $selected={selected}
         $isHidden={hidden}
@@ -126,7 +132,11 @@ export const DefaultLayerHeader = () => {
         <Eye />
       </Hide>
       <div className="inner">
-        <div ref={layerHeader}>
+        <div
+          ref={(dom) => {
+            layerHeader(dom);
+          }}
+        >
           {topLevel ? (
             <TopLevelIndicator>
               <Linked />

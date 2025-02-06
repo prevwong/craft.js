@@ -5,13 +5,15 @@ import { createNode } from './createNode';
 import { Node } from '../interfaces';
 
 export function parseNodeFromJSX(
-  jsx: React.ReactElement | string,
-  normalize?: (node: Node, jsx: React.ReactElement) => void
+  jsx: React.ReactElement<any> | string,
+  normalize?: (node: Node, jsx: React.ReactElement<any>) => void
 ) {
-  let element = jsx as React.ReactElement;
+  let element = jsx as React.ReactElement<any>;
 
   if (typeof element === 'string') {
-    element = React.createElement(Fragment, {}, element) as React.ReactElement;
+    element = React.createElement(Fragment, {}, element) as React.ReactElement<
+      any
+    >;
   }
 
   let actualType = element.type as any;

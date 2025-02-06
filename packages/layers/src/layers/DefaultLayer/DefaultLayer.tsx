@@ -67,7 +67,9 @@ export const DefaultLayer = ({ children }: DefaultLayerProps) => {
 
   return (
     <LayerNodeDiv
-      ref={layer}
+      ref={(dom) => {
+        layer(dom);
+      }}
       $expanded={expanded}
       $hasCanvases={hasChildCanvases}
       $hovered={hovered}
