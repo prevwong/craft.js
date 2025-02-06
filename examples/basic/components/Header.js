@@ -2,9 +2,9 @@ import { useEditor } from '@craftjs/core';
 import {
   Box,
   Typography,
-  Grid,
+  Grid2 as Grid,
   Button as MaterialButton,
-} from '@material-ui/core';
+} from '@mui/material';
 import React from 'react';
 
 import { Button } from './user/Button';

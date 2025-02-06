@@ -1,7 +1,6 @@
 import { useNode } from '@craftjs/core';
-import { Slider } from '@material-ui/core';
-import { Paper, FormControl, FormLabel } from '@material-ui/core';
-import ColorPicker from 'material-ui-color-picker';
+import { Slider, Paper, FormControl, FormLabel } from '@mui/material';
+import { HexColorPicker } from 'react-colorful';
 import React from 'react';
 
 export const Container = ({ background, padding, children, ...props }) => {
@@ -33,9 +32,9 @@ export const ContainerSettings = () => {
     <div>
       <FormControl fullWidth={true} margin="normal" component="fieldset">
         <FormLabel component="legend">Background</FormLabel>
-        <ColorPicker
+        <HexColorPicker
           name="background-color"
-          value={background}
+          color={background}
           onChange={(color) => {
             setProp((props) => (props.background = color), 500);
           }}

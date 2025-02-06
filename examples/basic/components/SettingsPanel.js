@@ -5,7 +5,7 @@ import {
   Grid,
   Typography,
   Button as MaterialButton,
-} from '@material-ui/core';
+} from '@mui/material';
 import React from 'react';
 
 export const SettingsPanel = () => {
