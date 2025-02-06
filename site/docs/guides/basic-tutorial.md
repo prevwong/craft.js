@@ -32,7 +32,7 @@ With Craft.js you decide how your editor should look and function. So, let's bui
 
 To make our lives easier, we'll use some external packages for designing our user interfaces.
 ```bash
-yarn add @material-ui/core react-contenteditable material-ui-color-picker
+yarn add @mui/material react-contenteditable material-ui-color-picker
 ```
 
 ### User Components
@@ -56,7 +56,7 @@ export const Text = ({text, fontSize}) => {
 ```jsx
 // components/user/Button.js
 import React  from "react";
-import {Button as MaterialButton} from "@material-ui/core";
+import {Button as MaterialButton} from "@mui/material";
 
 export const Button = ({size, variant, color, children}) => {
   return (
@@ -73,7 +73,7 @@ We will also create a Container component to allow our users to change its backg
 ```jsx
 // components/user/Container.js
 import React from "react";
-import { Paper } from "@material-ui/core";
+import { Paper } from "@mui/material";
 
 export const Container = ({background, padding = 0, children}) => {
   return (
@@ -117,7 +117,7 @@ Let's build a "toolbox" which our users will be able to drag and drop to create 
 ```jsx
 // components/Toolbox.js
 import React from "react";
-import { Box, Typography, Grid, Button as MaterialButton } from "@material-ui/core";
+import { Box, Typography, Grid, Button as MaterialButton } from "@mui/material";
 
 export const Toolbox = () => {
   return (
@@ -152,7 +152,7 @@ For now, let's just put in some dummy text fields. We'll revisit this in the lat
 ```jsx
 // components/SettingsPanel.js
 import React from 'react';
-import { Box, Chip, Grid, Typography, Button as MaterialButton, FormControl, FormLabel, Slider } from "@material-ui/core";
+import { Box, Chip, Grid, Typography, Button as MaterialButton, FormControl, FormLabel, Slider } from "@mui/material";
 
 export const SettingsPanel = () => {  
   return  (    
@@ -194,7 +194,7 @@ Let's design a section that is going to contain a switch for users to disable th
 ```jsx
 // components/Topbar.js
 import React from "react";
-import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton } from "@material-ui/core";
+import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton } from "@mui/material";
 
 export const Topbar = () => {
   return (
@@ -222,7 +222,7 @@ Now, let's put together our entire React application.
 // pages/index.js
 
 import React from 'react';
-import {Typography, Paper, Grid} from '@material-ui/core';
+import {Typography, Paper, Grid} from '@mui/material';
 
 import { Toolbox } from '../components/Toolbox';
 import { SettingsPanel } from '../components/SettingsPanel';
@@ -272,7 +272,7 @@ Up to this point, we have made a user interface for our page editor. Now, let's 
 ```jsx {19,22,31,40}
 // pages/index.js
 import React from 'react';
-import {Typography, Paper, Grid} from '@material-ui/core';
+import {Typography, Paper, Grid} from '@mui/material';
 
 import { Toolbox } from '../components/Toolbox';
 import { SettingsPanel } from '../components/SettingsPanel';
@@ -369,7 +369,7 @@ The first thing we will need to do is to let Craft.js to manage the DOM of our c
 ```jsx {4,7,10}
 // components/user/Text.js
 import React from "react";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import { useNode } from "@craftjs/core";
 
 export const Text = ({text}) => {
@@ -556,7 +556,7 @@ The `useEditor` also provides `connectors`; the one we are interested in right n
 ```jsx {20,23,26,29}
 // components/Toolbox.js
 import React from "react";
-import { Box, Typography, Grid, Button as MaterialButton } from "@material-ui/core";
+import { Box, Typography, Grid, Button as MaterialButton } from "@mui/material";
 import { Element, useEditor } from "@craftjs/core";
 import { Container } from "./user/Container";
 import { Card } from "./user/Card";
@@ -664,7 +664,7 @@ This should give you an idea of the possibilities of implementing powerful visua
 While we are at it, let's also add a slider for users to edit the `fontSize`
 ```jsx
 // components/user/Text.js
-import {Slider, FormControl, FormLabel} from "@material-ui/core";
+import {Slider, FormControl, FormLabel} from "@mui/material";
 
 export const Text= ({text, fontSize, textAlign}) => {
   const { connectors: {connect, drag}, hasSelectedNode, hasDraggedNode, actions: {setProp} } = useNode((state) => ({
@@ -758,7 +758,7 @@ Text.craft = {
 Before we move on to the Settings Panel, let's quickly do the same for the other User Components:
 ```jsx
 // components/user/Button.js
-import {Button as MaterialButton, Grid, FormControl, FormLabel, RadioGroup,Radio, FormControlLabel} from "@material-ui/core";
+import {Button as MaterialButton, Grid, FormControl, FormLabel, RadioGroup,Radio, FormControlLabel} from "@mui/material";
 export const Button = () => {}
 
 
@@ -806,8 +806,8 @@ Button.craft = {
 
 ```jsx
 // components/user/Container.js
-import {FormControl, FormLabel, Slider} from "@material-ui/core";
-import ColorPicker from 'material-ui-color-picker'
+import {FormControl, FormLabel, Slider} from "@mui/material";
+import {HexColorPicker} from 'react-colorful'
 
 export const Container = () => {...}
 
@@ -820,7 +820,7 @@ export const ContainerSettings = () => {
     <div>
       <FormControl fullWidth={true} margin="normal" component="fieldset">
         <FormLabel component="legend">Background</FormLabel>
-        <ColorPicker defaultValue={background || '#000'} onChange={color => {
+        <HexColorPicker color={background || '#000'} onChange={color => {
           setProp(props => props.background = color)
         }} />
       </FormControl>
@@ -933,7 +933,7 @@ Now, let's replace the placeholder text fields in our Settings Panel with the `s
 ```jsx {4,7-22,24,35-37}
 // components/SettingsPanel.js
 
-import { Box, Chip, Grid, Typography, Button as MaterialButton } from "@material-ui/core";
+import { Box, Chip, Grid, Typography, Button as MaterialButton } from "@mui/material";
 import { useEditor } from "@craftjs/core";
 
 export const SettingsPanel = () => {
@@ -1039,7 +1039,7 @@ Lastly, the `useEditor` hook also provides `query` methods which provide informa
 ```jsx {4,7-9,16,25-27}
 // components/Topbar.js
 import React from "react";
-import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton } from "@material-ui/core";
+import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton } from "@mui/material";
 import { useEditor } from "@craftjs/core";
 
 export const Topbar = () => {
