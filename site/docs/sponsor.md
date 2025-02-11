@@ -20,6 +20,6 @@ You can choose to contribute via [Github Sponsors](https://github.com/sponsors/p
 - [Mattermix](https://opencollective.com/mattermix)
 - [muttenzer](https://github.com/muttenzer)
 - [ITCuw](https://github.com/ITCuw)
-- [Victor Vanegas](vicvans20)
+- [Victor Vanegas](https://github.com/vicvans20)
 - [Andreas Thoelke](https://github.com/andreasthoelke)
 - [Saltcorn](https://github.com/saltcorn)

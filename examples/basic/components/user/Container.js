@@ -1,7 +1,7 @@
 import { useNode } from '@craftjs/core';
 import { Slider, Paper, FormControl, FormLabel } from '@mui/material';
-import { HexColorPicker } from 'react-colorful';
 import React from 'react';
+import { HexColorPicker } from 'react-colorful';
 
 export const Container = ({ background, padding, children, ...props }) => {
   const {
