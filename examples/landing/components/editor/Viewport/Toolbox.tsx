@@ -51,7 +51,7 @@ export const Toolbox = () => {
     >
       <div className="flex flex-1 flex-col items-center pt-3 gap-3">
         <div
-          ref={(ref) =>
+          ref={(ref) => {
             create(
               ref,
               <Element
@@ -62,8 +62,8 @@ export const Toolbox = () => {
                 height="300px"
                 width="300px"
               ></Element>
-            )
-          }
+            );
+          }}
         >
           <Tooltip title="Container" placement="right">
             <Item $move>
@@ -72,9 +72,12 @@ export const Toolbox = () => {
           </Tooltip>
         </div>
         <div
-          ref={(ref) =>
-            create(ref, <Text fontSize="12" textAlign="left" text="Hi there" />)
-          }
+          ref={(ref) => {
+            create(
+              ref,
+              <Text fontSize="12" textAlign="left" text="Hi there" />
+            );
+          }}
         >
           <Tooltip title="Text" placement="right">
             <Item $move>
@@ -82,14 +85,22 @@ export const Toolbox = () => {
             </Item>
           </Tooltip>
         </div>
-        <div ref={(ref) => create(ref, <Button />)}>
+        <div
+          ref={(ref) => {
+            create(ref, <Button />);
+          }}
+        >
           <Tooltip title="Button" placement="right">
             <Item $move>
               <ButtonSvg viewBox="-4 -3 24 24" />
             </Item>
           </Tooltip>
         </div>
-        <div ref={(ref) => create(ref, <Video />)}>
+        <div
+          ref={(ref) => {
+            create(ref, <Video />);
+          }}
+        >
           <Tooltip title="Video" placement="right">
             <Item $move>
               <YoutubeSvg viewBox="-3 -3 28 28" />

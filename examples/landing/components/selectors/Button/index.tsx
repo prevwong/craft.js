@@ -53,7 +53,9 @@ export const Button: UserComponent<ButtonProps> = ({
 
   return (
     <StyledButton
-      ref={connect}
+      ref={(dom) => {
+        connect(dom);
+      }}
       className={cx([
         'rounded w-full px-4 py-2',
         {

@@ -31,7 +31,12 @@ export const Video = (props: any) => {
   const { videoId } = props;
 
   return (
-    <YoutubeDiv ref={connect} $enabled={enabled}>
+    <YoutubeDiv
+      ref={(dom) => {
+        connect(dom);
+      }}
+      $enabled={enabled}
+    >
       <YouTube
         videoId={videoId}
         opts={{

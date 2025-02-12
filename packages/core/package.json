@@ -47,6 +47,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.195",
     "@types/react": "19.0.8",
+    "@types/react-dom": "19.0.3",
     "react": "19.0.0"
   },
   "peerDependencies": {

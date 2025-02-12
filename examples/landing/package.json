@@ -23,7 +23,7 @@
     "next": "15.1.6",
     "next-seo": "6.6.0",
     "postcss": "latest",
-    "re-resizable": "6.1.0",
+    "re-resizable": "6.10.3",
     "react": "19.0.0",
     "react-color": "2.17.3",
     "react-contenteditable": "3.3.2",
@@ -31,7 +31,7 @@
     "react-loading": "2.0.3",
     "react-rnd": "10.1.1",
     "react-youtube": "7.9.0",
-    "styled-components": "6.1.13"
+    "styled-components": "6.1.15"
   },
   "devDependencies": {
     "@babel/core": "7.7.5",
@@ -39,13 +39,13 @@
     "@types/classnames": "2.2.9",
     "@types/node": "12.12.5",
     "@types/react": "19.0.8",
-    "@types/react-color": "3.0.1",
-    "@types/styled-components": "4.4.1",
+    "@types/react-color": "3.0.13",
+    "@types/react-dom": "19.0.3",
     "babel-plugin-inline-react-svg": "2.0.1",
     "cross-env": "6.0.3",
     "postcss-import": "12.0.1",
     "postcss-preset-env": "6.7.0",
-    "tailwindcss": "latest",
-    "typescript": "4.9.5"
+    "tailwindcss": "3.4.17",
+    "typescript": "5.7.3"
   }
 }

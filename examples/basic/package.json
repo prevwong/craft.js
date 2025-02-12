@@ -6,7 +6,6 @@
     "@craftjs/core": "workspace:*",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@material-ui/core": "4.5.2",
     "@mui/material": "^6.4.3",
     "clsx": "latest",
     "copy-to-clipboard": "3.2.0",
@@ -25,6 +24,8 @@
     "clean": "rimraf lib .next out dist"
   },
   "devDependencies": {
+    "@types/react": "19.0.8",
+    "@types/react-dom": "19.0.3",
     "cross-env": "6.0.3"
   }
 }
