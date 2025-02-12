@@ -5,7 +5,6 @@ rm -rf build
 yarn clean 
 yarn build:all
 
-lerna run export --stream
 mv site/build build
 mkdir build/examples
 cp -r ./examples/basic/out/ build/examples/basic
