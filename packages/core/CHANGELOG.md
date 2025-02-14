@@ -1,5 +1,14 @@
 # @craftjs/core
 
+## 0.2.12
+
+### Patch Changes
+
+- [#726](https://github.com/prevwong/craft.js/pull/726) [`ace25f1`](https://github.com/prevwong/craft.js/commit/ace25f137e3b95f515207d9f06afc4526faa1202) Thanks [@prevwong](https://github.com/prevwong)! - Add support for react 19
+
+- Updated dependencies [[`ace25f1`](https://github.com/prevwong/craft.js/commit/ace25f137e3b95f515207d9f06afc4526faa1202)]:
+  - @craftjs/utils@0.2.5
+
 ## 0.2.11
 
 ### Patch Changes
