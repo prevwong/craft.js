@@ -73,7 +73,24 @@ export const ToolbarTextInput = ({
           setInternalValue(e.target.value);
         }}
         margin="dense"
-        variant="filled"
+        variant="standard"
+        sx={{
+          padding: 0,
+          width: '100%',
+          background: 'transparent',
+          borderRadius: '100px',
+          border: 'none',
+          margin: 0,
+          marginTop: 7,
+          position: 'relative',
+          '.MuiInputBase-input': {
+            background: '#e5e5e5',
+            borderRadius: '100px',
+            fontSize: '0.9rem',
+            position: 'relative',
+            paddingLeft: '28px',
+          },
+        }}
         InputProps={{
           disableUnderline: true,
           startAdornment: ['color', 'bg'].includes(type) ? (
@@ -86,7 +103,7 @@ export const ToolbarTextInput = ({
               }}
             >
               <div
-                className="w-2 h-2 inline-block rounded-full relative"
+                className="w-2 h-2 inline-block rounded-full relative z-10"
                 style={{
                   left: '15px',
                   background: internalValue,

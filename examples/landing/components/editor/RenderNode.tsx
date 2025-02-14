@@ -121,7 +121,7 @@ export const RenderNode = ({ render }) => {
                     drag(dom);
                   }}
                 >
-                  <Move />
+                  <Move viewBox="-4 -3 24 24" />
                 </Btn>
               ) : null}
               {id !== ROOT_NODE && (
@@ -131,7 +131,7 @@ export const RenderNode = ({ render }) => {
                     actions.selectNode(parent);
                   }}
                 >
-                  <ArrowUp />
+                  <ArrowUp viewBox="-4 -1 24 24" />
                 </Btn>
               )}
               {deletable ? (
@@ -142,7 +142,7 @@ export const RenderNode = ({ render }) => {
                     actions.delete(id);
                   }}
                 >
-                  <Delete />
+                  <Delete viewBox="-4 -3 24 24" />
                 </Btn>
               ) : null}
             </IndicatorDiv>,

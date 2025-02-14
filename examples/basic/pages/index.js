@@ -28,7 +28,7 @@ export default function App() {
       >
         <Topbar />
         <Grid container spacing={5} style={{ paddingTop: '10px' }}>
-          <Grid item xs>
+          <Grid size={8}>
             <Frame>
               <Element
                 canvas
@@ -56,7 +56,7 @@ export default function App() {
               </Element>
             </Frame>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item size={4}>
             <Paper
               sx={{
                 padding: 0,
