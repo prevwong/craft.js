@@ -7,6 +7,7 @@ function StyledRadio(props) {
     <Radio
       disableRipple
       color="default"
+      size="small"
       sx={{
         '&.Mui-checked': {
           color: 'rgb(19, 115, 230)',

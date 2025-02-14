@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import { styled } from 'styled-components';
 
@@ -13,13 +14,15 @@ const SidebarItemDiv = styled.div<{ $visible?: boolean; $height?: string }>`
       ? `1`
       : 'unset'};
   color: #545454;
+  border-bottom: 1px solid transparent;
+  border-color: ${(props) => (props.$visible ? '#eee' : 'transparent')};
 `;
 
 const Chevron = styled.a<{ $visible: boolean }>`
   transform: rotate(${(props) => (props.$visible ? 180 : 0)}deg);
   svg {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
   }
 `;
 
@@ -30,6 +33,7 @@ export type SidebarItemProps = {
   visible?: boolean;
   onChange?: (bool: boolean) => void;
   children?: React.ReactNode;
+  className?: string;
 };
 
 const HeaderDiv = styled.div`
@@ -47,12 +51,13 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
   children,
   height,
   onChange,
+  className,
 }) => {
   return (
     <SidebarItemDiv
       $visible={visible}
       $height={height}
-      className="flex flex-col"
+      className={classNames('flex flex-col', className)}
     >
       <HeaderDiv
         onClick={() => {
@@ -67,7 +72,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
           <h2 className="text-xs uppercase">{title}</h2>
         </div>
         <Chevron $visible={visible}>
-          <Arrow />
+          <Arrow viewBox="-2 -1 12 12" />
         </Chevron>
       </HeaderDiv>
       {visible ? (
