@@ -635,8 +635,8 @@ The `useNode` hook accepts a collector function which can be used to retrieve st
 // components/user/Text.js
 export const Text = ({text, fontSize}) => {
   const { connectors: {connect, drag}, hasSelectedNode, hasDraggedNode, actions: {setProp} } = useNode((state) => ({
-    hasSelectedNode: state.events.selected,
-    hasDraggedNode: state.events.dragged
+    selected: state.events.selected,
+    dragged: state.events.dragged,
   }));
 
   const [editable, setEditable] = useState(false);
