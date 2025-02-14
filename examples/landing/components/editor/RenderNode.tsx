@@ -6,6 +6,7 @@ import { styled } from 'styled-components';
 
 import ArrowUp from '../../public/icons/arrow-up.svg';
 import Delete from '../../public/icons/delete.svg';
+import Duplicate from '../../public/icons/duplicate.svg';
 import Move from '../../public/icons/move.svg';
 
 const IndicatorDiv = styled.div`
@@ -13,12 +14,6 @@ const IndicatorDiv = styled.div`
   margin-top: -29px;
   font-size: 12px;
   line-height: 12px;
-
-  svg {
-    fill: #fff;
-    width: 15px;
-    height: 15px;
-  }
 `;
 
 const Btn = styled.a`
@@ -30,6 +25,29 @@ const Btn = styled.a`
     position: relative;
     top: -50%;
     left: -50%;
+  }
+
+  svg {
+    fill: #fff;
+    width: 15px;
+    height: 15px;
+  }
+`;
+
+const DuplicateBtn = styled.a`
+  padding: 0 0px;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  > div {
+    position: relative;
+    top: -50%;
+    left: -50%;
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
   }
 `;
 
@@ -47,6 +65,7 @@ export const RenderNode = ({ render }) => {
     deletable,
     connectors: { drag },
     parent,
+    isCanvas,
   } = useNode((node) => ({
     isHover: node.events.hovered,
     dom: node.dom,
@@ -55,6 +74,7 @@ export const RenderNode = ({ render }) => {
     deletable: query.node(node.id).isDeletable(),
     parent: node.data.parent,
     props: node.data.props,
+    isCanvas: query.node(node.id).isCanvas(),
   }));
 
   const currentRef = React.useRef<HTMLDivElement | null>(null);
@@ -136,7 +156,7 @@ export const RenderNode = ({ render }) => {
               )}
               {deletable ? (
                 <Btn
-                  className="cursor-pointer"
+                  className="mr-2 cursor-pointer"
                   onMouseDown={(e: React.MouseEvent) => {
                     e.stopPropagation();
                     actions.delete(id);
@@ -144,6 +164,22 @@ export const RenderNode = ({ render }) => {
                 >
                   <Delete viewBox="-4 -3 24 24" />
                 </Btn>
+              ) : null}
+              {!isCanvas ? (
+                <DuplicateBtn
+                  className="cursor-pointer"
+                  onMouseDown={() => {
+                    const {
+                      data: { type, props },
+                    } = query.node(id).get();
+                    actions.add(
+                      query.createNode(React.createElement(type, props)),
+                      parent
+                    );
+                  }}
+                >
+                  <Duplicate />
+                </DuplicateBtn>
               ) : null}
             </IndicatorDiv>,
             document.querySelector('.page-container')
