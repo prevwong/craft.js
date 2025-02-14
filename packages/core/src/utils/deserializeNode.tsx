@@ -13,7 +13,7 @@ import {
 import { Resolver } from '../interfaces';
 import { Canvas } from '../nodes/Canvas';
 
-type DeserialisedType = JSX.Element & { name: string };
+type DeserialisedType = React.JSX.Element & { name: string };
 
 const restoreType = (type: ReduceCompType, resolver: Resolver) =>
   typeof type === 'object' && type.resolvedName

@@ -227,6 +227,6 @@ Craft.js is released under the [MIT license](https://github.com/prevwong/craft.j
 - [Mattermix](https://opencollective.com/mattermix)
 - [muttenzer](https://github.com/muttenzer)
 - [ITCuw](https://github.com/ITCuw)
-- [Victor Vanegas](vicvans20)
+- [Victor Vanegas](https://github.com/vicvans20)
 - [Andreas Thoelke](https://github.com/andreasthoelke)
 - [Saltcorn](https://github.com/saltcorn)

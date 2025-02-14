@@ -196,7 +196,7 @@ export function useMethods<
 
   let methodsFactory: Methods<S, R>;
   let ignoreHistoryForActionsRef = useRef([]);
-  let normalizeHistoryRef = useRef<any>();
+  let normalizeHistoryRef = useRef<any>(() => {});
 
   if (typeof methodsOrOptions === 'function') {
     methodsFactory = methodsOrOptions;

@@ -1,5 +1,5 @@
 import { ERROR_RESOLVER_NOT_AN_OBJECT, HISTORY_ACTIONS } from '@craftjs/utils';
-import React, { useEffect, useRef } from 'react';
+import * as React from 'react';
 import invariant from 'tiny-invariant';
 
 import { EditorContext } from './EditorContext';
@@ -26,7 +26,7 @@ export const Editor = ({ children, ...options }: EditorProps) => {
     );
   }
 
-  const optionsRef = useRef(options);
+  const optionsRef = React.useRef(options);
 
   const context = useEditorStore(
     optionsRef.current,
@@ -74,7 +74,7 @@ export const Editor = ({ children, ...options }: EditorProps) => {
   );
 
   // sync enabled prop with editor store options
-  useEffect(() => {
+  React.useEffect(() => {
     if (!context) {
       return;
     }
@@ -91,7 +91,7 @@ export const Editor = ({ children, ...options }: EditorProps) => {
     });
   }, [context, options.enabled]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     context.subscribe(
       (_) => ({
         json: context.query.serialize(),

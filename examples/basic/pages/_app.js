@@ -1,5 +1,5 @@
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
 import App from 'next/app';
 import Head from 'next/head';
 import React from 'react';

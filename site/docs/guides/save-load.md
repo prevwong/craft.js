@@ -23,7 +23,7 @@ yarn add lzutf8 copy-to-clipboard
 We'll use `lzutf8` to compress our serialised JSON Nodes, and additionally transform it into base64.
 ```jsx {24-36}
 import React, { useState } from "react";
-import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Snackbar } from "@material-ui/core";
+import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Snackbar } from "@mui/core";
 import { useEditor } from "@craftjs/core";
 import lz from "lzutf8";
 import copy from 'copy-to-clipboard';
@@ -81,7 +81,7 @@ Then, we will need to work in reverse to obtain the original JSON provided by ou
 
 ```jsx {12-14,40-83}
 import React, { useState } from "react";
-import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Snackbar } from "@material-ui/core";
+import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Snackbar } from "@mui/core";
 import { useEditor } from "@craftjs/core";
 import lz from "lzutf8";
 import copy from 'copy-to-clipboard';
@@ -186,7 +186,7 @@ By default, it constructs the editor state based on what was initially rendered 
 ```jsx
 import React, {useState, useEffect} from 'react';
 import "../styles/main.css";
-import {Typography, Button as MaterialButton, Paper, Grid, makeStyles} from '@material-ui/core';
+import {Typography, Button as MaterialButton, Paper, Grid, makeStyles} from '@mui/core';
 import {Toolbox} from '../components/Toolbox';
 import {Container} from '../components/user/Container';
 import {Button} from '../components/user/Button';

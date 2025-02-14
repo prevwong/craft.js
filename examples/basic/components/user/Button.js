@@ -6,7 +6,7 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
-} from '@material-ui/core';
+} from '@mui/material';
 import React from 'react';
 
 export const Button = ({ size, variant, color, text, ...props }) => {

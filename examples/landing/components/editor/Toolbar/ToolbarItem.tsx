@@ -1,65 +1,9 @@
 import { useNode } from '@craftjs/core';
-import { Grid, Slider, RadioGroup } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import React from 'react';
+import { Grid2 as Grid, Slider, RadioGroup } from '@mui/material';
+import * as React from 'react';
 
 import { ToolbarDropdown } from './ToolbarDropdown';
 import { ToolbarTextInput } from './ToolbarTextInput';
-
-const iOSBoxShadow =
-  '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
-
-const SliderStyled = withStyles({
-  root: {
-    color: '#3880ff',
-    height: 2,
-    padding: '5px 0',
-    width: '100%',
-  },
-  thumb: {
-    height: 14,
-    width: 14,
-    backgroundColor: '#fff',
-    boxShadow: iOSBoxShadow,
-    marginTop: -7,
-    marginLeft: -7,
-    '&:focus,&:hover,&$active': {
-      boxShadow:
-        '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)',
-      // Reset on touch devices, it doesn't add specificity
-      '@media (hover: none)': {
-        boxShadow: iOSBoxShadow,
-      },
-    },
-  },
-  active: {},
-  valueLabel: {
-    left: 'calc(-50% + 11px)',
-    top: -22,
-    '& *': {
-      background: 'transparent',
-      color: '#000',
-    },
-  },
-  track: {
-    height: 2,
-  },
-  rail: {
-    height: 2,
-    opacity: 0.5,
-    backgroundColor: '#bfbfbf',
-  },
-  mark: {
-    backgroundColor: '#bfbfbf',
-    height: 8,
-    width: 1,
-    marginTop: -3,
-  },
-  markActive: {
-    opacity: 1,
-    backgroundColor: 'currentColor',
-  },
-})(Slider);
 
 export type ToolbarItemProps = {
   prefix?: string;
@@ -88,7 +32,7 @@ export const ToolbarItem = ({
   const value = Array.isArray(propValue) ? propValue[index] : propValue;
 
   return (
-    <Grid item xs={full ? 12 : 6}>
+    <Grid size={{ xs: full ? 12 : 6 }}>
       <div className="mb-2">
         {['text', 'color', 'bg', 'number'].includes(type) ? (
           <ToolbarTextInput
@@ -110,7 +54,20 @@ export const ToolbarItem = ({
             {props.label ? (
               <h4 className="text-sm text-light-gray-2">{props.label}</h4>
             ) : null}
-            <SliderStyled
+            <Slider
+              sx={{
+                color: '#3880ff',
+                height: 2,
+                padding: '5px 0',
+                width: '100%',
+                '& .MuiSlider-track': {
+                  height: 2,
+                },
+                '& .MuiSlider-thumb': {
+                  height: 12,
+                  width: 12,
+                },
+              }}
               value={parseInt(value) || 0}
               onChange={
                 ((_, value: number) => {

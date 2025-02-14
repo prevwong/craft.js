@@ -1,6 +1,6 @@
 import { useNode, useEditor } from '@craftjs/core';
 import { ROOT_NODE } from '@craftjs/utils';
-import React, { useEffect, useRef, useCallback } from 'react';
+import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { styled } from 'styled-components';
 
@@ -57,16 +57,16 @@ export const RenderNode = ({ render }) => {
     props: node.data.props,
   }));
 
-  const currentRef = useRef<HTMLDivElement>();
+  const currentRef = React.useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (dom) {
       if (isActive || isHover) dom.classList.add('component-selected');
       else dom.classList.remove('component-selected');
     }
   }, [dom, isActive, isHover]);
 
-  const getPos = useCallback((dom: HTMLElement) => {
+  const getPos = React.useCallback((dom: HTMLElement) => {
     const { top, left, bottom } = dom
       ? dom.getBoundingClientRect()
       : { top: 0, left: 0, bottom: 0 };
@@ -76,16 +76,19 @@ export const RenderNode = ({ render }) => {
     };
   }, []);
 
-  const scroll = useCallback(() => {
+  const scroll = React.useCallback(() => {
     const { current: currentDOM } = currentRef;
 
-    if (!currentDOM) return;
+    if (!currentDOM) {
+      return;
+    }
+
     const { top, left } = getPos(dom);
     currentDOM.style.top = top;
     currentDOM.style.left = left;
   }, [dom, getPos]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     document
       .querySelector('.craftjs-renderer')
       .addEventListener('scroll', scroll);
@@ -112,8 +115,13 @@ export const RenderNode = ({ render }) => {
             >
               <h2 className="flex-1 mr-4">{name}</h2>
               {moveable ? (
-                <Btn className="mr-2 cursor-move" ref={drag}>
-                  <Move />
+                <Btn
+                  className="mr-2 cursor-move"
+                  ref={(dom) => {
+                    drag(dom);
+                  }}
+                >
+                  <Move viewBox="-4 -3 24 24" />
                 </Btn>
               ) : null}
               {id !== ROOT_NODE && (
@@ -123,7 +131,7 @@ export const RenderNode = ({ render }) => {
                     actions.selectNode(parent);
                   }}
                 >
-                  <ArrowUp />
+                  <ArrowUp viewBox="-4 -1 24 24" />
                 </Btn>
               )}
               {deletable ? (
@@ -134,7 +142,7 @@ export const RenderNode = ({ render }) => {
                     actions.delete(id);
                   }}
                 >
-                  <Delete />
+                  <Delete viewBox="-4 -3 24 24" />
                 </Btn>
               ) : null}
             </IndicatorDiv>,

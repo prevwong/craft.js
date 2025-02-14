@@ -9,7 +9,12 @@ export const Custom3BtnDrop = ({ children }) => {
     connectors: { connect },
   } = useNode();
   return (
-    <div ref={connect} className="w-full h-full">
+    <div
+      ref={(dom) => {
+        connect(dom);
+      }}
+      className="w-full h-full"
+    >
       {children}
     </div>
   );

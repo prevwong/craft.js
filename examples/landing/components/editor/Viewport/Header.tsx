@@ -1,5 +1,5 @@
 import { useEditor } from '@craftjs/core';
-import { Tooltip } from '@material-ui/core';
+import { Tooltip } from '@mui/material';
 import cx from 'classnames';
 import React from 'react';
 import { styled } from 'styled-components';
@@ -88,7 +88,11 @@ export const Header = () => {
               actions.setOptions((options) => (options.enabled = !enabled));
             }}
           >
-            {enabled ? <Checkmark /> : <Customize />}
+            {enabled ? (
+              <Checkmark viewBox="-3 -3 20 20" />
+            ) : (
+              <Customize viewBox="2 0 16 16" />
+            )}
             {enabled ? 'Finish Editing' : 'Edit'}
           </Btn>
         </div>

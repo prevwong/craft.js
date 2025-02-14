@@ -158,9 +158,9 @@ export function QueryMethods(state: EditorState) {
       return JSON.stringify(this.getSerializedNodes());
     },
 
-    parseReactElement: (reactElement: React.ReactElement) => ({
+    parseReactElement: (reactElement: React.ReactElement<any>) => ({
       toNodeTree(
-        normalize?: (node: Node, jsx: React.ReactElement) => void
+        normalize?: (node: Node, jsx: React.ReactElement<any>) => void
       ): NodeTree {
         let node = parseNodeFromJSX(reactElement, (node, jsx) => {
           const name = resolveComponent(state.options.resolver, node.data.type);

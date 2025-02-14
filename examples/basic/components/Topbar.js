@@ -11,7 +11,7 @@ import {
   DialogActions,
   TextField,
   Snackbar,
-} from '@material-ui/core';
+} from '@mui/material';
 import copy from 'copy-to-clipboard';
 import lz from 'lzutf8';
 import React, { useState } from 'react';

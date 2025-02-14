@@ -1,3 +1,5 @@
+import { themes as prismThemes } from 'prism-react-renderer';
+
 /**
  * Copyright (c) 2017-present, Facebook, Inc.
  *
@@ -18,10 +20,10 @@ module.exports = {
       appId: 'PH8YTBNA7Q',
       apiKey: '7a21621f37e010ec9a8c39298d71b045',
       indexName: 'craft-js',
-      contextualSearch: false
+      contextualSearch: false,
     },
     prism: {
-      theme: require('prism-react-renderer/themes/shadesOfPurple'),
+      theme: prismThemes.shadesOfPurple,
     },
     navbar: {
       hideOnScroll: false,

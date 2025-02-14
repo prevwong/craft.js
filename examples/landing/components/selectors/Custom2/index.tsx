@@ -9,7 +9,12 @@ export const Custom2VideoDrop = ({ children }) => {
     connectors: { connect },
   } = useNode();
   return (
-    <div ref={connect} className="flex-1 ml-5 h-full">
+    <div
+      ref={(dom) => {
+        connect(dom);
+      }}
+      className="flex-1 ml-5 h-full"
+    >
       {children}
     </div>
   );

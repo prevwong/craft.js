@@ -9,7 +9,14 @@ export const OnlyButtons = ({ children, ...props }) => {
     connectors: { connect },
   } = useNode();
   return (
-    <div title="only-buttons" ref={connect} className="w-full mt-5" {...props}>
+    <div
+      title="only-buttons"
+      ref={(dom) => {
+        connect(dom);
+      }}
+      className="w-full mt-5"
+      {...props}
+    >
       {children}
     </div>
   );

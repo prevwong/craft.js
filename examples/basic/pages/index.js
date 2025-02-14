@@ -1,5 +1,5 @@
 import { Editor, Frame, Element } from '@craftjs/core';
-import { Typography, Paper, Grid, makeStyles } from '@material-ui/core';
+import { Typography, Paper, Grid2 as Grid } from '@mui/material';
 import React from 'react';
 
 import { SettingsPanel } from '../components/SettingsPanel';
@@ -10,15 +10,7 @@ import { Card, CardBottom, CardTop } from '../components/user/Card';
 import { Container } from '../components/user/Container';
 import { Text } from '../components/user/Text';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    padding: 0,
-    background: 'rgb(252, 253, 253)',
-  },
-}));
 export default function App() {
-  const classes = useStyles();
-
   return (
     <div style={{ margin: '0 auto', width: '800px' }}>
       <Typography style={{ margin: '20px 0' }} variant="h5" align="center">
@@ -36,7 +28,7 @@ export default function App() {
       >
         <Topbar />
         <Grid container spacing={5} style={{ paddingTop: '10px' }}>
-          <Grid item xs>
+          <Grid size={8}>
             <Frame>
               <Element
                 canvas
@@ -64,8 +56,13 @@ export default function App() {
               </Element>
             </Frame>
           </Grid>
-          <Grid item xs={4}>
-            <Paper className={classes.root}>
+          <Grid item size={4}>
+            <Paper
+              sx={{
+                padding: 0,
+                background: 'rgb(252, 253, 253)',
+              }}
+            >
               <Toolbox />
               <SettingsPanel />
             </Paper>
