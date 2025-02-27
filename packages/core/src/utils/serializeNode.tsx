@@ -20,11 +20,13 @@ export const serializeComp = (
   props = Object.keys(props).reduce((result: Record<string, any>, key) => {
     const prop = props[key];
 
-    if (prop === undefined || prop === null || typeof prop === 'function') {
+    if (prop === undefined || typeof prop === 'function') {
       return result;
     }
 
-    if (key === 'children' && typeof prop !== 'string') {
+    if (prop === null) {
+      result[key] = null;
+    } else if (key === 'children' && typeof prop !== 'string') {
       result[key] = Children.map(prop, (child) => {
         if (typeof child === 'string') {
           return child;
